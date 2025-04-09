@@ -72,6 +72,10 @@ class ElectrochemicalSpeciesBandDiagram {
         this._modeChangeCallback = null;
         this._tooltipCallback = null;
 
+        this.config.throttleDelay = initialConfig.throttleDelay === undefined ? 100 : initialConfig.throttleDelay; // Throttle delay in ms
+        this._throttleTimeout = null; // Timeout ID for throttling
+        this._throttleWaiting = false; // Flag to indicate if waiting for timeout
+
         // Clear container
         this.container.html(''); // Clear previous content
 
@@ -180,11 +184,18 @@ class ElectrochemicalSpeciesBandDiagram {
              this._handleInteraction(event, true); // Pass click flag
         };
         this.interactionRect
-             .on('pointerover', () => this._tooltip.style('visibility', 'visible').style('opacity', 1))
-             .on('pointerout', () => this._tooltip.style('visibility', 'hidden').style('opacity', 0))
-             .on('pointermove', interactionHandler)
-             .on('click', clickHandler); // Simple click handling
-             // More sophisticated touch handling (e.g., long press for tooltip?) could be added
+             // ... (attributes and styles) ...
+             .on('pointerover', () => this._tooltip.style('visibility', 'visible').style('opacity', 1)) // Keep immediate feedback on enter
+             .on('pointerout', () => {
+                 // Hide immediately on mouse out, cancel any pending throttled update
+                 clearTimeout(this._throttleTimeout);
+                 this._throttleTimeout = null;
+                 this._throttleWaiting = false; // Reset throttle state
+                 this._tooltip.style('visibility', 'hidden').style('opacity', 0);
+             })
+             // Apply throttling ONLY to pointermove
+             .on('pointermove', (event) => this._handleInteraction(event, false)) // Pass isClick = false
+             .on('click', (event) => this._handleInteraction(event, true)); // Pass isClick = true
     }
 
 
@@ -630,7 +641,34 @@ class ElectrochemicalSpeciesBandDiagram {
      }
 
 
-     _handleInteraction(event, isClick = false) {
+    _handleInteraction(event, isClick = false) {
+        // Handle clicks immediately, reset any pending move updates
+        if (isClick) {
+            clearTimeout(this._throttleTimeout);
+            this._throttleTimeout = null;
+            this._throttleWaiting = false; // Reset state in case click happens during wait
+            this._updateTooltip(event, true); // Call core logic directly
+            return;
+        }
+
+        // Throttle move events using the immediate execution + delay flag pattern
+        if (this._throttleWaiting) {
+            return; // Already waiting for timeout, ignore this move event
+        }
+
+        // --- Execute immediately on the first move event after delay ---
+        this._updateTooltip(event, false);
+        this._throttleWaiting = true; // Set the flag
+
+        // --- Set timeout to clear the flag after the delay ---
+        // Use stored timeout to potentially clear if needed (e.g. on pointerout)
+        this._throttleTimeout = setTimeout(() => {
+            this._throttleWaiting = false; // Allow next execution after delay
+            this._throttleTimeout = null;
+        }, this.config.throttleDelay);
+    }
+
+    _updateTooltip(event, isClick) {
         // Guard clauses
         if (!this._tooltipCallback || !this.lastDrawData || this.lastDrawData.length === 0) {
             this._tooltip.style("visibility", "hidden").style("opacity", 0);
