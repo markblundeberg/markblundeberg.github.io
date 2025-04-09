@@ -468,7 +468,7 @@ class ElectrochemicalSpeciesBandDiagram {
     _getAutoLabel(prettyName) {
          const prefix = { Volts: 'V', eV: 'E', kJmol: 'G' }[this.config.mode] || '?';
          // Use math mode for potential italics: $V_{...}$ etc.
-         return `$${prefix}_{${prettyName || '?'}}$`;
+         return `${prefix}_{${prettyName || '?'}}`;
      }
 
     _drawBackgrounds() {
