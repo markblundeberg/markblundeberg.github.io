@@ -7,7 +7,7 @@ import ElectrochemicalSpeciesBandDiagram from './ElectrochemicalSpeciesBandDiagr
 const cellConfig = {
     // Species Definitions
     cation: {
-        id: "Ag+",
+        textName: 'Ag+',
         z: 1,
         latexPrettyName: "\\mathrm{Ag}^{+}",
         // From user: μ⊖(Ag⁺) ≈ +77 kJ/mol
@@ -15,7 +15,7 @@ const cellConfig = {
         color: "#E6AB02" // Gold/Yellow
     },
     anion: {
-        id: "NO3-",
+        textName: "NO3-",
         z: -1,
         latexPrettyName: "\\mathrm{NO}_3^{-}",
         // From user: μ⊖(NO₃⁻) ≈ -111 kJ/mol
@@ -23,7 +23,7 @@ const cellConfig = {
         color: "#66A61E" // Green
     },
     electron: {
-        id: "e-",
+        textName: "e-",
         z: -1,
         latexPrettyName: "\\mathrm{e}^{-}",
         // Standard state here is arbitrary as V_e is set by equilibrium
@@ -79,9 +79,9 @@ const modeSelector = document.getElementById('unit-mode-selector');
 const diagram = new ElectrochemicalSpeciesBandDiagram(plotContainerId, { width: 800, height: 500 });
 
 // --- Define Species Info from Config ---
-diagram.addSpeciesInfo(cellConfig.cation.id, cellConfig.cation);
-diagram.addSpeciesInfo(cellConfig.anion.id, cellConfig.anion);
-diagram.addSpeciesInfo(cellConfig.electron.id, cellConfig.electron);
+['cation', 'anion', 'electron'].forEach(id => {
+    diagram.addSpeciesInfo(id, cellConfig[id]);
+});
 
 // --- Calculation Function ---
 // Calculates V_volt values based on concentrations and config
@@ -131,63 +131,63 @@ function calculateState(c1, c2, config) {
     const traceDefs = [
         // --- Cation Traces ---
         {
-            id: `${cation.id}_potential_1`, speciesId: cation.id, curveType: 'potential', showLabel: true,
+            id: `cation_potential_1`, speciesId: 'cation', curveType: 'potential', showLabel: true,
             inputUnits: 'V_volt', xRange: { min: x.electrolyte1_start, max: x.electrolyte1_end },
             y: [V_cation_1, V_cation_1], // Constant value within range
             x: [x.electrolyte1_start, x.electrolyte1_end] // Define x points for this segment
         },
         {
-            id: `${cation.id}_potential_2`, speciesId: cation.id, curveType: 'potential', showLabel: true,
+            id: `cation_potential_2`, speciesId: 'cation', curveType: 'potential', showLabel: true,
             inputUnits: 'V_volt', xRange: { min: x.electrolyte2_start, max: x.electrolyte2_end },
             y: [V_cation_2, V_cation_2],
             x: [x.electrolyte2_start, x.electrolyte2_end]
         },
         { // Standard state needs only one value per region as phi=0 is constant
-            id: `${cation.id}_standard_1`, speciesId: cation.id, curveType: 'standardState', showLabel: false,
+            id: `cation_standard_1`, speciesId: 'cation', curveType: 'standardState', showLabel: false,
             inputUnits: 'V_volt', xRange: { min: x.electrolyte1_start, max: x.electrolyte1_end },
             y: [V_STD_cation + phi_electrolyte, V_STD_cation + phi_electrolyte],
             x: [x.electrolyte1_start, x.electrolyte1_end]
         },
          {
-            id: `${cation.id}_standard_2`, speciesId: cation.id, curveType: 'standardState', showLabel: false,
+            id: `cation_standard_2`, speciesId: 'cation', curveType: 'standardState', showLabel: false,
             inputUnits: 'V_volt', xRange: { min: x.electrolyte2_start, max: x.electrolyte2_end },
             y: [V_STD_cation + phi_electrolyte, V_STD_cation + phi_electrolyte],
             x: [x.electrolyte2_start, x.electrolyte2_end]
         },
        // --- Anion Traces ---
         {
-            id: `${anion.id}_potential_1`, speciesId: anion.id, curveType: 'potential', showLabel: true,
+            id: `anion_potential_1`, speciesId: 'anion', curveType: 'potential', showLabel: true,
             inputUnits: 'V_volt', xRange: { min: x.electrolyte1_start, max: x.electrolyte1_end },
             y: [V_anion_1, V_anion_1],
             x: [x.electrolyte1_start, x.electrolyte1_end]
         },
         {
-            id: `${anion.id}_potential_2`, speciesId: anion.id, curveType: 'potential', showLabel: true,
+            id: `anion_potential_2`, speciesId: 'anion', curveType: 'potential', showLabel: true,
             inputUnits: 'V_volt', xRange: { min: x.electrolyte2_start, max: x.electrolyte2_end },
             y: [V_anion_2, V_anion_2],
             x: [x.electrolyte2_start, x.electrolyte2_end]
         },
         {
-            id: `${anion.id}_standard_1`, speciesId: anion.id, curveType: 'standardState', showLabel: false,
+            id: `anion_standard_1`, speciesId: 'anion', curveType: 'standardState', showLabel: false,
             inputUnits: 'V_volt', xRange: { min: x.electrolyte1_start, max: x.electrolyte1_end },
             y: [V_STD_anion + phi_electrolyte, V_STD_anion + phi_electrolyte],
             x: [x.electrolyte1_start, x.electrolyte1_end]
         },
          {
-            id: `${anion.id}_standard_2`, speciesId: anion.id, curveType: 'standardState', showLabel: false,
+            id: `anion_standard_2`, speciesId: 'anion', curveType: 'standardState', showLabel: false,
             inputUnits: 'V_volt', xRange: { min: x.electrolyte2_start, max: x.electrolyte2_end },
             y: [V_STD_anion + phi_electrolyte, V_STD_anion + phi_electrolyte],
             x: [x.electrolyte2_start, x.electrolyte2_end]
         },
         // --- Electron Traces ---
         {
-            id: `e_electrode1`, speciesId: electron.id, curveType: 'potential', showLabel: true,
+            id: `e_electrode1`, speciesId: 'electron', curveType: 'potential', showLabel: true,
             inputUnits: 'V_volt', xRange: { min: x.electrode1_start, max: x.electrode1_end },
             y: [V_e_1, V_e_1],
             x: [x.electrode1_start, x.electrode1_end]
         },
         {
-            id: `e_electrode2`, speciesId: electron.id, curveType: 'potential', showLabel: true,
+            id: `e_electrode2`, speciesId: 'electron', curveType: 'potential', showLabel: true,
             inputUnits: 'V_volt', xRange: { min: x.electrode2_start, max: x.electrode2_end },
             y: [V_e_2, V_e_2],
             x: [x.electrode2_start, x.electrode2_end]
@@ -201,7 +201,7 @@ function calculateState(c1, c2, config) {
 function getTooltipContent(info) {
     // info contains: { speciesId, traceId, xValue, yValueDisplayed, yValueVolts, currentMode, pointEvent }
     const config = cellConfig; // Access outer scope config
-    const species = config[info.speciesId] || config.cation.id === info.speciesId ? config.cation : (config.anion.id === info.speciesId ? config.anion : config.electron);
+    const species = config[info.speciesId];
     let content = `<b>\$${species.latexPrettyName || info.speciesId}\$</b><br>x = ${info.xValue.toFixed(3)}<br>`;
     const mode = info.currentMode;
     const val = info.yValueDisplayed;
@@ -216,7 +216,7 @@ function getTooltipContent(info) {
     let conc = null;
     const x = info.xValue;
     const layout = config.layout;
-    if (info.speciesId === config.cation.id || info.speciesId === config.anion.id) {
+    if (info.speciesId === 'cation' || info.speciesId === 'anion') {
         if (x >= layout.electrolyte1_start && x <= layout.electrolyte1_end) {
             conc = parseFloat(c1Slider.value);
             content += `<br>Region: Electrolyte 1`;
@@ -224,7 +224,7 @@ function getTooltipContent(info) {
             conc = parseFloat(c2Slider.value);
             content += `<br>Region: Electrolyte 2`;
         }
-    } else if (info.speciesId === config.electron.id) {
+    } else if (info.speciesId === 'electron') {
          if (x >= layout.electrode1_start && x <= layout.electrode1_end) {
             content += `<br>Region: Electrode 1`;
          } else if (x >= layout.electrode2_start && x <= layout.electrode2_end) {
