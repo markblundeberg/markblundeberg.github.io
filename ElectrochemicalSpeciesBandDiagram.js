@@ -630,9 +630,7 @@ class ElectrochemicalSpeciesBandDiagram {
      }
 
 
-// Replace the existing _handleInteraction method in ElectrochemicalSpeciesBandDiagram.js
-
-    _handleInteraction(event, isClick = false) {
+     _handleInteraction(event, isClick = false) {
         // Guard clauses
         if (!this._tooltipCallback || !this.lastDrawData || this.lastDrawData.length === 0) {
             this._tooltip.style("visibility", "hidden").style("opacity", 0);
@@ -641,9 +639,8 @@ class ElectrochemicalSpeciesBandDiagram {
 
         const [pointerX, pointerY] = d3.pointer(event, this.plotArea.node());
 
-        // Check if pointer is within plot bounds horizontally (allow slight buffer?)
-        // Vertical check happens via threshold later
-        if (pointerX < -5 || pointerX > this.plotWidth + 5 ) { // Allow small margin outside axis
+        // Check if pointer is within plot bounds horizontally
+        if (pointerX < -5 || pointerX > this.plotWidth + 5) {
             this._tooltip.style("visibility", "hidden").style("opacity", 0);
             return;
         }
@@ -652,125 +649,151 @@ class ElectrochemicalSpeciesBandDiagram {
 
         let closestTraceInfo = null;
         let minDistY = Infinity;
-        const verticalThresholdPx = 25; // Max vertical pixel distance to trigger tooltip
+        const verticalThresholdPx = 25;
 
-        // Iterate through the *processed* data used for the last draw
+        // Iterate through the processed data used for the last draw
         this.lastDrawData.forEach(trace => {
-            // 1. Check if xValue is within the logical range for this trace
-            // We need the original xRange definition for this check
             const originalTraceDef = this.traceData.find(td => td.id === trace.id);
-            const xRange = originalTraceDef?.xRange; // Get xRange from original definition
+            const xRange = originalTraceDef?.xRange;
             const isInRange = !xRange || (xValue >= xRange.min && xValue <= xRange.max);
 
             if (!isInRange || trace.points.length < 2) {
-                return; // Skip trace if xValue is outside its defined range or trace is too short
+                return; // Skip trace
             }
 
-            // 2. Find points bracketing xValue and interpolate y_display
+            // Find points bracketing xValue and interpolate y_display
             let y_interp = null;
-            let p_interp = null; // Store the interpolated or closest point data
-
-            // Use d3.bisect for potentially better performance on sorted data
+            let p_interp = null;
             const bisect = d3.bisector(p => p.x).left;
             const index = bisect(trace.points, xValue, 1);
             const p0 = trace.points[index - 1];
             const p1 = trace.points[index];
 
-            if (p0 && p1) { // Found bracketing points
-                 // Check for vertical line segment (avoid division by zero)
-                 if (p1.x === p0.x) {
-                      if (Math.abs(p0.x - xValue) < 1e-9) { // If xValue matches vertical segment
-                           // Find which y is closer vertically
+            if (p0 && p1) {
+                 if (p1.x === p0.x) { // Vertical segment check
+                      if (Math.abs(p0.x - xValue) < 1e-9) {
                             if (Math.abs(this.yScale(p0.y_display) - pointerY) < Math.abs(this.yScale(p1.y_display) - pointerY)) {
-                                y_interp = p0.y_display;
-                                p_interp = p0;
+                                y_interp = p0.y_display; p_interp = p0;
                             } else {
-                                y_interp = p1.y_display;
-                                p_interp = p1;
+                                y_interp = p1.y_display; p_interp = p1;
                             }
-                       } // else: xValue not on the vertical segment
-                 } else {
-                      // Linear interpolation
+                       }
+                 } else { // Interpolate
                       const t = (xValue - p0.x) / (p1.x - p0.x);
                       if (p0.y_display !== null && isFinite(p0.y_display) && p1.y_display !== null && isFinite(p1.y_display)) {
                           y_interp = p0.y_display + t * (p1.y_display - p0.y_display);
-                          // Interpolate other values if needed, or just use closest point's data
-                          p_interp = (t < 0.5) ? p0 : p1; // Use data from closer x point
-                          p_interp.y_display = y_interp; // Store interpolated y for tooltip
+                          p_interp = (t < 0.5) ? p0 : p1; // Use nearest point's other data
+                          p_interp = { ...p_interp, y_display: y_interp }; // Update point data with interpolated y
                       }
                  }
-            } else if (p0 || p1) { // Handle edge case: xValue might match first or last point
+            } else if (p0 || p1) { // Edge case check
                  const p_edge = p0 || p1;
-                 if (Math.abs(p_edge.x - xValue) < 1e-9) { // Check tolerance
-                    y_interp = p_edge.y_display;
-                    p_interp = p_edge;
+                 if (Math.abs(p_edge.x - xValue) < 1e-9) {
+                    y_interp = p_edge.y_display; p_interp = p_edge;
                  }
             }
 
-
-            // 3. Calculate vertical distance if interpolation was successful
+            // Calculate vertical distance if interpolation was successful
             if (y_interp !== null && isFinite(y_interp)) {
                 const distY = Math.abs(this.yScale(y_interp) - pointerY);
-
-                // 4. Update closest trace if this one is closer vertically
                 if (distY < minDistY) {
                     minDistY = distY;
-                    closestTraceInfo = {
-                        trace: trace, // Keep ref to the processed trace object
-                        pointData: p_interp, // Contains x, interpolated y_display, y_volt, source info
-                        xValue: xValue // The actual x under cursor
-                    };
+                    closestTraceInfo = { trace: trace, pointData: p_interp, xValue: xValue };
                 }
             }
         }); // End loop through traces
 
-        // 5. Display tooltip if a close enough trace was found
+        // Display tooltip if a close enough trace was found
         if (closestTraceInfo && minDistY < verticalThresholdPx) {
             const trace = closestTraceInfo.trace;
             const point = closestTraceInfo.pointData;
 
             const tooltipInfo = {
-                 speciesId: trace.speciesId,
-                 traceId: trace.id,
-                 xValue: xValue, // Report x under cursor
-                 yValueDisplayed: point.y_display, // Report interpolated y
-                 yValueVolts: point.y_volt, // Report corresponding V_volt (might also be interpolated if needed)
-                 yValueSource: point.source_y, // Original source y for this point segment
-                 yValueSourceUnits: point.source_units,
-                 currentMode: this.config.mode,
-                 pointEvent: event
+                 speciesId: trace.speciesId, traceId: trace.id, xValue: xValue,
+                 yValueDisplayed: point.y_display, yValueVolts: point.y_volt,
+                 yValueSource: point.source_y, yValueSourceUnits: point.source_units,
+                 currentMode: this.config.mode, pointEvent: event
              };
 
             try {
+                // --- Generate Content via Callback ---
                 const content = this._tooltipCallback(tooltipInfo);
-                // Inside _handleInteraction method, after getting content:
+
                 if (content) {
-                    // Get pointer coordinates relative to the CONTAINER div
+                    // --- Set HTML Content ---
+                    this._tooltip.html(content);
+
+                    // --- Render KaTeX within the tooltip ---
+                    // Requires KaTeX auto-render extension JS to be loaded
+                    if (typeof renderMathInElement === 'function') {
+                         try {
+                            renderMathInElement(this._tooltip.node(), {
+                                delimiters: [
+                                    {left: "$$", right: "$$", display: true},
+                                    {left: "$", right: "$", display: false},
+                                    {left: "\\(", right: "\\)", display: false},
+                                    {left: "\\[", right: "\\]", display: true}
+                                ],
+                                throwOnError: false // Set true for debugging LaTeX errors
+                            });
+                         } catch (katexError) {
+                             console.error("KaTeX auto-render failed in tooltip:", katexError);
+                         }
+                    } else {
+                         console.warn("KaTeX auto-render extension not loaded.");
+                    }
+
+                    // --- Measure and Position Tooltip (with boundary checks) ---
+                    const tooltipNode = this._tooltip.node();
+                    const tooltipWidth = tooltipNode.offsetWidth;
+                    const tooltipHeight = tooltipNode.offsetHeight;
+
+                    // Use container-relative coordinates for positioning logic
                     const [containerX, containerY] = d3.pointer(event, this.container.node());
+                    const containerWidth = this.container.node().clientWidth;
+                    // Use plotHeight for bottom boundary check relative to container coords
+                    const plotBottomY = this.plotHeight + this.config.margin.top + this.config.margin.bottom;
 
-                    // Position tooltip relative to container, offset from cursor
-                    const tooltipX = containerX + 15; // Offset slightly right of cursor
-                    const tooltipY = containerY - 15; // Offset slightly above cursor
 
+                    // Calculate desired position (e.g., above-right of cursor)
+                    let targetX = containerX + 15;
+                    let targetY = containerY - 15 - tooltipHeight; // Position top edge above cursor
+
+                    // Boundary Checks (relative to container)
+                    if (targetX + tooltipWidth > containerWidth) {
+                        targetX = containerX - 15 - tooltipWidth; // Flip left
+                    }
+                    if (targetX < 0) { targetX = 5; } // Prevent going off left
+
+                    if (targetY < 0) { // Check top edge
+                         targetY = containerY + 15; // Flip below cursor
+                    }
+                     // Check bottom edge (relative to container height)
+                    // Note: This assumes tooltip is positioned relative to container, not page.
+                    if (targetY + tooltipHeight > this.config.height) {
+                         targetY = this.config.height - tooltipHeight - 5; // Stick near bottom
+                    }
+
+
+                    // Apply final position and make visible
                     this._tooltip
-                        .html(content)
-                        .style("left", `${tooltipX}px`)
-                        .style("top", `${tooltipY}px`)
-                        // Make sure visibility/opacity are set AFTER position/content
-                        // to prevent flickering/size calculation issues if display was none
+                        .style("left", `${targetX}px`)
+                        .style("top", `${targetY}px`)
                         .style("visibility", "visible")
                         .style("opacity", 1);
-                } else {
-                    this._tooltip.style("visibility", "hidden").style("opacity", 0);
+
+                } else { // No content returned by callback
+                     this._tooltip.style("visibility", "hidden").style("opacity", 0);
                 }
-            } catch (e) {
+            } catch (e) { // Error in user's callback
                  console.error("Error in tooltip callback:", e);
                  this._tooltip.style("visibility", "hidden").style("opacity", 0);
             }
-        } else {
+        } else { // No close trace found
             this._tooltip.style("visibility", "hidden").style("opacity", 0);
         }
     }
+
 
 } // End of class
 
