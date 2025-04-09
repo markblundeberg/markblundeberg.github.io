@@ -9,7 +9,7 @@ const cellConfig = {
     cation: {
         id: "Ag+",
         z: 1,
-        latex: "Ag^{+}",
+        latexPrettyName: "\\mathrm{Ag}^{+}",
         // From user: μ⊖(Ag⁺) ≈ +77 kJ/mol
         mu_standard_J_mol: 77000.0,
         color: "#E6AB02" // Gold/Yellow
@@ -17,7 +17,7 @@ const cellConfig = {
     anion: {
         id: "NO3-",
         z: -1,
-        latex: "NO_3^{-}",
+        latexPrettyName: "\\mathrm{NO}_3^{-}",
         // From user: μ⊖(NO₃⁻) ≈ -111 kJ/mol
         mu_standard_J_mol: -111000.0,
         color: "#66A61E" // Green
@@ -25,7 +25,7 @@ const cellConfig = {
     electron: {
         id: "e-",
         z: -1,
-        latex: "e^{-}",
+        latexPrettyName: "\\mathrm{e}^{-}",
         // Standard state here is arbitrary as V_e is set by equilibrium
         mu_standard_J_mol: 0,
         color: "#1B9E77" // Teal
@@ -202,7 +202,7 @@ function getTooltipContent(info) {
     // info contains: { speciesId, traceId, xValue, yValueDisplayed, yValueVolts, currentMode, pointEvent }
     const config = cellConfig; // Access outer scope config
     const species = config[info.speciesId] || config.cation.id === info.speciesId ? config.cation : (config.anion.id === info.speciesId ? config.anion : config.electron);
-    let content = `<b>\$${species.latex || info.speciesId}\$</b><br>x = ${info.xValue.toFixed(3)}<br>`;
+    let content = `<b>\$${species.latexPrettyName || info.speciesId}\$</b><br>x = ${info.xValue.toFixed(3)}<br>`;
     const mode = info.currentMode;
     const val = info.yValueDisplayed;
 
