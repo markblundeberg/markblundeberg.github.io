@@ -743,19 +743,25 @@ class ElectrochemicalSpeciesBandDiagram {
 
             try {
                 const content = this._tooltipCallback(tooltipInfo);
+                // Inside _handleInteraction method, after getting content:
                 if (content) {
-                     // Use event page coordinates directly for positioning
-                     const tooltipX = event.pageX + 15;
-                     const tooltipY = event.pageY - 15; // Position above cursor usually better
+                    // Get pointer coordinates relative to the CONTAINER div
+                    const [containerX, containerY] = d3.pointer(event, this.container.node());
 
-                     this._tooltip
+                    // Position tooltip relative to container, offset from cursor
+                    const tooltipX = containerX + 15; // Offset slightly right of cursor
+                    const tooltipY = containerY - 15; // Offset slightly above cursor
+
+                    this._tooltip
                         .html(content)
                         .style("left", `${tooltipX}px`)
                         .style("top", `${tooltipY}px`)
+                        // Make sure visibility/opacity are set AFTER position/content
+                        // to prevent flickering/size calculation issues if display was none
                         .style("visibility", "visible")
                         .style("opacity", 1);
                 } else {
-                     this._tooltip.style("visibility", "hidden").style("opacity", 0);
+                    this._tooltip.style("visibility", "hidden").style("opacity", 0);
                 }
             } catch (e) {
                  console.error("Error in tooltip callback:", e);
