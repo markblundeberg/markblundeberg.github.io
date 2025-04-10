@@ -42,28 +42,15 @@ const cellConfig = {
         anion: 1,
         cation: 1,
     },
-
-    // Spatial Layout (relative coordinates 0 to 1)
-    layout: {
-        electrode1_start: 0.0,
-        electrode1_end: 0.2,
-        electrolyte1_start: 0.2,
-        electrolyte1_end: 0.48, // Leave small gap for junction visualization (salt bridge / membrane)
-        electrolyte2_start: 0.52, //
-        electrolyte2_end: 0.8,
-        electrode2_start: 0.8,
-        electrode2_end: 1.0,
-    },
-
-    // Background Regions
-    regions: [
-        { start: 0.0, end: 0.2, name: 'Electrode 1 (Ag)', color: '#E0E0E0' },
-        { start: 0.2, end: 0.48, name: 'Electrolyte 1', color: '#E6F5FF' },
-        { start: 0.52, end: 0.8, name: 'Electrolyte 2', color: '#D6EFFF' }, // Slightly different
-        { start: 0.8, end: 1.0, name: 'Electrode 2 (Ag)', color: '#D0D0D0' },
+    boundaries: [0.0, 0.2, 0.48, 0.52, 0.8, 1.0], // N+1 boundaries for N regions
+    regionProps: [
+        // N regions
+        { name: 'Electrode 1 (Ag)', color: '#E0E0E0' },
+        { name: 'Electrolyte 1', color: '#E6F5FF' },
+        { name: 'Junction', color: 'rgba(255,255,255,0)' }, // Transparent region for the gap
+        { name: 'Electrolyte 2', color: '#D6EFFF' }, // Slightly different blue
+        { name: 'Electrode 2 (Ag)', color: '#D0D0D0' },
     ],
-    // Interface Lines
-    interfaces: [0.2, 0.48, 0.52, 0.8], // Mark all boundaries
 };
 
 // Physical Constants
@@ -170,7 +157,7 @@ function calculateState(c1, c2, junctype, config) {
     const V_e_2 = V_cation_2 - V_reaction;
 
     // Prepare trace definitions using V_volt input unit
-    const x = config.layout; // Shortcut for layout boundaries
+    const b = config.boundaries;
     const traceDefs = [
         // --- Cation Traces ---
         {
@@ -179,9 +166,8 @@ function calculateState(c1, c2, junctype, config) {
             curveType: 'potential',
             showLabel: true,
             inputUnits: 'V_volt',
-            xRange: { min: x.electrolyte1_start, max: x.electrolyte1_end },
-            y: [V_cation_1, V_cation_1], // Constant value within range
-            x: [x.electrolyte1_start, x.electrolyte1_end], // Define x points for this segment
+            x: [b[1], b[2]],
+            y: [V_cation_1, V_cation_1],
         },
         {
             id: `cation_potential_2`,
@@ -189,9 +175,8 @@ function calculateState(c1, c2, junctype, config) {
             curveType: 'potential',
             showLabel: true,
             inputUnits: 'V_volt',
-            xRange: { min: x.electrolyte2_start, max: x.electrolyte2_end },
+            x: [b[3], b[4]],
             y: [V_cation_2, V_cation_2],
-            x: [x.electrolyte2_start, x.electrolyte2_end],
         },
         {
             // Standard state needs only one value per region as phi=0 is constant
@@ -200,19 +185,17 @@ function calculateState(c1, c2, junctype, config) {
             curveType: 'standardState',
             showLabel: false,
             inputUnits: 'V_volt',
-            xRange: { min: x.electrolyte1_start, max: x.electrolyte1_end },
+            x: [b[1], b[2]],
             y: [V_STD_cation_1, V_STD_cation_1],
-            x: [x.electrolyte1_start, x.electrolyte1_end],
         },
         {
             id: `cation_standard_2`,
-            speciesId: 'cation',
+            speciesId: cation.id,
             curveType: 'standardState',
             showLabel: false,
             inputUnits: 'V_volt',
-            xRange: { min: x.electrolyte2_start, max: x.electrolyte2_end },
+            x: [b[3], b[4]],
             y: [V_STD_cation_2, V_STD_cation_2],
-            x: [x.electrolyte2_start, x.electrolyte2_end],
         },
         // --- Anion Traces ---
         {
@@ -221,9 +204,8 @@ function calculateState(c1, c2, junctype, config) {
             curveType: 'potential',
             showLabel: true,
             inputUnits: 'V_volt',
-            xRange: { min: x.electrolyte1_start, max: x.electrolyte1_end },
+            x: [b[1], b[2]],
             y: [V_anion_1, V_anion_1],
-            x: [x.electrolyte1_start, x.electrolyte1_end],
         },
         {
             id: `anion_potential_2`,
@@ -231,9 +213,8 @@ function calculateState(c1, c2, junctype, config) {
             curveType: 'potential',
             showLabel: true,
             inputUnits: 'V_volt',
-            xRange: { min: x.electrolyte2_start, max: x.electrolyte2_end },
+            x: [b[3], b[4]],
             y: [V_anion_2, V_anion_2],
-            x: [x.electrolyte2_start, x.electrolyte2_end],
         },
         {
             id: `anion_standard_1`,
@@ -241,9 +222,8 @@ function calculateState(c1, c2, junctype, config) {
             curveType: 'standardState',
             showLabel: false,
             inputUnits: 'V_volt',
-            xRange: { min: x.electrolyte1_start, max: x.electrolyte1_end },
+            x: [b[1], b[2]],
             y: [V_STD_anion_1, V_STD_anion_1],
-            x: [x.electrolyte1_start, x.electrolyte1_end],
         },
         {
             id: `anion_standard_2`,
@@ -251,9 +231,8 @@ function calculateState(c1, c2, junctype, config) {
             curveType: 'standardState',
             showLabel: false,
             inputUnits: 'V_volt',
-            xRange: { min: x.electrolyte2_start, max: x.electrolyte2_end },
+            x: [b[3], b[4]],
             y: [V_STD_anion_2, V_STD_anion_2],
-            x: [x.electrolyte2_start, x.electrolyte2_end],
         },
         // --- Electron Traces ---
         {
@@ -262,9 +241,8 @@ function calculateState(c1, c2, junctype, config) {
             curveType: 'potential',
             showLabel: true,
             inputUnits: 'V_volt',
-            xRange: { min: x.electrode1_start, max: x.electrode1_end },
+            x: [b[0], b[1]],
             y: [V_e_1, V_e_1],
-            x: [x.electrode1_start, x.electrode1_end],
         },
         {
             id: `e_electrode2`,
@@ -272,9 +250,8 @@ function calculateState(c1, c2, junctype, config) {
             curveType: 'potential',
             showLabel: true,
             inputUnits: 'V_volt',
-            xRange: { min: x.electrode2_start, max: x.electrode2_end },
+            x: [b[4], b[5]],
             y: [V_e_2, V_e_2],
-            x: [x.electrode2_start, x.electrode2_end],
         },
     ];
 
@@ -296,33 +273,37 @@ function getTooltipContent(info) {
         content += `${mode} = N/A`;
     }
 
-    // Add concentration info if it's an ion in an electrolyte region
-    let conc = null;
-    const x = info.xValue;
-    const layout = config.layout;
-    if (info.speciesId === 'cation' || info.speciesId === 'anion') {
-        if (x >= layout.electrolyte1_start && x <= layout.electrolyte1_end) {
-            conc = parseFloat(c1Slider.value);
-            content += `<br>Region: Electrolyte 1`;
-        } else if (
-            x >= layout.electrolyte2_start &&
-            x <= layout.electrolyte2_end
-        ) {
-            conc = parseFloat(c2Slider.value);
-            content += `<br>Region: Electrolyte 2`;
-        }
-    } else if (info.speciesId === 'electron') {
-        if (x >= layout.electrode1_start && x <= layout.electrode1_end) {
-            content += `<br>Region: Electrode 1`;
-        } else if (x >= layout.electrode2_start && x <= layout.electrode2_end) {
-            content += `<br>Region: Electrode 2`;
-        }
+    if (info.regionInfo) {
+        content += `<br>Region: ${info.regionInfo.name} (#${info.regionIndex})`;
     }
 
-    if (conc !== null) {
+    // Add concentration/activity info if applicable
+    let conc = null;
+    let activity = null;
+    // Determine concentration based on region index
+    if (info.regionIndex === 1) {
+        // Electrolyte 1 (index 1 in regionProps array)
+        conc = parseFloat(c1Slider.value);
+    } else if (info.regionIndex === 3) {
+        // Electrolyte 2 (index 3 in regionProps array)
+        conc = parseFloat(c2Slider.value);
+    }
+
+    // Calculate activity only if it's an ion and concentration is known
+    if (
+        (info.speciesId === 'cation' || info.speciesId === 'anion') &&
+        conc !== null
+    ) {
+        const nu =
+            info.speciesId === 'cation'
+                ? config.compound_stoichiometry.cation
+                : config.compound_stoichiometry.anion;
+        activity = (nu * conc) / config.c_std_M;
+    }
+
+    if (activity !== null) {
         content += `<br>Conc ≈ ${conc.toFixed(3)} M`;
-        // Could add activity calculation here if needed: a = conc/C_STD
-        content += `<br>\$${species.latexPrettyName}\$ activity ≈ ${((conc * config.compound_stoichiometry[info.speciesId]) / C_STD).toFixed(3)}`;
+        content += `<br>\$${species.latexPrettyName}\$ activity ≈ ${(activity / C_STD).toFixed(3)}`;
     }
 
     return content;
@@ -371,8 +352,7 @@ document
     .forEach((item) => item.addEventListener('click', updateDiagram));
 
 // --- Initial Draw ---
-diagram.setRegions(cellConfig.regions);
-diagram.setInterfaces(cellConfig.interfaces);
+diagram.setSpatialLayout(cellConfig.boundaries, cellConfig.regionProps);
 updateDiagram(); // Calculate initial state and draw
 
 console.log('Concentration cell example loaded.');

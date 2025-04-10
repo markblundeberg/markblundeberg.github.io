@@ -88,6 +88,9 @@ class ElectrochemicalSpeciesBandDiagram {
         this.traceData = [];
         this.regions = [];
         this.interfaces = [];
+        this.boundaries = []; // Sorted array of x-coordinates defining region edges [x0, x1, ..., xN]
+        this.regionProps = []; // Array of {name, color} for regions between boundaries [{...region0_1...}, {..region1_2..}] Length N
+        // ---
         this.differenceMarkers = [];
         this.lastDrawData = [];
 
@@ -267,26 +270,45 @@ class ElectrochemicalSpeciesBandDiagram {
         this.redraw();
     }
 
-    /** Sets background region definitions. */
-    setRegions(regionDefs = []) {
-        if (!Array.isArray(regionDefs)) {
-            console.error('ESBD Error: setRegions expects an array.');
-            this.regions = [];
+    /**
+     * Sets the spatial layout using boundaries and region properties.
+     * @param {Array<number>} boundaries - Sorted array of x-coordinates defining region edges (e.g., [0, 0.2, 0.5, 1.0]). Must include 0 and max x.
+     * @param {Array<object>} regionProperties - Array of properties for regions between boundaries. Length must be boundaries.length - 1. E.g., [{name, color}, {name, color}, ...]
+     */
+    setSpatialLayout(boundaries = [], regionProperties = []) {
+        // Basic validation
+        if (
+            !Array.isArray(boundaries) ||
+            boundaries.length < 2 ||
+            !Array.isArray(regionProperties) ||
+            regionProperties.length !== boundaries.length - 1
+        ) {
+            console.error(
+                'ESBD Error: Invalid input for setSpatialLayout. Need boundaries array (N+1 >= 2) and regionProperties array (N).',
+                { boundaries, regionProperties }
+            );
+            this.boundaries = [];
+            this.regionProps = [];
         } else {
-            this.regions = regionDefs;
+            // Optional: Add validation for sorted boundaries
+            let sorted = true;
+            for (let i = 1; i < boundaries.length; i++) {
+                if (boundaries[i] < boundaries[i - 1]) sorted = false;
+            }
+            if (!sorted) {
+                console.error('ESBD Error: Boundaries must be sorted.');
+                this.boundaries = [];
+                this.regionProps = [];
+            } else {
+                this.boundaries = boundaries;
+                this.regionProps = regionProperties;
+            }
         }
-        if (this.plotArea) this._drawBackgrounds();
-    }
-
-    /** Sets interface line positions. */
-    setInterfaces(interfaceCoords = []) {
-        if (!Array.isArray(interfaceCoords)) {
-            console.error('ESBD Error: setInterfaces expects an array.');
-            this.interfaces = [];
-        } else {
-            this.interfaces = interfaceCoords;
+        // Redraw static elements immediately if possible
+        if (this.plotArea) {
+            this._drawBackgrounds();
+            this._drawInterfaceLines();
         }
-        if (this.plotArea) this._drawInterfaceLines();
     }
 
     /** Sets definitions for vertical difference markers. */
@@ -346,12 +368,12 @@ class ElectrochemicalSpeciesBandDiagram {
         );
 
         // 2. Update Scales
-        // Use extent of all x data from traces for x-domain
-        const allXValues = this.lastDrawData.flatMap((t) =>
-            t.points.map((p) => p.x)
+        const xDomain = d3.extent(
+            this.boundaries && this.boundaries.length > 0
+                ? this.boundaries
+                : allXValues
         );
-        let xDomain = d3.extent(allXValues);
-        if (xDomain[0] === undefined) xDomain = [0, 1]; // Default if no data
+        if (xDomain[0] === undefined) xDomain = [0, 1];
         this.xScale.domain(xDomain).nice();
 
         // Use extent of y_display values for y-domain
@@ -393,7 +415,7 @@ class ElectrochemicalSpeciesBandDiagram {
             .attr('width', this.plotWidth)
             .attr('height', this.plotHeight);
 
-        // 5. Draw Static Elements (using current API's state)
+        // 5. Draw Static Elements
         this._drawBackgrounds();
         this._drawInterfaceLines();
 
@@ -696,27 +718,50 @@ class ElectrochemicalSpeciesBandDiagram {
     }
 
     _drawBackgrounds() {
-        if (!this.regions) return;
+        if (
+            !this.boundaries ||
+            this.boundaries.length < 2 ||
+            !this.regionProps ||
+            this.regionProps.length !== this.boundaries.length - 1
+        ) {
+            this.backgroundGroup.selectAll('rect.esbd-region-bg').remove();
+            return;
+        }
+        // Create data pairs: [ { start: b[0], end: b[1], props: r[0] }, { start: b[1], end: b[2], props: r[1] }, ... ]
+        const regionDrawData = this.regionProps.map((props, i) => ({
+            id: `bg_${i}_${props?.name?.replace(/\s+/g, '-') || i}`, // Unique ID based on index/name
+            start: this.boundaries[i],
+            end: this.boundaries[i + 1],
+            props: props || {}, // Ensure props object exists
+        }));
+
         this.backgroundGroup
             .selectAll('rect.esbd-region-bg')
-            .data(this.regions, (d) => d.name || `${d.start}-${d.end}`)
+            .data(regionDrawData, (d) => d.id) // Key by generated ID
             .join('rect')
             .attr('class', 'esbd-region-bg')
             .attr('x', (d) => this.xScale(d.start))
             .attr('y', 0)
             .attr('width', (d) =>
                 Math.max(0, this.xScale(d.end) - this.xScale(d.start))
-            )
+            ) // Ensure non-negative width
             .attr('height', this.plotHeight)
-            .attr('fill', (d) => d.color || 'transparent')
-            .lower();
+            .attr('fill', (d) => d.props.color || 'transparent')
+            .lower(); // Ensure backgrounds are behind everything else
     }
 
     _drawInterfaceLines() {
-        if (!this.interfaces) return;
+        if (!this.boundaries || this.boundaries.length < 3) {
+            // Need at least 3 boundaries for 1 interface line
+            this.interfaceGroup.selectAll('line.esbd-interface-line').remove();
+            return;
+        }
+        // Draw lines at internal boundaries (excluding start and end)
+        const interfaceData = this.boundaries.slice(1, -1);
+
         this.interfaceGroup
             .selectAll('line.esbd-interface-line')
-            .data(this.interfaces, (d) => d)
+            .data(interfaceData, (d) => d) // Key by x-coordinate value
             .join('line')
             .attr('class', 'esbd-interface-line')
             .attr('x1', (d) => this.xScale(d))
@@ -987,18 +1032,44 @@ class ElectrochemicalSpeciesBandDiagram {
         }
         const xValue = this.xScale.invert(pointerX);
 
-        // --- Find Region Info (USING OLD API FOR NOW) ---
+        // --- Find Region Info (NEW LOGIC) ---
         let regionIndex = -1;
         let regionInfo = null;
-        if (this.regions && this.regions.length > 0) {
-            regionIndex = this.regions.findIndex(
-                (region) => xValue >= region.start && xValue <= region.end
-            );
-            if (regionIndex !== -1) {
+        if (this.boundaries && this.boundaries.length > 1) {
+            // Find index i such that boundaries[i] <= xValue < boundaries[i+1]
+            // or boundaries[i] <= xValue <= boundaries[i+1] for the last region
+            regionIndex = this.boundaries.findIndex((b, i, arr) => {
+                if (i === arr.length - 1) return false; // Stop before last boundary element
+                const next_b = arr[i + 1];
+                const isLastRegionCheck = i === arr.length - 2; // Is this the last interval?
+                // Check within bounds, handle floating point precision near boundaries
+                const epsilon = 1e-9; // Small tolerance
+                return (
+                    xValue >= b - epsilon &&
+                    (xValue < next_b - epsilon ||
+                        (isLastRegionCheck && xValue <= next_b + epsilon))
+                );
+            });
+
+            if (
+                regionIndex !== -1 &&
+                this.regionProps &&
+                this.regionProps[regionIndex]
+            ) {
                 regionInfo = {
-                    ...this.regions[regionIndex],
                     index: regionIndex,
-                }; // Pass copy
+                    name:
+                        this.regionProps[regionIndex].name ||
+                        `Region ${regionIndex}`,
+                    color: this.regionProps[regionIndex].color, // Pass color too
+                    startX: this.boundaries[regionIndex],
+                    endX: this.boundaries[regionIndex + 1],
+                };
+            } else {
+                // Handle case where xValue might be exactly on the start/end boundary?
+                // Or slightly outside due to padding/nice(). Assign to nearest?
+                // For now, null if not strictly within a defined region.
+                // console.warn(`Could not find region for xValue: ${xValue}`);
             }
         }
         // --- End Find Region Info ---
@@ -1097,8 +1168,8 @@ class ElectrochemicalSpeciesBandDiagram {
                 yValueSource: point.source_y,
                 yValueSourceUnits: point.source_units,
                 currentMode: this.config.mode,
-                regionIndex: regionIndex, // <-- Pass region index
-                regionInfo: regionInfo, // <-- Pass region properties
+                regionIndex: regionIndex, // <-- Pass region index (-1 if not found)
+                regionInfo: regionInfo, // <-- Pass region properties (or null)
                 pointEvent: event,
             };
             try {
