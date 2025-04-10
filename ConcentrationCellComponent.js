@@ -60,13 +60,14 @@ class ConcentrationCellComponent {
     /** Creates the necessary HTML structure within the container */
     _createInternalHTML() {
         const config = this.cellConfig;
-        // Generate unique IDs for label 'for' attributes if needed
-        const c1SliderId = `c1-${this.plotDivId}`; // Reuse plot id for uniqueness prefix
+        // Generate unique IDs for elements needing association
+        const c1SliderId = `c1-${this.plotDivId}`;
         const c2SliderId = `c2-${this.plotDivId}`;
         const anionId = `anion-${this.plotDivId}`;
         const sbId = `sb-${this.plotDivId}`;
         const cationId = `cation-${this.plotDivId}`;
         const modeSelectId = `mode-${this.plotDivId}`;
+        const voltageOutputId = `volt-out-${this.plotDivId}`; // ID for output element
 
         // Note: Using classes for elements that JS needs to find within the component instance
         this.container.innerHTML = `
@@ -81,19 +82,26 @@ class ConcentrationCellComponent {
                     <input type="range" class="c2-slider" id="${c2SliderId}" min="${config.cMin || 0.001}" max="${config.cMax || 2.0}" step="0.001" value="${this.currentC2}">
                     <output class="c2-value">${this.currentC2.toFixed(3)}</output> M
                 </div>
-                 <div class="control-row radio-group">
-                    <label class="control-label">Junction Type:</label>
+                 
+                 <fieldset class="control-row radio-group" style="border: none; padding: 0; margin: 0; margin-bottom: 8px;">
+                    <legend class="control-label" style="padding: 0; margin-right: 10px; float: left; width: 200px; text-align: right;">Junction Type:</legend>
+                    <div style="display: inline-block;">
                     <input type="radio" value="anion" name="${this.junctionSelectorName}" id="${anionId}" ${this.junctionType === 'anion' ? 'checked' : ''}>
-                    <label for="${anionId}">Anion Membrane (Ideal)</label>
+                        <label for="${anionId}" style="min-width: initial; margin-left: 2px; margin-right: 10px; font-weight: normal;">Anion Membrane (Ideal)</label>
+                        
                     <input type="radio" value="saltbridge" name="${this.junctionSelectorName}" id="${sbId}" ${this.junctionType === 'saltbridge' ? 'checked' : ''}>
-                    <label for="${sbId}">Salt Bridge (Ideal)</label>
+                        <label for="${sbId}" style="min-width: initial; margin-left: 2px; margin-right: 10px; font-weight: normal;">Salt Bridge (Ideal)</label>
+                        
                     <input type="radio" value="cation" name="${this.junctionSelectorName}" id="${cationId}" ${this.junctionType === 'cation' ? 'checked' : ''}>
-                    <label for="${cationId}">Cation Membrane (Ideal)</label>
+                        <label for="${cationId}" style="min-width: initial; margin-left: 2px; margin-right: 10px; font-weight: normal;">Cation Membrane (Ideal)</label>
                 </div>
+                 </fieldset>
+
                 <div class="control-row">
-                    <label class="control-label">Calculated Cell Voltage:</label>
-                    <output class="cell-voltage">?.???</output> V
+                    <label class="control-label" for="${voltageOutputId}">Calculated Cell Voltage:</label>
+                    <output class="cell-voltage" id="${voltageOutputId}">?.???</output> V
                 </div>
+
                  <div class="control-row">
                     <label class="control-label" for="${modeSelectId}">Display Mode:</label>
                     <select class="mode-selector" id="${modeSelectId}" style="margin-left: 10px;">
