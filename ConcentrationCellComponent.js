@@ -29,11 +29,14 @@ class ConcentrationCellComponent {
             );
         }
         this.cellConfig = cellConfig; // Store config
+        this.diagram = null; // ESBD instance
+        this.plotDivId = `esbd-plot-${Math.random().toString(36).substring(2, 9)}`; // Unique ID for plot container
+        this.junctionSelectorName = `junction-${this.plotDivId}`; // Unique name for radio group
+
         // Initialize state from config or defaults
         this.currentC1 = cellConfig.initialC1 || 0.1;
         this.currentC2 = cellConfig.initialC2 || 1.0;
         this.junctionType = cellConfig.initialJunction || 'saltbridge';
-        this.diagram = null; // ESBD instance
 
         try {
             this._createInternalHTML(); // Generate controls and plot div
@@ -57,16 +60,15 @@ class ConcentrationCellComponent {
     /** Creates the necessary HTML structure within the container */
     _createInternalHTML() {
         const config = this.cellConfig;
-        // Generate unique IDs for elements within this instance if needed (e.g., for labels)
-        const instanceId = `inst-${Math.random().toString(36).substring(2, 9)}`;
-        const c1SliderId = `c1-${instanceId}`;
-        const c2SliderId = `c2-${instanceId}`;
-        const junctionName = `junction-${instanceId}`;
-        const anionId = `anion-${instanceId}`;
-        const sbId = `sb-${instanceId}`;
-        const cationId = `cation-${instanceId}`;
-        this.plotDivId = `esbd-plot-${instanceId}`; // Unique ID for the plot container
+        // Generate unique IDs for label 'for' attributes if needed
+        const c1SliderId = `c1-${this.plotDivId}`; // Reuse plot id for uniqueness prefix
+        const c2SliderId = `c2-${this.plotDivId}`;
+        const anionId = `anion-${this.plotDivId}`;
+        const sbId = `sb-${this.plotDivId}`;
+        const cationId = `cation-${this.plotDivId}`;
+        const modeSelectId = `mode-${this.plotDivId}`;
 
+        // Note: Using classes for elements that JS needs to find within the component instance
         this.container.innerHTML = `
             <div class="controls esbd-controls">
                 <div class="control-row">
@@ -81,11 +83,11 @@ class ConcentrationCellComponent {
                 </div>
                  <div class="control-row radio-group">
                     <label class="control-label">Junction Type:</label>
-                    <input type="radio" value="anion" name="${junctionName}" id="${anionId}" ${this.junctionType === 'anion' ? 'checked' : ''}>
+                    <input type="radio" value="anion" name="${this.junctionSelectorName}" id="${anionId}" ${this.junctionType === 'anion' ? 'checked' : ''}>
                     <label for="${anionId}">Anion Membrane (Ideal)</label>
-                    <input type="radio" value="saltbridge" name="${junctionName}" id="${sbId}" ${this.junctionType === 'saltbridge' ? 'checked' : ''}>
+                    <input type="radio" value="saltbridge" name="${this.junctionSelectorName}" id="${sbId}" ${this.junctionType === 'saltbridge' ? 'checked' : ''}>
                     <label for="${sbId}">Salt Bridge (Ideal)</label>
-                    <input type="radio" value="cation" name="${junctionName}" id="${cationId}" ${this.junctionType === 'cation' ? 'checked' : ''}>
+                    <input type="radio" value="cation" name="${this.junctionSelectorName}" id="${cationId}" ${this.junctionType === 'cation' ? 'checked' : ''}>
                     <label for="${cationId}">Cation Membrane (Ideal)</label>
                 </div>
                 <div class="control-row">
@@ -93,8 +95,8 @@ class ConcentrationCellComponent {
                     <output class="cell-voltage">?.???</output> V
                 </div>
                  <div class="control-row">
-                    <label class="control-label">Display Mode:</label>
-                    <select class="mode-selector" style="margin-left: 10px;">
+                    <label class="control-label" for="${modeSelectId}">Display Mode:</label>
+                    <select class="mode-selector" id="${modeSelectId}" style="margin-left: 10px;">
                          <option value="Volts" selected>Volts</option>
                          <option value="eV">eV</option>
                          <option value="kJmol">kJ/mol</option>
@@ -105,17 +107,15 @@ class ConcentrationCellComponent {
         `;
     }
 
-    /** Finds references to the dynamically created DOM elements */
+    /** Finds references to the dynamically created DOM elements within this component */
     _findInternalElements() {
         this.c1Slider = this.container.querySelector('.c1-slider');
         this.c1Value = this.container.querySelector('.c1-value');
         this.c2Slider = this.container.querySelector('.c2-slider');
         this.c2Value = this.container.querySelector('.c2-value');
         this.junctionRadios = this.container.querySelectorAll(
-            `input[name="${this.junctionSelectorName}"]`
-        ); // Use name selector
-        this.junctionSelectorName =
-            this.junctionRadios.length > 0 ? this.junctionRadios[0].name : null; // Store the generated name
+            `input[type="radio"][name="${this.junctionSelectorName}"]`
+        );
         this.cellVoltageOut = this.container.querySelector('.cell-voltage');
         this.modeSelector = this.container.querySelector('.mode-selector');
         this.plotDiv = this.container.querySelector('.plot-container'); // Found by class
@@ -151,15 +151,20 @@ class ConcentrationCellComponent {
             this.modeSelector.addEventListener('change', (e) =>
                 this.diagram.setMode(e.target.value)
             );
-        if (this.junctionSelectorName) {
-            this.container
-                .querySelectorAll(`input[name="${this.junctionSelectorName}"]`)
-                .forEach((radio) => {
+
+        if (this.junctionRadios && this.junctionRadios.length > 0) {
+            this.junctionRadios.forEach((radio) => {
                     radio.addEventListener('change', () => {
+                    if (radio.checked) {
                         this.junctionType = radio.value; // Update internal state
-                        this.updateDiagram();
-                    });
+                        this.updateDiagram(); // Trigger redraw
+                    }
                 });
+            });
+        } else {
+            console.warn(
+                `Junction selector radios not found for component in ${this.container.id || this.containerSelector}`
+            );
         }
     }
 
