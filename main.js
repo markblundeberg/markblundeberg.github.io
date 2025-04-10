@@ -9,30 +9,40 @@ const cellConfig = {
     cation: {
         textName: 'Ag+',
         z: 1,
+        stoich: 1,   // formal compound is (Ag)_1(NO3)_1
+        mu_standard_J_mol: 77000.0, // aqueous
+        color: "#E6AB02", // Gold/Yellow
         latexPrettyName: "\\mathrm{Ag}^{+}",
-        // From user: μ⊖(Ag⁺) ≈ +77 kJ/mol
-        mu_standard_J_mol: 77000.0,
-        color: "#E6AB02" // Gold/Yellow
     },
     anion: {
         textName: "NO3-",
         z: -1,
+        stoich: 1,   // formal compound is (Ag)_1(NO3)_1
+        mu_standard_J_mol: -111000.0, // aqueous
+        color: "#66A61E", // Green
         latexPrettyName: "\\mathrm{NO}_3^{-}",
-        // From user: μ⊖(NO₃⁻) ≈ -111 kJ/mol
-        mu_standard_J_mol: -111000.0,
-        color: "#66A61E" // Green
     },
     electron: {
         textName: "e-",
         z: -1,
+        // mu_standard_J_mol not needed for electron
+        color: "#1B9E77", // Teal
         latexPrettyName: "\\mathrm{e}^{-}",
-        // Standard state here is arbitrary as V_e is set by equilibrium
-        mu_standard_J_mol: 0,
-        color: "#1B9E77" // Teal
     },
+
+    // Other chemical info
     electrode_neutral: {
         // Chemical potential of the solid electrode material (relative to elements=0)
+        // It is assumed electrode is made of cation with 1:1 stoichiometry for purposes
+        // of this chemical potential.
         mu_J_mol: 0.0 // For pure Ag(s)
+    },
+    compound_stoichiometry: {
+        // Stoichiometries of the ions inside of the formal electrolyte compound:
+        //    (anion)_x(cation)_y
+        // this is used to map the user-selected concentration to ion concentrations.
+        anion:1,
+        cation:1,
     },
 
     // Spatial Layout (relative coordinates 0 to 1)
@@ -40,8 +50,8 @@ const cellConfig = {
         electrode1_start: 0.0,
         electrode1_end: 0.2,
         electrolyte1_start: 0.2,
-        electrolyte1_end: 0.48, // Leave small gap for "bridge" visualization
-        electrolyte2_start: 0.52,
+        electrolyte1_end: 0.48, // Leave small gap for junction visualization (salt bridge / membrane)
+        electrolyte2_start: 0.52, //
         electrolyte2_end: 0.8,
         electrode2_start: 0.8,
         electrode2_end: 1.0,
@@ -62,7 +72,7 @@ const cellConfig = {
 const R = 8.31446; // J / (mol K)
 const F = 96485.3; // C / mol
 const TEMP_K = 298.15; // Kelvin
-const RT_F = (R * TEMP_K) / F; // Approx 0.02569 V
+const RT_F = (R * TEMP_K) / F; // Approx 0.026 V - 'thermal voltage'
 const C_STD = 1.0; // Standard concentration (1 M) for molar activity scale
 
 // --- DOM Element References ---
@@ -85,46 +95,77 @@ const diagram = new ElectrochemicalSpeciesBandDiagram(plotContainerId, { width: 
 
 // --- Calculation Function ---
 // Calculates V_volt values based on concentrations and config
-function calculateState(c1, c2, config) {
-    c1 = Math.max(c1, 1e-9); // Avoid log(0) issues
-    c2 = Math.max(c2, 1e-9);
-    const a1 = c1 / C_STD; // Ideal activity = c/c_std
-    const a2 = c2 / C_STD;
-
+function calculateState(c1, c2, junctype, config) {
     // Get parameters from config
     const cation = config.cation;
     const anion = config.anion;
-    const electron = config.electron;
+    const compound = config.compound_stoichiometry;
     const mu_electrode = config.electrode_neutral.mu_J_mol;
-    const n_reaction = cation.z; // Number of electrons in M -> M^n+ + n e-
 
-    // Calculate standard state potentials V^⊖ = μ^⊖ / (zF) in Volts
-    const V_STD_cation = cation.mu_standard_J_mol / (cation.z * F);
-    const V_STD_anion = anion.mu_standard_J_mol / (anion.z * F);
+    if (compound.anion * anion.z + compound.cation * cation.z != 0) {
+        throw('non-neutral compound; fix stoichiometry');
+    }
 
+    c1 = Math.max(c1, 1e-9); // Avoid log(0) issues
+    c2 = Math.max(c2, 1e-9);
+    // Assume ideal molar activities:
+    const a_a1 = c1 * compound.anion / C_STD;
+    const a_c1 = c1 * compound.cation / C_STD;
+    const a_a2 = c2 * compound.anion / C_STD;
+    const a_c2 = c2 * compound.cation / C_STD;
     // Calculate potential term RT/(zF) * ln(a) for each ion/region
-    const nernst_cation1 = (RT_F / cation.z) * Math.log(a1);
-    const nernst_cation2 = (RT_F / cation.z) * Math.log(a2);
-    // Assume anion activity scales with cation activity (e.g., a_anion = a_cation for 1:1 salt)
-    const nernst_anion1 = (RT_F / anion.z) * Math.log(a1);
-    const nernst_anion2 = (RT_F / anion.z) * Math.log(a2);
+    // This is the offset between V_STD_i and V_i
+    const nernst_cation1 = (RT_F / cation.z) * Math.log(a_c1);
+    const nernst_cation2 = (RT_F / cation.z) * Math.log(a_c2);
+    const nernst_anion1 = (RT_F / anion.z) * Math.log(a_a1);
+    const nernst_anion2 = (RT_F / anion.z) * Math.log(a_a2);
 
-    // Assume ideal salt bridge: phi is constant in both bulk electrolytes. Set phi=0.
-    const phi_electrolyte = 0;
+    // Electrode reaction M^n+ + n e- <-> M
+    // (1/z)mu_cation+ + mu_e- = (1/z)mu_electrode   (divide by z of cation)
+    // V_cation - V_e- = (1/zF)mu_electrode          (divide by F)
+    const V_reaction = mu_electrode / (cation.z * F);
 
-    // Calculate V = V^⊖ + (RT/zF)ln(a) + phi for ions in each electrolyte
-    const V_cation_1 = V_STD_cation + nernst_cation1 + phi_electrolyte;
-    const V_cation_2 = V_STD_cation + nernst_cation2 + phi_electrolyte;
-    const V_anion_1 = V_STD_anion + nernst_anion1 + phi_electrolyte;
-    const V_anion_2 = V_STD_anion + nernst_anion2 + phi_electrolyte;
+    // Calculate standard state potentials V^⊖ = μ^⊖ / (zF),  (relative to phi)
+    const iV_STD_cation = cation.mu_standard_J_mol / (cation.z * F);
+    const iV_STD_anion = anion.mu_standard_J_mol / (anion.z * F);
+    // Only the difference between them will matter:
+    const V_STD_span = iV_STD_cation - iV_STD_anion;
 
-    // Calculate V_e in electrodes based on equilibrium at interface:
-    // V_cation - V_electron = mu_electrode / (n * F)  => V_e = V_cation - mu_electrode / (n*F)
-    const V_e_1 = V_cation_1 - mu_electrode / (n_reaction * F);
-    const V_e_2 = V_cation_2 - mu_electrode / (n_reaction * F);
+    // Now work our way from left to right. 
+    
+    // left electrode is ground
+    const V_e_1 = 0; 
+    // left side solution:
+    const V_cation_1 = V_e_1 + V_reaction;
+    const V_STD_cation_1 = V_cation_1 - nernst_cation1;
+    const V_STD_anion_1 = V_STD_cation_1 - V_STD_span;
+    const V_anion_1 = V_STD_anion_1 + nernst_anion1;
 
-    // Calculate Cell Voltage
-    const cell_voltage = V_e_2 - V_e_1; // Potential of right electrode minus left
+    // junction!
+    // for simplicity, we'll calculate the jump between V_cation_1 and V_cation_2
+    // cell_voltage == V_e_2 - V_e_1 == V_cation_2 - V_cation_1 within numerical error
+    let cell_voltage = 0;
+    switch(junctype) {
+        case 'cation':
+            cell_voltage = 0;
+            break;
+        case 'saltbridge':
+            cell_voltage = nernst_cation2 - nernst_cation1;
+            break;
+        case 'anion':
+            cell_voltage = nernst_cation2 - nernst_cation1 + nernst_anion1 - nernst_anion2;
+            break;
+        default:
+            throw(junctype);
+    }
+
+    // right side solution:
+    const V_cation_2 = V_cation_1 + cell_voltage;
+    const V_STD_cation_2 = V_cation_2 - nernst_cation2;
+    const V_STD_anion_2 = V_STD_cation_2 - V_STD_span;
+    const V_anion_2 = V_STD_anion_2 + nernst_anion2;
+    // right electrode:
+    const V_e_2 = V_cation_2 - V_reaction;
 
     // Prepare trace definitions using V_volt input unit
     const x = config.layout; // Shortcut for layout boundaries
@@ -145,13 +186,13 @@ function calculateState(c1, c2, config) {
         { // Standard state needs only one value per region as phi=0 is constant
             id: `cation_standard_1`, speciesId: 'cation', curveType: 'standardState', showLabel: false,
             inputUnits: 'V_volt', xRange: { min: x.electrolyte1_start, max: x.electrolyte1_end },
-            y: [V_STD_cation + phi_electrolyte, V_STD_cation + phi_electrolyte],
+            y: [V_STD_cation_1, V_STD_cation_1],
             x: [x.electrolyte1_start, x.electrolyte1_end]
         },
          {
             id: `cation_standard_2`, speciesId: 'cation', curveType: 'standardState', showLabel: false,
             inputUnits: 'V_volt', xRange: { min: x.electrolyte2_start, max: x.electrolyte2_end },
-            y: [V_STD_cation + phi_electrolyte, V_STD_cation + phi_electrolyte],
+            y: [V_STD_cation_2, V_STD_cation_2],
             x: [x.electrolyte2_start, x.electrolyte2_end]
         },
        // --- Anion Traces ---
@@ -170,13 +211,13 @@ function calculateState(c1, c2, config) {
         {
             id: `anion_standard_1`, speciesId: 'anion', curveType: 'standardState', showLabel: false,
             inputUnits: 'V_volt', xRange: { min: x.electrolyte1_start, max: x.electrolyte1_end },
-            y: [V_STD_anion + phi_electrolyte, V_STD_anion + phi_electrolyte],
+            y: [V_STD_anion_1, V_STD_anion_1],
             x: [x.electrolyte1_start, x.electrolyte1_end]
         },
          {
             id: `anion_standard_2`, speciesId: 'anion', curveType: 'standardState', showLabel: false,
             inputUnits: 'V_volt', xRange: { min: x.electrolyte2_start, max: x.electrolyte2_end },
-            y: [V_STD_anion + phi_electrolyte, V_STD_anion + phi_electrolyte],
+            y: [V_STD_anion_2, V_STD_anion_2],
             x: [x.electrolyte2_start, x.electrolyte2_end]
         },
         // --- Electron Traces ---
@@ -248,9 +289,12 @@ function updateDiagram() {
     const c2 = parseFloat(c2Slider.value);
     c1Value.textContent = c1.toFixed(3);
     c2Value.textContent = c2.toFixed(3);
+    const juncradio = document.querySelector('input[name="junction-selector"]:checked');
+    if (!juncradio) { throw('no junction type selected'); }
+    const junctype = juncradio.value;
 
     // Calculate the new state based on slider values and cellConfig
-    const { traceDefs, calculatedVoltage } = calculateState(c1, c2, cellConfig);
+    const { traceDefs, calculatedVoltage } = calculateState(c1, c2, junctype, cellConfig);
 
     // Update the diagram instance's data
     diagram.updateTraceData(traceDefs);
@@ -267,6 +311,9 @@ c2Slider.addEventListener('input', updateDiagram);
 modeSelector.addEventListener('change', (event) => {
     diagram.setMode(event.target.value);
 });
+document.getElementsByName('junction-selector').forEach(
+    item => item.addEventListener('click', updateDiagram)
+)
 
 // --- Initial Draw ---
 diagram.setRegions(cellConfig.regions);

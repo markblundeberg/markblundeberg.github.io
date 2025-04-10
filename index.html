@@ -49,7 +49,14 @@
                  <option value="kJmol">kJ/mol</option>
             </select>
         </div>
-    </div>
+        <div>
+        <fieldset>
+            <legend>Type of junction</legend>
+            <input type="radio" value="anion" name="junction-selector"/><label for="anion">Anionic membrane</label>
+            <input type="radio" value="saltbridge" name="junction-selector" checked/><label for="saltbridge">Salt bridge</label>
+            <input type="radio" value="cation" name="junction-selector"/><label for="cation">Cationic membrane</label>
+        </fieldset>
+     </div>
 
     <div id="plot-container"></div>
 
