@@ -1,29 +1,27 @@
-// main.js
+// main.js for Concentration Cell Example
+
 import ElectrochemicalSpeciesBandDiagram from './ElectrochemicalSpeciesBandDiagram.js';
 
 // --- Configuration Section ---
 
-// Cell Setup Parameters
+// Cell Setup Parameters for AgNO3 Concentration Cell
 const cellConfig = {
-    // Species Definitions
+    // Species Definitions (using generic keys 'cation', 'anion', 'electron')
     cation: {
-        textName: 'Ag+',
         z: 1,
-        mu_standard_J_mol: 77000.0, // aqueous
+        mu_standard_J_mol: 77000.0, // aqueous Ag+ rel H+ standard state
         color: '#E6AB02', // Gold/Yellow
-        latexPrettyName: '\\mathrm{Ag}^{+}',
+        latexPrettyName: '\\mathrm{Ag}^{+}', // For auto-labels
     },
     anion: {
-        textName: 'NO3-',
         z: -1,
-        mu_standard_J_mol: -111000.0, // aqueous
+        mu_standard_J_mol: -111000.0, // aqueous NO3- rel H+ standard state
         color: '#66A61E', // Green
         latexPrettyName: '\\mathrm{NO}_3^{-}',
     },
     electron: {
-        textName: 'e-',
         z: -1,
-        // mu_standard_J_mol not needed for electron
+        mu_standard_J_mol: 0, // Standard state choice irrelevant as V_e set by equilibrium
         color: '#1B9E77', // Teal
         latexPrettyName: '\\mathrm{e}^{-}',
     },
@@ -31,17 +29,21 @@ const cellConfig = {
     // Other chemical info
     electrode_neutral: {
         // Chemical potential of the solid electrode material (relative to elements=0)
-        // It is assumed electrode is made of cation with 1:1 stoichiometry for purposes
-        // of this chemical potential.
+        // Assumed to be the metallic form of the cation species.
+        // I.e. cation is M^(z+) and electrode is M = M^(z+) + z*e^-
         mu_J_mol: 0.0, // For pure Ag(s)
     },
     compound_stoichiometry: {
-        // Stoichiometries of the ions inside of the formal electrolyte compound:
-        //    (anion)_x(cation)_y
-        // this is used to map the user-selected concentration to ion concentrations.
-        anion: 1,
-        cation: 1,
+        // Stoichiometries of the ions in the formal electrolyte compound M_nu_c X_nu_a
+        // Used to map formal concentration 'c' to ion activities
+        cation: 1, // nu_+ for Ag+ in AgNO3
+        anion: 1, // nu_- for NO3- in AgNO3
     },
+    // Standard concentration for activity calculation (a = gamma * nu*c / C_STD)
+    // Assuming gamma=1 (ideal) and C_STD=1M here.
+    c_std_M: 1.0,
+
+    // Spatial Layout definition using boundaries and regionProps
     boundaries: [0.0, 0.2, 0.48, 0.52, 0.8, 1.0], // N+1 boundaries for N regions
     regionProps: [
         // N regions
@@ -51,14 +53,21 @@ const cellConfig = {
         { name: 'Electrolyte 2', color: '#D6EFFF' }, // Slightly different blue
         { name: 'Electrode 2 (Ag)', color: '#D0D0D0' },
     ],
+
+    // Initial slider values and ranges
+    initialC1: 0.1,
+    initialC2: 1.0,
+    cMin: 0.001,
+    cMax: 2.0,
+    plotHeight: 250,
+    initialJunction: 'saltbridge',
 };
 
 // Physical Constants
 const R = 8.31446; // J / (mol K)
 const F = 96485.3; // C / mol
 const TEMP_K = 298.15; // Kelvin
-const RT_F = (R * TEMP_K) / F; // Approx 0.026 V - 'thermal voltage'
-const C_STD = 1.0; // Standard concentration (1 M) for molar activity scale
+const RT_F = (R * TEMP_K) / F; // Approx 0.02569 V
 
 // --- DOM Element References ---
 const plotContainerId = 'plot-container';
@@ -68,40 +77,53 @@ const c2Slider = document.getElementById('c2_slider');
 const c2Value = document.getElementById('c2_value');
 const cellVoltageOut = document.getElementById('cell_voltage');
 const modeSelector = document.getElementById('unit-mode-selector');
+const junctionRadios = document.getElementsByName('junction-selector'); // Get radio group
 
 // --- Instantiate Diagram ---
-// Pass initial width/height hints matching CSS (optional)
+// Ensure container exists before instantiation
+const plotContainer = document.getElementById(plotContainerId);
+if (!plotContainer) {
+    // TODO: ? Disable controls and display error in HTML
+    throw `ESBD Error: Plot container #${plotContainerId} not found.`;
+}
 const diagram = new ElectrochemicalSpeciesBandDiagram(plotContainerId, {
-    width: 800,
-    height: 500,
+    width: 800, // Initial hint
+    height: cellConfig.plotHeight,
 });
 
 // --- Define Species Info from Config ---
-['cation', 'anion', 'electron'].forEach((id) => {
-    diagram.addSpeciesInfo(id, cellConfig[id]);
-});
+diagram.addSpeciesInfo('cation', cellConfig.cation);
+diagram.addSpeciesInfo('anion', cellConfig.anion);
+diagram.addSpeciesInfo('electron', cellConfig.electron);
+
+// --- Set boundaries / regions ---
+diagram.setSpatialLayout(cellConfig.boundaries, cellConfig.regionProps);
 
 // --- Calculation Function ---
-// Calculates V_volt values based on concentrations and config
-function calculateState(c1, c2, junctype, config) {
+// Calculates V_volt values based on concentrations, junction type, and config
+function calculateState(c1, c2, junctionType, config) {
     // Get parameters from config
     const cation = config.cation;
     const anion = config.anion;
     const compound = config.compound_stoichiometry;
     const mu_electrode = config.electrode_neutral.mu_J_mol;
+    const C_STD = config.c_std_M;
 
-    if (compound.anion * anion.z + compound.cation * cation.z != 0) {
+    // Check compound neutrality (optional but good practice)
+    if (compound.cation * cation.z + compound.anion * anion.z !== 0) {
         throw 'non-neutral compound; fix stoichiometry';
     }
 
-    c1 = Math.max(c1, 1e-9); // Avoid log(0) issues
+    // Ensure concentrations are positive, calculate ideal molar activities
+    c1 = Math.max(c1, 1e-9);
     c2 = Math.max(c2, 1e-9);
-    // Assume ideal molar activities:
-    const a_a1 = (c1 * compound.anion) / C_STD;
-    const a_c1 = (c1 * compound.cation) / C_STD;
-    const a_a2 = (c2 * compound.anion) / C_STD;
-    const a_c2 = (c2 * compound.cation) / C_STD;
-    // Calculate potential term RT/(zF) * ln(a) for each ion/region
+    // Activity a_i = gamma_i * nu_i * c / C_STD. Assume gamma_i=1 (molar gamma!).
+    const a_c1 = (compound.cation * c1) / C_STD;
+    const a_a1 = (compound.anion * c1) / C_STD;
+    const a_c2 = (compound.cation * c2) / C_STD;
+    const a_a2 = (compound.anion * c2) / C_STD;
+
+    // Calculate Nernst potential term offset: (RT/zF) * ln(a)
     // This is the offset between V_STD_i and V_i
     const nernst_cation1 = (RT_F / cation.z) * Math.log(a_c1);
     const nernst_cation2 = (RT_F / cation.z) * Math.log(a_c2);
@@ -133,7 +155,7 @@ function calculateState(c1, c2, junctype, config) {
     // for simplicity, we'll calculate the jump between V_cation_1 and V_cation_2
     // cell_voltage == V_e_2 - V_e_1 == V_cation_2 - V_cation_1 within numerical error
     let cell_voltage = 0;
-    switch (junctype) {
+    switch (junctionType) {
         case 'cation':
             cell_voltage = 0;
             break;
@@ -145,7 +167,7 @@ function calculateState(c1, c2, junctype, config) {
                 nernst_cation2 - nernst_cation1 + nernst_anion1 - nernst_anion2;
             break;
         default:
-            throw junctype;
+            throw junctionType;
     }
 
     // right side solution:
@@ -156,8 +178,8 @@ function calculateState(c1, c2, junctype, config) {
     // right electrode:
     const V_e_2 = V_cation_2 - V_reaction;
 
-    // Prepare trace definitions using V_volt input unit
-    const b = config.boundaries;
+    // --- Prepare trace definitions ---
+    const b = config.boundaries; // Use boundaries from config
     const traceDefs = [
         // --- Cation Traces ---
         {
@@ -179,7 +201,6 @@ function calculateState(c1, c2, junctype, config) {
             y: [V_cation_2, V_cation_2],
         },
         {
-            // Standard state needs only one value per region as phi=0 is constant
             id: `cation_standard_1`,
             speciesId: 'cation',
             curveType: 'standardState',
@@ -190,7 +211,7 @@ function calculateState(c1, c2, junctype, config) {
         },
         {
             id: `cation_standard_2`,
-            speciesId: cation.id,
+            speciesId: 'cation',
             curveType: 'standardState',
             showLabel: false,
             inputUnits: 'V_volt',
@@ -260,19 +281,42 @@ function calculateState(c1, c2, junctype, config) {
 
 // --- Tooltip Callback ---
 function getTooltipContent(info) {
-    // info contains: { speciesId, traceId, xValue, yValueDisplayed, yValueVolts, currentMode, pointEvent }
     const config = cellConfig; // Access outer scope config
     const species = config[info.speciesId];
-    let content = `<b>\$${info.labelString}\$</b><br>x = ${info.xValue.toFixed(3)}<br>`;
+
+    // Fallback if speciesId isn't one of the main keys (e.g., for manual traces later)
+    if (!species) {
+        return `Trace: ${info.traceId}<br>x = ${info.xValue.toFixed(3)}<br>${info.currentMode} = ${info.yValueDisplayed?.toFixed(3)}`;
+    }
+
+    let label = info.labelString;
+    // Add $ delimiters for KaTeX rendering in tooltip
+    if (label) label = `$${label}$`;
+    else label = species.latexPrettyName || info.speciesId;
+
+    let content = `<b>${label}</b>`;
+    // Add description based on curve type
+    if (info.curveType === 'standardState')
+        content += `: Standard State Potential`;
+    else if (info.curveType === 'potential')
+        content += `: Electrochemical Potential`;
+    else if (info.curveType === 'bandEdge_C')
+        content += `: Conduction Band Edge (E<sub>C</sub>)`;
+    else if (info.curveType === 'bandEdge_V')
+        content += `: Valence Band Edge (E<sub>V</sub>)`;
+    else if (info.curveType) content += `: ${info.curveType}`;
+
+    content += `<br>x = ${info.xValue.toFixed(3)}<br>`;
+
     const mode = info.currentMode;
     const val = info.yValueDisplayed;
-
     if (val !== null && isFinite(val)) {
         content += `${mode} = ${val.toFixed(3)} ${mode === 'kJmol' ? 'kJ/mol' : mode}`;
     } else {
         content += `${mode} = N/A`;
     }
 
+    // Use regionInfo passed from module
     if (info.regionInfo) {
         content += `<br>Region: ${info.regionInfo.name} (#${info.regionIndex})`;
     }
@@ -280,12 +324,12 @@ function getTooltipContent(info) {
     // Add concentration/activity info if applicable
     let conc = null;
     let activity = null;
-    // Determine concentration based on region index
+    // Determine concentration based on region index (indices from cellConfig.regionProps)
     if (info.regionIndex === 1) {
-        // Electrolyte 1 (index 1 in regionProps array)
+        // Electrolyte 1
         conc = parseFloat(c1Slider.value);
     } else if (info.regionIndex === 3) {
-        // Electrolyte 2 (index 3 in regionProps array)
+        // Electrolyte 2
         conc = parseFloat(c2Slider.value);
     }
 
@@ -294,65 +338,71 @@ function getTooltipContent(info) {
         (info.speciesId === 'cation' || info.speciesId === 'anion') &&
         conc !== null
     ) {
-        const nu =
-            info.speciesId === 'cation'
-                ? config.compound_stoichiometry.cation
-                : config.compound_stoichiometry.anion;
+        const nu = config.compound_stoichiometry[info.speciesId]; // Get stoichiometry (1 for both here)
         activity = (nu * conc) / config.c_std_M;
-    }
-
-    if (activity !== null) {
-        content += `<br>Conc ≈ ${conc.toFixed(3)} M`;
-        content += `<br>\$${species.latexPrettyName}\$ activity ≈ ${(activity / C_STD).toFixed(3)}`;
+        content += `<br>Formal Conc ≈ ${conc.toFixed(3)} M`;
+        // Use species.latexPrettyName for the activity label
+        content += `<br>Activity($${species.latexPrettyName}$) ≈ ${activity.toFixed(3)}`;
     }
 
     return content;
 }
+
+// Set the callback only if diagram was initialized
 diagram.setTooltipCallback(getTooltipContent);
 
 // --- Update Function and Event Listeners ---
 function updateDiagram() {
+    // Add checks for element existence
+    if (
+        !c1Slider ||
+        !c2Slider ||
+        !c1Value ||
+        !c2Value ||
+        !cellVoltageOut ||
+        !diagram
+    ) {
+        console.error('Missing UI elements or diagram instance.');
+        return;
+    }
     const c1 = parseFloat(c1Slider.value);
     const c2 = parseFloat(c2Slider.value);
     c1Value.textContent = c1.toFixed(3);
     c2Value.textContent = c2.toFixed(3);
-    const juncradio = document.querySelector(
+    const juncRadio = document.querySelector(
         'input[name="junction-selector"]:checked'
     );
-    if (!juncradio) {
-        throw 'no junction type selected';
-    }
-    const junctype = juncradio.value;
+    const junctionType = juncRadio ? juncRadio.value : 'saltbridge';
 
-    // Calculate the new state based on slider values and cellConfig
     const { traceDefs, calculatedVoltage } = calculateState(
         c1,
         c2,
-        junctype,
+        junctionType,
         cellConfig
     );
-
-    // Update the diagram instance's data
     diagram.updateTraceData(traceDefs);
-
-    // Update displayed cell voltage
     cellVoltageOut.textContent = calculatedVoltage.toFixed(3);
 }
 
-// Listener for sliders
-c1Slider.addEventListener('input', updateDiagram);
-c2Slider.addEventListener('input', updateDiagram);
-
-// Listener for mode selector
-modeSelector.addEventListener('change', (event) => {
-    diagram.setMode(event.target.value);
-});
-document
-    .getElementsByName('junction-selector')
-    .forEach((item) => item.addEventListener('click', updateDiagram));
+// Add listeners only if elements exist
+if (c1Slider && c2Slider) {
+    c1Slider.addEventListener('input', updateDiagram);
+    c2Slider.addEventListener('input', updateDiagram);
+}
+if (modeSelector) {
+    modeSelector.addEventListener('change', (event) => {
+        if (diagram) diagram.setMode(event.target.value);
+    });
+}
+if (junctionRadios.length > 0) {
+    junctionRadios.forEach((radio) =>
+        radio.addEventListener('change', updateDiagram)
+    );
+} else {
+    console.warn('Junction selector radio buttons not found.');
+}
 
 // --- Initial Draw ---
-diagram.setSpatialLayout(cellConfig.boundaries, cellConfig.regionProps);
-updateDiagram(); // Calculate initial state and draw
-
-console.log('Concentration cell example loaded.');
+// Trigger initial calculation and draw
+updateDiagram();
+console.log('Concentration cell example loaded using setSpatialLayout.');
