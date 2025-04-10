@@ -1,65 +1,144 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESBD: Ag/AgNO₃ Concentration Cell</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css" integrity="sha384-zh0CIslj+VczCZtlzBcjt5ppRcsAmDnRem7ESsYwWwg3m/OaJ2l4x7YBZl9Kxxib" crossorigin="anonymous">
-    <!-- The loading of KaTeX is deferred to speed up page rendering -->
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js" integrity="sha384-Rma6DA2IPUwhNxmrB/7S3Tno0YY7sFu9WSYMCuulLhIqYSGZ2gKCJWIqhBWqMQfh" crossorigin="anonymous"></script>
-    <!-- To automatically render math in text elements, include the auto-render extension: -->
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
-        onload="renderMathInElement(document.body);"></script>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ESBD: Ag/AgNO₃ Concentration Cell</title>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css"
+            integrity="sha384-zh0CIslj+VczCZtlzBcjt5ppRcsAmDnRem7ESsYwWwg3m/OaJ2l4x7YBZl9Kxxib"
+            crossorigin="anonymous"
+        />
+        <!-- The loading of KaTeX is deferred to speed up page rendering -->
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"
+            integrity="sha384-Rma6DA2IPUwhNxmrB/7S3Tno0YY7sFu9WSYMCuulLhIqYSGZ2gKCJWIqhBWqMQfh"
+            crossorigin="anonymous"
+        ></script>
+        <!-- To automatically render math in text elements, include the auto-render extension: -->
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js"
+            integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh"
+            crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"
+        ></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-    <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; }
-        .controls { margin: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; }
-        label { margin-right: 10px; }
-        input[type="range"] { width: 200px; margin-right: 5px; }
-        output { font-weight: bold; min-width: 50px; display: inline-block; }
-        #plot-container { width: 90%; max-width: 800px; height: 250px; border: 1px solid #ddd; margin-top: 10px; }
-        /* Tooltip style from ESBD module will be appended */
-        .esbd-y-axis-label { font-size: 12px; cursor: pointer; }
-        .esbd-y-axis-label:hover { fill: blue; }
-    </style>
-</head>
-<body>
-    <h1>ESBD: Ag/AgNO<sub>3</sub> Concentration Cell</h1>
+        <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+        <style>
+            body {
+                font-family: sans-serif;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .controls {
+                margin: 20px;
+                padding: 15px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                background-color: #f9f9f9;
+            }
+            label {
+                margin-right: 10px;
+            }
+            input[type='range'] {
+                width: 200px;
+                margin-right: 5px;
+            }
+            output {
+                font-weight: bold;
+                min-width: 50px;
+                display: inline-block;
+            }
+            #plot-container {
+                width: 90%;
+                max-width: 800px;
+                height: 250px;
+                border: 1px solid #ddd;
+                margin-top: 10px;
+            }
+            /* Tooltip style from ESBD module will be appended */
+            .esbd-y-axis-label {
+                font-size: 12px;
+                cursor: pointer;
+            }
+            .esbd-y-axis-label:hover {
+                fill: blue;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>ESBD: Ag/AgNO<sub>3</sub> Concentration Cell</h1>
 
-    <div class="controls">
-        <div>
-            <label for="c1_slider">Concentration C₁ (Left, M):</label>
-            <input type="range" id="c1_slider" min="0.001" max="2.0" step="0.001" value="0.1">
-            <output id="c1_value">0.100</output> M
+        <div class="controls">
+            <div>
+                <label for="c1_slider">Concentration C₁ (Left, M):</label>
+                <input
+                    type="range"
+                    id="c1_slider"
+                    min="0.001"
+                    max="2.0"
+                    step="0.001"
+                    value="0.1"
+                />
+                <output id="c1_value">0.100</output> M
+            </div>
+            <div>
+                <label for="c2_slider">Concentration C₂ (Right, M):</label>
+                <input
+                    type="range"
+                    id="c2_slider"
+                    min="0.001"
+                    max="2.0"
+                    step="0.001"
+                    value="1.0"
+                />
+                <output id="c2_value">1.000</output> M
+            </div>
+            <div>
+                Calculated Cell Voltage \( V_{\mathrm{e}^-} (\text{right}) -
+                V_{\mathrm{e}^-} (\text{left}) \) =
+                <output id="cell_voltage">?.???</output> V
+            </div>
+            <div>
+                Display Mode:
+                <select id="unit-mode-selector" style="margin-left: 10px">
+                    <option value="Volts" selected>Volts</option>
+                    <option value="eV">eV</option>
+                    <option value="kJmol">kJ/mol</option>
+                </select>
+            </div>
+            <fieldset>
+                <legend>Type of junction</legend>
+                <input
+                    type="radio"
+                    value="anion"
+                    name="junction-selector"
+                    id="junction-selector-anion"
+                /><label for="junction-selector-anion">Anionic membrane</label>
+                <input
+                    type="radio"
+                    value="saltbridge"
+                    name="junction-selector"
+                    id="junction-selector-saltbridge"
+                    checked
+                /><label for="junction-selector-saltbridge">Salt bridge</label>
+                <input
+                    type="radio"
+                    value="cation"
+                    name="junction-selector"
+                    id="junction-selector-cation"
+                /><label for="junction-selector-cation"
+                    >Cationic membrane</label
+                >
+            </fieldset>
         </div>
-        <div>
-            <label for="c2_slider">Concentration C₂ (Right, M):</label>
-            <input type="range" id="c2_slider" min="0.001" max="2.0" step="0.001" value="1.0">
-            <output id="c2_value">1.000</output> M
-        </div>
-        <div>
-            Calculated Cell Voltage \( V_{\mathrm{e}^-} (\text{right}) - V_{\mathrm{e}^-} (\text{left}) \) = <output id="cell_voltage">?.???</output> V
-        </div>
-         <div>
-            Display Mode:
-            <select id="unit-mode-selector" style="margin-left: 10px;">
-                 <option value="Volts" selected>Volts</option>
-                 <option value="eV">eV</option>
-                 <option value="kJmol">kJ/mol</option>
-            </select>
-        </div>
-        <fieldset>
-            <legend>Type of junction</legend>
-            <input type="radio" value="anion" name="junction-selector" id="junction-selector-anion"/><label for="junction-selector-anion">Anionic membrane</label>
-            <input type="radio" value="saltbridge" name="junction-selector" id="junction-selector-saltbridge" checked/><label for="junction-selector-saltbridge">Salt bridge</label>
-            <input type="radio" value="cation" name="junction-selector" id="junction-selector-cation"/><label for="junction-selector-cation">Cationic membrane</label>
-        </fieldset>
-     </div>
 
-    <div id="plot-container"></div>
+        <div id="plot-container"></div>
 
-    <script type="module" src="main.js"></script>
-
-</body>
+        <script type="module" src="main.js"></script>
+    </body>
 </html>
