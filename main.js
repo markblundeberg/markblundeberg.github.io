@@ -9,7 +9,6 @@ const cellConfig = {
     cation: {
         textName: 'Ag+',
         z: 1,
-        stoich: 1,   // formal compound is (Ag)_1(NO3)_1
         mu_standard_J_mol: 77000.0, // aqueous
         color: "#E6AB02", // Gold/Yellow
         latexPrettyName: "\\mathrm{Ag}^{+}",
@@ -17,7 +16,6 @@ const cellConfig = {
     anion: {
         textName: "NO3-",
         z: -1,
-        stoich: 1,   // formal compound is (Ag)_1(NO3)_1
         mu_standard_J_mol: -111000.0, // aqueous
         color: "#66A61E", // Green
         latexPrettyName: "\\mathrm{NO}_3^{-}",
