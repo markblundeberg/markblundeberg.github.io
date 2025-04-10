@@ -1,6 +1,7 @@
 // main.js for Concentration Cell Example
 
 import ElectrochemicalSpeciesBandDiagram from './ElectrochemicalSpeciesBandDiagram.js';
+import { formatTooltipBaseContent } from './utils.js';
 
 // --- Configuration Section ---
 
@@ -289,57 +290,18 @@ function calculateState(c1, c2, junctionType, config) {
     return { traceDefs, calculatedVoltage: cell_voltage };
 }
 
-// --- Tooltip Callback ---
 function getTooltipContent(info) {
-    const config = cellConfig; // Access outer scope config
-    const species = config[info.speciesId];
+    // Get default tooltip
+    let content = formatTooltipBaseContent(info); // No longer needs config
 
-    // Fallback if speciesId isn't one of the main keys (e.g., for manual traces later)
-    if (!species) {
-        return `Trace: ${info.traceId}<br>x = ${info.xValue.toFixed(3)}<br>${info.currentMode} = ${info.yValueDisplayed?.toFixed(3)}`;
-    }
-
-    let label = info.labelString;
-    // Add $ delimiters for KaTeX rendering in tooltip
-    if (label) label = `$${label}$`;
-    else label = species.latexPrettyName || info.speciesId;
-
-    let content = `<b>${label}</b>`;
-    // Add description based on curve type
-    if (info.curveType === 'standardState')
-        content += `: Standard State Potential`;
-    else if (info.curveType === 'potential')
-        content += `: Electrochemical Potential`;
-    else if (info.curveType === 'bandEdge_C')
-        content += `: Conduction Band Edge (E<sub>C</sub>)`;
-    else if (info.curveType === 'bandEdge_V')
-        content += `: Valence Band Edge (E<sub>V</sub>)`;
-    else if (info.curveType) content += `: ${info.curveType}`;
-
-    content += `<br>x = ${info.xValue.toFixed(3)}<br>`;
-
-    const mode = info.currentMode;
-    const val = info.yValueDisplayed;
-    if (val !== null && isFinite(val)) {
-        content += `${mode} = ${val.toFixed(3)} ${mode === 'kJmol' ? 'kJ/mol' : mode}`;
-    } else {
-        content += `${mode} = N/A`;
-    }
-
-    // Use regionInfo passed from module
-    if (info.regionInfo) {
-        content += `<br>Region: ${info.regionInfo.name} (#${info.regionIndex})`;
-    }
-
-    // Add concentration/activity info if applicable
+    // Append extra info as appropriate
     let conc = null;
     let activity = null;
-    // Determine concentration based on region index (indices from cellConfig.regionProps)
     if (info.regionIndex === 1) {
-        // Electrolyte 1
+        // Electrolyte 1 (index 1 in regionProps array)
         conc = parseFloat(c1Slider.value);
     } else if (info.regionIndex === 3) {
-        // Electrolyte 2
+        // Electrolyte 2 (index 3 in regionProps array)
         conc = parseFloat(c2Slider.value);
     }
 
@@ -348,10 +310,10 @@ function getTooltipContent(info) {
         (info.speciesId === 'cation' || info.speciesId === 'anion') &&
         conc !== null
     ) {
-        const nu = config.compound_stoichiometry[info.speciesId]; // Get stoichiometry (1 for both here)
-        activity = (nu * conc) / config.c_std_M;
+        const species = cellConfig[info.speciesId]; // Get species config for label/stoichiometry
+        const nu = cellConfig.compound_stoichiometry[info.speciesId];
+        activity = (nu * conc) / cellConfig.c_std_M;
         content += `<br>Formal Conc ≈ ${conc.toFixed(3)} M`;
-        // Use species.latexPrettyName for the activity label
         content += `<br>Activity($${species.latexPrettyName}$) ≈ ${activity.toFixed(3)}`;
     }
 

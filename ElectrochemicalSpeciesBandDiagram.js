@@ -3,6 +3,8 @@
 
 // Assumes D3 and KaTeX (core + auto-render) are loaded globally or imported appropriately.
 
+import { formatTooltipBaseContent } from './utils.js';
+
 // --- Constants ---
 const R = 8.31446261815324; // J / (mol K)
 const F = 96485.33212331001; // C / mol (Faraday constant)
@@ -96,7 +98,7 @@ class ElectrochemicalSpeciesBandDiagram {
 
         // Callbacks & Throttling state
         this._modeChangeCallback = null;
-        this._tooltipCallback = null;
+        this._tooltipCallback = formatTooltipBaseContent; // from utils.js
         this._throttleTimeout = null;
         this._throttleWaiting = false;
 
