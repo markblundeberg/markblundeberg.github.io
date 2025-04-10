@@ -377,4 +377,4 @@ if (junctionRadios.length > 0) {
 // --- Initial Draw ---
 // Trigger initial calculation and draw
 updateDiagram();
-console.log('Concentration cell example loaded using setSpatialLayout.');
+console.log('Concentration cell example loaded.');
