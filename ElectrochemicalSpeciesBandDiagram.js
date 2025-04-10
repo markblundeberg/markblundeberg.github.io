@@ -1,6 +1,7 @@
 // ElectrochemicalSpeciesBandDiagram.js
 // ESBD Module using D3.js (v7+)
-// Assumes D3 and KaTeX are loaded globally or imported appropriately.
+
+// Assumes D3 and KaTeX (core + auto-render) are loaded globally or imported appropriately.
 
 // --- Constants ---
 const R = 8.31446261815324; // J / (mol K)
@@ -9,8 +10,8 @@ const e_charge = 1.602176634e-19; // C (Elementary charge)
 const Na = 6.02214076e23; // 1 / mol (Avogadro constant)
 const TEMP_K = 298.15; // Standard Temperature (Kelvin) - Make configurable?
 const J_PER_MOL_TO_EV = 1 / (Na * e_charge); // eV / (J/mol)
-const V_TO_EV_PER_CHARGE = 1; // eV / V (for energy E = qV where q=e)
-const F_kJmol = F / 1000.0; // F in kJ / (V mol)
+const V_TO_EV_PER_CHARGE = 1; // Factor to convert V_volt to E_display (eV) is (-1)
+const F_kJmol = F / 1000.0; // F in kJ / (V mol), used for G_display = V_volt * F_kJmol
 
 // Default styling constants
 const STYLE_DEFAULTS = {
@@ -43,8 +44,9 @@ class ElectrochemicalSpeciesBandDiagram {
      * @param {number} [initialConfig.width=800] - Initial width hint (will adapt).
      * @param {number} [initialConfig.height=500] - Initial height hint (will adapt).
      * @param {string} [initialConfig.mode='Volts'] - Initial display mode ('Volts', 'eV', 'kJmol').
-     * @param {object} [initialConfig.margin={top: 30, right: 60, bottom: 50, left: 70}] - Plot margins (increased for labels).
+     * @param {object} [initialConfig.margin={top: 30, right: 60, bottom: 50, left: 70}] - Plot margins.
      * @param {number} [initialConfig.transitionDuration=250] - Duration for D3 transitions (ms).
+     * @param {number} [initialConfig.throttleDelay=100] - Delay for tooltip throttling (ms).
      */
     constructor(containerId, initialConfig = {}) {
         this.containerId = containerId;
@@ -73,62 +75,59 @@ class ElectrochemicalSpeciesBandDiagram {
                 initialConfig.transitionDuration === undefined
                     ? 250
                     : initialConfig.transitionDuration,
-            tempK: TEMP_K, // Allow overriding later?
+            throttleDelay:
+                initialConfig.throttleDelay === undefined
+                    ? 100
+                    : initialConfig.throttleDelay,
+            tempK: TEMP_K,
         };
+        // Plot dimensions calculated dynamically by getters
 
         // Internal state
-        this.speciesInfo = new Map(); // { z, color, latexPrettyName } keyed by speciesId
-        this.traceData = []; // Array of trace definition objects provided by caller
-        this.regions = []; // Array of { start, end, name, color }
-        this.interfaces = []; // Array of x-coordinates
-        this.differenceMarkers = []; // Array of marker definitions
-        this.lastDrawData = []; // Store processed data used in last draw { id, speciesId, curveType, color, style, points:[{x, y_display, y_volt, ...}], labelPos, labelString }
+        this.speciesInfo = new Map();
+        this.traceData = [];
+        this.regions = [];
+        this.interfaces = [];
+        this.differenceMarkers = [];
+        this.lastDrawData = [];
 
-        // Callbacks
+        // Callbacks & Throttling state
         this._modeChangeCallback = null;
         this._tooltipCallback = null;
+        this._throttleTimeout = null;
+        this._throttleWaiting = false;
 
-        this.config.throttleDelay =
-            initialConfig.throttleDelay === undefined
-                ? 100
-                : initialConfig.throttleDelay; // Throttle delay in ms
-        this._throttleTimeout = null; // Timeout ID for throttling
-        this._throttleWaiting = false; // Flag to indicate if waiting for timeout
+        // Clear container initially
+        this.container.html('');
 
-        // Clear container
-        this.container.html(''); // Clear previous content
-
-        // Tooltip Element
+        // Tooltip Element setup
         this._tooltip = this.container
             .append('div')
             .attr('class', 'esbd-tooltip')
             .style('position', 'absolute')
             .style('visibility', 'hidden')
-            .style('opacity', 0) // Start hidden and fade in
+            .style('opacity', 0)
             .style('background', 'rgba(245, 245, 245, 0.95)')
             .style('border', '1px solid #aaa')
             .style('border-radius', '4px')
             .style('padding', '8px')
             .style('font-size', '12px')
-            .style('pointer-events', 'none') // Prevent tooltip interfering
+            .style('pointer-events', 'none')
             .style('z-index', '10')
-            .style('transition', 'opacity 0.2s'); // Fade effect
+            .style('transition', 'opacity 0.2s');
 
         // --- D3 Setup ---
         this._setupD3Structure();
 
         // --- Responsiveness ---
-        // Initial calculation of dimensions
         const initialWidth =
             this.container.node().clientWidth || this.config.width;
         const initialHeight =
             this.container.node().clientHeight || this.config.height;
-        this._handleResize(initialWidth, initialHeight, false); // Initial size calculation without redraw
+        this._handleResize(initialWidth, initialHeight, false); // Initial size without redraw
 
-        // Attach observer
         this._resizeObserver = new ResizeObserver((entries) => {
             if (entries[0]) {
-                // Debounce or throttle resize events if needed, but often fine directly
                 const { width, height } = entries[0].contentRect;
                 this._handleResize(width, height);
             }
@@ -141,14 +140,14 @@ class ElectrochemicalSpeciesBandDiagram {
     }
 
     _setupD3Structure() {
-        this.container.style('position', 'relative'); // For tooltip positioning
+        this.container.style('position', 'relative');
 
         this.svg = this.container
             .append('svg')
             .attr('class', 'esbd-svg')
             .attr('width', this.config.width)
             .attr('height', this.config.height)
-            .style('-webkit-tap-highlight-color', 'transparent'); // Improve mobile tap experience
+            .style('-webkit-tap-highlight-color', 'transparent');
 
         this.plotArea = this.svg
             .append('g')
@@ -158,7 +157,7 @@ class ElectrochemicalSpeciesBandDiagram {
                 `translate(${this.config.margin.left},${this.config.margin.top})`
             );
 
-        // Groups for different layers (drawing order: bottom first)
+        // Layer groups
         this.backgroundGroup = this.plotArea
             .append('g')
             .attr('class', 'esbd-backgrounds');
@@ -173,7 +172,7 @@ class ElectrochemicalSpeciesBandDiagram {
             .append('g')
             .attr('class', 'esbd-connectors')
             .style('pointer-events', 'none');
-        this.linesGroup = this.plotArea.append('g').attr('class', 'esbd-lines'); // Lines will get pointer events for tooltips
+        this.linesGroup = this.plotArea.append('g').attr('class', 'esbd-lines');
         this.markersGroup = this.plotArea
             .append('g')
             .attr('class', 'esbd-markers')
@@ -186,15 +185,11 @@ class ElectrochemicalSpeciesBandDiagram {
             .append('g')
             .attr('class', 'esbd-custom-drawing');
 
-        // Scales (ranges set in _handleResize)
+        // Scales & Axes
         this.xScale = d3.scaleLinear();
         this.yScale = d3.scaleLinear();
-
-        // Axis Generators
         this.xAxisGen = d3.axisBottom(this.xScale);
         this.yAxisGen = d3.axisLeft(this.yScale);
-
-        // Axis Groups (positioned in redraw)
         this.xAxisGroup = this.plotArea
             .append('g')
             .attr('class', 'esbd-x-axis');
@@ -202,22 +197,21 @@ class ElectrochemicalSpeciesBandDiagram {
             .append('g')
             .attr('class', 'esbd-y-axis');
 
-        // Y-Axis Label (Interactive) - Append to main SVG for easier absolute positioning
+        // Interactive Y-Axis Label
         this.yAxisLabel = this.svg
             .append('text')
             .attr('class', 'esbd-y-axis-label esbd-interactive')
             .style('text-anchor', 'middle')
             .style('cursor', 'pointer')
             .style('-webkit-user-select', 'none')
-            .style('user-select', 'none') // Prevent text selection on click
+            .style('user-select', 'none')
             .on('click', () => this._handleYAxisLabelClick());
-        // Position updated in _handleResize
 
         // Line generator template
         this.lineGenerator = d3
             .line()
             .x((d) => this.xScale(d.x))
-            // y value set during trace processing based on y_display
+            .y((d) => this.yScale(d.y_display)) // Use y_display for plotting
             .defined(
                 (d) =>
                     d.y_display !== null &&
@@ -225,29 +219,36 @@ class ElectrochemicalSpeciesBandDiagram {
                     isFinite(d.y_display)
             );
 
-        // Interaction rect (overlay for detecting hover/click anywhere on plot area)
+        // Interaction overlay rect
         this.interactionRect = this.plotArea
             .append('rect')
             .attr('class', 'esbd-interaction-overlay')
             .style('fill', 'none')
             .style('pointer-events', 'all')
             .on('pointerout', () => {
-                // Hide immediately on mouse out, cancel any pending throttled update
                 clearTimeout(this._throttleTimeout);
                 this._throttleTimeout = null;
-                this._throttleWaiting = false; // Reset throttle state
+                this._throttleWaiting = false;
                 this._hideTooltip();
             })
-            // Apply throttling ONLY to pointermove
-            .on('pointermove', (event) => this._handleInteraction(event, false)) // Pass isClick = false
-            .on('click', (event) => this._handleInteraction(event, true)); // Pass isClick = true
+            .on('pointermove', (event) => this._handleInteraction(event, false))
+            .on('click', (event) => this._handleInteraction(event, true));
     }
 
     // --- Public API Methods ---
 
     /** Stores properties for a given species ID. */
     addSpeciesInfo(speciesId, properties) {
-        if (!speciesId || !properties) return;
+        if (!speciesId || !properties) {
+            console.error('ESBD Error: Invalid input for addSpeciesInfo.');
+            return;
+        }
+        if (properties.z !== null && typeof properties.z !== 'number') {
+            console.warn(
+                `ESBD Warn: Invalid charge number for species ${speciesId}. Setting z to null.`
+            );
+            properties.z = null;
+        }
         this.speciesInfo.set(speciesId, {
             z: properties.z,
             color: properties.color || 'black',
@@ -257,27 +258,46 @@ class ElectrochemicalSpeciesBandDiagram {
 
     /** Updates the complete set of trace data to be plotted. */
     updateTraceData(traceDefs = []) {
-        this.traceData = traceDefs;
+        if (!Array.isArray(traceDefs)) {
+            console.error('ESBD Error: updateTraceData expects an array.');
+            this.traceData = [];
+        } else {
+            this.traceData = traceDefs;
+        }
         this.redraw();
     }
 
     /** Sets background region definitions. */
     setRegions(regionDefs = []) {
-        this.regions = regionDefs;
-        // Only need to redraw backgrounds if axes/scales haven't changed
+        if (!Array.isArray(regionDefs)) {
+            console.error('ESBD Error: setRegions expects an array.');
+            this.regions = [];
+        } else {
+            this.regions = regionDefs;
+        }
         if (this.plotArea) this._drawBackgrounds();
     }
 
     /** Sets interface line positions. */
     setInterfaces(interfaceCoords = []) {
-        this.interfaces = interfaceCoords;
+        if (!Array.isArray(interfaceCoords)) {
+            console.error('ESBD Error: setInterfaces expects an array.');
+            this.interfaces = [];
+        } else {
+            this.interfaces = interfaceCoords;
+        }
         if (this.plotArea) this._drawInterfaceLines();
     }
 
     /** Sets definitions for vertical difference markers. */
     setDifferenceMarkers(markerDefs = []) {
-        this.differenceMarkers = markerDefs;
-        if (this.plotArea) this.redraw(); // Needs full redraw
+        if (!Array.isArray(markerDefs)) {
+            console.error('ESBD Error: setDifferenceMarkers expects an array.');
+            this.differenceMarkers = [];
+        } else {
+            this.differenceMarkers = markerDefs;
+        }
+        if (this.plotArea) this.redraw();
     }
 
     /** Sets the display mode and triggers redraw and callback. */
@@ -308,7 +328,6 @@ class ElectrochemicalSpeciesBandDiagram {
         this._modeChangeCallback =
             typeof callbackFn === 'function' ? callbackFn : null;
     }
-
     /** Registers a callback function to generate tooltip content dynamically. */
     setTooltipCallback(callbackFn) {
         this._tooltipCallback =
@@ -317,26 +336,33 @@ class ElectrochemicalSpeciesBandDiagram {
 
     /** Main drawing/update function. */
     redraw() {
-        if (!this.svg || !this.plotArea) return; // Not initialized
+        if (!this.svg || !this.plotArea) return;
 
-        // --- 1. Prepare Data & Calculate Display Values ---
+        // 1. Prepare Data
         this.lastDrawData = this._preparePlotDataAndScale();
 
-        // --- 2. Update Scales ---
-        const xDomain = d3.extent(
-            this.lastDrawData.flatMap((t) => t.points.map((p) => p.x))
+        const hasPlottableData = this.lastDrawData.some(
+            (t) => t.points.length > 0
         );
-        if (xDomain[0] === undefined) xDomain = [0, 1];
+
+        // 2. Update Scales
+        // Use extent of all x data from traces for x-domain
+        const allXValues = this.lastDrawData.flatMap((t) =>
+            t.points.map((p) => p.x)
+        );
+        let xDomain = d3.extent(allXValues);
+        if (xDomain[0] === undefined) xDomain = [0, 1]; // Default if no data
         this.xScale.domain(xDomain).nice();
 
+        // Use extent of y_display values for y-domain
         const allYValues = this.lastDrawData.flatMap((t) =>
             t.points.map((p) => p.y_display)
         );
         let yDomain = d3.extent(
             allYValues.filter((y) => y !== null && isFinite(y))
         );
-
         if (
+            !hasPlottableData ||
             yDomain[0] === undefined ||
             yDomain[1] === undefined ||
             yDomain[0] === yDomain[1]
@@ -350,7 +376,7 @@ class ElectrochemicalSpeciesBandDiagram {
         }
         this.yScale.domain(yDomain).nice();
 
-        // --- 3. Update Axes ---
+        // 3. Update Axes
         this.xAxisGroup
             .attr('transform', `translate(0,${this.plotHeight})`)
             .transition()
@@ -362,20 +388,20 @@ class ElectrochemicalSpeciesBandDiagram {
             .call(this.yAxisGen);
         this.yAxisLabel.text(this._getYAxisLabel());
 
-        // --- 4. Update interaction overlay size ---
+        // 4. Update interaction overlay size
         this.interactionRect
             .attr('width', this.plotWidth)
             .attr('height', this.plotHeight);
 
-        // --- 5. Draw Backgrounds & Interfaces (No transitions needed) ---
+        // 5. Draw Static Elements (using current API's state)
         this._drawBackgrounds();
         this._drawInterfaceLines();
 
-        // --- 6. Draw Traces, Connectors, Labels, Markers (With Transitions) ---
+        // 6. Draw Data Elements
         this._drawTraces();
         this._drawConnectors();
         this._drawLabels();
-        this._drawDifferenceMarkers(); // TODO: Implement fully
+        this._drawDifferenceMarkers(); // TODO: Implement
     }
 
     /** Cleans up resources like observers and listeners. */
@@ -383,8 +409,8 @@ class ElectrochemicalSpeciesBandDiagram {
         if (this._resizeObserver) {
             this._resizeObserver.disconnect();
         }
-        // Remove D3 listeners if any were added directly to window/document
-        this.container.html(''); // Clear SVG and tooltip div
+        this._hideTooltip(); // Ensure tooltip is hidden on destroy
+        this.container.html('');
         console.log('ESBD Destroyed.');
     }
 
@@ -476,23 +502,33 @@ class ElectrochemicalSpeciesBandDiagram {
         if (value === null || !isFinite(value)) return null;
 
         switch (inputUnit) {
-            case 'mu_bar_kJmol': // input is μ̄ in kJ/mol
-                if (z === null || z === 0) return null; // Cannot convert without charge
+            case 'mu_bar_kJmol':
+                if (z === null || typeof z !== 'number' || z === 0) {
+                    console.warn(
+                        `ESBD Warn: Cannot convert 'mu_bar_kJmol' to Volts without valid non-zero charge z (received z=${z}).`
+                    );
+                    return null;
+                }
                 return (value * 1000) / (z * F); // V = μ̄/(zF)
 
-            case 'mu_bar_eV': // input is μ̄ in eV/particle
-                if (z === null || z === 0) return null;
-                // V = μ̄_J_particle / (z * e_charge) = (value * e_charge) / (z * e_charge) = value / z
+            case 'mu_bar_eV':
+                if (z === null || typeof z !== 'number' || z === 0) {
+                    console.warn(
+                        `ESBD Warn: Cannot convert 'mu_bar_eV' to Volts without valid non-zero charge z (received z=${z}).`
+                    );
+                    return null;
+                }
+                // V = value[eV] / z
                 return value / z;
 
-            case 'E_band_eV': // input is E_band in eV/particle
-                // Using convention V = -E_band / e_charge
-                return -value / V_TO_EV_PER_CHARGE;
+            case 'E_band_eV':
+                // Convention V = -E_band / e_charge
+                return -value / V_TO_EV_PER_CHARGE; // Effectively -value
 
-            case 'phi_V': // input is φ in Volts
+            case 'phi_V':
                 return value; // V_phi = phi
 
-            case 'V_volt': // input is already V_volt
+            case 'V_volt':
                 return value;
 
             default:
@@ -512,12 +548,15 @@ class ElectrochemicalSpeciesBandDiagram {
                 return value_volt; // Factor = +1
 
             case 'eV':
-                // E = -e * V
+                // E = -V_volt * V_TO_EV_PER_CHARGE (where constant is 1)
+                // Represents Energy in eV using E = -V convention
                 return value_volt * -V_TO_EV_PER_CHARGE; // Factor = -1
 
             case 'kJmol':
-                // G = F * V = μ̄/z (if V came from μ̄/(zF))
-                // We want kJ/mol, so factor is F/1000
+                // G = V_volt * F_kJmol
+                // Represents Molar Energy / z in kJ/mol (if V_volt derived from mu_bar)
+                // Or represents F*phi/1000 if V_volt derived from phi_V
+                // Or represents -Na*E_band/1000 if V_volt derived from E_band_eV
                 return value_volt * F_kJmol; // Factor = +F/1000
         }
         return null;
@@ -527,6 +566,19 @@ class ElectrochemicalSpeciesBandDiagram {
     _preparePlotDataAndScale() {
         const processedTraces = [];
         for (const traceDef of this.traceData) {
+            if (
+                !traceDef ||
+                !traceDef.id ||
+                !traceDef.x ||
+                !traceDef.y ||
+                !traceDef.inputUnits
+            ) {
+                console.warn(
+                    'ESBD Warn: Skipping invalid trace definition:',
+                    traceDef
+                );
+                continue;
+            }
             const species = this.speciesInfo.get(traceDef.speciesId) || {};
             const z = species.z;
             const color = traceDef.color || species.color || 'black';
@@ -572,6 +624,7 @@ class ElectrochemicalSpeciesBandDiagram {
                     traceDef.showLabel && lastValidPointData
                         ? lastValidPointData
                         : null;
+                // Always calculate labelString even if not shown by default
                 const labelString = traceDef.labelOverride
                     ? traceDef.labelOverride[this.config.mode] || traceDef.id
                     : this._getAutoLabel(defaultLabelName, curveType);
@@ -588,7 +641,7 @@ class ElectrochemicalSpeciesBandDiagram {
                     points: points,
                     labelPos: labelPos,
                     labelString: labelString,
-                    showLabel: traceDef.showLabel,
+                    showLabel: Boolean(traceDef.showLabel),
                 });
             }
         }
@@ -643,9 +696,10 @@ class ElectrochemicalSpeciesBandDiagram {
     }
 
     _drawBackgrounds() {
+        if (!this.regions) return;
         this.backgroundGroup
             .selectAll('rect.esbd-region-bg')
-            .data(this.regions, (d) => d.name || `${d.start}-${d.end}`) // Use key if available
+            .data(this.regions, (d) => d.name || `${d.start}-${d.end}`)
             .join('rect')
             .attr('class', 'esbd-region-bg')
             .attr('x', (d) => this.xScale(d.start))
@@ -655,13 +709,14 @@ class ElectrochemicalSpeciesBandDiagram {
             )
             .attr('height', this.plotHeight)
             .attr('fill', (d) => d.color || 'transparent')
-            .lower(); // Draw behind other elements
+            .lower();
     }
 
     _drawInterfaceLines() {
+        if (!this.interfaces) return;
         this.interfaceGroup
             .selectAll('line.esbd-interface-line')
-            .data(this.interfaces)
+            .data(this.interfaces, (d) => d)
             .join('line')
             .attr('class', 'esbd-interface-line')
             .attr('x1', (d) => this.xScale(d))
@@ -917,7 +972,6 @@ class ElectrochemicalSpeciesBandDiagram {
     }
 
     _updateTooltip(event, isClick) {
-        // Guard clauses
         if (
             !this._tooltipCallback ||
             !this.lastDrawData ||
@@ -926,16 +980,28 @@ class ElectrochemicalSpeciesBandDiagram {
             this._hideTooltip();
             return;
         }
-
         const [pointerX, pointerY] = d3.pointer(event, this.plotArea.node());
-
-        // Check if pointer is within plot bounds horizontally
         if (pointerX < -5 || pointerX > this.plotWidth + 5) {
             this._hideTooltip();
             return;
         }
-
         const xValue = this.xScale.invert(pointerX);
+
+        // --- Find Region Info (USING OLD API FOR NOW) ---
+        let regionIndex = -1;
+        let regionInfo = null;
+        if (this.regions && this.regions.length > 0) {
+            regionIndex = this.regions.findIndex(
+                (region) => xValue >= region.start && xValue <= region.end
+            );
+            if (regionIndex !== -1) {
+                regionInfo = {
+                    ...this.regions[regionIndex],
+                    index: regionIndex,
+                }; // Pass copy
+            }
+        }
+        // --- End Find Region Info ---
 
         let closestTraceInfo = null;
         let minDistY = Infinity;
@@ -1023,22 +1089,21 @@ class ElectrochemicalSpeciesBandDiagram {
             const tooltipInfo = {
                 speciesId: trace.speciesId,
                 traceId: trace.id,
-                xValue: xValue,
+                curveType: trace.curveType,
                 labelString: trace.labelString,
+                xValue: xValue,
                 yValueDisplayed: point.y_display,
                 yValueVolts: point.y_volt,
                 yValueSource: point.source_y,
                 yValueSourceUnits: point.source_units,
                 currentMode: this.config.mode,
+                regionIndex: regionIndex, // <-- Pass region index
+                regionInfo: regionInfo, // <-- Pass region properties
                 pointEvent: event,
             };
-
             try {
-                // --- Generate Content via Callback ---
                 const content = this._tooltipCallback(tooltipInfo);
-
                 if (content) {
-                    // --- Set HTML Content ---
                     this._tooltip.html(content);
 
                     // --- Render KaTeX within the tooltip ---
@@ -1123,12 +1188,10 @@ class ElectrochemicalSpeciesBandDiagram {
                     this._hideTooltip();
                 }
             } catch (e) {
-                // Error in user's callback
                 console.error('Error in tooltip callback:', e);
                 this._hideTooltip();
             }
         } else {
-            // No close trace found
             this._hideTooltip();
         }
     }
