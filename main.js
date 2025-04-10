@@ -276,7 +276,7 @@ function getTooltipContent(info) {
     if (conc !== null) {
         content += `<br>Conc ≈ ${conc.toFixed(3)} M`;
         // Could add activity calculation here if needed: a = conc/C_STD
-        content += `<br>Activity ≈ ${(conc/C_STD).toFixed(3)}`;
+        content += `<br>\$${species.latexPrettyName}\$ activity ≈ ${(conc*config.compound_stoichiometry[info.speciesId]/C_STD).toFixed(3)}`;
     }
 
     return content;
