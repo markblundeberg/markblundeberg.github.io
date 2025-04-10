@@ -173,19 +173,7 @@ class ElectrochemicalSpeciesBandDiagram {
         this.interactionRect = this.plotArea.append('rect')
              .attr('class', 'esbd-interaction-overlay')
              .style('fill', 'none')
-             .style('pointer-events', 'all');
-        // Add touch/mouse listeners
-        const interactionHandler = (event) => {
-             event.preventDefault(); // Prevent scrolling on touch drag maybe
-             this._handleInteraction(event);
-        };
-        const clickHandler = (event) => {
-             event.preventDefault();
-             this._handleInteraction(event, true); // Pass click flag
-        };
-        this.interactionRect
-             // ... (attributes and styles) ...
-   //          .on('pointerover', () => this._tooltip.style('visibility', 'visible').style('opacity', 1)) // Keep immediate feedback on enter
+             .style('pointer-events', 'all')
              .on('pointerout', () => {
                  // Hide immediately on mouse out, cancel any pending throttled update
                  clearTimeout(this._throttleTimeout);
