@@ -22,7 +22,7 @@ const cellConfig = {
     },
     electron: {
         z: -1,
-        mu_standard_J_mol: 0, // Standard state choice irrelevant as V_e set by equilibrium
+        mu_standard_J_mol: 0, // Not directly used, V_e set by equilibrium
         color: '#1B9E77', // Teal
         latexPrettyName: '\\mathrm{e}^{-}',
     },
@@ -30,28 +30,22 @@ const cellConfig = {
     // Other chemical info
     electrode_neutral: {
         // Chemical potential of the solid electrode material (relative to elements=0)
-        // Assumed to be the metallic form of the cation species.
-        // I.e. cation is M^(z+) and electrode is M = M^(z+) + z*e^-
         mu_J_mol: 0.0, // For pure Ag(s)
     },
     compound_stoichiometry: {
-        // Stoichiometries of the ions in the formal electrolyte compound M_nu_c X_nu_a
-        // Used to map formal concentration 'c' to ion activities
-        cation: 1, // nu_+ for Ag+ in AgNO3
-        anion: 1, // nu_- for NO3- in AgNO3
+        // Stoichiometries of the ions in the formal (charge neutral) electrolyte
+        cation: 1, // 1 Ag+ in AgNO3
+        anion: 1, // 1 NO3- in AgNO3
     },
-    // Standard concentration for activity calculation (a = gamma * nu*c / C_STD)
-    // Assuming gamma=1 (ideal) and C_STD=1M here.
-    c_std_M: 1.0,
+    c_std_M: 1.0, // Standard concentration 1 M
 
     // Spatial Layout definition using boundaries and regionProps
-    boundaries: [0.0, 0.2, 0.48, 0.52, 0.8, 1.0], // N+1 boundaries for N regions
+    boundaries: [0.0, 0.2, 0.48, 0.52, 0.8, 1.0],
     regionProps: [
-        // N regions
         { name: 'Electrode 1 (Ag)', color: '#E0E0E0' },
         { name: 'Electrolyte 1', color: '#E6F5FF' },
-        { name: 'Junction', color: 'rgba(255,255,255,0)' }, // Transparent region for the gap
-        { name: 'Electrolyte 2', color: '#D6EFFF' }, // Slightly different blue
+        { name: 'Junction', color: 'rgba(255,255,255,0)' },
+        { name: 'Electrolyte 2', color: '#D6EFFF' },
         { name: 'Electrode 2 (Ag)', color: '#D0D0D0' },
     ],
 
@@ -78,17 +72,15 @@ const c2Slider = document.getElementById('c2_slider');
 const c2Value = document.getElementById('c2_value');
 const cellVoltageOut = document.getElementById('cell_voltage');
 const modeSelector = document.getElementById('unit-mode-selector');
-const junctionRadios = document.getElementsByName('junction-selector'); // Get radio group
+const junctionRadios = document.getElementsByName('junction-selector');
 
 // --- Instantiate Diagram ---
-// Ensure container exists before instantiation
 const plotContainer = document.getElementById(plotContainerId);
 if (!plotContainer) {
-    // TODO: ? Disable controls and display error in HTML
     throw `ESBD Error: Plot container #${plotContainerId} not found.`;
 }
 const diagram = new ElectrochemicalSpeciesBandDiagram(plotContainerId, {
-    width: 800, // Initial hint
+    width: 800,
     height: cellConfig.plotHeight,
 });
 
@@ -110,7 +102,7 @@ function calculateState(c1, c2, junctionType, config) {
     const mu_electrode = config.electrode_neutral.mu_J_mol;
     const C_STD = config.c_std_M;
 
-    // Check compound neutrality (optional but good practice)
+    // Check compound neutrality (solutions must be charge neutral!)
     if (compound.cation * cation.z + compound.anion * anion.z !== 0) {
         throw 'non-neutral compound; fix stoichiometry';
     }
@@ -118,7 +110,6 @@ function calculateState(c1, c2, junctionType, config) {
     // Ensure concentrations are positive, calculate ideal molar activities
     c1 = Math.max(c1, 1e-9);
     c2 = Math.max(c2, 1e-9);
-    // Activity a_i = gamma_i * nu_i * c / C_STD. Assume gamma_i=1 (molar gamma!).
     const a_c1 = (compound.cation * c1) / C_STD;
     const a_a1 = (compound.anion * c1) / C_STD;
     const a_c2 = (compound.cation * c2) / C_STD;
@@ -142,18 +133,20 @@ function calculateState(c1, c2, junctionType, config) {
     // Only the difference between them will matter:
     const V_STD_span = iV_STD_cation - iV_STD_anion;
 
-    // Now work our way from left to right.
+    // Now, calculate all the levels. We work our way from left to right.
 
-    // left electrode is ground
+    // (Region 0) Set left electrode as ground reference:
     const V_e_1 = 0;
-    // left side solution:
+
+    // (Region 1) left side solution:
     const V_cation_1 = V_e_1 + V_reaction;
     const V_STD_cation_1 = V_cation_1 - nernst_cation1;
     const V_STD_anion_1 = V_STD_cation_1 - V_STD_span;
     const V_anion_1 = V_STD_anion_1 + nernst_anion1;
 
-    // junction!
-    // for simplicity, we'll calculate the jump between V_cation_1 and V_cation_2
+    // (~Region 2) The effect of the junction:
+    // For simplicity, we'll calculate the jump between V_cation_1 and V_cation_2
+    // Note:
     // cell_voltage == V_e_2 - V_e_1 == V_cation_2 - V_cation_1 within numerical error
     let cell_voltage = 0;
     switch (junctionType) {
@@ -168,19 +161,20 @@ function calculateState(c1, c2, junctionType, config) {
                 nernst_cation2 - nernst_cation1 + nernst_anion1 - nernst_anion2;
             break;
         default:
-            throw junctionType;
+            throw `Unknown junction type: ${junctionType}`;
     }
 
-    // right side solution:
+    // (Region 3) right side solution:
     const V_cation_2 = V_cation_1 + cell_voltage;
     const V_STD_cation_2 = V_cation_2 - nernst_cation2;
     const V_STD_anion_2 = V_STD_cation_2 - V_STD_span;
     const V_anion_2 = V_STD_anion_2 + nernst_anion2;
-    // right electrode:
+
+    // (Region 4) Right electrode:
     const V_e_2 = V_cation_2 - V_reaction;
 
     // --- Prepare trace definitions ---
-    const b = config.boundaries; // Use boundaries from config
+    const b = config.boundaries;
     const traceDefs = [
         // --- Cation Traces ---
         {
@@ -291,12 +285,12 @@ function calculateState(c1, c2, junctionType, config) {
 }
 
 function getTooltipContent(info) {
-    // Get default tooltip
-    let content = formatTooltipBaseContent(info); // No longer needs config
+    // Start with the default tooltip, to which we will append (as appropriate)
+    let content = formatTooltipBaseContent(info);
 
-    // Append extra info as appropriate
     let conc = null;
     let activity = null;
+    // Determine concentration based on region index passed in info
     if (info.regionIndex === 1) {
         // Electrolyte 1 (index 1 in regionProps array)
         conc = parseFloat(c1Slider.value);
@@ -319,13 +313,10 @@ function getTooltipContent(info) {
 
     return content;
 }
-
-// Set the callback only if diagram was initialized
 diagram.setTooltipCallback(getTooltipContent);
 
 // --- Update Function and Event Listeners ---
 function updateDiagram() {
-    // Add checks for element existence
     if (
         !c1Slider ||
         !c2Slider ||
@@ -334,7 +325,9 @@ function updateDiagram() {
         !cellVoltageOut ||
         !diagram
     ) {
-        console.error('Missing UI elements or diagram instance.');
+        console.error(
+            'Cannot update: Missing UI elements or diagram instance.'
+        );
         return;
     }
     const c1 = parseFloat(c1Slider.value);
@@ -346,26 +339,37 @@ function updateDiagram() {
     );
     const junctionType = juncRadio ? juncRadio.value : 'saltbridge';
 
-    const { traceDefs, calculatedVoltage } = calculateState(
-        c1,
-        c2,
-        junctionType,
-        cellConfig
-    );
-    diagram.updateTraceData(traceDefs);
-    cellVoltageOut.textContent = calculatedVoltage.toFixed(3);
+    try {
+        const { traceDefs, calculatedVoltage } = calculateState(
+            c1,
+            c2,
+            junctionType,
+            cellConfig
+        );
+        diagram.updateTraceData(traceDefs);
+        cellVoltageOut.textContent = calculatedVoltage.toFixed(3);
+    } catch (error) {
+        console.error('Error during state calculation or update:', error);
+        cellVoltageOut.textContent = 'Error'; // Indicate error in UI
+    }
 }
 
 // Add listeners only if elements exist
 if (c1Slider && c2Slider) {
     c1Slider.addEventListener('input', updateDiagram);
     c2Slider.addEventListener('input', updateDiagram);
+} else {
+    console.warn('Concentration sliders not found.');
 }
+
 if (modeSelector) {
     modeSelector.addEventListener('change', (event) => {
         if (diagram) diagram.setMode(event.target.value);
     });
+} else {
+    console.warn('Mode selector not found.');
 }
+
 if (junctionRadios.length > 0) {
     junctionRadios.forEach((radio) =>
         radio.addEventListener('change', updateDiagram)
