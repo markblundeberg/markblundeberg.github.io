@@ -202,10 +202,10 @@ function getTooltipContent(info) {
     // info contains: { speciesId, traceId, xValue, yValueDisplayed, yValueVolts, currentMode, pointEvent }
     const config = cellConfig; // Access outer scope config
     const species = config[info.speciesId];
-    let content = `<b>\$${species.latexPrettyName || info.speciesId}\$</b><br>x = ${info.xValue.toFixed(3)}<br>`;
+    let content = `<b>\$${info.labelString}\$</b><br>x = ${info.xValue.toFixed(3)}<br>`;
     const mode = info.currentMode;
     const val = info.yValueDisplayed;
-
+    
     if (val !== null && isFinite(val)) {
         content += `${mode} = ${val.toFixed(3)} ${mode === 'kJmol' ? 'kJ/mol' : mode}`;
     } else {

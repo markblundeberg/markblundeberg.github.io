@@ -185,13 +185,13 @@ class ElectrochemicalSpeciesBandDiagram {
         };
         this.interactionRect
              // ... (attributes and styles) ...
-             .on('pointerover', () => this._tooltip.style('visibility', 'visible').style('opacity', 1)) // Keep immediate feedback on enter
+   //          .on('pointerover', () => this._tooltip.style('visibility', 'visible').style('opacity', 1)) // Keep immediate feedback on enter
              .on('pointerout', () => {
                  // Hide immediately on mouse out, cancel any pending throttled update
                  clearTimeout(this._throttleTimeout);
                  this._throttleTimeout = null;
                  this._throttleWaiting = false; // Reset throttle state
-                 this._tooltip.style('visibility', 'hidden').style('opacity', 0);
+                 this._hideTooltip();
              })
              // Apply throttling ONLY to pointermove
              .on('pointermove', (event) => this._handleInteraction(event, false)) // Pass isClick = false
@@ -243,6 +243,7 @@ class ElectrochemicalSpeciesBandDiagram {
 
         this.config.mode = newMode;
         console.log("ESBD Mode switched to:", this.config.mode);
+        this._hideTooltip();
         this.redraw(); // Redraw applies new scaling
 
         if (this._modeChangeCallback) {
@@ -462,25 +463,64 @@ class ElectrochemicalSpeciesBandDiagram {
 
             if (points.length > 0) {
                 let labelPos = (traceDef.showLabel && lastValidPointData) ? lastValidPointData : null;
-                const labelString = traceDef.labelOverride
-                    ? traceDef.labelOverride[this.config.mode] || traceDef.id
-                    : (traceDef.showLabel ? this._getAutoLabel(defaultLabelName) : null);
+                const labelString = traceDef.labelOverride ?
+                      (traceDef.labelOverride[this.config.mode] || traceDef.id)
+                    : this._getAutoLabel(defaultLabelName, curveType);
 
                 processedTraces.push({
                     id: traceDef.id, speciesId: traceDef.speciesId, curveType: curveType,
                     color: color, style: { ...STYLE_DEFAULTS[curveType], ...(traceDef.styleOverride || {}) },
-                    points: points, labelPos: labelPos, labelString: labelString
+                    points: points, labelPos: labelPos, labelString: labelString, showLabel: traceDef.showLabel
                 });
             }
         }
         return processedTraces;
     }
 
-    _getAutoLabel(prettyName) {
-         const prefix = { Volts: 'V', eV: 'E', kJmol: 'G' }[this.config.mode] || '?';
-         // Use math mode for potential italics: $V_{...}$ etc.
-         return `${prefix}_{${prettyName || '?'}}`;
-     }
+    /**
+     * Generates default label based on mode, species name, curve type, and species ID.
+     * Returns raw LaTeX string without delimiters.
+     */
+    _getAutoLabel(prettyName, curveType) {
+        let symbol = '?';
+        let subscript = prettyName || '?'; // Default to species name
+        let superscript = "";
+
+        // Determine base symbol based ONLY on mode
+        symbol = { Volts: 'V', eV: 'E', kJmol: 'G' }[this.config.mode] || '?';
+
+        // Add superscripts or modify symbol/subscript based on curveType
+        switch (curveType) {
+            case 'standardState':
+                superscript = "\\ominus";
+                break;
+            case 'bandEdge_C':
+            case 'bandEdge_V':
+            case 'bandEdge':
+                superscript = "\\text{band}";
+                break;
+            case 'phi':
+                // special case! for volt mode we show \phi, not V_\phi
+                symbol = { Volts: '\\phi', eV: 'E', kJmol: 'G' }[this.config.mode] || '?';
+                subscript = (this.config.mode === 'Volts') ? '' : '\\phi';
+                break;
+            case 'potential': // Default case, no changes needed to symbol/subscript/superscript
+            default:
+                 // Keep symbol from mode, keep subscript from prettyName
+                 // Clear subscript if prettyName was null/undefined?
+                 if (!prettyName) subscript = '';
+                break;
+        }
+
+        // Construct final label string (no delimiters)
+        if (subscript) {
+            // Format like V_{Ag^{+}}^{\ominus} or E^{band}_{e^{-}}
+            return `${symbol}${superscript ? `^{${superscript}}` : ''}_{${subscript}}`;
+        } else {
+            // Format like \phi or V^{\ominus} (if prettyName was cleared)
+            return `${symbol}${superscript ? `^{${superscript}}` : ''}`;
+        }
+    }
 
     _drawBackgrounds() {
         this.backgroundGroup.selectAll("rect.esbd-region-bg")
@@ -515,6 +555,7 @@ class ElectrochemicalSpeciesBandDiagram {
             .join(
                 enter => enter.append("path")
                              .attr("class", "esbd-data-line")
+                             .attr("data-trace-id", d => d.id)
                              .attr("fill", "none")
                              // Initial position can be set if desired before transition
                              .attr("stroke", d => d.color)
@@ -595,7 +636,7 @@ class ElectrochemicalSpeciesBandDiagram {
 
 
     _drawLabels() {
-        const labelData = this.lastDrawData.filter(d => d.labelPos && d.labelString);
+        const labelData = this.lastDrawData.filter(d => d.labelPos && d.showLabel && d.labelString);
 
         this.labelsGroup.selectAll("foreignObject.esbd-line-label")
             .data(labelData, d => d.id)
@@ -668,10 +709,27 @@ class ElectrochemicalSpeciesBandDiagram {
         }, this.config.throttleDelay);
     }
 
+    // Helper function to apply/reset highlight styles
+    _applyHighlight(targetTraceId = null) {
+        const highlightWidthIncrease = 2; // How much thicker to make the highlighted line
+        const fadedOpacity = 0.4;        // Opacity for non-highlighted lines
+
+        this.linesGroup.selectAll("path.esbd-data-line")
+            .interrupt() // Stop previous transitions
+            .transition().duration(targetTraceId ? 50 : this.config.transitionDuration / 2) // Faster fade back
+            .style("opacity", d => (targetTraceId === null || d.id === targetTraceId) ? 1.0 : fadedOpacity)
+            .attr("stroke-width", d => (targetTraceId !== null && d.id === targetTraceId) ? d.style.lineWidth + highlightWidthIncrease : d.style.lineWidth);
+    }
+
+    _hideTooltip() {
+        this._tooltip.style("visibility", "hidden").style("opacity", 0);
+        this._applyHighlight(null);
+    }
+
     _updateTooltip(event, isClick) {
         // Guard clauses
         if (!this._tooltipCallback || !this.lastDrawData || this.lastDrawData.length === 0) {
-            this._tooltip.style("visibility", "hidden").style("opacity", 0);
+            this._hideTooltip();
             return;
         }
 
@@ -679,7 +737,7 @@ class ElectrochemicalSpeciesBandDiagram {
 
         // Check if pointer is within plot bounds horizontally
         if (pointerX < -5 || pointerX > this.plotWidth + 5) {
-            this._tooltip.style("visibility", "hidden").style("opacity", 0);
+            this._hideTooltip();
             return;
         }
 
@@ -748,6 +806,7 @@ class ElectrochemicalSpeciesBandDiagram {
 
             const tooltipInfo = {
                  speciesId: trace.speciesId, traceId: trace.id, xValue: xValue,
+                 labelString: trace.labelString,
                  yValueDisplayed: point.y_display, yValueVolts: point.y_volt,
                  yValueSource: point.source_y, yValueSourceUnits: point.source_units,
                  currentMode: this.config.mode, pointEvent: event
@@ -819,16 +878,16 @@ class ElectrochemicalSpeciesBandDiagram {
                         .style("top", `${targetY}px`)
                         .style("visibility", "visible")
                         .style("opacity", 1);
-
+                    this._applyHighlight(closestTraceInfo.trace.id);
                 } else { // No content returned by callback
-                     this._tooltip.style("visibility", "hidden").style("opacity", 0);
+                    this._hideTooltip();
                 }
             } catch (e) { // Error in user's callback
                  console.error("Error in tooltip callback:", e);
-                 this._tooltip.style("visibility", "hidden").style("opacity", 0);
+                 this._hideTooltip();
             }
         } else { // No close trace found
-            this._tooltip.style("visibility", "hidden").style("opacity", 0);
+            this._hideTooltip();
         }
     }
 
