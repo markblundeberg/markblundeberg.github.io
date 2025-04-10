@@ -102,6 +102,9 @@ class ElectrochemicalSpeciesBandDiagram {
         this._throttleTimeout = null;
         this._throttleWaiting = false;
 
+        this._lastDrawPlotWidth = -1;
+        this._lastDrawPlotHeight = -1;
+
         // Clear container initially
         this.container.html('');
 
@@ -134,7 +137,7 @@ class ElectrochemicalSpeciesBandDiagram {
         this._resizeObserver = new ResizeObserver((entries) => {
             if (entries[0]) {
                 const { width, height } = entries[0].contentRect;
-                this._handleResize(width, height);
+                this._handleResize(width, height, false);
             }
         });
         this._resizeObserver.observe(this.container.node());
@@ -476,6 +479,25 @@ class ElectrochemicalSpeciesBandDiagram {
         const pw = this.plotWidth;
         const ph = this.plotHeight;
 
+        // --- Loop Prevention Check ---
+        // Check if calculated plot dimensions have meaningfully changed since last draw
+        // Use a small tolerance (e.g., 1 pixel)
+        const widthChanged = Math.abs(pw - this._lastDrawPlotWidth) > 5;
+        const heightChanged = Math.abs(ph - this._lastDrawPlotHeight) > 5;
+        console.log(widthChanged, heightChanged);
+
+        // Only proceed if dimensions actually changed or if forcing redraw
+        if (!widthChanged && !heightChanged && !shouldRedraw) {
+            // console.log("Resize skipped, dimensions unchanged."); // Optional debug log
+            return;
+        }
+        // --- End Loop Prevention Check ---
+
+        // Update internal record of drawn dimensions *before* redraw
+        this._lastDrawPlotWidth = pw;
+        this._lastDrawPlotHeight = ph;
+
+        // Update SVG dimensions
         this.svg
             .attr('width', this.config.width)
             .attr('height', this.config.height);
