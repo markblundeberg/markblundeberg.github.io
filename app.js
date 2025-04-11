@@ -55,7 +55,7 @@ const liIonConfig = {
     // Define species relevant to Li-ion (can reuse some keys if careful)
     // Note: Using generic 'anion' key for PF6- or similar
     li_ion: { z: 1, color: '#E41A1C', latexPrettyName: '\\mathrm{Li}^{+}' }, // Red for Li+
-    anion: { z: -1, color: '#FF7F00', latexPrettyName: 'PF_6^{-}' }, // Orange for PF6- (example)
+    anion: { z: -1, color: '#FF7F00', latexPrettyName: '\\mathrm{PF}_6^{-}' }, // Orange for PF6- (example)
     electron: { z: -1, color: '#377EB8', latexPrettyName: '\\mathrm{e}^{-}' }, // Blue for electron
 
     // Electrode definitions with Langmuir E0 vs Li/Li+

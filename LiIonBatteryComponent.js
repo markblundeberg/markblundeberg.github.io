@@ -176,17 +176,6 @@ class LiIonBatteryComponent {
                 latexPrettyName: '\\mathrm{e}^{-}',
             }
         ); // Blue
-        // Add info for electrode species if needed for labels/tooltips (optional)
-        this.diagram.addSpeciesInfo('anode_host', {
-            z: null,
-            color: this.config.anode?.color || 'grey',
-            latexPrettyName: this.config.anode?.latexPrettyName || 'Anode',
-        });
-        this.diagram.addSpeciesInfo('cathode_host', {
-            z: null,
-            color: this.config.cathode?.color || 'black',
-            latexPrettyName: this.config.cathode?.latexPrettyName || 'Cathode',
-        });
 
         // Set layout
         this.diagram.setSpatialLayout(
@@ -415,7 +404,7 @@ class LiIonBatteryComponent {
         let content = formatTooltipBaseContent(info); // Call base formatter
 
         // Add Li content (x or y) if hovering over an electrode region
-        const config = this.cellConfig;
+        const config = this.config;
         const Li_total_norm = config.Li_total_norm || 0.95;
         const x_anode = Math.max(0.01, Math.min(0.99, this.currentSoC)); // Assuming slider is x_anode
         const y_cathode = Math.max(
