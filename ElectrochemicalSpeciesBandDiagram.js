@@ -10,12 +10,12 @@ const R = 8.31446261815324; // J / (mol K)
 const F = 96485.33212331001; // C / mol (Faraday constant)
 const e_charge = 1.602176634e-19; // C (Elementary charge)
 const Na = 6.02214076e23; // 1 / mol (Avogadro constant)
-const TEMP_K = 298.15; // Standard Temperature (Kelvin) - Make configurable?
+const TEMP_K = 298.15; // Standard Temperature (Kelvin)
 const J_PER_MOL_TO_EV = 1 / (Na * e_charge); // eV / (J/mol)
-const V_TO_EV_PER_CHARGE = 1; // Factor to convert V_volt to E_display (eV) is (-1)
+const V_TO_EV_PER_CHARGE = 1; // Factor for E = -V scaling in eV mode
 const F_kJmol = F / 1000.0; // F in kJ / (V mol), used for G_display = V_volt * F_kJmol
 
-// Default styling constants
+// Default styling constants for different curve types
 const STYLE_DEFAULTS = {
     potential: { lineWidth: 3, dasharray: null },
     standardState: { lineWidth: 1, dasharray: null },
@@ -34,9 +34,8 @@ const STYLE_DEFAULTS = {
 
 /**
  * Creates an interactive Electrochemical Species Band Diagram using D3.js.
- * The caller provides fundamental physical data (e.g., electrochemical potentials in J/mol,
- * band edges in eV, electrostatic potential in V) with explicit units. The module
- * handles scaling to the selected display mode (Volts, eV, kJmol) and rendering.
+ * Uses a boundaries array and region properties array for layout.
+ * Caller provides fundamental physical data with explicit units.
  */
 class ElectrochemicalSpeciesBandDiagram {
     /**
@@ -55,13 +54,10 @@ class ElectrochemicalSpeciesBandDiagram {
         this.containerId = containerId;
         this.container = d3.select(`#${this.containerId}`);
         if (this.container.empty()) {
-            console.error(
-                `ESBD Error: Container element with ID "${containerId}" not found.`
-            );
             throw new Error(`Container element #${containerId} not found.`);
         }
 
-        // Configuration
+        // Configuration with defaults
         this.config = {
             width: initialConfig.width || 800,
             height: initialConfig.height || 500,
@@ -74,35 +70,25 @@ class ElectrochemicalSpeciesBandDiagram {
                 bottom: 50,
                 left: 70,
             },
-            transitionDuration:
-                initialConfig.transitionDuration === undefined
-                    ? 250
-                    : initialConfig.transitionDuration,
-            throttleDelay:
-                initialConfig.throttleDelay === undefined
-                    ? 100
-                    : initialConfig.throttleDelay,
+            transitionDuration: initialConfig.transitionDuration ?? 250,
+            throttleDelay: initialConfig.throttleDelay ?? 100,
             resizeDebounceDelay: initialConfig.resizeDebounceDelay ?? 200,
             tempK: TEMP_K,
         };
-        // Plot dimensions calculated dynamically by getters
 
-        // Internal state
+        // Internal state initialization
         this.speciesInfo = new Map();
         this.traceData = [];
-        this.regions = [];
-        this.interfaces = [];
-        this.boundaries = []; // Sorted array of x-coordinates defining region edges [x0, x1, ..., xN]
-        this.regionProps = []; // Array of {name, color} for regions between boundaries [{...region0_1...}, {..region1_2..}] Length N
-        // ---
+        this.boundaries = [];
+        this.regionProps = [];
         this.differenceMarkers = [];
         this.lastDrawData = [];
 
-        // Callbacks & Throttling state
+        // Callbacks & Interaction state
         this._modeChangeCallback = null;
-        this._tooltipCallback = formatTooltipBaseContent; // from utils.js
+        this._tooltipCallback = formatTooltipBaseContent; // Default formatter
         this._throttleTimeout = null;
-        this._throttleWaiting = false;
+        this._throttleWaiting = false; // For tooltip throttling
 
         // Clear container initially
         this.container.html('');
@@ -131,11 +117,11 @@ class ElectrochemicalSpeciesBandDiagram {
             this.container.node().clientWidth || this.config.width;
         const initialHeight =
             this.container.node().clientHeight || this.config.height;
-        this._handleResize(initialWidth, initialHeight, false); // Initial size without redraw
+        this._handleResize(initialWidth, initialHeight, false); // Initial size calculation, no redraw
 
-        // REFACTOR: Create debounced resize handler here
+        // Debounced resize handler
         this._debouncedHandleResize = debounce((width, height) => {
-            this._handleResize(width, height); // Call actual handler
+            this._handleResize(width, height);
         }, this.config.resizeDebounceDelay);
 
         this._resizeObserver = new ResizeObserver((entries) => {
@@ -168,7 +154,7 @@ class ElectrochemicalSpeciesBandDiagram {
                 `translate(${this.config.margin.left},${this.config.margin.top})`
             );
 
-        // Layer groups
+        // Layer groups (order matters for rendering)
         this.backgroundGroup = this.plotArea
             .append('g')
             .attr('class', 'esbd-backgrounds');
@@ -366,11 +352,15 @@ class ElectrochemicalSpeciesBandDiagram {
 
     /** Main drawing/update function. */
     redraw() {
-        if (!this.svg || !this.plotArea) return;
+        if (!this.svg || !this.plotArea) {
+            console.error(
+                'ESBD Error: Attempted redraw before structure setup.'
+            );
+            return;
+        }
 
-        // 1. Prepare Data
+        // 1. Prepare Data (converts units, scales to display mode)
         this.lastDrawData = this._preparePlotDataAndScale();
-
         const hasPlottableData = this.lastDrawData.some(
             (t) => t.points.length > 0
         );
@@ -379,12 +369,11 @@ class ElectrochemicalSpeciesBandDiagram {
         const xDomain = d3.extent(
             this.boundaries && this.boundaries.length > 0
                 ? this.boundaries
-                : allXValues
+                : this.lastDrawData.flatMap((t) => t.points.map((p) => p.x))
         );
         if (xDomain[0] === undefined) xDomain = [0, 1];
         this.xScale.domain(xDomain).nice();
 
-        // Use extent of y_display values for y-domain
         const allYValues = this.lastDrawData.flatMap((t) =>
             t.points.map((p) => p.y_display)
         );
@@ -406,7 +395,7 @@ class ElectrochemicalSpeciesBandDiagram {
         }
         this.yScale.domain(yDomain).nice();
 
-        // 3. Update Axes
+        // 3. Update Axes (apply transitions)
         this.xAxisGroup
             .attr('transform', `translate(0,${this.plotHeight})`)
             .transition()
@@ -416,18 +405,13 @@ class ElectrochemicalSpeciesBandDiagram {
             .transition()
             .duration(this.config.transitionDuration)
             .call(this.yAxisGen);
-        this.yAxisLabel.text(this._getYAxisLabel());
+        this.yAxisLabel.text(this._getYAxisLabel()); // Update text immediately
 
-        // 4. Update interaction overlay size
-        this.interactionRect
-            .attr('width', this.plotWidth)
-            .attr('height', this.plotHeight);
-
-        // 5. Draw Static Elements
+        // 4. Draw Static Elements (backgrounds/interfaces don't usually need transitions)
         this._drawBackgrounds();
         this._drawInterfaceLines();
 
-        // 6. Draw Data Elements
+        // 5. Draw Data Elements (these use transitions internally)
         this._drawTraces();
         this._drawConnectors();
         this._drawLabels();
@@ -439,7 +423,10 @@ class ElectrochemicalSpeciesBandDiagram {
         if (this._resizeObserver) {
             this._resizeObserver.disconnect();
         }
-        this._hideTooltip(); // Ensure tooltip is hidden on destroy
+        // Clear any pending timeouts
+        clearTimeout(this._throttleTimeout);
+        clearTimeout(this.this._debouncedHandleResize);
+        this._hideTooltip();
         this.container.html('');
         console.log('ESBD Destroyed.');
     }
@@ -476,15 +463,12 @@ class ElectrochemicalSpeciesBandDiagram {
 
     // --- "Private" Helper Methods ---
 
-    // REFACTOR: Simplified _handleResize, relies on debounce for loop prevention
     _handleResize(width, height, shouldRedraw = true) {
         // Update config dimensions based on container size reported by observer
         this.config.width = width;
         this.config.height = height;
 
-        // Update SVG element size IMMEDIATELY to match container
-        // Note: If CSS sets svg { width: 100%; height: 100%; }, this might be redundant
-        // but setting attributes is generally robust.
+        // Update SVG element size to match container
         this.svg
             .attr('width', this.config.width)
             .attr('height', this.config.height);
@@ -508,7 +492,7 @@ class ElectrochemicalSpeciesBandDiagram {
         this.interactionRect.attr('width', pw).attr('height', ph);
 
         // Trigger redraw if requested and data exists
-        // No need for dimension check here, debounce handles excessive calls.
+        // Debouncing prevents this being called excessively or causing loops
         if (shouldRedraw && this.traceData.length > 0) {
             this.redraw();
         }
