@@ -1,4 +1,5 @@
 // LiIonBatteryComponent.js
+// Component for displaying an ESBD of a Li-ion battery at equilibrium (OCV).
 
 import ElectrochemicalSpeciesBandDiagram from './ElectrochemicalSpeciesBandDiagram.js';
 import { formatTooltipBaseContent, debounce } from './utils.js';
@@ -82,7 +83,7 @@ class LiIonBatteryComponent {
                 `Error initializing LiIonBatteryComponent in ${containerSelector}:`,
                 error
             );
-            this.container.innerHTML = `<p style="color: red;">Error initializing diagram component.</p>`;
+            this.container.innerHTML = `<p style="color: red;">Error initializing diagram component: ${error.message}</p>`;
         }
     }
 
@@ -95,7 +96,8 @@ class LiIonBatteryComponent {
         const showAnionId = `showAnion-${instanceId}`;
         const totalLiSliderId = `totalLi-${instanceId}`;
         const elyteConcSliderId = `elyteConc-${instanceId}`;
-        const modeSelectId = `mode-${instanceId}`; // Give mode selector an ID too
+        const modeSelectId = `mode-${instanceId}`;
+        const voltageOutputId = `volt-out-${instanceId}`; // Give output an ID
 
         this.container.innerHTML = `
             <div class="controls esbd-controls">
@@ -140,7 +142,7 @@ class LiIonBatteryComponent {
                     </div>
                 </details>
             </div>
-            <div class="plot-container" id="${this.plotDivId}" style="width:100%; height:${config.plotHeight || 300}px; border: 1px solid #ddd; margin-top: 10px;"></div>
+            <div class="plot-container" id="${this.plotDivId}" style="width:100%; /* height set by CSS */ border: 1px solid #ddd; margin-top: 10px;"></div>
         `;
     }
 
@@ -166,13 +168,10 @@ class LiIonBatteryComponent {
     /** Sets up the ESBD instance */
     _setupESBD() {
         if (!this.plotDiv) throw new Error('Plot container div not found.');
-
         this.diagram = new ElectrochemicalSpeciesBandDiagram(this.plotDivId, {
             height: this.config.plotHeight,
         });
-
         // Define species known to the diagram
-        // Use generic IDs that match keys in config for easy lookup
         this.diagram.addSpeciesInfo(
             'li+',
             this.config.li_ion || {
@@ -180,7 +179,7 @@ class LiIonBatteryComponent {
                 color: '#E41A1C',
                 latexPrettyName: '\\mathrm{Li}^{+}',
             }
-        ); // Red
+        );
         this.diagram.addSpeciesInfo(
             'anion',
             this.config.anion || {
@@ -188,7 +187,7 @@ class LiIonBatteryComponent {
                 color: '#4DAF4A',
                 latexPrettyName: 'PF_6^-',
             }
-        ); // Default anion if not specified
+        );
         this.diagram.addSpeciesInfo(
             'electron',
             this.config.electron || {
@@ -196,7 +195,7 @@ class LiIonBatteryComponent {
                 color: '#377EB8',
                 latexPrettyName: '\\mathrm{e}^{-}',
             }
-        ); // Blue
+        );
 
         // Set layout
         this.diagram.setSpatialLayout(
@@ -239,15 +238,9 @@ class LiIonBatteryComponent {
 
     /** Reads inputs, calculates state, updates diagram and outputs */
     updateDiagram() {
-        // Check essential elements
-        if (
-            !this.socSlider ||
-            !this.socValue ||
-            !this.cellVoltageOut ||
-            !this.diagram
-        ) {
+        if (!this.diagram) {
             return;
-        }
+        } // Don't update if diagram failed to init
 
         // Read current state from UI controls
         this.currentSoC = parseFloat(this.socSlider.value);
@@ -279,10 +272,11 @@ class LiIonBatteryComponent {
             // Update the diagram
             this.diagram.updateTraceData(traceDefs);
             // Update displayed cell voltage
+            if (this.cellVoltageOut)
             this.cellVoltageOut.textContent = calculatedVoltage.toFixed(3);
         } catch (error) {
             console.error('Error during state calculation or update:', error);
-            this.cellVoltageOut.textContent = 'Error';
+            if (this.cellVoltageOut) this.cellVoltageOut.textContent = 'Error';
         }
     }
 
@@ -300,38 +294,46 @@ class LiIonBatteryComponent {
         // Calculate y_cathode based on total Li (assuming equal site capacities for now)
         const y_cathode = Math.max(0.01, Math.min(0.99, LiTotalNorm - x_anode));
 
-        // Phase 2: Determine Electrode OCVs using Langmuir model
+        // --- Phase 2: Determine Electrode OCVs using Langmuir model ---
         const E0_anode = config.anode?.E0_vs_Li ?? 0.15;
         const E0_cathode = config.cathode?.E0_vs_Li ?? 3.8;
-        const langmuir_term = (x) => (RT_F / 1) * Math.log(x / (1 - x)); // n=1 for Li+
+        // Langmuir term: ln(x/(1-x)) - ensure x is strictly between 0 and 1
+        const langmuir_term = (x) => {
+            const x_safe = Math.max(1e-9, Math.min(1.0 - 1e-9, x)); // Avoid exact 0 or 1
+            return (RT_F / 1) * Math.log(x_safe / (1 - x_safe)); // n=1 for Li+
+        };
         const OCV_anode = E0_anode - langmuir_term(x_anode);
         const OCV_cathode = E0_cathode - langmuir_term(y_cathode);
 
-        // Phase 3: Calculate Primary Potential Lines (V_e, V_Li+)
+        // --- Phase 3: Calculate Primary Potential Lines (V_e, V_Li+) ---
         const V_Li_plus_elyte = 0; // Set electrolyte Li+ potential as reference V=0
-        const V_e_anode = OCV_anode;
+        const V_e_anode = OCV_anode; // V_e = OCV vs Li/Li+ when V_Li+ = 0 ref
         const V_e_cathode = OCV_cathode;
         const cell_voltage = V_e_cathode - V_e_anode;
 
-        // Phase 4: Calculate Optional Secondary Potentials
+        // --- Phase 4: Calculate Optional Secondary Potentials ---
         let V_anion = null,
             V_STD_Li_plus = null,
             V_STD_anion = null;
         if (showStd || showAnion) {
             const C_STD = config.c_std_M || 1.0;
-            // Assuming 1:1 salt like LiPF6 for activity calculation a = c/C_STD
-            const a_Li_plus = Math.max(elyteConc / C_STD, 1e-9);
-            const a_anion = Math.max(elyteConc / C_STD, 1e-9); // Assumes 1:1 salt
+            // Use current electrolyte concentration
+            const a_Li_plus = Math.max(
+                ((config.electrolyte?.nu_Li || 1) * elyteConc) / C_STD,
+                1e-9
+            ); // Use stoichiometry if provided
+            const a_anion = Math.max(
+                ((config.electrolyte?.nu_Anion || 1) * elyteConc) / C_STD,
+                1e-9
+            );
 
             const mu_std_Li_plus = config.li_ion?.mu_standard_J_mol;
             const mu_std_anion = config.anion?.mu_standard_J_mol;
             const z_anion = config.anion?.z ?? -1;
             const V_span_placeholder = config.V_span_placeholder ?? 1.0;
 
-            // Calculate V_STD_Li+ relative to V_Li_plus=0 reference
             V_STD_Li_plus = V_Li_plus_elyte - (RT_F / 1) * Math.log(a_Li_plus);
 
-            // Calculate V_STD_anion
             if (mu_std_Li_plus !== undefined && mu_std_anion !== undefined) {
                 const V_STD_Li_abs = mu_std_Li_plus / (1 * F);
                 const V_STD_anion_abs = mu_std_anion / (z_anion * F);
@@ -340,7 +342,6 @@ class LiIonBatteryComponent {
             } else {
                 V_STD_anion = V_STD_Li_plus - V_span_placeholder;
             }
-            // Calculate V_anion
             V_anion = V_STD_anion + (RT_F / z_anion) * Math.log(a_anion);
         }
 
@@ -350,7 +351,7 @@ class LiIonBatteryComponent {
             throw new Error('Invalid boundaries configuration for 7 regions.');
         }
         const traceDefs = [];
-        const traceIdSuffix = this.plotDivId; // Make trace IDs unique per instance
+        const traceIdSuffix = this.plotDivId;
 
         // V_e- Traces
         traceDefs.push({
@@ -388,7 +389,7 @@ class LiIonBatteryComponent {
 
         // Optional Traces
         if (showStd) {
-            if (V_STD_Li_plus !== null) {
+            if (V_STD_Li_plus !== null)
                 traceDefs.push({
                     id: `li_std_${traceIdSuffix}`,
                     speciesId: 'li+',
@@ -399,8 +400,7 @@ class LiIonBatteryComponent {
                     x: [b[2], b[5]],
                     y: [V_STD_Li_plus, V_STD_Li_plus],
                 });
-            }
-            if (showAnion && V_STD_anion !== null) {
+            if (showAnion && V_STD_anion !== null)
                 traceDefs.push({
                     id: `anion_std_${traceIdSuffix}`,
                     speciesId: 'anion',
@@ -411,10 +411,9 @@ class LiIonBatteryComponent {
                     x: [b[2], b[5]],
                     y: [V_STD_anion, V_STD_anion],
                 });
-            }
         }
         if (showAnion) {
-            if (V_anion !== null) {
+            if (V_anion !== null)
                 traceDefs.push({
                     id: `anion_elyte_${traceIdSuffix}`,
                     speciesId: 'anion',
@@ -425,7 +424,6 @@ class LiIonBatteryComponent {
                     x: [b[2], b[5]],
                     y: [V_anion, V_anion],
                 });
-            }
         }
 
         return { traceDefs, calculatedVoltage: cell_voltage };
@@ -433,8 +431,10 @@ class LiIonBatteryComponent {
 
     /** Tooltip callback specific to this Li-ion component instance */
     _getTooltipContent(info) {
-        let content = formatTooltipBaseContent(info); // Base content
+        // 1. Get base content
+        let content = formatTooltipBaseContent(info);
 
+        // 2. Add Li-ion specific info
         const config = this.config;
         // Use current state values stored in the instance
         const x_anode = Math.max(0.01, Math.min(0.99, this.currentSoC));
@@ -451,6 +451,7 @@ class LiIonBatteryComponent {
             content += `<br>Cathode y = ${y_cathode.toFixed(3)}`;
         // Add electrolyte info
         else if (info.regionIndex >= 2 && info.regionIndex <= 4) {
+            // Electrolyte / Separator regions
             const C_STD = config.c_std_M || 1.0;
             // Assuming 1:1 salt for activity display
             const a_Li_plus = Math.max(elyteConc / C_STD, 1e-9);
