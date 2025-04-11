@@ -61,13 +61,16 @@ class LiIonBatteryComponent {
         }
         // --- End Validation ---
 
-        // Initialize state from config or defaults
-        this.currentSoC = componentConfig.initialSoC ?? 0.5;
+        this.currentSoCPercent = Math.max(
+            0,
+            Math.min(100, componentConfig.initialSoCPercent ?? 50)
+        );
         this.currentLiTotalNorm = componentConfig.initialLiTotalNorm ?? 0.95;
         this.currentElyteConc = componentConfig.initialElyteConc ?? 1.0;
-        // State for optional displays
-        this.showStdStates = false;
-        this.showAnion = false;
+        this.showStdStates = componentConfig.initialShowStdStates ?? false;
+        this.showAnion = componentConfig.initialShowAnion ?? false;
+        this.currentXAnode = null;
+        this.currentYCathode = null;
 
         try {
             this._createInternalHTML();
@@ -102,13 +105,13 @@ class LiIonBatteryComponent {
         this.container.innerHTML = `
             <div class="controls esbd-controls">
                 <div class="control-row">
-                    <label class="control-label" for="${socSliderId}">State of Charge (Anode x):</label>
-                    <input type="range" class="soc-slider" id="${socSliderId}" min="0.01" max="0.99" step="0.01" value="${this.currentSoC}">
-                    <output class="soc-value">${this.currentSoC.toFixed(2)}</output>
+                    <label class="control-label" for="${socSliderId}">State of Charge (%):</label>
+                    <input type="range" class="soc-slider" id="${socSliderId}" min="0" max="100" step="1" value="${this.currentSoCPercent}">
+                    <output class="soc-value">${this.currentSoCPercent.toFixed(0)}</output> %
                 </div>
                  <div class="control-row">
-                    <label class="control-label">Cell Voltage (OCV):</label>
-                    <output class="cell-voltage">?.???</output> V
+                    <label class="control-label" for="${voltageOutputId}">Cell Voltage (OCV):</label>
+                    <output class="cell-voltage" id="${voltageOutputId}">?.???</output> V
                 </div>
                  <div class="control-row">
                     <label class="control-label" for="${modeSelectId}">Display Mode:</label>
@@ -122,21 +125,21 @@ class LiIonBatteryComponent {
                     <summary style="cursor:pointer; font-size: 0.9em; margin-top: 5px;">Advanced Controls</summary>
                     <div style="padding-left: 20px; margin-top: 5px;">
                         <div class="control-row">
-                            <label class="control-label" for="${totalLiSliderId}">Total Li (Norm.):</label>
-                            <input type="range" class="total-li-slider" id="${totalLiSliderId}" min="0.5" max="1.5" step="0.01" value="${this.currentLiTotalNorm}">
+                            <label class="control-label" for="${totalLiSliderId}">Total Li Inventory (Norm.):</label>
+                            <input type="range" class="total-li-slider" id="${totalLiSliderId}" min="0.1" max="1.0" step="0.01" value="${this.currentLiTotalNorm}">
                             <output class="total-li-value">${this.currentLiTotalNorm.toFixed(2)}</output>
                         </div>
                         <div class="control-row">
-                            <label class="control-label" for="${elyteConcSliderId}">Elyte Conc (M):</label>
+                            <label class="control-label" for="${elyteConcSliderId}">Electrolyte Conc (M):</label>
                             <input type="range" class="elyte-conc-slider" id="${elyteConcSliderId}" min="0.1" max="2.0" step="0.01" value="${this.currentElyteConc}">
                             <output class="elyte-conc-value">${this.currentElyteConc.toFixed(3)}</output> M
                         </div>
                         <div class="control-row">
-                             <input type="checkbox" class="show-std-checkbox" id="${showStdId}">
+                             <input type="checkbox" class="show-std-checkbox" id="${showStdId}" ${this.showStdStates ? 'checked' : ''}>
                              <label for="${showStdId}" style="min-width: initial; font-weight: normal;">Show Standard States</label>
                         </div>
                         <div class="control-row">
-                             <input type="checkbox" class="show-anion-checkbox" id="${showAnionId}">
+                             <input type="checkbox" class="show-anion-checkbox" id="${showAnionId}" ${this.showAnion ? 'checked' : ''}>
                              <label for="${showAnionId}" style="min-width: initial; font-weight: normal;">Show Anion Potentials</label>
                         </div>
                     </div>
@@ -208,32 +211,32 @@ class LiIonBatteryComponent {
 
     /** Attaches event listeners to controls */
     _attachListeners() {
-        if (this.socSlider)
-            this.socSlider.addEventListener('input', () =>
-                this.updateDiagram()
-            );
-        if (this.modeSelector)
-            this.modeSelector.addEventListener('change', (e) =>
-                this.diagram.setMode(e.target.value)
-            );
-        if (this.showStdCheckbox)
-            this.showStdCheckbox.addEventListener('change', (e) => {
-                this.showStdStates = e.target.checked;
-                this.updateDiagram();
-            });
-        if (this.showAnionCheckbox)
-            this.showAnionCheckbox.addEventListener('change', (e) => {
-                this.showAnion = e.target.checked;
-                this.updateDiagram();
-            });
-        if (this.totalLiSlider)
-            this.totalLiSlider.addEventListener('input', () =>
-                this.updateDiagram()
-            );
-        if (this.elyteConcSlider)
-            this.elyteConcSlider.addEventListener('input', () =>
-                this.updateDiagram()
-            );
+        // Helper to add listener if element exists
+        const addListener = (element, eventType, handler) => {
+            if (element) {
+                element.addEventListener(eventType, handler);
+            } else {
+                // REVIEW: Added warning if element expected but not found
+                console.warn(
+                    `ESBD Component Warn: Element not found for listener (${eventType})`
+                );
+            }
+        };
+
+        addListener(this.socSlider, 'input', () => this.updateDiagram());
+        addListener(this.modeSelector, 'change', (e) =>
+            this.diagram.setMode(e.target.value)
+        );
+        addListener(this.showStdCheckbox, 'change', (e) => {
+            this.showStdStates = e.target.checked;
+            this.updateDiagram();
+        });
+        addListener(this.showAnionCheckbox, 'change', (e) => {
+            this.showAnion = e.target.checked;
+            this.updateDiagram();
+        });
+        addListener(this.totalLiSlider, 'input', () => this.updateDiagram());
+        addListener(this.elyteConcSlider, 'input', () => this.updateDiagram());
     }
 
     /** Reads inputs, calculates state, updates diagram and outputs */
@@ -243,37 +246,36 @@ class LiIonBatteryComponent {
         } // Don't update if diagram failed to init
 
         // Read current state from UI controls
-        this.currentSoC = parseFloat(this.socSlider.value);
+        if (this.socSlider)
+            this.currentSoCPercent = parseFloat(this.socSlider.value);
         if (this.totalLiSlider)
             this.currentLiTotalNorm = parseFloat(this.totalLiSlider.value);
         if (this.elyteConcSlider)
             this.currentElyteConc = parseFloat(this.elyteConcSlider.value);
-        // Read optional flags (already updated by listeners)
-        const showStd = this.showStdStates;
-        const showAnion = this.showAnion;
 
         // Update UI displays
-        this.socValue.textContent = this.currentSoC.toFixed(2);
+        if (this.socValue)
+            this.socValue.textContent = this.currentSoCPercent.toFixed(0);
         if (this.totalLiValue)
             this.totalLiValue.textContent = this.currentLiTotalNorm.toFixed(2);
         if (this.elyteConcValue)
             this.elyteConcValue.textContent = this.currentElyteConc.toFixed(3);
 
         try {
-            // Calculate the new state, passing new state variables
+            // Calculate the new state
             const { traceDefs, calculatedVoltage } = this._calculateState(
-                this.currentSoC,
-                this.currentLiTotalNorm, // Pass total Li
-                this.currentElyteConc, // Pass elyte conc
+                this.currentSoCPercent,
+                this.currentLiTotalNorm,
+                this.currentElyteConc,
                 this.config,
-                showStd,
-                showAnion
+                this.showStdStates,
+                this.showAnion
             );
             // Update the diagram
             this.diagram.updateTraceData(traceDefs);
             // Update displayed cell voltage
             if (this.cellVoltageOut)
-            this.cellVoltageOut.textContent = calculatedVoltage.toFixed(3);
+                this.cellVoltageOut.textContent = calculatedVoltage.toFixed(3);
         } catch (error) {
             console.error('Error during state calculation or update:', error);
             if (this.cellVoltageOut) this.cellVoltageOut.textContent = 'Error';
@@ -282,17 +284,40 @@ class LiIonBatteryComponent {
 
     /** Calculation logic specific to Li-ion battery OCV */
     _calculateState(
-        soc_anode_x,
-        LiTotalNorm,
+        socPercent,
+        LiTotalNormInput,
         elyteConc,
         config,
         showStd,
         showAnion
     ) {
-        // Phase 1: Determine Lithiation State
-        const x_anode = Math.max(0.01, Math.min(0.99, soc_anode_x));
-        // Calculate y_cathode based on total Li (assuming equal site capacities for now)
-        const y_cathode = Math.max(0.01, Math.min(0.99, LiTotalNorm - x_anode));
+        // --- Phase 1: Determine Lithiation State ---
+        const x_min = config.anode?.x_min ?? 0.01;
+        const x_max = config.anode?.x_max ?? 0.99;
+        const y_min = config.cathode?.y_min ?? 0.01;
+        const y_max = config.cathode?.y_max ?? 0.99;
+
+        // Clamp total Li used in calculation to valid range based on min/max limits
+        // Min possible sum: x_min + y_min
+        // Max possible sum for full range: x_max + y_min == x_min + y_max (assuming equal spans)
+        const LiTotalNorm = Math.max(
+            x_min + y_min,
+            Math.min(x_max + y_min, LiTotalNormInput)
+        );
+
+        // Calculate the amount of lithium that can actually be shifted between electrodes
+        const Li_movable = LiTotalNorm - (x_min + y_min);
+
+        // Map SoC % (0-100) to the distribution of movable lithium
+        const socFrac = socPercent / 100.0;
+
+        // REFACTOR: Calculate x_anode and y_cathode based on distributing Li_movable
+        const x_anode = x_min + Li_movable * socFrac;
+        const y_cathode = y_min + Li_movable * (1.0 - socFrac);
+
+        // Store calculated values for tooltip use
+        this.currentXAnode = x_anode;
+        this.currentYCathode = y_cathode;
 
         // --- Phase 2: Determine Electrode OCVs using Langmuir model ---
         const E0_anode = config.anode?.E0_vs_Li ?? 0.15;
@@ -436,19 +461,14 @@ class LiIonBatteryComponent {
 
         // 2. Add Li-ion specific info
         const config = this.config;
-        // Use current state values stored in the instance
-        const x_anode = Math.max(0.01, Math.min(0.99, this.currentSoC));
-        const y_cathode = Math.max(
-            0.01,
-            Math.min(0.99, this.currentLiTotalNorm - x_anode)
-        );
-        const elyteConc = this.currentElyteConc;
+        const elyteConc = this.currentElyteConc; // Use stored value
 
-        // Add electrode lithiation state
-        if (info.regionIndex === 1)
-            content += `<br>Anode x = ${x_anode.toFixed(3)}`;
-        else if (info.regionIndex === 5)
-            content += `<br>Cathode y = ${y_cathode.toFixed(3)}`;
+        // Add electrode lithiation state using stored values
+        if (info.regionIndex === 1) {
+            content += `<br>Anode x = ${this.currentXAnode?.toFixed(3) ?? 'N/A'}`;
+        } else if (info.regionIndex === 5) {
+            content += `<br>Cathode y = ${this.currentYCathode?.toFixed(3) ?? 'N/A'}`;
+        }
         // Add electrolyte info
         else if (info.regionIndex >= 2 && info.regionIndex <= 4) {
             // Electrolyte / Separator regions

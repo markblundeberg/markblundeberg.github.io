@@ -84,7 +84,7 @@ const liIonConfig = {
 
     // Balancing and SoC
     Li_total_norm: 0.95, // Total Li relative to one electrode's site capacity (assumed equal)
-    initialSoC: 0.5, // Start at 50% SoC (relative to anode x)
+    initialSoCPercent: 50, // Start at 50% SoC (relative to anode x)
 
     // Placeholder for relative standard state potential difference if mu_std not provided
     V_span_placeholder: 1.0, // Placeholder V_std(Li+) - V_std(Anion) in Volts
