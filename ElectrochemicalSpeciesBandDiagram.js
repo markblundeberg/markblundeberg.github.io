@@ -1072,104 +1072,30 @@ class ElectrochemicalSpeciesBandDiagram {
                 // console.warn(`Could not find region for xValue: ${xValue}`);
             }
         }
-        // --- End Find Region Info ---
 
-        let closestTraceInfo = null;
-        let minDistY = Infinity;
+        // --- Find Closest Trace using Helper ---
+        const closestResult = this._findClosestTrace(xValue, pointerY);
+
         const verticalThresholdPx = 25;
 
-        // Iterate through the processed data used for the last draw
-        this.lastDrawData.forEach((trace) => {
-            const originalTraceDef = this.traceData.find(
-                (td) => td.id === trace.id
-            );
-            const xRange = originalTraceDef?.xRange;
-            const isInRange =
-                !xRange || (xValue >= xRange.min && xValue <= xRange.max);
-
-            if (!isInRange || trace.points.length < 2) {
-                return; // Skip trace
-            }
-
-            // Find points bracketing xValue and interpolate y_display
-            let y_interp = null;
-            let p_interp = null;
-            const bisect = d3.bisector((p) => p.x).left;
-            const index = bisect(trace.points, xValue, 1);
-            const p0 = trace.points[index - 1];
-            const p1 = trace.points[index];
-
-            if (p0 && p1) {
-                if (p1.x === p0.x) {
-                    // Vertical segment check
-                    if (Math.abs(p0.x - xValue) < 1e-9) {
-                        if (
-                            Math.abs(this.yScale(p0.y_display) - pointerY) <
-                            Math.abs(this.yScale(p1.y_display) - pointerY)
-                        ) {
-                            y_interp = p0.y_display;
-                            p_interp = p0;
-                        } else {
-                            y_interp = p1.y_display;
-                            p_interp = p1;
-                        }
-                    }
-                } else {
-                    // Interpolate
-                    const t = (xValue - p0.x) / (p1.x - p0.x);
-                    if (
-                        p0.y_display !== null &&
-                        isFinite(p0.y_display) &&
-                        p1.y_display !== null &&
-                        isFinite(p1.y_display)
-                    ) {
-                        y_interp =
-                            p0.y_display + t * (p1.y_display - p0.y_display);
-                        p_interp = t < 0.5 ? p0 : p1; // Use nearest point's other data
-                        p_interp = { ...p_interp, y_display: y_interp }; // Update point data with interpolated y
-                    }
-                }
-            } else if (p0 || p1) {
-                // Edge case check
-                const p_edge = p0 || p1;
-                if (Math.abs(p_edge.x - xValue) < 1e-9) {
-                    y_interp = p_edge.y_display;
-                    p_interp = p_edge;
-                }
-            }
-
-            // Calculate vertical distance if interpolation was successful
-            if (y_interp !== null && isFinite(y_interp)) {
-                const distY = Math.abs(this.yScale(y_interp) - pointerY);
-                if (distY < minDistY) {
-                    minDistY = distY;
-                    closestTraceInfo = {
-                        trace: trace,
-                        pointData: p_interp,
-                        xValue: xValue,
-                    };
-                }
-            }
-        }); // End loop through traces
-
-        // Display tooltip if a close enough trace was found
-        if (closestTraceInfo && minDistY < verticalThresholdPx) {
-            const trace = closestTraceInfo.trace;
-            const point = closestTraceInfo.pointData;
+        // --- Display Tooltip ---
+        if (closestResult && closestResult.minDistPx < verticalThresholdPx) {
+            const trace = closestResult.trace; // Get trace info from result
+            const point = closestResult.pointData; // Get point data from result
 
             const tooltipInfo = {
                 speciesId: trace.speciesId,
                 traceId: trace.id,
                 curveType: trace.curveType,
                 labelString: trace.labelString,
-                xValue: xValue,
-                yValueDisplayed: point.y_display,
+                xValue: xValue, // Use xValue under cursor
+                yValueDisplayed: point.y_display, // Use interpolated/closest y
                 yValueVolts: point.y_volt,
                 yValueSource: point.source_y,
                 yValueSourceUnits: point.source_units,
                 currentMode: this.config.mode,
-                regionIndex: regionIndex, // <-- Pass region index (-1 if not found)
-                regionInfo: regionInfo, // <-- Pass region properties (or null)
+                regionIndex: regionIndex, // Pass region index
+                regionInfo: regionInfo, // Pass region properties
                 pointEvent: event,
             };
             try {
@@ -1219,43 +1145,27 @@ class ElectrochemicalSpeciesBandDiagram {
                         this.container.node()
                     );
                     const containerWidth = this.container.node().clientWidth;
-                    // Use plotHeight for bottom boundary check relative to container coords
-                    const plotBottomY =
-                        this.plotHeight +
-                        this.config.margin.top +
-                        this.config.margin.bottom;
-
-                    // Calculate desired position (e.g., above-right of cursor)
                     let targetX = containerX + 15;
-                    let targetY = containerY - 15 - tooltipHeight; // Position top edge above cursor
-
-                    // Boundary Checks (relative to container)
+                    let targetY = containerY - 15 - tooltipHeight;
                     if (targetX + tooltipWidth > containerWidth) {
-                        targetX = containerX - 15 - tooltipWidth; // Flip left
+                        targetX = containerX - 15 - tooltipWidth;
                     }
                     if (targetX < 0) {
                         targetX = 5;
-                    } // Prevent going off left
-
+                    }
                     if (targetY < 0) {
-                        // Check top edge
-                        targetY = containerY + 15; // Flip below cursor
+                        targetY = containerY + 15;
                     }
-                    // Check bottom edge (relative to container height)
-                    // Note: This assumes tooltip is positioned relative to container, not page.
                     if (targetY + tooltipHeight > this.config.height) {
-                        targetY = this.config.height - tooltipHeight - 5; // Stick near bottom
+                        targetY = this.config.height - tooltipHeight - 5;
                     }
-
-                    // Apply final position and make visible
                     this._tooltip
                         .style('left', `${targetX}px`)
                         .style('top', `${targetY}px`)
                         .style('visibility', 'visible')
                         .style('opacity', 1);
-                    this._applyHighlight(closestTraceInfo.trace.id);
+                    this._applyHighlight(trace.id); // Highlight the found trace
                 } else {
-                    // No content returned by callback
                     this._hideTooltip();
                 }
             } catch (e) {
@@ -1264,8 +1174,105 @@ class ElectrochemicalSpeciesBandDiagram {
             }
         } else {
             this._hideTooltip();
-        }
+        } // Hide if no close trace found
     }
-} // End of class
+
+    /**
+     * Finds the trace that is vertically closest to the pointer at a given x-coordinate.
+     * @param {number} xValue - The x-coordinate in data space.
+     * @param {number} pointerY - The y-coordinate of the pointer in pixel space.
+     * @returns {object | null} - Object { trace, pointData, minDistPx } or null if no suitable trace found.
+     */
+    _findClosestTrace(xValue, pointerY) {
+        let closestTraceInfo = null;
+        let minDistPx = Infinity;
+
+        this.lastDrawData.forEach((trace) => {
+            const originalTraceDef = this.traceData.find(
+                (td) => td.id === trace.id
+            );
+            const xRange = originalTraceDef?.xRange;
+            const isInExplicitRange =
+                !xRange || (xValue >= xRange.min && xValue <= xRange.max);
+
+            // Also check if the trace actually has points spanning this xValue
+            // (Handles cases where xRange might be wider than actual data points provided)
+            const hasPointsInRange =
+                trace.points.length >= 2 &&
+                xValue >= trace.points[0].x &&
+                xValue <= trace.points[trace.points.length - 1].x;
+
+            if (!isInExplicitRange || !hasPointsInRange) {
+                return; // Skip trace if xValue is outside its defined range or data extent
+            }
+
+            // Find points bracketing xValue and interpolate y_display
+            let y_interp = null;
+            let p_interp = null;
+            const bisect = d3.bisector((p) => p.x).left;
+            const index = bisect(trace.points, xValue, 1);
+            const p0 = trace.points[index - 1];
+            const p1 = trace.points[index];
+
+            if (p0 && p1) {
+                if (p1.x === p0.x) {
+                    // Vertical segment
+                    if (Math.abs(p0.x - xValue) < 1e-9) {
+                        y_interp =
+                            Math.abs(this.yScale(p0.y_display) - pointerY) <
+                            Math.abs(this.yScale(p1.y_display) - pointerY)
+                                ? p0.y_display
+                                : p1.y_display;
+                        p_interp = y_interp === p0.y_display ? p0 : p1;
+                    }
+                } else {
+                    // Interpolate
+                    const t = (xValue - p0.x) / (p1.x - p0.x);
+                    if (
+                        p0.y_display !== null &&
+                        isFinite(p0.y_display) &&
+                        p1.y_display !== null &&
+                        isFinite(p1.y_display)
+                    ) {
+                        y_interp =
+                            p0.y_display + t * (p1.y_display - p0.y_display);
+                        // Create an interpolated point data object
+                        p_interp = {
+                            x: xValue,
+                            y_display: y_interp,
+                            // Interpolate y_volt as well? Or take from nearest point? Let's take from nearest for simplicity.
+                            y_volt: t < 0.5 ? p0.y_volt : p1.y_volt,
+                            source_y: t < 0.5 ? p0.source_y : p1.source_y,
+                            source_units:
+                                t < 0.5 ? p0.source_units : p1.source_units,
+                        };
+                    }
+                }
+            } else if (p0 || p1) {
+                // Edge case: xValue might match first or last point
+                const p_edge = p0 || p1;
+                if (Math.abs(p_edge.x - xValue) < 1e-9) {
+                    y_interp = p_edge.y_display;
+                    p_interp = p_edge;
+                }
+            }
+
+            // Calculate vertical distance in pixels if interpolation was successful
+            if (y_interp !== null && isFinite(y_interp)) {
+                const distY = Math.abs(this.yScale(y_interp) - pointerY);
+                if (distY < minDistPx) {
+                    minDistPx = distY;
+                    closestTraceInfo = {
+                        trace: trace, // The full trace object from lastDrawData
+                        pointData: p_interp, // The specific (potentially interpolated) point data
+                        minDistPx: distY, // Store the distance found
+                    };
+                }
+            }
+        }); // End loop through traces
+
+        return closestTraceInfo; // Return object { trace, pointData, minDistPx } or null
+    }
+}
 
 export default ElectrochemicalSpeciesBandDiagram;
