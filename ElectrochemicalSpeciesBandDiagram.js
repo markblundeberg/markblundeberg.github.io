@@ -30,6 +30,18 @@ const STYLE_DEFAULTS = {
         color: 'rgba(128,128,128,0.7)',
     },
     differenceMarker: { lineWidth: 1, color: 'black' },
+    reactionMarker: {
+        symbol: '⇌',
+        fontSize: '14px',
+        color: '#333',
+        backgroundRadius: 8,
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        backgroundStroke: '#AAA',
+        legColor: '#888',
+        legWidth: 1,
+        legThresholdPx: 15, // Min gap in pixels to draw legs
+        highlightColor: 'rgba(0, 123, 255, 0.3)', // Example highlight (semi-transparent blue bg)
+    },
 };
 
 /**
@@ -82,6 +94,7 @@ class ElectrochemicalSpeciesBandDiagram {
         this.boundaries = [];
         this.regionProps = [];
         this.differenceMarkers = [];
+        this.reactionMarkers = new Map();
         this.lastDrawData = [];
 
         // Callbacks & Interaction state
@@ -174,6 +187,9 @@ class ElectrochemicalSpeciesBandDiagram {
             .append('g')
             .attr('class', 'esbd-markers')
             .style('pointer-events', 'none');
+        this.interfaceMarkersGroup = this.plotArea
+            .append('g')
+            .attr('class', 'esbd-interface-markers');
         this.labelsGroup = this.plotArea
             .append('g')
             .attr('class', 'esbd-labels')
@@ -316,6 +332,90 @@ class ElectrochemicalSpeciesBandDiagram {
         if (this.plotArea) this.redraw();
     }
 
+    /**
+     * Defines a reaction marker to be displayed at an interface.
+     * @param {string} markerId - Unique identifier for this marker.
+     * @param {object} definition - Marker definition.
+     * @param {string} [definition.symbol='⇌'] - SVG text symbol to display.
+     * @param {string} definition.speciesId1 - The speciesId for the first potential (y1).
+     * @param {string} definition.speciesId2 - The speciesId for the second potential (y2).
+     * @param {function} definition.tooltipCallback - Function to generate tooltip HTML, receives markerTooltipInfo object.
+     */
+    addReactionMarker(markerId, definition) {
+        if (
+            !markerId ||
+            !definition ||
+            !definition.speciesId1 ||
+            !definition.speciesId2 ||
+            typeof definition.tooltipCallback !== 'function'
+        ) {
+            console.error(
+                'ESBD Error: Invalid definition for addReactionMarker. Requires markerId, speciesId1, speciesId2, tooltipCallback.',
+                definition
+            );
+            return;
+        }
+        this.reactionMarkers.set(markerId, {
+            definition: {
+                symbol:
+                    definition.symbol || STYLE_DEFAULTS.reactionMarker.symbol,
+                speciesId1: definition.speciesId1,
+                speciesId2: definition.speciesId2,
+                tooltipCallback: definition.tooltipCallback,
+            },
+            currentData: null, // Position/data updated via updateReactionMarker
+        });
+    }
+
+    /**
+     * Updates the position and data for a defined reaction marker.
+     * @param {string} markerId - Identifier of the marker to update.
+     * @param {object} data - Data for positioning and tooltip.
+     * @param {number} data.x - X-coordinate (data units) of the interface.
+     * @param {number} data.y1 - Potential value 1 (in specified units).
+     * @param {number} data.y2 - Potential value 2 (in specified units).
+     * @param {string} data.inputUnits - Units of y1 and y2 (e.g., 'V_volt', 'mu_bar_eV').
+     * @param {any} [data.tooltipArgs] - Custom data to pass to the tooltip callback.
+     */
+    updateReactionMarker(markerId, data) {
+        if (!this.reactionMarkers.has(markerId)) {
+            console.warn(
+                `ESBD Warn: No reaction marker found with ID "${markerId}" to update.`
+            );
+            return;
+        }
+        if (
+            !data ||
+            data.x === undefined ||
+            data.y1 === undefined ||
+            data.y2 === undefined ||
+            !data.inputUnits
+        ) {
+            console.error(
+                `ESBD Error: Invalid data for updateReactionMarker. Requires x, y1, y2, inputUnits.`,
+                data
+            );
+            return;
+        }
+
+        const marker = this.reactionMarkers.get(markerId);
+        const z1 = this.speciesInfo.get(marker.definition.speciesId1)?.z;
+        const z2 = this.speciesInfo.get(marker.definition.speciesId2)?.z;
+
+        // Convert input y values to internal V_volt representation
+        const y1_volt = this._convertToVolts(data.y1, data.inputUnits, z1);
+        const y2_volt = this._convertToVolts(data.y2, data.inputUnits, z2);
+
+        // Store current data including pre-calculated volt values
+        marker.currentData = {
+            x: data.x,
+            y1_volt: y1_volt,
+            y2_volt: y2_volt,
+            tooltipArgs: data.tooltipArgs || {}, // Store custom args
+        };
+        // No redraw needed here, redraw() will pick up latest data from the map
+    }
+
     /** Sets the display mode and triggers redraw and callback. */
     setMode(newMode) {
         const validModes = ['Volts', 'eV', 'kJmol'];
@@ -414,6 +514,7 @@ class ElectrochemicalSpeciesBandDiagram {
         // 5. Draw Data Elements (these use transitions internally)
         this._drawTraces();
         this._drawConnectors();
+        this._drawReactionMarkers();
         this._drawLabels();
         this._drawDifferenceMarkers(); // TODO: Implement
     }
@@ -1014,6 +1115,7 @@ class ElectrochemicalSpeciesBandDiagram {
     _hideTooltip() {
         this._tooltip.style('visibility', 'hidden').style('opacity', 0);
         this._applyHighlight(null);
+        this._applyMarkerHighlight(null);
     }
 
     _updateTooltip(event, isClick) {
@@ -1294,6 +1396,244 @@ class ElectrochemicalSpeciesBandDiagram {
 
         return closestTraceInfo; // Return object { trace, pointData, minDistPx } or null
     }
-}
+
+    /** Draws or updates the reaction marker symbols at interfaces */
+    _drawReactionMarkers() {
+        const markerData = Array.from(this.reactionMarkers.entries())
+            .map(([id, data]) => ({ id, ...data })) // Combine ID with stored data {definition, currentData}
+            .filter(
+                (d) =>
+                    d.currentData &&
+                    d.currentData.x !== undefined &&
+                    d.currentData.y1_volt !== null &&
+                    d.currentData.y2_volt !== null
+            ); // Ensure data is valid
+
+        const markerStyle = STYLE_DEFAULTS.reactionMarker;
+        const legThreshold = markerStyle.legThresholdPx || 15;
+        const symbolSize = markerStyle.fontSize || '14px';
+        const bgRadius = markerStyle.backgroundRadius || 8;
+
+        // Data binding for the marker groups
+        this.interfaceMarkersGroup
+            .selectAll('g.esbd-interface-marker')
+            .data(markerData, (d) => d.id) // Key by markerId
+            .join(
+                (enter) => {
+                    const g = enter
+                        .append('g')
+                        .attr('class', 'esbd-interface-marker')
+                        .attr('data-marker-id', (d) => d.id) // Store ID for potential use
+                        .style('cursor', 'help'); // Indicate interactivity
+
+                    // Add background circle for easier hover/click detection
+                    g.append('circle')
+                        .attr('class', 'marker-bg')
+                        .attr('r', bgRadius)
+                        .attr('fill', markerStyle.backgroundColor)
+                        .attr('stroke', markerStyle.backgroundStroke)
+                        .attr('stroke-width', 1);
+                    // Add the symbol text
+                    g.append('text')
+                        .attr('class', 'marker-symbol')
+                        .attr('text-anchor', 'middle')
+                        .attr('dominant-baseline', 'central')
+                        .attr('font-size', symbolSize)
+                        .attr('fill', markerStyle.color)
+                        .text((d) => d.definition.symbol);
+
+                    // Add lines for legs (initially zero length, positioned later)
+                    g.append('line')
+                        .attr('class', 'marker-leg-1')
+                        .attr('stroke', markerStyle.legColor)
+                        .attr('stroke-width', markerStyle.legWidth);
+                    g.append('line')
+                        .attr('class', 'marker-leg-2')
+                        .attr('stroke', markerStyle.legColor)
+                        .attr('stroke-width', markerStyle.legWidth);
+
+                    // Attach listeners to the group
+                    g.on('pointerover', (event, d) => {
+                        event.stopPropagation();
+                            this._handleInterfaceMarkerInteraction(event, d.id);
+                        this._applyMarkerHighlight(d.id, true);
+                        })
+                        .on('pointerout', (event, d) => {
+                            event.stopPropagation();
+                            this._hideTooltip(); // Hides tooltip and resets highlights
+                        })
+                        .on('click', (event, d) => {
+                            event.stopPropagation();
+                            this._handleInterfaceMarkerInteraction(
+                                event,
+                                d.id,
+                                true
+                            );
+                        });
+                    return g;
+                },
+                (update) => update, // Nothing static needs updating usually
+                (exit) =>
+                    exit
+                        .transition()
+                        .duration(this.config.transitionDuration)
+                        .attr('opacity', 0)
+                        .remove() // Fade out removed markers
+            )
+            // Update position and legs with transitions
+            .each((d, i, nodes) => {
+                // Calculate pixel positions for this marker
+                const markerG = d3.select(nodes[i]);
+                const data = d.currentData;
+                if (!data || data.y1_volt === null || data.y2_volt === null) {
+                    markerG.style('display', 'none'); // Hide if data is invalid
+                    return;
+                } else {
+                    markerG.style('display', null);
+                }
+
+                // Get display values for positioning
+                const z1 = this.speciesInfo.get(d.definition.speciesId1)?.z;
+                const z2 = this.speciesInfo.get(d.definition.speciesId2)?.z;
+                const y1_display = this._scaleVoltToDisplay(data.y1_volt, z1);
+                const y2_display = this._scaleVoltToDisplay(data.y2_volt, z2);
+
+                // Skip if potentials aren't valid for display
+                if (
+                    y1_display === null ||
+                    !isFinite(y1_display) ||
+                    y2_display === null ||
+                    !isFinite(y2_display)
+                ) {
+                    markerG.style('display', 'none');
+                    return;
+                } else {
+                    markerG.style('display', null);
+                }
+
+                const x_px = this.xScale(data.x);
+                const y1_px = this.yScale(y1_display);
+                const y2_px = this.yScale(y2_display);
+                const y_mid_px = (y1_px + y2_px) / 2;
+                const gap_px = Math.abs(y1_px - y2_px);
+
+                // Transition group to new position
+                markerG
+                    .transition()
+                    .duration(this.config.transitionDuration)
+                    .attr('transform', `translate(${x_px}, ${y_mid_px})`);
+
+                // Update legs based on gap
+                const showLegs = gap_px > legThreshold;
+                // Calculate leg endpoints relative to the group's center (y_mid_px)
+                const legTargetY1 = y1_px - y_mid_px;
+                const legTargetY2 = y2_px - y_mid_px;
+                // Start legs just outside the background circle radius
+                const legStartY1 = Math.sign(legTargetY1) * bgRadius;
+                const legStartY2 = Math.sign(legTargetY2) * bgRadius;
+
+                markerG
+                    .select('line.marker-leg-1')
+                    .transition()
+                    .duration(this.config.transitionDuration)
+                    .attr('display', showLegs ? null : 'none')
+                    .attr('x1', 0)
+                    .attr('y1', legStartY1)
+                    .attr('x2', 0)
+                    .attr('y2', legTargetY1);
+
+                markerG
+                    .select('line.marker-leg-2')
+                    .transition()
+                    .duration(this.config.transitionDuration)
+                    .attr('display', showLegs ? null : 'none')
+                    .attr('x1', 0)
+                    .attr('y1', legStartY2)
+                    .attr('x2', 0)
+                    .attr('y2', legTargetY2);
+            });
+    }
+
+    _handleInterfaceMarkerInteraction(event, markerId, isClick = false) {
+        event.stopPropagation(); // Prevent interactionRect listener
+
+        const markerData = this.reactionMarkers?.get(markerId);
+        if (
+            !markerData ||
+            !markerData.currentData ||
+            typeof markerData.definition.tooltipCallback !== 'function'
+        ) {
+            console.warn(
+                `No marker data or callback found for markerId: ${markerId}`
+            );
+            this._hideTooltip();
+            return;
+        }
+
+        // Retrieve stored potential values (internal V_volt representation)
+        const currentData = markerData.currentData;
+        const y1_volt = currentData.y1_volt;
+        const y2_volt = currentData.y2_volt;
+
+        // Calculate the values scaled for the current display mode
+        const z1 = this.speciesInfo.get(markerData.definition.speciesId1)?.z;
+        const z2 = this.speciesInfo.get(markerData.definition.speciesId2)?.z;
+        const y1_display = this._scaleVoltToDisplay(y1_volt, z1);
+        const y2_display = this._scaleVoltToDisplay(y2_volt, z2);
+
+        // Prepare the comprehensive info object for the callback
+        const markerTooltipInfo = {
+            markerId: markerId,
+            xValue: currentData.x,
+            y1_volt: y1_volt,
+            y2_volt: y2_volt,
+            y1_display: y1_display,
+            y2_display: y2_display,
+            currentMode: this.config.mode,
+            customArgs: currentData.tooltipArgs, // Pass the custom data
+            pointEvent: event,
+        };
+
+        try {
+            // Call the specific callback registered for this marker
+            const content =
+                markerData.definition.tooltipCallback(markerTooltipInfo);
+            if (content) {
+                // Get coordinates relative to container for positioning anchor
+                const [containerX, containerY] = d3.pointer(
+                    event,
+                    this.container.node()
+                );
+                this._setTooltip(containerX, containerY, content);
+                this._applyMarkerHighlight(markerId, true);
+            } else {
+                this._hideTooltip();
+            }
+        } catch (e) {
+            console.error(
+                `Error in tooltip callback for marker ${markerId}:`,
+                e
+            );
+            this._hideTooltip();
+        }
+    }
+
+    /** Helper function to apply/reset highlight styles for markers */
+    _applyMarkerHighlight(targetMarkerId = null) {
+        const markerStyle = STYLE_DEFAULTS.reactionMarker;
+        this.interfaceMarkersGroup
+            .selectAll('g.esbd-interface-marker circle.marker-bg')
+            .transition()
+            .duration(50) // Quick transition for highlight
+            .attr(
+                'fill',
+                (d) =>
+                    d.id === targetMarkerId
+                        ? markerStyle.highlightColor // Use defined highlight color
+                        : markerStyle.backgroundColor // Reset to default background
+            );
+        // Could also highlight symbol text or legs if desired
+    }
+} // End of class
 
 export default ElectrochemicalSpeciesBandDiagram;
