@@ -3,7 +3,7 @@
 
 // Assumes D3 and KaTeX (core + auto-render) are loaded globally or imported appropriately.
 
-import { formatTooltipBaseContent } from './utils.js';
+import { formatTooltipBaseContent, debounce } from './utils.js';
 
 // --- Constants ---
 const R = 8.31446261815324; // J / (mol K)
@@ -49,6 +49,7 @@ class ElectrochemicalSpeciesBandDiagram {
      * @param {object} [initialConfig.margin={top: 30, right: 60, bottom: 50, left: 70}] - Plot margins.
      * @param {number} [initialConfig.transitionDuration=250] - Duration for D3 transitions (ms).
      * @param {number} [initialConfig.throttleDelay=100] - Delay for tooltip throttling (ms).
+     * @param {number} [initialConfig.resizeDebounceDelay=200] - Debounce delay for resize events (ms).
      */
     constructor(containerId, initialConfig = {}) {
         this.containerId = containerId;
@@ -81,6 +82,7 @@ class ElectrochemicalSpeciesBandDiagram {
                 initialConfig.throttleDelay === undefined
                     ? 100
                     : initialConfig.throttleDelay,
+            resizeDebounceDelay: initialConfig.resizeDebounceDelay ?? 200,
             tempK: TEMP_K,
         };
         // Plot dimensions calculated dynamically by getters
@@ -101,9 +103,6 @@ class ElectrochemicalSpeciesBandDiagram {
         this._tooltipCallback = formatTooltipBaseContent; // from utils.js
         this._throttleTimeout = null;
         this._throttleWaiting = false;
-
-        this._lastDrawPlotWidth = -1;
-        this._lastDrawPlotHeight = -1;
 
         // Clear container initially
         this.container.html('');
@@ -134,10 +133,15 @@ class ElectrochemicalSpeciesBandDiagram {
             this.container.node().clientHeight || this.config.height;
         this._handleResize(initialWidth, initialHeight, false); // Initial size without redraw
 
+        // REFACTOR: Create debounced resize handler here
+        this._debouncedHandleResize = debounce((width, height) => {
+            this._handleResize(width, height); // Call actual handler
+        }, this.config.resizeDebounceDelay);
+
         this._resizeObserver = new ResizeObserver((entries) => {
             if (entries[0]) {
                 const { width, height } = entries[0].contentRect;
-                this._handleResize(width, height);
+                this._debouncedHandleResize(width, height);
             }
         });
         this._resizeObserver.observe(this.container.node());
@@ -148,8 +152,6 @@ class ElectrochemicalSpeciesBandDiagram {
     }
 
     _setupD3Structure() {
-        this.container.style('position', 'relative');
-
         this.svg = this.container
             .append('svg')
             .attr('class', 'esbd-svg')
@@ -474,50 +476,40 @@ class ElectrochemicalSpeciesBandDiagram {
 
     // --- "Private" Helper Methods ---
 
+    // REFACTOR: Simplified _handleResize, relies on debounce for loop prevention
     _handleResize(width, height, shouldRedraw = true) {
+        // Update config dimensions based on container size reported by observer
         this.config.width = width;
         this.config.height = height;
-        const pw = this.plotWidth;
-        const ph = this.plotHeight;
 
-        // --- Loop Prevention Check ---
-        // Check if calculated plot dimensions have meaningfully changed since last draw
-        // Use a small tolerance (e.g., 1 pixel)
-        const widthChanged = Math.abs(pw - this._lastDrawPlotWidth) > 5;
-        const heightChanged = Math.abs(ph - this._lastDrawPlotHeight) > 5;
-
-        // Only proceed if dimensions actually changed or if forcing redraw
-        if (!widthChanged && !heightChanged && !shouldRedraw) {
-            // console.log("Resize skipped, dimensions unchanged."); // Optional debug log
-            return;
-        }
-        // --- End Loop Prevention Check ---
-
-        // Update internal record of drawn dimensions *before* redraw
-        this._lastDrawPlotWidth = pw;
-        this._lastDrawPlotHeight = ph;
-
-        // Update SVG dimensions
+        // Update SVG element size IMMEDIATELY to match container
+        // Note: If CSS sets svg { width: 100%; height: 100%; }, this might be redundant
+        // but setting attributes is generally robust.
         this.svg
             .attr('width', this.config.width)
             .attr('height', this.config.height);
+
+        // Calculate new plot area dimensions using getters
+        const pw = this.plotWidth;
+        const ph = this.plotHeight;
+
+        // Update things that depend directly on pw, ph
         this.plotArea.attr(
             'transform',
             `translate(${this.config.margin.left},${this.config.margin.top})`
         );
-
         this.xScale.range([0, pw]);
         this.yScale.range([ph, 0]);
-
         this.xAxisGroup.attr('transform', `translate(0,${ph})`);
-        // Position label centered vertically, slightly left of axis
         this.yAxisLabel.attr(
             'transform',
             `translate(${this.config.margin.left / 2.5}, ${this.config.margin.top + ph / 2}) rotate(-90)`
         );
+        this.interactionRect.attr('width', pw).attr('height', ph);
 
+        // Trigger redraw if requested and data exists
+        // No need for dimension check here, debounce handles excessive calls.
         if (shouldRedraw && this.traceData.length > 0) {
-            // Avoid redraw if no data yet
             this.redraw();
         }
     }
