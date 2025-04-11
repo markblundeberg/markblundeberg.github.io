@@ -111,7 +111,7 @@ class ConcentrationCellComponent {
                     </select>
                 </div>
             </div>
-            <div class="plot-container" id="${this.plotDivId}" style="width:100%; height:${config.plotHeight || 250}px; border: 1px solid #ddd; margin-top: 10px; overflow:hidden;"></div>
+            <div class="plot-container" id="${this.plotDivId}" "></div>
         `;
     }
 
