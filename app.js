@@ -12,20 +12,20 @@ const agNO3Config = {
     // Species Definitions
     cation: {
         z: 1,
-        mu_standard_J_mol: 77000.0, // aqueous Ag+ rel H+ standard state
-        color: '#E6AB02', // Gold/Yellow
+        mu_standard_J_mol: 77000.0,
+        color: '#E6AB02',
         latexPrettyName: '\\mathrm{Ag}^{+}',
     },
     anion: {
         z: -1,
-        mu_standard_J_mol: -111000.0, // aqueous NO3- rel H+ standard state
-        color: '#66A61E', // Green
+        mu_standard_J_mol: -111000.0,
+        color: '#66A61E',
         latexPrettyName: '\\mathrm{NO}_3^{-}',
     },
     electron: {
         z: -1,
-        mu_standard_J_mol: 0, // Not directly used
-        color: '#1B9E77', // Teal
+        mu_standard_J_mol: 0,
+        color: '#1B9E77',
         latexPrettyName: '\\mathrm{e}^{-}',
     },
     // Other chemical info
@@ -108,15 +108,15 @@ const liIonConfig = {
 
 // --- Initialization ---
 
-// Wait for the DOM to be fully loaded before initializing components
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM Loaded, initializing components...');
 
     // Initialize Concentration Cell Component
-    const concCellContainerId = '#ag-conc-cell-container'; // ID used in index.html
+    const concCellContainerId = '#ag-conc-cell-container';
     const concCellContainer = document.querySelector(concCellContainerId);
     if (concCellContainer) {
         try {
+            // Pass the specific config for the concentration cell
             new ConcentrationCellComponent(concCellContainerId, agNO3Config);
             console.log('ConcentrationCellComponent initialized.');
         } catch (error) {
