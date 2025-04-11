@@ -15,7 +15,7 @@ const J_PER_MOL_TO_EV = 1 / (Na * e_charge); // eV / (J/mol)
 const V_TO_EV_PER_CHARGE = 1; // Factor for E = -V scaling in eV mode
 const F_kJmol = F / 1000.0; // F in kJ / (V mol), used for G_display = V_volt * F_kJmol
 
-// Default styling constants for different curve types
+// Default styling constants
 const STYLE_DEFAULTS = {
     potential: { lineWidth: 3, dasharray: null },
     standardState: { lineWidth: 1, dasharray: null },
@@ -85,7 +85,7 @@ class ElectrochemicalSpeciesBandDiagram {
             transitionDuration: initialConfig.transitionDuration ?? 250,
             throttleDelay: initialConfig.throttleDelay ?? 100,
             resizeDebounceDelay: initialConfig.resizeDebounceDelay ?? 200,
-            tempK: TEMP_K,
+            tempK: initialConfig.tempK || TEMP_K,
         };
 
         // Internal state initialization
@@ -117,10 +117,12 @@ class ElectrochemicalSpeciesBandDiagram {
             .style('border', '1px solid #aaa')
             .style('border-radius', '4px')
             .style('padding', '8px')
-            .style('font-size', '12px')
+            .style('font-size', '11px') // Slightly smaller tooltip text
             .style('pointer-events', 'none')
             .style('z-index', '10')
-            .style('transition', 'opacity 0.2s');
+            .style('transition', 'opacity 0.2s')
+            .style('max-width', '250px') // Prevent tooltip getting too wide
+            .style('box-shadow', '0 2px 5px rgba(0,0,0,0.2)');
 
         // --- D3 Setup ---
         this._setupD3Structure();
@@ -156,7 +158,7 @@ class ElectrochemicalSpeciesBandDiagram {
             .attr('class', 'esbd-svg')
             .attr('width', this.config.width)
             .attr('height', this.config.height)
-            .style('position', 'absolute')
+            .style('position', 'absolute') // make sure position:absolute to avoid resize infinite loops!
             .style('-webkit-tap-highlight-color', 'transparent');
 
         this.plotArea = this.svg
@@ -1460,9 +1462,9 @@ class ElectrochemicalSpeciesBandDiagram {
                     // Attach listeners to the group
                     g.on('pointerover', (event, d) => {
                         event.stopPropagation();
-                            this._handleInterfaceMarkerInteraction(event, d.id);
+                        this._handleInterfaceMarkerInteraction(event, d.id);
                         this._applyMarkerHighlight(d.id, true);
-                        })
+                    })
                         .on('pointerout', (event, d) => {
                             event.stopPropagation();
                             this._hideTooltip(); // Hides tooltip and resets highlights
