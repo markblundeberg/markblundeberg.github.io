@@ -205,8 +205,22 @@ class LiIonBatteryComponent {
             this.config.boundaries,
             this.config.regionProps
         );
-        // Set tooltip callback
+
+        // Set general tooltip callback (for traces)
         this.diagram.setTooltipCallback(this._getTooltipContent.bind(this));
+
+        this.diagram.addReactionMarker('anode_eq', {
+            symbol: '⇌', // Or use config.anode.symbol?
+            speciesId1: 'electron', // Corresponds to y1 in update call (V_e_anode)
+            speciesId2: 'li+', // Corresponds to y2 in update call (V_Li_plus_elyte)
+            tooltipCallback: this._getAnodeEqTooltip.bind(this), // Dedicated callback
+        });
+        this.diagram.addReactionMarker('cathode_eq', {
+            symbol: '⇌',
+            speciesId1: 'electron', // Corresponds to y1 (V_e_cathode)
+            speciesId2: 'li+', // Corresponds to y2 (V_Li_plus_elyte)
+            tooltipCallback: this._getCathodeEqTooltip.bind(this), // Dedicated callback
+        });
     }
 
     /** Attaches event listeners to controls */
@@ -451,7 +465,74 @@ class LiIonBatteryComponent {
                 });
         }
 
+        const anodeTooltipData = {
+            reaction:
+                '\\mathrm{Li(graphite)} \\rightleftharpoons \\mathrm{Li}^+ + \\mathrm{e}^-',
+            ocv: OCV_anode,
+            x: this.currentXAnode, // Pass lithiation state
+        };
+        this.diagram.updateReactionMarker('anode_eq', {
+            x: b[2], // Anode/Elyte1 interface boundary index
+            y1: V_e_anode, // Electron potential (speciesId1 = 'electron')
+            y2: V_Li_plus_elyte, // Li+ potential (speciesId2 = 'li+')
+            inputUnits: 'V_volt', // Units of potentials passed
+            tooltipArgs: anodeTooltipData,
+        });
+
+        const cathodeTooltipData = {
+            reaction:
+                '\\mathrm{Li(oxide)} \\rightleftharpoons \\mathrm{Li}^+ + \\mathrm{e}^-',
+            ocv: OCV_cathode,
+            y: this.currentYCathode, // Pass lithiation state
+        };
+        this.diagram.updateReactionMarker('cathode_eq', {
+            x: b[5], // Elyte2/Cathode interface boundary index
+            y1: V_e_cathode, // Electron potential (speciesId1 = 'electron')
+            y2: V_Li_plus_elyte, // Li+ potential (speciesId2 = 'li+')
+            inputUnits: 'V_volt',
+            tooltipArgs: cathodeTooltipData,
+        });
+
         return { traceDefs, calculatedVoltage: cell_voltage };
+    }
+
+    _getAnodeEqTooltip(info) {
+        // info contains: { markerId, xValue, y1_volt, y2_volt, y1_display, y2_display, currentMode, customArgs, pointEvent }
+        const args = info.customArgs;
+        const diff_display = info.y1_display - info.y2_display; // V_e - V_Li+ in current units
+        const mode = info.currentMode;
+        const unit = mode === 'kJmol' ? 'kJ/mol' : mode;
+
+        let content = `<b>Anode Interface Equilibrium</b><br>
+                       Reaction: $${args.reaction}$<br>`;
+        if (args.ocv !== undefined) {
+            content += `OCV vs Li/Li⁺ ≈ ${args.ocv.toFixed(3)} V<br>`;
+            // Display difference in current units, note V_e - V_Li+ = OCV
+            content += `Δ(${mode}) = $${info.labelString || 'V_e - V_{Li^+}'}$ ≈ ${diff_display.toFixed(3)} ${unit}`;
+        }
+        if (args.x !== undefined) {
+            content += `<br>Anode Lithiation x = ${args.x.toFixed(3)}`;
+        }
+        return content;
+    }
+
+    _getCathodeEqTooltip(info) {
+        // info contains: { markerId, xValue, y1_volt, y2_volt, y1_display, y2_display, currentMode, customArgs, pointEvent }
+        const args = info.customArgs;
+        const diff_display = info.y1_display - info.y2_display; // V_e - V_Li+ in current units
+        const mode = info.currentMode;
+        const unit = mode === 'kJmol' ? 'kJ/mol' : mode;
+
+        let content = `<b>Cathode Interface Equilibrium</b><br>
+                       Reaction: $${args.reaction}$<br>`;
+        if (args.ocv !== undefined) {
+            content += `OCV vs Li/Li⁺ ≈ ${args.ocv.toFixed(3)} V<br>`;
+            content += `Δ(${mode}) = $${info.labelString || 'V_e - V_{Li^+}'}$ ≈ ${diff_display.toFixed(3)} ${unit}`;
+        }
+        if (args.y !== undefined) {
+            content += `<br>Cathode Lithiation y = ${args.y.toFixed(3)}`;
+        }
+        return content;
     }
 
     /** Tooltip callback specific to this Li-ion component instance */
