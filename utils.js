@@ -77,18 +77,33 @@ export function formatTooltipBaseContent(info) {
 /**
  * Creates a debounced function that delays invoking func until after wait milliseconds
  * have elapsed since the last time the debounced function was invoked.
+ * Includes a .cancel() method to cancel delayed func invocations.
  * @param {Function} func The function to debounce.
  * @param {number} wait The number of milliseconds to delay.
- * @returns {Function} Returns the new debounced function.
+ * @returns {Function & { cancel: () => void }} Returns the new debounced function with a cancel method.
  */
 export function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
+    let timeoutId = null; // Store timeout ID accessible by returned function and cancel method
+
+    const debounced = function executedFunction(...args) {
+        // 'this' context is preserved from where debounced is called
+        const context = this;
+        // Define the function to run after the delay
         const later = () => {
-            clearTimeout(timeout);
-            func.apply(this, args); // Call original function with correct context and args
+            timeoutId = null; // Clear the timeout ID *before* execution
+            func.apply(context, args); // Call the original function
         };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
+        // Clear any existing timer
+        clearTimeout(timeoutId);
+        // Set a new timer
+        timeoutId = setTimeout(later, wait);
     };
+
+    // Add the cancel method to the debounced function object
+    debounced.cancel = function () {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+    };
+
+    return debounced;
 }

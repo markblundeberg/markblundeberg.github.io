@@ -526,7 +526,12 @@ class ElectrochemicalSpeciesBandDiagram {
         }
         // Clear any pending timeouts
         clearTimeout(this._throttleTimeout);
-        clearTimeout(this.this._debouncedHandleResize);
+        if (
+            this._debouncedHandleResize &&
+            typeof this._debouncedHandleResize.cancel === 'function'
+        ) {
+            this._debouncedHandleResize.cancel();
+        }
         this._hideTooltip();
         this.container.html('');
         console.log('ESBD Destroyed.');
