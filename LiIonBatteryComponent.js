@@ -38,9 +38,7 @@ class LiIonBatteryComponent {
         this.config = componentConfig;
         this.diagram = null;
         this.plotDivId = `esbd-plot-${Math.random().toString(36).substring(2, 9)}`;
-        this.junctionSelectorName = `junction-${this.plotDivId}`; // Although no junction selector used here yet
 
-        // --- Validation for essential config ---
         if (
             !this.config.boundaries ||
             !Array.isArray(this.config.boundaries) ||
@@ -59,7 +57,6 @@ class LiIonBatteryComponent {
                 `LiIonBatteryComponent Error: config.regionProps must be an array with length = boundaries.length - 1.`
             );
         }
-        // --- End Validation ---
 
         this.currentSoCPercent = Math.max(
             0,
@@ -188,7 +185,7 @@ class LiIonBatteryComponent {
             this.config.anion || {
                 z: -1,
                 color: '#4DAF4A',
-                latexPrettyName: 'PF_6^-',
+                latexPrettyName: '\\mathrm{PF}_6^{-}',
             }
         );
         this.diagram.addSpeciesInfo(
@@ -321,11 +318,7 @@ class LiIonBatteryComponent {
 
         // Calculate the amount of lithium that can actually be shifted between electrodes
         const Li_movable = LiTotalNorm - (x_min + y_min);
-
-        // Map SoC % (0-100) to the distribution of movable lithium
         const socFrac = socPercent / 100.0;
-
-        // REFACTOR: Calculate x_anode and y_cathode based on distributing Li_movable
         const x_anode = x_min + Li_movable * socFrac;
         const y_cathode = y_min + Li_movable * (1.0 - socFrac);
 
@@ -338,8 +331,8 @@ class LiIonBatteryComponent {
         const E0_cathode = config.cathode?.E0_vs_Li ?? 3.8;
         // Langmuir term: ln(x/(1-x)) - ensure x is strictly between 0 and 1
         const langmuir_term = (x) => {
-            const x_safe = Math.max(1e-9, Math.min(1.0 - 1e-9, x)); // Avoid exact 0 or 1
-            return (RT_F / 1) * Math.log(x_safe / (1 - x_safe)); // n=1 for Li+
+            const x_safe = Math.max(1e-9, Math.min(1.0 - 1e-9, x));
+            return (RT_F / 1) * Math.log(x_safe / (1 - x_safe));
         };
         const OCV_anode = E0_anode - langmuir_term(x_anode);
         const OCV_cathode = E0_cathode - langmuir_term(y_cathode);
