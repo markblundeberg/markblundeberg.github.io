@@ -137,7 +137,7 @@ class ElectrochemicalSpeciesBandDiagram {
         this._resizeObserver = new ResizeObserver((entries) => {
             if (entries[0]) {
                 const { width, height } = entries[0].contentRect;
-                this._handleResize(width, height, false);
+                this._handleResize(width, height);
             }
         });
         this._resizeObserver.observe(this.container.node());
@@ -155,6 +155,7 @@ class ElectrochemicalSpeciesBandDiagram {
             .attr('class', 'esbd-svg')
             .attr('width', this.config.width)
             .attr('height', this.config.height)
+            .style('position', 'absolute')
             .style('-webkit-tap-highlight-color', 'transparent');
 
         this.plotArea = this.svg
@@ -484,7 +485,6 @@ class ElectrochemicalSpeciesBandDiagram {
         // Use a small tolerance (e.g., 1 pixel)
         const widthChanged = Math.abs(pw - this._lastDrawPlotWidth) > 5;
         const heightChanged = Math.abs(ph - this._lastDrawPlotHeight) > 5;
-        console.log(widthChanged, heightChanged);
 
         // Only proceed if dimensions actually changed or if forcing redraw
         if (!widthChanged && !heightChanged && !shouldRedraw) {
