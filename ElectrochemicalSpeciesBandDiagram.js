@@ -1101,80 +1101,101 @@ class ElectrochemicalSpeciesBandDiagram {
             try {
                 const content = this._tooltipCallback(tooltipInfo);
                 if (content) {
-                    this._tooltip.html(content);
-
-                    // --- Render KaTeX within the tooltip ---
-                    // Requires KaTeX auto-render extension JS to be loaded
-                    if (typeof renderMathInElement === 'function') {
-                        try {
-                            renderMathInElement(this._tooltip.node(), {
-                                delimiters: [
-                                    { left: '$$', right: '$$', display: true },
-                                    { left: '$', right: '$', display: false },
-                                    {
-                                        left: '\\(',
-                                        right: '\\)',
-                                        display: false,
-                                    },
-                                    {
-                                        left: '\\[',
-                                        right: '\\]',
-                                        display: true,
-                                    },
-                                ],
-                                throwOnError: false, // Set true for debugging LaTeX errors
-                            });
-                        } catch (katexError) {
-                            console.error(
-                                'KaTeX auto-render failed in tooltip:',
-                                katexError
-                            );
-                        }
-                    } else {
-                        console.warn('KaTeX auto-render extension not loaded.');
-                    }
-
-                    // --- Measure and Position Tooltip (with boundary checks) ---
-                    const tooltipNode = this._tooltip.node();
-                    const tooltipWidth = tooltipNode.offsetWidth;
-                    const tooltipHeight = tooltipNode.offsetHeight;
-
-                    // Use container-relative coordinates for positioning logic
+                    // Get coordinates relative to container for positioning anchor
                     const [containerX, containerY] = d3.pointer(
                         event,
                         this.container.node()
                     );
-                    const containerWidth = this.container.node().clientWidth;
-                    let targetX = containerX + 15;
-                    let targetY = containerY - 15 - tooltipHeight;
-                    if (targetX + tooltipWidth > containerWidth) {
-                        targetX = containerX - 15 - tooltipWidth;
-                    }
-                    if (targetX < 0) {
-                        targetX = 5;
-                    }
-                    if (targetY < 0) {
-                        targetY = containerY + 15;
-                    }
-                    if (targetY + tooltipHeight > this.config.height) {
-                        targetY = this.config.height - tooltipHeight - 5;
-                    }
-                    this._tooltip
-                        .style('left', `${targetX}px`)
-                        .style('top', `${targetY}px`)
-                        .style('visibility', 'visible')
-                        .style('opacity', 1);
-                    this._applyHighlight(trace.id); // Highlight the found trace
+                    // Set tooltip content and position using the new helper
+                    this._setTooltip(containerX, containerY, content);
+                    // Apply highlight to the line
+                    this._applyHighlight(trace.id);
                 } else {
-                    this._hideTooltip();
+                    this._hideTooltip(); // Hide if callback returns no content
                 }
             } catch (e) {
                 console.error('Error in tooltip callback:', e);
                 this._hideTooltip();
             }
         } else {
+            this._hideTooltip(); // Hide if no close trace found
+        }
+    }
+
+    /**
+     * Sets the tooltip content, renders KaTeX, calculates position with boundary checks, and displays it.
+     * @param {number} targetX - The anchor x-coordinate (relative to container) for positioning.
+     * @param {number} targetY - The anchor y-coordinate (relative to container) for positioning.
+     * @param {string} htmlContent - The HTML content string for the tooltip (may contain KaTeX delimiters).
+     */
+    _setTooltip(targetX, targetY, htmlContent) {
+        if (!htmlContent) {
             this._hideTooltip();
-        } // Hide if no close trace found
+            return;
+        }
+
+        // Set content FIRST, make briefly visible off-screen to measure
+        this._tooltip
+            .html(htmlContent)
+            .style('left', '-1000px') // Position off-screen while measuring
+            .style('top', '-1000px')
+            .style('visibility', 'hidden') // Keep hidden
+            .style('opacity', 1); // Make opaque
+
+        // Render KaTeX within the tooltip
+        if (typeof renderMathInElement === 'function') {
+            try {
+                renderMathInElement(this._tooltip.node(), {
+                    delimiters: [
+                        { left: '$$', right: '$$', display: true },
+                        { left: '$', right: '$', display: false },
+                        { left: '\\(', right: '\\)', display: false },
+                        { left: '\\[', right: '\\]', display: true },
+                    ],
+                    throwOnError: false,
+                });
+            } catch (katexError) {
+                console.error(
+                    'KaTeX auto-render failed in tooltip:',
+                    katexError
+                );
+            }
+        } else {
+            console.warn('KaTeX auto-render extension not loaded.');
+        }
+
+        // Measure actual tooltip dimensions
+        const tooltipNode = this._tooltip.node();
+        const tooltipWidth = tooltipNode.offsetWidth;
+        const tooltipHeight = tooltipNode.offsetHeight;
+
+        // Calculate final position with boundary checks (relative to container)
+        const containerWidth = this.container.node().clientWidth;
+        const containerHeight = this.config.height; // Use configured height for boundary
+
+        // Default: position top-right of cursor anchor point
+        let finalX = targetX + 15;
+        let finalY = targetY - 15 - tooltipHeight; // Position top edge above anchor point
+
+        // Boundary Checks
+        if (finalX + tooltipWidth > containerWidth) {
+            finalX = targetX - 15 - tooltipWidth;
+        } // Flip left
+        if (finalX < 0) {
+            finalX = 5;
+        } // Prevent going off left
+        if (finalY < 0) {
+            finalY = targetY + 15;
+        } // Flip below cursor
+        if (finalY + tooltipHeight > containerHeight) {
+            finalY = containerHeight - tooltipHeight - 5;
+        } // Stick near bottom
+
+        // Apply final position and make visible
+        this._tooltip
+            .style('left', `${finalX}px`)
+            .style('top', `${finalY}px`)
+            .style('visibility', 'visible'); // Opacity handled by transition
     }
 
     /**
