@@ -29,18 +29,18 @@ const STYLE_DEFAULTS = {
         dasharray: '3,3',
         color: 'rgba(128,128,128,0.7)',
     },
-    differenceMarker: { lineWidth: 1, color: 'black' },
-    reactionMarker: {
-        symbol: '⇌',
+    verticalMarker: {
+        symbol: '↕',
         fontSize: '14px',
         color: '#333',
         backgroundRadius: 8,
-        backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        backgroundStroke: '#AAA',
-        legColor: '#888',
+        backgroundColor: 'rgba(255, 255, 255, 0.0)',
+        backgroundStroke: 'none',
+        legColor: '#666',
         legWidth: 1,
-        legThresholdPx: 15, // Min gap in pixels to draw legs
-        highlightColor: 'rgba(0, 123, 255, 0.3)', // Example highlight (semi-transparent blue bg)
+        legThresholdPx: 12,
+        highlightColor: 'rgba(0, 123, 255, 0.2)',
+        highlightStroke: 'rgba(0, 123, 255, 0.5)',
     },
 };
 
@@ -93,8 +93,7 @@ class ElectrochemicalSpeciesBandDiagram {
         this.traceData = [];
         this.boundaries = [];
         this.regionProps = [];
-        this.differenceMarkers = [];
-        this.reactionMarkers = new Map();
+        this.verticalMarkers = new Map();
         this.lastDrawData = [];
 
         // Callbacks & Interaction state
@@ -185,13 +184,9 @@ class ElectrochemicalSpeciesBandDiagram {
             .attr('class', 'esbd-connectors')
             .style('pointer-events', 'none');
         this.linesGroup = this.plotArea.append('g').attr('class', 'esbd-lines');
-        this.markersGroup = this.plotArea
+        this.verticalMarkersGroup = this.plotArea
             .append('g')
-            .attr('class', 'esbd-markers')
-            .style('pointer-events', 'none');
-        this.interfaceMarkersGroup = this.plotArea
-            .append('g')
-            .attr('class', 'esbd-interface-markers');
+            .attr('class', 'esbd-vertical-markers');
         this.labelsGroup = this.plotArea
             .append('g')
             .attr('class', 'esbd-labels')
@@ -323,66 +318,54 @@ class ElectrochemicalSpeciesBandDiagram {
         }
     }
 
-    /** Sets definitions for vertical difference markers. */
-    setDifferenceMarkers(markerDefs = []) {
-        if (!Array.isArray(markerDefs)) {
-            console.error('ESBD Error: setDifferenceMarkers expects an array.');
-            this.differenceMarkers = [];
-        } else {
-            this.differenceMarkers = markerDefs;
-        }
-        if (this.plotArea) this.redraw();
-    }
-
     /**
-     * Defines a reaction marker to be displayed at an interface.
+     * Defines a vertical marker to be displayed, often at an interface or specific point.
+     * Can represent reactions, energy gaps, overpotentials etc. via tooltip callback.
      * @param {string} markerId - Unique identifier for this marker.
      * @param {object} definition - Marker definition.
-     * @param {string} [definition.symbol='⇌'] - SVG text symbol to display.
-     * @param {string} definition.speciesId1 - The speciesId for the first potential (y1).
-     * @param {string} definition.speciesId2 - The speciesId for the second potential (y2).
-     * @param {function} definition.tooltipCallback - Function to generate tooltip HTML, receives markerTooltipInfo object.
+     * @param {string} [definition.symbol='↕'] - SVG text symbol to display.
+     * @param {string} [definition.speciesId1] - Optional: speciesId for potential y1 (for z lookup).
+     * @param {string} [definition.speciesId2] - Optional: speciesId for potential y2 (for z lookup).
+     * @param {function} definition.tooltipCallback - Function(info) to generate tooltip HTML.
      */
-    addReactionMarker(markerId, definition) {
+    addVerticalMarker(markerId, definition) {
         if (
             !markerId ||
             !definition ||
-            !definition.speciesId1 ||
-            !definition.speciesId2 ||
             typeof definition.tooltipCallback !== 'function'
         ) {
             console.error(
-                'ESBD Error: Invalid definition for addReactionMarker. Requires markerId, speciesId1, speciesId2, tooltipCallback.',
+                'ESBD Error: Invalid definition for addVerticalMarker. Requires markerId and tooltipCallback.',
                 definition
             );
             return;
         }
-        this.reactionMarkers.set(markerId, {
+        this.verticalMarkers.set(markerId, {
             definition: {
                 symbol:
-                    definition.symbol || STYLE_DEFAULTS.reactionMarker.symbol,
+                    definition.symbol || STYLE_DEFAULTS.verticalMarker.symbol,
                 speciesId1: definition.speciesId1,
                 speciesId2: definition.speciesId2,
                 tooltipCallback: definition.tooltipCallback,
             },
-            currentData: null, // Position/data updated via updateReactionMarker
+            currentData: null, // Position/data updated via updateVerticalMarker
         });
     }
 
     /**
-     * Updates the position and data for a defined reaction marker.
+     * Updates the position and data for a defined vertical marker.
      * @param {string} markerId - Identifier of the marker to update.
      * @param {object} data - Data for positioning and tooltip.
-     * @param {number} data.x - X-coordinate (data units) of the interface.
-     * @param {number} data.y1 - Potential value 1 (in specified units).
-     * @param {number} data.y2 - Potential value 2 (in specified units).
+     * @param {number} data.x - X-coordinate (data units) where the marker should appear.
+     * @param {number} data.y1 - Potential/Energy value 1 (in specified units).
+     * @param {number} data.y2 - Potential/Energy value 2 (in specified units).
      * @param {string} data.inputUnits - Units of y1 and y2 (e.g., 'V_volt', 'mu_bar_eV').
-     * @param {any} [data.tooltipArgs] - Custom data to pass to the tooltip callback.
+     * @param {any} [data.tooltipArgs={}] - Custom data to pass to the tooltip callback.
      */
-    updateReactionMarker(markerId, data) {
-        if (!this.reactionMarkers.has(markerId)) {
+    updateVerticalMarker(markerId, data) {
+        if (!this.verticalMarkers.has(markerId)) {
             console.warn(
-                `ESBD Warn: No reaction marker found with ID "${markerId}" to update.`
+                `ESBD Warn: No vertical marker found with ID "${markerId}" to update.`
             );
             return;
         }
@@ -394,17 +377,18 @@ class ElectrochemicalSpeciesBandDiagram {
             !data.inputUnits
         ) {
             console.error(
-                `ESBD Error: Invalid data for updateReactionMarker. Requires x, y1, y2, inputUnits.`,
+                `ESBD Error: Invalid data for updateVerticalMarker. Requires x, y1, y2, inputUnits.`,
                 data
             );
             return;
         }
 
-        const marker = this.reactionMarkers.get(markerId);
+        const marker = this.verticalMarkers.get(markerId);
+        // Look up z values if needed for conversion (using optional speciesId from definition)
         const z1 = this.speciesInfo.get(marker.definition.speciesId1)?.z;
         const z2 = this.speciesInfo.get(marker.definition.speciesId2)?.z;
 
-        // Convert input y values to internal V_volt representation
+        // Convert input y values to internal V_volt representation and store
         const y1_volt = this._convertToVolts(data.y1, data.inputUnits, z1);
         const y2_volt = this._convertToVolts(data.y2, data.inputUnits, z2);
 
@@ -415,8 +399,8 @@ class ElectrochemicalSpeciesBandDiagram {
             y2_volt: y2_volt,
             tooltipArgs: data.tooltipArgs || {}, // Store custom args
         };
-        // No redraw needed here, redraw() will pick up latest data from the map
     }
+    // --- End Refactor ---
 
     /** Sets the display mode and triggers redraw and callback. */
     setMode(newMode) {
@@ -516,9 +500,8 @@ class ElectrochemicalSpeciesBandDiagram {
         // 5. Draw Data Elements (these use transitions internally)
         this._drawTraces();
         this._drawConnectors();
-        this._drawReactionMarkers();
+        this._drawVerticalMarkers();
         this._drawLabels();
-        this._drawDifferenceMarkers(); // TODO: Implement
     }
 
     /** Cleans up resources like observers and listeners. */
@@ -1122,7 +1105,7 @@ class ElectrochemicalSpeciesBandDiagram {
     _hideTooltip() {
         this._tooltip.style('visibility', 'hidden').style('opacity', 0);
         this._applyHighlight(null);
-        this._applyMarkerHighlight(null);
+        this._applyVerticalMarkerHighlight(null);
     }
 
     _updateTooltip(event, isClick) {
@@ -1404,33 +1387,33 @@ class ElectrochemicalSpeciesBandDiagram {
         return closestTraceInfo; // Return object { trace, pointData, minDistPx } or null
     }
 
-    /** Draws or updates the reaction marker symbols at interfaces */
-    _drawReactionMarkers() {
-        const markerData = Array.from(this.reactionMarkers.entries())
-            .map(([id, data]) => ({ id, ...data })) // Combine ID with stored data {definition, currentData}
+    /** Draws or updates the vertical marker symbols. */
+    _drawVerticalMarkers() {
+        const markerData = Array.from(this.verticalMarkers.entries())
+            .map(([id, data]) => ({ id, ...data }))
             .filter(
                 (d) =>
                     d.currentData &&
                     d.currentData.x !== undefined &&
                     d.currentData.y1_volt !== null &&
                     d.currentData.y2_volt !== null
-            ); // Ensure data is valid
+            );
 
-        const markerStyle = STYLE_DEFAULTS.reactionMarker;
-        const legThreshold = markerStyle.legThresholdPx || 15;
-        const symbolSize = markerStyle.fontSize || '14px';
-        const bgRadius = markerStyle.backgroundRadius || 8;
+        const markerStyle = STYLE_DEFAULTS.verticalMarker;
+        const legThreshold = markerStyle.legThresholdPx;
+        const symbolSize = markerStyle.fontSize;
+        const bgRadius = markerStyle.backgroundRadius;
 
-        // Data binding for the marker groups
-        this.interfaceMarkersGroup
-            .selectAll('g.esbd-interface-marker')
-            .data(markerData, (d) => d.id) // Key by markerId
+        // Data binding within the verticalMarkersGroup
+        this.verticalMarkersGroup
+            .selectAll('g.esbd-vertical-marker') // Renamed class and group target
+            .data(markerData, (d) => d.id)
             .join(
                 (enter) => {
                     const g = enter
                         .append('g')
-                        .attr('class', 'esbd-interface-marker')
-                        .attr('data-marker-id', (d) => d.id) // Store ID for potential use
+                        .attr('class', 'esbd-vertical-marker') // Renamed class
+                        .attr('data-marker-id', (d) => d.id)
                         .style('cursor', 'help'); // Indicate interactivity
 
                     // Add background circle for easier hover/click detection
@@ -1462,16 +1445,16 @@ class ElectrochemicalSpeciesBandDiagram {
                     // Attach listeners to the group
                     g.on('pointerover', (event, d) => {
                         event.stopPropagation();
-                        this._handleInterfaceMarkerInteraction(event, d.id);
-                        this._applyMarkerHighlight(d.id, true);
+                        this._handleVerticalMarkerInteraction(event, d.id);
+                        this._applyVerticalMarkerHighlight(d.id, true);
                     })
                         .on('pointerout', (event, d) => {
                             event.stopPropagation();
-                            this._hideTooltip(); // Hides tooltip and resets highlights
+                            this._hideTooltip(); /* Resets highlights */
                         })
                         .on('click', (event, d) => {
                             event.stopPropagation();
-                            this._handleInterfaceMarkerInteraction(
+                            this._handleVerticalMarkerInteraction(
                                 event,
                                 d.id,
                                 true
@@ -1561,10 +1544,10 @@ class ElectrochemicalSpeciesBandDiagram {
             });
     }
 
-    _handleInterfaceMarkerInteraction(event, markerId, isClick = false) {
+    _handleVerticalMarkerInteraction(event, markerId, isClick = false) {
         event.stopPropagation(); // Prevent interactionRect listener
 
-        const markerData = this.reactionMarkers?.get(markerId);
+        const markerData = this.verticalMarkers?.get(markerId);
         if (
             !markerData ||
             !markerData.currentData ||
@@ -1612,7 +1595,6 @@ class ElectrochemicalSpeciesBandDiagram {
                     this.container.node()
                 );
                 this._setTooltip(containerX, containerY, content);
-                this._applyMarkerHighlight(markerId, true);
             } else {
                 this._hideTooltip();
             }
@@ -1625,21 +1607,24 @@ class ElectrochemicalSpeciesBandDiagram {
         }
     }
 
-    /** Helper function to apply/reset highlight styles for markers */
-    _applyMarkerHighlight(targetMarkerId = null) {
-        const markerStyle = STYLE_DEFAULTS.reactionMarker;
-        this.interfaceMarkersGroup
-            .selectAll('g.esbd-interface-marker circle.marker-bg')
+    /** Helper function to apply/reset highlight styles for vertical markers */
+    _applyVerticalMarkerHighlight(targetMarkerId = null) {
+        const markerStyle = STYLE_DEFAULTS.verticalMarker; // Renamed style key
+        this.verticalMarkersGroup
+            .selectAll('g.esbd-vertical-marker circle.marker-bg') // Renamed group/class
             .transition()
-            .duration(50) // Quick transition for highlight
-            .attr(
-                'fill',
-                (d) =>
-                    d.id === targetMarkerId
-                        ? markerStyle.highlightColor // Use defined highlight color
-                        : markerStyle.backgroundColor // Reset to default background
+            .duration(50)
+            .attr('fill', (d) =>
+                d.id === targetMarkerId
+                    ? markerStyle.highlightColor
+                    : markerStyle.backgroundColor
+            )
+            .attr('stroke', (d) =>
+                d.id === targetMarkerId
+                    ? markerStyle.highlightStroke ||
+                      markerStyle.backgroundStroke
+                    : markerStyle.backgroundStroke
             );
-        // Could also highlight symbol text or legs if desired
     }
 } // End of class
 
