@@ -25,7 +25,7 @@ const agNO3Config = {
     electron: {
         z: -1,
         mu_standard_J_mol: 0,
-        color: '#1B9E77',
+        color: '#377EB8',
         latexPrettyName: '\\mathrm{e}^{-}',
     },
     // Other chemical info
