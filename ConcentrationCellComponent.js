@@ -161,6 +161,25 @@ class ConcentrationCellComponent {
 
         // Set general tooltip callback (for lines)
         this.diagram.setTooltipCallback(this._getTooltipContent.bind(this));
+
+        this.diagram.addVerticalMarker('left_interface_eq', {
+            symbol: '⇌',
+            speciesId1: 'electron', // Corresponds to y1 in update call (V_e_1)
+            speciesId2: 'cation', // Corresponds to y2 in update call (V_cation_1)
+            tooltipCallback: this._getInterfaceTooltip.bind(
+                this,
+                'Left Electrode'
+            ), // Pass identifier
+        });
+        this.diagram.addVerticalMarker('right_interface_eq', {
+            symbol: '⇌',
+            speciesId1: 'electron', // Corresponds to y1 (V_e_2)
+            speciesId2: 'cation', // Corresponds to y2 (V_cation_2)
+            tooltipCallback: this._getInterfaceTooltip.bind(
+                this,
+                'Right Electrode'
+            ), // Pass identifier
+        });
     }
 
     /** Attaches event listeners to controls */
@@ -236,8 +255,6 @@ class ConcentrationCellComponent {
 
     /** Calculation logic specific to concentration cell */
     _calculateState(c1, c2, junctionType, config) {
-        // This logic is identical to the previous calculateState function
-        // It now uses 'config' argument instead of global cellConfig
         const cation = config.cation;
         const anion = config.anion;
         const compound = config.compound_stoichiometry;
@@ -423,6 +440,32 @@ class ConcentrationCellComponent {
             },
         ];
 
+        const leftTooltipArgs = {
+            reaction: `${cation.latexPrettyName} + ${cation.z}\\mathrm{e}^{-} \\rightleftharpoons \\mathrm{Ag(s)}`, // General form
+            potential_diff_volt: V_cation_1 - V_e_1, // Should be V_reaction (approx 0)
+            interfaceName: 'Electrode 1 / Elyte 1',
+        };
+        this.diagram.updateVerticalMarker('left_interface_eq', {
+            x: b[1], // Interface boundary
+            y1: V_e_1, // Electron potential
+            y2: V_cation_1, // Cation potential
+            inputUnits: 'V_volt',
+            tooltipArgs: leftTooltipArgs,
+        });
+
+        const rightTooltipArgs = {
+            reaction: `${cation.latexPrettyName} + ${cation.z}\\mathrm{e}^{-} \\rightleftharpoons \\mathrm{Ag(s)}`,
+            potential_diff_volt: V_cation_2 - V_e_2, // Should be V_reaction (approx 0)
+            interfaceName: 'Elyte 2 / Electrode 2',
+        };
+        this.diagram.updateVerticalMarker('right_interface_eq', {
+            x: b[4], // Interface boundary
+            y1: V_e_2, // Electron potential
+            y2: V_cation_2, // Cation potential
+            inputUnits: 'V_volt',
+            tooltipArgs: rightTooltipArgs,
+        });
+
         return { traceDefs, calculatedVoltage: cell_voltage };
     }
 
@@ -446,12 +489,48 @@ class ConcentrationCellComponent {
             (info.speciesId === 'cation' || info.speciesId === 'anion') &&
             conc !== null
         ) {
-            const species = this.cellConfig[info.speciesId];
-            const nu = this.cellConfig.compound_stoichiometry[info.speciesId];
-            activity = (nu * conc) / this.cellConfig.c_std_M;
+            const species = this.config[info.speciesId];
+            const nu = this.config.compound_stoichiometry[info.speciesId];
+            activity = (nu * conc) / this.config.c_std_M;
             content += `<br>Formal Conc ≈ ${conc.toFixed(3)} M`;
             content += `<br>Activity($${species.latexPrettyName}$) ≈ ${activity.toFixed(3)}`;
         }
+        return content;
+    }
+
+    /**
+     * Generates tooltip content for the electrode interface equilibrium markers.
+     * @param {string} identifier - 'Left Electrode' or 'Right Electrode'.
+     * @param {object} info - The markerTooltipInfo object from ESBD module.
+     */
+    _getInterfaceTooltip(identifier, info) {
+        // info contains: { markerId, xValue, y1_volt(V_e), y2_volt(V_cation), y1_display, y2_display, currentMode, customArgs, pointEvent }
+        const args = info.customArgs || {};
+        const reaction =
+            args.reaction ||
+            `${this.config.cation.latexPrettyName} + ${this.config.cation.z}e^- \\rightleftharpoons \\text{Electrode}`;
+        const potentialDiff = args.potential_diff_volt; // V_cation - V_e = V_reaction
+        const mode = info.currentMode;
+
+        let content = `<b>Interface: ${identifier}</b><br>
+                       Reaction: $${reaction}$<br>`;
+
+        // Display the equilibrium condition V_cation - V_e = V_reaction
+        if (potentialDiff !== undefined) {
+            content += `Equilibrium: $V_{${this.config.cation.latexPrettyName}} - V_{\\mathrm{e}^{-}} = ${potentialDiff.toFixed(3)}$ V`;
+            // Explain if V_reaction is zero
+            if (Math.abs(potentialDiff) < 1e-6) {
+                content += ` (\$= \\mu_{\\mathrm{${this.config.cation.latexPrettyName.replace('+', '')}(s)}} / ${this.config.cation.z}F = 0\$)`;
+            } else {
+                content += ` (\$= \\mu_{\\text{electrode}} / nF\$)`;
+            }
+        }
+
+        // Optionally show the difference in current display units
+        // const diff_display = info.y2_display - info.y1_display; // V_cation - V_e in current units
+        // const unit = mode === 'kJmol' ? 'kJ/mol' : mode;
+        // content += `<br>Displayed Δ(${mode}) ≈ ${diff_display.toFixed(3)} ${unit}`;
+
         return content;
     }
 
