@@ -1041,16 +1041,6 @@ class ElectrochemicalSpeciesBandDiagram {
         // TODO: Smarter label positioning to avoid overlaps.
     }
 
-    _drawDifferenceMarkers() {
-        // TODO: Implement fully as discussed before.
-        // Get pairs from this.differenceMarkers, find corresponding points in this.lastDrawData,
-        // calculate difference using y_display, draw lines/brackets and text/KaTeX labels.
-        this.markersGroup.selectAll('.esbd-diff-marker').remove(); // Clear old
-        if (this.differenceMarkers.length > 0) {
-            console.warn('Difference marker drawing not yet implemented.');
-        }
-    }
-
     _handleInteraction(event, isClick = false) {
         // Handle clicks immediately, reset any pending move updates
         if (isClick) {
