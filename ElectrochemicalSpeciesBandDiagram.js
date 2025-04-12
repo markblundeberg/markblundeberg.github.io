@@ -3,7 +3,7 @@
 
 // Assumes D3 and KaTeX (core + auto-render) are loaded globally or imported appropriately.
 
-import { formatTooltipBaseContent, debounce } from './utils.js';
+import { formatPopupBaseContent, debounce } from './utils.js';
 
 // --- Constants ---
 const R = 8.31446261815324; // J / (mol K)
@@ -48,6 +48,7 @@ const STYLE_DEFAULTS = {
  * Creates an interactive Electrochemical Species Band Diagram using D3.js.
  * Uses a boundaries array and region properties array for layout.
  * Caller provides fundamental physical data with explicit units.
+ * Interaction model: Click/Tap shows persistent popup and highlight. Click background clears.
  */
 class ElectrochemicalSpeciesBandDiagram {
     /**
@@ -59,7 +60,6 @@ class ElectrochemicalSpeciesBandDiagram {
      * @param {string} [initialConfig.mode='Volts'] - Initial display mode ('Volts', 'eV', 'kJmol').
      * @param {object} [initialConfig.margin={top: 15, right: 25, bottom: 20, left: 60}] - Plot margins.
      * @param {number} [initialConfig.transitionDuration=250] - Duration for D3 transitions (ms).
-     * @param {number} [initialConfig.throttleDelay=100] - Delay for tooltip throttling (ms).
      * @param {number} [initialConfig.resizeDebounceDelay=200] - Debounce delay for resize events (ms).
      */
     constructor(containerId, initialConfig = {}) {
@@ -83,7 +83,6 @@ class ElectrochemicalSpeciesBandDiagram {
                 left: 60,
             },
             transitionDuration: initialConfig.transitionDuration ?? 250,
-            throttleDelay: initialConfig.throttleDelay ?? 100,
             resizeDebounceDelay: initialConfig.resizeDebounceDelay ?? 200,
             tempK: initialConfig.tempK || TEMP_K,
         };
@@ -98,17 +97,13 @@ class ElectrochemicalSpeciesBandDiagram {
 
         // Callbacks & Interaction state
         this._modeChangeCallback = null;
-        this._tooltipCallback = formatTooltipBaseContent; // Default formatter
-        this._throttleTimeout = null;
-        this._throttleWaiting = false; // For tooltip throttling
+        this._tracePopupCallback = formatPopupBaseContent; // Default formatter for trace popups
+        this._pinnedPopupInfo = null; // Stores null or ['trace'|'marker', id]
 
-        // Clear container initially
         this.container.html('');
-
-        // Tooltip Element setup
-        this._tooltip = this.container
+        this._popupDiv = this.container
             .append('div')
-            .attr('class', 'esbd-tooltip')
+            .attr('class', 'esbd-popup')
             .style('position', 'absolute')
             .style('visibility', 'hidden')
             .style('opacity', 0)
@@ -116,11 +111,11 @@ class ElectrochemicalSpeciesBandDiagram {
             .style('border', '1px solid #aaa')
             .style('border-radius', '4px')
             .style('padding', '8px')
-            .style('font-size', '11px') // Slightly smaller tooltip text
+            .style('font-size', '11px') // Slightly smaller popup/tooltip text
             .style('pointer-events', 'none')
             .style('z-index', '10')
             .style('transition', 'opacity 0.2s')
-            .style('max-width', '250px') // Prevent tooltip getting too wide
+            .style('max-width', '250px') // Prevent popup/tooltip getting too wide
             .style('box-shadow', '0 2px 5px rgba(0,0,0,0.2)');
 
         // --- D3 Setup ---
@@ -184,19 +179,12 @@ class ElectrochemicalSpeciesBandDiagram {
             .attr('class', 'esbd-connectors')
             .style('pointer-events', 'none');
         this.linesGroup = this.plotArea.append('g').attr('class', 'esbd-lines');
+        // Interaction rectangle sits ON TOP of lines but BELOW markers/labels
         this.interactionRect = this.plotArea
             .append('rect')
             .attr('class', 'esbd-interaction-overlay')
             .style('fill', 'none')
-            .style('pointer-events', 'all')
-            .on('pointerout', () => {
-                clearTimeout(this._throttleTimeout);
-                this._throttleTimeout = null;
-                this._throttleWaiting = false;
-                this._hideTooltip();
-            })
-            .on('pointermove', (event) => this._handleInteraction(event, false))
-            .on('click', (event) => this._handleInteraction(event, true));
+            .style('pointer-events', 'all'); // Catches events not caught by elements above it
         this.verticalMarkersGroup = this.plotArea
             .append('g')
             .attr('class', 'esbd-vertical-markers');
@@ -241,6 +229,10 @@ class ElectrochemicalSpeciesBandDiagram {
                     !isNaN(d.y_display) &&
                     isFinite(d.y_display)
             );
+
+        this.interactionRect.on('click', (event) =>
+            this._handleClickInteraction(event, null)
+        ); // Click on background
     }
 
     // --- Public API Methods ---
@@ -318,22 +310,22 @@ class ElectrochemicalSpeciesBandDiagram {
 
     /**
      * Defines a vertical marker to be displayed, often at an interface or specific point.
-     * Can represent reactions, energy gaps, overpotentials etc. via tooltip callback.
+     * Can represent reactions, energy gaps, overpotentials etc. via popup callback.
      * @param {string} markerId - Unique identifier for this marker.
      * @param {object} definition - Marker definition.
      * @param {string} [definition.symbol='↕'] - SVG text symbol to display.
      * @param {string} [definition.speciesId1] - Optional: speciesId for potential y1 (for z lookup).
      * @param {string} [definition.speciesId2] - Optional: speciesId for potential y2 (for z lookup).
-     * @param {function} definition.tooltipCallback - Function(info) to generate tooltip HTML.
+     * @param {function} definition.popupCallback - Function(info) to generate popup HTML.
      */
     addVerticalMarker(markerId, definition) {
         if (
             !markerId ||
             !definition ||
-            typeof definition.tooltipCallback !== 'function'
+            typeof definition.popupCallback !== 'function'
         ) {
             console.error(
-                'ESBD Error: Invalid definition for addVerticalMarker. Requires markerId and tooltipCallback.',
+                'ESBD Error: Invalid definition for addVerticalMarker. Requires markerId and popupCallback.',
                 definition
             );
             return;
@@ -344,7 +336,7 @@ class ElectrochemicalSpeciesBandDiagram {
                     definition.symbol || STYLE_DEFAULTS.verticalMarker.symbol,
                 speciesId1: definition.speciesId1,
                 speciesId2: definition.speciesId2,
-                tooltipCallback: definition.tooltipCallback,
+                popupCallback: definition.popupCallback,
             },
             currentData: null, // Position/data updated via updateVerticalMarker
         });
@@ -353,12 +345,12 @@ class ElectrochemicalSpeciesBandDiagram {
     /**
      * Updates the position and data for a defined vertical marker.
      * @param {string} markerId - Identifier of the marker to update.
-     * @param {object} data - Data for positioning and tooltip.
+     * @param {object} data - Data for positioning and popup.
      * @param {number} data.x - X-coordinate (data units) where the marker should appear.
      * @param {number} data.y1 - Potential/Energy value 1 (in specified units).
      * @param {number} data.y2 - Potential/Energy value 2 (in specified units).
      * @param {string} data.inputUnits - Units of y1 and y2 (e.g., 'V_volt', 'mu_bar_eV').
-     * @param {any} [data.tooltipArgs={}] - Custom data to pass to the tooltip callback.
+     * @param {any} [data.popupArgs={}] - Custom data to pass to the popup callback.
      */
     updateVerticalMarker(markerId, data) {
         if (!this.verticalMarkers.has(markerId)) {
@@ -395,10 +387,9 @@ class ElectrochemicalSpeciesBandDiagram {
             x: data.x,
             y1_volt: y1_volt,
             y2_volt: y2_volt,
-            tooltipArgs: data.tooltipArgs || {}, // Store custom args
+            popupArgs: data.popupArgs || {}, // Store custom args
         };
     }
-    // --- End Refactor ---
 
     /** Sets the display mode and triggers redraw and callback. */
     setMode(newMode) {
@@ -408,7 +399,7 @@ class ElectrochemicalSpeciesBandDiagram {
 
         this.config.mode = newMode;
         console.log('ESBD Mode switched to:', this.config.mode);
-        this._hideTooltip();
+        this._hidePopup();
         this.redraw(); // Redraw applies new scaling
 
         if (this._modeChangeCallback) {
@@ -428,10 +419,13 @@ class ElectrochemicalSpeciesBandDiagram {
         this._modeChangeCallback =
             typeof callbackFn === 'function' ? callbackFn : null;
     }
-    /** Registers a callback function to generate tooltip content dynamically. */
-    setTooltipCallback(callbackFn) {
-        this._tooltipCallback =
-            typeof callbackFn === 'function' ? callbackFn : null;
+
+    /** Registers a callback function to generate verbose popup content for data traces. */
+    setTracePopupCallback(callbackFn) {
+        this._tracePopupCallback =
+            typeof callbackFn === 'function'
+                ? callbackFn
+                : formatPopupBaseContent; // Use base formatter if null/invalid
     }
 
     /** Main drawing/update function. */
@@ -507,15 +501,13 @@ class ElectrochemicalSpeciesBandDiagram {
         if (this._resizeObserver) {
             this._resizeObserver.disconnect();
         }
-        // Clear any pending timeouts
-        clearTimeout(this._throttleTimeout);
         if (
             this._debouncedHandleResize &&
             typeof this._debouncedHandleResize.cancel === 'function'
         ) {
             this._debouncedHandleResize.cancel();
         }
-        this._hideTooltip();
+        this._hidePopup();
         this.container.html('');
         console.log('ESBD Destroyed.');
     }
@@ -892,7 +884,8 @@ class ElectrochemicalSpeciesBandDiagram {
             .duration(this.config.transitionDuration)
             .attr('d', (d) =>
                 this.lineGenerator.y((p) => this.yScale(p.y_display))(d.points)
-            );
+            )
+            .style('pointer-events', 'none'); // Ensure lines don't block clicks
     }
 
     _drawConnectors() {
@@ -1041,78 +1034,44 @@ class ElectrochemicalSpeciesBandDiagram {
         // TODO: Smarter label positioning to avoid overlaps.
     }
 
-    _handleInteraction(event, isClick = false) {
-        // Handle clicks immediately, reset any pending move updates
-        if (isClick) {
-            clearTimeout(this._throttleTimeout);
-            this._throttleTimeout = null;
-            this._throttleWaiting = false; // Reset state in case click happens during wait
-            this._updateTooltip(event, true); // Call core logic directly
-            return;
-        }
-
-        // Throttle move events using the immediate execution + delay flag pattern
-        if (this._throttleWaiting) {
-            return; // Already waiting for timeout, ignore this move event
-        }
-
-        // --- Execute immediately on the first move event after delay ---
-        this._updateTooltip(event, false);
-        this._throttleWaiting = true; // Set the flag
-
-        // --- Set timeout to clear the flag after the delay ---
-        // Use stored timeout to potentially clear if needed (e.g. on pointerout)
-        this._throttleTimeout = setTimeout(() => {
-            this._throttleWaiting = false; // Allow next execution after delay
-            this._throttleTimeout = null;
-        }, this.config.throttleDelay);
-    }
-
     // Helper function to apply/reset highlight styles
-    _applyHighlight(targetTraceId = null) {
+    _applyHighlight(targetTraceId) {
         const highlightWidthIncrease = 2; // How much thicker to make the highlighted line
         const fadedOpacity = 0.4; // Opacity for non-highlighted lines
+        const isPinned = targetTraceId !== null;
 
         this.linesGroup
             .selectAll('path.esbd-data-line')
-            .interrupt() // Stop previous transitions
+            .interrupt()
             .transition()
-            .duration(targetTraceId ? 50 : this.config.transitionDuration / 2) // Faster fade back
-            .style('opacity', (d) =>
-                targetTraceId === null || d.id === targetTraceId
-                    ? 1.0
-                    : fadedOpacity
-            )
+            .duration(50)
+            // REVIEW: Decide if non-pinned lines should fade when something IS pinned
+            // Option 1: Fade others when pinned:
+            // .style("opacity", d => (targetTraceId === null || d.id === targetTraceId) ? 1.0 : fadedOpacity)
+            // Option 2: Keep all lines opaque when pinned:
+            .style('opacity', 1.0)
             .attr('stroke-width', (d) =>
-                targetTraceId !== null && d.id === targetTraceId
+                isPinned && d.id === targetTraceId
                     ? d.style.lineWidth + highlightWidthIncrease
                     : d.style.lineWidth
             );
     }
 
-    _hideTooltip() {
-        this._tooltip.style('visibility', 'hidden').style('opacity', 0);
-        this._applyHighlight(null);
-        this._applyVerticalMarkerHighlight(null);
+    /** Hides the popup and resets all highlights and pinned state. */
+    _hidePopup() {
+        this._popupDiv.style('visibility', 'hidden').style('opacity', 0);
+        this._applyHighlight(null); // Reset line highlight
+        this._applyVerticalMarkerHighlight(null); // Reset marker highlight
+        this._pinnedPopupInfo = null; // Clear pinned state
     }
 
-    _updateTooltip(event, isClick) {
-        if (
-            !this._tooltipCallback ||
-            !this.lastDrawData ||
-            this.lastDrawData.length === 0
-        ) {
-            this._hideTooltip();
-            return;
-        }
-        const [pointerX, pointerY] = d3.pointer(event, this.plotArea.node());
-        if (pointerX < -5 || pointerX > this.plotWidth + 5) {
-            this._hideTooltip();
-            return;
-        }
-        const xValue = this.xScale.invert(pointerX);
+    /** Gathers info, calls callback, shows popup for a data trace */
+    _showTracePopup(event, closestResult) {
+        const trace = closestResult.trace;
+        const point = closestResult.pointData;
+        const xValue = point.x;
 
-        // --- Find Region Info (NEW LOGIC) ---
+        // Find Region Info
         let regionIndex = -1;
         let regionInfo = null;
         if (this.boundaries && this.boundaries.length > 1) {
@@ -1153,79 +1112,48 @@ class ElectrochemicalSpeciesBandDiagram {
             }
         }
 
-        // --- Find Closest Trace using Helper ---
-        const closestResult = this._findClosestTrace(xValue, pointerY);
+        const popupInfo = {
+            speciesId: trace.speciesId,
+            traceId: trace.id,
+            curveType: trace.curveType,
+            labelString: trace.labelString,
+            xValue: xValue,
+            yValueDisplayed: point.y_display,
+            yValueVolts: point.y_volt,
+            yValueSource: point.source_y,
+            yValueSourceUnits: point.source_units,
+            currentMode: this.config.mode,
+            regionIndex: regionIndex,
+            regionInfo: regionInfo,
+            pointEvent: event,
+        };
 
-        const verticalThresholdPx = 25;
-
-        // --- Display Tooltip ---
-        if (closestResult && closestResult.minDistPx < verticalThresholdPx) {
-            const trace = closestResult.trace; // Get trace info from result
-            const point = closestResult.pointData; // Get point data from result
-
-            const tooltipInfo = {
-                speciesId: trace.speciesId,
-                traceId: trace.id,
-                curveType: trace.curveType,
-                labelString: trace.labelString,
-                xValue: xValue, // Use xValue under cursor
-                yValueDisplayed: point.y_display, // Use interpolated/closest y
-                yValueVolts: point.y_volt,
-                yValueSource: point.source_y,
-                yValueSourceUnits: point.source_units,
-                currentMode: this.config.mode,
-                regionIndex: regionIndex, // Pass region index
-                regionInfo: regionInfo, // Pass region properties
-                pointEvent: event,
-            };
-            try {
-                const content = this._tooltipCallback(tooltipInfo);
-                if (content) {
-                    // Get coordinates relative to container for positioning anchor
-                    const [containerX, containerY] = d3.pointer(
-                        event,
-                        this.container.node()
-                    );
-                    // Set tooltip content and position using the new helper
-                    this._setTooltip(containerX, containerY, content);
-                    // Apply highlight to the line
-                    this._applyHighlight(trace.id);
-                } else {
-                    this._hideTooltip(); // Hide if callback returns no content
-                }
-            } catch (e) {
-                console.error('Error in tooltip callback:', e);
-                this._hideTooltip();
+        try {
+            const content = this._tracePopupCallback(popupInfo); // Use the general trace callback
+            if (content) {
+                this._pinnedPopupInfo = ['trace', trace.id]; // Set pin state
+                this._setPopup(event, content); // Show popup
+                this._applyHighlight(trace.id); // Apply line highlight
+                this._applyVerticalMarkerHighlight(null); // Clear marker highlight
+            } else {
+                this._hidePopup();
             }
-        } else {
-            this._hideTooltip(); // Hide if no close trace found
+        } catch (e) {
+            console.error('Error in trace popup callback:', e);
+            this._hidePopup();
         }
     }
 
-    /**
-     * Sets the tooltip content, renders KaTeX, calculates position with boundary checks, and displays it.
-     * @param {number} targetX - The anchor x-coordinate (relative to container) for positioning.
-     * @param {number} targetY - The anchor y-coordinate (relative to container) for positioning.
-     * @param {string} htmlContent - The HTML content string for the tooltip (may contain KaTeX delimiters).
-     */
-    _setTooltip(targetX, targetY, htmlContent) {
+    /** Sets the popup content, renders KaTeX, calculates position, displays it. */
+    _setPopup(event, htmlContent) {
         if (!htmlContent) {
-            this._hideTooltip();
+            this._hidePopup();
             return;
         }
-
-        // Set content FIRST, make briefly visible off-screen to measure
-        this._tooltip
-            .html(htmlContent)
-            .style('left', '-1000px') // Position off-screen while measuring
-            .style('top', '-1000px')
-            .style('visibility', 'hidden') // Keep hidden
-            .style('opacity', 1); // Make opaque
-
-        // Render KaTeX within the tooltip
+        this._popupDiv.html(htmlContent);
         if (typeof renderMathInElement === 'function') {
             try {
-                renderMathInElement(this._tooltip.node(), {
+                renderMathInElement(this._popupDiv.node(), {
                     delimiters: [
                         { left: '$$', right: '$$', display: true },
                         { left: '$', right: '$', display: false },
@@ -1234,48 +1162,45 @@ class ElectrochemicalSpeciesBandDiagram {
                     ],
                     throwOnError: false,
                 });
-            } catch (katexError) {
-                console.error(
-                    'KaTeX auto-render failed in tooltip:',
-                    katexError
-                );
+            } catch (e) {
+                console.error(e);
             }
         } else {
             console.warn('KaTeX auto-render extension not loaded.');
         }
 
-        // Measure actual tooltip dimensions
-        const tooltipNode = this._tooltip.node();
-        const tooltipWidth = tooltipNode.offsetWidth;
-        const tooltipHeight = tooltipNode.offsetHeight;
+        // Measure actual popup dimensions
+        const popupNode = this._popupDiv.node();
+        const popupWidth = popupNode.offsetWidth;
+        const popupHeight = popupNode.offsetHeight;
 
-        // Calculate final position with boundary checks (relative to container)
+        // Get coordinates relative to container for positioning anchor
+        const [containerX, containerY] = d3.pointer(
+            event,
+            this.container.node()
+        );
         const containerWidth = this.container.node().clientWidth;
-        const containerHeight = this.config.height; // Use configured height for boundary
+        const containerHeight = this.config.height;
 
-        // Default: position top-right of cursor anchor point
-        let finalX = targetX + 15;
-        let finalY = targetY - 15 - tooltipHeight; // Position top edge above anchor point
-
-        // Boundary Checks
-        if (finalX + tooltipWidth > containerWidth) {
-            finalX = targetX - 15 - tooltipWidth;
-        } // Flip left
-        if (finalX < 0) {
-            finalX = 5;
-        } // Prevent going off left
-        if (finalY < 0) {
-            finalY = targetY + 15;
-        } // Flip below cursor
-        if (finalY + tooltipHeight > containerHeight) {
-            finalY = containerHeight - tooltipHeight - 5;
-        } // Stick near bottom
-
-        // Apply final position and make visible
-        this._tooltip
-            .style('left', `${finalX}px`)
-            .style('top', `${finalY}px`)
-            .style('visibility', 'visible'); // Opacity handled by transition
+        let targetX = containerX + 15;
+        let targetY = containerY - 15 - popupHeight;
+        if (targetX + popupWidth > containerWidth) {
+            targetX = containerX - 15 - popupWidth;
+        }
+        if (targetX < 0) {
+            targetX = 5;
+        }
+        if (targetY < 0) {
+            targetY = containerY + 15;
+        }
+        if (targetY + popupHeight > containerHeight) {
+            targetY = containerHeight - popupHeight - 5;
+        }
+        this._popupDiv
+            .style('left', `${targetX}px`)
+            .style('top', `${targetY}px`)
+            .style('visibility', 'visible')
+            .style('opacity', 1);
     }
 
     /**
@@ -1431,23 +1356,10 @@ class ElectrochemicalSpeciesBandDiagram {
                         .attr('stroke-width', markerStyle.legWidth);
 
                     // Attach listeners to the group
-                    g.on('pointerover', (event, d) => {
-                        event.stopPropagation();
-                        this._handleVerticalMarkerInteraction(event, d.id);
-                        this._applyVerticalMarkerHighlight(d.id, true);
-                    })
-                        .on('pointerout', (event, d) => {
-                            event.stopPropagation();
-                            this._hideTooltip(); /* Resets highlights */
-                        })
-                        .on('click', (event, d) => {
-                            event.stopPropagation();
-                            this._handleVerticalMarkerInteraction(
-                                event,
-                                d.id,
-                                true
-                            );
-                        });
+                    g.on('click', (event, d) => {
+                        event.stopPropagation(); // Prevent background click
+                        this._handleClickInteraction(event, d.id);
+                    });
                     return g;
                 },
                 (update) => update, // Nothing static needs updating usually
@@ -1532,83 +1444,117 @@ class ElectrochemicalSpeciesBandDiagram {
             });
     }
 
-    _handleVerticalMarkerInteraction(event, markerId, isClick = false) {
-        event.stopPropagation(); // Prevent interactionRect listener
+    /** Handles all click events on the plot area */
+    _handleClickInteraction(event, targetId = null) {
+        if (targetId) {
+            event.stopPropagation(); // Stop if click was on a specific element (line/marker)
+        }
 
+        // If clicking the currently pinned element, unpin it.
+        if (
+            targetId &&
+            this._pinnedPopupInfo &&
+            this._pinnedPopupInfo[1] === targetId
+        ) {
+            this._hidePopup(); // Clears pin state and highlights
+            return;
+        }
+
+        // Clear previous pin state before potentially setting a new one
+        this._pinnedPopupInfo = null;
+        // Reset highlights (will be reapplied if needed) - _hidePopup does this, but maybe redundant call is ok
+        this._applyHighlight(null);
+        this._applyVerticalMarkerHighlight(null);
+
+        if (targetId === null) {
+            // Click on background - try to find closest trace
+            const [pointerX, pointerY] = d3.pointer(
+                event,
+                this.plotArea.node()
+            );
+            const xValue = this.xScale.invert(pointerX);
+            const clickThresholdPx = 15; // How close vertically?
+            const closestResult = this._findClosestTrace(xValue, pointerY);
+
+            if (closestResult && closestResult.minDistPx < clickThresholdPx) {
+                // Click was close to a trace -> Show trace popup
+                this._showTracePopup(event, closestResult);
+            } else {
+                // Click was on empty background -> Hide any existing popup
+                this._hidePopup();
+            }
+        } else if (this.verticalMarkers.has(targetId)) {
+            // Click was on a vertical marker -> Show marker popup
+            this._showVerticalMarkerPopup(event, targetId);
+        }
+    }
+
+    /** Gathers info, calls callback, shows popup for a vertical marker */
+    _showVerticalMarkerPopup(event, markerId) {
         const markerData = this.verticalMarkers?.get(markerId);
         if (
             !markerData ||
             !markerData.currentData ||
-            typeof markerData.definition.tooltipCallback !== 'function'
+            typeof markerData.definition.popupCallback !== 'function'
         ) {
             console.warn(
                 `No marker data or callback found for markerId: ${markerId}`
             );
-            this._hideTooltip();
+            this._hidePopup();
             return;
         }
-
-        // Retrieve stored potential values (internal V_volt representation)
         const currentData = markerData.currentData;
-        const y1_volt = currentData.y1_volt;
-        const y2_volt = currentData.y2_volt;
-
-        // Calculate the values scaled for the current display mode
         const z1 = this.speciesInfo.get(markerData.definition.speciesId1)?.z;
         const z2 = this.speciesInfo.get(markerData.definition.speciesId2)?.z;
-        const y1_display = this._scaleVoltToDisplay(y1_volt, z1);
-        const y2_display = this._scaleVoltToDisplay(y2_volt, z2);
+        const y1_display = this._scaleVoltToDisplay(currentData.y1_volt, z1);
+        const y2_display = this._scaleVoltToDisplay(currentData.y2_volt, z2);
 
-        // Prepare the comprehensive info object for the callback
-        const markerTooltipInfo = {
+        const markerPopupInfo = {
             markerId: markerId,
             xValue: currentData.x,
-            y1_volt: y1_volt,
-            y2_volt: y2_volt,
+            y1_volt: currentData.y1_volt,
+            y2_volt: currentData.y2_volt,
             y1_display: y1_display,
             y2_display: y2_display,
             currentMode: this.config.mode,
-            customArgs: currentData.tooltipArgs, // Pass the custom data
+            customArgs: currentData.popupArgs,
             pointEvent: event,
         };
 
         try {
-            // Call the specific callback registered for this marker
             const content =
-                markerData.definition.tooltipCallback(markerTooltipInfo);
+                markerData.definition.popupCallback(markerPopupInfo);
             if (content) {
-                // Get coordinates relative to container for positioning anchor
-                const [containerX, containerY] = d3.pointer(
-                    event,
-                    this.container.node()
-                );
-                this._setTooltip(containerX, containerY, content);
+                this._pinnedPopupInfo = ['marker', markerId]; // Set pin state
+                this._setPopup(event, content); // Show popup
+                this._applyVerticalMarkerHighlight(markerId); // Apply marker highlight
+                this._applyHighlight(null); // Clear line highlight
             } else {
-                this._hideTooltip();
+                this._hidePopup();
             }
         } catch (e) {
-            console.error(
-                `Error in tooltip callback for marker ${markerId}:`,
-                e
-            );
-            this._hideTooltip();
+            console.error(`Error in popup callback for marker ${markerId}:`, e);
+            this._hidePopup();
         }
     }
 
-    /** Helper function to apply/reset highlight styles for vertical markers */
-    _applyVerticalMarkerHighlight(targetMarkerId = null) {
-        const markerStyle = STYLE_DEFAULTS.verticalMarker; // Renamed style key
+    /** Applies/resets highlight styles for vertical markers based on pinned ID. */
+    _applyVerticalMarkerHighlight(targetMarkerId) {
+        const markerStyle = STYLE_DEFAULTS.verticalMarker;
+        const isPinned = targetMarkerId !== null;
+
         this.verticalMarkersGroup
-            .selectAll('g.esbd-vertical-marker circle.marker-bg') // Renamed group/class
+            .selectAll('g.esbd-vertical-marker circle.marker-bg')
+            .interrupt()
             .transition()
             .duration(50)
             .attr('fill', (d) =>
-                d.id === targetMarkerId
+                isPinned && d.id === targetMarkerId
                     ? markerStyle.highlightColor
                     : markerStyle.backgroundColor
             )
             .attr('stroke', (d) =>
-                d.id === targetMarkerId
+                isPinned && d.id === targetMarkerId
                     ? markerStyle.highlightStroke ||
                       markerStyle.backgroundStroke
                     : markerStyle.backgroundStroke

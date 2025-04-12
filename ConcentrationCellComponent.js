@@ -2,7 +2,7 @@
 // Encapsulates the logic and UI for an interactive concentration cell ESBD.
 
 import ElectrochemicalSpeciesBandDiagram from './ElectrochemicalSpeciesBandDiagram.js';
-import { formatTooltipBaseContent } from './utils.js';
+import { formatPopupBaseContent } from './utils.js';
 
 // --- Physical Constants ---
 const R = 8.31446; // J / (mol K)
@@ -160,13 +160,15 @@ class ConcentrationCellComponent {
         );
 
         // Set general tooltip callback (for lines)
-        this.diagram.setTooltipCallback(this._getTooltipContent.bind(this));
+        this.diagram.setTracePopupCallback(
+            this._getTracePopupContent.bind(this)
+        );
 
         this.diagram.addVerticalMarker('left_interface_eq', {
             symbol: '⇌',
             speciesId1: 'electron', // Corresponds to y1 in update call (V_e_1)
             speciesId2: 'cation', // Corresponds to y2 in update call (V_cation_1)
-            tooltipCallback: this._getInterfaceTooltip.bind(
+            popupCallback: this._getInterfacePopupContent.bind(
                 this,
                 'Left Electrode'
             ), // Pass identifier
@@ -175,7 +177,7 @@ class ConcentrationCellComponent {
             symbol: '⇌',
             speciesId1: 'electron', // Corresponds to y1 (V_e_2)
             speciesId2: 'cation', // Corresponds to y2 (V_cation_2)
-            tooltipCallback: this._getInterfaceTooltip.bind(
+            popupCallback: this._getInterfacePopupContent.bind(
                 this,
                 'Right Electrode'
             ), // Pass identifier
@@ -440,7 +442,7 @@ class ConcentrationCellComponent {
             },
         ];
 
-        const leftTooltipArgs = {
+        const leftpopupArgs = {
             reaction: `${cation.latexPrettyName} + ${cation.z}\\mathrm{e}^{-} \\rightleftharpoons \\mathrm{Ag(s)}`, // General form
             potential_diff_volt: V_cation_1 - V_e_1, // Should be V_reaction (approx 0)
             interfaceName: 'Electrode 1 / Elyte 1',
@@ -450,10 +452,10 @@ class ConcentrationCellComponent {
             y1: V_e_1, // Electron potential
             y2: V_cation_1, // Cation potential
             inputUnits: 'V_volt',
-            tooltipArgs: leftTooltipArgs,
+            popupArgs: leftpopupArgs,
         });
 
-        const rightTooltipArgs = {
+        const rightpopupArgs = {
             reaction: `${cation.latexPrettyName} + ${cation.z}\\mathrm{e}^{-} \\rightleftharpoons \\mathrm{Ag(s)}`,
             potential_diff_volt: V_cation_2 - V_e_2, // Should be V_reaction (approx 0)
             interfaceName: 'Elyte 2 / Electrode 2',
@@ -463,15 +465,15 @@ class ConcentrationCellComponent {
             y1: V_e_2, // Electron potential
             y2: V_cation_2, // Cation potential
             inputUnits: 'V_volt',
-            tooltipArgs: rightTooltipArgs,
+            popupArgs: rightpopupArgs,
         });
 
         return { traceDefs, calculatedVoltage: cell_voltage };
     }
 
-    _getTooltipContent(info) {
+    _getTracePopupContent(info) {
         // Start with the default tooltip, to which we will append (as appropriate)
-        let content = formatTooltipBaseContent(info);
+        let content = formatPopupBaseContent(info);
 
         let conc = null;
         let activity = null;
@@ -503,7 +505,7 @@ class ConcentrationCellComponent {
      * @param {string} identifier - 'Left Electrode' or 'Right Electrode'.
      * @param {object} info - The markerTooltipInfo object from ESBD module.
      */
-    _getInterfaceTooltip(identifier, info) {
+    _getInterfacePopupContent(identifier, info) {
         // info contains: { markerId, xValue, y1_volt(V_e), y2_volt(V_cation), y1_display, y2_display, currentMode, customArgs, pointEvent }
         const args = info.customArgs || {};
         const reaction =

@@ -176,10 +176,10 @@ h2 {
     /* background set inline currently */
 }
 
-/* Tooltip */
-.esbd-tooltip {
+/* popup */
+.esbd-popup {
     max-width: 250px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    font-size: 11px; /* Smaller tooltip text */
+    font-size: 11px; /* Smaller popup text */
     /* Other static styles */
 }

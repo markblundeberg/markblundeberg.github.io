@@ -2,7 +2,7 @@
 // Component for displaying an ESBD of a Li-ion battery at equilibrium (OCV).
 
 import ElectrochemicalSpeciesBandDiagram from './ElectrochemicalSpeciesBandDiagram.js';
-import { formatTooltipBaseContent, debounce } from './utils.js';
+import { formatPopupBaseContent, debounce } from './utils.js';
 
 // --- Physical Constants ---
 const R = 8.31446; // J / (mol K)
@@ -203,20 +203,22 @@ class LiIonBatteryComponent {
             this.config.regionProps
         );
 
-        // Set general tooltip callback (for traces)
-        this.diagram.setTooltipCallback(this._getTooltipContent.bind(this));
+        // Set general popup callback (for traces)
+        this.diagram.setTracePopupCallback(
+            this._getTracePopupContent.bind(this)
+        );
 
         this.diagram.addVerticalMarker('anode_eq', {
             symbol: '⇌', // Or use config.anode.symbol?
             speciesId1: 'electron', // Corresponds to y1 in update call (V_e_anode)
             speciesId2: 'li+', // Corresponds to y2 in update call (V_Li_plus_elyte)
-            tooltipCallback: this._getAnodeEqTooltip.bind(this), // Dedicated callback
+            popupCallback: this._getAnodeEqPopup.bind(this), // Dedicated callback
         });
         this.diagram.addVerticalMarker('cathode_eq', {
             symbol: '⇌',
             speciesId1: 'electron', // Corresponds to y1 (V_e_cathode)
             speciesId2: 'li+', // Corresponds to y2 (V_Li_plus_elyte)
-            tooltipCallback: this._getCathodeEqTooltip.bind(this), // Dedicated callback
+            popupCallback: this._getCathodeEqPopup.bind(this), // Dedicated callback
         });
     }
 
@@ -322,7 +324,7 @@ class LiIonBatteryComponent {
         const x_anode = x_min + Li_movable * socFrac;
         const y_cathode = y_min + Li_movable * (1.0 - socFrac);
 
-        // Store calculated values for tooltip use
+        // Store calculated values for popup use
         this.currentXAnode = x_anode;
         this.currentYCathode = y_cathode;
 
@@ -458,7 +460,7 @@ class LiIonBatteryComponent {
                 });
         }
 
-        const anodeTooltipData = {
+        const anodePopupData = {
             reaction:
                 '\\mathrm{Li(graphite)} \\rightleftharpoons \\mathrm{Li}^+ + \\mathrm{e}^-',
             ocv: OCV_anode,
@@ -469,10 +471,10 @@ class LiIonBatteryComponent {
             y1: V_e_anode, // Electron potential (speciesId1 = 'electron')
             y2: V_Li_plus_elyte, // Li+ potential (speciesId2 = 'li+')
             inputUnits: 'V_volt', // Units of potentials passed
-            tooltipArgs: anodeTooltipData,
+            popupArgs: anodePopupData,
         });
 
-        const cathodeTooltipData = {
+        const cathodePopupData = {
             reaction:
                 '\\mathrm{Li(oxide)} \\rightleftharpoons \\mathrm{Li}^+ + \\mathrm{e}^-',
             ocv: OCV_cathode,
@@ -483,13 +485,13 @@ class LiIonBatteryComponent {
             y1: V_e_cathode, // Electron potential (speciesId1 = 'electron')
             y2: V_Li_plus_elyte, // Li+ potential (speciesId2 = 'li+')
             inputUnits: 'V_volt',
-            tooltipArgs: cathodeTooltipData,
+            popupArgs: cathodePopupData,
         });
 
         return { traceDefs, calculatedVoltage: cell_voltage };
     }
 
-    _getAnodeEqTooltip(info) {
+    _getAnodeEqPopup(info) {
         // info contains: { markerId, xValue, y1_volt, y2_volt, y1_display, y2_display, currentMode, customArgs, pointEvent }
         const args = info.customArgs;
         const diff_display = info.y1_display - info.y2_display; // V_e - V_Li+ in current units
@@ -509,7 +511,7 @@ class LiIonBatteryComponent {
         return content;
     }
 
-    _getCathodeEqTooltip(info) {
+    _getCathodeEqPopup(info) {
         // info contains: { markerId, xValue, y1_volt, y2_volt, y1_display, y2_display, currentMode, customArgs, pointEvent }
         const args = info.customArgs;
         const diff_display = info.y1_display - info.y2_display; // V_e - V_Li+ in current units
@@ -528,10 +530,10 @@ class LiIonBatteryComponent {
         return content;
     }
 
-    /** Tooltip callback specific to this Li-ion component instance */
-    _getTooltipContent(info) {
+    /** Popup callback specific to this Li-ion component instance */
+    _getTracePopupContent(info) {
         // 1. Get base content
-        let content = formatTooltipBaseContent(info);
+        let content = formatPopupBaseContent(info);
 
         // 2. Add Li-ion specific info
         const config = this.config;
