@@ -2,10 +2,9 @@
 // Encapsulates the logic and UI for an interactive concentration cell ESBD.
 
 import ElectrochemicalSpeciesBandDiagram from './ElectrochemicalSpeciesBandDiagram.js';
-import { formatTooltipBaseContent } from './utils.js'; // Assuming utils.js exists
+import { formatTooltipBaseContent } from './utils.js';
 
 // --- Physical Constants ---
-// Moved here or could be in utils.js
 const R = 8.31446; // J / (mol K)
 const F = 96485.3; // C / mol
 const TEMP_K = 298.15; // Kelvin
@@ -20,30 +19,44 @@ class ConcentrationCellComponent {
     constructor(containerSelector, cellConfig) {
         this.container = document.querySelector(containerSelector);
         if (!this.container) {
-            console.error(
-                `ConcentrationCellComponent Error: Container "${containerSelector}" not found.`
-            );
-            // Consider throwing an error or returning early
             throw new Error(
                 `Container element ${containerSelector} not found.`
             );
         }
-        this.cellConfig = cellConfig; // Store config
-        this.diagram = null; // ESBD instance
-        this.plotDivId = `esbd-plot-${Math.random().toString(36).substring(2, 9)}`; // Unique ID for plot container
-        this.junctionSelectorName = `junction-${this.plotDivId}`; // Unique name for radio group
+        this.config = cellConfig;
+        this.diagram = null;
+        this.plotDivId = `esbd-plot-${Math.random().toString(36).substring(2, 9)}`;
+        this.junctionSelectorName = `junction-${this.plotDivId}`;
 
-        // Initialize state from config or defaults
+        if (
+            !this.config.boundaries ||
+            !Array.isArray(this.config.boundaries) ||
+            this.config.boundaries.length < 2
+        ) {
+            throw new Error(
+                `ConcentrationCellComponent Error: config.boundaries must be an array with at least 2 values.`
+            );
+        }
+        if (
+            !this.config.regionProps ||
+            !Array.isArray(this.config.regionProps) ||
+            this.config.regionProps.length !== this.config.boundaries.length - 1
+        ) {
+            throw new Error(
+                `ConcentrationCellComponent Error: config.regionProps must be an array with length = boundaries.length - 1.`
+            );
+        }
+
         this.currentC1 = cellConfig.initialC1 || 0.1;
         this.currentC2 = cellConfig.initialC2 || 1.0;
         this.junctionType = cellConfig.initialJunction || 'saltbridge';
 
         try {
-            this._createInternalHTML(); // Generate controls and plot div
-            this._findInternalElements(); // Find the generated elements
-            this._setupESBD(); // Create the diagram instance
-            this._attachListeners(); // Attach listeners to controls
-            this.updateDiagram(); // Perform initial calculation and draw
+            this._createInternalHTML();
+            this._findInternalElements();
+            this._setupESBD();
+            this._attachListeners();
+            this.updateDiagram();
             console.log(
                 `ConcentrationCellComponent initialized in ${containerSelector}`
             );
@@ -52,14 +65,13 @@ class ConcentrationCellComponent {
                 `Error initializing ConcentrationCellComponent in ${containerSelector}:`,
                 error
             );
-            // Display error in the container?
-            this.container.innerHTML = `<p style="color: red;">Error initializing diagram component.</p>`;
+            this.container.innerHTML = `<p style="color: red;">Error initializing diagram component: ${error.message}</p>`;
         }
     }
 
-    /** Creates the necessary HTML structure within the container */
+    /** Creates the HTML structure for controls and plot */
     _createInternalHTML() {
-        const config = this.cellConfig;
+        const config = this.config;
         // Generate unique IDs for elements needing association
         const c1SliderId = `c1-${this.plotDivId}`;
         const c2SliderId = `c2-${this.plotDivId}`;
@@ -115,7 +127,7 @@ class ConcentrationCellComponent {
         `;
     }
 
-    /** Finds references to the dynamically created DOM elements within this component */
+    /** Finds references to the dynamically created DOM elements */
     _findInternalElements() {
         this.c1Slider = this.container.querySelector('.c1-slider');
         this.c1Value = this.container.querySelector('.c1-value');
@@ -131,20 +143,23 @@ class ConcentrationCellComponent {
 
     /** Sets up the ESBD instance */
     _setupESBD() {
+        if (!this.plotDiv) throw new Error('Plot container div not found.');
         this.diagram = new ElectrochemicalSpeciesBandDiagram(this.plotDivId, {
-            height: this.cellConfig.plotHeight, // Pass height config to ESBD
-            // Pass other ESBD config if needed
+            height: this.config.plotHeight,
         });
-        // Add species info using this.cellConfig
-        this.diagram.addSpeciesInfo('cation', this.cellConfig.cation);
-        this.diagram.addSpeciesInfo('anion', this.cellConfig.anion);
-        this.diagram.addSpeciesInfo('electron', this.cellConfig.electron);
+
+        // Define species info
+        this.diagram.addSpeciesInfo('cation', this.config.cation);
+        this.diagram.addSpeciesInfo('anion', this.config.anion);
+        this.diagram.addSpeciesInfo('electron', this.config.electron);
+
         // Set layout
         this.diagram.setSpatialLayout(
-            this.cellConfig.boundaries,
-            this.cellConfig.regionProps
+            this.config.boundaries,
+            this.config.regionProps
         );
-        // Set tooltip callback (binding 'this' to maintain context)
+
+        // Set general tooltip callback (for lines)
         this.diagram.setTooltipCallback(this._getTooltipContent.bind(this));
     }
 
@@ -207,7 +222,7 @@ class ConcentrationCellComponent {
                 this.currentC1,
                 this.currentC2,
                 this.junctionType,
-                this.cellConfig // Pass config to calculation method
+                this.config
             );
             // Update the diagram
             this.diagram.updateTraceData(traceDefs);
@@ -451,5 +466,5 @@ class ConcentrationCellComponent {
     }
 }
 
-// Export the class to be used by app.js
+// Export the class
 export default ConcentrationCellComponent;
