@@ -34,12 +34,12 @@ const STYLE_DEFAULTS = {
         fontSize: '14px',
         color: '#333',
         backgroundRadius: 8,
-        backgroundColor: 'rgba(255, 255, 255, 0.0)',
-        backgroundStroke: 'none',
-        legColor: '#666',
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        backgroundStroke: '#AAA',
+        legColor: '#888',
         legWidth: 1,
-        legThresholdPx: 12,
-        highlightColor: 'rgba(0, 123, 255, 0.2)',
+        legThresholdPx: 15, // Min gap in pixels to draw legs
+        highlightColor: 'rgba(0, 123, 255, 0.3)', // Example highlight (semi-transparent blue bg)
         highlightStroke: 'rgba(0, 123, 255, 0.5)',
     },
 };
