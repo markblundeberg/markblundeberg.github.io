@@ -99,6 +99,9 @@ class ElectrochemicalSpeciesBandDiagram {
         this._modeChangeCallback = null;
         this._tracePopupCallback = formatPopupBaseContent; // Default formatter for trace popups
         this._pinnedPopupInfo = null; // Stores null or ['trace'|'marker', id]
+        this._highlightedElementInfo = null; // Stores null or {type, id}
+        this._hoverThrottleTimeout = null; // Throttle timer for pointermove highlights
+        this._hoverThrottleWaiting = false; // Throttle flag
 
         this.container.html('');
         this._popupDiv = this.container
@@ -230,9 +233,18 @@ class ElectrochemicalSpeciesBandDiagram {
                     isFinite(d.y_display)
             );
 
-        this.interactionRect.on('click', (event) =>
-            this._handleClickInteraction(event, null)
-        ); // Click on background
+        // --- Interaction Rect Listeners ---
+        this.interactionRect
+            .on('pointermove', (event) =>
+                this._handlePointerMoveInteractionRect(event)
+            ) // Throttled hover check
+            .on('pointerout', (event) =>
+                this._handlePointerOutInteractionRect(event)
+            ) // Clear hover highlight
+            .on('click', (event) => this._handleClickInteraction(event, null)); // Background click
+
+        // Note: Listeners for markers (including hover) are added in _drawVerticalMarkers
+        // Note: Lines have pointer-events: none
     }
 
     // --- Public API Methods ---
@@ -507,6 +519,7 @@ class ElectrochemicalSpeciesBandDiagram {
         ) {
             this._debouncedHandleResize.cancel();
         }
+        clearTimeout(this._hoverThrottleTimeout);
         this._hidePopup();
         this.container.html('');
         console.log('ESBD Destroyed.');
@@ -1034,34 +1047,12 @@ class ElectrochemicalSpeciesBandDiagram {
         // TODO: Smarter label positioning to avoid overlaps.
     }
 
-    // Helper function to apply/reset highlight styles
-    _applyHighlight(targetTraceId) {
-        const highlightWidthIncrease = 2; // How much thicker to make the highlighted line
-        const fadedOpacity = 0.4; // Opacity for non-highlighted lines
-        const isPinned = targetTraceId !== null;
-
-        this.linesGroup
-            .selectAll('path.esbd-data-line')
-            .interrupt()
-            .transition()
-            .duration(50)
-            // REVIEW: Decide if non-pinned lines should fade when something IS pinned
-            // Option 1: Fade others when pinned:
-            // .style("opacity", d => (targetTraceId === null || d.id === targetTraceId) ? 1.0 : fadedOpacity)
-            // Option 2: Keep all lines opaque when pinned:
-            .style('opacity', 1.0)
-            .attr('stroke-width', (d) =>
-                isPinned && d.id === targetTraceId
-                    ? d.style.lineWidth + highlightWidthIncrease
-                    : d.style.lineWidth
-            );
-    }
+    // --- Interaction & Popup/Highlight Methods ---
 
     /** Hides the popup and resets all highlights and pinned state. */
     _hidePopup() {
         this._popupDiv.style('visibility', 'hidden').style('opacity', 0);
-        this._applyHighlight(null); // Reset line highlight
-        this._applyVerticalMarkerHighlight(null); // Reset marker highlight
+        this._setActiveHighlight(null); // Clear any active highlight (pinned or hover)
         this._pinnedPopupInfo = null; // Clear pinned state
     }
 
@@ -1129,12 +1120,11 @@ class ElectrochemicalSpeciesBandDiagram {
         };
 
         try {
-            const content = this._tracePopupCallback(popupInfo); // Use the general trace callback
+            const content = this._tracePopupCallback(popupInfo);
             if (content) {
                 this._pinnedPopupInfo = ['trace', trace.id]; // Set pin state
                 this._setPopup(event, content); // Show popup
-                this._applyHighlight(trace.id); // Apply line highlight
-                this._applyVerticalMarkerHighlight(null); // Clear marker highlight
+                this._setActiveHighlight({ type: 'trace', id: trace.id }); // Set highlight
             } else {
                 this._hidePopup();
             }
@@ -1142,6 +1132,67 @@ class ElectrochemicalSpeciesBandDiagram {
             console.error('Error in trace popup callback:', e);
             this._hidePopup();
         }
+    }
+
+    /** Applies/resets highlight style ONLY for data traces. */
+    _applyHighlight(targetTraceId) {
+        const highlightWidthIncrease = 2;
+        const isPinned = targetTraceId !== null; // Check if a specific trace should be highlighted
+        this.linesGroup
+            .selectAll('path.esbd-data-line')
+            .interrupt()
+            .transition()
+            .duration(50)
+            .style('opacity', 1.0) // Keep all lines opaque
+            .attr('stroke-width', (d) =>
+                isPinned && d.id === targetTraceId
+                    ? d.style.lineWidth + highlightWidthIncrease
+                    : d.style.lineWidth
+            );
+    }
+
+    /** Applies/resets highlight styles ONLY for vertical markers. */
+    _applyVerticalMarkerHighlight(targetMarkerId) {
+        const markerStyle = STYLE_DEFAULTS.verticalMarker;
+        const isPinned = targetMarkerId !== null; // Check if a specific marker should be highlighted
+        this.verticalMarkersGroup
+            .selectAll('g.esbd-vertical-marker circle.marker-bg')
+            .interrupt()
+            .transition()
+            .duration(50)
+            .attr('fill', (d) =>
+                isPinned && d.id === targetMarkerId
+                    ? markerStyle.highlightColor
+                    : markerStyle.backgroundColor
+            )
+            .attr('stroke', (d) =>
+                isPinned && d.id === targetMarkerId
+                    ? markerStyle.highlightStroke ||
+                      markerStyle.backgroundStroke
+                    : markerStyle.backgroundStroke
+            );
+    }
+
+    /** Sets the active highlight, ensuring only one element is highlighted. */
+    _setActiveHighlight(highlightInfo = null) {
+        // Avoid redundant work if highlight target hasn't changed
+        if (
+            this._highlightedElementInfo?.type === highlightInfo?.type &&
+            this._highlightedElementInfo?.id === highlightInfo?.id
+        ) {
+            return;
+        }
+
+        const newType = highlightInfo?.type;
+        const newId = highlightInfo?.id;
+
+        // Reset highlights based on type (call simplified helpers)
+        this._applyHighlight(newType === 'trace' ? newId : null);
+        this._applyVerticalMarkerHighlight(newType === 'marker' ? newId : null);
+        // Add resets for other future types here
+
+        // Store the new highlight state
+        this._highlightedElementInfo = highlightInfo;
     }
 
     /** Sets the popup content, renders KaTeX, calculates position, displays it. */
@@ -1355,11 +1406,20 @@ class ElectrochemicalSpeciesBandDiagram {
                         .attr('stroke', markerStyle.legColor)
                         .attr('stroke-width', markerStyle.legWidth);
 
-                    // Attach listeners to the group
-                    g.on('click', (event, d) => {
-                        event.stopPropagation(); // Prevent background click
-                        this._handleClickInteraction(event, d.id);
-                    });
+                    g.on('pointerover', (event, d) =>
+                        this._handleMarkerPointerOver(event, d.id)
+                    )
+                        .on('pointerout', (event, d) =>
+                            this._handleMarkerPointerOut(event, d.id)
+                        )
+                        .on('pointermove', (event) => {
+                            // Prevent move reaching interactionRect
+                            event.stopPropagation();
+                        })
+                        .on('click', (event, d) => {
+                            event.stopPropagation();
+                            this._handleClickInteraction(event, d.id);
+                        });
                     return g;
                 },
                 (update) => update, // Nothing static needs updating usually
@@ -1460,11 +1520,9 @@ class ElectrochemicalSpeciesBandDiagram {
             return;
         }
 
-        // Clear previous pin state before potentially setting a new one
-        this._pinnedPopupInfo = null;
-        // Reset highlights (will be reapplied if needed) - _hidePopup does this, but maybe redundant call is ok
-        this._applyHighlight(null);
-        this._applyVerticalMarkerHighlight(null);
+        // Clear previous pin state and highlights before setting new one
+        this._pinnedPopupInfo = null; // Clear pin first
+        this._hidePopup(); // Clear pin, hide popup, reset highlights
 
         if (targetId === null) {
             // Click on background - try to find closest trace
@@ -1477,12 +1535,9 @@ class ElectrochemicalSpeciesBandDiagram {
             const closestResult = this._findClosestTrace(xValue, pointerY);
 
             if (closestResult && closestResult.minDistPx < clickThresholdPx) {
-                // Click was close to a trace -> Show trace popup
-                this._showTracePopup(event, closestResult);
-            } else {
-                // Click was on empty background -> Hide any existing popup
-                this._hidePopup();
+                this._showTracePopup(event, closestResult); // Show trace popup
             }
+            // If no close trace, _hidePopup was already called, so nothing more to do
         } else if (this.verticalMarkers.has(targetId)) {
             // Click was on a vertical marker -> Show marker popup
             this._showVerticalMarkerPopup(event, targetId);
@@ -1527,8 +1582,7 @@ class ElectrochemicalSpeciesBandDiagram {
             if (content) {
                 this._pinnedPopupInfo = ['marker', markerId]; // Set pin state
                 this._setPopup(event, content); // Show popup
-                this._applyVerticalMarkerHighlight(markerId); // Apply marker highlight
-                this._applyHighlight(null); // Clear line highlight
+                this._setActiveHighlight({ type: 'marker', id: markerId });
             } else {
                 this._hidePopup();
             }
@@ -1538,27 +1592,56 @@ class ElectrochemicalSpeciesBandDiagram {
         }
     }
 
-    /** Applies/resets highlight styles for vertical markers based on pinned ID. */
-    _applyVerticalMarkerHighlight(targetMarkerId) {
-        const markerStyle = STYLE_DEFAULTS.verticalMarker;
-        const isPinned = targetMarkerId !== null;
+    /** Handles pointer move over the main interaction rectangle (for line highlights) */
+    _handlePointerMoveInteractionRect(event) {
+        if (this._pinnedPopupInfo) return; // Do nothing if popup is pinned
 
-        this.verticalMarkersGroup
-            .selectAll('g.esbd-vertical-marker circle.marker-bg')
-            .interrupt()
-            .transition()
-            .duration(50)
-            .attr('fill', (d) =>
-                isPinned && d.id === targetMarkerId
-                    ? markerStyle.highlightColor
-                    : markerStyle.backgroundColor
-            )
-            .attr('stroke', (d) =>
-                isPinned && d.id === targetMarkerId
-                    ? markerStyle.highlightStroke ||
-                      markerStyle.backgroundStroke
-                    : markerStyle.backgroundStroke
-            );
+        const [pointerX, pointerY] = d3.pointer(event, this.plotArea.node());
+        const xValue = this.xScale.invert(pointerX);
+        const hoverThresholdPx = 15; // Similar threshold for hover highlight
+        const closestResult = this._findClosestTrace(xValue, pointerY);
+
+        if (closestResult && closestResult.minDistPx < hoverThresholdPx) {
+            this._setActiveHighlight({
+                type: 'trace',
+                id: closestResult.trace.id,
+            });
+            // No tooltip shown on hover in this version
+        } else {
+            this._setActiveHighlight(null); // Clear highlight if not close to any line
+        }
+    }
+
+    /** Handles pointer leaving the main interaction rectangle */
+    _handlePointerOutInteractionRect(event) {
+        if (!this._pinnedPopupInfo) {
+            this._setActiveHighlight(null); // Clear any hover highlight
+            // No tooltip to hide in this version
+        }
+    }
+
+    /** Handles pointer entering a vertical marker */
+    _handleMarkerPointerOver(event, markerId) {
+        event.stopPropagation();
+        if (!this._pinnedPopupInfo) {
+            this._setActiveHighlight({ type: 'marker', id: markerId });
+            // No tooltip shown on hover in this version
+        }
+    }
+
+    /** Handles pointer leaving a vertical marker */
+    _handleMarkerPointerOut(event, markerId) {
+        event.stopPropagation();
+        if (!this._pinnedPopupInfo) {
+            // Only clear highlight if the mouse is leaving the currently highlighted marker
+            if (
+                this._highlightedElementInfo?.type === 'marker' &&
+                this._highlightedElementInfo?.id === markerId
+            ) {
+                this._setActiveHighlight(null);
+            }
+            // No tooltip to hide in this version
+        }
     }
 } // End of class
 
