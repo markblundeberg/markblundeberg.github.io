@@ -184,6 +184,19 @@ class ElectrochemicalSpeciesBandDiagram {
             .attr('class', 'esbd-connectors')
             .style('pointer-events', 'none');
         this.linesGroup = this.plotArea.append('g').attr('class', 'esbd-lines');
+        this.interactionRect = this.plotArea
+            .append('rect')
+            .attr('class', 'esbd-interaction-overlay')
+            .style('fill', 'none')
+            .style('pointer-events', 'all')
+            .on('pointerout', () => {
+                clearTimeout(this._throttleTimeout);
+                this._throttleTimeout = null;
+                this._throttleWaiting = false;
+                this._hideTooltip();
+            })
+            .on('pointermove', (event) => this._handleInteraction(event, false))
+            .on('click', (event) => this._handleInteraction(event, true));
         this.verticalMarkersGroup = this.plotArea
             .append('g')
             .attr('class', 'esbd-vertical-markers');
@@ -228,21 +241,6 @@ class ElectrochemicalSpeciesBandDiagram {
                     !isNaN(d.y_display) &&
                     isFinite(d.y_display)
             );
-
-        // Interaction overlay rect
-        this.interactionRect = this.plotArea
-            .append('rect')
-            .attr('class', 'esbd-interaction-overlay')
-            .style('fill', 'none')
-            .style('pointer-events', 'all')
-            .on('pointerout', () => {
-                clearTimeout(this._throttleTimeout);
-                this._throttleTimeout = null;
-                this._throttleWaiting = false;
-                this._hideTooltip();
-            })
-            .on('pointermove', (event) => this._handleInteraction(event, false))
-            .on('click', (event) => this._handleInteraction(event, true));
     }
 
     // --- Public API Methods ---
