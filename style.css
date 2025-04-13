@@ -32,7 +32,8 @@ h2 {
 
 /* Component Instance Containers */
 #ag-conc-cell-container,
-#li-ion-container /* Add IDs for other instances here */ {
+#li-ion-container,
+#lead-acid-container {
     width: 95%;
     max-width: 800px;
 

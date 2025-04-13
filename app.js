@@ -3,7 +3,8 @@
 
 // Import component classes
 import ConcentrationCellComponent from './ConcentrationCellComponent.js';
-import LiIonBatteryComponent from './LiIonBatteryComponent.js'; // Import the new component
+import LiIonBatteryComponent from './LiIonBatteryComponent.js';
+import LeadAcidBatteryComponent from './LeadAcidBatteryComponent.js';
 
 // --- Configuration Objects ---
 
@@ -106,6 +107,65 @@ const liIonConfig = {
     plotHeight: 300, // Slightly taller for battery?
 };
 
+// Configuration for the Lead-Acid Battery
+const leadAcidConfig = {
+    // Species Definitions (using standard mu^⊖ values in J/mol)
+    species: {
+        'H+': {
+            z: 1,
+            mu_standard_J_mol: 0,
+            color: '#E41A1C',
+            latexPrettyName: '\\mathrm{H}^{+}',
+        }, // Red
+        'HSO4-': {
+            z: -1,
+            mu_standard_J_mol: -755900,
+            color: '#FF7F00',
+            latexPrettyName: '\\mathrm{HSO}_4^{-}',
+        }, // Orange
+        'e-': {
+            z: -1,
+            mu_standard_J_mol: 0,
+            color: '#377EB8',
+            latexPrettyName: '\\mathrm{e}^{-}',
+        }, // Blue
+        // Optional: Add SO4^2- if implementing dissociation later
+        // 'SO4^2-':{ z: -2, mu_standard_J_mol: -744500, color: '#984EA3', latexPrettyName: '\\mathrm{SO}_4^{2-}' }, // Purple
+    },
+    // Standard chemical potentials for solid/liquid phases (J/mol)
+    solids: {
+        mu_Pb: 0,
+        mu_PbSO4: -813000, // Using Gibbs Energy value
+        mu_PbO2: -217300,
+        mu_H2O: -237100,
+    },
+    // Electrolyte properties
+    electrolyte: {
+        initialConc: 4.0, // Starting H2SO4 concentration (M)
+        // For simplified activity calculation a_i = nu_i * C / C_STD
+        nu_H: 1, // Effective stoichiometry for H+ in H2SO4 (simplification)
+        nu_HSO4: 1, // Effective stoichiometry for HSO4- in H2SO4 (simplification)
+    },
+    c_std_M: 1.0, // Standard concentration 1 M
+
+    // Spatial Layout (5 regions: Coll | Pb | Elyte/Sep | PbO2 | Coll)
+    boundaries: [0, 0.15, 0.35, 0.65, 0.85, 1.0], // 6 boundaries
+    regionProps: [
+        { name: 'Collector (Pb)', color: '#AAAAAA' },
+        { name: 'Anode (Pb)', color: '#D0D0D0' },
+        { name: 'Electrolyte/Separator', color: '#E6F5FF' },
+        { name: 'Cathode (PbO₂)', color: '#606060' }, // Darker grey for PbO2
+        { name: 'Collector (Pb)', color: '#AAAAAA' },
+    ],
+
+    // Initial slider values and ranges
+    concMin: 0.1, // Min H2SO4 conc
+    concMax: 6.0, // Max H2SO4 conc
+    plotHeight: 300,
+    initialShowStdStates: false,
+    initialShowHSO4: true, // Show HSO4- by default
+};
+
 // --- Initialization ---
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -150,6 +210,27 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.warn(
             `Container ${liIonContainerId} not found for LiIonBatteryComponent.`
+        );
+    }
+
+    // Initialize Lead-Acid Battery Component
+    const leadAcidContainerId = '#lead-acid-container'; // Make sure this ID exists in your HTML
+    const leadAcidContainer = document.querySelector(leadAcidContainerId);
+    if (leadAcidContainer) {
+        try {
+            // Pass the specific config for the lead-acid battery
+            new LeadAcidBatteryComponent(leadAcidContainerId, leadAcidConfig);
+            console.log('LeadAcidBatteryComponent initialized.');
+        } catch (error) {
+            console.error(
+                `Failed to initialize LeadAcidBatteryComponent in ${leadAcidContainerId}:`,
+                error
+            );
+            leadAcidContainer.innerHTML = `<p style="color: red;">Error loading lead-acid battery diagram.</p>`;
+        }
+    } else {
+        console.warn(
+            `Container ${leadAcidContainerId} not found for LeadAcidBatteryComponent.`
         );
     }
 }); // End DOMContentLoaded listener
