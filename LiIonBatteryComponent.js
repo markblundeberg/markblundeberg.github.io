@@ -39,25 +39,6 @@ class LiIonBatteryComponent {
         this.diagram = null;
         this.plotDivId = `esbd-plot-${Math.random().toString(36).substring(2, 9)}`;
 
-        if (
-            !this.config.boundaries ||
-            !Array.isArray(this.config.boundaries) ||
-            this.config.boundaries.length < 2
-        ) {
-            throw new Error(
-                `LiIonBatteryComponent Error: config.boundaries must be an array with at least 2 values.`
-            );
-        }
-        if (
-            !this.config.regionProps ||
-            !Array.isArray(this.config.regionProps) ||
-            this.config.regionProps.length !== this.config.boundaries.length - 1
-        ) {
-            throw new Error(
-                `LiIonBatteryComponent Error: config.regionProps must be an array with length = boundaries.length - 1.`
-            );
-        }
-
         this.currentSoCPercent = Math.max(
             0,
             Math.min(100, componentConfig.initialSoCPercent ?? 50)

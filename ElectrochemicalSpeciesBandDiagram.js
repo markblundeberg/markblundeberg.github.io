@@ -197,6 +197,8 @@ class ElectrochemicalSpeciesBandDiagram {
      * @param {Array<object>} regionProperties - Array of properties for regions between boundaries. Length must be boundaries.length - 1. E.g., [{name, color}, {name, color}, ...]
      */
     setSpatialLayout(boundaries = [], regionProperties = []) {
+        this.boundaries = [];
+        this.regionProps = [];
         // Basic validation
         if (
             !Array.isArray(boundaries) ||
@@ -204,12 +206,10 @@ class ElectrochemicalSpeciesBandDiagram {
             !Array.isArray(regionProperties) ||
             regionProperties.length !== boundaries.length - 1
         ) {
-            console.error(
+            throw [
                 'ESBD Error: Invalid input for setSpatialLayout. Need boundaries array (N+1 >= 2) and regionProperties array (N).',
-                { boundaries, regionProperties }
-            );
-            this.boundaries = [];
-            this.regionProps = [];
+                { boundaries, regionProperties },
+            ];
         } else {
             // Optional: Add validation for sorted boundaries
             let sorted = true;
@@ -217,9 +217,7 @@ class ElectrochemicalSpeciesBandDiagram {
                 if (boundaries[i] < boundaries[i - 1]) sorted = false;
             }
             if (!sorted) {
-                console.error('ESBD Error: Boundaries must be sorted.');
-                this.boundaries = [];
-                this.regionProps = [];
+                throw ['ESBD Error: Boundaries must be sorted.', boundaries];
             } else {
                 this.boundaries = boundaries;
                 this.regionProps = regionProperties;

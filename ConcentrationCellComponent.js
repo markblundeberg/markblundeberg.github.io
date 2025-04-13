@@ -28,25 +28,6 @@ class ConcentrationCellComponent {
         this.plotDivId = `esbd-plot-${Math.random().toString(36).substring(2, 9)}`;
         this.junctionSelectorName = `junction-${this.plotDivId}`;
 
-        if (
-            !this.config.boundaries ||
-            !Array.isArray(this.config.boundaries) ||
-            this.config.boundaries.length < 2
-        ) {
-            throw new Error(
-                `ConcentrationCellComponent Error: config.boundaries must be an array with at least 2 values.`
-            );
-        }
-        if (
-            !this.config.regionProps ||
-            !Array.isArray(this.config.regionProps) ||
-            this.config.regionProps.length !== this.config.boundaries.length - 1
-        ) {
-            throw new Error(
-                `ConcentrationCellComponent Error: config.regionProps must be an array with length = boundaries.length - 1.`
-            );
-        }
-
         this.currentC1 = cellConfig.initialC1 || 0.1;
         this.currentC2 = cellConfig.initialC2 || 1.0;
         this.junctionType = cellConfig.initialJunction || 'saltbridge';
