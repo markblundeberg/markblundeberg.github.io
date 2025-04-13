@@ -3,7 +3,11 @@
 
 // Assumes D3 and KaTeX (core + auto-render) are loaded globally or imported appropriately.
 
-import { formatPopupBaseContent, debounce } from './utils.js';
+import {
+    formatPopupBaseContent,
+    debounce,
+    describeCurveType,
+} from './utils.js';
 
 // --- Constants ---
 const R = 8.31446261815324; // J / (mol K)
@@ -87,10 +91,10 @@ class ElectrochemicalSpeciesBandDiagram {
                 left: 60,
             },
             transitionDuration: initialConfig.transitionDuration ?? 250,
+            hoverThrottleDelay: initialConfig.hoverThrottleDelay ?? 50,
             resizeDebounceDelay: initialConfig.resizeDebounceDelay ?? 200,
             tempK: initialConfig.tempK || TEMP_K,
         };
-
         // Internal state initialization
         this.speciesInfo = new Map();
         this.traceData = [];
@@ -1242,31 +1246,44 @@ class ElectrochemicalSpeciesBandDiagram {
         }
     }
 
-    /** Handles pointer move over the main interaction rectangle (for line highlights) */
+    /** Handles pointer move over the main interaction rectangle (for line highlights/tooltips) */
     _handlePointerMoveInteractionRect(event) {
+        // Throttle this handler
+        if (this._hoverThrottleWaiting) return;
+        this._hoverThrottleWaiting = true;
+        this._hoverThrottleTimeout = setTimeout(() => {
+            this._hoverThrottleWaiting = false;
+            this._hoverThrottleTimeout = null;
+        }, this.config.hoverThrottleDelay); // Use configured delay
+
+        // Logic to execute on throttled event
         if (this._pinnedPopupInfo) return; // Do nothing if popup is pinned
 
         const [pointerX, pointerY] = d3.pointer(event, this.plotArea.node());
         const xValue = this.xScale.invert(pointerX);
-        const hoverThresholdPx = 15; // Similar threshold for hover highlight
+        const hoverThresholdPx = 15;
         const closestResult = this._findClosestTrace(xValue, pointerY);
 
         if (closestResult && closestResult.minDistPx < hoverThresholdPx) {
-            this._setActiveHighlight({
-                type: 'trace',
-                id: closestResult.trace.id,
-            });
-            // No tooltip shown on hover in this version
+            const trace = closestResult.trace;
+            // Generate brief content
+            const label = trace.labelString
+                ? `$${trace.labelString}$`
+                : trace.speciesId || trace.id;
+            const description = describeCurveType(trace.curveType);
+            const briefContent = `<b>${label}</b>${description ? `: ${description}` : ''} ›`; // Add hint arrow
+
+            this._setPopup(event, briefContent); // Show brief tooltip
+            this._setActiveHighlight({ type: 'trace', id: trace.id }); // Show temp highlight
         } else {
-            this._setActiveHighlight(null); // Clear highlight if not close to any line
+            this._hidePopup(); // Also de-highlights
         }
     }
 
     /** Handles pointer leaving the main interaction rectangle */
     _handlePointerOutInteractionRect(event) {
         if (!this._pinnedPopupInfo) {
-            this._setActiveHighlight(null); // Clear any hover highlight
-            // No tooltip to hide in this version
+            this._hidePopup(); // Also de-highlights
         }
     }
 
@@ -1274,8 +1291,12 @@ class ElectrochemicalSpeciesBandDiagram {
     _handleMarkerPointerOver(event, markerId) {
         event.stopPropagation();
         if (!this._pinnedPopupInfo) {
-            this._setActiveHighlight({ type: 'marker', id: markerId });
-            // No tooltip shown on hover in this version
+            const markerData = this.verticalMarkers?.get(markerId);
+            const symbol = markerData?.definition?.symbol || '⇌';
+            // Generate generic brief content for marker hover
+            const briefContent = `<b>${symbol}</b>: Interface Equilibrium ›`; // Add hint arrow
+            this._setPopup(event, briefContent); // Show brief tooltip
+            this._setActiveHighlight({ type: 'marker', id: markerId }); // Show temp highlight
         }
     }
 
@@ -1283,14 +1304,13 @@ class ElectrochemicalSpeciesBandDiagram {
     _handleMarkerPointerOut(event, markerId) {
         event.stopPropagation();
         if (!this._pinnedPopupInfo) {
-            // Only clear highlight if the mouse is leaving the currently highlighted marker
+            // Only clear if leaving the currently hover-highlighted marker
             if (
                 this._highlightedElementInfo?.type === 'marker' &&
                 this._highlightedElementInfo?.id === markerId
             ) {
-                this._setActiveHighlight(null);
+                this._hidePopup(); // Also de-highlights
             }
-            // No tooltip to hide in this version
         }
     }
 
