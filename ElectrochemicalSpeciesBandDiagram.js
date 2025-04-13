@@ -40,10 +40,11 @@ const STYLE_DEFAULTS = {
         backgroundRadius: 8,
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
         backgroundStroke: '#AAA',
-        legColor: '#888',
-        legWidth: 1,
+        legColor: '#666',
+        legWidth: 2,
         legThresholdPx: 15, // Min gap in pixels to draw legs
-        highlightColor: 'rgba(0, 123, 255, 0.3)', // Example highlight (semi-transparent blue bg)
+        legEndRadius: 3,
+        highlightColor: 'rgba(0, 123, 255, 0.3)',
         highlightStroke: 'rgba(0, 123, 255, 0.5)',
     },
 };
@@ -876,35 +877,28 @@ class ElectrochemicalSpeciesBandDiagram {
         const symbolSize = markerStyle.fontSize;
         const bgRadius = markerStyle.backgroundRadius;
 
-        // Data binding within the verticalMarkersGroup
+        const legEndRadius = markerStyle.legEndRadius || 2.5;
+
         this.verticalMarkersGroup
-            .selectAll('g.esbd-vertical-marker') // Renamed class and group target
+            .selectAll('g.esbd-vertical-marker')
             .data(markerData, (d) => d.id)
             .join(
                 (enter) => {
                     const g = enter
                         .append('g')
-                        .attr('class', 'esbd-vertical-marker') // Renamed class
-                        .attr('data-marker-id', (d) => d.id)
-                        .style('cursor', 'help'); // Indicate interactivity
+                        .attr('class', 'esbd-vertical-marker')
+                        .attr('data-marker-id', (d) => d.id);
 
-                    // Add background circle for easier hover/click detection
                     g.append('circle')
-                        .attr('class', 'marker-bg')
-                        .attr('r', bgRadius)
-                        .attr('fill', markerStyle.backgroundColor)
-                        .attr('stroke', markerStyle.backgroundStroke)
-                        .attr('stroke-width', 1);
-                    // Add the symbol text
-                    g.append('text')
-                        .attr('class', 'marker-symbol')
-                        .attr('text-anchor', 'middle')
-                        .attr('dominant-baseline', 'central')
-                        .attr('font-size', symbolSize)
-                        .attr('fill', markerStyle.color)
-                        .text((d) => d.definition.symbol);
+                        .attr('class', 'marker-leg-end-circle leg-end-1')
+                        .attr('r', legEndRadius)
+                        .attr('stroke-width', 0);
+                    g.append('circle')
+                        .attr('class', 'marker-leg-end-circle leg-end-2')
+                        .attr('r', legEndRadius)
+                        .attr('stroke-width', 0);
 
-                    // Add lines for legs (initially zero length, positioned later)
+                    // Append legs next
                     g.append('line')
                         .attr('class', 'marker-leg-1')
                         .attr('stroke', markerStyle.legColor)
@@ -914,9 +908,29 @@ class ElectrochemicalSpeciesBandDiagram {
                         .attr('stroke', markerStyle.legColor)
                         .attr('stroke-width', markerStyle.legWidth);
 
-                    g.on('pointerover', (event, d) =>
-                        this._handleMarkerPointerOver(event, d.id)
-                    )
+                    // Add background circle for easier hover/click detection
+                    g.append('circle')
+                        .attr('class', 'marker-bg')
+                        .attr('r', bgRadius)
+                        .attr('fill', markerStyle.backgroundColor)
+                        .attr('stroke', markerStyle.backgroundStroke)
+                        .attr('stroke-width', 1)
+                        .style('cursor', 'help');
+
+                    g.append('text')
+                        .attr('class', 'marker-symbol')
+                        .attr('text-anchor', 'middle')
+                        .attr('dominant-baseline', 'central')
+                        .attr('font-size', symbolSize)
+                        .attr('fill', markerStyle.color)
+                        .style('pointer-events', 'none')
+                        .text((d) => d.definition.symbol);
+
+                    // Attach listeners to the background circle for reliable interaction area
+                    g.select('circle.marker-bg') // Target the background circle
+                        .on('pointerover', (event, d) =>
+                            this._handleMarkerPointerOver(event, d.id)
+                        )
                         .on('pointerout', (event, d) =>
                             this._handleMarkerPointerOut(event, d.id)
                         )
@@ -930,17 +944,17 @@ class ElectrochemicalSpeciesBandDiagram {
                         });
                     return g;
                 },
-                (update) => update, // Nothing static needs updating usually
+                (update) => update,
                 (exit) =>
                     exit
                         .transition()
                         .duration(this.config.transitionDuration)
                         .attr('opacity', 0)
-                        .remove() // Fade out removed markers
+                        .remove()
             )
             // Update position and legs with transitions
             .each((d, i, nodes) => {
-                // Calculate pixel positions for this marker
+                // Update position, legs, and leg ends
                 const markerG = d3.select(nodes[i]);
                 const data = d.currentData;
                 if (!data || data.y1_volt === null || data.y2_volt === null) {
@@ -975,7 +989,7 @@ class ElectrochemicalSpeciesBandDiagram {
                 const y_mid_px = (y1_px + y2_px) / 2;
                 const gap_px = Math.abs(y1_px - y2_px);
 
-                // Transition group to new position
+                // Transition group position
                 markerG
                     .transition()
                     .duration(this.config.transitionDuration)
@@ -989,7 +1003,6 @@ class ElectrochemicalSpeciesBandDiagram {
                 // Start legs just outside the background circle radius
                 const legStartY1 = Math.sign(legTargetY1) * bgRadius;
                 const legStartY2 = Math.sign(legTargetY2) * bgRadius;
-
                 markerG
                     .select('line.marker-leg-1')
                     .transition()
@@ -1009,6 +1022,24 @@ class ElectrochemicalSpeciesBandDiagram {
                     .attr('y1', legStartY2)
                     .attr('x2', 0)
                     .attr('y2', legTargetY2);
+
+                markerG
+                    .select('circle.leg-end-1')
+                    .transition()
+                    .duration(this.config.transitionDuration)
+                    .attr('display', showLegs ? null : 'none')
+                    .attr('cx', 0)
+                    .attr('cy', legTargetY1) // Position at end of leg
+                    .attr('fill', markerStyle.legColor);
+
+                markerG
+                    .select('circle.leg-end-2')
+                    .transition()
+                    .duration(this.config.transitionDuration)
+                    .attr('display', showLegs ? null : 'none')
+                    .attr('cx', 0)
+                    .attr('cy', legTargetY2) // Position at end of leg
+                    .attr('fill', markerStyle.legColor);
             });
     }
 
