@@ -5,12 +5,12 @@
 // export const MY_CONSTANT = ...;
 
 /**
- * Creates the base HTML content for a tooltip based on diagram info object.
+ * Creates the base HTML content for a popup based on diagram info object.
  * Generic version that does not depend on external config.
- * @param {object} info - The tooltipInfo object from the ESBD callback.
+ * @param {object} info - The info object from the ESBD callback.
  * Expected fields: labelString, speciesId, traceId, curveType,
  * xValue, yValueDisplayed, currentMode, regionInfo.
- * @returns {string} - Basic HTML string for the tooltip, using KaTeX delimiters.
+ * @returns {string} - Basic HTML string for the popup, using KaTeX delimiters.
  */
 export function formatPopupBaseContent(info) {
     // Use info directly
@@ -86,20 +86,15 @@ export function debounce(func, wait) {
     let timeoutId = null; // Store timeout ID accessible by returned function and cancel method
 
     const debounced = function executedFunction(...args) {
-        // 'this' context is preserved from where debounced is called
         const context = this;
-        // Define the function to run after the delay
         const later = () => {
-            timeoutId = null; // Clear the timeout ID *before* execution
-            func.apply(context, args); // Call the original function
+            timeoutId = null;
+            func.apply(context, args);
         };
-        // Clear any existing timer
         clearTimeout(timeoutId);
-        // Set a new timer
         timeoutId = setTimeout(later, wait);
     };
 
-    // Add the cancel method to the debounced function object
     debounced.cancel = function () {
         clearTimeout(timeoutId);
         timeoutId = null;
