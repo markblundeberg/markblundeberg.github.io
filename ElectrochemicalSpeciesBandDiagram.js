@@ -51,6 +51,10 @@ const STYLE_DEFAULTS = {
  * Interaction model: Click/Tap shows persistent popup and highlight. Click background clears.
  */
 class ElectrochemicalSpeciesBandDiagram {
+    // ========================================================================
+    // Constructor
+    // ========================================================================
+
     /**
      * Creates an instance of the ESBD diagram.
      * @param {string} containerId - ID of the HTML element to contain the plot.
@@ -149,105 +153,9 @@ class ElectrochemicalSpeciesBandDiagram {
         );
     }
 
-    _setupD3Structure() {
-        this.svg = this.container
-            .append('svg')
-            .attr('class', 'esbd-svg')
-            .attr('width', this.config.width)
-            .attr('height', this.config.height)
-            .style('position', 'absolute') // make sure position:absolute to avoid resize infinite loops!
-            .style('-webkit-tap-highlight-color', 'transparent');
-
-        this.plotArea = this.svg
-            .append('g')
-            .attr('class', 'esbd-plot-area')
-            .attr(
-                'transform',
-                `translate(${this.config.margin.left},${this.config.margin.top})`
-            );
-
-        // Layer groups (order matters for rendering)
-        this.backgroundGroup = this.plotArea
-            .append('g')
-            .attr('class', 'esbd-backgrounds');
-        this.interfaceGroup = this.plotArea
-            .append('g')
-            .attr('class', 'esbd-interfaces');
-        this.gridGroup = this.plotArea
-            .append('g')
-            .attr('class', 'esbd-grid')
-            .style('pointer-events', 'none');
-        this.connectorsGroup = this.plotArea
-            .append('g')
-            .attr('class', 'esbd-connectors')
-            .style('pointer-events', 'none');
-        this.linesGroup = this.plotArea.append('g').attr('class', 'esbd-lines');
-        // Interaction rectangle sits ON TOP of lines but BELOW markers/labels
-        this.interactionRect = this.plotArea
-            .append('rect')
-            .attr('class', 'esbd-interaction-overlay')
-            .style('fill', 'none')
-            .style('pointer-events', 'all'); // Catches events not caught by elements above it
-        this.verticalMarkersGroup = this.plotArea
-            .append('g')
-            .attr('class', 'esbd-vertical-markers');
-        this.labelsGroup = this.plotArea
-            .append('g')
-            .attr('class', 'esbd-labels')
-            .style('pointer-events', 'none');
-        this.customGroup = this.plotArea
-            .append('g')
-            .attr('class', 'esbd-custom-drawing');
-
-        // Scales & Axes
-        this.xScale = d3.scaleLinear();
-        this.yScale = d3.scaleLinear();
-        this.xAxisGen = d3.axisBottom(this.xScale);
-        this.yAxisGen = d3.axisLeft(this.yScale);
-        this.xAxisGroup = this.plotArea
-            .append('g')
-            .attr('class', 'esbd-x-axis');
-        this.yAxisGroup = this.plotArea
-            .append('g')
-            .attr('class', 'esbd-y-axis');
-
-        // Interactive Y-Axis Label
-        this.yAxisLabel = this.svg
-            .append('text')
-            .attr('class', 'esbd-y-axis-label esbd-interactive')
-            .style('text-anchor', 'middle')
-            .style('cursor', 'pointer')
-            .style('-webkit-user-select', 'none')
-            .style('user-select', 'none')
-            .on('click', () => this._handleYAxisLabelClick());
-
-        // Line generator template
-        this.lineGenerator = d3
-            .line()
-            .x((d) => this.xScale(d.x))
-            .y((d) => this.yScale(d.y_display)) // Use y_display for plotting
-            .defined(
-                (d) =>
-                    d.y_display !== null &&
-                    !isNaN(d.y_display) &&
-                    isFinite(d.y_display)
-            );
-
-        // --- Interaction Rect Listeners ---
-        this.interactionRect
-            .on('pointermove', (event) =>
-                this._handlePointerMoveInteractionRect(event)
-            ) // Throttled hover check
-            .on('pointerout', (event) =>
-                this._handlePointerOutInteractionRect(event)
-            ) // Clear hover highlight
-            .on('click', (event) => this._handleClickInteraction(event, null)); // Background click
-
-        // Note: Listeners for markers (including hover) are added in _drawVerticalMarkers
-        // Note: Lines have pointer-events: none
-    }
-
-    // --- Public API Methods ---
+    // ========================================================================
+    // Public API Methods
+    // ========================================================================
 
     /** Stores properties for a given species ID. */
     addSpeciesInfo(speciesId, properties) {
@@ -508,24 +416,10 @@ class ElectrochemicalSpeciesBandDiagram {
         this._drawLabels();
     }
 
-    /** Cleans up resources like observers and listeners. */
-    destroy() {
-        if (this._resizeObserver) {
-            this._resizeObserver.disconnect();
-        }
-        if (
-            this._debouncedHandleResize &&
-            typeof this._debouncedHandleResize.cancel === 'function'
-        ) {
-            this._debouncedHandleResize.cancel();
-        }
-        clearTimeout(this._hoverThrottleTimeout);
-        this._hidePopup();
-        this.container.html('');
-        console.log('ESBD Destroyed.');
-    }
+    // ========================================================================
+    // Public Accessors (Getters)
+    // ========================================================================
 
-    // --- Public Accessors ---
     get svgNode() {
         return this.svg?.node();
     }
@@ -555,7 +449,107 @@ class ElectrochemicalSpeciesBandDiagram {
         );
     }
 
-    // --- "Private" Helper Methods ---
+    // ========================================================================
+    // Core Private Setup & Update Logic
+    // ========================================================================
+
+    _setupD3Structure() {
+        this.svg = this.container
+            .append('svg')
+            .attr('class', 'esbd-svg')
+            .attr('width', this.config.width)
+            .attr('height', this.config.height)
+            .style('position', 'absolute') // make sure position:absolute to avoid resize infinite loops!
+            .style('-webkit-tap-highlight-color', 'transparent');
+
+        this.plotArea = this.svg
+            .append('g')
+            .attr('class', 'esbd-plot-area')
+            .attr(
+                'transform',
+                `translate(${this.config.margin.left},${this.config.margin.top})`
+            );
+
+        // Layer groups (order matters for rendering)
+        this.backgroundGroup = this.plotArea
+            .append('g')
+            .attr('class', 'esbd-backgrounds');
+        this.interfaceGroup = this.plotArea
+            .append('g')
+            .attr('class', 'esbd-interfaces');
+        this.gridGroup = this.plotArea
+            .append('g')
+            .attr('class', 'esbd-grid')
+            .style('pointer-events', 'none');
+        this.connectorsGroup = this.plotArea
+            .append('g')
+            .attr('class', 'esbd-connectors')
+            .style('pointer-events', 'none');
+        this.linesGroup = this.plotArea.append('g').attr('class', 'esbd-lines');
+        // Interaction rectangle sits ON TOP of lines but BELOW markers/labels
+        this.interactionRect = this.plotArea
+            .append('rect')
+            .attr('class', 'esbd-interaction-overlay')
+            .style('fill', 'none')
+            .style('pointer-events', 'all'); // Catches events not caught by elements above it
+        this.verticalMarkersGroup = this.plotArea
+            .append('g')
+            .attr('class', 'esbd-vertical-markers');
+        this.labelsGroup = this.plotArea
+            .append('g')
+            .attr('class', 'esbd-labels')
+            .style('pointer-events', 'none');
+        this.customGroup = this.plotArea
+            .append('g')
+            .attr('class', 'esbd-custom-drawing');
+
+        // Scales & Axes
+        this.xScale = d3.scaleLinear();
+        this.yScale = d3.scaleLinear();
+        this.xAxisGen = d3.axisBottom(this.xScale);
+        this.yAxisGen = d3.axisLeft(this.yScale);
+        this.xAxisGroup = this.plotArea
+            .append('g')
+            .attr('class', 'esbd-x-axis');
+        this.yAxisGroup = this.plotArea
+            .append('g')
+            .attr('class', 'esbd-y-axis');
+
+        // Interactive Y-Axis Label
+        this.yAxisLabel = this.svg
+            .append('text')
+            .attr('class', 'esbd-y-axis-label esbd-interactive')
+            .style('text-anchor', 'middle')
+            .style('cursor', 'pointer')
+            .style('-webkit-user-select', 'none')
+            .style('user-select', 'none')
+            .on('click', () => this._handleYAxisLabelClick());
+
+        // Line generator template
+        this.lineGenerator = d3
+            .line()
+            .x((d) => this.xScale(d.x))
+            .y((d) => this.yScale(d.y_display)) // Use y_display for plotting
+            .defined(
+                (d) =>
+                    d.y_display !== null &&
+                    !isNaN(d.y_display) &&
+                    isFinite(d.y_display)
+            );
+
+        // --- Interaction Rect Listeners ---
+        this.interactionRect
+            .on('pointermove', (event) =>
+                this._handlePointerMoveInteractionRect(event)
+            ) // Throttled hover check
+            .on('pointerout', (event) =>
+                this._handlePointerOutInteractionRect(event)
+            ) // Clear hover highlight
+            .on('click', (event) => this._handleClickInteraction(event, null)); // Background click
+
+        // Note: Listeners for markers (including hover) are added in _drawVerticalMarkers
+        // Note: Lines have pointer-events: none
+    }
 
     _handleResize(width, height, shouldRedraw = true) {
         // Update config dimensions based on container size reported by observer
@@ -590,92 +584,6 @@ class ElectrochemicalSpeciesBandDiagram {
         if (shouldRedraw && this.traceData.length > 0) {
             this.redraw();
         }
-    }
-
-    _handleYAxisLabelClick() {
-        const modes = ['Volts', 'eV', 'kJmol'];
-        const currentIdx = modes.indexOf(this.config.mode);
-        const nextIdx = (currentIdx + 1) % modes.length;
-        this.setMode(modes[nextIdx]);
-    }
-
-    _getYAxisLabel() {
-        // Add unicode arrows or similar to hint clickability
-        const arrows = ' \u21F5 '; // Up down arrows symbol
-        switch (this.config.mode) {
-            case 'eV':
-                return `Energy (eV)${arrows}`; // E = -eV convention
-            case 'kJmol':
-                return `Molar Energy / z (kJ/mol)${arrows}`; // G = FV = μ̄/z
-            case 'Volts':
-            default:
-                return `Potential (V)${arrows}`; // V = μ̄/(zF)
-        }
-    }
-
-    /** Converts input data value to the internal V_volt representation. */
-    _convertToVolts(value, inputUnit, z) {
-        if (value === null || !isFinite(value)) return null;
-
-        switch (inputUnit) {
-            case 'mu_bar_kJmol':
-                if (z === null || typeof z !== 'number' || z === 0) {
-                    console.warn(
-                        `ESBD Warn: Cannot convert 'mu_bar_kJmol' to Volts without valid non-zero charge z (received z=${z}).`
-                    );
-                    return null;
-                }
-                return (value * 1000) / (z * F); // V = μ̄/(zF)
-
-            case 'mu_bar_eV':
-                if (z === null || typeof z !== 'number' || z === 0) {
-                    console.warn(
-                        `ESBD Warn: Cannot convert 'mu_bar_eV' to Volts without valid non-zero charge z (received z=${z}).`
-                    );
-                    return null;
-                }
-                // V = value[eV] / z
-                return value / z;
-
-            case 'E_band_eV':
-                // Convention V = -E_band / e_charge
-                return -value / V_TO_EV_PER_CHARGE; // Effectively -value
-
-            case 'phi_V':
-                return value; // V_phi = phi
-
-            case 'V_volt':
-                return value;
-
-            default:
-                console.warn(
-                    `ESBD Warn: Unknown input unit "${inputUnit}" for conversion to Volts.`
-                );
-                return null;
-        }
-    }
-
-    /** Scales the internal V_volt value to the final display unit based on mode. */
-    _scaleVoltToDisplay(value_volt, z) {
-        if (value_volt === null || !isFinite(value_volt)) return null;
-
-        switch (this.config.mode) {
-            case 'Volts':
-                return value_volt; // Factor = +1
-
-            case 'eV':
-                // E = -V_volt * V_TO_EV_PER_CHARGE (where constant is 1)
-                // Represents Energy in eV using E = -V convention
-                return value_volt * -V_TO_EV_PER_CHARGE; // Factor = -1
-
-            case 'kJmol':
-                // G = V_volt * F_kJmol
-                // Represents Molar Energy / z in kJ/mol (if V_volt derived from mu_bar)
-                // Or represents F*phi/1000 if V_volt derived from phi_V
-                // Or represents -Na*E_band/1000 if V_volt derived from E_band_eV
-                return value_volt * F_kJmol; // Factor = +F/1000
-        }
-        return null;
     }
 
     /** Processes traceDefs, converts inputs to internal V_volt, then scales to y_display */
@@ -764,52 +672,9 @@ class ElectrochemicalSpeciesBandDiagram {
         return processedTraces;
     }
 
-    /**
-     * Generates default label based on mode, species name, curve type, and species ID.
-     * Returns raw LaTeX string without delimiters.
-     */
-    _getAutoLabel(prettyName, curveType) {
-        let symbol = '?';
-        let subscript = prettyName || '?'; // Default to species name
-        let superscript = '';
-
-        // Determine base symbol based ONLY on mode
-        symbol = { Volts: 'V', eV: 'E', kJmol: 'G' }[this.config.mode] || '?';
-
-        // Add superscripts or modify symbol/subscript based on curveType
-        switch (curveType) {
-            case 'standardState':
-                superscript = '\\ominus';
-                break;
-            case 'bandEdge_C':
-            case 'bandEdge_V':
-            case 'bandEdge':
-                superscript = '\\text{band}';
-                break;
-            case 'phi':
-                // special case! for volt mode we show \phi, not V_\phi
-                symbol =
-                    { Volts: '\\phi', eV: 'E', kJmol: 'G' }[this.config.mode] ||
-                    '?';
-                subscript = this.config.mode === 'Volts' ? '' : '\\phi';
-                break;
-            case 'potential': // Default case, no changes needed to symbol/subscript/superscript
-            default:
-                // Keep symbol from mode, keep subscript from prettyName
-                // Clear subscript if prettyName was null/undefined?
-                if (!prettyName) subscript = '';
-                break;
-        }
-
-        // Construct final label string (no delimiters)
-        if (subscript) {
-            // Format like V_{Ag^{+}}^{\ominus} or E^{band}_{e^{-}}
-            return `${symbol}${superscript ? `^{${superscript}}` : ''}_{${subscript}}`;
-        } else {
-            // Format like \phi or V^{\ominus} (if prettyName was cleared)
-            return `${symbol}${superscript ? `^{${superscript}}` : ''}`;
-        }
-    }
+    // ========================================================================
+    // Private Drawing Helpers
+    // ========================================================================
 
     _drawBackgrounds() {
         if (
@@ -990,367 +855,6 @@ class ElectrochemicalSpeciesBandDiagram {
             .attr('y2', (d) => this.yScale(d.y2));
     }
 
-    _drawLabels() {
-        const labelData = this.lastDrawData.filter(
-            (d) => d.labelPos && d.showLabel && d.labelString
-        );
-
-        this.labelsGroup
-            .selectAll('foreignObject.esbd-line-label')
-            .data(labelData, (d) => d.id)
-            .join(
-                (enter) =>
-                    enter
-                        .append('foreignObject')
-                        .attr('class', 'esbd-line-label')
-                        .attr('width', 1)
-                        .attr('height', 1) // Start small, let content expand
-                        .style('overflow', 'visible')
-                        .style('pointer-events', 'none') // Labels shouldn't block interaction
-                        .html(
-                            (d) =>
-                                `<span class="katex-label-container" style="color: ${d.color}; white-space: nowrap; display: inline-block; padding: 1px 3px; background: rgba(255,255,255,0.7); border-radius: 2px;"></span>`
-                        ),
-                // Added background for readability
-                (update) => update,
-                (exit) =>
-                    exit
-                        .transition()
-                        .duration(this.config.transitionDuration)
-                        .style('opacity', 0)
-                        .remove()
-            )
-            .each(function (d) {
-                const fo = d3.select(this);
-                const span = fo.select('.katex-label-container').node();
-                // Render KaTeX (ensure KaTeX JS is loaded)
-                if (span && typeof katex !== 'undefined') {
-                    try {
-                        katex.render(d.labelString, span, {
-                            throwOnError: false,
-                            displayMode: false,
-                        });
-                    } catch (error) {
-                        span.textContent = d.speciesId || d.id;
-                    }
-                } else {
-                    if (span) span.textContent = d.speciesId || d.id;
-                }
-            })
-            // Apply transitions AFTER KaTeX might have changed size (slight delay ok)
-            .transition()
-            .duration(this.config.transitionDuration)
-            .attr('x', (d) => this.xScale(d.labelPos.x) + 5)
-            // Adjust y to roughly center the label vertically on the line end point
-            // This assumes ~1em line height; might need refinement based on actual rendered height
-            .attr('y', (d) => this.yScale(d.labelPos.y) - 10);
-        // TODO: Smarter label positioning to avoid overlaps.
-    }
-
-    // --- Interaction & Popup/Highlight Methods ---
-
-    /** Hides the popup and resets all highlights and pinned state. */
-    _hidePopup() {
-        this._popupDiv.style('visibility', 'hidden').style('opacity', 0);
-        this._setActiveHighlight(null); // Clear any active highlight (pinned or hover)
-        this._pinnedPopupInfo = null; // Clear pinned state
-    }
-
-    /** Gathers info, calls callback, shows popup for a data trace */
-    _showTracePopup(event, closestResult) {
-        const trace = closestResult.trace;
-        const point = closestResult.pointData;
-        const xValue = point.x;
-
-        // Find Region Info
-        let regionIndex = -1;
-        let regionInfo = null;
-        if (this.boundaries && this.boundaries.length > 1) {
-            // Find index i such that boundaries[i] <= xValue < boundaries[i+1]
-            // or boundaries[i] <= xValue <= boundaries[i+1] for the last region
-            regionIndex = this.boundaries.findIndex((b, i, arr) => {
-                if (i === arr.length - 1) return false; // Stop before last boundary element
-                const next_b = arr[i + 1];
-                const isLastRegionCheck = i === arr.length - 2; // Is this the last interval?
-                // Check within bounds, handle floating point precision near boundaries
-                const epsilon = 1e-9; // Small tolerance
-                return (
-                    xValue >= b - epsilon &&
-                    (xValue < next_b - epsilon ||
-                        (isLastRegionCheck && xValue <= next_b + epsilon))
-                );
-            });
-
-            if (
-                regionIndex !== -1 &&
-                this.regionProps &&
-                this.regionProps[regionIndex]
-            ) {
-                regionInfo = {
-                    index: regionIndex,
-                    name:
-                        this.regionProps[regionIndex].name ||
-                        `Region ${regionIndex}`,
-                    color: this.regionProps[regionIndex].color, // Pass color too
-                    startX: this.boundaries[regionIndex],
-                    endX: this.boundaries[regionIndex + 1],
-                };
-            } else {
-                // Handle case where xValue might be exactly on the start/end boundary?
-                // Or slightly outside due to padding/nice(). Assign to nearest?
-                // For now, null if not strictly within a defined region.
-                // console.warn(`Could not find region for xValue: ${xValue}`);
-            }
-        }
-
-        const popupInfo = {
-            speciesId: trace.speciesId,
-            traceId: trace.id,
-            curveType: trace.curveType,
-            labelString: trace.labelString,
-            xValue: xValue,
-            yValueDisplayed: point.y_display,
-            yValueVolts: point.y_volt,
-            yValueSource: point.source_y,
-            yValueSourceUnits: point.source_units,
-            currentMode: this.config.mode,
-            regionIndex: regionIndex,
-            regionInfo: regionInfo,
-            pointEvent: event,
-        };
-
-        try {
-            const content = this._tracePopupCallback(popupInfo);
-            if (content) {
-                this._pinnedPopupInfo = ['trace', trace.id]; // Set pin state
-                this._setPopup(event, content); // Show popup
-                this._setActiveHighlight({ type: 'trace', id: trace.id }); // Set highlight
-            } else {
-                this._hidePopup();
-            }
-        } catch (e) {
-            console.error('Error in trace popup callback:', e);
-            this._hidePopup();
-        }
-    }
-
-    /** Applies/resets highlight style ONLY for data traces. */
-    _applyHighlight(targetTraceId) {
-        const highlightWidthIncrease = 2;
-        const isPinned = targetTraceId !== null; // Check if a specific trace should be highlighted
-        this.linesGroup
-            .selectAll('path.esbd-data-line')
-            .interrupt()
-            .transition()
-            .duration(50)
-            .style('opacity', 1.0) // Keep all lines opaque
-            .attr('stroke-width', (d) =>
-                isPinned && d.id === targetTraceId
-                    ? d.style.lineWidth + highlightWidthIncrease
-                    : d.style.lineWidth
-            );
-    }
-
-    /** Applies/resets highlight styles ONLY for vertical markers. */
-    _applyVerticalMarkerHighlight(targetMarkerId) {
-        const markerStyle = STYLE_DEFAULTS.verticalMarker;
-        const isPinned = targetMarkerId !== null; // Check if a specific marker should be highlighted
-        this.verticalMarkersGroup
-            .selectAll('g.esbd-vertical-marker circle.marker-bg')
-            .interrupt()
-            .transition()
-            .duration(50)
-            .attr('fill', (d) =>
-                isPinned && d.id === targetMarkerId
-                    ? markerStyle.highlightColor
-                    : markerStyle.backgroundColor
-            )
-            .attr('stroke', (d) =>
-                isPinned && d.id === targetMarkerId
-                    ? markerStyle.highlightStroke ||
-                      markerStyle.backgroundStroke
-                    : markerStyle.backgroundStroke
-            );
-    }
-
-    /** Sets the active highlight, ensuring only one element is highlighted. */
-    _setActiveHighlight(highlightInfo = null) {
-        // Avoid redundant work if highlight target hasn't changed
-        if (
-            this._highlightedElementInfo?.type === highlightInfo?.type &&
-            this._highlightedElementInfo?.id === highlightInfo?.id
-        ) {
-            return;
-        }
-
-        const newType = highlightInfo?.type;
-        const newId = highlightInfo?.id;
-
-        // Reset highlights based on type (call simplified helpers)
-        this._applyHighlight(newType === 'trace' ? newId : null);
-        this._applyVerticalMarkerHighlight(newType === 'marker' ? newId : null);
-        // Add resets for other future types here
-
-        // Store the new highlight state
-        this._highlightedElementInfo = highlightInfo;
-    }
-
-    /** Sets the popup content, renders KaTeX, calculates position, displays it. */
-    _setPopup(event, htmlContent) {
-        if (!htmlContent) {
-            this._hidePopup();
-            return;
-        }
-        this._popupDiv.html(htmlContent);
-        if (typeof renderMathInElement === 'function') {
-            try {
-                renderMathInElement(this._popupDiv.node(), {
-                    delimiters: [
-                        { left: '$$', right: '$$', display: true },
-                        { left: '$', right: '$', display: false },
-                        { left: '\\(', right: '\\)', display: false },
-                        { left: '\\[', right: '\\]', display: true },
-                    ],
-                    throwOnError: false,
-                });
-            } catch (e) {
-                console.error(e);
-            }
-        } else {
-            console.warn('KaTeX auto-render extension not loaded.');
-        }
-
-        // Measure actual popup dimensions
-        const popupNode = this._popupDiv.node();
-        const popupWidth = popupNode.offsetWidth;
-        const popupHeight = popupNode.offsetHeight;
-
-        // Get coordinates relative to container for positioning anchor
-        const [containerX, containerY] = d3.pointer(
-            event,
-            this.container.node()
-        );
-        const containerWidth = this.container.node().clientWidth;
-        const containerHeight = this.config.height;
-
-        let targetX = containerX + 15;
-        let targetY = containerY - 15 - popupHeight;
-        if (targetX + popupWidth > containerWidth) {
-            targetX = containerX - 15 - popupWidth;
-        }
-        if (targetX < 0) {
-            targetX = 5;
-        }
-        if (targetY < 0) {
-            targetY = containerY + 15;
-        }
-        if (targetY + popupHeight > containerHeight) {
-            targetY = containerHeight - popupHeight - 5;
-        }
-        this._popupDiv
-            .style('left', `${targetX}px`)
-            .style('top', `${targetY}px`)
-            .style('visibility', 'visible')
-            .style('opacity', 1);
-    }
-
-    /**
-     * Finds the trace that is vertically closest to the pointer at a given x-coordinate.
-     * @param {number} xValue - The x-coordinate in data space.
-     * @param {number} pointerY - The y-coordinate of the pointer in pixel space.
-     * @returns {object | null} - Object { trace, pointData, minDistPx } or null if no suitable trace found.
-     */
-    _findClosestTrace(xValue, pointerY) {
-        let closestTraceInfo = null;
-        let minDistPx = Infinity;
-
-        this.lastDrawData.forEach((trace) => {
-            const originalTraceDef = this.traceData.find(
-                (td) => td.id === trace.id
-            );
-            const xRange = originalTraceDef?.xRange;
-            const isInExplicitRange =
-                !xRange || (xValue >= xRange.min && xValue <= xRange.max);
-
-            // Also check if the trace actually has points spanning this xValue
-            // (Handles cases where xRange might be wider than actual data points provided)
-            const hasPointsInRange =
-                trace.points.length >= 2 &&
-                xValue >= trace.points[0].x &&
-                xValue <= trace.points[trace.points.length - 1].x;
-
-            if (!isInExplicitRange || !hasPointsInRange) {
-                return; // Skip trace if xValue is outside its defined range or data extent
-            }
-
-            // Find points bracketing xValue and interpolate y_display
-            let y_interp = null;
-            let p_interp = null;
-            const bisect = d3.bisector((p) => p.x).left;
-            const index = bisect(trace.points, xValue, 1);
-            const p0 = trace.points[index - 1];
-            const p1 = trace.points[index];
-
-            if (p0 && p1) {
-                if (p1.x === p0.x) {
-                    // Vertical segment
-                    if (Math.abs(p0.x - xValue) < 1e-9) {
-                        y_interp =
-                            Math.abs(this.yScale(p0.y_display) - pointerY) <
-                            Math.abs(this.yScale(p1.y_display) - pointerY)
-                                ? p0.y_display
-                                : p1.y_display;
-                        p_interp = y_interp === p0.y_display ? p0 : p1;
-                    }
-                } else {
-                    // Interpolate
-                    const t = (xValue - p0.x) / (p1.x - p0.x);
-                    if (
-                        p0.y_display !== null &&
-                        isFinite(p0.y_display) &&
-                        p1.y_display !== null &&
-                        isFinite(p1.y_display)
-                    ) {
-                        y_interp =
-                            p0.y_display + t * (p1.y_display - p0.y_display);
-                        // Create an interpolated point data object
-                        p_interp = {
-                            x: xValue,
-                            y_display: y_interp,
-                            // Interpolate y_volt as well? Or take from nearest point? Let's take from nearest for simplicity.
-                            y_volt: t < 0.5 ? p0.y_volt : p1.y_volt,
-                            source_y: t < 0.5 ? p0.source_y : p1.source_y,
-                            source_units:
-                                t < 0.5 ? p0.source_units : p1.source_units,
-                        };
-                    }
-                }
-            } else if (p0 || p1) {
-                // Edge case: xValue might match first or last point
-                const p_edge = p0 || p1;
-                if (Math.abs(p_edge.x - xValue) < 1e-9) {
-                    y_interp = p_edge.y_display;
-                    p_interp = p_edge;
-                }
-            }
-
-            // Calculate vertical distance in pixels if interpolation was successful
-            if (y_interp !== null && isFinite(y_interp)) {
-                const distY = Math.abs(this.yScale(y_interp) - pointerY);
-                if (distY < minDistPx) {
-                    minDistPx = distY;
-                    closestTraceInfo = {
-                        trace: trace, // The full trace object from lastDrawData
-                        pointData: p_interp, // The specific (potentially interpolated) point data
-                        minDistPx: distY, // Store the distance found
-                    };
-                }
-            }
-        }); // End loop through traces
-
-        return closestTraceInfo; // Return object { trace, pointData, minDistPx } or null
-    }
-
     /** Draws or updates the vertical marker symbols. */
     _drawVerticalMarkers() {
         const markerData = Array.from(this.verticalMarkers.entries())
@@ -1504,6 +1008,74 @@ class ElectrochemicalSpeciesBandDiagram {
             });
     }
 
+    _drawLabels() {
+        const labelData = this.lastDrawData.filter(
+            (d) => d.labelPos && d.showLabel && d.labelString
+        );
+
+        this.labelsGroup
+            .selectAll('foreignObject.esbd-line-label')
+            .data(labelData, (d) => d.id)
+            .join(
+                (enter) =>
+                    enter
+                        .append('foreignObject')
+                        .attr('class', 'esbd-line-label')
+                        .attr('width', 1)
+                        .attr('height', 1) // Start small, let content expand
+                        .style('overflow', 'visible')
+                        .style('pointer-events', 'none') // Labels shouldn't block interaction
+                        .html(
+                            (d) =>
+                                `<span class="katex-label-container" style="color: ${d.color}; white-space: nowrap; display: inline-block; padding: 1px 3px; background: rgba(255,255,255,0.7); border-radius: 2px;"></span>`
+                        ),
+                // Added background for readability
+                (update) => update,
+                (exit) =>
+                    exit
+                        .transition()
+                        .duration(this.config.transitionDuration)
+                        .style('opacity', 0)
+                        .remove()
+            )
+            .each(function (d) {
+                const fo = d3.select(this);
+                const span = fo.select('.katex-label-container').node();
+                // Render KaTeX (ensure KaTeX JS is loaded)
+                if (span && typeof katex !== 'undefined') {
+                    try {
+                        katex.render(d.labelString, span, {
+                            throwOnError: false,
+                            displayMode: false,
+                        });
+                    } catch (error) {
+                        span.textContent = d.speciesId || d.id;
+                    }
+                } else {
+                    if (span) span.textContent = d.speciesId || d.id;
+                }
+            })
+            // Apply transitions AFTER KaTeX might have changed size (slight delay ok)
+            .transition()
+            .duration(this.config.transitionDuration)
+            .attr('x', (d) => this.xScale(d.labelPos.x) + 5)
+            // Adjust y to roughly center the label vertically on the line end point
+            // This assumes ~1em line height; might need refinement based on actual rendered height
+            .attr('y', (d) => this.yScale(d.labelPos.y) - 10);
+        // TODO: Smarter label positioning to avoid overlaps.
+    }
+
+    // ========================================================================
+    // Private Interaction Handlers
+    // ========================================================================
+
+    _handleYAxisLabelClick() {
+        const modes = ['Volts', 'eV', 'kJmol'];
+        const currentIdx = modes.indexOf(this.config.mode);
+        const nextIdx = (currentIdx + 1) % modes.length;
+        this.setMode(modes[nextIdx]);
+    }
+
     /** Handles all click events on the plot area */
     _handleClickInteraction(event, targetId = null) {
         if (targetId) {
@@ -1541,6 +1113,84 @@ class ElectrochemicalSpeciesBandDiagram {
         } else if (this.verticalMarkers.has(targetId)) {
             // Click was on a vertical marker -> Show marker popup
             this._showVerticalMarkerPopup(event, targetId);
+        }
+    }
+
+    /** Gathers info, calls callback, shows popup for a data trace */
+    _showTracePopup(event, closestResult) {
+        const trace = closestResult.trace;
+        const point = closestResult.pointData;
+        const xValue = point.x;
+
+        // Find Region Info
+        let regionIndex = -1;
+        let regionInfo = null;
+        if (this.boundaries && this.boundaries.length > 1) {
+            // Find index i such that boundaries[i] <= xValue < boundaries[i+1]
+            // or boundaries[i] <= xValue <= boundaries[i+1] for the last region
+            regionIndex = this.boundaries.findIndex((b, i, arr) => {
+                if (i === arr.length - 1) return false; // Stop before last boundary element
+                const next_b = arr[i + 1];
+                const isLastRegionCheck = i === arr.length - 2; // Is this the last interval?
+                // Check within bounds, handle floating point precision near boundaries
+                const epsilon = 1e-9; // Small tolerance
+                return (
+                    xValue >= b - epsilon &&
+                    (xValue < next_b - epsilon ||
+                        (isLastRegionCheck && xValue <= next_b + epsilon))
+                );
+            });
+
+            if (
+                regionIndex !== -1 &&
+                this.regionProps &&
+                this.regionProps[regionIndex]
+            ) {
+                regionInfo = {
+                    index: regionIndex,
+                    name:
+                        this.regionProps[regionIndex].name ||
+                        `Region ${regionIndex}`,
+                    color: this.regionProps[regionIndex].color, // Pass color too
+                    startX: this.boundaries[regionIndex],
+                    endX: this.boundaries[regionIndex + 1],
+                };
+            } else {
+                // Handle case where xValue might be exactly on the start/end boundary?
+                // Or slightly outside due to padding/nice(). Assign to nearest?
+                // For now, null if not strictly within a defined region.
+                // console.warn(`Could not find region for xValue: ${xValue}`);
+            }
+        }
+
+        const popupInfo = {
+            speciesId: trace.speciesId,
+            traceId: trace.id,
+            curveType: trace.curveType,
+            labelString: trace.labelString,
+            xValue: xValue,
+            yValueDisplayed: point.y_display,
+            yValueVolts: point.y_volt,
+            yValueSource: point.source_y,
+            yValueSourceUnits: point.source_units,
+            currentMode: this.config.mode,
+            regionIndex: regionIndex,
+            regionInfo: regionInfo,
+            pointEvent: event,
+        };
+
+        try {
+            const content = this._tracePopupCallback(popupInfo);
+            if (content) {
+                this._pinnedPopupInfo = ['trace', trace.id]; // Set pin state
+                this._setPopup(event, content); // Show popup
+                this._setActiveHighlight({ type: 'trace', id: trace.id }); // Set highlight
+            } else {
+                this._hidePopup();
+            }
+        } catch (e) {
+            console.error('Error in trace popup callback:', e);
+            this._hidePopup();
         }
     }
 
@@ -1642,6 +1292,385 @@ class ElectrochemicalSpeciesBandDiagram {
             }
             // No tooltip to hide in this version
         }
+    }
+
+    // ========================================================================
+    // Private Popup/Highlight Helpers
+    // ========================================================================
+
+    /** Sets the popup content, renders KaTeX, calculates position, displays it. */
+    _setPopup(event, htmlContent) {
+        if (!htmlContent) {
+            this._hidePopup();
+            return;
+        }
+        this._popupDiv.html(htmlContent);
+        if (typeof renderMathInElement === 'function') {
+            try {
+                renderMathInElement(this._popupDiv.node(), {
+                    delimiters: [
+                        { left: '$$', right: '$$', display: true },
+                        { left: '$', right: '$', display: false },
+                        { left: '\\(', right: '\\)', display: false },
+                        { left: '\\[', right: '\\]', display: true },
+                    ],
+                    throwOnError: false,
+                });
+            } catch (e) {
+                console.error(e);
+            }
+        } else {
+            console.warn('KaTeX auto-render extension not loaded.');
+        }
+
+        // Measure actual popup dimensions
+        const popupNode = this._popupDiv.node();
+        const popupWidth = popupNode.offsetWidth;
+        const popupHeight = popupNode.offsetHeight;
+
+        // Get coordinates relative to container for positioning anchor
+        const [containerX, containerY] = d3.pointer(
+            event,
+            this.container.node()
+        );
+        const containerWidth = this.container.node().clientWidth;
+        const containerHeight = this.config.height;
+
+        let targetX = containerX + 15;
+        let targetY = containerY - 15 - popupHeight;
+        if (targetX + popupWidth > containerWidth) {
+            targetX = containerX - 15 - popupWidth;
+        }
+        if (targetX < 0) {
+            targetX = 5;
+        }
+        if (targetY < 0) {
+            targetY = containerY + 15;
+        }
+        if (targetY + popupHeight > containerHeight) {
+            targetY = containerHeight - popupHeight - 5;
+        }
+        this._popupDiv
+            .style('left', `${targetX}px`)
+            .style('top', `${targetY}px`)
+            .style('visibility', 'visible')
+            .style('opacity', 1);
+    }
+
+    /** Hides the popup and resets all highlights and pinned state. */
+    _hidePopup() {
+        this._popupDiv.style('visibility', 'hidden').style('opacity', 0);
+        this._setActiveHighlight(null); // Clear any active highlight (pinned or hover)
+        this._pinnedPopupInfo = null; // Clear pinned state
+    }
+
+    /** Applies/resets highlight style ONLY for data traces. */
+    _applyHighlight(targetTraceId) {
+        const highlightWidthIncrease = 2;
+        const isPinned = targetTraceId !== null; // Check if a specific trace should be highlighted
+        this.linesGroup
+            .selectAll('path.esbd-data-line')
+            .interrupt()
+            .transition()
+            .duration(50)
+            .style('opacity', 1.0) // Keep all lines opaque
+            .attr('stroke-width', (d) =>
+                isPinned && d.id === targetTraceId
+                    ? d.style.lineWidth + highlightWidthIncrease
+                    : d.style.lineWidth
+            );
+    }
+
+    /** Applies/resets highlight styles ONLY for vertical markers. */
+    _applyVerticalMarkerHighlight(targetMarkerId) {
+        const markerStyle = STYLE_DEFAULTS.verticalMarker;
+        const isPinned = targetMarkerId !== null; // Check if a specific marker should be highlighted
+        this.verticalMarkersGroup
+            .selectAll('g.esbd-vertical-marker circle.marker-bg')
+            .interrupt()
+            .transition()
+            .duration(50)
+            .attr('fill', (d) =>
+                isPinned && d.id === targetMarkerId
+                    ? markerStyle.highlightColor
+                    : markerStyle.backgroundColor
+            )
+            .attr('stroke', (d) =>
+                isPinned && d.id === targetMarkerId
+                    ? markerStyle.highlightStroke ||
+                      markerStyle.backgroundStroke
+                    : markerStyle.backgroundStroke
+            );
+    }
+
+    /** Sets the active highlight, ensuring only one element is highlighted. */
+    _setActiveHighlight(highlightInfo = null) {
+        // Avoid redundant work if highlight target hasn't changed
+        if (
+            this._highlightedElementInfo?.type === highlightInfo?.type &&
+            this._highlightedElementInfo?.id === highlightInfo?.id
+        ) {
+            return;
+        }
+
+        const newType = highlightInfo?.type;
+        const newId = highlightInfo?.id;
+
+        // Reset highlights based on type (call simplified helpers)
+        this._applyHighlight(newType === 'trace' ? newId : null);
+        this._applyVerticalMarkerHighlight(newType === 'marker' ? newId : null);
+        // Add resets for other future types here
+
+        // Store the new highlight state
+        this._highlightedElementInfo = highlightInfo;
+    }
+
+    /**
+     * Finds the trace that is vertically closest to the pointer at a given x-coordinate.
+     * @param {number} xValue - The x-coordinate in data space.
+     * @param {number} pointerY - The y-coordinate of the pointer in pixel space.
+     * @returns {object | null} - Object { trace, pointData, minDistPx } or null if no suitable trace found.
+     */
+    _findClosestTrace(xValue, pointerY) {
+        let closestTraceInfo = null;
+        let minDistPx = Infinity;
+
+        this.lastDrawData.forEach((trace) => {
+            const originalTraceDef = this.traceData.find(
+                (td) => td.id === trace.id
+            );
+            const xRange = originalTraceDef?.xRange;
+            const isInExplicitRange =
+                !xRange || (xValue >= xRange.min && xValue <= xRange.max);
+
+            // Also check if the trace actually has points spanning this xValue
+            // (Handles cases where xRange might be wider than actual data points provided)
+            const hasPointsInRange =
+                trace.points.length >= 2 &&
+                xValue >= trace.points[0].x &&
+                xValue <= trace.points[trace.points.length - 1].x;
+
+            if (!isInExplicitRange || !hasPointsInRange) {
+                return; // Skip trace if xValue is outside its defined range or data extent
+            }
+
+            // Find points bracketing xValue and interpolate y_display
+            let y_interp = null;
+            let p_interp = null;
+            const bisect = d3.bisector((p) => p.x).left;
+            const index = bisect(trace.points, xValue, 1);
+            const p0 = trace.points[index - 1];
+            const p1 = trace.points[index];
+
+            if (p0 && p1) {
+                if (p1.x === p0.x) {
+                    // Vertical segment
+                    if (Math.abs(p0.x - xValue) < 1e-9) {
+                        y_interp =
+                            Math.abs(this.yScale(p0.y_display) - pointerY) <
+                            Math.abs(this.yScale(p1.y_display) - pointerY)
+                                ? p0.y_display
+                                : p1.y_display;
+                        p_interp = y_interp === p0.y_display ? p0 : p1;
+                    }
+                } else {
+                    // Interpolate
+                    const t = (xValue - p0.x) / (p1.x - p0.x);
+                    if (
+                        p0.y_display !== null &&
+                        isFinite(p0.y_display) &&
+                        p1.y_display !== null &&
+                        isFinite(p1.y_display)
+                    ) {
+                        y_interp =
+                            p0.y_display + t * (p1.y_display - p0.y_display);
+                        // Create an interpolated point data object
+                        p_interp = {
+                            x: xValue,
+                            y_display: y_interp,
+                            // Interpolate y_volt as well? Or take from nearest point? Let's take from nearest for simplicity.
+                            y_volt: t < 0.5 ? p0.y_volt : p1.y_volt,
+                            source_y: t < 0.5 ? p0.source_y : p1.source_y,
+                            source_units:
+                                t < 0.5 ? p0.source_units : p1.source_units,
+                        };
+                    }
+                }
+            } else if (p0 || p1) {
+                // Edge case: xValue might match first or last point
+                const p_edge = p0 || p1;
+                if (Math.abs(p_edge.x - xValue) < 1e-9) {
+                    y_interp = p_edge.y_display;
+                    p_interp = p_edge;
+                }
+            }
+
+            // Calculate vertical distance in pixels if interpolation was successful
+            if (y_interp !== null && isFinite(y_interp)) {
+                const distY = Math.abs(this.yScale(y_interp) - pointerY);
+                if (distY < minDistPx) {
+                    minDistPx = distY;
+                    closestTraceInfo = {
+                        trace: trace, // The full trace object from lastDrawData
+                        pointData: p_interp, // The specific (potentially interpolated) point data
+                        minDistPx: distY, // Store the distance found
+                    };
+                }
+            }
+        }); // End loop through traces
+
+        return closestTraceInfo; // Return object { trace, pointData, minDistPx } or null
+    }
+
+    // ========================================================================
+    // Private Calculation/Utility Helpers
+    // ========================================================================
+
+    /**
+     * Generates default label based on mode, species name, curve type, and species ID.
+     * Returns raw LaTeX string without delimiters.
+     */
+    _getAutoLabel(prettyName, curveType) {
+        let symbol = '?';
+        let subscript = prettyName || '?'; // Default to species name
+        let superscript = '';
+
+        // Determine base symbol based ONLY on mode
+        symbol = { Volts: 'V', eV: 'E', kJmol: 'G' }[this.config.mode] || '?';
+
+        // Add superscripts or modify symbol/subscript based on curveType
+        switch (curveType) {
+            case 'standardState':
+                superscript = '\\ominus';
+                break;
+            case 'bandEdge_C':
+            case 'bandEdge_V':
+            case 'bandEdge':
+                superscript = '\\text{band}';
+                break;
+            case 'phi':
+                // special case! for volt mode we show \phi, not V_\phi
+                symbol =
+                    { Volts: '\\phi', eV: 'E', kJmol: 'G' }[this.config.mode] ||
+                    '?';
+                subscript = this.config.mode === 'Volts' ? '' : '\\phi';
+                break;
+            case 'potential': // Default case, no changes needed to symbol/subscript/superscript
+            default:
+                // Keep symbol from mode, keep subscript from prettyName
+                // Clear subscript if prettyName was null/undefined?
+                if (!prettyName) subscript = '';
+                break;
+        }
+
+        // Construct final label string (no delimiters)
+        if (subscript) {
+            // Format like V_{Ag^{+}}^{\ominus} or E^{band}_{e^{-}}
+            return `${symbol}${superscript ? `^{${superscript}}` : ''}_{${subscript}}`;
+        } else {
+            // Format like \phi or V^{\ominus} (if prettyName was cleared)
+            return `${symbol}${superscript ? `^{${superscript}}` : ''}`;
+        }
+    }
+
+    _getYAxisLabel() {
+        // Add unicode arrows or similar to hint clickability
+        const arrows = ' \u21F5 '; // Up down arrows symbol
+        switch (this.config.mode) {
+            case 'eV':
+                return `Energy (eV)${arrows}`; // E = -eV convention
+            case 'kJmol':
+                return `Molar Energy / z (kJ/mol)${arrows}`; // G = FV = μ̄/z
+            case 'Volts':
+            default:
+                return `Potential (V)${arrows}`; // V = μ̄/(zF)
+        }
+    }
+
+    /** Converts input data value to the internal V_volt representation. */
+    _convertToVolts(value, inputUnit, z) {
+        if (value === null || !isFinite(value)) return null;
+
+        switch (inputUnit) {
+            case 'mu_bar_kJmol':
+                if (z === null || typeof z !== 'number' || z === 0) {
+                    console.warn(
+                        `ESBD Warn: Cannot convert 'mu_bar_kJmol' to Volts without valid non-zero charge z (received z=${z}).`
+                    );
+                    return null;
+                }
+                return (value * 1000) / (z * F); // V = μ̄/(zF)
+
+            case 'mu_bar_eV':
+                if (z === null || typeof z !== 'number' || z === 0) {
+                    console.warn(
+                        `ESBD Warn: Cannot convert 'mu_bar_eV' to Volts without valid non-zero charge z (received z=${z}).`
+                    );
+                    return null;
+                }
+                // V = value[eV] / z
+                return value / z;
+
+            case 'E_band_eV':
+                // Convention V = -E_band / e_charge
+                return -value / V_TO_EV_PER_CHARGE; // Effectively -value
+
+            case 'phi_V':
+                return value; // V_phi = phi
+
+            case 'V_volt':
+                return value;
+
+            default:
+                console.warn(
+                    `ESBD Warn: Unknown input unit "${inputUnit}" for conversion to Volts.`
+                );
+                return null;
+        }
+    }
+
+    /** Scales the internal V_volt value to the final display unit based on mode. */
+    _scaleVoltToDisplay(value_volt, z) {
+        if (value_volt === null || !isFinite(value_volt)) return null;
+
+        switch (this.config.mode) {
+            case 'Volts':
+                return value_volt; // Factor = +1
+
+            case 'eV':
+                // E = -V_volt * V_TO_EV_PER_CHARGE (where constant is 1)
+                // Represents Energy in eV using E = -V convention
+                return value_volt * -V_TO_EV_PER_CHARGE; // Factor = -1
+
+            case 'kJmol':
+                // G = V_volt * F_kJmol
+                // Represents Molar Energy / z in kJ/mol (if V_volt derived from mu_bar)
+                // Or represents F*phi/1000 if V_volt derived from phi_V
+                // Or represents -Na*E_band/1000 if V_volt derived from E_band_eV
+                return value_volt * F_kJmol; // Factor = +F/1000
+        }
+        return null;
+    }
+
+    // ========================================================================
+    // Destroy Method
+    // ========================================================================
+
+    /** Cleans up resources like observers and listeners. */
+    destroy() {
+        if (this._resizeObserver) {
+            this._resizeObserver.disconnect();
+        }
+        if (
+            this._debouncedHandleResize &&
+            typeof this._debouncedHandleResize.cancel === 'function'
+        ) {
+            this._debouncedHandleResize.cancel();
+        }
+        clearTimeout(this._hoverThrottleTimeout);
+        this._hidePopup();
+        this.container.html('');
+        console.log('ESBD Destroyed.');
     }
 } // End of class
 
