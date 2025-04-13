@@ -1216,8 +1216,7 @@ class ElectrochemicalSpeciesBandDiagram {
         try {
             const content = this._tracePopupCallback(popupInfo);
             if (content) {
-                this._pinnedPopupInfo = ['trace', trace.id]; // Set pin state
-                this._setPopup(event, content); // Show popup
+                this._setPopup(event, content, ['trace', trace.id]); // Show pinned popup
                 this._setActiveHighlight({ type: 'trace', id: trace.id }); // Set highlight
             } else {
                 this._hidePopup();
@@ -1264,8 +1263,7 @@ class ElectrochemicalSpeciesBandDiagram {
             const content =
                 markerData.definition.popupCallback(markerPopupInfo);
             if (content) {
-                this._pinnedPopupInfo = ['marker', markerId]; // Set pin state
-                this._setPopup(event, content); // Show popup
+                this._setPopup(event, content, ['marker', markerId]); // Show pinned popup
                 this._setActiveHighlight({ type: 'marker', id: markerId });
             } else {
                 this._hidePopup();
@@ -1354,12 +1352,18 @@ class ElectrochemicalSpeciesBandDiagram {
     // ========================================================================
 
     /** Sets the popup content, renders KaTeX, calculates position, displays it. */
-    _setPopup(event, htmlContent) {
+    _setPopup(event, htmlContent, pinnedPopupInfo = null) {
         if (!htmlContent) {
             this._hidePopup();
             return;
         }
-        this._popupDiv.html(htmlContent);
+        // If this is to be a pinned (clicked) popup, enable pointer events to allow
+        // text selection. Otherwise, for mouse hover popups disable pointer events
+        // to discourage potential flickering problems.
+        this._pinnedPopupInfo = pinnedPopupInfo;
+        this._popupDiv
+            .style('pointer-events', pinnedPopupInfo ? 'auto' : 'none')
+            .html(htmlContent);
         if (typeof renderMathInElement === 'function') {
             try {
                 renderMathInElement(this._popupDiv.node(), {
