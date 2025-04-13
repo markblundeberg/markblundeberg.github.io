@@ -246,15 +246,16 @@ class LeadAcidBatteryComponent {
         // A real model needs HSO4- <=> H+ + SO4-- equilibrium based on C and Ka
         const a_H_plus = Math.max(acidConc / C_STD, 1e-9); // Approximation
         const a_HSO4_minus = Math.max(acidConc / C_STD, 1e-9); // Approximation
-        const activity_term = RT_F * Math.log(a_H_plus / a_HSO4_minus); // Used in Nernst difference
+        const activity_term = -RT_F * Math.log(a_H_plus * a_HSO4_minus);
 
         // --- 2. Set Reference Potential ---
         const V_e_anode = 0.0; // Set anode electron potential as reference
 
         // --- 3. Solve for Ion Potentials (V_H+, V_HSO4-) relative to V_e_anode=0 ---
-        // Eq1 (from Anode Eq): V_H+ + V_HSO4- = -2 * Const_A
+        // Eq1 (from Anode Eq): V_H+ + V_HSO4- = 2 * (V_e_anode - Const_A)
         // Eq2 (from Nernst Diff): V_HSO4- - V_H+ = V_span + activity_term
-        const V_H_plus = -Const_A - 0.5 * V_span - 0.5 * activity_term;
+        const V_H_plus =
+            V_e_anode - Const_A - 0.5 * V_span - 0.5 * activity_term;
         const V_HSO4_minus = V_H_plus + V_span + activity_term;
 
         // --- 4. Calculate Cathode Electron Potential ---
