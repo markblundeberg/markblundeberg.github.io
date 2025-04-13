@@ -1294,7 +1294,12 @@ class ElectrochemicalSpeciesBandDiagram {
             const markerData = this.verticalMarkers?.get(markerId);
             const symbol = markerData?.definition?.symbol || '⇌';
             // Generate generic brief content for marker hover
-            const briefContent = `<b>${symbol}</b>: Interface Equilibrium ›`; // Add hint arrow
+            let briefContent = null;
+            if (symbol == '⇌') {
+                briefContent = `Equilibrium ›`;
+            } else {
+                briefContent = `Vertical difference ›`;
+            }
             this._setPopup(event, briefContent); // Show brief tooltip
             this._setActiveHighlight({ type: 'marker', id: markerId }); // Show temp highlight
         }
