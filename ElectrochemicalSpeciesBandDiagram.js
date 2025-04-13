@@ -1437,26 +1437,62 @@ class ElectrochemicalSpeciesBandDiagram {
             );
     }
 
-    /** Applies/resets highlight styles ONLY for vertical markers. */
+    /** Apply/reset highlight styles for vertical markers */
     _applyVerticalMarkerHighlight(targetMarkerId) {
         const markerStyle = STYLE_DEFAULTS.verticalMarker;
-        const isPinned = targetMarkerId !== null; // Check if a specific marker should be highlighted
+
+        // Select all marker groups: highlight our target and return the others to normal.
         this.verticalMarkersGroup
-            .selectAll('g.esbd-vertical-marker circle.marker-bg')
-            .interrupt()
-            .transition()
-            .duration(50)
-            .attr('fill', (d) =>
-                isPinned && d.id === targetMarkerId
-                    ? markerStyle.highlightColor
-                    : markerStyle.backgroundColor
-            )
-            .attr('stroke', (d) =>
-                isPinned && d.id === targetMarkerId
-                    ? markerStyle.highlightStroke ||
-                      markerStyle.backgroundStroke
-                    : markerStyle.backgroundStroke
-            );
+            .selectAll('g.esbd-vertical-marker')
+            .each((d, i, nodes) => {
+                const group = d3.select(nodes[i]);
+                const isTarget = d.id === targetMarkerId; // Is this the specific marker to highlight?
+
+                // Transition background circle style
+                group
+                    .select('circle.marker-bg')
+                    .interrupt()
+                    .transition()
+                    .duration(50)
+                    .attr(
+                        'fill',
+                        isTarget
+                            ? markerStyle.highlightColor
+                            : markerStyle.backgroundColor
+                    )
+                    .attr(
+                        'stroke',
+                        isTarget
+                            ? markerStyle.highlightStroke
+                            : markerStyle.backgroundStroke
+                    );
+
+                const myLegColor = isTarget
+                    ? markerStyle.highlightStroke
+                    : markerStyle.legColor;
+                const myLegWidth = isTarget
+                    ? markerStyle.legWidth + 1 // Make legs slightly thicker
+                    : markerStyle.legWidth;
+                const myLegRadius = isTarget
+                    ? markerStyle.legEndRadius + 1 // Make end circles slightly larger
+                    : markerStyle.legEndRadius;
+
+                group
+                    .selectAll('line.marker-leg-1, line.marker-leg-2')
+                    .interrupt()
+                    .transition()
+                    .duration(50)
+                    .attr('stroke-width', myLegWidth)
+                    .attr('stroke', myLegColor);
+
+                group
+                    .selectAll('circle.marker-leg-end-circle')
+                    .interrupt()
+                    .transition()
+                    .duration(50)
+                    .attr('r', myLegRadius)
+                    .attr('fill', myLegColor);
+            });
     }
 
     /** Sets the active highlight, ensuring only one element is highlighted. */
