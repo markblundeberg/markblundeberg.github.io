@@ -124,7 +124,6 @@ class ElectrochemicalSpeciesBandDiagram {
             .style('border-radius', '4px')
             .style('padding', '8px')
             .style('font-size', '11px') // Slightly smaller popup/tooltip text
-            .style('pointer-events', 'none')
             .style('z-index', '10')
             .style('transition', 'opacity 0.2s')
             .style('max-width', '250px') // Prevent popup/tooltip getting too wide

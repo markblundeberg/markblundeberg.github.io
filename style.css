@@ -137,6 +137,10 @@ h2 {
     left: 0;
     width: 100%;
     height: 100%;
+    -webkit-user-select: none; /* Safari/Chrome/Opera/Edge */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE */
+    user-select: none; /* Standard */
 }
 
 /* D3 Axis Styling */
