@@ -1,5 +1,6 @@
 // LeadAcidBatteryComponent.js
 // Component for displaying an ESBD of a Lead-Acid battery at equilibrium (OCV).
+// Final review pass.
 
 import ElectrochemicalSpeciesBandDiagram from './ElectrochemicalSpeciesBandDiagram.js';
 import { formatPopupBaseContent, debounce } from './utils.js';
@@ -16,8 +17,6 @@ class LeadAcidBatteryComponent {
      * Creates and manages a lead-acid battery diagram instance.
      * @param {string} containerSelector - CSS selector for the parent div element.
      * @param {object} componentConfig - Configuration object defining the battery specifics.
-     * Expected fields: species (H+, HSO4-, e-), solids (mu_Pb, mu_PbSO4, mu_PbO2, mu_H2O),
-     * electrolyte (initialConc, nu_H, nu_HSO4), layout (boundaries, regionProps), plotHeight.
      */
     constructor(containerSelector, componentConfig) {
         this.container = document.querySelector(containerSelector);
@@ -52,9 +51,9 @@ class LeadAcidBatteryComponent {
         }
 
         // Initialize state
-        this.currentAcidConc = componentConfig.electrolyte?.initialConc ?? 4.0; // Default to ~4 M H2SO4
+        this.currentAcidConc = componentConfig.electrolyte?.initialConc ?? 4.0;
         this.showStdStates = componentConfig.initialShowStdStates ?? false;
-        this.showHSO4 = componentConfig.initialShowHSO4 ?? true; // Show HSO4- by default
+        this.showHSO4 = componentConfig.initialShowHSO4 ?? true;
 
         try {
             this._createInternalHTML();
@@ -146,8 +145,6 @@ class LeadAcidBatteryComponent {
         this.diagram.addSpeciesInfo('H+', this.config.species['H+']);
         this.diagram.addSpeciesInfo('HSO4-', this.config.species['HSO4-']);
         this.diagram.addSpeciesInfo('e-', this.config.species['e-']);
-        // Optionally add SO4^2- if needed later
-        // this.diagram.addSpeciesInfo('SO4^2-', this.config.species['SO4^2-']);
 
         // Set layout
         this.diagram.setSpatialLayout(
@@ -155,23 +152,23 @@ class LeadAcidBatteryComponent {
             this.config.regionProps
         );
 
-        // Set general tooltip callback (for lines)
+        // Set general popup callback (for lines)
         this.diagram.setTracePopupCallback(
             this._getTracePopupContent.bind(this)
         );
 
-        // Add reaction markers for the electrode interfaces
+        // Add vertical markers for the electrode interfaces
         this.diagram.addVerticalMarker('anode_eq', {
             symbol: '⇌',
             speciesId1: 'electron',
-            speciesId2: 'H+', // Link e- and H+ visually? Or HSO4-? Let's try H+
-            popupCallback: this._getInterfacePopupContent.bind(this, 'Anode'), // Use generic handler
+            speciesId2: 'H+',
+            popupCallback: this._getInterfacePopupContent.bind(this, 'Anode'),
         });
         this.diagram.addVerticalMarker('cathode_eq', {
             symbol: '⇌',
             speciesId1: 'electron',
-            speciesId2: 'H+', // Link e- and H+ visually?
-            popupCallback: this._getInterfacePopupContent.bind(this, 'Cathode'), // Use generic handler
+            speciesId2: 'H+',
+            popupCallback: this._getInterfacePopupContent.bind(this, 'Cathode'),
         });
     }
 
@@ -228,35 +225,35 @@ class LeadAcidBatteryComponent {
     _calculateState(acidConc, config, showStd, showHSO4) {
         // --- 1. Define Constants & Inputs ---
         const C_STD = config.c_std_M || 1.0;
-
-        // Get standard chemical potentials (J/mol)
         const mu_Pb = config.solids.mu_Pb;
         const mu_PbSO4 = config.solids.mu_PbSO4;
         const mu_PbO2 = config.solids.mu_PbO2;
         const mu_H2O = config.solids.mu_H2O;
-        const mu_std_H_plus = config.species['H+'].mu_standard_J_mol; // Should be 0 by definition
+        const mu_std_H_plus = config.species['H+'].mu_standard_J_mol;
         const mu_std_HSO4_minus = config.species['HSO4-'].mu_standard_J_mol;
 
         // Calculate constants for equilibrium equations
-        const Const_A = (0.5 * (mu_PbSO4 - mu_Pb)) / F; // Approx -4.21 V
-        const Const_C = (0.5 * (mu_PbO2 - mu_PbSO4 - 2 * mu_H2O)) / F; // Approx +5.54 V
-        const V_span = (-mu_std_HSO4_minus - mu_std_H_plus) / F; // Approx +7.83 V
+        const Const_A = (0.5 * (mu_PbSO4 - mu_Pb)) / F;
+        const Const_C = (0.5 * (mu_PbO2 - mu_PbSO4 - 2 * mu_H2O)) / F;
+        const V_span = (-mu_std_HSO4_minus - mu_std_H_plus) / F;
 
-        // Calculate activities (Simplification: a_i = C / C_STD, ignore dissociation)
-        // A real model needs HSO4- <=> H+ + SO4-- equilibrium based on C and Ka
-        const a_H_plus = Math.max(acidConc / C_STD, 1e-9); // Approximation
-        const a_HSO4_minus = Math.max(acidConc / C_STD, 1e-9); // Approximation
-        const activity_term = -RT_F * Math.log(a_H_plus * a_HSO4_minus);
+        // Calculate activities (Simplification)
+        const a_H_plus = Math.max(acidConc / C_STD, 1e-9);
+        const a_HSO4_minus = Math.max(acidConc / C_STD, 1e-9);
+        // This is the term for V_HSO4- - V_H+
+        const nernst_diff_term =
+            V_span - RT_F * Math.log(a_H_plus * a_HSO4_minus);
 
         // --- 2. Set Reference Potential ---
-        const V_e_anode = 0.0; // Set anode electron potential as reference
+        const V_e_anode = 0.0;
 
         // --- 3. Solve for Ion Potentials (V_H+, V_HSO4-) relative to V_e_anode=0 ---
-        // Eq1 (from Anode Eq): V_H+ + V_HSO4- = 2 * (V_e_anode - Const_A)
-        // Eq2 (from Nernst Diff): V_HSO4- - V_H+ = V_span + activity_term
-        const V_H_plus =
-            V_e_anode - Const_A - 0.5 * V_span - 0.5 * activity_term;
-        const V_HSO4_minus = V_H_plus + V_span + activity_term;
+        // Eq1 (Anode): V_H+ + V_HSO4- = 2 * (V_e_anode - Const_A) = -2 * Const_A
+        // Eq2 (Nernst): V_HSO4- - V_H+ = nernst_diff_term
+        // Add Eq1 and Eq2: 2 * V_HSO4- = -2 * Const_A + nernst_diff_term
+        const V_HSO4_minus = V_e_anode - Const_A + 0.5 * nernst_diff_term;
+        // Substract Eq2 from Eq1: 2 * V_H+ = -2 * Const_A - nernst_diff_term
+        const V_H_plus = V_e_anode - Const_A - 0.5 * nernst_diff_term;
 
         // --- 4. Calculate Cathode Electron Potential ---
         const V_e_cathode = 1.5 * V_H_plus - 0.5 * V_HSO4_minus + Const_C;
@@ -276,13 +273,7 @@ class LeadAcidBatteryComponent {
         // --- 7. Prepare Trace Definitions ---
         const b = config.boundaries;
         if (!b || b.length !== 6) {
-            // Expecting 5 regions: C|Pb|Elyte/Sep|PbO2|C
-            console.warn(
-                'LeadAcid Config Warning: Expected 6 boundaries for 5 regions. Adjusting trace ranges.'
-            );
-            // Adjust boundary indices if layout differs, assuming 5 regions for now:
-            // R0=Coll1[0,1], R1=Pb[1,2], R2=Elyte[2,3], R3=PbO2[3,4], R4=Coll2[4,5]
-            if (!b || b.length !== 6) b = [0, 0.15, 0.35, 0.65, 0.85, 1.0]; // Default layout
+            throw new Error('Invalid boundaries configuration for 5 regions.');
         }
         const traceDefs = [];
         const traceIdSuffix = this.plotDivId;
@@ -364,13 +355,13 @@ class LeadAcidBatteryComponent {
             const anodeTooltipArgs = {
                 reaction:
                     '\\mathrm{Pb}(s) + \\mathrm{HSO}_4^{-} \\rightleftharpoons \\mathrm{PbSO}_4(s) + \\mathrm{H}^{+} + 2\\mathrm{e}^{-}',
-                potential_diff_volt: V_H_plus + V_HSO4_minus - 2 * V_e_anode, // Should be -2*Const_A
+                potential_check_volt: V_H_plus + V_HSO4_minus - 2 * V_e_anode,
                 interfaceName: 'Anode/Electrolyte',
             };
             this.diagram.updateVerticalMarker('anode_eq', {
                 x: b[2], // Pb/Elyte interface boundary index
                 y1: V_e_anode, // Electron potential
-                y2: V_H_plus, // Use H+ potential as the other anchor? Or HSO4-?
+                y2: V_H_plus, // Use H+ potential as the other anchor
                 inputUnits: 'V_volt',
                 tooltipArgs: anodeTooltipArgs,
             });
@@ -378,14 +369,14 @@ class LeadAcidBatteryComponent {
             const cathodeTooltipArgs = {
                 reaction:
                     '\\mathrm{PbO}_2(s) + \\mathrm{HSO}_4^{-} + 3\\mathrm{H}^{+} + 2\\mathrm{e}^{-} \\rightleftharpoons \\mathrm{PbSO}_4(s) + 2\\mathrm{H}_2\\mathrm{O}(l)',
-                potential_diff_volt:
-                    1.5 * V_H_plus - 0.5 * V_HSO4_minus - V_e_cathode, // Should be -Const_C
+                potential_check_volt:
+                    1.5 * V_H_plus - 0.5 * V_HSO4_minus - V_e_cathode,
                 interfaceName: 'Electrolyte/Cathode',
             };
             this.diagram.updateVerticalMarker('cathode_eq', {
                 x: b[3], // Elyte/PbO2 interface boundary index
                 y1: V_e_cathode, // Electron potential
-                y2: V_H_plus, // Use H+ potential as the other anchor?
+                y2: V_H_plus, // Use H+ potential as the other anchor
                 inputUnits: 'V_volt',
                 tooltipArgs: cathodeTooltipArgs,
             });
@@ -429,23 +420,27 @@ class LeadAcidBatteryComponent {
         // info contains: { markerId, xValue, y1_volt(V_e), y2_volt(V_H+), y1_display, y2_display, currentMode, customArgs, pointEvent }
         const args = info.customArgs || {};
         const reaction = args.reaction || 'Reaction';
-        const potentialDiff = args.potential_diff_volt; // This is a check value, should be constant
+        const potentialCheck = args.potential_check_volt; // Check value (~ -2*Const_A or -Const_C)
         const mode = info.currentMode;
 
-        let content = `<b>Interface: ${identifier}</b><br>
-                       Reaction: $${reaction}$<br>`;
+        // Format reaction with KaTeX delimiters
+        const reactionStr = `$${reaction}$`;
 
-        // Verify equilibrium (potentialDiff should be constant related to solids)
-        if (potentialDiff !== undefined) {
-            // V_e = 0.5*(V_H+ + V_HSO4-) + Const_A => 2V_e - V_H+ - V_HSO4 = 2*Const_A
-            // V_e = 1.5*V_H+ - 0.5*V_HSO4- + Const_C => 2V_e - 3V_H+ + V_HSO4 = 2*Const_C
-            // Displaying the check value might be confusing. Let's just state equilibrium holds.
-            content += `Equilibrium holds at this interface.`;
-            // content += `<br>Check Value ≈ ${potentialDiff.toFixed(3)} V`;
-        }
+        let content = `<b>Interface: ${identifier}</b><br>
+                       Reaction: ${reactionStr}<br>`;
+
+        // State that equilibrium holds (implied by OCV calculation)
+        content += `Equilibrium Condition Holds`;
+        // Optionally show check value for debugging?
+        // if (potentialCheck !== undefined) {
+        //    content += `<br>(Check Val ≈ ${potentialCheck.toFixed(3)} V)`;
+        // }
+
         // Display the potentials being linked by the marker
-        content += `<br>$V_{e^-}$(${mode}) ≈ ${info.y1_display.toFixed(3)}`;
-        content += `<br>$V_{H^+}$(${mode}) ≈ ${info.y2_display.toFixed(3)}`; // Assuming marker links V_e and V_H+
+        // REVIEW: Displaying V_H+ might be confusing as the marker visually links V_e.
+        // Maybe just display V_e? Or state the full equilibrium?
+        // Let's just show V_e for now.
+        content += `<br>$V_{\\mathrm{e}^{-}}$(${mode}) ≈ ${info.y1_display.toFixed(3)} ${mode === 'kJmol' ? 'kJ/mol' : mode}`;
 
         return content;
     }
