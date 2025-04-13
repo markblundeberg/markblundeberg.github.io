@@ -1395,16 +1395,16 @@ class ElectrochemicalSpeciesBandDiagram {
         const containerWidth = this.container.node().clientWidth;
         const containerHeight = this.config.height;
 
-        let targetX = containerX + 15;
-        let targetY = containerY - 15 - popupHeight;
+        let targetX = containerX + 5;
+        let targetY = containerY - 5 - popupHeight;
         if (targetX + popupWidth > containerWidth) {
-            targetX = containerX - 15 - popupWidth;
+            targetX = containerX - 5 - popupWidth;
         }
         if (targetX < 0) {
             targetX = 5;
         }
         if (targetY < 0) {
-            targetY = containerY + 15;
+            targetY = containerY + 5;
         }
         if (targetY + popupHeight > containerHeight) {
             targetY = containerHeight - popupHeight - 5;
