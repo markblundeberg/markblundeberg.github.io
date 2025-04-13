@@ -120,7 +120,7 @@ const leadAcidConfig = {
         'HSO4-': {
             z: -1,
             mu_standard_J_mol: -755900,
-            color: '#FF7F00',
+            color: '#009F9F',
             latexPrettyName: '\\mathrm{HSO}_4^{-}',
         }, // Orange
         'e-': {

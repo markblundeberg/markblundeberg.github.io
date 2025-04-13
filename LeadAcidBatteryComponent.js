@@ -1,6 +1,5 @@
 // LeadAcidBatteryComponent.js
 // Component for displaying an ESBD of a Lead-Acid battery at equilibrium (OCV).
-// Final review pass.
 
 import ElectrochemicalSpeciesBandDiagram from './ElectrochemicalSpeciesBandDiagram.js';
 import { formatPopupBaseContent, debounce } from './utils.js';
@@ -60,7 +59,7 @@ class LeadAcidBatteryComponent {
             this._findInternalElements();
             this._setupESBD();
             this._attachListeners();
-            this.updateDiagram(); // Initial draw
+            this.updateDiagram();
             console.log(
                 `LeadAcidBatteryComponent initialized in ${containerSelector}`
             );
@@ -224,7 +223,6 @@ class LeadAcidBatteryComponent {
     /** Calculation logic specific to Lead-Acid battery OCV */
     _calculateState(acidConc, config, showStd, showHSO4) {
         // --- 1. Define Constants & Inputs ---
-        const C_STD = config.c_std_M || 1.0;
         const mu_Pb = config.solids.mu_Pb;
         const mu_PbSO4 = config.solids.mu_PbSO4;
         const mu_PbO2 = config.solids.mu_PbO2;
@@ -247,13 +245,9 @@ class LeadAcidBatteryComponent {
         // --- 2. Set Reference Potential ---
         const V_e_anode = 0.0;
 
-        // --- 3. Solve for Ion Potentials (V_H+, V_HSO4-) relative to V_e_anode=0 ---
-        // Eq1 (Anode): V_H+ + V_HSO4- = 2 * (V_e_anode - Const_A) = -2 * Const_A
-        // Eq2 (Nernst): V_HSO4- - V_H+ = nernst_diff_term
-        // Add Eq1 and Eq2: 2 * V_HSO4- = -2 * Const_A + nernst_diff_term
-        const V_HSO4_minus = V_e_anode - Const_A + 0.5 * nernst_diff_term;
-        // Substract Eq2 from Eq1: 2 * V_H+ = -2 * Const_A - nernst_diff_term
+        // --- 3. Solve for Ion Potentials ---
         const V_H_plus = V_e_anode - Const_A - 0.5 * nernst_diff_term;
+        const V_HSO4_minus = V_e_anode - Const_A + 0.5 * nernst_diff_term;
 
         // --- 4. Calculate Cathode Electron Potential ---
         const V_e_cathode = 1.5 * V_H_plus - 0.5 * V_HSO4_minus + Const_C;
@@ -278,7 +272,6 @@ class LeadAcidBatteryComponent {
         const traceDefs = [];
         const traceIdSuffix = this.plotDivId;
 
-        // Electron Traces (Collector|Anode and Cathode|Collector)
         traceDefs.push({
             id: `e_anode_side_${traceIdSuffix}`,
             speciesId: 'e-',
@@ -299,8 +292,6 @@ class LeadAcidBatteryComponent {
             x: [b[3], b[5]],
             y: [V_e_cathode, V_e_cathode],
         });
-
-        // H+ Trace (Electrolyte/Separator region)
         traceDefs.push({
             id: `H_plus_elyte_${traceIdSuffix}`,
             speciesId: 'H+',
@@ -323,8 +314,6 @@ class LeadAcidBatteryComponent {
                 y: [V_STD_H_plus, V_STD_H_plus],
             });
         }
-
-        // HSO4- Traces (Optional)
         if (showHSO4) {
             traceDefs.push({
                 id: `HSO4_minus_elyte_${traceIdSuffix}`,
@@ -363,7 +352,7 @@ class LeadAcidBatteryComponent {
                 y1: V_e_anode, // Electron potential
                 y2: V_H_plus, // Use H+ potential as the other anchor
                 inputUnits: 'V_volt',
-                tooltipArgs: anodeTooltipArgs,
+                popupArgs: anodeTooltipArgs,
             });
 
             const cathodeTooltipArgs = {
@@ -378,7 +367,7 @@ class LeadAcidBatteryComponent {
                 y1: V_e_cathode, // Electron potential
                 y2: V_H_plus, // Use H+ potential as the other anchor
                 inputUnits: 'V_volt',
-                tooltipArgs: cathodeTooltipArgs,
+                popupArgs: cathodeTooltipArgs,
             });
         }
 
@@ -398,29 +387,20 @@ class LeadAcidBatteryComponent {
             const a_H_plus = Math.max(elyteConc / C_STD, 1e-9); // Approximation
             const a_HSO4_minus = Math.max(elyteConc / C_STD, 1e-9); // Approximation
 
-            content += `<br>Region: Electrolyte/Separator`;
             content += `<br>Stoich Conc ≈ ${elyteConc.toFixed(3)} M`;
             if (info.speciesId === 'H+')
                 content += `<br>Activity($\\mathrm{H}^{+}$) ≈ ${a_H_plus.toFixed(3)}`;
             if (info.speciesId === 'HSO4-')
                 content += `<br>Activity($\\mathrm{HSO}_4^{-}$) ≈ ${a_HSO4_minus.toFixed(3)}`;
         }
-        // Add electrode info? (No variable SoC here, just material type)
-        else if (info.regionIndex === 1) content += `<br>Region: Anode (Pb)`;
-        else if (info.regionIndex === 3)
-            content += `<br>Region: Cathode (PbO₂)`;
-        else if (info.regionIndex === 0 || info.regionIndex === 4)
-            content += `<br>Region: Current Collector`;
 
         return content;
     }
 
     /** Tooltip callback specific to interface markers */
     _getInterfacePopupContent(identifier, info) {
-        // info contains: { markerId, xValue, y1_volt(V_e), y2_volt(V_H+), y1_display, y2_display, currentMode, customArgs, pointEvent }
         const args = info.customArgs || {};
-        const reaction = args.reaction || 'Reaction';
-        const potentialCheck = args.potential_check_volt; // Check value (~ -2*Const_A or -Const_C)
+        const reaction = args.reaction || 'Reaction N/A';
         const mode = info.currentMode;
 
         // Format reaction with KaTeX delimiters
@@ -429,17 +409,9 @@ class LeadAcidBatteryComponent {
         let content = `<b>Interface: ${identifier}</b><br>
                        Reaction: ${reactionStr}<br>`;
 
-        // State that equilibrium holds (implied by OCV calculation)
         content += `Equilibrium Condition Holds`;
-        // Optionally show check value for debugging?
-        // if (potentialCheck !== undefined) {
-        //    content += `<br>(Check Val ≈ ${potentialCheck.toFixed(3)} V)`;
-        // }
 
-        // Display the potentials being linked by the marker
-        // REVIEW: Displaying V_H+ might be confusing as the marker visually links V_e.
-        // Maybe just display V_e? Or state the full equilibrium?
-        // Let's just show V_e for now.
+        // Display the electron potential at the interface
         content += `<br>$V_{\\mathrm{e}^{-}}$(${mode}) ≈ ${info.y1_display.toFixed(3)} ${mode === 'kJmol' ? 'kJ/mol' : mode}`;
 
         return content;
