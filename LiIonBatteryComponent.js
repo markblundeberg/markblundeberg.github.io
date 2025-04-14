@@ -123,7 +123,7 @@ class LiIonBatteryComponent {
                     </div>
                 </details>
             </div>
-            <div class="plot-container" id="${this.plotDivId}" style="width:100%; /* height set by CSS */ border: 1px solid #ddd; margin-top: 10px;"></div>
+            <div class="plot-container" id="${this.plotDivId}""></div>
         `;
     }
 
