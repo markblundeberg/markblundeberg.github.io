@@ -44,7 +44,7 @@ const agNO3Config = {
     ],
     // Initial slider values and ranges
     initialC1: 0.1,
-    initialC2: 1.0,
+    initialC2: 1.5,
     cMin: 0.001,
     cMax: 2.0,
     plotHeight: 250,
