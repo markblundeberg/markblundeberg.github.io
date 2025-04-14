@@ -13,7 +13,7 @@ class EnergyLevelsDiagram {
      * @param {object} [initialConfig={}] - Initial configuration options.
      * @param {number} [initialConfig.width=200] - Width of the SVG element.
      * @param {number} [initialConfig.height=400] - Height of the SVG element.
-     * @param {object} [initialConfig.margin={top: 20, right: 50, bottom: 40, left: 60}] - Plot margins.
+     * @param {object} [initialConfig.margin={top: 10, right: 5, bottom: 20, left: 45}] - Plot margins.
      * @param {string} [initialConfig.yAxisLabel='Potential / Energy'] - Label for the Y axis (plain text).
      * @param {Array<number>} [initialConfig.initialYRange=[0, 1]] - Initial [min, max] for Y axis domain.
      * @param {boolean} [initialConfig.showYTicks=true] - Whether to show Y axis ticks and labels.
@@ -23,7 +23,7 @@ class EnergyLevelsDiagram {
      */
     constructor(containerId, initialConfig = {}) {
         this.containerId = containerId;
-        this.container = d3.select(`#${this.containerId}`);
+        this.container = d3.select(this.containerId);
         if (this.container.empty()) {
             throw new Error(`Container element #${containerId} not found.`);
         }
@@ -33,10 +33,10 @@ class EnergyLevelsDiagram {
             width: initialConfig.width || 200,
             height: initialConfig.height || 400,
             margin: initialConfig.margin || {
-                top: 20,
-                right: 50,
-                bottom: 40,
-                left: 60,
+                top: 10,
+                right: 5,
+                bottom: 20,
+                left: 45,
             },
             yAxisLabel: initialConfig.yAxisLabel || 'Potential / Energy',
             yRange: initialConfig.initialYRange || [0, 1],
@@ -176,7 +176,8 @@ class EnergyLevelsDiagram {
         this.xScale = d3
             .scaleBand()
             .paddingInner(0.5) // Space between category bands
-            .paddingOuter(0.3); // Space at edges
+            .paddingOuter(0.2) // Space at edges
+            .align(0.25); // Shift left
         this.yScale = d3.scaleLinear();
 
         // Axis Generators
@@ -284,8 +285,8 @@ class EnergyLevelsDiagram {
     /** Draws/Updates the energy/potential level lines and labels. */
     _drawLevels() {
         const transitionDuration = this.config.transitionDuration;
-        const lineHalfLength = 25;
-        const labelOffset = 8;
+        const lineHalfLength = 0.5 * this.xScale.bandwidth();
+        const labelOffset = 0;
         const defaultStyle = this.config.defaultLevelStyle;
 
         // --- Data Binding ---

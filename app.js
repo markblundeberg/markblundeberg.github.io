@@ -243,8 +243,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 1. Define Configuration for this diagram instance
 const solventDiagramConfig = {
-    width: 350, // Wider to accommodate two categories + labels
-    height: 450, // Taller to accommodate potential range
+    width: 200, // Wider to accommodate two categories + labels
+    height: 400, // Taller to accommodate potential range
     yAxisLabel: 'Illustrative V^⊖ (Volts vs. Arb. Ref.)',
     initialYRange: [-3.5, 3.5], // Example range covering typical values vs SHE somewhat
     showYTicks: true, // Show ticks for reference
