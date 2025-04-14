@@ -5,6 +5,7 @@
 import ConcentrationCellComponent from './ConcentrationCellComponent.js';
 import LiIonBatteryComponent from './LiIonBatteryComponent.js';
 import LeadAcidBatteryComponent from './LeadAcidBatteryComponent.js';
+import EnergyLevelsDiagram from './EnergyLevelsDiagram.js';
 
 // --- Configuration Objects ---
 
@@ -234,3 +235,158 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     }
 }); // End DOMContentLoaded listener
+
+// --- Energy Level Diagram Example: Solvent Comparison ---
+
+// Assuming EnergyLevelsDiagram class is imported:
+// import EnergyLevelsDiagram from './EnergyLevelsDiagram.js';
+
+// 1. Define Configuration for this diagram instance
+const solventDiagramConfig = {
+    width: 350, // Wider to accommodate two categories + labels
+    height: 450, // Taller to accommodate potential range
+    yAxisLabel: 'Illustrative V^⊖ (Volts vs. Arb. Ref.)',
+    initialYRange: [-3.5, 3.5], // Example range covering typical values vs SHE somewhat
+    showYTicks: true, // Show ticks for reference
+    categories: [
+        // Define the two horizontal categories
+        { id: 'h2o', label: 'Water (Aq)' },
+        { id: 'an', label: 'Acetonitrile (AN)' },
+    ],
+    defaultLevelStyle: { lineWidth: 1 }, // Use thin lines for standard states
+};
+
+// 2. Define the Level Data (Using PLACEHOLDER / ILLUSTRATIVE V^⊖ values)
+// Values roughly based on aqueous E0 vs SHE, with arbitrary shifts for AN
+// DO NOT TREAT THESE AS ACCURATE THERMODYNAMIC VALUES FOR AN!
+const solventLevelsData = [
+    // --- Water ---
+    {
+        categoryId: 'h2o',
+        levelId: 'Ag+_h2o',
+        yValue: 0.8,
+        label: 'V^{\\ominus}_{\\mathrm{Ag}^{+}}',
+        color: '#E6AB02',
+    },
+    {
+        categoryId: 'h2o',
+        levelId: 'H+_h2o',
+        yValue: 0.0,
+        label: 'V^{\\ominus}_{\\mathrm{H}^{+}}',
+        color: '#E41A1C',
+    }, // SHE reference
+    {
+        categoryId: 'h2o',
+        levelId: 'Cu2+_h2o',
+        yValue: 0.34,
+        label: 'V^{\\ominus}_{\\mathrm{Cu}^{2+}}',
+        color: '#D95F02',
+    }, // Example
+    {
+        categoryId: 'h2o',
+        levelId: 'Zn2+_h2o',
+        yValue: -0.76,
+        label: 'V^{\\ominus}_{\\mathrm{Zn}^{2+}}',
+        color: '#7570B3',
+    }, // Example
+    {
+        categoryId: 'h2o',
+        levelId: 'Li+_h2o',
+        yValue: -3.04,
+        label: 'V^{\\ominus}_{\\mathrm{Li}^{+}}',
+        color: '#E41A1C',
+    }, // Example Li+
+    {
+        categoryId: 'h2o',
+        levelId: 'Cl-_h2o',
+        yValue: 1.36,
+        label: 'V^{\\ominus}_{\\mathrm{Cl}^{-}}',
+        color: '#66A61E',
+    }, // Example Cl- (from Cl2/Cl-)
+    {
+        categoryId: 'h2o',
+        levelId: 'NO3-_h2o',
+        yValue: 1.15,
+        label: 'V^{\\ominus}_{\\mathrm{NO}_3^{-}}',
+        color: '#66A61E',
+    }, // From previous
+
+    // --- Acetonitrile (Illustrative Shifts) ---
+    // Cations generally less stable (more positive V^⊖)
+    // Anions generally much less stable (much more positive V^⊖)
+    {
+        categoryId: 'an',
+        levelId: 'Ag+_an',
+        yValue: 0.8 + 0.5,
+        label: 'V^{\\ominus}_{\\mathrm{Ag}^{+}}',
+        color: '#E6AB02',
+    }, // Shifted up
+    {
+        categoryId: 'an',
+        levelId: 'H+_an',
+        yValue: 0.0 + 0.6,
+        label: 'V^{\\ominus}_{\\mathrm{H}^{+}}',
+        color: '#E41A1C',
+    }, // Shifted up (arb.)
+    {
+        categoryId: 'an',
+        levelId: 'Cu2+_an',
+        yValue: 0.34 + 0.5,
+        label: 'V^{\\ominus}_{\\mathrm{Cu}^{2+}}',
+        color: '#D95F02',
+    },
+    {
+        categoryId: 'an',
+        levelId: 'Zn2+_an',
+        yValue: -0.76 + 0.5,
+        label: 'V^{\\ominus}_{\\mathrm{Zn}^{2+}}',
+        color: '#7570B3',
+    },
+    {
+        categoryId: 'an',
+        levelId: 'Li+_an',
+        yValue: -3.04 + 0.5,
+        label: 'V^{\\ominus}_{\\mathrm{Li}^{+}}',
+        color: '#E41A1C',
+    },
+    {
+        categoryId: 'an',
+        levelId: 'Cl-_an',
+        yValue: 1.36 + 1.0,
+        label: 'V^{\\ominus}_{\\mathrm{Cl}^{-}}',
+        color: '#66A61E',
+    }, // Large shift up
+    {
+        categoryId: 'an',
+        levelId: 'NO3-_an',
+        yValue: 1.15 + 1.0,
+        label: 'V^{\\ominus}_{\\mathrm{NO}_3^{-}}',
+        color: '#66A61E',
+    }, // Large shift up
+];
+
+// 3. Find container and instantiate the diagram
+const solventContainerId = '#solvent-comparison-container';
+const solventContainer = document.querySelector(solventContainerId);
+if (solventContainer) {
+    try {
+        const solventDiagram = new EnergyLevelsDiagram(
+            solventContainerId,
+            solventDiagramConfig
+        );
+        solventDiagram.setLevels(solventLevelsData);
+        console.log('Solvent comparison diagram initialized.');
+    } catch (error) {
+        console.error(
+            `Failed to initialize EnergyLevelsDiagram in ${solventContainerId}:`,
+            error
+        );
+        solventContainer.innerHTML = `<p style="color: red;">Error loading level diagram.</p>`;
+    }
+} else {
+    console.warn(
+        `Container ${solventContainerId} not found for EnergyLevelsDiagram.`
+    );
+}
+
+// --- End Energy Level Diagram Example ---
