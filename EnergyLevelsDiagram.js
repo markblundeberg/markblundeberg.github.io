@@ -2,10 +2,6 @@
 // A D3 component for drawing simple energy/potential level diagrams
 // with discrete horizontal categories.
 
-// Assumes D3 and KaTeX are loaded globally or imported appropriately.
-// import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-// import { debounce } from './utils.js'; // Not strictly needed yet
-
 class EnergyLevelsDiagram {
     // ========================================================================
     // Constructor
@@ -15,10 +11,10 @@ class EnergyLevelsDiagram {
      * Creates an instance of the EnergyLevelsDiagram.
      * @param {string} containerId - ID of the HTML element to contain the plot.
      * @param {object} [initialConfig={}] - Initial configuration options.
-     * @param {number} [initialConfig.width=300] - Width of the SVG element.
+     * @param {number} [initialConfig.width=200] - Width of the SVG element.
      * @param {number} [initialConfig.height=400] - Height of the SVG element.
      * @param {object} [initialConfig.margin={top: 20, right: 50, bottom: 40, left: 60}] - Plot margins.
-     * @param {string} [initialConfig.yAxisLabel='Potential / Energy'] - Label for the Y axis.
+     * @param {string} [initialConfig.yAxisLabel='Potential / Energy'] - Label for the Y axis (plain text).
      * @param {Array<number>} [initialConfig.initialYRange=[0, 1]] - Initial [min, max] for Y axis domain.
      * @param {boolean} [initialConfig.showYTicks=true] - Whether to show Y axis ticks and labels.
      * @param {Array<object>} [initialConfig.categories=[]] - Categories for the X axis. Array of {id: string, label: string}.
@@ -34,7 +30,7 @@ class EnergyLevelsDiagram {
 
         // --- Configuration with defaults ---
         this.config = {
-            width: initialConfig.width || 300,
+            width: initialConfig.width || 200,
             height: initialConfig.height || 400,
             margin: initialConfig.margin || {
                 top: 20,
@@ -43,9 +39,9 @@ class EnergyLevelsDiagram {
                 left: 60,
             },
             yAxisLabel: initialConfig.yAxisLabel || 'Potential / Energy',
-            yRange: initialConfig.initialYRange || [0, 1], // Store current range
-            showYTicks: initialConfig.showYTicks !== false, // Default true
-            categories: initialConfig.categories || [], // {id: string, label: string}
+            yRange: initialConfig.initialYRange || [0, 1],
+            showYTicks: initialConfig.showYTicks !== false,
+            categories: initialConfig.categories || [],
             defaultLevelStyle: initialConfig.defaultLevelStyle || {
                 color: 'black',
                 lineWidth: 2,
@@ -54,7 +50,7 @@ class EnergyLevelsDiagram {
             transitionDuration: initialConfig.transitionDuration ?? 250,
         };
 
-        // Calculate plot dimensions
+        // Calculate plot dimensions once - assuming fixed size for now
         this.plotWidth =
             this.config.width -
             this.config.margin.left -
@@ -74,7 +70,7 @@ class EnergyLevelsDiagram {
 
         // --- D3 Setup ---
         this._setupD3Structure();
-        this.redraw(); // Initial draw (likely empty)
+        this.redraw(); // Initial draw
 
         console.log(`EnergyLevelsDiagram Initialized in #${containerId}.`);
     }
@@ -96,8 +92,6 @@ class EnergyLevelsDiagram {
             return;
         }
         this.levelsData = levelsData;
-        // Optional: Update Y range based on new data if not fixed?
-        // For now, assume fixed range set by config or setYRange.
         this.redraw();
     }
 
@@ -119,7 +113,7 @@ class EnergyLevelsDiagram {
     }
 
     /**
-     * Sets the label for the Y axis. Supports KaTeX.
+     * Sets the label for the Y axis. (Plain text only).
      * @param {string} label - The label text.
      */
     setYAxisLabel(label) {
@@ -139,19 +133,14 @@ class EnergyLevelsDiagram {
         }
         this._updateScales();
         this._drawAxes();
-        this._drawLevels(); // Pass data implicitly via this.levelsData
-    }
-
-    /** Cleans up the SVG element. */
-    destroy() {
-        this.container.html(''); // Clear SVG
-        console.log(`EnergyLevelsDiagram in #${this.containerId} destroyed.`);
+        this._drawLevels();
     }
 
     // ========================================================================
     // Public Accessors (Getters)
     // ========================================================================
 
+    /** Returns the main SVG DOM node. */
     get svgNode() {
         return this.svg?.node();
     }
@@ -166,7 +155,7 @@ class EnergyLevelsDiagram {
 
         this.svg = this.container
             .append('svg')
-            .attr('class', 'energy-levels-svg') // Different class from ESBD
+            .attr('class', 'energy-levels-svg')
             .attr('width', this.config.width)
             .attr('height', this.config.height);
 
@@ -178,26 +167,26 @@ class EnergyLevelsDiagram {
                 `translate(${this.config.margin.left},${this.config.margin.top})`
             );
 
-        // Layer groups
+        // Layer group for levels
         this.levelsGroup = this.plotArea
             .append('g')
             .attr('class', 'energy-levels');
 
-        // Scales
+        // Scales (domains updated in _updateScales)
         this.xScale = d3
             .scaleBand()
-            .paddingInner(0.5) // Adjust padding between categories
-            .paddingOuter(0.3);
+            .paddingInner(0.5) // Space between category bands
+            .paddingOuter(0.3); // Space at edges
         this.yScale = d3.scaleLinear();
 
         // Axis Generators
         this.xAxisGen = d3
             .axisBottom(this.xScale)
-            .tickSize(0) // No ticks, just labels
-            .tickPadding(10);
-        this.yAxisGen = d3.axisLeft(this.yScale);
+            .tickSize(0) // No ticks lines
+            .tickPadding(6); // Padding between axis and labels
+        this.yAxisGen = d3.axisLeft(this.yScale); // Ticks configured in _drawAxes
 
-        // Axis Groups
+        // Axis Groups (positioned in _updateScales or _drawAxes)
         this.xAxisGroup = this.plotArea
             .append('g')
             .attr('class', 'energy-levels-x-axis');
@@ -209,10 +198,6 @@ class EnergyLevelsDiagram {
         this.yAxisLabel = this.svg
             .append('text')
             .attr('class', 'energy-levels-y-axis-label')
-            .attr(
-                'transform',
-                `translate(${this.config.margin.left / 2.5}, ${this.config.margin.top + this.plotHeight / 2}) rotate(-90)`
-            )
             .style('text-anchor', 'middle')
             .style('font-size', '11px')
             .style('fill', '#333');
@@ -220,7 +205,7 @@ class EnergyLevelsDiagram {
 
     /** Updates the domains and ranges of the D3 scales. */
     _updateScales() {
-        // Recalculate dimensions in case config changed (though unlikely without resize handling)
+        // Calculate current plot dimensions
         this.plotWidth =
             this.config.width -
             this.config.margin.left -
@@ -230,16 +215,23 @@ class EnergyLevelsDiagram {
             this.config.margin.top -
             this.config.margin.bottom;
 
-        // Update Y scale (linear)
+        // Update Y scale
         this.yScale
-            .domain(this.config.yRange) // Use configured fixed range
+            .domain(this.config.yRange)
             .range([this.plotHeight, 0]) // Pixels (bottom to top)
-            .nice(); // Adjust domain slightly for nice ticks if shown
+            .nice();
 
-        // Update X scale (categorical band scale)
+        // Update X scale
         this.xScale
-            .domain(this.config.categories.map((c) => c.id)) // Use category IDs for domain
-            .range([0, this.plotWidth]); // Pixels (left to right)
+            .domain(this.config.categories.map((c) => c.id)) // Use category IDs
+            .range([0, this.plotWidth]);
+
+        // Update axis group positions (needed if height changes)
+        this.xAxisGroup.attr('transform', `translate(0,${this.plotHeight})`);
+        this.yAxisLabel.attr(
+            'transform',
+            `translate(${this.config.margin.left / 2.5}, ${this.config.margin.top + this.plotHeight / 2}) rotate(-90)`
+        );
     }
 
     // ========================================================================
@@ -251,50 +243,49 @@ class EnergyLevelsDiagram {
         // Update Y Axis
         this.yAxisGen.scale(this.yScale);
         if (!this.config.showYTicks) {
-            this.yAxisGen.tickValues([]); // Remove ticks if configured
+            this.yAxisGen.tickValues([]); // Remove ticks/labels
         } else {
+            this.yAxisGen.tickSize(-this.plotWidth); // Extend ticks as grid lines if shown
             this.yAxisGen.tickValues(null); // Restore default ticks
         }
         this.yAxisGroup
             .transition()
             .duration(this.config.transitionDuration)
             .call(this.yAxisGen);
-        // Remove domain line for cleaner look? Optional.
-        this.yAxisGroup.select('.domain').remove();
 
-        // Update Y Axis Label Text (KaTeX rendering handled by browser in SVG text?)
-        // For SVG text, KaTeX doesn't work directly. Need foreignObject or manual formatting.
-        // Let's just use plain text for axis labels for simplicity in this component.
+        // Style grid lines (if shown)
+        this.yAxisGroup
+            .selectAll('.tick line')
+            .attr('stroke', '#e0e0e0')
+            .attr('stroke-dasharray', '2,2');
+        this.yAxisGroup.select('.domain').remove(); // Remove y-axis line
+
+        // Update Y Axis Label Text
         this.yAxisLabel.text(this.config.yAxisLabel);
-        // Reposition Y label in case height changed
-        this.yAxisLabel.attr(
-            'transform',
-            `translate(${this.config.margin.left / 2.5}, ${this.config.margin.top + this.plotHeight / 2}) rotate(-90)`
-        );
 
         // Update X Axis (Category Labels)
         this.xAxisGen.scale(this.xScale);
         // Use category labels for tick formatting
         this.xAxisGen.tickFormat(
-            (d, i) => this.config.categories[i]?.label || d
+            (categoryId, i) =>
+                this.config.categories.find((c) => c.id === categoryId)
+                    ?.label || categoryId
         );
 
-        this.xAxisGroup
-            .attr('transform', `translate(0,${this.plotHeight})`)
-            .call(this.xAxisGen)
-            .select('.domain')
-            .remove(); // Remove x-axis line
+        this.xAxisGroup.call(this.xAxisGen).select('.domain').remove(); // Remove x-axis line
 
-        // Style x-axis labels if needed (e.g., rotation for long labels)
-        this.xAxisGroup.selectAll('text').style('text-anchor', 'middle');
-        // .attr("transform", "rotate(-30)"); // Example rotation
+        // Optional: Adjust x-axis text style
+        this.xAxisGroup
+            .selectAll('text')
+            .style('text-anchor', 'middle')
+            .style('font-size', '11px');
     }
 
     /** Draws/Updates the energy/potential level lines and labels. */
     _drawLevels() {
         const transitionDuration = this.config.transitionDuration;
-        const lineHalfLength = 20; // Example half-length for level lines
-        const labelOffset = 5; // Example offset for labels from line end
+        const lineHalfLength = 25;
+        const labelOffset = 8;
         const defaultStyle = this.config.defaultLevelStyle;
 
         // --- Data Binding ---
@@ -302,120 +293,130 @@ class EnergyLevelsDiagram {
             .selectAll('g.level-group')
             .data(this.levelsData, (d) => d.levelId); // Use unique levelId as key
 
-        // --- Exit ---
-        levelGroups
-            .exit()
-            .transition()
-            .duration(transitionDuration)
-            .style('opacity', 0)
-            .remove();
+        levelGroups.join(
+            (enter) => {
+                const g = enter
+                    .append('g')
+                    .attr('class', 'level-group')
+                    // Set initial position based on data for transition start
+                    .attr(
+                        'transform',
+                        (d) =>
+                            `translate(${this.xScale(d.categoryId) + this.xScale.bandwidth() / 2}, ${this.yScale(d.yValue)})`
+                    );
 
-        // --- Enter ---
-        const enterGroups = levelGroups
-            .enter()
-            .append('g')
-            .attr('class', 'level-group')
-            // Set initial position based on data
-            .attr(
-                'transform',
-                (d) =>
-                    `translate(${this.xScale(d.categoryId) + this.xScale.bandwidth() / 2}, ${this.yScale(d.yValue)})`
-            )
-            .style('opacity', 0); // Start transparent
+                // Fade-in transition
+                g.style('opacity', 0)
+                    .transition('fade-in')
+                    .duration(transitionDuration)
+                    .style('opacity', 1);
 
-        // Add line segment
-        enterGroups
-            .append('line')
-            .attr('class', 'level-line')
-            .attr('x1', -lineHalfLength)
-            .attr('y1', 0)
-            .attr('x2', lineHalfLength)
-            .attr('y2', 0)
-            .attr('stroke', (d) => d.color || defaultStyle.color)
-            .attr(
-                'stroke-width',
-                (d) => d.style?.lineWidth || defaultStyle.lineWidth
-            )
-            .attr(
-                'stroke-dasharray',
-                (d) => d.style?.dasharray || defaultStyle.dasharray
-            );
+                g.append('line')
+                    .attr('class', 'level-line')
+                    .attr('x1', -lineHalfLength)
+                    .attr('y1', 0)
+                    .attr('x2', lineHalfLength)
+                    .attr('y2', 0)
+                    .attr('stroke', (d) => d.color || defaultStyle.color)
+                    .attr(
+                        'stroke-width',
+                        (d) => d.style?.lineWidth || defaultStyle.lineWidth
+                    )
+                    .attr(
+                        'stroke-dasharray',
+                        (d) => d.style?.dasharray || defaultStyle.dasharray
+                    );
 
-        // Add label structure (foreignObject + span)
-        const fo = enterGroups
-            .append('foreignObject')
-            .attr('class', 'level-label')
-            .attr('x', lineHalfLength + labelOffset)
-            .attr('y', -10) // Adjust vertical alignment offset
-            .attr('width', 1)
-            .attr('height', 1) // Let content define size
-            .style('overflow', 'visible')
-            .style('pointer-events', 'none');
+                // Label structure (foreignObject + span) positioned relative to group origin
+                const fo = g
+                    .append('foreignObject')
+                    .attr('class', 'level-label')
+                    .attr('x', lineHalfLength + labelOffset)
+                    .attr('y', -10) // Approximate vertical center offset
+                    .attr('width', 1)
+                    .attr('height', 1) // Let content define size
+                    .style('overflow', 'visible')
+                    .style('pointer-events', 'none');
 
-        fo.append('xhtml:span')
-            .attr('class', 'katex-label-container')
-            .style('color', (d) => d.color || defaultStyle.color)
-            .style('white-space', 'nowrap')
-            .style('display', 'inline-block')
-            .style('padding', '1px 3px')
-            .style('font-size', '10px') // Smaller font for levels?
-            .style('background', 'rgba(255,255,255,0.7)')
-            .style('border-radius', '2px')
-            // Render KaTeX ONCE on enter
-            .each(function (d) {
-                const span = this;
-                const labelText = d.label || d.levelId; // Raw LaTeX
-                if (span && typeof katex !== 'undefined' && labelText) {
-                    try {
-                        katex.render(labelText, span, {
-                            throwOnError: false,
-                            displayMode: false,
-                        });
-                    } catch (e) {
-                        console.error('KaTeX render error:', e);
-                        span.textContent = labelText;
-                    }
-                } else if (span) {
-                    span.textContent = labelText;
-                }
-            });
+                fo.append('xhtml:span')
+                    .attr('class', 'katex-label-container')
+                    .style('color', (d) => d.color || defaultStyle.color)
+                    .style('white-space', 'nowrap')
+                    .style('display', 'inline-block')
+                    .style('padding', '1px 3px')
+                    .style('font-size', '10px')
+                    .style('background', 'rgba(255,255,255,0.7)')
+                    .style('border-radius', '2px')
+                    // Render KaTeX ONCE on enter
+                    .each(function (d) {
+                        const span = this;
+                        const labelText = d.label || d.levelId; // Raw LaTeX
+                        if (span && typeof katex !== 'undefined' && labelText) {
+                            try {
+                                katex.render(labelText, span, {
+                                    throwOnError: false,
+                                    displayMode: false,
+                                });
+                            } catch (e) {
+                                console.error('KaTeX render error:', e);
+                                span.textContent = labelText;
+                            }
+                        } else if (span) {
+                            span.textContent = labelText;
+                        }
+                    });
 
-        // --- Update + Enter ---
-        const mergedGroups = enterGroups.merge(levelGroups);
+                return g; // Return the entering group
+            },
+            (update) => {
+                // Update styles that might change immediately (before transition)
+                update
+                    .select('line.level-line')
+                    .attr('stroke', (d) => d.color || defaultStyle.color)
+                    .attr(
+                        'stroke-width',
+                        (d) => d.style?.lineWidth || defaultStyle.lineWidth
+                    )
+                    .attr(
+                        'stroke-dasharray',
+                        (d) => d.style?.dasharray || defaultStyle.dasharray
+                    );
+                update
+                    .select('span.katex-label-container')
+                    .style('color', (d) => d.color || defaultStyle.color);
+                // Note: KaTeX label text is NOT updated here assuming it's static per levelId
 
-        // Transition opacity and position
-        mergedGroups
-            .transition()
-            .duration(transitionDuration)
-            .style('opacity', 1)
-            .attr(
-                'transform',
-                (d) =>
-                    `translate(${this.xScale(d.categoryId) + this.xScale.bandwidth() / 2}, ${this.yScale(d.yValue)})`
-            );
-
-        // Update styles only if they might change (optional)
-        mergedGroups
-            .select('line.level-line')
-            .attr('stroke', (d) => d.color || defaultStyle.color)
-            .attr(
-                'stroke-width',
-                (d) => d.style?.lineWidth || defaultStyle.lineWidth
-            )
-            .attr(
-                'stroke-dasharray',
-                (d) => d.style?.dasharray || defaultStyle.dasharray
-            );
-        mergedGroups
-            .select('span.katex-label-container')
-            .style('color', (d) => d.color || defaultStyle.color);
-        // Note: KaTeX content not re-rendered on update
+                // Apply position transition
+                update
+                    .transition('position') // Name transition
+                    .duration(transitionDuration)
+                    .attr(
+                        'transform',
+                        (d) =>
+                            `translate(${this.xScale(d.categoryId) + this.xScale.bandwidth() / 2}, ${this.yScale(d.yValue)})`
+                    );
+            },
+            (exit) => {
+                exit.transition('fade-out') // Name transition
+                    .duration(transitionDuration)
+                    .style('opacity', 0)
+                    .remove(); // Remove element after transition
+            }
+        );
     }
 
     // ========================================================================
     // Private Calculation/Utility Helpers
     // ========================================================================
     // (None needed for this simple component yet)
+
+    // ========================================================================
+    // Destroy Method
+    // ========================================================================
+    destroy() {
+        this.container.html(''); // Clear SVG
+        console.log(`EnergyLevelsDiagram in #${this.containerId} destroyed.`);
+    }
 } // End of class
 
 export default EnergyLevelsDiagram;
