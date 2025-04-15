@@ -240,10 +240,21 @@ class EnergyLevelsDiagram {
 
         // Update axis group positions
         this.xAxisGroup.attr('transform', `translate(0,${this.plotHeight})`);
+
+        // Update Y axis label position and dimensions
+        const yLabelX = effectiveLeftMargin / 2.5;
+        const yLabelY = this.config.margin.top + this.plotHeight / 2;
         this.yAxisLabel.attr(
             'transform',
-            `translate(${this.config.margin.left / 2.5}, ${this.config.margin.top + this.plotHeight / 2}) rotate(-90)`
+            `translate(${yLabelX}, ${yLabelY}) rotate(-90)`
         );
+        const labelWidthEstimate = 200;
+        const labelHeightEstimate = 20; // Estimates
+        this.yAxisLabel
+            .attr('width', labelWidthEstimate)
+            .attr('height', labelHeightEstimate)
+            .attr('x', -labelWidthEstimate / 2)
+            .attr('y', -labelHeightEstimate / 2);
     }
 
     // ========================================================================
