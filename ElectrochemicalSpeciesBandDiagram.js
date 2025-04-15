@@ -475,10 +475,12 @@ class ElectrochemicalSpeciesBandDiagram {
         // Layer groups (order matters for rendering)
         this.backgroundGroup = this.plotArea
             .append('g')
-            .attr('class', 'esbd-backgrounds');
+            .attr('class', 'esbd-backgrounds')
+            .style('pointer-events', 'none');
         this.interfaceGroup = this.plotArea
             .append('g')
-            .attr('class', 'esbd-interfaces');
+            .attr('class', 'esbd-interfaces')
+            .style('pointer-events', 'none');
         this.gridGroup = this.plotArea
             .append('g')
             .attr('class', 'esbd-grid')
@@ -487,7 +489,10 @@ class ElectrochemicalSpeciesBandDiagram {
             .append('g')
             .attr('class', 'esbd-connectors')
             .style('pointer-events', 'none');
-        this.linesGroup = this.plotArea.append('g').attr('class', 'esbd-lines');
+        this.linesGroup = this.plotArea
+            .append('g')
+            .attr('class', 'esbd-lines')
+            .style('pointer-events', 'none');
         // Interaction rectangle sits ON TOP of lines but BELOW markers/labels
         this.interactionRect = this.plotArea
             .append('rect')
@@ -496,7 +501,8 @@ class ElectrochemicalSpeciesBandDiagram {
             .style('pointer-events', 'all'); // Catches events not caught by elements above it
         this.verticalMarkersGroup = this.plotArea
             .append('g')
-            .attr('class', 'esbd-vertical-markers');
+            .attr('class', 'esbd-vertical-markers')
+            .style('pointer-events', 'all');
         this.labelsGroup = this.plotArea
             .append('g')
             .attr('class', 'esbd-labels')
@@ -764,8 +770,7 @@ class ElectrochemicalSpeciesBandDiagram {
             .duration(this.config.transitionDuration)
             .attr('d', (d) =>
                 this.lineGenerator.y((p) => this.yScale(p.y_display))(d.points)
-            )
-            .style('pointer-events', 'none'); // Ensure lines don't block clicks
+            );
     }
 
     _drawConnectors() {
@@ -1056,7 +1061,6 @@ class ElectrochemicalSpeciesBandDiagram {
                         .attr('width', 1)
                         .attr('height', 1) // Start small, let content expand
                         .style('overflow', 'visible')
-                        .style('pointer-events', 'none') // Labels shouldn't block interaction
                         .html(
                             (d) =>
                                 `<span class="katex-label-container" style="color: ${d.color}; white-space: nowrap; display: inline-block; padding: 1px 3px; background: rgba(255,255,255,0.7); border-radius: 2px;"></span>`
