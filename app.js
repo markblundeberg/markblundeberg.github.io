@@ -454,8 +454,9 @@ if (solventContainer) {
     }
 
     // 5. Update Function
-    function updateUnisonShiftDiagrams(phi) {
+    function updateUnisonShiftDiagrams() {
         if (!muBarDiagram || !vDiagram) return; // Don't run if diagrams failed to init
+        const phi = parseFloat(phiSlider.value);
 
         const muBarLevelsData = [];
         const vLevelsData = [];
@@ -498,15 +499,11 @@ if (solventContainer) {
     // 6. Event Listener for Slider
     if (phiSlider) {
         phiSlider.addEventListener('input', (event) => {
-            const phi = parseFloat(event.target.value);
-            if (phiValue) phiValue.textContent = phi.toFixed(2);
-            updateUnisonShiftDiagrams(phi);
+            updateUnisonShiftDiagrams();
         });
 
         // Initial update
-        const initialPhi = parseFloat(phiSlider.value);
-        if (phiValue) phiValue.textContent = initialPhi.toFixed(2);
-        updateUnisonShiftDiagrams(initialPhi);
+        updateUnisonShiftDiagrams();
         console.log('Unison shift demo initialized.');
     } else {
         console.warn('Phi slider not found.');
