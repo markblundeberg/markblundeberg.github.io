@@ -363,7 +363,7 @@ class EnergyLevelsDiagram {
         this.xAxisGen.tickFormat(
             (categoryId) =>
                 this.config.categories.find((c) => c.id === categoryId)
-                    ?.label || categoryId
+                    ?.label ?? categoryId
         );
         this.xAxisGroup
             .transition()
