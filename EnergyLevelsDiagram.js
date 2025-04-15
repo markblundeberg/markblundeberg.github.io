@@ -2,6 +2,8 @@
 // A D3 component for drawing simple energy/potential level diagrams
 // with discrete horizontal categories.
 
+// Assumes D3 and KaTeX (core library AND auto-render extension) are loaded.
+
 class EnergyLevelsDiagram {
     // ========================================================================
     // Constructor
@@ -14,7 +16,7 @@ class EnergyLevelsDiagram {
      * @param {number} [initialConfig.width=200] - Width of the SVG element.
      * @param {number} [initialConfig.height=400] - Height of the SVG element.
      * @param {object} [initialConfig.margin] - Plot margins. Defaults provided if omitted.
-     * @param {string} [initialConfig.yAxisLabel='Potential / Energy'] - Label for the Y axis (plain text).
+     * @param {string} [initialConfig.yAxisLabel='Potential / Energy'] - Label for Y axis (can contain KaTeX delimiters like $..$).
      * @param {Array<number>} [initialConfig.initialYRange=[0, 1]] - Initial [min, max] for Y axis domain.
      * @param {boolean} [initialConfig.showYTicks=true] - Whether to show Y axis ticks and labels.
      * @param {Array<object>} [initialConfig.categories=[]] - Categories for the X axis. Array of {id: string, label: string}.
@@ -106,8 +108,8 @@ class EnergyLevelsDiagram {
     }
 
     /**
-     * Sets the label for the Y axis. (Plain text only).
-     * @param {string} label - The label text.
+     * Sets the label for the Y axis. Supports KaTeX delimiters.
+     * @param {string} label - The label text (e.g., 'Potential $V$ (V)').
      */
     setYAxisLabel(label) {
         this.config.yAxisLabel = label || '';
@@ -177,13 +179,24 @@ class EnergyLevelsDiagram {
             .append('g')
             .attr('class', 'energy-levels-y-axis');
 
-        // Y-Axis Label Element
+        // Y-Axis Label Element using foreignObject for KaTeX
         this.yAxisLabel = this.svg
-            .append('text')
+            .append('foreignObject')
             .attr('class', 'energy-levels-y-axis-label')
-            .style('text-anchor', 'middle')
+            .attr('width', 1)
+            .attr('height', 1) // Size determined by content/transform
+            .style('overflow', 'visible')
+            .style('text-anchor', 'middle'); // Note: text-anchor on foreignObject might not work as expected
+
+        // Add span inside foreignObject for KaTeX rendering
+        this.yAxisLabel
+            .append('xhtml:span')
+            .attr('class', 'katex-axis-label-container')
+            .style('display', 'inline-block') // Important for rotation and sizing
+            .style('text-align', 'center') // Center text within span
             .style('font-size', '11px')
-            .style('fill', '#333');
+            .style('color', '#333');
+        // Transform set in _updateScales
 
         // Layer group for levels
         this.levelsGroup = this.plotArea
@@ -265,8 +278,35 @@ class EnergyLevelsDiagram {
             .attr('stroke-dasharray', '2,2');
         this.yAxisGroup.select('.domain').remove(); // Remove y-axis line
 
-        // Update Y Axis Label Text
-        this.yAxisLabel.text(this.config.yAxisLabel);
+        // Update Y Axis Label Text using renderMathInElement
+        const yLabelSpan = this.yAxisLabel
+            .select('span.katex-axis-label-container')
+            .node();
+        if (yLabelSpan && this.config.yAxisLabel) {
+            // Set the raw text content (including delimiters like $...$)
+            yLabelSpan.textContent = this.config.yAxisLabel;
+            // Call the auto-render function on the span
+            // Ensure KaTeX auto-render script is loaded in HTML
+            if (typeof renderMathInElement === 'function') {
+                try {
+                    renderMathInElement(yLabelSpan, {
+                        delimiters: [
+                            { left: '$$', right: '$$', display: true },
+                            { left: '$', right: '$', display: false },
+                            { left: '\\(', right: '\\)', display: false },
+                            { left: '\\[', right: '\\]', display: true },
+                        ],
+                        throwOnError: false,
+                    });
+                } catch (e) {
+                    console.error('KaTeX render error for Y Axis Label:', e);
+                }
+            } else {
+                console.warn('KaTeX auto-render extension not loaded.');
+            }
+        } else if (yLabelSpan) {
+            yLabelSpan.textContent = ''; // Clear if no label
+        }
 
         // Update X Axis (Category Labels)
         this.xAxisGen.scale(this.xScale);

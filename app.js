@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const solventDiagramConfig = {
     width: 200, // Wider to accommodate two categories + labels
     height: 400, // Taller to accommodate potential range
-    yAxisLabel: 'Illustrative V^⊖ (Volts vs. Arb. Ref.)',
+    yAxisLabel: 'Illustrative $V^\\ominus_i$ (Volts vs. Arb. Ref.)',
     initialYRange: [-3.5, 3.5], // Example range covering typical values vs SHE somewhat
     showYTicks: true, // Show ticks for reference
     categories: [
