@@ -23,7 +23,7 @@ class EnergyLevelsDiagram {
      * @param {boolean} [initialConfig.showYTicks=true] - Whether to show Y axis ticks and labels.
      * @param {Array<object>} [initialConfig.categories=[]] - Categories for the X axis. Array of {id: string, label: string}.
      * @param {object} [initialConfig.defaultLevelStyle] - Default styles for levels.
-     * @param {number} [initialConfig.transitionDuration=250] - Duration for D3 transitions (ms).
+     * @param {number} [initialConfig.transitionDuration=500] - Duration for D3 transitions (ms).
      * @param {number} [initialConfig.resizeDebounceDelay=200] - Debounce delay for resize events (ms).
      */
     constructor(containerId, initialConfig = {}) {
@@ -55,7 +55,7 @@ class EnergyLevelsDiagram {
                 lineWidth: 2,
                 dasharray: null,
             },
-            transitionDuration: initialConfig.transitionDuration ?? 250,
+            transitionDuration: initialConfig.transitionDuration ?? 500,
             resizeDebounceDelay: initialConfig.resizeDebounceDelay ?? 200,
         };
         this.plotWidth = 0;
@@ -484,6 +484,7 @@ class EnergyLevelsDiagram {
                 update
                     .transition('position') // Name transition
                     .duration(transitionDuration)
+                    .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
                     .attr(
                         'transform',
                         (d) =>
