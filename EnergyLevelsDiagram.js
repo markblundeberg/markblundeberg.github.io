@@ -167,11 +167,6 @@ class EnergyLevelsDiagram {
                 `translate(${this.config.margin.left},${this.config.margin.top})`
             );
 
-        // Layer group for levels
-        this.levelsGroup = this.plotArea
-            .append('g')
-            .attr('class', 'energy-levels');
-
         // Scales (domains updated in _updateScales)
         this.xScale = d3
             .scaleBand()
@@ -202,6 +197,11 @@ class EnergyLevelsDiagram {
             .style('text-anchor', 'middle')
             .style('font-size', '11px')
             .style('fill', '#333');
+
+        // Layer group for levels
+        this.levelsGroup = this.plotArea
+            .append('g')
+            .attr('class', 'energy-levels');
     }
 
     /** Updates the domains and ranges of the D3 scales. */
