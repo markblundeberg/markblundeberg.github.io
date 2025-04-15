@@ -74,6 +74,11 @@ export function formatPopupBaseContent(info) {
     return content;
 }
 
+// ========================================================================
+// Debounce and Throttle Utilities
+// Based on common patterns (similar to Lodash implementations)
+// ========================================================================
+
 /**
  * Creates a debounced function that delays invoking func until after wait milliseconds
  * have elapsed since the last time the debounced function was invoked.
@@ -101,4 +106,63 @@ export function debounce(func, wait) {
     };
 
     return debounced;
+}
+
+/**
+ * Creates a throttled function that only invokes func at most once per every wait milliseconds.
+ * Includes options for leading and trailing calls and a .cancel() method.
+ * @param {Function} func The function to throttle.
+ * @param {number} wait The number of milliseconds to throttle invocations to.
+ * @param {object} [options={}] Optional configuration.
+ * @param {boolean} [options.leading=true] Specify invoking on the leading edge of the timeout.
+ * @param {boolean} [options.trailing=true] Specify invoking on the trailing edge of the timeout.
+ * @returns {Function & { cancel: () => void }} Returns the new throttled function with a cancel method.
+ */
+export function throttle(func, wait, options = {}) {
+    let context, args, result;
+    let timeoutId = null;
+    let previous = 0; // Timestamp of the last execution
+    if (!options) options = {};
+    const leading = options.leading !== false; // Default true
+    const trailing = options.trailing !== false; // Default true
+
+    const later = function () {
+        previous = leading === false ? 0 : Date.now(); // Reset previous if leading is false
+        timeoutId = null;
+        result = func.apply(context, args); // Execute the function
+        if (!timeoutId) context = args = null; // Clear references if no pending timeout
+    };
+
+    const throttled = function () {
+        const now = Date.now();
+        // If leading is false and this is the first call, set previous to now
+        if (!previous && leading === false) previous = now;
+
+        const remaining = wait - (now - previous);
+        context = this;
+        args = arguments;
+
+        if (remaining <= 0 || remaining > wait) {
+            // If time expired or system clock changed drastically
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+                timeoutId = null;
+            }
+            previous = now;
+            result = func.apply(context, args); // Execute immediately
+            if (!timeoutId) context = args = null;
+        } else if (trailing && !timeoutId) {
+            // Schedule trailing call if option enabled and no timer currently pending
+            timeoutId = setTimeout(later, remaining);
+        }
+        return result;
+    };
+
+    throttled.cancel = function () {
+        clearTimeout(timeoutId);
+        previous = 0;
+        timeoutId = context = args = null;
+    };
+
+    return throttled;
 }
