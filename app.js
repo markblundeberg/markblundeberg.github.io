@@ -390,3 +390,127 @@ if (solventContainer) {
 }
 
 // --- End Energy Level Diagram Example ---
+
+{
+    // --- Unison Shift Demo ---
+
+    // 1. Data for Generic Species
+    // Using ecp_init as baseline mu_bar at phi=0 (arbitrary energy units, assuming F=1)
+    const ionData = {
+        // Using simple keys A, B, C, D, E
+        A: { z: -2, ecp_init: +1.0, color: '#e41a1c', latex: 'A^{2-}' }, // Red
+        B: { z: -1, ecp_init: -1.2, color: '#377eb8', latex: 'B^{-}' }, // Blue
+        C: { z: 0, ecp_init: +1.7, color: '#4daf4a', latex: 'C' }, // Green (Neutral)
+        D: { z: +1, ecp_init: +0.5, color: '#ff7f00', latex: 'D^{+}' }, // Purple
+        E: { z: +2, ecp_init: +2.6, color: '#e41a1c', latex: 'E^{2+}' }, // Orange
+    };
+    const speciesKeys = Object.keys(ionData);
+
+    // 2. Configuration for the Diagrams
+    const commonConfig = {
+        width: 250, // Narrower plots
+        height: 350,
+        showYTicks: false, // No numerical ticks as requested
+        categories: [{ id: 'levels', label: '' }], // Single category, no label needed below
+        margin: { top: 10, right: 40, bottom: 20, left_compact: 25 }, // Minimal margins if no Y axis label/ticks
+    };
+
+    const muBarConfig = {
+        ...commonConfig,
+        yAxisLabel: '$\\bar{\\mu}_i$ (Arb. Energy)', // KaTeX label
+        initialYRange: [-2.5, 5.0], // Calculated range + padding
+    };
+
+    const vConfig = {
+        ...commonConfig,
+        yAxisLabel: '$V_i$ (Arb. Volts)', // KaTeX label (Volts relative to F=1)
+        initialYRange: [-2.0, 2.8], // Calculated range + padding
+    };
+
+    // 3. DOM References
+    const phiSlider = document.getElementById('phi-slider');
+    const phiValue = document.getElementById('phi-value');
+    const muBarContainerId = '#mu-bar-diagram-container';
+    const vContainerId = '#v-diagram-container';
+
+    // 4. Instantiate Diagrams (check containers exist first)
+    let muBarDiagram = null;
+    let vDiagram = null;
+    const muBarContainer = document.querySelector(muBarContainerId);
+    const vContainer = document.querySelector(vContainerId);
+
+    if (muBarContainer && vContainer) {
+        try {
+            muBarDiagram = new EnergyLevelsDiagram(
+                muBarContainerId,
+                muBarConfig
+            );
+            vDiagram = new EnergyLevelsDiagram(vContainerId, vConfig);
+        } catch (error) {
+            console.error('Failed to initialize level diagrams:', error);
+        }
+    } else {
+        console.warn('Container divs for level diagrams not found.');
+    }
+
+    // 5. Update Function
+    function updateUnisonShiftDiagrams(phi) {
+        if (!muBarDiagram || !vDiagram) return; // Don't run if diagrams failed to init
+
+        const muBarLevelsData = [];
+        const vLevelsData = [];
+
+        speciesKeys.forEach((key) => {
+            const ion = ionData[key];
+            const z = ion.z;
+            const ecp_init = ion.ecp_init;
+
+            // Calculate mu_bar (assuming F=1)
+            const mu_bar = ecp_init + z * phi;
+            muBarLevelsData.push({
+                categoryId: 'levels',
+                levelId: key + '_mu', // Unique ID
+                yValue: mu_bar,
+                label: `\\bar{\\mu}_{${ion.latex}}`, // Raw LaTeX for component
+                color: ion.color,
+            });
+
+            // Calculate V (only if z is not 0)
+            if (z !== 0) {
+                // V = mu_bar / z (since F=1)
+                // OR V = V_init + phi = (ecp_init / z) + phi
+                const V = ecp_init / z + phi;
+                vLevelsData.push({
+                    categoryId: 'levels',
+                    levelId: key + '_V', // Unique ID
+                    yValue: V,
+                    label: `V_{${ion.latex}}`, // Raw LaTeX for component
+                    color: ion.color,
+                });
+            }
+        });
+
+        // Update the diagrams
+        muBarDiagram.setLevels(muBarLevelsData);
+        vDiagram.setLevels(vLevelsData);
+    }
+
+    // 6. Event Listener for Slider
+    if (phiSlider) {
+        phiSlider.addEventListener('input', (event) => {
+            const phi = parseFloat(event.target.value);
+            if (phiValue) phiValue.textContent = phi.toFixed(2);
+            updateUnisonShiftDiagrams(phi);
+        });
+
+        // Initial update
+        const initialPhi = parseFloat(phiSlider.value);
+        if (phiValue) phiValue.textContent = initialPhi.toFixed(2);
+        updateUnisonShiftDiagrams(initialPhi);
+        console.log('Unison shift demo initialized.');
+    } else {
+        console.warn('Phi slider not found.');
+    }
+
+    // --- End Unison Shift Demo ---
+}
