@@ -58,27 +58,25 @@ class EnergyLevelsDiagram {
             transitionDuration: initialConfig.transitionDuration ?? 500,
             resizeDebounceDelay: initialConfig.resizeDebounceDelay ?? 200,
         };
+
+        // --- Internal state ---
         this.plotWidth = 0;
         this.plotHeight = 0; // Will be calculated by _updateScales
         this.levelsData = [];
 
         this._setupD3Structure();
-
-        // Initial size calculation and draw
         const initialWidth =
             this.container.node().clientWidth || this.config.width;
         const initialHeight =
             this.container.node().clientHeight || this.config.height;
-        // Set initial config size based on container
         this.config.width = initialWidth;
         this.config.height = initialHeight;
         this.svg
             .attr('width', this.config.width)
             .attr('height', this.config.height);
-        // Perform initial redraw which includes scale updates
-        this.redraw();
+        this.redraw(); // Initial draw
 
-        // Setup observer with debounced handler
+        // Setup resize observer
         this._debouncedHandleResize = debounce((width, height) => {
             this._handleResize(width, height);
         }, this.config.resizeDebounceDelay);
@@ -377,14 +375,13 @@ class EnergyLevelsDiagram {
     /** Draws/Updates the energy/potential level lines and labels. */
     _drawLevels() {
         const transitionDuration = this.config.transitionDuration;
-        const lineHalfLength = 0.5 * this.xScale.bandwidth();
+        const lineHalfLength = Math.max(5, this.xScale.bandwidth() * 0.5); // Adjusted based on bandwidth
         const labelOffset = 0;
         const defaultStyle = this.config.defaultLevelStyle;
 
-        // --- Data Binding ---
         const levelGroups = this.levelsGroup
             .selectAll('g.level-group')
-            .data(this.levelsData, (d) => d.levelId); // Use unique levelId as key
+            .data(this.levelsData, (d) => d.levelId);
 
         levelGroups.join(
             (enter) => {
