@@ -270,16 +270,16 @@ class EnergyLevelsDiagram {
 
         // Update X Axis (Category Labels)
         this.xAxisGen.scale(this.xScale);
-        // Use category labels for tick formatting
         this.xAxisGen.tickFormat(
-            (categoryId, i) =>
+            (categoryId) =>
                 this.config.categories.find((c) => c.id === categoryId)
                     ?.label || categoryId
         );
-
-        this.xAxisGroup.call(this.xAxisGen).select('.domain').remove(); // Remove x-axis line
-
-        // Optional: Adjust x-axis text style
+        this.xAxisGroup
+            .transition()
+            .duration(this.config.transitionDuration) // Transition axis update
+            .call(this.xAxisGen);
+        this.xAxisGroup.select('.domain').remove(); // Remove x-axis line
         this.xAxisGroup
             .selectAll('text')
             .style('text-anchor', 'middle')
