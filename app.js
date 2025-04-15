@@ -376,6 +376,7 @@ if (solventContainer) {
             solventDiagramConfig
         );
         solventDiagram.setLevels(solventLevelsData);
+        solventDiagram.redraw();
         console.log('Solvent comparison diagram initialized.');
     } catch (error) {
         console.error(
@@ -494,7 +495,9 @@ if (solventContainer) {
 
         // Update the diagrams
         muBarDiagram.setLevels(muBarLevelsData);
+        muBarDiagram.redraw();
         vDiagram.setLevels(vLevelsData);
+        vDiagram.redraw();
     }
 
     // 6. Event Listener for Slider

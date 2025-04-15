@@ -98,7 +98,7 @@ class EnergyLevelsDiagram {
     // ========================================================================
 
     /**
-     * Updates the levels displayed on the diagram.
+     * Updates the levels displayed on the diagram. Caller must .redraw()
      * @param {Array<object>} [levelsData=[]] - Flat array of level objects.
      * Expected format: [{ categoryId, levelId, yValue, label (raw LaTeX), color?, style?: {lineWidth?, dasharray?} }, ...]
      */
@@ -110,11 +110,10 @@ class EnergyLevelsDiagram {
             return;
         }
         this.levelsData = levelsData;
-        this.redraw();
     }
 
     /**
-     * Sets the vertical range (domain) of the Y axis.
+     * Sets the vertical range (domain) of the Y axis. Caller must .redraw()
      * @param {number} min - Minimum value for the Y axis.
      * @param {number} max - Maximum value for the Y axis.
      */
@@ -127,7 +126,6 @@ class EnergyLevelsDiagram {
             return;
         }
         this.config.yRange = [min, max];
-        this.redraw();
     }
 
     /**
@@ -490,12 +488,14 @@ class EnergyLevelsDiagram {
                         (d) =>
                             `translate(${this.xScale(d.categoryId) + this.xScale.bandwidth() / 2}, ${this.yScale(d.yValue)})`
                     );
+                return update;
             },
             (exit) => {
                 exit.transition('fade-out') // Name transition
                     .duration(transitionDuration)
                     .style('opacity', 0)
                     .remove(); // Remove element after transition
+                return exit;
             }
         );
     }
