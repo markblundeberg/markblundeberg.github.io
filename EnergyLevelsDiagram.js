@@ -55,15 +55,10 @@ class EnergyLevelsDiagram {
             },
             transitionDuration: initialConfig.transitionDuration ?? 250,
         };
-
-        // Calculate initial plot dimensions (will be updated by _updateScales)
         this.plotWidth = 0;
-        this.plotHeight = 0;
-
-        // --- Internal state ---
+        this.plotHeight = 0; // Will be calculated by _updateScales
         this.levelsData = [];
 
-        // --- D3 Setup ---
         this._setupD3Structure();
         this.redraw(); // Initial draw
 
@@ -98,7 +93,7 @@ class EnergyLevelsDiagram {
     setYRange(min, max) {
         if (typeof min !== 'number' || typeof max !== 'number' || min >= max) {
             console.error(
-                'EnergyLevelsDiagram Error: Invalid arguments for setYRange. Requires min < max.',
+                'EnergyLevelsDiagram Error: Invalid arguments for setYRange.',
                 { min, max }
             );
             return;
@@ -150,14 +145,14 @@ class EnergyLevelsDiagram {
 
         this.svg = this.container
             .append('svg')
-            .attr('class', 'energy-levels-svg')
+            .attr('class', 'energy-levels-svg') // Use class for CSS
             .attr('width', this.config.width)
             .attr('height', this.config.height);
 
         this.plotArea = this.svg
             .append('g')
             .attr('class', 'energy-levels-plot-area');
-        // Transform set in _updateScales based on dynamic margin
+        // Transform set in _updateScales
 
         // Scales
         this.xScale = d3
@@ -171,7 +166,7 @@ class EnergyLevelsDiagram {
         this.xAxisGen = d3.axisBottom(this.xScale).tickSize(0).tickPadding(6);
         this.yAxisGen = d3.axisLeft(this.yScale);
 
-        // Axis Groups (positioned in _updateScales or _drawAxes)
+        // Axis Groups
         this.xAxisGroup = this.plotArea
             .append('g')
             .attr('class', 'energy-levels-x-axis');
@@ -222,12 +217,11 @@ class EnergyLevelsDiagram {
             console.warn(
                 'Plot dimensions are not positive after margin calculation.'
             );
-            // Optionally handle this case, e.g., by setting a minimum size
             this.plotWidth = Math.max(10, this.plotWidth);
             this.plotHeight = Math.max(10, this.plotHeight);
         }
 
-        // Update plot area transform using effective margin
+        // Update plot area transform
         this.plotArea.attr(
             'transform',
             `translate(${effectiveLeftMargin},${this.config.margin.top})`
@@ -266,12 +260,12 @@ class EnergyLevelsDiagram {
             this.yAxisGen.tickSize(-this.plotWidth);
             this.yAxisGen.tickValues(null);
         }
+        // Apply axis generator with transition
         this.yAxisGroup
             .transition()
             .duration(this.config.transitionDuration)
             .call(this.yAxisGen);
-
-        // Style grid lines (if shown)
+        // Style grid lines and remove domain line after transition (or immediately)
         this.yAxisGroup
             .selectAll('.tick line')
             .attr('stroke', '#e0e0e0')
@@ -343,7 +337,6 @@ class EnergyLevelsDiagram {
                 const g = enter
                     .append('g')
                     .attr('class', 'level-group')
-                    // Set initial position based on data for transition start
                     .attr(
                         'transform',
                         (d) =>
@@ -453,7 +446,7 @@ class EnergyLevelsDiagram {
     // ========================================================================
     // Private Calculation/Utility Helpers
     // ========================================================================
-    // (None needed for this simple component yet)
+    // (None needed yet)
 
     // ========================================================================
     // Destroy Method
