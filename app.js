@@ -398,21 +398,21 @@ if (solventContainer) {
     // Using ecp_init as baseline mu_bar at phi=0 (arbitrary energy units, assuming F=1)
     const ionData = {
         // Using simple keys A, B, C, D, E
-        A: { z: -2, ecp_init: +1.0, color: '#e41a1c', latex: 'A^{2-}' }, // Red
-        B: { z: -1, ecp_init: -1.2, color: '#377eb8', latex: 'B^{-}' }, // Blue
+        A: { z: -2, ecp_init: +1.0, color: '#984ea3', latex: 'A^{2-}' }, // Purple
+        B: { z: -1, ecp_init: -0.9, color: '#377eb8', latex: 'B^{-}' }, // Blue
         C: { z: 0, ecp_init: +1.7, color: '#4daf4a', latex: 'C' }, // Green (Neutral)
-        D: { z: +1, ecp_init: +0.5, color: '#ff7f00', latex: 'D^{+}' }, // Purple
-        E: { z: +2, ecp_init: +2.6, color: '#e41a1c', latex: 'E^{2+}' }, // Orange
+        D: { z: +1, ecp_init: +0.5, color: '#ff7f00', latex: 'D^{+}' }, // Orange
+        E: { z: +2, ecp_init: +2.6, color: '#e41a1c', latex: 'E^{2+}' }, // Red
     };
     const speciesKeys = Object.keys(ionData);
 
     // 2. Configuration for the Diagrams
     const commonConfig = {
-        width: 250, // Narrower plots
-        height: 350,
+        width: 100, // Narrower plots
+        height: 250,
         showYTicks: false, // No numerical ticks as requested
         categories: [{ id: 'levels', label: '' }], // Single category, no label needed below
-        margin: { top: 10, right: 40, bottom: 20, left_compact: 25 }, // Minimal margins if no Y axis label/ticks
+        margin: { top: 10, right: 0, bottom: 20, left_compact: 25 }, // Minimal margins if no Y axis label/ticks
     };
 
     const muBarConfig = {
