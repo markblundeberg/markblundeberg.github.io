@@ -415,7 +415,8 @@ class EnergyLevelsDiagram {
     /** Draws/Updates the energy/potential level lines and labels. */
     _drawLevels() {
         const transitionDuration = this.config.transitionDuration;
-        const lineHalfLength = Math.max(5, this.xScale.bandwidth() * 0.5); // Adjusted based on bandwidth
+        const bandwidth = this.xScale.bandwidth();
+        const lineHalfLength = Math.max(5, bandwidth * 0.5); // Adjusted based on bandwidth
         const labelOffset = 0;
         const defaultStyle = this.config.defaultLevelStyle;
 
@@ -431,7 +432,7 @@ class EnergyLevelsDiagram {
                     .attr(
                         'transform',
                         (d) =>
-                            `translate(${this.xScale(d.categoryId) + this.xScale.bandwidth() / 2}, ${this.yScale(d.yValue)})`
+                            `translate(${this.xScale(d.categoryId) + bandwidth / 2}, ${this.yScale(d.yValue)})`
                     );
 
                 // Fade-in transition
@@ -523,7 +524,7 @@ class EnergyLevelsDiagram {
                     .attr(
                         'transform',
                         (d) =>
-                            `translate(${this.xScale(d.categoryId) + this.xScale.bandwidth() / 2}, ${this.yScale(d.yValue)})`
+                            `translate(${this.xScale(d.categoryId) + bandwidth / 2}, ${this.yScale(d.yValue)})`
                     );
                 return update;
             },
@@ -539,8 +540,7 @@ class EnergyLevelsDiagram {
         this.levelPositions.clear();
         mergedGroups.each((d) => {
             // Calculate and store positions after transform is set/updated
-            const x_center_px =
-                this.xScale(d.categoryId) + this.xScale.bandwidth() / 2;
+            const x_center_px = this.xScale(d.categoryId) + bandwidth / 2;
             const y_px = this.yScale(d.yValue);
             if (isFinite(x_center_px) && isFinite(y_px)) {
                 this.levelPositions.set(d.levelId, { x_center_px, y_px });
@@ -559,82 +559,94 @@ class EnergyLevelsDiagram {
         for (const arrowDef of arrowData) {
             const pos1 = levelPositions.get(arrowDef.fromLevelId);
             const pos2 = levelPositions.get(arrowDef.toLevelId);
-            // Only include if both endpoints exist
-            if (pos1 && pos2) {
-                drawableArrowData.push({
-                    arrowId: arrowDef.arrowId,
-                    x1: pos1.x_center_px,
-                    y1: pos1.y_px, // Use calculated pixel coords
-                    x2: pos2.x_center_px,
-                    y2: pos2.y_px,
-                    label: arrowDef.label, // Raw LaTeX
-                    arrowStyle: arrowDef.arrowStyle || '->', // Default to forward arrow
-                    cssClass: arrowDef.cssClass || '',
-                    color: arrowDef.color || '#555', // Default arrow color
-                });
-            }
+            if (!(pos1 && pos2)) continue;
+            drawableArrowData.push({
+                arrowId: arrowDef.arrowId,
+                x1: pos1.x_center_px,
+                y1: pos1.y_px, // Use calculated pixel coords
+                x2: pos2.x_center_px,
+                y2: pos2.y_px,
+                label: arrowDef.label, // Raw LaTeX
+                arrowStyle: arrowDef.arrowStyle || '->', // Default to forward arrow
+                cssClass: arrowDef.cssClass || '',
+                color: arrowDef.color || '#555', // Default arrow color
+            });
         }
 
         // 2. Data Binding for Arrows
-        const arrowGroups = this.arrowsGroup
+
+        // Helpers: shared attributes for on-enter (immediate) and update (transition)
+        function applyLineAttributes(lineSel) {
+            lineSel
+                .attr('stroke', (d) => d.color)
+                .attr('x1', (d) => d.x1)
+                .attr('y1', (d) => d.y1)
+                .attr('x2', (d) => d.x2)
+                .attr('y2', (d) => d.y2);
+        }
+        function applyLabelAttributes(labelSel) {
+            labelSel
+                .attr('x', (d) => (d.x1 + d.x2) / 2 + 5) // Offset slightly right of midpoint
+                .attr('y', (d) => (d.y1 + d.y2) / 2 - 8); // Offset slightly above midpoint
+        }
+
+        const mergedGroups = this.arrowsGroup
             .selectAll('g.level-arrow')
-            .data(drawableArrowData, (d) => d.arrowId);
+            .data(drawableArrowData, (d) => d.arrowId)
+            .join(
+                (enter) => {
+                    const g = enter
+                        .append('g')
+                        .attr(
+                            'class',
+                            (d) => `level-arrow ${d.cssClass || ''}`
+                        );
+                    // fade-in
+                    g.style('opacity', 0)
+                        .transition('fade-in')
+                        .duration(transitionDuration)
+                        .style('opacity', 1);
 
-        // 3. Exit
-        arrowGroups
-            .exit()
-            .transition()
-            .duration(transitionDuration)
-            .style('opacity', 0)
-            .remove();
+                    const line = g
+                        .append('line')
+                        .attr('class', 'arrow-line')
+                        .attr('stroke-width', 1.5)
+                        .call(applyLineAttributes);
 
-        // 4. Enter
-        const enterGroups = arrowGroups
-            .enter()
-            .append('g')
-            .attr('class', (d) => `level-arrow ${d.cssClass || ''}`)
-            .style('opacity', 0);
-
-        // Enter: Add line
-        enterGroups
-            .append('line')
-            .attr('class', 'arrow-line')
-            .attr('stroke', (d) => d.color)
-            .attr('stroke-width', 1.5);
-
-        // Enter: Add label structure
-        const fo = enterGroups
-            .append('foreignObject')
-            .attr('class', 'arrow-label')
-            .attr('width', 1)
-            .attr('height', 1)
-            .style('overflow', 'visible')
-            .style('pointer-events', 'none')
-            .style('text-align', 'center'); // Center label text
-
-        fo.append('xhtml:span')
-            .attr('class', 'katex-label-container')
-            .style('color', (d) => d.color)
-            .style('white-space', 'nowrap')
-            .style('display', 'inline-block')
-            .style('padding', '0px 2px')
-            .style('font-size', '9px') // Smaller label for arrows
-            .style('background', 'rgba(255,255,255,0.8)'); // Background for readability
-
-        // 5. Update + Enter (Merged)
-        const mergedGroups = enterGroups.merge(arrowGroups);
+                    const fo = g
+                        .append('foreignObject')
+                        .attr('class', 'arrow-label')
+                        .attr('width', 1)
+                        .attr('height', 1)
+                        .style('overflow', 'visible')
+                        .style('pointer-events', 'none')
+                        .style('text-align', 'center')
+                        .call(applyLabelAttributes);
+                    fo.append('xhtml:span')
+                        .attr('class', 'katex-label-container')
+                        .style('color', (d) => d.color)
+                        .style('white-space', 'nowrap')
+                        .style('display', 'inline-block')
+                        .style('padding', '0px 2px')
+                        .style('font-size', '9px')
+                        .style('background', 'rgba(255,255,255,0.8)');
+                    return g;
+                },
+                (update) => update,
+                (exit) => {
+                    exit.transition()
+                        .duration(transitionDuration)
+                        .style('opacity', 0)
+                        .remove();
+                }
+            );
 
         // Update line position and style
         mergedGroups
             .select('line.arrow-line')
-            .interrupt() // Interrupt previous transitions
             .transition()
             .duration(transitionDuration)
-            .attr('x1', (d) => d.x1)
-            .attr('y1', (d) => d.y1)
-            .attr('x2', (d) => d.x2)
-            .attr('y2', (d) => d.y2)
-            .attr('stroke', (d) => d.color)
+            .call(applyLineAttributes)
             // Apply arrowheads based on style
             .attr('marker-start', (d) =>
                 d.arrowStyle.includes('<') ? 'url(#arrowhead)' : null
@@ -646,17 +658,19 @@ class EnergyLevelsDiagram {
         // Update label position and render KaTeX
         mergedGroups
             .select('foreignObject.arrow-label')
-            .interrupt()
             .transition()
             .duration(transitionDuration)
-            // Position label at midpoint, slightly offset horizontally maybe?
-            .attr('x', (d) => (d.x1 + d.x2) / 2 + 5) // Offset slightly right of midpoint
-            .attr('y', (d) => (d.y1 + d.y2) / 2 - 8) // Offset slightly above midpoint
+            .call(applyLabelAttributes)
             .select('span.katex-label-container')
             .each(function (d) {
                 // Render KaTeX
                 const span = this;
                 const labelText = d.label; // Raw LaTeX
+
+                // //
+                // if (d.datum().shownLabel === labelText) return;
+                // d.datum().shownLabel = labelText;
+
                 if (span && typeof katex !== 'undefined' && labelText) {
                     try {
                         katex.render(labelText, span, {
@@ -671,12 +685,6 @@ class EnergyLevelsDiagram {
                     span.textContent = '';
                 } // Clear if no label
             });
-
-        // Fade in entering groups
-        mergedGroups
-            .transition('fade-in')
-            .duration(transitionDuration)
-            .style('opacity', 1);
     }
 
     // ========================================================================
