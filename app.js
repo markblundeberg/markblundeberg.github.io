@@ -6,6 +6,7 @@ import ConcentrationCellComponent from './ConcentrationCellComponent.js';
 import LiIonBatteryComponent from './LiIonBatteryComponent.js';
 import LeadAcidBatteryComponent from './LeadAcidBatteryComponent.js';
 import EnergyLevelsDiagram from './EnergyLevelsDiagram.js';
+import { throttle } from './utils.js';
 
 // --- Configuration Objects ---
 
@@ -498,9 +499,10 @@ if (solventContainer) {
 
     // 6. Event Listener for Slider
     if (phiSlider) {
-        phiSlider.addEventListener('input', (event) => {
-            updateUnisonShiftDiagrams();
-        });
+        phiSlider.addEventListener(
+            'input',
+            throttle((event) => updateUnisonShiftDiagrams(), 100)
+        );
 
         // Initial update
         updateUnisonShiftDiagrams();
