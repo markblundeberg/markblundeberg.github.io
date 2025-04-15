@@ -4,6 +4,8 @@
 
 // Assumes D3 and KaTeX (core library AND auto-render extension) are loaded.
 
+import { debounce } from './utils.js';
+
 class EnergyLevelsDiagram {
     // ========================================================================
     // Constructor
@@ -22,6 +24,7 @@ class EnergyLevelsDiagram {
      * @param {Array<object>} [initialConfig.categories=[]] - Categories for the X axis. Array of {id: string, label: string}.
      * @param {object} [initialConfig.defaultLevelStyle] - Default styles for levels.
      * @param {number} [initialConfig.transitionDuration=250] - Duration for D3 transitions (ms).
+     * @param {number} [initialConfig.resizeDebounceDelay=200] - Debounce delay for resize events (ms).
      */
     constructor(containerId, initialConfig = {}) {
         this.containerId = containerId;
@@ -42,7 +45,6 @@ class EnergyLevelsDiagram {
         this.config = {
             width: initialConfig.width || 200,
             height: initialConfig.height || 400,
-            // Merge provided margin with defaults carefully
             margin: { ...defaultMargin, ...(initialConfig.margin || {}) },
             yAxisLabel: initialConfig.yAxisLabel || 'Potential / Energy',
             yRange: initialConfig.initialYRange || [0, 1],
@@ -54,13 +56,39 @@ class EnergyLevelsDiagram {
                 dasharray: null,
             },
             transitionDuration: initialConfig.transitionDuration ?? 250,
+            resizeDebounceDelay: initialConfig.resizeDebounceDelay ?? 200,
         };
         this.plotWidth = 0;
         this.plotHeight = 0; // Will be calculated by _updateScales
         this.levelsData = [];
 
         this._setupD3Structure();
-        this.redraw(); // Initial draw
+
+        // Initial size calculation and draw
+        const initialWidth =
+            this.container.node().clientWidth || this.config.width;
+        const initialHeight =
+            this.container.node().clientHeight || this.config.height;
+        // Set initial config size based on container
+        this.config.width = initialWidth;
+        this.config.height = initialHeight;
+        this.svg
+            .attr('width', this.config.width)
+            .attr('height', this.config.height);
+        // Perform initial redraw which includes scale updates
+        this.redraw();
+
+        // Setup observer with debounced handler
+        this._debouncedHandleResize = debounce((width, height) => {
+            this._handleResize(width, height);
+        }, this.config.resizeDebounceDelay);
+        this._resizeObserver = new ResizeObserver((entries) => {
+            if (entries[0]) {
+                const { width, height } = entries[0].contentRect;
+                this._debouncedHandleResize(width, height);
+            }
+        });
+        this._resizeObserver.observe(this.container.node());
 
         console.log(`EnergyLevelsDiagram Initialized in #${containerId}.`);
     }
@@ -108,7 +136,8 @@ class EnergyLevelsDiagram {
      */
     setYAxisLabel(label) {
         this.config.yAxisLabel = label || '';
-        this._drawAxes(); // Only need to redraw axes for label change
+        // Only need to redraw axes for label change if scales/size are unchanged
+        if (this.plotArea) this._drawAxes();
     }
 
     /**
@@ -197,6 +226,22 @@ class EnergyLevelsDiagram {
         this.levelsGroup = this.plotArea
             .append('g')
             .attr('class', 'energy-levels');
+    }
+
+    /** Handles resize events (debounced). Updates config/SVG size and triggers redraw. */
+    _handleResize(width, height) {
+        // Update config dimensions based on container size reported by observer
+        this.config.width = width;
+        this.config.height = height;
+
+        // Update SVG element size to match container
+        this.svg
+            .attr('width', this.config.width)
+            .attr('height', this.config.height);
+
+        // Trigger redraw which will handle scale updates etc.
+        // Debouncer ensures this doesn't fire too often.
+        this.redraw();
     }
 
     /** Updates the domains and ranges of the D3 scales and positions elements. */
@@ -462,8 +507,19 @@ class EnergyLevelsDiagram {
     // ========================================================================
     // Destroy Method
     // ========================================================================
+
+    /** Cleans up the SVG element and observers. */
     destroy() {
-        this.container.html(''); // Clear SVG
+        if (this._resizeObserver) {
+            this._resizeObserver.disconnect();
+        }
+        if (
+            this._debouncedHandleResize &&
+            typeof this._debouncedHandleResize.cancel === 'function'
+        ) {
+            this._debouncedHandleResize.cancel();
+        }
+        this.container.html('');
         console.log(`EnergyLevelsDiagram in #${this.containerId} destroyed.`);
     }
 } // End of class
