@@ -210,6 +210,7 @@ class EnergyLevelsDiagram {
             .attr('width', 1)
             .attr('height', 1) // Size determined by content/transform
             .style('overflow', 'visible')
+            .style('text-align', 'center')
             .style('text-anchor', 'middle'); // Note: text-anchor on foreignObject might not work as expected
 
         // Add span inside foreignObject for KaTeX rendering
@@ -217,7 +218,6 @@ class EnergyLevelsDiagram {
             .append('xhtml:span')
             .attr('class', 'katex-axis-label-container')
             .style('display', 'inline-block') // Important for rotation and sizing
-            .style('text-align', 'center') // Center text within span
             .style('font-size', '11px')
             .style('color', '#333');
         // Transform set in _updateScales
