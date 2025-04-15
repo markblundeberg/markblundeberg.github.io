@@ -63,6 +63,8 @@ class EnergyLevelsDiagram {
         this.plotWidth = 0;
         this.plotHeight = 0; // Will be calculated by _updateScales
         this.levelsData = [];
+        this.arrowData = []; // Stores arrow definitions from setArrows
+        this.levelPositions = new Map(); // Stores calculated pixel positions {x_center_px, y_px} for each levelId
 
         this._setupD3Structure();
         const initialWidth =
@@ -111,6 +113,21 @@ class EnergyLevelsDiagram {
     }
 
     /**
+     * Updates the arrows displayed between levels. Caller must call redraw().
+     * @param {Array<object>} [arrowData=[]] - Flat array of arrow definition objects.
+     * Expected format: [{ arrowId, fromLevelId, toLevelId, label?, arrowStyle?, cssClass? }, ...]
+     */
+    setArrows(arrowData = []) {
+        if (!Array.isArray(arrowData)) {
+            console.error(
+                'EnergyLevelsDiagram Error: setArrows expects an array.'
+            );
+            return;
+        }
+        this.arrowData = arrowData;
+    }
+
+    /**
      * Sets the vertical range (domain) of the Y axis. Caller must .redraw()
      * @param {number} min - Minimum value for the Y axis.
      * @param {number} max - Maximum value for the Y axis.
@@ -146,9 +163,12 @@ class EnergyLevelsDiagram {
             );
             return;
         }
+        // Don't change order of the following. Each helper relies on state set by
+        // the previous helpers.
         this._updateScales();
         this._drawAxes();
         this._drawLevels();
+        this._drawArrows();
     }
 
     // ========================================================================
@@ -178,6 +198,22 @@ class EnergyLevelsDiagram {
             .append('g')
             .attr('class', 'energy-levels-plot-area');
         // Transform set in _updateScales
+
+        const defs = this.svg.append('defs');
+        // Simple arrowhead marker
+        defs.append('marker')
+            .attr('id', 'arrowhead')
+            .attr('viewBox', '-0 -5 10 10') // Coordinate system for marker
+            .attr('refX', 5) // Position marker relative to line end
+            .attr('refY', 0)
+            .attr('orient', 'auto')
+            .attr('markerWidth', 5)
+            .attr('markerHeight', 5)
+            .attr('xoverflow', 'visible')
+            .append('svg:path')
+            .attr('d', 'M 0,-5 L 10 ,0 L 0,5') // Path for the arrowhead shape
+            .attr('fill', '#555') // Arrow color
+            .style('stroke', 'none');
 
         // Scales
         this.xScale = d3
@@ -222,6 +258,10 @@ class EnergyLevelsDiagram {
         this.levelsGroup = this.plotArea
             .append('g')
             .attr('class', 'energy-levels');
+
+        this.arrowsGroup = this.plotArea
+            .append('g')
+            .attr('class', 'level-arrows');
     }
 
     /** Handles resize events (debounced). Updates config/SVG size and triggers redraw. */
@@ -383,7 +423,7 @@ class EnergyLevelsDiagram {
             .selectAll('g.level-group')
             .data(this.levelsData, (d) => d.levelId);
 
-        levelGroups.join(
+        const mergedGroups = levelGroups.join(
             (enter) => {
                 const g = enter
                     .append('g')
@@ -495,6 +535,148 @@ class EnergyLevelsDiagram {
                 return exit;
             }
         );
+
+        this.levelPositions.clear();
+        mergedGroups.each((d) => {
+            // Calculate and store positions after transform is set/updated
+            const x_center_px =
+                this.xScale(d.categoryId) + this.xScale.bandwidth() / 2;
+            const y_px = this.yScale(d.yValue);
+            if (isFinite(x_center_px) && isFinite(y_px)) {
+                this.levelPositions.set(d.levelId, { x_center_px, y_px });
+            }
+        });
+    }
+
+    /** Draws/Updates arrows between specified levels. */
+    _drawArrows() {
+        const transitionDuration = this.config.transitionDuration;
+        const arrowData = this.arrowData || [];
+        const levelPositions = this.levelPositions; // Use cached positions
+
+        // 1. Filtermap: Prepare data for drawing (only valid arrows with coordinates)
+        const drawableArrowData = [];
+        for (const arrowDef of arrowData) {
+            const pos1 = levelPositions.get(arrowDef.fromLevelId);
+            const pos2 = levelPositions.get(arrowDef.toLevelId);
+            // Only include if both endpoints exist
+            if (pos1 && pos2) {
+                drawableArrowData.push({
+                    arrowId: arrowDef.arrowId,
+                    x1: pos1.x_center_px,
+                    y1: pos1.y_px, // Use calculated pixel coords
+                    x2: pos2.x_center_px,
+                    y2: pos2.y_px,
+                    label: arrowDef.label, // Raw LaTeX
+                    arrowStyle: arrowDef.arrowStyle || '->', // Default to forward arrow
+                    cssClass: arrowDef.cssClass || '',
+                    color: arrowDef.color || '#555', // Default arrow color
+                });
+            }
+        }
+
+        // 2. Data Binding for Arrows
+        const arrowGroups = this.arrowsGroup
+            .selectAll('g.level-arrow')
+            .data(drawableArrowData, (d) => d.arrowId);
+
+        // 3. Exit
+        arrowGroups
+            .exit()
+            .transition()
+            .duration(transitionDuration)
+            .style('opacity', 0)
+            .remove();
+
+        // 4. Enter
+        const enterGroups = arrowGroups
+            .enter()
+            .append('g')
+            .attr('class', (d) => `level-arrow ${d.cssClass || ''}`)
+            .style('opacity', 0);
+
+        // Enter: Add line
+        enterGroups
+            .append('line')
+            .attr('class', 'arrow-line')
+            .attr('stroke', (d) => d.color)
+            .attr('stroke-width', 1.5);
+
+        // Enter: Add label structure
+        const fo = enterGroups
+            .append('foreignObject')
+            .attr('class', 'arrow-label')
+            .attr('width', 1)
+            .attr('height', 1)
+            .style('overflow', 'visible')
+            .style('pointer-events', 'none')
+            .style('text-align', 'center'); // Center label text
+
+        fo.append('xhtml:span')
+            .attr('class', 'katex-label-container')
+            .style('color', (d) => d.color)
+            .style('white-space', 'nowrap')
+            .style('display', 'inline-block')
+            .style('padding', '0px 2px')
+            .style('font-size', '9px') // Smaller label for arrows
+            .style('background', 'rgba(255,255,255,0.8)'); // Background for readability
+
+        // 5. Update + Enter (Merged)
+        const mergedGroups = enterGroups.merge(arrowGroups);
+
+        // Update line position and style
+        mergedGroups
+            .select('line.arrow-line')
+            .interrupt() // Interrupt previous transitions
+            .transition()
+            .duration(transitionDuration)
+            .attr('x1', (d) => d.x1)
+            .attr('y1', (d) => d.y1)
+            .attr('x2', (d) => d.x2)
+            .attr('y2', (d) => d.y2)
+            .attr('stroke', (d) => d.color)
+            // Apply arrowheads based on style
+            .attr('marker-start', (d) =>
+                d.arrowStyle.includes('<') ? 'url(#arrowhead)' : null
+            ) // Assumes marker ID is 'arrowhead'
+            .attr('marker-end', (d) =>
+                d.arrowStyle.includes('>') ? 'url(#arrowhead)' : null
+            );
+
+        // Update label position and render KaTeX
+        mergedGroups
+            .select('foreignObject.arrow-label')
+            .interrupt()
+            .transition()
+            .duration(transitionDuration)
+            // Position label at midpoint, slightly offset horizontally maybe?
+            .attr('x', (d) => (d.x1 + d.x2) / 2 + 5) // Offset slightly right of midpoint
+            .attr('y', (d) => (d.y1 + d.y2) / 2 - 8) // Offset slightly above midpoint
+            .select('span.katex-label-container')
+            .each(function (d) {
+                // Render KaTeX
+                const span = this;
+                const labelText = d.label; // Raw LaTeX
+                if (span && typeof katex !== 'undefined' && labelText) {
+                    try {
+                        katex.render(labelText, span, {
+                            throwOnError: false,
+                            displayMode: false,
+                        });
+                    } catch (e) {
+                        console.error('KaTeX render error:', e);
+                        span.textContent = labelText;
+                    }
+                } else if (span) {
+                    span.textContent = '';
+                } // Clear if no label
+            });
+
+        // Fade in entering groups
+        mergedGroups
+            .transition('fade-in')
+            .duration(transitionDuration)
+            .style('opacity', 1);
     }
 
     // ========================================================================
