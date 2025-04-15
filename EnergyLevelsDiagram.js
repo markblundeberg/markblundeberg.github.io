@@ -13,12 +13,12 @@ class EnergyLevelsDiagram {
      * @param {object} [initialConfig={}] - Initial configuration options.
      * @param {number} [initialConfig.width=200] - Width of the SVG element.
      * @param {number} [initialConfig.height=400] - Height of the SVG element.
-     * @param {object} [initialConfig.margin={top: 10, right: 5, bottom: 20, left: 45}] - Plot margins.
+     * @param {object} [initialConfig.margin] - Plot margins. Defaults provided if omitted.
      * @param {string} [initialConfig.yAxisLabel='Potential / Energy'] - Label for the Y axis (plain text).
      * @param {Array<number>} [initialConfig.initialYRange=[0, 1]] - Initial [min, max] for Y axis domain.
      * @param {boolean} [initialConfig.showYTicks=true] - Whether to show Y axis ticks and labels.
      * @param {Array<object>} [initialConfig.categories=[]] - Categories for the X axis. Array of {id: string, label: string}.
-     * @param {object} [initialConfig.defaultLevelStyle={color: 'black', lineWidth: 2, dasharray: null}] - Default styles for levels.
+     * @param {object} [initialConfig.defaultLevelStyle] - Default styles for levels.
      * @param {number} [initialConfig.transitionDuration=250] - Duration for D3 transitions (ms).
      */
     constructor(containerId, initialConfig = {}) {
@@ -29,18 +29,22 @@ class EnergyLevelsDiagram {
         }
 
         // --- Configuration with defaults ---
+        const defaultMargin = {
+            top: 10,
+            right: 5,
+            bottom: 20,
+            left: 45, // Default left margin when ticks are shown
+            left_compact: 20, // Default left margin when ticks are hidden
+        };
+
         this.config = {
             width: initialConfig.width || 200,
             height: initialConfig.height || 400,
-            margin: initialConfig.margin || {
-                top: 10,
-                right: 5,
-                bottom: 20,
-                left: 45,
-            },
+            // Merge provided margin with defaults carefully
+            margin: { ...defaultMargin, ...(initialConfig.margin || {}) },
             yAxisLabel: initialConfig.yAxisLabel || 'Potential / Energy',
             yRange: initialConfig.initialYRange || [0, 1],
-            showYTicks: initialConfig.showYTicks !== false,
+            showYTicks: initialConfig.showYTicks !== false, // Default true
             categories: initialConfig.categories || [],
             defaultLevelStyle: initialConfig.defaultLevelStyle || {
                 color: 'black',
@@ -50,23 +54,12 @@ class EnergyLevelsDiagram {
             transitionDuration: initialConfig.transitionDuration ?? 250,
         };
 
-        // Calculate plot dimensions once - assuming fixed size for now
-        this.plotWidth =
-            this.config.width -
-            this.config.margin.left -
-            this.config.margin.right;
-        this.plotHeight =
-            this.config.height -
-            this.config.margin.top -
-            this.config.margin.bottom;
-        if (this.plotWidth <= 0 || this.plotHeight <= 0) {
-            throw new Error(
-                'Calculated plot dimensions are not positive. Check width/height and margins.'
-            );
-        }
+        // Calculate initial plot dimensions (will be updated by _updateScales)
+        this.plotWidth = 0;
+        this.plotHeight = 0;
 
         // --- Internal state ---
-        this.levelsData = []; // Stores the current array of level objects
+        this.levelsData = [];
 
         // --- D3 Setup ---
         this._setupD3Structure();
@@ -161,13 +154,10 @@ class EnergyLevelsDiagram {
 
         this.plotArea = this.svg
             .append('g')
-            .attr('class', 'energy-levels-plot-area')
-            .attr(
-                'transform',
-                `translate(${this.config.margin.left},${this.config.margin.top})`
-            );
+            .attr('class', 'energy-levels-plot-area');
+        // Transform set in _updateScales based on dynamic margin
 
-        // Scales (domains updated in _updateScales)
+        // Scales
         this.xScale = d3
             .scaleBand()
             .paddingInner(0.5) // Space between category bands
@@ -176,11 +166,8 @@ class EnergyLevelsDiagram {
         this.yScale = d3.scaleLinear();
 
         // Axis Generators
-        this.xAxisGen = d3
-            .axisBottom(this.xScale)
-            .tickSize(0) // No ticks lines
-            .tickPadding(6); // Padding between axis and labels
-        this.yAxisGen = d3.axisLeft(this.yScale); // Ticks configured in _drawAxes
+        this.xAxisGen = d3.axisBottom(this.xScale).tickSize(0).tickPadding(6);
+        this.yAxisGen = d3.axisLeft(this.yScale);
 
         // Axis Groups (positioned in _updateScales or _drawAxes)
         this.xAxisGroup = this.plotArea
@@ -204,30 +191,47 @@ class EnergyLevelsDiagram {
             .attr('class', 'energy-levels');
     }
 
-    /** Updates the domains and ranges of the D3 scales. */
+    /** Updates the domains and ranges of the D3 scales and positions elements. */
     _updateScales() {
-        // Calculate current plot dimensions
+        // Calculate effective left margin based on tick visibility
+        const effectiveLeftMargin = this.config.showYTicks
+            ? this.config.margin.left
+            : (this.config.margin.left_compact ?? this.config.margin.left / 2);
+
+        // Calculate plot dimensions using effective margin
         this.plotWidth =
-            this.config.width -
-            this.config.margin.left -
-            this.config.margin.right;
+            this.config.width - effectiveLeftMargin - this.config.margin.right;
         this.plotHeight =
             this.config.height -
             this.config.margin.top -
             this.config.margin.bottom;
+        if (this.plotWidth <= 0 || this.plotHeight <= 0) {
+            console.warn(
+                'Plot dimensions are not positive after margin calculation.'
+            );
+            // Optionally handle this case, e.g., by setting a minimum size
+            this.plotWidth = Math.max(10, this.plotWidth);
+            this.plotHeight = Math.max(10, this.plotHeight);
+        }
+
+        // Update plot area transform using effective margin
+        this.plotArea.attr(
+            'transform',
+            `translate(${effectiveLeftMargin},${this.config.margin.top})`
+        );
 
         // Update Y scale
         this.yScale
             .domain(this.config.yRange)
-            .range([this.plotHeight, 0]) // Pixels (bottom to top)
+            .range([this.plotHeight, 0])
             .nice();
 
         // Update X scale
         this.xScale
-            .domain(this.config.categories.map((c) => c.id)) // Use category IDs
+            .domain(this.config.categories.map((c) => c.id))
             .range([0, this.plotWidth]);
 
-        // Update axis group positions (needed if height changes)
+        // Update axis group positions
         this.xAxisGroup.attr('transform', `translate(0,${this.plotHeight})`);
         this.yAxisLabel.attr(
             'transform',
@@ -244,10 +248,10 @@ class EnergyLevelsDiagram {
         // Update Y Axis
         this.yAxisGen.scale(this.yScale);
         if (!this.config.showYTicks) {
-            this.yAxisGen.tickValues([]); // Remove ticks/labels
+            this.yAxisGen.tickValues([]);
         } else {
-            this.yAxisGen.tickSize(-this.plotWidth); // Extend ticks as grid lines if shown
-            this.yAxisGen.tickValues(null); // Restore default ticks
+            this.yAxisGen.tickSize(-this.plotWidth);
+            this.yAxisGen.tickValues(null);
         }
         this.yAxisGroup
             .transition()
