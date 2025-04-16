@@ -166,3 +166,44 @@ export function throttle(func, wait, options = {}) {
 
     return throttled;
 }
+
+/**
+ * Renders LaTeX mathmode inside a given span element, but only if the new label
+ * text is different from the previously rendered text (stored in dataset).
+ * Handles clearing old content and potential KaTeX errors.
+ * @param {HTMLSpanElement} spanElement - The target span element.
+ * @param {string | null | undefined} newLabelText - The raw LaTeX string (no delimiters) or null/empty to clear.
+ * @param {boolean} forceRender - Render anyway even if label was unchanged.
+ */
+export function renderSpanMath(spanElement, newLabelText, forceRender = false) {
+    if (!spanElement) return; // Safety check
+    if (typeof katex === 'undefined') {
+        // Caller forgot to load katex
+        spanElement.textContent = currentLabel;
+        return;
+    }
+
+    const currentLabel = newLabelText || ''; // Treat null/undefined as empty string
+    const previousLabel = spanElement.dataset.renderedLabel || '';
+
+    // Avoid re-rendering if no change
+    if (currentLabel === previousLabel && !forceRender) return;
+
+    // Update stored label first
+    spanElement.dataset.renderedLabel = currentLabel;
+    // Clear existing content
+    spanElement.textContent = '';
+
+    if (!currentLabel) return;
+
+    try {
+        katex.render(currentLabel, spanElement, {
+            throwOnError: false,
+            displayMode: false,
+            // Add other KaTeX options if needed
+        });
+    } catch (e) {
+        console.error('KaTeX render error:', e, '| Input:', currentLabel);
+        spanElement.textContent = currentLabel; // Fallback on error
+    }
+}

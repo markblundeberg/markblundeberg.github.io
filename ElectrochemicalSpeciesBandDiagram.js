@@ -7,6 +7,7 @@ import {
     formatPopupBaseContent,
     debounce,
     describeCurveType,
+    renderSpanMath,
 } from './utils.js';
 
 // --- Constants ---
@@ -1075,21 +1076,10 @@ class ElectrochemicalSpeciesBandDiagram {
                         .remove()
             )
             .each(function (d) {
-                const fo = d3.select(this);
-                const span = fo.select('.katex-label-container').node();
-                // Render KaTeX (ensure KaTeX JS is loaded)
-                if (span && typeof katex !== 'undefined') {
-                    try {
-                        katex.render(d.labelString, span, {
-                            throwOnError: false,
-                            displayMode: false,
-                        });
-                    } catch (error) {
-                        span.textContent = d.speciesId || d.id;
-                    }
-                } else {
-                    if (span) span.textContent = d.speciesId || d.id;
-                }
+                renderSpanMath(
+                    d3.select(this).select('.katex-label-container').node(),
+                    d.labelString || d.id
+                );
             })
             // Apply transitions AFTER KaTeX might have changed size (slight delay ok)
             .transition()

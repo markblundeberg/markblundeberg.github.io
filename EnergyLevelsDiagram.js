@@ -4,7 +4,7 @@
 
 // Assumes D3 and KaTeX (core library AND auto-render extension) are loaded.
 
-import { debounce } from './utils.js';
+import { debounce, renderSpanMath } from './utils.js';
 
 class EnergyLevelsDiagram {
     // ========================================================================
@@ -466,35 +466,15 @@ class EnergyLevelsDiagram {
                     .attr('width', 1)
                     .attr('height', 1) // Let content define size
                     .style('overflow', 'visible')
-                    .style('pointer-events', 'none');
-
-                fo.append('xhtml:span')
+                    .style('pointer-events', 'none')
+                    .append('xhtml:span')
                     .attr('class', 'katex-label-container')
-                    .style('color', (d) => d.color || defaultStyle.color)
                     .style('white-space', 'nowrap')
                     .style('display', 'inline-block')
                     .style('padding', '1px 3px')
                     .style('font-size', '10px')
                     .style('background', 'rgba(255,255,255,0.7)')
-                    .style('border-radius', '2px')
-                    // Render KaTeX ONCE on enter
-                    .each(function (d) {
-                        const span = this;
-                        const labelText = d.label || d.levelId; // Raw LaTeX
-                        if (span && typeof katex !== 'undefined' && labelText) {
-                            try {
-                                katex.render(labelText, span, {
-                                    throwOnError: false,
-                                    displayMode: false,
-                                });
-                            } catch (e) {
-                                console.error('KaTeX render error:', e);
-                                span.textContent = labelText;
-                            }
-                        } else if (span) {
-                            span.textContent = labelText;
-                        }
-                    });
+                    .style('border-radius', '2px');
 
                 return g; // Return the entering group
             },
@@ -511,10 +491,6 @@ class EnergyLevelsDiagram {
                         'stroke-dasharray',
                         (d) => d.style?.dasharray || defaultStyle.dasharray
                     );
-                update
-                    .select('span.katex-label-container')
-                    .style('color', (d) => d.color || defaultStyle.color);
-                // Note: KaTeX label text is NOT updated here assuming it's static per levelId
 
                 // Apply position transition
                 update
@@ -536,6 +512,15 @@ class EnergyLevelsDiagram {
                 return exit;
             }
         );
+
+        // Update label position and render KaTeX
+        mergedGroups
+            .select('foreignObject.level-label')
+            .style('color', (d) => d.color || defaultStyle.color)
+            .select('span.katex-label-container')
+            .each(function (d) {
+                renderSpanMath(this, d.label);
+            });
 
         this.levelPositions.clear();
         mergedGroups.each((d) => {
@@ -663,27 +648,7 @@ class EnergyLevelsDiagram {
             .call(applyLabelAttributes)
             .select('span.katex-label-container')
             .each(function (d) {
-                // Render KaTeX
-                const span = this;
-                const labelText = d.label; // Raw LaTeX
-
-                // //
-                // if (d.datum().shownLabel === labelText) return;
-                // d.datum().shownLabel = labelText;
-
-                if (span && typeof katex !== 'undefined' && labelText) {
-                    try {
-                        katex.render(labelText, span, {
-                            throwOnError: false,
-                            displayMode: false,
-                        });
-                    } catch (e) {
-                        console.error('KaTeX render error:', e);
-                        span.textContent = labelText;
-                    }
-                } else if (span) {
-                    span.textContent = '';
-                } // Clear if no label
+                renderSpanMath(this, d.label);
             });
     }
 
