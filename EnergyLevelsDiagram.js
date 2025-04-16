@@ -202,11 +202,24 @@ class EnergyLevelsDiagram {
         const defs = this.svg.append('defs');
         // Simple arrowhead marker
         defs.append('marker')
-            .attr('id', 'arrowhead')
+            .attr('id', 'arrowhead-end')
             .attr('viewBox', '-0 -5 10 10') // Coordinate system for marker
             .attr('refX', 5) // Position marker relative to line end
             .attr('refY', 0)
             .attr('orient', 'auto')
+            .attr('markerWidth', 5)
+            .attr('markerHeight', 5)
+            .attr('xoverflow', 'visible')
+            .append('svg:path')
+            .attr('d', 'M 0,-5 L 10 ,0 L 0,5') // Path for the arrowhead shape
+            .attr('fill', '#555') // Arrow color
+            .style('stroke', 'none');
+        defs.append('marker')
+            .attr('id', 'arrowhead-start')
+            .attr('viewBox', '-0 -5 10 10') // Coordinate system for marker
+            .attr('refX', 5) // Position marker relative to line end
+            .attr('refY', 0)
+            .attr('orient', 'auto-start-reverse')
             .attr('markerWidth', 5)
             .attr('markerHeight', 5)
             .attr('xoverflow', 'visible')
@@ -462,7 +475,7 @@ class EnergyLevelsDiagram {
                     .append('foreignObject')
                     .attr('class', 'level-label')
                     .attr('x', lineHalfLength + labelOffset)
-                    .attr('y', -10) // Approximate vertical center offset
+                    .attr('y', -12)
                     .attr('width', 1)
                     .attr('height', 1) // Let content define size
                     .style('overflow', 'visible')
@@ -634,10 +647,10 @@ class EnergyLevelsDiagram {
             .call(applyLineAttributes)
             // Apply arrowheads based on style
             .attr('marker-start', (d) =>
-                d.arrowStyle.includes('<') ? 'url(#arrowhead)' : null
+                d.arrowStyle.includes('<') ? 'url(#arrowhead-start)' : null
             ) // Assumes marker ID is 'arrowhead'
             .attr('marker-end', (d) =>
-                d.arrowStyle.includes('>') ? 'url(#arrowhead)' : null
+                d.arrowStyle.includes('>') ? 'url(#arrowhead-end)' : null
             );
 
         // Update label position and render KaTeX
