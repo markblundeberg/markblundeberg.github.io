@@ -1,2 +1,2 @@
 #!/bin/sh
-python3 -m http.server 7800
+npx @11ty/eleventy --serve --port 7800
