@@ -65,6 +65,7 @@ class EnergyLevelsDiagram {
         this.levelsData = [];
         this.arrowData = []; // Stores arrow definitions from setArrows
         this.levelPositions = new Map(); // Stores calculated pixel positions {x_center_px, y_px} for each levelId
+        this._redrawScheduled = false;
 
         this._setupD3Structure();
         const initialWidth =
@@ -98,7 +99,7 @@ class EnergyLevelsDiagram {
     // ========================================================================
 
     /**
-     * Updates the levels displayed on the diagram. Caller must .redraw()
+     * Updates the levels displayed on the diagram.
      * @param {Array<object>} [levelsData=[]] - Flat array of level objects.
      * Expected format: [{ categoryId, levelId, yValue, label (raw LaTeX), color?, style?: {lineWidth?, dasharray?} }, ...]
      */
@@ -110,10 +111,11 @@ class EnergyLevelsDiagram {
             return;
         }
         this.levelsData = levelsData;
+        this._scheduleRedraw();
     }
 
     /**
-     * Updates the arrows displayed between levels. Caller must call redraw().
+     * Updates the arrows displayed between levels.
      * @param {Array<object>} [arrowData=[]] - Flat array of arrow definition objects.
      * Expected format: [{ arrowId, fromLevelId, toLevelId, label?, arrowStyle?, cssClass? }, ...]
      */
@@ -125,10 +127,11 @@ class EnergyLevelsDiagram {
             return;
         }
         this.arrowData = arrowData;
+        this._scheduleRedraw();
     }
 
     /**
-     * Sets the vertical range (domain) of the Y axis. Caller must .redraw()
+     * Sets the vertical range (domain) of the Y axis.
      * @param {number} min - Minimum value for the Y axis.
      * @param {number} max - Maximum value for the Y axis.
      */
@@ -141,6 +144,7 @@ class EnergyLevelsDiagram {
             return;
         }
         this.config.yRange = [min, max];
+        this._scheduleRedraw();
     }
 
     /**
@@ -275,6 +279,20 @@ class EnergyLevelsDiagram {
         this.arrowsGroup = this.plotArea
             .append('g')
             .attr('class', 'level-arrows');
+    }
+
+    _scheduleRedraw() {
+        // If a redraw is already scheduled, do nothing
+        if (this._redrawScheduled) {
+            return;
+        }
+        // Set the flag
+        this._redrawScheduled = true;
+        // Schedule the redraw to run before the next browser paint
+        requestAnimationFrame(() => {
+            this.redraw(); // Call the actual redraw method
+            this._redrawScheduled = false; // Clear the flag after redraw runs
+        });
     }
 
     /** Handles resize events (debounced). Updates config/SVG size and triggers redraw. */
