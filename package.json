@@ -1,5 +1,5 @@
 {
-  "name": "gemini-4",
+  "name": "ESBD-site",
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@11ty/eleventy": "^3.0.0",
     "prettier": "3.5.3"
   }
 }
