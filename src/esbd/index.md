@@ -11,42 +11,59 @@ eleventyNavigation:
 
 **(Optional: Compelling Header Image/Animation showing a finished ESBD)**
 
-Ever looked at a semiconductor band diagram and thought, "Wow, that makes intuitive sense!"? Those diagrams clearly show electron and hole energy levels, band bending, and driving forces. Now, compare that to electrochemistry – trying to track electrode potentials, reference electrodes, solution potentials ($\phi$), ion chemical potentials ($\mu_i$), activities, junction potentials... it often feels like a confusing soup of concepts, right? What if we could bring some of that band diagram clarity to batteries, fuel cells, electrolysis, and more?
+Ever looked at a semiconductor band diagram and thought, "Wow, that makes intuitive sense!"? Those diagrams clearly show electron and hole energy levels, band bending, and driving forces. Compare that to electrochemistry — trying to track electrode potentials, reference electrodes, solution potentials ($\phi$), ion chemical potentials ($\mu_i$), activities, junction potentials... it often feels like a confusing soup of concepts, right? What if we could bring some of that band diagram clarity to batteries, fuel cells, electrolysis, and more?
 
 That's the idea behind **Electrochemical Species Band Diagrams (ESBDs)**. We leverage the fundamental concept governing all chemical and electrochemical processes – the **electrochemical potential ($\bar{\mu}_i$)** – to create a unified visual landscape.
 
-This site explores this framework. Our goal isn't necessarily rigorous derivations (though we'll link to those!) but building _intuition_ for scientists and engineers working across disciplines involving charged species in materials. Let's dive in!
+This site explores this framework, to building _intuition_ for scientists and engineers working across disciplines involving charged species in materials. Let's dive in!
 
----
+## Foundation: The Electrochemical Potential ($\bar{\mu}_i$)
 
-## The Foundation: Electrochemical Potential ($\bar{\mu}_i$) - The "Real" Energy
+How do mobile particles know where to move and when to react? For any individual particle it is a mess of microscopic forces. On average though, we can zoom out and talk about statistical tendencies of similar particles, and these tendencies are characterized by chemical potential $\mu_i$ for the type/_species_ of particle labelled $i$. Chemical potential is to particles what temperature $T$ is to energy: when two bodies are in equilibrium they equalize their $\mu_i$'s and $T$'s. The chemical potential combines all the per-particle energy, the entropy, the diffusion, the _mess_ ... in just the right way.
 
-Forget splitting energies into "chemical" and "electrical" for a moment. The most fundamental quantity telling us where charged particles (like ions and electrons) _want_ to go is their **electrochemical potential, $\bar{\mu}_i$**.
+You may already know the chemical potential by another representation or name: Fugacity. Activity. Water potential. Fermi level. They all encode $\mu_i$.
+When it comes to _charged_ particles, like electrons and ions, the chemical potential gets a bit weird as we will see. But thermodynamics is okay with this weirdness, and it gives us a chemical potential for ions just as well! For reasons of convention, when we talk about electrons and ions we will refer to their proper thermodynamic $\mu_i$ as their **electrochemical potential $\bar{\mu}_i$**.
 
-Think of it like gravitational potential energy – things naturally move from high energy to low energy. Similarly, **species $i$ spontaneously moves from a location with high $\bar{\mu}_i$ to a location with low $\bar{\mu}_i$**. This applies to electrons, ions, holes, everything! It's the true driving force. (Even neutral species follow their _chemical_ potential $\mu_i$, which is part of $\bar{\mu}_i$).
+No matter what you call it, no matter what charges the particles have, the particles want to go from high $\bar{\mu}_i$ to low $\bar{\mu}_i$, as surely as energy wants to go from high $T$ to low $T$. The value of $\bar{\mu}_i$ is energy per particle (or energy per mole), and you can think of it as 'particles want to roll downhill'!
 
-<div class="interactive-placeholder" style="border:1px dashed #ccc; padding: 20px; margin: 1em 0; text-align: center; background-color: #f9f9f9;">
+<p class="diagram-placeholder" style="border: 1px dashed #ccc;">
   **[Interactive Demo: Driving Force]**<br>
-  (Using 'EnergyLevelsDiagram' showing $\bar{\mu}_i$ for one species in 'Body 1' vs 'Body 2', with an arrow indicating flow direction. Maybe link $\bar{\mu}_i$ level to a slider?)
-</div>
+  (Using 'EnergyLevelsDiagram' showing $\bar{\mu}_i$ for one species in 'Body 1' vs 'Body 2', with an arrow indicating flow direction. Link the difference to a slider.
+</p>
 
-So why don't we just plot $\bar{\mu}_i$ everywhere? Because it has a "weird" property related to the electrostatic potential, $\phi$. The definition $\bar{\mu}_i = \mu_i + z_i F \phi$ means that if we change the overall electrostatic environment $\phi$ (like charging a piece of metal), the $\bar{\mu}_i$ levels shift up or down by an amount proportional to the species' charge, $z_i$. Electrons ($z_i=-1$) shift differently than Li⁺ ions ($z_i=+1$) or O²⁻ ions ($z_i=-2$). This makes comparing $\bar{\mu}_i$ levels between different materials or conditions tricky, as the shifts depend on both chemistry ($\mu_i$) and the often arbitrary electrostatic offset $\phi$. (What _is_ the absolute voltage zero, anyway? [Link to Thermodynamics Page])
+So, why does chemical potential get weird for charged particles? Part of their energy is due to the "absolute" electrostatic potential, not just nearby electric fields. And so, $\bar\mu_i$ is not only dependent local material environment. Not only can two bodies with identical compositions have any electrostatic difference that we want, but also, the electrostatic potential fundamentally has an arbitrary global offset! And unfortunately, even worse, the $\bar{\mu}_i$ levels shift up or down by an amount proportional to the species' charge, $z_i$. Electrons ($z=-1$) shift differently than $\mathrm{Li}^+$ ions ($z=+1$) or $\mathrm{O}^{2-}$ ions ($z=-2$). This makes comparing $\bar{\mu}_i$ levels between different materials or conditions a bit annoying, as all the $\bar{\mu}_i$ values depend on both the local chemistry and the (often arbitrary) electrostatic offset.
 
-What if we could scale $\bar{\mu}_i$ to remove this charge-dependent electrostatic shift?
+<p class="diagram-placeholder" style="border: 1px dashed #ccc;">
+  Interactive demo of charging effect somehow?
+  Left: \bar\mu_i with 'original' levels.
+  Right: \bar\mu_i with 'shifted' levels.
+</p>
 
----
+The standard approach in electrochemistry to deal with the weirdness of electrochemical potential $\bar{\mu}_i$ is to try to define an electrostatic potential $\phi$ inside materials, and subtract off all that nastiness to arrive at a clean "internal chemical potential" $\mu_{\mathrm{int},i} = \bar{\mu}_i - z_i F \phi$:
 
-## The Scaling: Species Voltage ($V_i$) - The "Real" Voltage
+<p class="diagram-placeholder" style="border: 1px dashed #ccc;">
+  Show the 'phi' solution to the $\bar{\mu}_i$ problem here.
+  Left: \bar\mu_i with shifting levels.
+  Right: \mu_{int,i}
+</p>
 
-We know voltmeters measure potential _difference_, specifically the difference in the _electron's_ electrochemical potential, scaled by its charge: $Voltage = \Delta \bar{\mu}_e / (-F)$. But why privilege electrons? What are the equivalent "voltages" driving other ions?
+This approach of subtracting off the $\phi$ dependence is admirable. It produces equations that work. It's the foundation of electrochemistry. It's also ... actually unnecessary? It turns out that $\phi$ is hard to define, and when we get to the end of our calculations our choice of defining $\phi$ just cancels out anyway![ref] And unfortunately. that translates into difficulties in defining $\mu_{\mathrm{int},i}$ too.
+
+What if we could fix the weirdness in $\bar{\mu}_i$ some other way?
+
+## Voltage for ions: $V_i$
+
+As a solid state physicist, I had to unlearn something about a simple instrument: the voltmeter. I'd always thought that it just measures electrostatic potentials. It turns out, the voltmeter is more like a thermodynamic device, but it doesn't measure temperature $T$, it measures electrochemical potentials.[ref] Specifically a voltmeter measures difference in the _electron's_ electrochemical potential, scaled by its charge: $\mathrm{Voltage} = \Delta \bar{\mu}_e / (-e)$. But why privilege electrons? What are the equivalent "voltages" driving other ions?
 
 Let's define a **Species Voltage, $V_i$**, for _any_ charged species $i$:
 
-$$V_i = \bar{\mu}_i / (z_i F)$$
+$$V_i = \frac{\bar{\mu}_i}{z_i F}\quad \text{(if $\mu$ is energy/mole)}~~~~~$$
 
-That's it! We just divide the fundamental energy ($\bar{\mu}_i$) by the charge involved ($z_i F$). It seems simple, maybe _too_ simple? Stick around, because this scaling has a profound consequence:
+$$V_i = \frac{\bar{\mu}_i}{z_i e}\quad \text{(if $\mu$ is energy/particle)}$$
 
-<div class="interactive-placeholder" style="border:1px dashed #ccc; padding: 20px; margin: 1em 0; text-align: center; background-color: #f9f9f9;">
+That's it! We just divide the energy per particle ($\bar{\mu}_i$) by the charge per particle ($z_i e$)! It seems simple, maybe _too_ simple? Stick around, because this scaling has a profound consequence:
+
+<p class="diagram-placeholder" style="border: 1px dashed #ccc;">
   **[Interactive Demo: Unison Shift]**<br>
   (Side-by-side 'EnergyLevelsDiagram' instances. Slider controls global $\phi$. Left plots $\bar{\mu}_i$ for A²⁻, B⁻, C⁰, D⁺, E²⁺. Right plots $V_i$ for charged species.)
 </div>
@@ -58,7 +75,7 @@ Now, how do things move in this $V$ world? The driving force ($\nabla \bar{\mu}_
 - **Cations ($z > 0$)** want to move from **high $V_+$ to low $V_+$**. (They "fall down" the $V$ landscape).
 - **Anions ($z < 0$)** want to move from **low $V_-$ to high $V_-$**. (They "float up" the $V$ landscape).
 
-<div class="interactive-placeholder" style="border:1px dashed #ccc; padding: 20px; margin: 1em 0; text-align: center; background-color: #f9f9f9;">
+<p class="diagram-placeholder" style="border: 1px dashed #ccc;">
   **[Interactive Demo: Driving Force V]**<br>
   (Simple 'EnergyLevelsDiagram' showing $V$ levels for a cation and an anion in 'Body 1' vs 'Body 2', with arrows indicating flow direction based on the rules above.)
 </div>
@@ -73,7 +90,7 @@ Okay, so $V_i$ gives us a consistent way to view potentials that shift uniformly
 
 This leads us to the **Electrochemical Species Band Diagram (ESBD)**. Here's a first look at one for a simple system (don't worry about understanding every line just yet!):
 
-<div class="interactive-placeholder" style="border:1px dashed #ccc; padding: 20px; margin: 1em 0; text-align: center; background-color: #f9f9f9;">
+<p class="diagram-placeholder" style="border: 1px dashed #ccc;">
   **[Interactive ESBD Diagram: Concentration Cell (Salt Bridge)]**<br>
   (Show the diagram generated by ConcentrationCellComponent.js. Maybe initially hide standard states/anion via config.)
 </div>
@@ -88,7 +105,7 @@ _Hint:_ Try clicking the Y-axis label or using the dropdown (if available in the
 
 Intrigued? The real power of ESBDs becomes apparent when applied to various systems. Explore these topics through interactive diagrams and detailed explanations by clicking on an image below:
 
-<div class="gallery-placeholder" style="border:1px dashed #ccc; padding: 20px; margin: 1em 0; text-align: center; background-color: #f9f9f9;">
+<p class="diagram-placeholder" style="border: 1px dashed #ccc;">
   **[Gallery of Thumbnails: Grid of appealing images/GIFs linking to detailed pages/sections for Standard State Ladders, Concentration Cells, Li-ion Battery, Lead-Acid Battery, Electrolysis, Semiconductor Junctions, Theory/Nuances, etc.]**
 </div>
 
