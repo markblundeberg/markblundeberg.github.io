@@ -1,7 +1,7 @@
 /* style.css */
 /* Basic styles for ESBD examples */
 
-/* Global */
+/* ====== Basic Page Readability Styles ====== */
 body {
     font-family:
         system-ui,
@@ -15,19 +15,55 @@ body {
         'Open Sans',
         'Helvetica Neue',
         sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 50px;
-    margin: 0;
-    line-height: 1.4;
+    line-height: 1.6; /* Improve line spacing */
+    color: #333;
+    margin: 0; /* Remove default body margin */
+    padding: 0;
+    background-color: #fdfdfd; /* Slightly off-white background */
+}
+
+main {
+    max-width: 75ch; /* Limit content width to ~75 characters for readability */
+    margin: 2em auto; /* Center the main content block with top/bottom margin */
+    padding: 1em 2em; /* Add padding inside the main content area */
+    background-color: #fff; /* White background for content */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    border-radius: 4px;
 }
 
 h1,
-h2 {
+h2,
+h3 {
+    line-height: 1.2;
     margin-top: 1.5em;
     margin-bottom: 0.5em;
+}
+
+h1 {
     text-align: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5em;
+}
+
+a {
+    color: #0077cc;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+code {
+    background-color: #f0f0f0;
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+pre code {
+    display: block;
+    padding: 1em;
+    overflow-x: auto;
 }
 
 /* Component Instance Containers */

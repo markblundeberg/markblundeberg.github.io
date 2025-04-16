@@ -1,73 +1,70 @@
 {# Base layout #}
 <!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {# Use title from front matter or provide a default #}
-    <title>{{ title or "ESBD Visualization" }}</title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        {# Use title from front matter or provide a default #}
+        <title>{{ title or "ESBD Visualization" }}</title>
 
-    {# Link to your CSS file (path relative to output site root) #}
-    <link rel="stylesheet" href="/css/style.css">
+        {# Link to your CSS file (path relative to output site root) #}
+        <link rel="stylesheet" href="/css/style.css" />
 
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css"
-        integrity="sha384-zh0CIslj+VczCZtlzBcjt5ppRcsAmDnRem7ESsYwWwg3m/OaJ2l4x7YBZl9Kxxib"
-        crossorigin="anonymous"
-    />
-    <!-- The loading of KaTeX is deferred to speed up page rendering -->
-    <script
-        defer
-        src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"
-        integrity="sha384-Rma6DA2IPUwhNxmrB/7S3Tno0YY7sFu9WSYMCuulLhIqYSGZ2gKCJWIqhBWqMQfh"
-        crossorigin="anonymous"
-    ></script>
-    <!-- To automatically render math in text elements, include the auto-render extension: -->
-    <script
-        defer
-        src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js"
-        integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh"
-        crossorigin="anonymous"
-    ></script>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css"
+            integrity="sha384-zh0CIslj+VczCZtlzBcjt5ppRcsAmDnRem7ESsYwWwg3m/OaJ2l4x7YBZl9Kxxib"
+            crossorigin="anonymous"
+        />
+        <!-- The loading of KaTeX is deferred to speed up page rendering -->
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"
+            integrity="sha384-Rma6DA2IPUwhNxmrB/7S3Tno0YY7sFu9WSYMCuulLhIqYSGZ2gKCJWIqhBWqMQfh"
+            crossorigin="anonymous"
+        ></script>
+        <!-- To automatically render math in text elements, include the auto-render extension: -->
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js"
+            integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh"
+            crossorigin="anonymous"
+        ></script>
 
-    {# KaTeX CSS & JS (Core + Auto-render) #}
-    <script>
-        // Optional: Customize KaTeX auto-render delimiters if needed
-        document.addEventListener("DOMContentLoaded", function() {
-            renderMathInElement(document.body, {
-              delimiters: [
-                  {left: '$$', right: '$$', display: true},
-                  {left: '$', right: '$', display: false},
-                  {left: '\\(', right: '\\)', display: false},
-                  {left: '\\[', right: '\\]', display: true}
-              ],
-              throwOnError : false
+        {# KaTeX CSS & JS (Core + Auto-render) #}
+        <script>
+            // Optional: Customize KaTeX auto-render delimiters if needed
+            document.addEventListener('DOMContentLoaded', function () {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        { left: '$$', right: '$$', display: true },
+                        { left: '$', right: '$', display: false },
+                        { left: '\\(', right: '\\)', display: false },
+                        { left: '\\[', right: '\\]', display: true },
+                    ],
+                    throwOnError: false,
+                });
             });
-        });
-    </script>
+        </script>
 
-    {# D3 Library #}
-    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+        {# D3 Library #}
+        <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    </head>
+    <body>
+        <header>
+            {# Optional: Add a consistent site header here #}
+            <h1><a href="/esbd/">ESBD Visualizations</a></h1>
+            <hr />
+        </header>
 
-</head>
-<body>
-    <header>
-        {# Optional: Add a consistent site header here #}
-        <h1><a href="/">ESBD Visualizations</a></h1>
-        <hr>
-    </header>
+        <main>
+            {# Content from individual pages goes here #} {{ content | safe }}
+        </main>
 
-    <main>
-        {# Content from individual pages goes here #}
-        {{ content | safe }}
-    </main>
-
-    <footer>
-        <hr>
-        {# Optional: Add a consistent site footer here #}
-        <p>Site Footer</p>
-    </footer>
-
-</body>
+        <footer>
+            <hr />
+            {# Optional: Add a consistent site footer here #}
+            <p><small>Made with 11ty</small></p>
+        </footer>
+    </body>
 </html>
