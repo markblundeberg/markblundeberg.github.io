@@ -70,6 +70,8 @@ $$V_i = \frac{\bar{\mu}_i}{z_i F}$$
 
 That's it! We just divide the energy per mole by the charge per mole! (for per-particle that's $V_i = \bar{\mu}_i / (z_i e)$) It seems simple, maybe _too_ simple? Stick around, because this scaling has a profound consequences in the way we can visualize electrochemistry. Let's try shifting that electrostatic offset again:
 
+{% include "esbd-diagrams/mu-V-unison-shift.html" %}
+
 <p class="diagram-placeholder" style="border: 1px dashed #ccc;">
   **[Interactive Demo: Unison Shift]**<br>
   (Side-by-side 'EnergyLevelsDiagram' instances. Slider controls global $\phi$. Left plots $\bar{\mu}_i$ for A²⁻, B⁻, C⁰, D⁺, E²⁺. Right plots $V_i$ for charged species.)

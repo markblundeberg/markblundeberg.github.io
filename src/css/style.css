@@ -90,7 +90,6 @@ p.diagram-placeholder {
     overflow: hidden;
 }
 
-/* Default (Mobile-First) Styles for the Demo Container */
 .demo-container {
     display: block; /* Behave like a normal block element */
     max-width: 150px; /* Or whatever looks good on mobile */
@@ -98,8 +97,6 @@ p.diagram-placeholder {
     padding: 0.5em;
     border: 1px solid #eee;
     border-radius: 5px;
-    clear: both; /* Ensure it doesn't interfere with other floats if any */
-    /* Remove inline styles like display:inline-block, max-width, margin from the include file's div */
 }
 
 /* Styles for ESBD examples' frame and controls */
