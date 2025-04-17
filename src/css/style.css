@@ -19,14 +19,14 @@ body {
     color: #333;
     margin: 0; /* Remove default body margin */
     padding: 0;
-    background-color: #fdfdfd; /* Slightly off-white background */
+    background-color: #fafaf4; /* Slightly off-white background */
 }
 
 main {
     max-width: 75ch; /* Limit content width to ~75 characters for readability */
     margin: 2em auto; /* Center the main content block with top/bottom margin */
     padding: 1em 2em; /* Add padding inside the main content area */
-    background-color: #fff; /* White background for content */
+    background-color: #fffffa; /* White background for content */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
     border-radius: 4px;
 }
