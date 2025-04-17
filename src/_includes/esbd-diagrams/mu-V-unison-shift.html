@@ -22,13 +22,13 @@
     </div>
     <div style="text-align: center">
         <div>
-            <label for="{{ idprefix }}-phi-slider" style="font-size: 0.85em"
+            <label for="{{ idprefix }}-dphi-slider" style="font-size: 0.85em"
                 >Electrostatic offset $\Delta\phi_1$:</label
             >
             <br />
             <input
                 type="range"
-                id="{{ idprefix }}-phi-slider"
+                id="{{ idprefix }}-dphi-slider"
                 min="-1.5"
                 max="1.5"
                 step="any"
@@ -44,7 +44,7 @@
     import { throttle } from '/js/utils.js';
 
     // DOM identifiers - must match above HTML!
-    const sliderId = '{{ idprefix }}-phi-slider';
+    const sliderId = '{{ idprefix }}-dphi-slider';
     const muBarContainerId = '{{ idprefix }}-mu-bar-diagram-container';
     const vContainerId = '{{ idprefix }}-v-diagram-container';
 
@@ -86,11 +86,11 @@
     // Launcher code
     function doit() {
         // DOM References
-        const phiSlider = document.getElementById(sliderId);
+        const dPhiSlider = document.getElementById(sliderId);
         const muBarContainer = document.getElementById(muBarContainerId);
         const vContainer = document.getElementById(vContainerId);
 
-        if (!(phiSlider && muBarContainer && vContainer))
+        if (!(dPhiSlider && muBarContainer && vContainer))
             throw 'Could not find all elements';
         const muBarDiagram = new EnergyLevelsDiagram(
             muBarContainerId,
@@ -102,7 +102,7 @@
         function updateDiagrams() {
             // Slider represents a shift in electrostatic potential from
             // whatever initial value that would have defined ecp_init.
-            const dphi = parseFloat(phiSlider.value);
+            const dphi = parseFloat(dPhiSlider.value);
 
             const muBarLevelsData = [];
             const vLevelsData = [];
@@ -143,7 +143,7 @@
         }
 
         // Slider event listener - throttle it.
-        phiSlider.addEventListener(
+        dPhiSlider.addEventListener(
             'input',
             throttle((event) => updateDiagrams(), throttleDuration)
         );
