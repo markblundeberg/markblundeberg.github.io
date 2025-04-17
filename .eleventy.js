@@ -24,6 +24,44 @@ module.exports = function (eleventyConfig) {
     // --- Filters / Shortcodes ---
     // Optional: Add custom filters or shortcodes later
 
+    // --- Wikipedia Link Shortcode ---
+    eleventyConfig.addShortcode(
+        'wiki',
+        function (pageTitle, linkText, lang = 'en') {
+            if (!pageTitle) {
+                return '[wiki link error: page title missing]';
+            }
+
+            // Use provided link text or format the page title
+            const displayText = linkText || pageTitle.replace(/_/g, ' ');
+
+            // Construct the Wikipedia URL (handle spaces vs underscores)
+            const encodedTitle = encodeURIComponent(
+                pageTitle.replace(/ /g, '_')
+            );
+            const url = `https://${lang}.wikipedia.org/wiki/${encodedTitle}`;
+
+            // --- Icon HTML (Choose ONE option) ---
+
+            // Option A: Inline SVG (Recommended for self-containment)
+            // Find a simple SVG icon for Wikipedia (e.g., from Wikimedia Commons or icon sets)
+            // Example using a generic external link icon as placeholder:
+            const iconHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="12" height="12" fill="currentColor" style="display: inline-block; vertical-align: baseline; margin-left: 3px;"><path fill-rule="evenodd" d="M14 2.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0 0 1h4.793L2.146 13.146a.5.5 0 0 0 .708.708L13 3.707V8.5a.5.5 0 0 0 1 0v-6z"></path></svg>`;
+            // TODO: Replace with an actual Wikipedia logo SVG path if desired
+
+            // Option B: Image Tag (Requires icon file in your img folder)
+            // const iconHTML = `<img src="/img/wikipedia-icon.svg" alt="Wikipedia link" width="12" height="12" style="display: inline-block; vertical-align: baseline; margin-left: 3px;">`;
+
+            // Option C: Icon Font (Requires loading Font Awesome or similar in your base layout)
+            // const iconHTML = `<i class="fab fa-wikipedia-w" style="font-size: 0.9em; margin-left: 3px;" aria-hidden="true"></i>`;
+
+            // --- Return Final HTML ---
+            // Use target="_blank" for external links
+            // rel="noopener noreferrer" is good practice for security/privacy
+            return `<a href="${url}" class="wikipedia-link" target="_blank" rel="noopener noreferrer">${displayText}${iconHTML}</a>`;
+        }
+    );
+
     // --- Base Config ---
     return {
         // Template formats to process (including Markdown)
