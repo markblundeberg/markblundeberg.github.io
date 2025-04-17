@@ -1,0 +1,145 @@
+<div
+    class="demo-container"
+    style="
+        margin: 1.5em 0;
+        padding: 1em;
+        border: 1px solid #eee;
+        border-radius: 5px;
+    "
+>
+    <div class="controls">
+        <div class="control-row">
+            <label
+                class="control-label"
+                for="mu-driving-force-slider"
+                style="min-width: 150px"
+                >Potential Difference:</label
+            >
+            <input
+                type="range"
+                id="mu-driving-force-slider"
+                min="-2.0"
+                max="2.0"
+                step="0.05"
+                value="1.0"
+                style="width: 250px"
+            />
+            <output id="mu-driving-force-value" style="min-width: 40px"
+                >Δμ = +1.0</output
+            >
+            <span style="font-size: 0.9em; margin-left: 5px">(Arb. Units)</span>
+        </div>
+    </div>
+
+    <div id="mu-driving-force-container" style="margin-top: 10px"></div>
+</div>
+
+<script type="module">
+    import EnergyLevelsDiagram from '/js/EnergyLevelsDiagram.js';
+
+    const slider = document.getElementById('mu-driving-force-slider');
+    const valueOutput = document.getElementById('mu-driving-force-value');
+    const containerId = '#mu-driving-force-container';
+    const diagramContainer = document.querySelector(containerId);
+
+    if (
+        slider &&
+        valueOutput &&
+        diagramContainer &&
+        typeof EnergyLevelsDiagram !== 'undefined'
+    ) {
+        // --- Configuration ---
+        const config = {
+            width: 300,
+            height: 250, // Shorter diagram
+            yAxisLabel: '$\\mu$ (Arb. Units)', // KaTeX requires delimiters
+            initialYRange: [-1.5, 1.5], // Adjust based on base + max diff
+            showYTicks: false, // No ticks needed for this demo
+            categories: [
+                { id: 'body1', label: 'Body 1' },
+                { id: 'body2', label: 'Body 2' },
+            ],
+            defaultLevelStyle: { lineWidth: 2 },
+            transitionDuration: 250, // Use default component transition
+        };
+
+        // --- Instantiate ---
+        let diagram = null;
+        try {
+            diagram = new EnergyLevelsDiagram(containerId, config);
+        } catch (e) {
+            console.error(
+                'Failed to create EnergyLevelsDiagram for driving force demo:',
+                e
+            );
+            diagramContainer.innerHTML =
+                "<p style='color:red;'>Error loading diagram.</p>";
+        }
+
+        // --- Update Function ---
+        function updateDemo(deltaMu) {
+            if (!diagram) return;
+
+            const mu_base = 0; // Center levels around 0 for simplicity
+            const mu1 = mu_base + deltaMu / 2;
+            const mu2 = mu_base - deltaMu / 2;
+
+            // 1. Update Levels
+            const levelsData = [
+                {
+                    categoryId: 'body1',
+                    levelId: 'mu1',
+                    yValue: mu1,
+                    label: '$\\mu_1$',
+                    color: '#377eb8',
+                }, // Blue
+                {
+                    categoryId: 'body2',
+                    levelId: 'mu2',
+                    yValue: mu2,
+                    label: '$\\mu_2$',
+                    color: '#e41a1c',
+                }, // Red
+            ];
+            diagram.setLevels(levelsData);
+
+            // 2. Update Arrow based on difference
+            let arrowData = [];
+            if (Math.abs(deltaMu) > 0.01) {
+                // Only draw arrow if there's a difference
+                const isFlow1to2 = deltaMu > 0; // mu1 > mu2
+                arrowData = [
+                    {
+                        arrowId: 'flow',
+                        fromLevelId: isFlow1to2 ? 'mu1' : 'mu2',
+                        toLevelId: isFlow1to2 ? 'mu2' : 'mu1',
+                        label: '\\text{Flow}', // Always label flow direction
+                        arrowStyle: '->', // Always point high to low
+                        color: '#4daf4a', // Green for flow?
+                    },
+                ];
+            }
+            diagram.setArrows(arrowData);
+
+            // 3. Trigger Redraw (since setters don't redraw automatically)
+            diagram.redraw();
+
+            // Update output text
+            valueOutput.textContent = `Δμ = ${deltaMu >= 0 ? '+' : ''}${deltaMu.toFixed(2)}`;
+        }
+
+        // --- Event Listener ---
+        slider.addEventListener('input', (event) => {
+            const deltaMu = parseFloat(event.target.value);
+            updateDemo(deltaMu);
+        });
+
+        // --- Initial Draw ---
+        updateDemo(parseFloat(slider.value));
+        console.log('Chemical potential driving force demo initialized.');
+    } else {
+        console.warn(
+            'Could not find all elements for chemical potential driving force demo.'
+        );
+    }
+</script>

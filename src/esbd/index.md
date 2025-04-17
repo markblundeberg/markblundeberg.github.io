@@ -25,10 +25,7 @@ You may already know the chemical potential by another representation or name: F
 
 No matter what you call it and no matter the kind of particles, the particles want to go from high $\mu_i$ to low $\mu_i$, as surely as energy wants to go from high $T$ to low $T$. The value of $\mu_i$ (or $\bar{\mu}_i$) is energy per particle (or energy per mole), and you can think of it as 'particles want to roll downhill'! It's that easy.
 
-<p class="diagram-placeholder" style="border: 1px dashed #ccc;">
-  **[Interactive Demo: Driving Force]**<br>
-  (Using 'EnergyLevelsDiagram' showing $\bar{\mu}_i$ for one species in 'Body 1' vs 'Body 2', with an arrow indicating flow direction. Link the difference to a slider.
-</p>
+{% include "esbd-diagrams/mu-driving-force.njk" %}
 
 With charged particles, the thermodynamics is a little bit funky and weird, because part of the energy of a charged particle is due to the "absolute" electrostatic potential. So although $\bar\mu_i$ is perfectly well defined in theory, it is not simply dependent on the local material environment. Not only can two bodies with totally identical compositions have any electrostatic offset that we want, but the electrostatic potential fundamentally has an arbitrary global offset.
 
