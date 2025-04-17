@@ -1,6 +1,21 @@
-<div class="demo-container" syle="max-width:150px">
-    <div class="controls">
-        <div class="control-row">
+<div class="demo-container" style="max-width: 200px">
+    <div style="display: flex; gap: 8px">
+        <div
+            id="mu-driving-force-container"
+            style="
+                flex: 1;
+                height: 200px;
+                min-width: 120px;
+                border: 1px solid #eee;
+            "
+        ></div>
+    </div>
+    <div style="text-align: center">
+        <div>
+            <label for="mu-driving-force-slider" style="font-size: 0.85em"
+                >$\mu$ difference:</label
+            >
+            <br />
             <input
                 type="range"
                 id="mu-driving-force-slider"
@@ -12,8 +27,6 @@
             />
         </div>
     </div>
-
-    <div id="mu-driving-force-container"></div>
 </div>
 
 <script type="module">
