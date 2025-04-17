@@ -62,6 +62,12 @@ module.exports = function (eleventyConfig) {
         }
     );
 
+    // Static TeX rendering:
+    const markdownItKatex = require('@vscode/markdown-it-katex').default;
+    eleventyConfig.amendLibrary('md', (mdLib) => mdLib.use(markdownItKatex));
+    // Brutal hammer if markdown screws with underscores in TeX:
+    //  eleventyConfig.amendLibrary('md', (mdLib) => mdLib.disable('emphasis'));
+
     // --- Base Config ---
     return {
         // Template formats to process (including Markdown)

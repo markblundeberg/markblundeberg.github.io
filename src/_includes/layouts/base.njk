@@ -11,6 +11,7 @@
         {# Link to your CSS file (path relative to output site root) #}
         <link rel="stylesheet" href="/css/style.css" />
 
+        {# KaTeX CSS & JS (Core + Auto-render) #}
         <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css"
@@ -32,7 +33,8 @@
             crossorigin="anonymous"
         ></script>
 
-        {# KaTeX CSS & JS (Core + Auto-render) #}
+        {# KaTeX auto render hook - although we use markdown-it-katex, this
+        catches any stragglers in e.g. html #}
         <script>
             // Optional: Customize KaTeX auto-render delimiters if needed
             document.addEventListener('DOMContentLoaded', function () {
