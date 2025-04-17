@@ -613,15 +613,8 @@ class EnergyLevelsDiagram {
                 (enter) => {
                     const g = enter
                         .append('g')
-                        .attr(
-                            'class',
-                            (d) => `level-arrow ${d.cssClass || ''}`
-                        );
-                    // fade-in
-                    g.style('opacity', 0)
-                        .transition('fade-in')
-                        .duration(transitionDuration)
-                        .style('opacity', 1);
+                        .attr('class', (d) => `level-arrow ${d.cssClass || ''}`)
+                        .style('opacity', 0);
 
                     const line = g
                         .append('line')
@@ -656,6 +649,11 @@ class EnergyLevelsDiagram {
                         .remove();
                 }
             );
+        // Fade-in on both enter and update (sometimes update fires after exit)
+        mergedGroups
+            .transition()
+            .duration(transitionDuration)
+            .style('opacity', 1);
 
         // Update line position and style
         mergedGroups
