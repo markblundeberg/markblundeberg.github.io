@@ -1,9 +1,6 @@
 <div class="demo-container">
     <div class="controls">
         <div class="control-row">
-            <label class="control-label" for="mu-driving-force-slider"
-                >Potential Difference:</label
-            >
             <input
                 type="range"
                 id="mu-driving-force-slider"
@@ -34,8 +31,8 @@
     ) {
         // --- Configuration ---
         const config = {
-            width: 300,
-            height: 250, // Shorter diagram
+            width: 500,
+            height: 200, // Shorter diagram
             yAxisLabel: 'Chemical potential $\\mu$ (Arb. Units)', // KaTeX requires delimiters
             initialYRange: [-1.5, 1.5], // Adjust based on base + max diff
             showYTicks: false, // No ticks needed for this demo
@@ -44,8 +41,9 @@
                 { id: 'body2', label: 'Body 2' },
             ],
             defaultLevelStyle: { lineWidth: 2 },
-            transitionDuration: 500, // Use default component transition
+            transitionDuration: 500,
         };
+        const throttleDuration = 100; // should be 1/5 or less of above
 
         // --- Instantiate ---
         let diagram = null;
@@ -92,16 +90,14 @@
             if (Math.abs(deltaMu) > 0.01) {
                 // Only draw arrow if there's a difference
                 const isFlow1to2 = deltaMu > 0; // mu1 > mu2
-                arrowData = [
-                    {
-                        arrowId: 'flow',
-                        fromLevelId: isFlow1to2 ? 'mu1' : 'mu2',
-                        toLevelId: isFlow1to2 ? 'mu2' : 'mu1',
-                        label: '\\text{Flow}', // Always label flow direction
-                        arrowStyle: '->', // Always point high to low
-                        color: '#4daf4a', // Green for flow?
-                    },
-                ];
+                arrowData.push({
+                    arrowId: 'flow',
+                    fromLevelId: isFlow1to2 ? 'mu1' : 'mu2',
+                    toLevelId: isFlow1to2 ? 'mu2' : 'mu1',
+                    label: '\\text{Flow}', // Always label flow direction
+                    arrowStyle: '->', // Always point high to low
+                    color: '#4daf4a', // Green for flow?
+                });
             }
             diagram.setArrows(arrowData);
         }
@@ -112,7 +108,7 @@
             throttle((event) => {
                 const deltaMu = parseFloat(event.target.value);
                 updateDemo(deltaMu);
-            }, 100)
+            }, throttleDuration)
         );
 
         // --- Initial Draw ---

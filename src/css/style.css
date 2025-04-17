@@ -93,7 +93,7 @@ p.diagram-placeholder {
 /* Default (Mobile-First) Styles for the Demo Container */
 .demo-container {
     display: block; /* Behave like a normal block element */
-    max-width: 200px; /* Or whatever looks good on mobile */
+    max-width: 150px; /* Or whatever looks good on mobile */
     margin: 1.5em auto; /* Center block horizontally, add vertical space */
     padding: 0.5em;
     border: 1px solid #eee;
