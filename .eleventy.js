@@ -68,6 +68,11 @@ module.exports = function (eleventyConfig) {
     // Brutal hammer if markdown screws with underscores in TeX:
     //  eleventyConfig.amendLibrary('md', (mdLib) => mdLib.disable('emphasis'));
 
+    eleventyConfig.setNunjucksEnvironmentOptions({
+        throwOnUndefined: true,
+        autoescape: false,
+    });
+
     // --- Base Config ---
     return {
         // Template formats to process (including Markdown)
