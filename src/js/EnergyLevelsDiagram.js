@@ -662,6 +662,7 @@ class EnergyLevelsDiagram {
             .select('line.arrow-line')
             .transition()
             .duration(transitionDuration)
+            .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
             .call(applyLineAttributes)
             // Apply arrowheads based on style
             .attr('marker-start', (d) =>
@@ -676,6 +677,7 @@ class EnergyLevelsDiagram {
             .select('foreignObject.arrow-label')
             .transition()
             .duration(transitionDuration)
+            .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
             .call(applyLabelAttributes)
             .select('span.katex-label-container')
             .each(function (d) {
