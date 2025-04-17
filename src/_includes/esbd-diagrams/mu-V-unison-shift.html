@@ -1,10 +1,10 @@
-<div style="max-width: none; text-align: center; display: inline-block">
-    <div class="controls unison-shift-controls">
+<div class="demo-container" style="max-width: 250px">
+    <div style="text-align: center">
         <div class="control-row">
             <label
                 class="control-label"
                 for="unison-shift-phi-slider"
-                style="min-width: 150px"
+                style="display: block; min-width: 150px"
                 >Electrostatic offset:</label
             >
             <input
@@ -18,14 +18,14 @@
             />
         </div>
     </div>
-    <div style="display: inline-block">
+    <div style="display: flex; gap: 8px">
         <div
             id="unison-shift-mu-bar-diagram-container"
             style="
-                border: 1px solid #eee;
-                display: inline-block;
-                width: 100px;
+                flex: 1;
                 height: 200px;
+                min-width: 80px;
+                border: 1px solid #eee;
             "
         >
             Left
@@ -33,10 +33,10 @@
         <div
             id="unison-shift-v-diagram-container"
             style="
-                border: 1px solid #eee;
-                display: inline-block;
-                width: 100px;
+                flex: 1;
                 height: 200px;
+                min-width: 100px;
+                border: 1px solid #eee;
             "
         >
             Right

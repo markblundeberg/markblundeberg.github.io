@@ -92,7 +92,8 @@ p.diagram-placeholder {
 
 .demo-container {
     display: block; /* Behave like a normal block element */
-    max-width: 150px; /* Or whatever looks good on mobile */
+    width: 90%;
+    max-width: 300px; /* Default, should be overridden */
     margin: 1.5em auto; /* Center block horizontally, add vertical space */
     padding: 0.5em;
     border: 1px solid #eee;
