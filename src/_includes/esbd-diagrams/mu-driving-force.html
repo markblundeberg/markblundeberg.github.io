@@ -9,10 +9,7 @@
 >
     <div class="controls">
         <div class="control-row">
-            <label
-                class="control-label"
-                for="mu-driving-force-slider"
-                style="min-width: 150px"
+            <label class="control-label" for="mu-driving-force-slider"
                 >Potential Difference:</label
             >
             <input
@@ -22,12 +19,8 @@
                 max="2.0"
                 step="0.05"
                 value="1.0"
-                style="width: 250px"
+                style="width: 100px"
             />
-            <output id="mu-driving-force-value" style="min-width: 40px"
-                >Δμ = +1.0</output
-            >
-            <span style="font-size: 0.9em; margin-left: 5px">(Arb. Units)</span>
         </div>
     </div>
 
@@ -39,13 +32,11 @@
     import { throttle } from '/js/utils.js';
 
     const slider = document.getElementById('mu-driving-force-slider');
-    const valueOutput = document.getElementById('mu-driving-force-value');
     const containerId = '#mu-driving-force-container';
     const diagramContainer = document.querySelector(containerId);
 
     if (
         slider &&
-        valueOutput &&
         diagramContainer &&
         typeof EnergyLevelsDiagram !== 'undefined'
     ) {
@@ -53,7 +44,7 @@
         const config = {
             width: 300,
             height: 250, // Shorter diagram
-            yAxisLabel: '$\\mu$ (Arb. Units)', // KaTeX requires delimiters
+            yAxisLabel: 'Chemical potential $\\mu$ (Arb. Units)', // KaTeX requires delimiters
             initialYRange: [-1.5, 1.5], // Adjust based on base + max diff
             showYTicks: false, // No ticks needed for this demo
             categories: [
@@ -61,7 +52,7 @@
                 { id: 'body2', label: 'Body 2' },
             ],
             defaultLevelStyle: { lineWidth: 2 },
-            transitionDuration: 250, // Use default component transition
+            transitionDuration: 500, // Use default component transition
         };
 
         // --- Instantiate ---
@@ -91,14 +82,14 @@
                     categoryId: 'body1',
                     levelId: 'mu1',
                     yValue: mu1,
-                    label: '$\\mu_1$',
+                    label: '\\mu',
                     color: '#377eb8',
                 }, // Blue
                 {
                     categoryId: 'body2',
                     levelId: 'mu2',
                     yValue: mu2,
-                    label: '$\\mu_2$',
+                    label: '\\mu',
                     color: '#e41a1c',
                 }, // Red
             ];
@@ -121,12 +112,6 @@
                 ];
             }
             diagram.setArrows(arrowData);
-
-            // 3. Trigger Redraw (since setters don't redraw automatically)
-            diagram.redraw();
-
-            // Update output text
-            valueOutput.textContent = `Δμ = ${deltaMu >= 0 ? '+' : ''}${deltaMu.toFixed(2)}`;
         }
 
         // --- Event Listener ---
