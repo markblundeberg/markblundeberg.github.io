@@ -15,7 +15,7 @@ Mark Lundeberg // originally uploaded 2025 April
 
 Ever looked at a semiconductor {%wiki "band diagram" %} and thought, "Wow, that makes intuitive sense!"? They clearly show electron and hole energy levels, band bending, and driving forces; band diagrams are the universal visual language of semiconductor devices. Compare that to electrochemistry — trying to track electrode potentials, reference electrodes, solution potentials ($\phi$), ion chemical potentials ($\mu_i$), activities, junction potentials... it often feels like a confusing soup of concepts, right? What if we could bring some of that band diagram clarity to batteries, fuel cells, electrolysis, and more?
 
-That's the idea behind **Electrochemical Species Band Diagrams (ESBDs)**. We leverage the fundamental concept governing all chemical and electrochemical processes – the **electrochemical potential ($\bar{\mu}_i$)** – to create a unified visual landscape.
+That's the idea behind **Electrochemical Species Band Diagrams (ESBDs)**. We leverage the fundamental thermodynamic concept governing all chemical and electrochemical processes – the **electrochemical potential ($\bar{\mu}_i$)** – to define a closely related quantity – the **species voltage $V_i$** – to create a unified visual landscape that generalizes the band diagram to things besides just electrons.
 
 This site explores this framework, with the goal of building <em>intuition</em> for scientists and engineers working across disciplines involving charged species in materials. This page will give a quick primer, and further articles (coming soon) will explore a wide variety of concepts. Let's dive in!
 
@@ -31,9 +31,11 @@ Particles want to go from high $\mu_i$ to low $\mu_i$, as surely as energy wants
 {% include "esbd-diagrams/mu-driving-force.html" %}
 
 There is also **{%wiki "electrochemical potential" %} $\bar{\mu}_i$**: for reasons of convention, when we talk about charged particles (electrons and ions) we will refer to their proper thermodynamic $\mu_i$ as the electrochemical potential $\bar{\mu}_i$. It works the same -- charged particles want to go from high $\bar{\mu}_i$ to low $\bar{\mu}_i$.
-But with charged particles, the thermodynamics is a little bit funky and weird, because part of the energy of a charged particle is due to the "absolute" electrostatic potential. So although $\bar\mu_i$ is perfectly well defined in theory, it is not simply dependent on the local material environment.
+Thermodynamics can get weird with charged particles, as part of the energy of a charge is due to the average electrostatic potential it experiences. So although $\bar\mu_i$ is perfectly well defined in theory, it is not simply dependent on the local material environment as is the case with neutral particles.
 
-Not only can two bodies with totally identical compositions have any electrostatic offset that we want, but the electrostatic potential fundamentally has an arbitrary global offset. And to make matters worse, when the electrostatic offset changes, the $\bar{\mu}_i$ levels shift up or down _differently_, by an amount proportional to the species' charge, $z_i$ (an integer). Electrons ($z=-1$) shift differently than $\mathrm{Li}^{+}$ ion ($z=+1$) shift differently than $\mathrm{O}^{2-}$ ions ($z=-2$). This makes comparing $\bar{\mu}_i$ levels between different materials or conditions rather annoying, as all the $\bar{\mu}_i$ values depend on both the local chemistry and the (often arbitrary) electrostatic offset.
+Not only can two bodies with totally identical compositions have any electrostatic offset that we want, but the electrostatic potential fundamentally has an arbitrary global offset. And to make matters worse, when the electrostatic offset changes, the $\bar{\mu}_i$ levels shift up or down _differently_, by an amount proportional to the species' charge, either $z_iF$ (charge per mol) or $z_i e$ (charge per particle). Electrons ($z_{\mathrm{e}^-}=-1$) shift differently than $\mathrm{Li}^{+}$ ion ($z_{\mathrm{Li}^{+}}=+1$) shift differently than $\mathrm{O}^{2-}$ ions ($z_{\mathrm{O}^{2-}}=-2$). This makes comparing $\bar{\mu}_i$ levels between different materials or conditions rather annoying, as all the $\bar{\mu}_i$ values are are slippery animals that seem to move arbitrarily.
+
+Check out this demo showing hypothetical $\bar{\mu}_i$ values for the charged particles in one body, and another _exactly identical_ body except for its electrostatic potential:
 
 <p class="diagram-placeholder" style="border: 1px dashed #ccc;">
   Interactive demo of charging effect somehow?
@@ -41,7 +43,7 @@ Not only can two bodies with totally identical compositions have any electrostat
   Right: \bar\mu_i with 'shifted' levels. Same composition but different mu's
 </p>
 
-The standard approach in electrochemistry to deal with the weirdness of electrochemical potential is to define an electrostatic potential $\phi$ inside materials, and subtract off all that nastiness to arrive at a clean "internal chemical potential" $\mu_{\mathrm{int},i} = \bar{\mu}_i - z_i F \phi$. Let's adapt the above demo:
+The standard approach in electrochemistry to deal with the weirdness of electrochemical potential is to define an electrostatic potential $\phi$ inside materials, and subtract off each particle's "external" controlled electrostatic energy $z_i F \phi$ to arrive at a clean "internal" chemical potential, $\mu_{\mathrm{int},i} = \bar{\mu}_i - z_i F \phi$. Let's adapt the above demo:
 
 <p class="diagram-placeholder" style="border: 1px dashed #ccc;">
   Show the 'phi' solution to the $\bar{\mu}_i$ problem here.
@@ -49,9 +51,9 @@ The standard approach in electrochemistry to deal with the weirdness of electroc
   Right: \mu_{int,i}
 </p>
 
-This approach of subtracting off the $\phi$ dependence is admirable. It produces equations that work. It's the textbook foundation of electrochemistry. It's ... maybe unnecessary? It turns out that the notion of 'the electrostatic potential in a material' is fundamentally hard (or impossible) to define. And so, when we correctly calculate any measurable quantity in electrochemistry, our choice of defining $\phi$ just cancels out anyway![ref] Unfortunately, the difficulties in defining $\phi$ only grow when moving beyond textbook dilute aqueous systems, and this directly translates to difficulties in defining $\mu_{\mathrm{int},i}$.
+This approach of subtracting off the $\phi$ dependence is helpful. It produces equations that work and resemble normal (neutral) chemistry. It's the textbook foundation of electrochemistry. It's ... maybe misleading? It turns out that the notion of 'the electrostatic potential in a material' is fundamentally hard (or impossible) to define. And so, when we correctly calculate any measurable quantity in electrochemistry, our choice of defining $\phi$ just cancels out anyway![ref] Unfortunately, the difficulties in defining $\phi$ only grow when moving beyond textbook dilute aqueous systems, and this directly translates to difficulties in defining $\mu_{\mathrm{int},i}$.
 
-What if we could fix the weirdness in $\bar{\mu}_i$ some other way?
+What if we could fix address the weirdness in $\bar{\mu}_i$ some other way?
 
 ## Voltage for ions: $V_i$
 
@@ -59,7 +61,7 @@ As a solid state physicist, I had to unlearn something about a simple yet fundam
 
 But why privilege electrons? What are the equivalent "voltages" driving other ions? We may not have practical ionic voltmeters but why not try treating them equally with electrons? Well get ready for it, here's the big idea I want you to take to heart:
 
-Let's define a **Species Voltage, $V_i$**, for _any_ charged species $i$:
+Let's define a **species voltage, $V_i$**, for _any_ charged species $i$:
 
 $$V_i = \frac{\bar{\mu}_i}{z_i F}$$
 
