@@ -90,6 +90,31 @@ p.diagram-placeholder {
     overflow: hidden;
 }
 
+/* Default (Mobile-First) Styles for the Demo Container */
+.demo-container {
+    display: block; /* Behave like a normal block element */
+    max-width: 200px; /* Or whatever looks good on mobile */
+    margin: 1.5em auto; /* Center block horizontally, add vertical space */
+    padding: 0.5em;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    clear: both; /* Ensure it doesn't interfere with other floats if any */
+    /* Remove inline styles like display:inline-block, max-width, margin from the include file's div */
+}
+
+/* Styles for Wider Screens (e.g., tablets and desktops) */
+@media (min-width: 768px) {
+    /* Adjust this breakpoint as needed */
+    .demo-container {
+        float: right;
+        width: 150px; /* Set a fixed width suitable for floating */
+        max-width: none; /* Remove the mobile max-width */
+        /* Adjust margin: top=0, right=0, bottom=1em (space below), left=1.5em (space between text) */
+        margin: 0em 0 1em 1.5em;
+        /* display: block; is implicit, no need to set */
+    }
+}
+
 /* Styles for ESBD examples' frame and controls */
 
 .controls.esbd-controls {
@@ -107,7 +132,6 @@ p.diagram-placeholder {
 
 .control-label {
     margin-right: 10px;
-    min-width: 180px;
     text-align: right;
     font-size: 0.85em;
     color: #333;
