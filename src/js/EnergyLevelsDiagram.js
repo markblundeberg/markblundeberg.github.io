@@ -191,6 +191,7 @@ class EnergyLevelsDiagram {
     /** Sets up the core D3 and SVG structure. */
     _setupD3Structure() {
         this.container.html(''); // Clear previous content
+        this.container.attr('overflow', 'hidden'); // reduce resize looping
 
         this.svg = this.container
             .append('svg')
