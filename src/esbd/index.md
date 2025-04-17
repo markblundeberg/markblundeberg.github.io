@@ -44,15 +44,15 @@ This is illustrated in the following demo showing $\bar{\mu}_i$ for variously ch
 
 This makes comparing $\bar{\mu}_i$ levels between different materials or conditions rather annoying, as all the $\bar{\mu}_i$ values are are slippery animals that seem to move arbitrarily.
 
-The standard approach to deal with the weirdness of electrochemical potential is to define a **material electrostatic potential** $\phi$, and then subtract off each particle's electrostatic energy $z_i F \phi$ to arrive at a clean "internal" chemical potential, $\mu_{\mathrm{int},i} = \bar{\mu}_i - z_i F \phi$. Let's adapt the above demo:
+The standard approach to deal with the weirdness of electrochemical potential is to define a **material electrostatic potential** $\phi$, and then subtract off each particle's electrostatic energy $z_i F \phi$ to arrive at a clean "internal" chemical potential, $\mu_{\mathrm{int},i} = \bar{\mu}_i - z_i F \phi$.
 
-<p class="diagram-placeholder" style="border: 1px dashed #ccc;">
-  Show the 'phi' solution to the $\bar{\mu}_i$ problem here.
-  Left: \bar\mu_i with shifting levels.
-  Right: \mu_{int,i}
-</p>
+Adapting the previous demo, you can see now that $\mu_{\mathrm{int},i}$ are unaffected by $\Delta\phi$:
 
-This approach of subtracting off the $\phi$ dependence is helpful. It produces equations that work and resemble normal (neutral) chemistry. It's the textbook foundation of electrochemistry. It's ... maybe misleading? It turns out that the notion of 'the electrostatic potential in a material' is fundamentally hard (or impossible) to define. And so, when we correctly calculate any measurable quantity in electrochemistry, our choice of defining $\phi$ just cancels out anyway![ref] Unfortunately, the difficulties in defining $\phi$ only grow when moving beyond textbook dilute aqueous systems, and this directly translates to difficulties in defining $\mu_{\mathrm{int},i}$.
+{% include "esbd-diagrams/mu-shift-mu-internal.html" %}
+
+(Here, our value of $\phi=0$ happens to occur when we move the $\Delta\phi$ slider a bit to the left.)
+
+This approach of subtracting off the $\phi$ dependence is helpful. It produces equations that work and resemble normal (neutral) chemistry. It's the textbook foundation of electrochemistry. It's ... maybe misleading? It turns out that while it was justified to define $\Delta \phi$ between otherwise identical bodies, the notion of 'the electrostatic potential in a material' $\phi$ is fundamentally hard (or impossible) to define. And so, when we correctly calculate any measurable quantity in electrochemistry, our choice of defining $\phi$ just cancels out anyway![ref] Unfortunately, the difficulties in defining $\phi$ only grow when moving beyond textbook dilute aqueous systems, and this directly translates to difficulties in defining $\mu_{\mathrm{int},i}$.
 
 What if we could fix address the weirdness in $\bar{\mu}_i$ some other way?
 
