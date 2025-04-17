@@ -36,15 +36,13 @@ There is also **{%wiki "electrochemical potential" %}**, denoted with a little b
 
 {# Caveat - actually neutral particles' mu are sensitve to gravitational potential too! Important in e.g. water potential. #}
 
-Not only can two bodies with totally identical compositions have any electrostatic offset that we want, but the electrostatic potential fundamentally has an arbitrary global offset. And to make matters worse, when the electrostatic offset changes, the $\bar{\mu}_i$ levels shift up or down _differently_, by an amount proportional to the species' charge, either $z_iF$ (charge per mol) or $z_i e$ (charge per particle). Electrons ($z_{\mathrm{e}^-}=-1$) shift differently than $\mathrm{Li}^{+}$ ion ($z_{\mathrm{Li}^{+}}=+1$) shift differently than $\mathrm{O}^{2-}$ ions ($z_{\mathrm{O}^{2-}}=-2$). This makes comparing $\bar{\mu}_i$ levels between different materials or conditions rather annoying, as all the $\bar{\mu}_i$ values are are slippery animals that seem to move arbitrarily.
+Not only can two bodies with totally identical compositions have any electrostatic offset that we want, but the electrostatic potential fundamentally has an arbitrary global offset. And to make matters worse, when the electrostatic offset changes by any amount (call it $\Delta \phi$), the $\bar{\mu}_i$ levels shift up or down _differently_, by an amount $z_iF\Delta \phi$ per mole ($z_i e\Delta \phi$ per particle) that is proportional to the species' charge $z_i$.
 
-Check out this demo showing hypothetical $\bar{\mu}_i$ values for the charged particles in one body, and another body that is _exactly identical_ except for its electrostatic potential:
+This is illustrated in the following demo showing $\bar{\mu}_i$ for variously charged particles ($z_i = \{-2,-1,+1,+2\}$ for $\mathrm{A}^{2-}$, $\mathrm{B}^{-}$, $\mathrm{D}^{+}$, $\mathrm{E}^{2+}$) and a neutral particle ($\mathrm{C}$) in a given body:
 
-<p class="diagram-placeholder" style="border: 1px dashed #ccc;">
-  Interactive demo of charging effect somehow?
-  Left: \bar\mu_i with 'original' levels.
-  Right: \bar\mu_i with 'shifted' levels. Same composition but different mu's
-</p>
+{% include "esbd-diagrams/mu-shift-only.html" %}
+
+This makes comparing $\bar{\mu}_i$ levels between different materials or conditions rather annoying, as all the $\bar{\mu}_i$ values are are slippery animals that seem to move arbitrarily.
 
 The standard approach to deal with the weirdness of electrochemical potential is to define a **material electrostatic potential** $\phi$, and then subtract off each particle's electrostatic energy $z_i F \phi$ to arrive at a clean "internal" chemical potential, $\mu_{\mathrm{int},i} = \bar{\mu}_i - z_i F \phi$. Let's adapt the above demo:
 
