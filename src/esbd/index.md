@@ -46,7 +46,7 @@ Check out this demo showing hypothetical $\bar{\mu}_i$ values for the charged pa
   Right: \bar\mu_i with 'shifted' levels. Same composition but different mu's
 </p>
 
-The standard approach in electrochemistry to deal with the weirdness of electrochemical potential is to define an electrostatic potential $\phi$ inside materials, and subtract off each particle's "external" controlled electrostatic energy $z_i F \phi$ to arrive at a clean "internal" chemical potential, $\mu_{\mathrm{int},i} = \bar{\mu}_i - z_i F \phi$. Let's adapt the above demo:
+The standard approach to deal with the weirdness of electrochemical potential is to define a **material electrostatic potential** $\phi$, and then subtract off each particle's electrostatic energy $z_i F \phi$ to arrive at a clean "internal" chemical potential, $\mu_{\mathrm{int},i} = \bar{\mu}_i - z_i F \phi$. Let's adapt the above demo:
 
 <p class="diagram-placeholder" style="border: 1px dashed #ccc;">
   Show the 'phi' solution to the $\bar{\mu}_i$ problem here.
@@ -71,11 +71,6 @@ $$V_i = \frac{\bar{\mu}_i}{z_i F}$$
 That's it! We just divide the energy per mole by the charge per mole! (for per-particle that's $V_i = \bar{\mu}_i / (z_i e)$) It seems simple, maybe _too_ simple? Stick around, because this scaling has a profound consequences in the way we can visualize electrochemistry. Let's try shifting that electrostatic offset again:
 
 {% include "esbd-diagrams/mu-V-unison-shift.html" %}
-
-<p class="diagram-placeholder" style="border: 1px dashed #ccc;">
-  **[Interactive Demo: Unison Shift]**<br>
-  (Side-by-side 'EnergyLevelsDiagram' instances. Slider controls global $\phi$. Left plots $\bar{\mu}_i$ for A²⁻, B⁻, C⁰, D⁺, E²⁺. Right plots $V_i$ for charged species.)
-</div>
 
 **Aha! Moment #1:** As you change the electrostatic offset $\phi$ with the slider, notice how the $\bar{\mu}_i$ levels on the left shift by different amounts (depending on $z_i$), creating a confusing picture. But on the right, the $V_i$ levels for all charged species **shift together** by the exact same amount ($\Delta V_i = \Delta \phi$)! This "Unison Shift" means the $V_i$ representation cleanly separates the intrinsic chemical/activity effects from simple, uniform electrostatic offsets. The _relative differences_ between $V_i$ levels become invariant to the choice of $\phi$ zero.
 
