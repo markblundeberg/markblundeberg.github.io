@@ -1,7 +1,8 @@
+{% set idprefix = "unison-shift" %}
 <div class="demo-container" style="max-width: 250px">
     <div style="display: flex; gap: 8px">
         <div
-            id="unison-shift-mu-bar-diagram-container"
+            id="{{ idprefix }}-mu-bar-diagram-container"
             style="
                 flex: 1;
                 height: 200px;
@@ -10,7 +11,7 @@
             "
         ></div>
         <div
-            id="unison-shift-v-diagram-container"
+            id="{{ idprefix }}-v-diagram-container"
             style="
                 flex: 1;
                 height: 200px;
@@ -21,13 +22,13 @@
     </div>
     <div style="text-align: center">
         <div>
-            <label for="unison-shift-phi-slider" style="font-size: 0.85em"
+            <label for="{{ idprefix }}-phi-slider" style="font-size: 0.85em"
                 >Electrostatic offset:</label
             >
             <br />
             <input
                 type="range"
-                id="unison-shift-phi-slider"
+                id="{{ idprefix }}-phi-slider"
                 min="-1.5"
                 max="1.5"
                 step="any"
@@ -39,9 +40,9 @@
 </div>
 
 <script type="module">
-    const sliderId = 'unison-shift-phi-slider';
-    const muBarContainerId = '#unison-shift-mu-bar-diagram-container';
-    const vContainerId = '#unison-shift-v-diagram-container';
+    const sliderId = '{{ idprefix }}-phi-slider';
+    const muBarContainerId = '#{{ idprefix }}-mu-bar-diagram-container';
+    const vContainerId = '#{{ idprefix }}-v-diagram-container';
 
     import EnergyLevelsDiagram from '/js/EnergyLevelsDiagram.js';
     import { throttle } from '/js/utils.js';
@@ -88,6 +89,8 @@
 
     // Main function
     function doit() {
+        if (!(phiSlider && muBarContainer && vContainer))
+            throw 'Could not find all elements';
         const muBarDiagram = new EnergyLevelsDiagram(
             muBarContainerId,
             muBarConfig
@@ -146,15 +149,11 @@
 
         // Initial update
         updateUnisonShiftDiagrams();
-        console.log('Unison shift demo initialized.');
+        console.log('{{ idprefix }} demo initialized.');
     }
-    if (phiSlider && muBarContainer && vContainer) {
-        try {
-            doit();
-        } catch (error) {
-            console.error('Failed to initialize:', error);
-        }
-    } else {
-        console.warn('Could not find all elements for unison shift demo.');
+    try {
+        doit();
+    } catch (error) {
+        console.error('Failed to initialize {{ idprefix }} demo!', error);
     }
 </script>
