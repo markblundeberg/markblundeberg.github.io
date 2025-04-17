@@ -15,7 +15,7 @@ Mark Lundeberg // originally uploaded 2025 April
 
 Ever looked at a semiconductor {%wiki "band diagram" %} and thought, "Wow, that makes intuitive sense!"? They clearly show electron and hole energy levels, band bending, and driving forces; band diagrams are the universal visual language of semiconductor devices. Compare that to electrochemistry — trying to track electrode potentials, reference electrodes, solution potentials ($\phi$), ion chemical potentials ($\mu_i$), activities, junction potentials... it often feels like a confusing soup of concepts, right? What if we could bring some of that band diagram clarity to batteries, fuel cells, electrolysis, and more?
 
-That's the idea behind **Electrochemical Species Band Diagrams (ESBDs)**. We leverage the fundamental thermodynamic concept governing all chemical and electrochemical processes – the **electrochemical potential ($\bar{\mu}_i$)** – to define a closely related quantity – the **species voltage $V_i$** – to create a unified visual landscape that generalizes the band diagram to things besides just electrons.
+That's the idea behind **Electrochemical Species Band Diagrams (ESBDs)**. We leverage the fundamental thermodynamic concept governing all chemical and electrochemical processes – the **electrochemical potential ($\bar{\mu}_i$)** – to define the **species voltage $V_i$** and create a unified visual landscape that generalizes the band diagram to things besides just electrons.
 
 This site explores this framework, with the goal of building <em>intuition</em> for scientists and engineers working across disciplines involving charged species in materials. This page will give a quick primer, and further articles (coming soon) will explore a wide variety of concepts. Let's dive in!
 
@@ -30,12 +30,15 @@ Particles want to go from high $\mu_i$ to low $\mu_i$, as surely as energy wants
 
 {% include "esbd-diagrams/mu-driving-force.html" %}
 
-There is also **{%wiki "electrochemical potential" %} $\bar{\mu}_i$**: for reasons of convention, when we talk about charged particles (electrons and ions) we will refer to their proper thermodynamic $\mu_i$ as the electrochemical potential $\bar{\mu}_i$. It works the same -- charged particles want to go from high $\bar{\mu}_i$ to low $\bar{\mu}_i$.
-Thermodynamics can get weird with charged particles, as part of the energy of a charge is due to the average electrostatic potential it experiences. So although $\bar\mu_i$ is perfectly well defined in theory, it is not simply dependent on the local material environment as is the case with neutral particles.
+{# Note - we're assuming bodies with equal temperature for now! #}
+
+There is also **{%wiki "electrochemical potential" %}**, denoted with a little bar on top: $\bar{\mu}_i$. For reasons of convention, when we talk about charged particles (electrons and ions) we will refer to their proper thermodynamic $\mu_i$ as the electrochemical potential $\bar{\mu}_i$. It works the same in many ways, like charged particles want to go from high $\bar{\mu}_i$ to low $\bar{\mu}_i$. But thermodynamics can get weird with charged particles, and the energy of a charge is now sensitive to the average electrostatic potential it experiences. So although $\bar\mu_i$ is perfectly well defined in theory, it is not simply dependent on the local material environment.
+
+{# Caveat - actually neutral particles' mu are sensitve to gravitational potential too! Important in e.g. water potential. #}
 
 Not only can two bodies with totally identical compositions have any electrostatic offset that we want, but the electrostatic potential fundamentally has an arbitrary global offset. And to make matters worse, when the electrostatic offset changes, the $\bar{\mu}_i$ levels shift up or down _differently_, by an amount proportional to the species' charge, either $z_iF$ (charge per mol) or $z_i e$ (charge per particle). Electrons ($z_{\mathrm{e}^-}=-1$) shift differently than $\mathrm{Li}^{+}$ ion ($z_{\mathrm{Li}^{+}}=+1$) shift differently than $\mathrm{O}^{2-}$ ions ($z_{\mathrm{O}^{2-}}=-2$). This makes comparing $\bar{\mu}_i$ levels between different materials or conditions rather annoying, as all the $\bar{\mu}_i$ values are are slippery animals that seem to move arbitrarily.
 
-Check out this demo showing hypothetical $\bar{\mu}_i$ values for the charged particles in one body, and another _exactly identical_ body except for its electrostatic potential:
+Check out this demo showing hypothetical $\bar{\mu}_i$ values for the charged particles in one body, and another body that is _exactly identical_ except for its electrostatic potential:
 
 <p class="diagram-placeholder" style="border: 1px dashed #ccc;">
   Interactive demo of charging effect somehow?
