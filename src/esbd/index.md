@@ -9,6 +9,8 @@ eleventyNavigation:
 
 # Band Diagrams for Batteries? An Intuitive Visualization
 
+Mark Lundeberg // originally uploaded 2025 April
+
 **(Optional: Compelling Header Image/Animation showing a finished ESBD)**
 
 Ever looked at a semiconductor {%wiki "band diagram" %} and thought, "Wow, that makes intuitive sense!"? They clearly show electron and hole energy levels, band bending, and driving forces; band diagrams are the universal visual language of semiconductor devices. Compare that to electrochemistry — trying to track electrode potentials, reference electrodes, solution potentials ($\phi$), ion chemical potentials ($\mu_i$), activities, junction potentials... it often feels like a confusing soup of concepts, right? What if we could bring some of that band diagram clarity to batteries, fuel cells, electrolysis, and more?
