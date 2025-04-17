@@ -36,6 +36,7 @@
 
 <script type="module">
     import EnergyLevelsDiagram from '/js/EnergyLevelsDiagram.js';
+    import { throttle } from '/js/utils.js';
 
     const slider = document.getElementById('mu-driving-force-slider');
     const valueOutput = document.getElementById('mu-driving-force-value');
@@ -129,10 +130,13 @@
         }
 
         // --- Event Listener ---
-        slider.addEventListener('input', (event) => {
-            const deltaMu = parseFloat(event.target.value);
-            updateDemo(deltaMu);
-        });
+        slider.addEventListener(
+            'input',
+            throttle((event) => {
+                const deltaMu = parseFloat(event.target.value);
+                updateDemo(deltaMu);
+            }, 100)
+        );
 
         // --- Initial Draw ---
         updateDemo(parseFloat(slider.value));
