@@ -121,6 +121,11 @@ Intrigued? The real power of ESBDs becomes apparent when applied to various syst
 
 Or explore by topic:
 
+- _Electrodes_ - Electrodes and Lithium ion batteries. {# don't really need standard states or solutions at all for this discussion! discuss e.g. Zn2+/Zn electrode and end with Li Ion batteries. #}
+- _Solutions_ - Concentrations and Junctions {# neutrality, standard states, salt bridges, membranes #}
+- _Electrons and holes_ - Semiconductors {# comes after solutions so we can talk in detail about electron and hole standard states vs band edges. #} -- or,
+- _Semiconductors_ - Electrons and holes {# comes after solutions so we can talk in detail about electron and hole standard states vs band edges. #}
+
 - [Link to Electrochemistry Basics in V]
 - [Link to Battery Examples]
 - [Link to Advanced Concepts & Non-Equilibrium]
