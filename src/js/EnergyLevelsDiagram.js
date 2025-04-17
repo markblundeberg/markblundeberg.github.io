@@ -28,7 +28,7 @@ class EnergyLevelsDiagram {
      */
     constructor(containerId, initialConfig = {}) {
         this.containerId = containerId;
-        this.container = d3.select(this.containerId);
+        this.container = d3.select('#' + this.containerId);
         if (this.container.empty()) {
             throw new Error(`Container element #${containerId} not found.`);
         }

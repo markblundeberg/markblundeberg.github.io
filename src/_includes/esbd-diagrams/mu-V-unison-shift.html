@@ -1,4 +1,4 @@
-{% set idprefix = "unison-shift" %}
+{% set idprefix = ["unison-shift-", idsuffix] | join %}
 <div class="demo-container" style="max-width: 250px">
     <div style="display: flex; gap: 8px">
         <div
@@ -23,7 +23,7 @@
     <div style="text-align: center">
         <div>
             <label for="{{ idprefix }}-phi-slider" style="font-size: 0.85em"
-                >Electrostatic offset:</label
+                >Electrostatic offset $\Delta\phi_1$:</label
             >
             <br />
             <input
@@ -40,17 +40,16 @@
 </div>
 
 <script type="module">
-    const sliderId = '{{ idprefix }}-phi-slider';
-    const muBarContainerId = '#{{ idprefix }}-mu-bar-diagram-container';
-    const vContainerId = '#{{ idprefix }}-v-diagram-container';
-
     import EnergyLevelsDiagram from '/js/EnergyLevelsDiagram.js';
     import { throttle } from '/js/utils.js';
 
-    // --- Unison Shift Demo ---
+    // DOM identifiers - must match above HTML!
+    const sliderId = '{{ idprefix }}-phi-slider';
+    const muBarContainerId = '{{ idprefix }}-mu-bar-diagram-container';
+    const vContainerId = '{{ idprefix }}-v-diagram-container';
 
-    // 1. Data for Generic Species
-    // Using ecp_init as baseline mu_bar at phi=0 (arbitrary energy units, assuming F=1)
+    // Data for Generic Species
+    // Using ecp_init as baseline \bar\mu (arbitrary energy units, assuming F=1)
     const ionData = {
         // Using simple keys A, B, C, D, E
         A: { z: -2, ecp_init: +1.0, color: '#984ea3', latex: 'A^{2-}' }, // Purple
@@ -61,14 +60,16 @@
     };
     const speciesKeys = Object.keys(ionData);
 
-    // 2. Configuration for the Diagrams
+    // Configuration for the Diagrams
     const commonConfig = {
-        width: 100, // Narrower plots
-        height: 250,
-        showYTicks: false, // No numerical ticks as requested
-        categories: [{ id: 'levels', label: '' }], // Single category, no label needed below
+        width: 100,
+        height: 200,
+        showYTicks: false, // No numerical ticks
+        categories: [{ id: 'levels', label: 'Body 1' }],
         margin: { top: 10, right: 0, bottom: 20, left_compact: 25 }, // Minimal margins if no Y axis label/ticks
+        transitionDuration: 500,
     };
+    const throttleDuration = 100; // should be 1/5 or less of transitionDuration
 
     const muBarConfig = {
         ...commonConfig,
@@ -82,13 +83,13 @@
         initialYRange: [-2.0, 2.8], // Calculated range + padding
     };
 
-    // 3. DOM References
-    const phiSlider = document.getElementById(sliderId);
-    const muBarContainer = document.querySelector(muBarContainerId);
-    const vContainer = document.querySelector(vContainerId);
-
-    // Main function
+    // Launcher code
     function doit() {
+        // DOM References
+        const phiSlider = document.getElementById(sliderId);
+        const muBarContainer = document.getElementById(muBarContainerId);
+        const vContainer = document.getElementById(vContainerId);
+
         if (!(phiSlider && muBarContainer && vContainer))
             throw 'Could not find all elements';
         const muBarDiagram = new EnergyLevelsDiagram(
@@ -97,10 +98,11 @@
         );
         const vDiagram = new EnergyLevelsDiagram(vContainerId, vConfig);
 
-        // 5. Update Function
-        function updateUnisonShiftDiagrams() {
-            if (!muBarDiagram || !vDiagram) return; // Don't run if diagrams failed to init
-            const phi = parseFloat(phiSlider.value);
+        // Update callback
+        function updateDiagrams() {
+            // Slider represents a shift in electrostatic potential from
+            // whatever initial value that would have defined ecp_init.
+            const dphi = parseFloat(phiSlider.value);
 
             const muBarLevelsData = [];
             const vLevelsData = [];
@@ -111,23 +113,23 @@
                 const ecp_init = ion.ecp_init;
 
                 // Calculate mu_bar (assuming F=1)
-                const mu_bar = ecp_init + z * phi;
+                const mu_bar = ecp_init + z * dphi;
                 muBarLevelsData.push({
                     categoryId: 'levels',
-                    levelId: key + '_mu', // Unique ID
+                    levelId: key,
                     yValue: mu_bar,
                     label: `\\bar{\\mu}_{${ion.latex}}`, // Raw LaTeX for component
                     color: ion.color,
                 });
 
-                // Calculate V (only if z is not 0)
+                // Calculate V (skip z=0)
                 if (z !== 0) {
                     // V = mu_bar / z (since F=1)
-                    // OR V = V_init + phi = (ecp_init / z) + phi
-                    const V = ecp_init / z + phi;
+                    // OR V = V_init + dphi = (ecp_init / z) + dphi
+                    const V = ecp_init / z + dphi;
                     vLevelsData.push({
                         categoryId: 'levels',
-                        levelId: key + '_V', // Unique ID
+                        levelId: key,
                         yValue: V,
                         label: `V_{${ion.latex}}`, // Raw LaTeX for component
                         color: ion.color,
@@ -140,15 +142,14 @@
             vDiagram.setLevels(vLevelsData);
         }
 
-        // 6. Event Listener for Slider
-
+        // Slider event listener - throttle it.
         phiSlider.addEventListener(
             'input',
-            throttle((event) => updateUnisonShiftDiagrams(), 100)
+            throttle((event) => updateDiagrams(), throttleDuration)
         );
 
         // Initial update
-        updateUnisonShiftDiagrams();
+        updateDiagrams();
         console.log('{{ idprefix }} demo initialized.');
     }
     try {
