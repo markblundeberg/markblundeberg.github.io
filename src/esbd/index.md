@@ -19,9 +19,9 @@ Compare that to electrochemistry — trying to track electrode potentials, refer
 
 That's the idea behind **Electrochemical Species Band Diagrams (ESBDs)**. We are going back to basics, using fundamental thermodynamics to define a **species voltage $V_i$** and create a unified visual landscape that handles both electrons and ions.
 
-This site explores this framework, with the goal of building <em>intuition</em> for scientists and engineers working across disciplines involving charged species in materials. This page will give a quick primer, and further articles (coming soon) will explore a wide variety of concepts. Let's dive in!
+This site explores this framework, with the goal of building <em>intuition</em> for scientists and engineers working across disciplines involving charged species in materials. This page will give a review of basic thermodynamics, and give a quick primer on the new idea. Further articles (coming soon) will explore a wide variety of concepts. Let's dive in!
 
-## Background: the electrochemical potential ($\bar{\mu}_i$)
+## Chemical potential: 'temperature' for particles
 
 How do mobile particles know where to move and when to react? For any individual particle, this is a mess of microscopic forces. On average though, we can zoom out and talk about statistical tendencies of similar particles, and these tendencies are characterized by the {%wiki "chemical_potential" %} $\mu_i$ for the type/_species_ of particle labelled $i$. Chemical potentials are to particles what temperature $T$ is to energy: when two bodies are in equilibrium they equalize their $\mu_i$'s and $T$'s by exchanging the fungible particles and energy. The chemical potential combines all the per-particle energy, the entropy, the diffusion, the <em>mess</em> ... in just the right way.
 
@@ -34,19 +34,21 @@ Particles want to go from high $\mu_i$ to low $\mu_i$, as surely as energy wants
 
 {# Note - we're assuming bodies with equal temperature for now! #}
 
+## The electrochemical potential ($\bar{\mu}_i$)
+
 There is also **{%wiki "electrochemical potential" %}**, denoted with a little bar on top: $\bar{\mu}_i$. To avoid some terminology ambiguities, when we talk about charged particles (electrons and ions) we will refer to their proper thermodynamic $\mu_i$ as the electrochemical potential $\bar{\mu}_i$. It works the same in many ways, like charged particles want to go from high $\bar{\mu}_i$ to low $\bar{\mu}_i$. But thermodynamics can get weird with charged particles, as the energy (and thus $\bar\mu_i$) of a charge is sensitive to the average electrostatic potential. So although $\bar\mu_i$ is perfectly well defined in theory, it is not simply dependent on the local material environment.
 
 {# Caveat - actually neutral particles' mu are sensitve to gravitational potential too! Important in e.g. water potential. #}
-
-## How to tame your ion
 
 Let's imagine various hypothetical charged species $\mathrm{A}^{2-}$, $\mathrm{B}^{-}$, $\mathrm{D}^{+}$, $\mathrm{E}^{2+}$, and a neutral species $\mathrm{C}$, all together in a thermodnamic body. Here's an interactive visualization of how their electrochemical potentials would vary due to a change $\Delta\phi$ in the electrostatic potential:
 
 {% include "esbd-diagrams/mu-shift-only.html" %}
 
-The $\bar{\mu}_i$ levels move all over the place, and specifically they're moving an amount $z_iF\Delta \phi$ per mole ($F$ is {%wiki "Faraday's constant" %} and $z_i$ is the ionic charge level, $-2$ or $+1$ etc.), or equivalently $z_i e\Delta \phi$ per particle. Here $\Delta\phi$ could represent anything from a deliberate control variable to the arbitrary global offset in electric potentials.
+It's _slippery weirdness_. The $\bar{\mu}_i$ levels move all over the place, and specifically they're moving an amount $z_iF\Delta \phi$ per mole ($F$ is {%wiki "Faraday's constant" %} and $z_i$ is the ionic charge level, $-2$ or $+1$ etc.), or equivalently $z_i e\Delta \phi$ per particle. Here $\Delta\phi$ could represent anything from a deliberate control variable to the arbitrary global offset in electric potentials.
 
 Ionic systems always include at least one positive species and one negative species, and so this slippery weirdness in electrochemical potentials makes it rather annoying to directly compare $\bar{\mu}_i$ values in different materials or conditions.
+
+## How to tame your ion
 
 The traditional approach to deal with the slippery weirdness of electrochemical potential is to define a **material electrostatic potential** $\phi$, and then subtract off each particle's electrostatic energy $z_i F \phi$ to arrive at a clean "internal" chemical potential, $\mu_{\mathrm{int},i} = \bar{\mu}_i - z_i F \phi$.
 
@@ -56,11 +58,11 @@ Adapting the previous demo, you can see now that $\mu_{\mathrm{int},i}$ are unaf
 
 {% include "esbd-diagrams/mu-shift-mu-internal.html" %}
 
-This approach of subtracting off the $\phi$ dependence is quite helpful as $z_i F \phi$ is simple and $\mu_{\mathrm{int},i}$ contains all the fun chemistry. It does however mean that for electrochemical processes, it doubles the driving forces that we have to consider: an chemical component and an electrostatic component. And in the end the total measurable driving forces are given by the combination $\bar{\mu}_i$ anyway.
+This approach of partitioning off the $\phi$ dependence is quite helpful as $z_i F \phi$ seems simple and $\mu_{\mathrm{int},i}$ contains normal-ish chemistry. It does however mean that for electrochemical processes, it doubles the driving forces that we have to consider: an internal chemical component and an electrostatic component, which anyway sum to the measurable total driving force (from $\bar{\mu}_i$). So this does complicate our mental picture too.
 
-What if we could address the slippery weirdness in $\bar{\mu}_i$ some other way?
+What if we could regularize the slippery weirdness in $\bar{\mu}_i$ some other way?
 
-## Voltage for ions: $V_i$
+## Voltage for ions too (a novel approach!)
 
 As a solid state physicist, I had to unlearn the idea that voltmeters let us probe the electrostatic potential $\phi$. The truth is that a voltmeter is a thermodynamic device: it lets electrons do thermodynamic work on it, and it measures that work. To make a long story short, the "true" voltage probed by a voltmeter is $V = -\bar{\mu}_{\mathrm{e}^-} / F$ (or $/e$ if working per-particle). Voltmeters measure differences in this thermodynamic, electronic voltage. The value $\bar{\mu}_{\mathrm{e}^-}$, also known as Fermi level $E_\mathrm{F}$, features prominently on any semiconductor band diagram and it is the proxy for voltage $V$.
 
@@ -74,7 +76,7 @@ $$V_i = \frac{\bar{\mu}_i}{z_i F}$$
 
 This is the big idea. We just divide the energy per mole by the charge per mole (for per-particle that's $V_i = \bar{\mu}_i / (z_i e)$). That seems simple, maybe _too_ simple? Stick around, because this scaling has a profound consequences on the way that we can visualize electrochemistry.
 
-Let's try shifting that electrostatic offset one more time:
+Let's try shifting that electrostatic offset one final time:
 
 {% include "esbd-diagrams/mu-V-unison-shift.html" %}
 
@@ -87,7 +89,7 @@ Remember before when we talked about particles going downhill in $\bar\mu$? Welc
 - **Cations ($z > 0$)** want to move from **high $V_+$ to low $V_+$**. (They "fall down" their $V_i$ landscape).
 - **Anions ($z < 0$)** want to move from **low $V_-$ to high $V_-$**. (They "float up" their $V_i$ landscape).
 
-That might sound familiar too, it's just the thermodynamic version of positive charges in a vacuum getting pushed from high $\phi$ to low $\phi$, or vice versa for negtive charges! The big difference is, now each species of particle experiences a different voltage landscape $V_i$.
+That might sound familiar too, it's just the thermodynamic version of positive charges in a vacuum getting pushed from high $\phi$ to low $\phi$, or vice versa for negtive charges! The big difference is, now each species of particle experiences a different voltage landscape $V_i$, and that's because $V_i$ includes some chemical energy which will differ from species to species.
 
 $V_i$ can have a landscape (dependence on position)? Let's see what it looks like.
 
