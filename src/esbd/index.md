@@ -13,9 +13,11 @@ Mark Lundeberg // originally uploaded 2025 April
 
 **(Optional: Compelling Header Image/Animation showing a finished ESBD)**
 
-Ever looked at a semiconductor {%wiki "band diagram" %} and thought, "Wow, that makes intuitive sense!"? They clearly show electron and hole energy levels, band bending, and driving forces; band diagrams are the universal visual language of semiconductor devices. Compare that to electrochemistry — trying to track electrode potentials, reference electrodes, solution potentials ($\phi$), ion chemical potentials ($\mu_i$), activities, junction potentials... it often feels like a confusing soup of concepts, right? What if we could bring some of that band diagram clarity to batteries, fuel cells, electrolysis, and more?
+Ever looked at a semiconductor device {%wiki "band diagram" %} and thought, "Wow, that makes intuitive sense!"? They clearly show electron and hole energy levels, band bending, equilibria, and driving forces. Band diagrams are the universal visual language of semiconductor devices.
 
-That's the idea behind **Electrochemical Species Band Diagrams (ESBDs)**. We leverage the fundamental thermodynamic concept governing all chemical and electrochemical processes – the **electrochemical potential ($\bar{\mu}_i$)** – to define the **species voltage $V_i$** and create a unified visual landscape that generalizes the band diagram to things besides just electrons.
+Compare that to electrochemistry — trying to track electrode potentials, reference electrodes, solution potentials ($\phi$), ion chemical potentials ($\mu_i$), activities, junction potentials... it often feels like a confusing soup of concepts, right? What if we could bring some of that band diagram clarity to batteries, fuel cells, electrolysis, and more?
+
+That's the idea behind **Electrochemical Species Band Diagrams (ESBDs)**. We are going back to basics, using fundamental thermodynamics to define a **species voltage $V_i$** and create a unified visual landscape that handles both electrons and ions.
 
 This site explores this framework, with the goal of building <em>intuition</em> for scientists and engineers working across disciplines involving charged species in materials. This page will give a quick primer, and further articles (coming soon) will explore a wide variety of concepts. Let's dive in!
 
@@ -32,33 +34,30 @@ Particles want to go from high $\mu_i$ to low $\mu_i$, as surely as energy wants
 
 {# Note - we're assuming bodies with equal temperature for now! #}
 
-There is also **{%wiki "electrochemical potential" %}**, denoted with a little bar on top: $\bar{\mu}_i$. For reasons of convention, when we talk about charged particles (electrons and ions) we will refer to their proper thermodynamic $\mu_i$ as the electrochemical potential $\bar{\mu}_i$. It works the same in many ways, like charged particles want to go from high $\bar{\mu}_i$ to low $\bar{\mu}_i$. But thermodynamics can get weird with charged particles, and the energy of a charge is now sensitive to the average electrostatic potential it experiences. So although $\bar\mu_i$ is perfectly well defined in theory, it is not simply dependent on the local material environment.
+There is also **{%wiki "electrochemical potential" %}**, denoted with a little bar on top: $\bar{\mu}_i$. For reasons of convention, when we talk about charged particles (electrons and ions) we will refer to their proper thermodynamic $\mu_i$ as the electrochemical potential $\bar{\mu}_i$. It works the same in many ways, like charged particles want to go from high $\bar{\mu}_i$ to low $\bar{\mu}_i$. But thermodynamics can get weird with charged particles, as the energy (and thus $\bar\mu_i$) of a charge is sensitive to the average electrostatic potential. So although $\bar\mu_i$ is perfectly well defined in theory, it is not simply dependent on the local material environment.
 
 {# Caveat - actually neutral particles' mu are sensitve to gravitational potential too! Important in e.g. water potential. #}
 
-Not only can two bodies with totally identical compositions have any electrostatic offset that we want, but the electrostatic potential fundamentally has an arbitrary global offset. And to make matters worse, when the electrostatic offset changes by any amount (call it $\Delta \phi$), the $\bar{\mu}_i$ levels shift up or down _differently_, by an amount $z_iF\Delta \phi$ per mole ($z_i e\Delta \phi$ per particle) that is proportional to the species' charge level $z_i$. Here $F$ is Faraday's constant, which is the charge of 1 mole of protons (each with charge $e$).
-
-This is illustrated in the following demo showing $\bar{\mu}_i$ for variously charged particles ($z_i = \{-2,-1,+1,+2\}$ for $\mathrm{A}^{2-}$, $\mathrm{B}^{-}$, $\mathrm{D}^{+}$, $\mathrm{E}^{2+}$) and a neutral particle ($\mathrm{C}$) in a hypothetical body of fixed composition.
+Let's imagine various hypothetical charged species $\mathrm{A}^{2-}$, $\mathrm{B}^{-}$, $\mathrm{D}^{+}$, $\mathrm{E}^{2+}$, and a neutral species $\mathrm{C}$, all together in a thermodnamic body. Here's an interactive visualization of how their relative $\bar\mu_i$ would vary due to a change $\Delta\phi$ in the electrostatic potential:
 
 {% include "esbd-diagrams/mu-shift-only.html" %}
 
-Observe the effect when you move $\Delta \phi$. This makes comparing $\bar{\mu}_i$ levels between different materials or conditions rather annoying.
+The $\bar{\mu}_i$ levels move all over the place, and specifically they're moving an amount $z_iF\Delta \phi$ per mole ($F$ is {%wiki "Faraday's constant" %} and $z_i$ is the ionic charge level, $-2$ or $+1$ etc.), or equivalently $z_i e\Delta \phi$ per particle. In any case, this slippery chaos in electrochemical potentials makes it rather annoying to use them to compare different materials or conditions.
 
 The traditional approach to deal with the weirdness of electrochemical potential is to define a **material electrostatic potential** $\phi$, and then subtract off each particle's electrostatic energy $z_i F \phi$ to arrive at a clean "internal" chemical potential, $\mu_{\mathrm{int},i} = \bar{\mu}_i - z_i F \phi$.
-
 Adapting the previous demo, you can see now that $\mu_{\mathrm{int},i}$ are unaffected by $\Delta\phi$:
 
 {% include "esbd-diagrams/mu-shift-mu-internal.html" %}
 
-(Here, our value of $\phi=0$ happens to occur when we move the $\Delta\phi$ slider a bit to the right.)
+(Here, our value of $\phi=0$ happens to occur when we move the $\Delta\phi$ slider a bit left.)
 
-This approach of subtracting off the $\phi$ dependence is helpful. It produces equations that work and resemble normal (neutral) chemistry. It's the textbook foundation of electrochemistry. It's ... maybe misleading? It turns out that while it was justified to define $\Delta \phi$ between otherwise identical bodies, the notion of 'the electrostatic potential in a material' $\phi$ is fundamentally hard (or impossible) to define. And so, when we correctly calculate any measurable quantity in electrochemistry, our choice of defining $\phi$ just cancels out anyway![ref] Unfortunately, the difficulties in defining $\phi$ only grow when moving beyond textbook dilute aqueous systems, and this directly translates to difficulties in defining $\mu_{\mathrm{int},i}$.
+This approach of subtracting off the $\phi$ dependence is helpful. It produces equations that work and resemble normal (neutral) chemistry. It's the textbook foundation of electrochemistry. It's ... maybe misleading? It turns out that while it was justified to define $\Delta \phi$ between otherwise identical bodies, the notion of 'the electrostatic potential in a material' $\phi$ is fundamentally hard (or impossible) to define. And when we correctly calculate any measurable quantity in electrochemistry, our choice of defining $\phi$ just cancels out anyway![ref] Unfortunately, the difficulties in defining $\phi$ only grow when moving beyond textbook dilute aqueous systems, and this directly translates to difficulties in defining $\mu_{\mathrm{int},i}$.
 
 What if we could fix address the weirdness in $\bar{\mu}_i$ some other way?
 
 ## Voltage for ions: $V_i$
 
-As a solid state physicist, I had to unlearn the idea that voltmeters let us measure electrostatic potential $\phi$. The subtle truth is that a voltmeter is a thermodynamic device: it lets electrons do thermodynamic work on it, and it measures that work. And so the voltmeter measures differences in the electron's electrochemical potential, not the electrostatic potential. For short, we can pretty much say that the "true" voltage is just $V = -\bar{\mu}_{\mathrm{e}^-} / F$ (or $/e$ if working per-particle) and that voltmeters just measure the differences in this voltage.
+As a solid state physicist, I had to unlearn the idea that voltmeters let us probe the electrostatic potential $\phi$. The truth is that a voltmeter is a thermodynamic device: it lets electrons do thermodynamic work on it, and it measures that work. To make a long story short, the "true" voltage probed by a voltmeter is $V = -\bar{\mu}_{\mathrm{e}^-} / F$ (or $/e$ if working per-particle). Voltmeters measure differences in this thermodynamic and electronic voltage.
 
 {# Specifically, when we attach a voltmeter to any electron-conductive materials 1 and 2, the measured voltage difference between those points 1 and 2 is $V(1) - V(2) = -[\bar{\mu}_{\mathrm{e}^-}(1) - \bar{\mu}_{\mathrm{e}^-}(2)]/e$ (or ${}/F$ for the chemists). #}
 
@@ -74,7 +73,7 @@ Let's try shifting that electrostatic offset one more time:
 
 {% include "esbd-diagrams/mu-V-unison-shift.html" %}
 
-_Aha_! The $V_i$ levels for all charged species **shift together** by the exact same amount ($\Delta V_i = \Delta \phi$)! No longer a mess, although we haven't fully gotten rid of the effect of $\Delta \phi$ have we? That's okay, _we actually want it that way_!
+_Aha_! The $V_i$ levels for all charged species **shift together** by the exact same amount ($\Delta V_i = \Delta \phi$)! It's no longer as messy, although, we haven't fully gotten rid of the effect of $\Delta \phi$? That's okay, we actually want it that way.
 
 (Readers who know semiconductor band diagrams might recognize this shifting-together property. It is a fundamental trait of band diagrams that makes them work.)
 
@@ -88,7 +87,7 @@ Remember before when we talked about particles going downhill in $\bar\mu$? Welc
 - **Cations ($z > 0$)** want to move from **high $V_+$ to low $V_+$**. (They "fall down" their $V_i$ landscape).
 - **Anions ($z < 0$)** want to move from **low $V_-$ to high $V_-$**. (They "float up" their $V_i$ landscape).
 
-That might sound familiar too, it's just the thermodynamic version of positive charges in a vacuum getting pushed from high $\phi$ to low $\phi$, or vice versa for negtive charges! The big difference is, now every specie of particle experiences a different voltage landscape $V_i$.
+That might sound familiar too, it's just the thermodynamic version of positive charges in a vacuum getting pushed from high $\phi$ to low $\phi$, or vice versa for negtive charges! The big difference is, now each species of particle experiences a different voltage landscape $V_i$.
 
 $V_i$ can have a landscape (dependence on position)? Let's see what it looks like.
 
@@ -117,14 +116,12 @@ Intrigued? The real power of ESBDs becomes apparent when applied to various syst
   **[Gallery of Thumbnails: Grid of appealing images/GIFs linking to detailed pages/sections for Standard State Ladders, Concentration Cells, Li-ion Battery, Lead-Acid Battery, Electrolysis, Semiconductor Junctions, Theory/Nuances, etc.]**
 </div>
 
-**(Optional Text Navigation)**
-
 Or explore by topic:
 
-- _Electrodes_ - Electrodes and Lithium ion batteries. {# don't really need standard states or solutions at all for this discussion! discuss e.g. Zn2+/Zn electrode and end with Li Ion batteries. #}
-- _Solutions_ - Concentrations and Junctions {# neutrality, standard states, salt bridges, membranes #}
-- _Electrons and holes_ - Semiconductors {# comes after solutions so we can talk in detail about electron and hole standard states vs band edges. #} -- or,
+- _Electrodes_ - Electrodes and lithium ion batteries. {# don't really need standard states or solutions at all for this discussion! discuss e.g. Zn2+/Zn electrode and end with Li Ion batteries. #}
+- _Solutions_ - Concentrations and junctions {# neutrality, standard states, salt bridges, membranes #}
 - _Semiconductors_ - Electrons and holes {# comes after solutions so we can talk in detail about electron and hole standard states vs band edges. #}
+- _Electrochemistry_ - Connecting species voltage $V_i$ to traditional $\phi$-based electrochemistry
 
 - [Link to Electrochemistry Basics in V]
 - [Link to Battery Examples]
