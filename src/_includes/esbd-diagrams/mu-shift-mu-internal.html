@@ -1,12 +1,12 @@
 {% set idprefix = ["mu-shift-internal", idsuffix] | join %}
-<div class="demo-container" style="max-width: 250px">
+<div class="demo-container" style="max-width: 300px">
     <div style="display: flex; gap: 8px">
         <div
             id="{{ idprefix }}-mu-bar-diagram-container"
             style="
-                flex: 1;
+                flex: 1.6;
                 height: 200px;
-                min-width: 100px;
+                min-width: 160px;
                 border: 1px solid #eee;
             "
         ></div>
@@ -58,7 +58,7 @@
         D: { z: +1, ecp_init: +0.5, color: '#ff7f00', latex: 'D^{+}' }, // Orange
         E: { z: +2, ecp_init: +2.6, color: '#e41a1c', latex: 'E^{2+}' }, // Red
     };
-    const phi_init = +1.0; // what phi value would have been used; phi = phi_init + dphi
+    const phi_init = -0.8; // what phi value would have been used; phi = phi_init + dphi
     const speciesKeys = Object.keys(ionData);
 
     // Configuration for the Diagrams
@@ -66,20 +66,25 @@
         width: 100,
         height: 200,
         showYTicks: false, // No numerical ticks
-        categories: [{ id: 'levels', label: '' }],
-        margin: { top: 10, right: 0, bottom: 20, left_compact: 25 }, // Minimal margins if no Y axis label/ticks
+
+        margin: { top: 10, right: 15, bottom: 20, left_compact: 25 }, // Minimal margins if no Y axis label/ticks
         transitionDuration: 500,
     };
     const throttleDuration = 100; // should be 1/5 or less of transitionDuration
 
     const muBarConfig = {
         ...commonConfig,
+        categories: [
+            { id: 'levels', label: '' },
+            { id: 'phi', label: '' },
+        ],
         yAxisLabel: 'Electrochemical potential $\\bar{\\mu}_i$', // KaTeX label
         initialYRange: [-2.5, 5.0], // Calculated range + padding
     };
 
     const muIntConfig = {
         ...commonConfig,
+        categories: [{ id: 'levels', label: '' }],
         yAxisLabel: 'Internal $\\mu_{\\mathrm{int}, i}$', // KaTeX label (Volts relative to F=1)
         initialYRange: [-2.5, 5.0], // Calculated range + padding
     };
@@ -110,6 +115,7 @@
             const phi = phi_init + dphi;
 
             const muBarLevelsData = [];
+            const phiLevelsData = [];
             const muIntLevelsData = [];
 
             speciesKeys.forEach((key) => {
@@ -126,9 +132,16 @@
                     label: `\\bar{\\mu}_{${ion.latex}}`, // Raw LaTeX for component
                     color: ion.color,
                 });
+                phiLevelsData.push({
+                    categoryId: 'phi',
+                    levelId: 'phi' + z,
+                    yValue: z * phi,
+                    label: z ? (z > 0 ? '+' : '') + z + `F\\phi` : '0', // Raw LaTeX for component
+                    color: ion.color,
+                    style: { lineWidth: 1 },
+                });
 
                 const muInt = mu_bar - z * phi;
-
                 muIntLevelsData.push({
                     categoryId: 'levels',
                     levelId: key,
@@ -139,7 +152,7 @@
             });
 
             // Update the diagrams
-            muBarDiagram.setLevels(muBarLevelsData);
+            muBarDiagram.setLevels(phiLevelsData.concat(muBarLevelsData));
             muIntDiagram.setLevels(muIntLevelsData);
         }
 
