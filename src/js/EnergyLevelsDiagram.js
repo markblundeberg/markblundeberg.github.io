@@ -452,6 +452,22 @@ class EnergyLevelsDiagram {
         const labelOffset = 0;
         const defaultStyle = this.config.defaultLevelStyle;
 
+        function applyLineAttributes(sel) {
+            sel.attr('x1', -lineHalfLength)
+                .attr('y1', 0)
+                .attr('x2', lineHalfLength)
+                .attr('y2', 0)
+                .attr('stroke', (d) => d.color || defaultStyle.color)
+                .attr(
+                    'stroke-width',
+                    (d) => d.style?.lineWidth || defaultStyle.lineWidth
+                )
+                .attr(
+                    'stroke-dasharray',
+                    (d) => d.style?.dasharray || defaultStyle.dasharray
+                );
+        }
+
         const levelGroups = this.levelsGroup
             .selectAll('g.level-group')
             .data(this.levelsData, (d) => d.levelId);
@@ -475,19 +491,7 @@ class EnergyLevelsDiagram {
 
                 g.append('line')
                     .attr('class', 'level-line')
-                    .attr('x1', -lineHalfLength)
-                    .attr('y1', 0)
-                    .attr('x2', lineHalfLength)
-                    .attr('y2', 0)
-                    .attr('stroke', (d) => d.color || defaultStyle.color)
-                    .attr(
-                        'stroke-width',
-                        (d) => d.style?.lineWidth || defaultStyle.lineWidth
-                    )
-                    .attr(
-                        'stroke-dasharray',
-                        (d) => d.style?.dasharray || defaultStyle.dasharray
-                    );
+                    .call(applyLineAttributes);
 
                 // Label structure (foreignObject + span) positioned relative to group origin
                 const fo = g
@@ -514,15 +518,9 @@ class EnergyLevelsDiagram {
                 // Update styles that might change immediately (before transition)
                 update
                     .select('line.level-line')
-                    .attr('stroke', (d) => d.color || defaultStyle.color)
-                    .attr(
-                        'stroke-width',
-                        (d) => d.style?.lineWidth || defaultStyle.lineWidth
-                    )
-                    .attr(
-                        'stroke-dasharray',
-                        (d) => d.style?.dasharray || defaultStyle.dasharray
-                    );
+                    .transition()
+                    .duration(transitionDuration)
+                    .call(applyLineAttributes);
 
                 // Apply position transition
                 update
