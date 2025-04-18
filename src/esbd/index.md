@@ -46,20 +46,19 @@ Let's imagine various hypothetical charged species $\mathrm{A}^{2-}$, $\mathrm{B
 
 The $\bar{\mu}_i$ levels move all over the place, and specifically they're moving an amount $z_iF\Delta \phi$ per mole ($F$ is {%wiki "Faraday's constant" %} and $z_i$ is the ionic charge level, $-2$ or $+1$ etc.), or equivalently $z_i e\Delta \phi$ per particle. Here $\Delta\phi$ could represent anything from a deliberate control variable to the arbitrary global offset in electric potentials.
 
-This slippery weirdness in electrochemical potentials makes it rather annoying to use them to compare different materials or conditions.
+Ionic systems always include at least one positive species and one negative species, and so this slippery weirdness in electrochemical potentials makes it rather annoying to directly compare $\bar{\mu}_i$ values in different materials or conditions.
 
-The traditional approach to deal with the weirdness of electrochemical potential is to define a **material electrostatic potential** $\phi$, and then subtract off each particle's electrostatic energy $z_i F \phi$ to arrive at a clean "internal" chemical potential, $\mu_{\mathrm{int},i} = \bar{\mu}_i - z_i F \phi$.
+The traditional approach to deal with the slippery weirdness of electrochemical potential is to define a **material electrostatic potential** $\phi$, and then subtract off each particle's electrostatic energy $z_i F \phi$ to arrive at a clean "internal" chemical potential, $\mu_{\mathrm{int},i} = \bar{\mu}_i - z_i F \phi$.
+
+(Often $\mu_{\mathrm{int},i}$ is called "the chemical potential" and given symbol $\mu_i$, which can create ambiguity. To avoid confusion, that's why I've adopted the unambiguous term "electrochemical potential" $\bar\mu_i$ for the proper thermodynamic variable of ions.)
+
 Adapting the previous demo, you can see now that $\mu_{\mathrm{int},i}$ are unaffected by $\Delta\phi$:
 
 {% include "esbd-diagrams/mu-shift-mu-internal.html" %}
 
-(Here, our value of $\phi=0$ happens to occur when we move the $\Delta\phi$ slider a bit left.)
+This approach of subtracting off the $\phi$ dependence is quite helpful as $z_i F \phi$ is simple and $\mu_{\mathrm{int},i}$ contains all the fun chemistry. It does however mean that for electrochemical processes, it doubles the driving forces that we have to consider: an chemical component and an electrostatic component. And in the end the total measurable driving forces are given by the combination $\bar{\mu}_i$ anyway.
 
-Often $\mu_{\mathrm{int},i}$ is called "the chemical potential" and given symbol $\mu_i$, which can create ambiguity. To save any confusion, that's why I've adopted the unambiguous term "electrochemical potential" $\bar\mu_i$ for the proper thermodynamic variable of ions.
-
-This approach of subtracting off the $\phi$ dependence is obvious and helpful. It produces equations that work and resemble normal (neutral) chemistry. It's the textbook foundation of electrochemistry. It's ... also unphysical. It turns out that while it was justified to define $\Delta \phi$ between otherwise identical bodies, the notion of 'the electrostatic potential in a material' $\phi$ is fundamentally hard (or impossible) to define. And when we correctly calculate any measurable quantity in electrochemistry, our choice of defining $\phi$ just cancels out anyway![ref] Unfortunately, the difficulties in defining $\phi$ only grow when moving beyond textbook dilute aqueous systems, and this directly translates to difficulties in defining $\mu_{\mathrm{int},i}$.
-
-What if we could fix address the weirdness in $\bar{\mu}_i$ some other way?
+What if we could address the slippery weirdness in $\bar{\mu}_i$ some other way?
 
 ## Voltage for ions: $V_i$
 
