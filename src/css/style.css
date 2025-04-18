@@ -25,10 +25,16 @@ body {
 main {
     max-width: 75ch; /* Limit content width to ~75 characters for readability */
     margin: 2em auto; /* Center the main content block with top/bottom margin */
-    padding: 1em 2em; /* Add padding inside the main content area */
+    padding: 1em 0em; /* Add padding inside the main content area */
     background-color: #fffffa; /* White background for content */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
     border-radius: 4px;
+}
+/* Apply side padding to direct children, EXCEPT demo containers */
+main > *:not(.demo-container):not(.full-width-figure) {
+    padding-left: 2em;
+    padding-right: 2em;
+    box-sizing: border-box; /* Include padding in element width */
 }
 
 h1,
@@ -92,7 +98,7 @@ p.diagram-placeholder {
 
 .demo-container {
     display: block; /* Behave like a normal block element */
-    width: 90%;
+
     max-width: 300px; /* Default, should be overridden */
     margin: 1.5em auto; /* Center block horizontally, add vertical space */
     padding: 0.5em;
