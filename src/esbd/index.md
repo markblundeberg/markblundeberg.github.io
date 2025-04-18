@@ -21,7 +21,7 @@ That's the idea behind **Electrochemical Species Band Diagrams (ESBDs)**. We are
 
 This site explores this framework, with the goal of building <em>intuition</em> for scientists and engineers working across disciplines involving charged species in materials. This page will give a review of basic thermodynamics, and give a quick primer on the new idea. Further articles (coming soon) will explore a wide variety of concepts. Let's dive in!
 
-## Chemical potential: 'temperature' for particles
+## Chemical potential: 'temperature' for particle flow
 
 How do mobile particles know where to move and when to react? For any individual particle, this is a mess of microscopic forces. On average though, we can zoom out and talk about statistical tendencies of similar particles, and these tendencies are characterized by the {%wiki "chemical_potential" %} $\mu_i$ for the type/_species_ of particle labelled $i$. Chemical potentials are to particles what temperature $T$ is to energy: when two bodies are in equilibrium they equalize their $\mu_i$'s and $T$'s by exchanging the fungible particles and energy. The chemical potential combines all the per-particle energy, the entropy, the diffusion, the <em>mess</em> ... in just the right way.
 
@@ -44,13 +44,13 @@ Let's imagine various hypothetical charged species $\mathrm{A}^{2-}$, $\mathrm{B
 
 {% include "esbd-diagrams/mu-shift-only.html" %}
 
-It's _slippery weirdness_. The $\bar{\mu}_i$ levels move all over the place, and specifically they're moving an amount $z_iF\Delta \phi$ per mole ($F$ is {%wiki "Faraday's constant" %} and $z_i$ is the ionic charge level, $-2$ or $+1$ etc.), or equivalently $z_i e\Delta \phi$ per particle. Here $\Delta\phi$ could represent anything from a deliberate control variable to the arbitrary global offset in electric potentials.
+The $\bar{\mu}_i$ levels move all over the place, and specifically they're moving an amount $z_iF\Delta \phi$ per mole ($F$ is {%wiki "Faraday's constant" %} and $z_i$ is the ionic charge level, $-2$ or $+1$ etc.), or equivalently $z_i e\Delta \phi$ per particle. Here $\Delta\phi$ could represent anything from a deliberate control variable to the arbitrary global offset in electric potentials.
 
-Ionic systems always include at least one positive species and one negative species, and so this slippery weirdness in electrochemical potentials makes it rather annoying to directly compare $\bar{\mu}_i$ values in different materials or conditions.
+Ionic systems always include at least one positive species and one negative species, and so these charge-dependent shifts in electrochemical potentials make it rather annoying to directly compare $\bar{\mu}_i$ values in different materials or conditions.
 
 ## How to tame your ion
 
-The traditional approach to deal with the slippery weirdness of electrochemical potential is to define a **material electrostatic potential** $\phi$, and then subtract off each particle's electrostatic energy $z_i F \phi$ to arrive at a clean "internal" chemical potential, $\mu_{\mathrm{int},i} = \bar{\mu}_i - z_i F \phi$.
+The traditional approach to deal with the charge-dependent shifts in electrochemical potential is to define a **material electrostatic potential** $\phi$, and then subtract off each particle's electrostatic energy $z_i F \phi$ to arrive at a clean "internal" chemical potential, $\mu_{\mathrm{int},i} = \bar{\mu}_i - z_i F \phi$.
 
 (Often $\mu_{\mathrm{int},i}$ is called "the chemical potential" and given symbol $\mu_i$, which can create ambiguity. To avoid confusion, that's why I've adopted the unambiguous term "electrochemical potential" $\bar\mu_i$ for the proper thermodynamic variable of ions.)
 
@@ -60,11 +60,11 @@ Adapting the previous demo, you can see now that $\mu_{\mathrm{int},i}$ are unaf
 
 This approach of partitioning off the $\phi$ dependence is quite helpful as $z_i F \phi$ seems simple and $\mu_{\mathrm{int},i}$ contains normal-ish chemistry. It does however mean that for electrochemical processes, it doubles the driving forces that we have to consider: an internal chemical component and an electrostatic component, which anyway sum to the measurable total driving force (from $\bar{\mu}_i$). So this does complicate our mental picture too.
 
-What if we could regularize the slippery weirdness in $\bar{\mu}_i$ some other way?
+What if we could regularize the charge-dependent shifts in $\bar{\mu}_i$ some other way?
 
-## Voltage for ions too (a novel approach!)
+## Voltage for ions too (a new approach)
 
-As a solid state physicist, I had to unlearn the idea that voltmeters let us probe the electrostatic potential $\phi$. The truth is that a voltmeter is a thermodynamic device: it lets electrons do thermodynamic work on it, and it measures that work. To make a long story short, the "true" voltage probed by a voltmeter is $V = -\bar{\mu}_{\mathrm{e}^-} / F$ (or $/e$ if working per-particle). Voltmeters measure differences in this thermodynamic, electronic voltage. The value $\bar{\mu}_{\mathrm{e}^-}$, also known as Fermi level $E_\mathrm{F}$, features prominently on any semiconductor band diagram and it is the proxy for voltage $V$.
+As a solid-state physicist, I had to unlearn the idea that voltmeters let us probe the electrostatic potential $\phi$. The truth is that a voltmeter is a thermodynamic device: it lets electrons do thermodynamic work on it, and it measures that work. To make a long story short, the "true" voltage probed by a voltmeter is $V = -\bar{\mu}_{\mathrm{e}^-} / F$ (or $/e$ if working per-particle). Voltmeters measure differences in this thermodynamic, electronic voltage. The value $\bar{\mu}_{\mathrm{e}^-}$, also known as Fermi level $E_\mathrm{F}$, features prominently on any semiconductor band diagram and it is the proxy for voltage $V$.
 
 {# Specifically, when we attach a voltmeter to any electron-conductive materials 1 and 2, the measured voltage difference between those points 1 and 2 is $V(1) - V(2) = -[\bar{\mu}_{\mathrm{e}^-}(1) - \bar{\mu}_{\mathrm{e}^-}(2)]/e$ (or ${}/F$ for the chemists). #}
 
