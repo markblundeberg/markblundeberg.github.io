@@ -62,7 +62,6 @@ class ConcentrationCellComponent {
         const anionId = `anion-${this.plotDivId}`;
         const sbId = `sb-${this.plotDivId}`;
         const cationId = `cation-${this.plotDivId}`;
-        const modeSelectId = `mode-${this.plotDivId}`;
         const voltageOutputId = `volt-out-${this.plotDivId}`; // ID for output element
 
         // Note: Using classes for elements that JS needs to find within the component instance
@@ -98,15 +97,6 @@ class ConcentrationCellComponent {
                     <label class="control-label" for="${voltageOutputId}">Calculated Cell Voltage:</label>
                     <output class="cell-voltage" id="${voltageOutputId}">?.???</output> V
                 </div>
-
-                 <div class="control-row">
-                    <label class="control-label" for="${modeSelectId}">Display Mode:</label>
-                    <select class="mode-selector" id="${modeSelectId}" style="margin-left: 10px;">
-                         <option value="Volts" selected>Volts</option>
-                         <option value="eV">eV</option>
-                         <option value="kJmol">kJ/mol</option>
-                    </select>
-                </div>
             </div>
         `;
     }
@@ -121,7 +111,6 @@ class ConcentrationCellComponent {
             `input[type="radio"][name="${this.junctionSelectorName}"]`
         );
         this.cellVoltageOut = this.container.querySelector('.cell-voltage');
-        this.modeSelector = this.container.querySelector('.mode-selector');
         this.plotDiv = this.container.querySelector('.plot-container'); // Found by class
     }
 
@@ -189,11 +178,6 @@ class ConcentrationCellComponent {
                 'input',
                 throttle(() => this.updateDiagram(), this.throttleDuration)
             );
-        if (this.modeSelector)
-            this.modeSelector.addEventListener('change', (e) =>
-                this.diagram.setMode(e.target.value)
-            );
-
         if (this.junctionRadios && this.junctionRadios.length > 0) {
             this.junctionRadios.forEach((radio) => {
                 radio.addEventListener('change', () => {
