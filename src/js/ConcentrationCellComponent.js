@@ -67,6 +67,7 @@ class ConcentrationCellComponent {
 
         // Note: Using classes for elements that JS needs to find within the component instance
         this.container.innerHTML = `
+            <div class="plot-container" id="${this.plotDivId}" "></div>
             <div class="controls esbd-controls">
                 <div class="control-row">
                     <label class="control-label" for="${c1SliderId}">Concentration C₁ (Left, M):</label>
@@ -80,16 +81,16 @@ class ConcentrationCellComponent {
                 </div>
                  
                  <fieldset class="control-row radio-group" style="border: none; padding: 0; margin: 0; margin-bottom: 8px;">
-                    <legend class="control-label" style="padding: 0; margin-right: 10px; float: left; width: 200px; text-align: right;">Junction Type:</legend>
+                    <legend class="control-label" style="padding: 0; margin-right: 10px; float: left; width: 200px; text-align: right;">Junction type (ideal):</legend>
                     <div style="display: inline-block;">
                     <input type="radio" value="anion" name="${this.junctionSelectorName}" id="${anionId}" ${this.junctionType === 'anion' ? 'checked' : ''}>
-                        <label for="${anionId}" style="min-width: initial; margin-left: 2px; margin-right: 10px; font-weight: normal;">Anion Membrane (Ideal)</label>
+                        <label for="${anionId}" style="min-width: initial; margin-left: 2px; margin-right: 10px; font-weight: normal;">Anion membrane</label>
                         
                     <input type="radio" value="saltbridge" name="${this.junctionSelectorName}" id="${sbId}" ${this.junctionType === 'saltbridge' ? 'checked' : ''}>
-                        <label for="${sbId}" style="min-width: initial; margin-left: 2px; margin-right: 10px; font-weight: normal;">Salt Bridge (Ideal)</label>
+                        <label for="${sbId}" style="min-width: initial; margin-left: 2px; margin-right: 10px; font-weight: normal;">Salt bridge</label>
                         
                     <input type="radio" value="cation" name="${this.junctionSelectorName}" id="${cationId}" ${this.junctionType === 'cation' ? 'checked' : ''}>
-                        <label for="${cationId}" style="min-width: initial; margin-left: 2px; margin-right: 10px; font-weight: normal;">Cation Membrane (Ideal)</label>
+                        <label for="${cationId}" style="min-width: initial; margin-left: 2px; margin-right: 10px; font-weight: normal;">Cation membrane</label>
                 </div>
                  </fieldset>
 
@@ -107,7 +108,6 @@ class ConcentrationCellComponent {
                     </select>
                 </div>
             </div>
-            <div class="plot-container" id="${this.plotDivId}" "></div>
         `;
     }
 
