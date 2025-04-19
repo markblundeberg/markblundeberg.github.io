@@ -110,27 +110,31 @@ It's just like a band diagram!
 - The standard states $V^\ominus_i$ are like the band edges, rigidly keeping space with each other by a constant 'bandgap'.
 - All the relative levels are invariant to global shifts in electrostatic potential (the shifting-together property), and the y-axis offset has no meaning.
 
-In fact it's not just an analogy; if we applied this method to a semiconductor device, our diagram would be _exactly_ a band diagram... only upside down. To make it a bit more comfortable for the semiconductor physicists, I've added an 'eV' button that plots energy $E_i = -e V_i$, flipping it to what we're used to. But I have come to believe the $V_i$ form is the more natural form, it just takes getting used to. We'll explore the connection to classic band diagrams in a later topic below.
+To the semiconductor people: It's not just an analogy; if we applied this method to a semiconductor device, our diagram would be _exactly_ a band diagram... only upside down. To make it a bit more comfortable, I've added an 'eV' button that plots energy $E_i = -e V_i$, flipping it to what we're used to. But I have come to believe the $V_i$ form is the more natural form, it just takes getting used to. We'll explore the connection to classic band diagrams in a later topic below.
 
-## Explore More: Visual Guide
+To the electrochemists: if you find $V_i$ and these diagrams strange, just remember we can connect it back: $V_i = \phi + \tfrac{1}{z_i F}\mu_{\mathrm{int},i} = \phi + \tfrac{1}{z_i F} \mu^\ominus_i + \tfrac{RT}{z_i F} \ln a_i$. In general I'm going to avoid plotting $\phi$ and prioritize discussions of $V_i$. We'll get back to that more in a later topic where we discuss how the usual electrochemical potentials (electrode, junction, redox, etc.) are precisely connected to $V_i$.
+
+## Explore More
 
 Intrigued? The real power of ESBDs becomes apparent when applied to various systems. Explore these topics through interactive diagrams and detailed explanations by clicking on a topic below:
 
 [work in progress below!]
 
 Basics:
-
-- [_Electrodes_](/esbd/electrodes/) - Electron-ion interfaces, and lithium ion batteries. {# don't really need standard states or solutions at all for this discussion! discuss e.g. Zn2+/Zn electrode and end with Li Ion batteries. #}
+- [_Electrodes_](/esbd/electrodes/) - Electron-ion interfaces.
+- _Lithium ion batteries_ - An application spotlight.
 - _Solutions_ - Concentrations, standard states $V^\ominus$, and lead-acid batteries.
 - _Junctions_ - Salt bridges and ion membranes.
-- _Semiconductors_ - Electrons and holes, and classic band diagrams. {# comes after solutions so we can talk in detail about electron and hole standard states vs band edges. #}
+
+Advanced:
+- _General electrodes_ - Gas, redox, multi-ion, and lead acid batteries.
 - _Electrochemistry_ - Traditional electrochemical quantities in terms of $V_i$.
+- _Semiconductors_ - Electrons and holes, and classic band diagrams. {# comes after solutions so we can talk in detail about electron and hole standard states vs band edges. #}
+- _Corrosion_ - Local inhomogeneities
+- _Non-ideal solutions_ -
+- _Non-equilibrium_ - Overpotentials
 
-Extended:
+Appendices:
 
-- _Non-idealities_ - Strong solutions.
-- _Non-equilibrium_ - Overpotentials and such.
 - _Thermodynamics_ - Subtleties of the basic thermodynamics of charged systems.
 - _Nuances_ - Are $V_i$ "real voltages"? Is $\phi$ real?
-
----
