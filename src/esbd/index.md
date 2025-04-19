@@ -52,7 +52,7 @@ Ionic systems always include at least one positive species and one negative spec
 
 The traditional approach to deal with the charge-dependent shifts in electrochemical potential is to define a **material electrostatic potential** $\phi$, and then subtract off each particle's electrostatic energy $z_i F \phi$ to arrive at a clean "internal" chemical potential, $\mu_{\mathrm{int},i} = \bar{\mu}_i - z_i F \phi$.
 
-(Often $\mu_{\mathrm{int},i}$ is called "the chemical potential" and given symbol $\mu_i$, which can create ambiguity. To avoid confusion, that's why I've adopted the unambiguous term "electrochemical potential" $\bar\mu_i$ for the proper thermodynamic variable of ions.)
+(Often $\mu_{\mathrm{int},i}$ is called "the chemical potential" and given symbol $\mu_i$, which can create ambiguity. To avoid confusion, I've adopted the unambiguous term "electrochemical potential" $\bar\mu_i$ for the proper, _total_ chemical potential of ions.)
 
 Adapting the previous demo, you can see now that $\mu_{\mathrm{int},i}$ are unaffected by $\Delta\phi$:
 
@@ -62,9 +62,9 @@ This approach of partitioning off the $\phi$ dependence is quite helpful as $z_i
 
 What if we could regularize the charge-dependent shifts in $\bar{\mu}_i$ some other way?
 
-## Voltage for ions too (a new approach)
+## Meet $V_i$: a voltage for ions, too
 
-As a solid-state physicist, I had to unlearn the idea that voltmeters let us probe the electrostatic potential $\phi$. The truth is that a voltmeter is a thermodynamic device: it lets electrons do thermodynamic work on it, and it measures that work. To make a long story short, the "true" voltage probed by a voltmeter is $V = -\bar{\mu}_{\mathrm{e}^-} / F$ (or $/e$ if working per-particle). Voltmeters measure differences in this thermodynamic, electronic voltage. The value $\bar{\mu}_{\mathrm{e}^-}$, also known as Fermi level $E_\mathrm{F}$, features prominently on any semiconductor band diagram and it is the proxy for voltage $V$.
+As a solid-state physicist, I had to unlearn the idea that voltmeters let us probe the electrostatic potential $\phi$. The truth is that a voltmeter is a thermodynamic device: it lets electrons flow in and do thermodynamic work on it, and it measures that work. To make a long story short, the "true" voltage probed by a voltmeter is $V = -\bar{\mu}_{\mathrm{e}^-} / F$ (or $/e$ if working per-particle). Voltmeters measure differences in this absolute voltage $V$.
 
 {# Specifically, when we attach a voltmeter to any electron-conductive materials 1 and 2, the measured voltage difference between those points 1 and 2 is $V(1) - V(2) = -[\bar{\mu}_{\mathrm{e}^-}(1) - \bar{\mu}_{\mathrm{e}^-}(2)]/e$ (or ${}/F$ for the chemists). #}
 
