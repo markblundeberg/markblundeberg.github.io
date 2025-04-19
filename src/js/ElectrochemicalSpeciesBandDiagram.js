@@ -11,14 +11,7 @@ import {
 } from './utils.js';
 
 // --- Constants ---
-const R = 8.31446261815324; // J / (mol K)
 const F = 96485.33212331001; // C / mol (Faraday constant)
-const e_charge = 1.602176634e-19; // C (Elementary charge)
-const Na = 6.02214076e23; // 1 / mol (Avogadro constant)
-const TEMP_K = 298.15; // Standard Temperature (Kelvin)
-const J_PER_MOL_TO_EV = 1 / (Na * e_charge); // eV / (J/mol)
-const V_TO_EV_PER_CHARGE = 1; // Factor for E = -V scaling in eV mode
-const F_kJmol = F / 1000.0; // F in kJ / (V mol), used for G_display = V_volt * F_kJmol
 
 // Default styling constants
 const STYLE_DEFAULTS = {
@@ -67,7 +60,7 @@ class ElectrochemicalSpeciesBandDiagram {
      * @param {object} [initialConfig={}] - Initial configuration options.
      * @param {number} [initialConfig.width=800] - Initial width hint (will adapt).
      * @param {number} [initialConfig.height=500] - Initial height hint (will adapt).
-     * @param {string} [initialConfig.mode='Volts'] - Initial display mode ('Volts', 'eV', 'kJmol').
+     * @param {string} [initialConfig.mode='Volts'] - Initial display mode ('Volts', 'eV').
      * @param {object} [initialConfig.margin={top: 15, right: 25, bottom: 20, left: 60}] - Plot margins.
      * @param {number} [initialConfig.transitionDuration=250] - Duration for D3 transitions (ms).
      * @param {number} [initialConfig.resizeDebounceDelay=200] - Debounce delay for resize events (ms).
@@ -83,7 +76,7 @@ class ElectrochemicalSpeciesBandDiagram {
         this.config = {
             width: initialConfig.width || 800,
             height: initialConfig.height || 500,
-            mode: ['Volts', 'eV', 'kJmol'].includes(initialConfig.mode)
+            mode: ['Volts', 'eV'].includes(initialConfig.mode)
                 ? initialConfig.mode
                 : 'Volts',
             margin: initialConfig.margin || {
@@ -95,7 +88,6 @@ class ElectrochemicalSpeciesBandDiagram {
             transitionDuration: initialConfig.transitionDuration ?? 250,
             hoverThrottleDelay: initialConfig.hoverThrottleDelay ?? 50,
             resizeDebounceDelay: initialConfig.resizeDebounceDelay ?? 200,
-            tempK: initialConfig.tempK || TEMP_K,
         };
         // Internal state initialization
         this.speciesInfo = new Map();
@@ -316,7 +308,7 @@ class ElectrochemicalSpeciesBandDiagram {
 
     /** Sets the display mode and triggers redraw and callback. */
     setMode(newMode) {
-        const validModes = ['Volts', 'eV', 'kJmol'];
+        const validModes = ['Volts', 'eV'];
         if (!validModes.includes(newMode) || newMode === this.config.mode)
             return;
 
@@ -1015,7 +1007,7 @@ class ElectrochemicalSpeciesBandDiagram {
     // ========================================================================
 
     _handleYAxisLabelClick() {
-        const modes = ['Volts', 'eV', 'kJmol'];
+        const modes = ['Volts', 'eV'];
         const currentIdx = modes.indexOf(this.config.mode);
         const nextIdx = (currentIdx + 1) % modes.length;
         this.setMode(modes[nextIdx]);
@@ -1542,7 +1534,7 @@ class ElectrochemicalSpeciesBandDiagram {
         let superscript = '';
 
         // Determine base symbol based ONLY on mode
-        symbol = { Volts: 'V', eV: 'E', kJmol: 'G' }[this.config.mode] || '?';
+        symbol = { Volts: 'V', eV: 'E' }[this.config.mode] || '?';
 
         // Add superscripts or modify symbol/subscript based on curveType
         switch (curveType) {
@@ -1556,9 +1548,7 @@ class ElectrochemicalSpeciesBandDiagram {
                 break;
             case 'phi':
                 // special case! for volt mode we show \phi, not V_\phi
-                symbol =
-                    { Volts: '\\phi', eV: 'E', kJmol: 'G' }[this.config.mode] ||
-                    '?';
+                symbol = { Volts: '\\phi', eV: 'E' }[this.config.mode] || '?';
                 subscript = this.config.mode === 'Volts' ? '' : '\\phi';
                 break;
             case 'potential': // Default case, no changes needed to symbol/subscript/superscript
@@ -1584,12 +1574,10 @@ class ElectrochemicalSpeciesBandDiagram {
         const arrows = ' \u21F5 '; // Up down arrows symbol
         switch (this.config.mode) {
             case 'eV':
-                return `Energy (eV)${arrows}`; // E = -eV convention
-            case 'kJmol':
-                return `Molar Energy / z (kJ/mol)${arrows}`; // G = FV = μ̄/z
+                return `Electronic Energy (eV)${arrows}`; // E = -eV convention
             case 'Volts':
             default:
-                return `Potential (V)${arrows}`; // V = μ̄/(zF)
+                return `Species Voltage (V)${arrows}`; // V = μ̄/(zF)
         }
     }
 
@@ -1600,7 +1588,7 @@ class ElectrochemicalSpeciesBandDiagram {
         switch (inputUnit) {
             case 'mu_bar_kJmol':
                 if (z === null || typeof z !== 'number' || z === 0) {
-                    console.warn(
+                    console.error(
                         `ESBD Warn: Cannot convert 'mu_bar_kJmol' to Volts without valid non-zero charge z (received z=${z}).`
                     );
                     return null;
@@ -1609,7 +1597,7 @@ class ElectrochemicalSpeciesBandDiagram {
 
             case 'mu_bar_eV':
                 if (z === null || typeof z !== 'number' || z === 0) {
-                    console.warn(
+                    console.error(
                         `ESBD Warn: Cannot convert 'mu_bar_eV' to Volts without valid non-zero charge z (received z=${z}).`
                     );
                     return null;
@@ -1619,7 +1607,7 @@ class ElectrochemicalSpeciesBandDiagram {
 
             case 'E_band_eV':
                 // Convention V = -E_band / e_charge
-                return -value / V_TO_EV_PER_CHARGE; // Effectively -value
+                return -value; // Effectively -value
 
             case 'phi_V':
                 return value; // V_phi = phi
@@ -1644,16 +1632,8 @@ class ElectrochemicalSpeciesBandDiagram {
                 return value_volt; // Factor = +1
 
             case 'eV':
-                // E = -V_volt * V_TO_EV_PER_CHARGE (where constant is 1)
-                // Represents Energy in eV using E = -V convention
-                return value_volt * -V_TO_EV_PER_CHARGE; // Factor = -1
-
-            case 'kJmol':
-                // G = V_volt * F_kJmol
-                // Represents Molar Energy / z in kJ/mol (if V_volt derived from mu_bar)
-                // Or represents F*phi/1000 if V_volt derived from phi_V
-                // Or represents -Na*E_band/1000 if V_volt derived from E_band_eV
-                return value_volt * F_kJmol; // Factor = +F/1000
+                // E_i = -e V_i ;  for eV units and V_volt in eV then:
+                return -value_volt;
         }
         return null;
     }
