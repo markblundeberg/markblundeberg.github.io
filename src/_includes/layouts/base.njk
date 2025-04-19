@@ -60,14 +60,31 @@
             <hr />
         </header>
 
-        <nav>
-        {{ collections.all | eleventyNavigation | eleventyNavigationToHtml | safe }}
 
-        </nav>
+        {# NEW: Wrapper div for the main layout columns #}
+        <div class="layout-wrapper">
 
-        <main>
-            {# Content from individual pages goes here #} {{ content | safe }}
-        </main>
+            {# Sidebar Navigation #}
+            <nav class="site-nav">
+                <h3>Navigation</h3> {# Optional heading #}
+                {# Render the Eleventy Navigation menu here #}
+                {# Example using a simple list #}
+                <ul>
+                    {%- for entry in collections.all | eleventyNavigation %}
+                    <li><a href="{{ entry.url | url }}"{% if entry.url == page.url %} aria-current="page"{% endif %}>{{ entry.title }}</a></li>
+                    {%- endfor %}
+                </ul>
+                {# Or use the filter for nested lists if you have hierarchy: #}
+                {# {{ collections.all | eleventyNavigation | eleventyNavigationToHtml | safe }} #}
+            </nav>
+
+            {# Main Content Area #}
+            <main>
+                {# Content from individual pages goes here #}
+                {{ content | safe }}
+            </main>
+
+        </div> {# End layout-wrapper #}
 
         <footer>
             <hr />

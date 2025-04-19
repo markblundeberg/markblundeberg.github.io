@@ -1,7 +1,5 @@
 /* style.css */
-/* Basic styles for ESBD examples */
 
-/* ====== Basic Page Readability Styles ====== */
 body {
     font-family:
         system-ui,
@@ -22,14 +20,91 @@ body {
     background-color: #fafaf4; /* Slightly off-white background */
 }
 
+/* ====== Layout Styles ====== */
+
+/* Wrapper for nav and main content */
+.layout-wrapper {
+    max-width: 1200px; /* Optional: Max width for the whole layout */
+    margin: 0 auto; /* Center the wrapper */
+    padding: 0 1em; /* Side padding for mobile */
+}
+
+/* Sidebar Navigation Styling */
+.site-nav {
+    /* Mobile: Stacks above main content by default */
+    padding: 0.5em 0;
+    margin-bottom: 1.5em;
+    border-bottom: 1px solid #eee; /* Separator on mobile */
+}
+.site-nav h3 {
+    margin-top: 0;
+    font-size: 1.1em;
+}
+.site-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.site-nav li {
+    margin-bottom: 0.25em;
+}
+.site-nav a {
+    text-decoration: none;
+    color: #333;
+    font-size: 0.95em;
+    display: block;
+    padding: 0.2em 0;
+}
+.site-nav a:hover {
+    color: #0077cc;
+}
+.site-nav a[aria-current='page'] {
+    font-weight: bold;
+    color: #005599;
+}
+
+/* Main Content Area Styling */
 main {
-    max-width: 75ch; /* Limit content width to ~75 characters for readability */
-    margin: 2em auto; /* Center the main content block with top/bottom margin */
-    padding: 1em 0em; /* Add padding inside the main content area */
-    background-color: #fffffa; /* White background for content */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    max-width: 75ch; /* Keep max-width for readability */
+    /* Remove horizontal centering margin */
+    margin: 0;
+    padding: 1em 0em; /* Keep internal padding */
+    background-color: #fffffa;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     border-radius: 4px;
 }
+
+/* Desktop Sidebar Layout using Flexbox */
+@media (min-width: 900px) {
+    /* Adjust this breakpoint as needed */
+    .layout-wrapper {
+        display: flex;
+        align-items: flex-start; /* Align tops of nav and main */
+        gap: 2em; /* Space between nav and main */
+        padding: 0 2em; /* Adjust overall padding */
+    }
+
+    .site-nav {
+        flex: 0 0 200px; /* Sidebar: Don't grow, don't shrink, base width 200px */
+        order: -1; /* Ensure nav appears first (left side) */
+        border-bottom: none; /* Remove mobile separator */
+        padding-top: 1em; /* Align top with main content padding */
+        /* Optional: Make sidebar sticky */
+        /* position: sticky; */
+        /* top: 2em; */
+    }
+
+    main {
+        flex: 1; /* Allow main content to take remaining space */
+        /* max-width: 75ch; /* Already set, applies within the flex item */
+        padding: 1em 2em; /* Keep padding */
+    }
+}
+
+/* ====== End Layout Styles ====== */
+
+/* ====== Basic Page Readability Styles ====== */
+
 /* Apply side padding to direct children, EXCEPT demo containers */
 main > *:not(.demo-container):not(.full-width-figure) {
     padding-left: 2em;
