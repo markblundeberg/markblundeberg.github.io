@@ -147,8 +147,9 @@ pre code {
     overflow-x: auto;
 }
 
-ul {
-    list-style-position: inside;
+main > ul,
+main > ol {
+    margin-left:2em;
 }
 
 p.diagram-placeholder {
