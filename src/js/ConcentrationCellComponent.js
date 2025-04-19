@@ -2,7 +2,7 @@
 // Encapsulates the logic and UI for an interactive concentration cell ESBD.
 
 import ElectrochemicalSpeciesBandDiagram from './ElectrochemicalSpeciesBandDiagram.js';
-import { formatPopupBaseContent } from './utils.js';
+import { formatPopupBaseContent, throttle } from './utils.js';
 
 // --- Physical Constants ---
 const R = 8.31446; // J / (mol K)
@@ -17,13 +17,16 @@ class ConcentrationCellComponent {
      * @param {object} cellConfig - Configuration object defining the cell chemistry, layout, etc.
      */
     constructor(containerSelector, cellConfig) {
+        this.config = cellConfig;
         this.container = document.querySelector(containerSelector);
         if (!this.container) {
             throw new Error(
                 `Container element ${containerSelector} not found.`
             );
         }
-        this.config = cellConfig;
+        this.transitionDuration = 500;
+        this.throttleDuration = 100;
+
         this.diagram = null;
         this.plotDivId = `esbd-plot-${Math.random().toString(36).substring(2, 9)}`;
         this.junctionSelectorName = `junction-${this.plotDivId}`;
@@ -127,6 +130,7 @@ class ConcentrationCellComponent {
         if (!this.plotDiv) throw new Error('Plot container div not found.');
         this.diagram = new ElectrochemicalSpeciesBandDiagram(this.plotDivId, {
             height: this.config.plotHeight,
+            transitionDuration: this.transitionDuration,
         });
 
         // Define species info
@@ -169,9 +173,15 @@ class ConcentrationCellComponent {
     _attachListeners() {
         // Check elements exist before adding listeners
         if (this.c1Slider)
-            this.c1Slider.addEventListener('input', () => this.updateDiagram());
+            this.c1Slider.addEventListener(
+                'input',
+                throttle(() => this.updateDiagram(), this.throttleDuration)
+            );
         if (this.c2Slider)
-            this.c2Slider.addEventListener('input', () => this.updateDiagram());
+            this.c2Slider.addEventListener(
+                'input',
+                throttle(() => this.updateDiagram(), this.throttleDuration)
+            );
         if (this.modeSelector)
             this.modeSelector.addEventListener('change', (e) =>
                 this.diagram.setMode(e.target.value)

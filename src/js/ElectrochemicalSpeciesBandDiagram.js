@@ -755,7 +755,8 @@ class ElectrochemicalSpeciesBandDiagram {
                         // Initial position can be set if desired before transition
                         .attr('stroke', (d) => d.color)
                         .attr('stroke-width', (d) => d.style.lineWidth)
-                        .attr('stroke-dasharray', (d) => d.style.dasharray),
+                        .attr('stroke-dasharray', (d) => d.style.dasharray)
+                        .style('opacity', 0),
                 (update) => update,
                 (exit) =>
                     exit
@@ -769,6 +770,8 @@ class ElectrochemicalSpeciesBandDiagram {
             .attr('stroke-dasharray', (d) => d.style.dasharray)
             .transition()
             .duration(this.config.transitionDuration)
+            .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
+            .style('opacity', 1)
             .attr('d', (d) =>
                 this.lineGenerator.y((p) => this.yScale(p.y_display))(d.points)
             );
@@ -996,6 +999,7 @@ class ElectrochemicalSpeciesBandDiagram {
                 markerG
                     .transition()
                     .duration(this.config.transitionDuration)
+                    .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
                     .attr('transform', `translate(${x_px}, ${y_mid_px})`);
 
                 // Update legs based on gap
@@ -1010,6 +1014,7 @@ class ElectrochemicalSpeciesBandDiagram {
                     .select('line.marker-leg-1')
                     .transition()
                     .duration(this.config.transitionDuration)
+                    .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
                     .attr('display', showLegs ? null : 'none')
                     .attr('x1', 0)
                     .attr('y1', legStartY1)
@@ -1020,6 +1025,7 @@ class ElectrochemicalSpeciesBandDiagram {
                     .select('line.marker-leg-2')
                     .transition()
                     .duration(this.config.transitionDuration)
+                    .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
                     .attr('display', showLegs ? null : 'none')
                     .attr('x1', 0)
                     .attr('y1', legStartY2)
@@ -1030,6 +1036,7 @@ class ElectrochemicalSpeciesBandDiagram {
                     .select('circle.leg-end-1')
                     .transition()
                     .duration(this.config.transitionDuration)
+                    .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
                     .attr('display', showLegs ? null : 'none')
                     .attr('cx', 0)
                     .attr('cy', legTargetY1) // Position at end of leg
@@ -1039,6 +1046,7 @@ class ElectrochemicalSpeciesBandDiagram {
                     .select('circle.leg-end-2')
                     .transition()
                     .duration(this.config.transitionDuration)
+                    .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
                     .attr('display', showLegs ? null : 'none')
                     .attr('cx', 0)
                     .attr('cy', legTargetY2) // Position at end of leg
@@ -1084,6 +1092,7 @@ class ElectrochemicalSpeciesBandDiagram {
             // Apply transitions AFTER KaTeX might have changed size (slight delay ok)
             .transition()
             .duration(this.config.transitionDuration)
+            .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
             .attr('x', (d) => this.xScale(d.labelPos.x) + 5)
             // Adjust y to roughly center the label vertically on the line end point
             // This assumes ~1em line height; might need refinement based on actual rendered height
