@@ -89,7 +89,7 @@ Remember before when we talked about particles going downhill in $\bar\mu$? Welc
 - **Cations ($z > 0$)** want to move from **high $V_+$ to low $V_+$**. (They "fall down" their $V_i$ landscape).
 - **Anions ($z < 0$)** want to move from **low $V_-$ to high $V_-$**. (They "float up" their $V_i$ landscape).
 
-That might sound familiar too, it's just the thermodynamic version of positive charges in a vacuum getting pushed from high $\phi$ to low $\phi$, or vice versa for negtive charges! The big difference is, now each species of particle experiences a different voltage landscape $V_i$. That's because $V_i$ includes some chemical energy, which will differ from species to species.
+That might sound familiar too, it's just the thermodynamic version of positive charges in a vacuum getting pushed from high $\phi$ to low $\phi$, or vice versa for negative charges! The big difference is, now each species of particle experiences a different voltage landscape $V_i$. That's because $V_i$ includes some chemical energy, which will differ from species to species.
 
 $V_i$ can have a landscape (dependence on position)? Let's see what it looks like.
 
@@ -108,29 +108,30 @@ You can see different lines representing the $V_i$ for different species ($V_{e^
 It's just like a band diagram!
 
 - $V_i$ are like Fermi levels.
-- The standard states $V^\ominus_i$ are like the band edges.
-- All the relative levels are invariant to global shifts in electrostatic potential (the shifting-together property).
+- The standard states $V^\ominus_i$ are like the band edges, rigidly keeping space with each other by a constant 'bandgap'.
+- All the relative levels are invariant to global shifts in electrostatic potential (the shifting-together property), and the y-axis offset has no meaning.
 
-In fact it's not just an analogy; if we applied this method to a semiconductor device, our diagram would be _exactly_ a band diagram... only upside down. To make it a bit more comfortable for the semiconductor physicists, I've added an 'eV' button that plots energy $E_i = -e V_i$, flipping it to what we're used to. But I do believe the $V_i$ form is the more natural form, it just takes getting used to. We'll explore the connection to classic band diagrams in a later topic below.
+In fact it's not just an analogy; if we applied this method to a semiconductor device, our diagram would be _exactly_ a band diagram... only upside down. To make it a bit more comfortable for the semiconductor physicists, I've added an 'eV' button that plots energy $E_i = -e V_i$, flipping it to what we're used to. But I have come to believe the $V_i$ form is the more natural form, it just takes getting used to. We'll explore the connection to classic band diagrams in a later topic below.
 
 ## Explore More: Visual Guide
 
-Intrigued? The real power of ESBDs becomes apparent when applied to various systems. Explore these topics through interactive diagrams and detailed explanations by clicking on an image below:
+Intrigued? The real power of ESBDs becomes apparent when applied to various systems. Explore these topics through interactive diagrams and detailed explanations by clicking on a topic below:
 
----
+[work in progress below!]
 
-[WIP from this point onwards]
-
-Or explore by topic:
+Basics:
 
 - _Electrodes_ - Electron-ion interfaces, and lithium ion batteries. {# don't really need standard states or solutions at all for this discussion! discuss e.g. Zn2+/Zn electrode and end with Li Ion batteries. #}
-- _Solutions_ - Concentrations and junctions {# neutrality, standard states, salt bridges, membranes #}
-- _Semiconductors_ - Electrons and holes, and classic band diagrams {# comes after solutions so we can talk in detail about electron and hole standard states vs band edges. #}
-- _Electrochemistry_ - Connecting species voltage $V_i$ to traditional $\phi$-based electrochemistry
+- _Solutions_ - Concentrations, standard states $V^\ominus$, and lead-acid batteries.
+- _Junctions_ - Salt bridges and ion membranes.
+- _Semiconductors_ - Electrons and holes, and classic band diagrams. {# comes after solutions so we can talk in detail about electron and hole standard states vs band edges. #}
+- _Electrochemistry_ - Traditional electrochemical quantities in terms of $V_i$.
 
-- [Link to Electrochemistry Basics in V]
-- [Link to Battery Examples]
-- [Link to Advanced Concepts & Non-Equilibrium]
-- [Link to Theory & Nuances]
+Extended:
+
+- _Non-idealities_ - Strong solutions.
+- _Non-equilibrium_ - Overpotentials and such.
+- _Thermodynamics_ - Subtleties of the basic thermodynamics of charged systems.
+- _Nuances_ - Are $V_i$ "real voltages"? Is $\phi$ real?
 
 ---
