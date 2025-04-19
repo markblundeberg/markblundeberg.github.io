@@ -61,7 +61,7 @@ class ElectrochemicalSpeciesBandDiagram {
      * @param {number} [initialConfig.width=800] - Initial width hint (will adapt).
      * @param {number} [initialConfig.height=500] - Initial height hint (will adapt).
      * @param {string} [initialConfig.mode='Volts'] - Initial display mode ('Volts', 'eV').
-     * @param {object} [initialConfig.margin={top: 15, right: 25, bottom: 20, left: 60}] - Plot margins.
+     * @param {object} [initialConfig.margin={top: 5, right: 35, bottom: 20, left: 50}] - Plot margins.
      * @param {number} [initialConfig.transitionDuration=250] - Duration for D3 transitions (ms).
      * @param {number} [initialConfig.resizeDebounceDelay=200] - Debounce delay for resize events (ms).
      */
@@ -80,10 +80,10 @@ class ElectrochemicalSpeciesBandDiagram {
                 ? initialConfig.mode
                 : 'Volts',
             margin: initialConfig.margin || {
-                top: 15,
-                right: 25,
+                top: 5,
+                right: 35,
                 bottom: 20,
-                left: 60,
+                left: 50,
             },
             transitionDuration: initialConfig.transitionDuration ?? 250,
             hoverThrottleDelay: initialConfig.hoverThrottleDelay ?? 50,
