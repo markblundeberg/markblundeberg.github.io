@@ -337,6 +337,7 @@ class ConcentrationCellComponent {
 
         // --- Prepare trace definitions ---
         const b = config.boundaries;
+        const mid = 0.5 * (b[2] + b[3]);
         const traceDefs = [
             {
                 id: `cation_potential_1_${this.plotDivId}`,
@@ -344,8 +345,11 @@ class ConcentrationCellComponent {
                 curveType: 'potential',
                 showLabel: true,
                 inputUnits: 'V_volt',
-                xRange: { min: b[1], max: b[2] },
-                x: [b[1], b[2]],
+                xRange: {
+                    min: b[1],
+                    max: junctionType == 'cation' ? mid : b[2],
+                },
+                x: [b[1], junctionType == 'cation' ? mid : b[2]],
                 y: [V_cation_1, V_cation_1],
             },
             {
@@ -354,8 +358,11 @@ class ConcentrationCellComponent {
                 curveType: 'potential',
                 showLabel: true,
                 inputUnits: 'V_volt',
-                xRange: { min: b[3], max: b[4] },
-                x: [b[3], b[4]],
+                xRange: {
+                    min: junctionType == 'cation' ? mid : b[3],
+                    max: b[4],
+                },
+                x: [junctionType == 'cation' ? mid : b[3], b[4]],
                 y: [V_cation_2, V_cation_2],
             },
             {
@@ -384,8 +391,11 @@ class ConcentrationCellComponent {
                 curveType: 'potential',
                 showLabel: true,
                 inputUnits: 'V_volt',
-                xRange: { min: b[1], max: b[2] },
-                x: [b[1], b[2]],
+                xRange: {
+                    min: b[1],
+                    max: junctionType == 'anion' ? mid : b[2],
+                },
+                x: [b[1], junctionType == 'anion' ? mid : b[2]],
                 y: [V_anion_1, V_anion_1],
             },
             {
@@ -394,8 +404,11 @@ class ConcentrationCellComponent {
                 curveType: 'potential',
                 showLabel: true,
                 inputUnits: 'V_volt',
-                xRange: { min: b[3], max: b[4] },
-                x: [b[3], b[4]],
+                xRange: {
+                    min: junctionType == 'anion' ? mid : b[3],
+                    max: b[4],
+                },
+                x: [junctionType == 'anion' ? mid : b[3], b[4]],
                 y: [V_anion_2, V_anion_2],
             },
             {
