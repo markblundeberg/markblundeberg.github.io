@@ -9,9 +9,9 @@ eleventyNavigation:
 
 # Band Diagrams for Batteries? An Intuitive Visualization
 
-Mark Lundeberg // originally uploaded 2025 April
+Mark Lundeberg // 2025 April
 
-**(Optional: Compelling Header Image/Animation showing a finished ESBD)**
+{# **(Optional: Compelling Header Image/Animation showing a finished ESBD)** #}
 
 Ever looked at a semiconductor device {%wiki "band diagram" %} and thought, "Wow, that makes intuitive sense!"? They clearly show electron and hole energy levels, band bending, equilibria, and driving forces. Band diagrams are the universal visual language of semiconductor devices.
 
@@ -44,7 +44,7 @@ Let's imagine various hypothetical charged species $\mathrm{A}^{2-}$, $\mathrm{B
 
 {% include "esbd-diagrams/mu-shift-only.html" %}
 
-The $\bar{\mu}_i$ levels move all over the place, and specifically they're moving an amount $z_iF\Delta \phi$ per mole ($F$ is {%wiki "Faraday's constant" %} and $z_i$ is the ionic charge level, $-2$ or $+1$ etc.), or equivalently $z_i e\Delta \phi$ per particle. Here $\Delta\phi$ could represent anything from a deliberate control variable to the arbitrary global offset in electric potentials.
+The $\bar{\mu}_i$ levels move all over the place, seemingly at random! Actually, they're moving an amount $z_iF\Delta \phi$ per mole ($F$ is {%wiki "Faraday's constant" %} and $z_i$ is the ionic charge level, $-2$ or $+1$ etc.). If you prefer per-particle, that's $z_i e\Delta \phi$. Here $\Delta\phi$ could represent anything from a deliberate control variable to the arbitrary global offset in electric potentials.
 
 Ionic systems always include at least one positive species and one negative species, and so these charge-dependent shifts in electrochemical potentials make it rather annoying to directly compare $\bar{\mu}_i$ values in different materials or conditions.
 
@@ -74,7 +74,7 @@ Let's define a **species voltage, $V_i$**, for _any_ charged species $i$:
 
 $$V_i = \frac{\bar{\mu}_i}{z_i F}$$
 
-This is the big idea. We just divide the energy per mole by the charge per mole (for per-particle that's $V_i = \bar{\mu}_i / (z_i e)$). That seems simple, maybe _too_ simple? Stick around, because this scaling has a profound consequences on the way that we can visualize electrochemistry.
+This is the big idea. We just divide the energy per mole by the charge per mole (for per-particle that's $V_i = \bar{\mu}_i / (z_i e)$). That seems simple, maybe _too_ simple? Stick around, because this scaling has a profound consequence on the way that we can visualize electrochemistry.
 
 Let's try shifting that electrostatic offset one final time:
 
@@ -89,7 +89,7 @@ Remember before when we talked about particles going downhill in $\bar\mu$? Welc
 - **Cations ($z > 0$)** want to move from **high $V_+$ to low $V_+$**. (They "fall down" their $V_i$ landscape).
 - **Anions ($z < 0$)** want to move from **low $V_-$ to high $V_-$**. (They "float up" their $V_i$ landscape).
 
-That might sound familiar too, it's just the thermodynamic version of positive charges in a vacuum getting pushed from high $\phi$ to low $\phi$, or vice versa for negtive charges! The big difference is, now each species of particle experiences a different voltage landscape $V_i$, and that's because $V_i$ includes some chemical energy which will differ from species to species.
+That might sound familiar too, it's just the thermodynamic version of positive charges in a vacuum getting pushed from high $\phi$ to low $\phi$, or vice versa for negtive charges! The big difference is, now each species of particle experiences a different voltage landscape $V_i$. That's because $V_i$ includes some chemical energy, which will differ from species to species.
 
 $V_i$ can have a landscape (dependence on position)? Let's see what it looks like.
 
@@ -97,13 +97,21 @@ $V_i$ can have a landscape (dependence on position)? Let's see what it looks lik
 
 Okay, so $V_i$ gives us a consistent way to view potentials that shift uniformly. But devices have different materials and potentials change with _position_, $x$. We need to plot $V_i$ vs. $x$!
 
-This leads us to the **Electrochemical Species Band Diagram (ESBD)**. Here's a first look at one for a simple system (don't worry about understanding every line just yet!):
+This leads us to the **Electrochemical Species Band Diagram (ESBD)**. Here's a first look at one for a textbook system (don't worry about understanding every line just yet!):
 
 {% include "esbd-diagrams/esbd-concentration-cell-agno3.html" %}
 
+This is a silver nitrate {%wiki "concentration cell" %}: two solutions with differing concentrations of dissolved $\mathrm{AgNO}_3$, connected to each other by an ionic junction.A measurable voltage ($V_{\mathrm{e}^-}$ difference) develops in two silver metal electrodes that are dipped in the solutions.
+
 You can see different lines representing the $V_i$ for different species ($V_{e^-}$, $V_{\mathrm{Ag}^{+}}$, $V_{\mathrm{NO}_3^{-}}$) across different regions (electrodes, electrolytes). Features like the standard state potentials ($V^\ominus$) or interface reaction markers ($\rightleftharpoons$) provide more context, which we'll explore later. The key idea is visualizing the potential landscape for _all_ relevant charged species vs. position.
 
-_Hint:_ Try clicking the Y-axis label or using the dropdown (if available in the example above) to switch between Volts, eV, and kJ/mol display modes!
+It's just like a band diagram!
+
+- $V_i$ are like Fermi levels.
+- The standard states $V^\ominus_i$ are like the band edges.
+- All the relative levels are invariant to global shifts in electrostatic potential (the shifting-together property).
+
+In fact it's not just an analogy; if we applied this method to a semiconductor device, our diagram would be _exactly_ a band diagram... only upside down. To make it a bit more comfortable for the semiconductor physicists, I've added an 'eV' button that plots energy $E_i = -e V_i$, flipping it to what we're used to. But I do believe the $V_i$ form is the more natural form, it just takes getting used to. We'll explore the connection to classic band diagrams in a later topic below.
 
 ## Explore More: Visual Guide
 
@@ -115,9 +123,9 @@ Intrigued? The real power of ESBDs becomes apparent when applied to various syst
 
 Or explore by topic:
 
-- _Electrodes_ - Electrodes and lithium ion batteries. {# don't really need standard states or solutions at all for this discussion! discuss e.g. Zn2+/Zn electrode and end with Li Ion batteries. #}
+- _Electrodes_ - Electron-ion interfaces, and lithium ion batteries. {# don't really need standard states or solutions at all for this discussion! discuss e.g. Zn2+/Zn electrode and end with Li Ion batteries. #}
 - _Solutions_ - Concentrations and junctions {# neutrality, standard states, salt bridges, membranes #}
-- _Semiconductors_ - Electrons and holes {# comes after solutions so we can talk in detail about electron and hole standard states vs band edges. #}
+- _Semiconductors_ - Electrons and holes, and classic band diagrams {# comes after solutions so we can talk in detail about electron and hole standard states vs band edges. #}
 - _Electrochemistry_ - Connecting species voltage $V_i$ to traditional $\phi$-based electrochemistry
 
 - [Link to Electrochemistry Basics in V]

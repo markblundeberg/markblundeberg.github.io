@@ -72,6 +72,10 @@ pre code {
     overflow-x: auto;
 }
 
+ul {
+    margin-left: 2em;
+}
+
 p.diagram-placeholder {
     border: 1px dashed #ccc;
     padding: 20px;
