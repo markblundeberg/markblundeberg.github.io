@@ -61,7 +61,7 @@ class ElectrochemicalSpeciesBandDiagram {
      * @param {number} [initialConfig.width=800] - Initial width hint (will adapt).
      * @param {number} [initialConfig.height=500] - Initial height hint (will adapt).
      * @param {string} [initialConfig.mode='Volts'] - Initial display mode ('Volts', 'eV').
-     * @param {object} [initialConfig.margin={top: 5, right: 35, bottom: 20, left: 50}] - Plot margins.
+     * @param {object} [initialConfig.margin={top: 5, right: 35, bottom: 20, left: 60}] - Plot margins.
      * @param {number} [initialConfig.transitionDuration=250] - Duration for D3 transitions (ms).
      * @param {number} [initialConfig.resizeDebounceDelay=200] - Debounce delay for resize events (ms).
      */
@@ -83,7 +83,7 @@ class ElectrochemicalSpeciesBandDiagram {
                 top: 5,
                 right: 35,
                 bottom: 20,
-                left: 50,
+                left: 60,
             },
             transitionDuration: initialConfig.transitionDuration ?? 250,
             hoverThrottleDelay: initialConfig.hoverThrottleDelay ?? 50,
@@ -124,6 +124,9 @@ class ElectrochemicalSpeciesBandDiagram {
 
         // --- D3 Setup ---
         this._setupD3Structure();
+
+        // --- Mode buttons ---
+        this._setupHTMLControls();
 
         // --- Responsiveness ---
         const initialWidth =
@@ -572,6 +575,39 @@ class ElectrochemicalSpeciesBandDiagram {
 
         // Note: Listeners for markers (including hover) are added in _drawVerticalMarkers
         // Note: Lines have pointer-events: none
+    }
+
+    // NEW: Method to create HTML controls using D3
+    _setupHTMLControls() {
+        // Define modes (use corrected names/values if changing)
+        const modes = [
+            { id: 'Volts', label: 'V' },
+            { id: 'eV', label: 'eV' },
+        ];
+
+        // Append a container div for the buttons
+        this._modeButtonContainer = this.container
+            .append('div')
+            .style('position', 'absolute')
+            .style('display', 'flex')
+            .style('flex-direction', 'column')
+            .style('left', '0px')
+            .style('top', this.config.height - 50 + 'px');
+        //            .style('transform', `rotate(-90deg)`);
+
+        // Create buttons using data binding
+        this._modeButtonContainer
+            .selectAll('button')
+            .data(modes, (d) => d.id) // Use mode ID as key
+            .join('button')
+            .attr('class', 'mode-button') // For general styling
+            .attr('type', 'button')
+            .attr('data-mode', (d) => d.id) // Store mode ID for listener
+            .attr('title', (d) => d.title) // Tooltip explanation
+            .text((d) => d.label) // Button text (V, eV)
+            .on('click', (event, d) => {
+                this.setMode(d.id); // Call setMode on click
+            });
     }
 
     _handleResize(width, height, shouldRedraw = true) {
