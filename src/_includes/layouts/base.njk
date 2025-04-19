@@ -54,12 +54,38 @@
         <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     </head>
     <body>
-        <header>
-            {# Optional: Add a consistent site header here #}
+
+
+ {# === Get Previous/Next Logic === #}
+  {% set currentCollection = collections.esbd_topic %} {# Use the sorted collection #}
+  {% set currentPageUrl = page.url %} {# URL of the current page #}
+  {% set currentIndex = -1 %} {# Default value if not found #}
+  {% set prevPage = null %}
+  {% set nextPage = null %}
+
+  {# Find the index of the current page within the sorted collection #}
+  {% for item in currentCollection %} {# Iterate through all items #}
+    {% if item.url == currentPageUrl %}
+      {% set currentIndex = loop.index0 %} {# Assign index when match found #}
+      {# No break - loop continues, but currentIndex now has the right value #}
+    {% endif %}
+  {% endfor %} {# Loop finishes naturally #}
+
+  {# Assign previous and next pages if found and within bounds #}
+  {% if currentIndex > 0 %} {# Check if not the first item #}
+    {% set prevPage = currentCollection[currentIndex - 1] %}
+  {% endif %}
+  {% if currentIndex >= 0 and currentIndex < currentCollection.length - 1 %} {# Check if not the last item #}
+    {% set nextPage = currentCollection[currentIndex + 1] %}
+  {% endif %}
+  {# === End Logic === #}
+  {# --- Top Navigation --- #}
+  
+
+{#        <header>
             <h1><a href="/esbd/">ESBD Visualizations</a></h1>
             <hr />
-        </header>
-
+        </header> #}
 
         {# NEW: Wrapper div for the main layout columns #}
         <div class="layout-wrapper">
@@ -79,10 +105,27 @@
             </nav>
 
             {# Main Content Area #}
+            <div>
+
+  <nav class="pagination-nav top-nav">
+    {% if prevPage %}
+      <a href="{{ prevPage.url | url }}">&lt;- {{ prevPage.data.title | escape }}</a>
+    {% else %}
+      <span></span> {# Empty span for layout consistency #}
+    {% endif %}
+    <span>~~~</span>
+    {% if nextPage %}
+      <a href="{{ nextPage.url | url }}">{{ nextPage.data.title | escape }} -&gt;</a>
+    {% else %}
+      <span></span> {# Empty span for layout consistency #}
+    {% endif %}
+  </nav>
             <main>
+
                 {# Content from individual pages goes here #}
                 {{ content | safe }}
             </main>
+            </div>
 
         </div> {# End layout-wrapper #}
 
