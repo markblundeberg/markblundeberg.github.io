@@ -60,6 +60,11 @@
             <hr />
         </header>
 
+        <nav>
+        {{ collections.all | eleventyNavigation | eleventyNavigationToHtml | safe }}
+
+        </nav>
+
         <main>
             {# Content from individual pages goes here #} {{ content | safe }}
         </main>

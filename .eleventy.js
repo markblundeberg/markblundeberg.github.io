@@ -1,4 +1,5 @@
 // Eleventy configuration file
+const eleventyNavigationPlugin = require('@11ty/eleventy-navigation');
 
 module.exports = function (eleventyConfig) {
     // --- Passthrough Copy ---
@@ -72,6 +73,8 @@ module.exports = function (eleventyConfig) {
         throwOnUndefined: true,
         autoescape: false,
     });
+
+    eleventyConfig.addPlugin(eleventyNavigationPlugin);
 
     // --- Base Config ---
     return {

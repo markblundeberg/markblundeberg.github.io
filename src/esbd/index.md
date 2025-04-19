@@ -4,7 +4,6 @@ title: 'ESBD: An Intuitive Visualization for Electrochemistry'
 tags: [page, esbd_topic]
 eleventyNavigation:
     key: ESBD
-    order: 1
 ---
 
 # Band Diagrams for Batteries? An Intuitive Visualization
@@ -121,7 +120,7 @@ Intrigued? The real power of ESBDs becomes apparent when applied to various syst
 
 Basics:
 
-- [_Electrodes_]({{ '/esbd/electrodes.md' | url }}) - Electron-ion interfaces, and lithium ion batteries. {# don't really need standard states or solutions at all for this discussion! discuss e.g. Zn2+/Zn electrode and end with Li Ion batteries. #}
+- [_Electrodes_](/esbd/electrodes/) - Electron-ion interfaces, and lithium ion batteries. {# don't really need standard states or solutions at all for this discussion! discuss e.g. Zn2+/Zn electrode and end with Li Ion batteries. #}
 - _Solutions_ - Concentrations, standard states $V^\ominus$, and lead-acid batteries.
 - _Junctions_ - Salt bridges and ion membranes.
 - _Semiconductors_ - Electrons and holes, and classic band diagrams. {# comes after solutions so we can talk in detail about electron and hole standard states vs band edges. #}
