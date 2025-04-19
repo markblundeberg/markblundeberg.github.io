@@ -414,7 +414,6 @@ class ElectrochemicalSpeciesBandDiagram {
 
         // 5. Draw Data Elements (these use transitions internally)
         this._drawTraces();
-        this._drawConnectors();
         this._drawVerticalMarkers();
         this._drawLabels();
     }
@@ -775,95 +774,6 @@ class ElectrochemicalSpeciesBandDiagram {
             .attr('d', (d) =>
                 this.lineGenerator.y((p) => this.yScale(p.y_display))(d.points)
             );
-    }
-
-    _drawConnectors() {
-        // Extract points for standard state and potential for connection
-        const connectorPairs = [];
-        const potentialPointsByX = new Map(); // Map<x, {y, color}>
-        const standardPointsByX = new Map(); // Map<x, {y, color}>
-
-        // Optimize lookup: create maps of points keyed by speciesId and x
-        const pointsMap = new Map(); // Map<speciesId, Map<x, point>>
-        this.lastDrawData.forEach((trace) => {
-            if (!pointsMap.has(trace.speciesId))
-                pointsMap.set(trace.speciesId, new Map());
-            const tracePoints = pointsMap.get(trace.speciesId);
-            trace.points.forEach((p) => tracePoints.set(p.x, p)); // Assumes unique x per trace
-        });
-
-        this.lastDrawData.forEach((trace) => {
-            if (trace.curveType === 'potential' && trace.speciesId) {
-                const stdTraceDef = this.traceData.find(
-                    (td) =>
-                        td.speciesId === trace.speciesId &&
-                        td.curveType === 'standardState'
-                );
-                if (stdTraceDef) {
-                    const stdPointsMap = pointsMap.get(trace.speciesId); // Re-use lookup? No, need standard trace points
-                    // Find the corresponding standard trace in lastDrawData
-                    const stdTrace = this.lastDrawData.find(
-                        (ldd) => ldd.id === stdTraceDef.id
-                    );
-                    if (stdTrace) {
-                        const stdPointsLookup = new Map(
-                            stdTrace.points.map((p) => [p.x, p])
-                        );
-                        trace.points.forEach((p_pot, i) => {
-                            const p_std = stdPointsLookup.get(p_pot.x);
-                            if (
-                                p_pot.y_display !== null &&
-                                isFinite(p_pot.y_display) &&
-                                p_std &&
-                                p_std.y_display !== null &&
-                                isFinite(p_std.y_display)
-                            ) {
-                                connectorPairs.push({
-                                    id: `${trace.speciesId}_conn_${p_pot.x}`, // Unique ID based on species & x
-                                    x: p_pot.x,
-                                    y1: p_pot.y_display,
-                                    y2: p_std.y_display,
-                                    color: trace.color,
-                                });
-                            }
-                        });
-                    }
-                }
-            }
-        });
-
-        this.connectorsGroup
-            .selectAll('line.esbd-connector-line')
-            .data(connectorPairs, (d) => d.id)
-            .join(
-                (enter) =>
-                    enter
-                        .append('line')
-                        .attr('class', 'esbd-connector-line')
-                        .attr('stroke', (d) => d.color)
-                        .attr(
-                            'stroke-width',
-                            STYLE_DEFAULTS.connector.lineWidth
-                        )
-                        .attr(
-                            'stroke-dasharray',
-                            STYLE_DEFAULTS.connector.dasharray
-                        ),
-                (update) => update,
-                (exit) =>
-                    exit
-                        .transition()
-                        .duration(this.config.transitionDuration)
-                        .style('opacity', 0)
-                        .remove()
-            )
-            .attr('stroke', (d) => d.color) // Update color immediately
-            .transition()
-            .duration(this.config.transitionDuration)
-            .attr('x1', (d) => this.xScale(d.x))
-            .attr('y1', (d) => this.yScale(d.y1))
-            .attr('x2', (d) => this.xScale(d.x))
-            .attr('y2', (d) => this.yScale(d.y2));
     }
 
     /** Draws or updates the vertical marker symbols. */
