@@ -167,6 +167,13 @@ class ConcentrationCellComponent {
                 'Right Electrode'
             ), // Pass identifier
         });
+
+        if (this.config.VRange) {
+            this.diagram.setVRange(
+                this.config.VRange[0],
+                this.config.VRange[1]
+            );
+        }
     }
 
     /** Attaches event listeners to controls */

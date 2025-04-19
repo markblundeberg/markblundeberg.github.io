@@ -329,6 +329,22 @@ class ElectrochemicalSpeciesBandDiagram {
         }
     }
 
+    /**
+     * Sets the vertical range (domain) of the Y axis, in Volts
+     * @param {number} min - Minimum value for the Y axis.
+     * @param {number} max - Maximum value for the Y axis.
+     */
+    setVRange(min, max) {
+        if (typeof min !== 'number' || typeof max !== 'number' || min >= max) {
+            console.error(
+                'EnergyLevelsDiagram Error: Invalid arguments for setVRange.',
+                { min, max }
+            );
+            return;
+        }
+        this.config.VRange = [min, max];
+    }
+
     /** Registers a callback function triggered after the mode changes and redraw starts. */
     onModeChange(callbackFn) {
         this._modeChangeCallback =
@@ -367,26 +383,33 @@ class ElectrochemicalSpeciesBandDiagram {
         if (xDomain[0] === undefined) xDomain = [0, 1];
         this.xScale.domain(xDomain).nice();
 
-        const allYValues = this.lastDrawData.flatMap((t) =>
-            t.points.map((p) => p.y_display)
-        );
-        let yDomain = d3.extent(
-            allYValues.filter((y) => y !== null && isFinite(y))
-        );
-        if (
-            !hasPlottableData ||
-            yDomain[0] === undefined ||
-            yDomain[1] === undefined ||
-            yDomain[0] === yDomain[1]
-        ) {
-            const fallbackCenter = yDomain[0] !== undefined ? yDomain[0] : 0;
-            yDomain = [fallbackCenter - 1, fallbackCenter + 1];
+        if (this.config.VRange) {
+            const ymin = this._scaleVoltToDisplay(this.config.VRange[0], 0);
+            const ymax = this._scaleVoltToDisplay(this.config.VRange[1], 0);
+            this.yScale.domain(ymin < ymax ? [ymin, ymax] : [ymax, ymin]);
         } else {
-            const padding = (yDomain[1] - yDomain[0]) * 0.1;
-            yDomain[0] -= padding;
-            yDomain[1] += padding;
+            const allYValues = this.lastDrawData.flatMap((t) =>
+                t.points.map((p) => p.y_display)
+            );
+            let yDomain = d3.extent(
+                allYValues.filter((y) => y !== null && isFinite(y))
+            );
+            if (
+                !hasPlottableData ||
+                yDomain[0] === undefined ||
+                yDomain[1] === undefined ||
+                yDomain[0] === yDomain[1]
+            ) {
+                const fallbackCenter =
+                    yDomain[0] !== undefined ? yDomain[0] : 0;
+                yDomain = [fallbackCenter - 1, fallbackCenter + 1];
+            } else {
+                const padding = (yDomain[1] - yDomain[0]) * 0.1;
+                yDomain[0] -= padding;
+                yDomain[1] += padding;
+            }
+            this.yScale.domain(yDomain).nice();
         }
-        this.yScale.domain(yDomain).nice();
 
         // 3. Update Axes (apply transitions)
         this.xAxisGroup
