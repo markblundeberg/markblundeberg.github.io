@@ -80,30 +80,13 @@ p.diagram-placeholder {
     background-color: rgba(0.5, 0.5, 0.5, 0.2);
 }
 
-/* Component Instance Containers */
-#ag-conc-cell-container,
-#li-ion-container,
-#lead-acid-container {
-    width: 95%;
-    max-width: 800px;
-
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 30px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #fdfdfd;
-    overflow: hidden;
-}
-
 .demo-container {
     display: block; /* Behave like a normal block element */
-
-    max-width: 300px; /* Default, should be overridden */
     margin: 1.5em auto; /* Center block horizontally, add vertical space */
     padding: 0.5em;
     border: 1px solid #eee;
     border-radius: 5px;
+    background-color: #fdfdfd;
 }
 
 /* Styles for ESBD examples' frame and controls */
