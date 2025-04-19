@@ -546,10 +546,8 @@ class ElectrochemicalSpeciesBandDiagram {
             .append('text')
             .attr('class', 'esbd-y-axis-label esbd-interactive')
             .style('text-anchor', 'middle')
-            .style('cursor', 'pointer')
             .style('-webkit-user-select', 'none')
-            .style('user-select', 'none')
-            .on('click', () => this._handleYAxisLabelClick());
+            .style('user-select', 'none');
 
         // Line generator template
         this.lineGenerator = d3
@@ -1064,13 +1062,6 @@ class ElectrochemicalSpeciesBandDiagram {
     // ========================================================================
     // Private Interaction Handlers
     // ========================================================================
-
-    _handleYAxisLabelClick() {
-        const modes = ['Volts', 'eV'];
-        const currentIdx = modes.indexOf(this.config.mode);
-        const nextIdx = (currentIdx + 1) % modes.length;
-        this.setMode(modes[nextIdx]);
-    }
 
     /** Handles all click events on the plot area */
     _handleClickInteraction(event, targetId = null) {
@@ -1629,14 +1620,12 @@ class ElectrochemicalSpeciesBandDiagram {
     }
 
     _getYAxisLabel() {
-        // Add unicode arrows or similar to hint clickability
-        const arrows = ' \u21F5 '; // Up down arrows symbol
         switch (this.config.mode) {
             case 'eV':
-                return `Electronic Energy (eV)${arrows}`; // E = -eV convention
+                return 'Electronic Energy (eV)'; // E = -eV convention
             case 'Volts':
             default:
-                return `Species Voltage (V)${arrows}`; // V = μ̄/(zF)
+                return 'Species Voltage (V)'; // V = bar mu /(zF)
         }
     }
 

@@ -206,12 +206,7 @@ p.diagram-placeholder {
 /* Interactive Y-Axis Label */
 .esbd-y-axis-label {
     font-size: 10px; /* Smaller axis label */
-    cursor: pointer;
     fill: #333;
-    transition: fill 0.2s ease-in-out;
-}
-.esbd-y-axis-label:hover {
-    fill: #007bff;
 }
 
 /* D3 Data Line Defaults */
