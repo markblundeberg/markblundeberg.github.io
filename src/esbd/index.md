@@ -1,6 +1,6 @@
 ---
 layout: layouts/base.njk
-title: 'ESBD: An Intuitive Visualization for Electrochemistry'
+title: 'ESBD: Intro'
 tags: [page, esbd_topic]
 orderESBD: 1
 eleventyNavigation:

@@ -63,6 +63,57 @@ body {
     color: #005599;
 }
 
+/* Styling for the Previous/Next Navigation */
+.pagination-nav {
+    display: flex;              /* Use flexbox for layout */
+    justify-content: space-between; /* Push prev/next divs to opposite ends */
+    align-items: center;        /* Vertically align items */
+    padding: 0.5em 0;          /* Vertical padding */
+  }
+
+.pagination-nav .nav-prev {
+    text-align: left;           /* Align text within the left div (default) */
+}
+
+.pagination-nav .nav-next {
+    text-align: right;          /* Align text within the right div */
+}
+
+/* Make sure the divs don't shrink if content is small */
+.pagination-nav .nav-prev,
+.pagination-nav .nav-next {
+    flex-basis: 48%; /* Give roughly half the space, adjust as needed */
+    /* Or just let them take content width if preferred */
+}
+
+/* Optional: Link styling */
+.pagination-nav a {
+    color: #0056b3; /* Example color */
+    text-decoration: none;
+    display: inline-block; /* Prevents text alignment issues */
+}
+
+.pagination-nav a:hover {
+    text-decoration: underline;
+}
+
+/* Optional: Placeholder styling */
+.pagination-nav span {
+    display: inline-block; /* Ensure it takes space */
+    min-height: 1.2em; /* Match approximate line height */
+    color: #aaa; /* Optional: make placeholder less visible */
+}
+
+
+.main-column {
+    /* Example: Allow main column to grow */
+    /* flex-grow: 1; */
+    /* Or just use standard block layout */
+    max-width: 900px; /* Example max width */
+    margin: 0 auto; /* Center if needed */
+    padding: 0 1em; /* Padding */
+}
+
 /* Main Content Area Styling */
 main {
     max-width: 75ch; /* Keep max-width for readability */

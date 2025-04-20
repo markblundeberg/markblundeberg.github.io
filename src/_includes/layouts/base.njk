@@ -55,33 +55,6 @@
     </head>
     <body>
 
-
- {# === Get Previous/Next Logic === #}
-  {% set currentCollection = collections.esbd_topic %} {# Use the sorted collection #}
-  {% set currentPageUrl = page.url %} {# URL of the current page #}
-  {% set currentIndex = -1 %} {# Default value if not found #}
-  {% set prevPage = null %}
-  {% set nextPage = null %}
-
-  {# Find the index of the current page within the sorted collection #}
-  {% for item in currentCollection %} {# Iterate through all items #}
-    {% if item.url == currentPageUrl %}
-      {% set currentIndex = loop.index0 %} {# Assign index when match found #}
-      {# No break - loop continues, but currentIndex now has the right value #}
-    {% endif %}
-  {% endfor %} {# Loop finishes naturally #}
-
-  {# Assign previous and next pages if found and within bounds #}
-  {% if currentIndex > 0 %} {# Check if not the first item #}
-    {% set prevPage = currentCollection[currentIndex - 1] %}
-  {% endif %}
-  {% if currentIndex >= 0 and currentIndex < currentCollection.length - 1 %} {# Check if not the last item #}
-    {% set nextPage = currentCollection[currentIndex + 1] %}
-  {% endif %}
-  {# === End Logic === #}
-  {# --- Top Navigation --- #}
-  
-
 {#        <header>
             <h1><a href="/esbd/">ESBD Visualizations</a></h1>
             <hr />
@@ -105,27 +78,84 @@
             </nav>
 
             {# Main Content Area #}
-            <div>
+            <div class="main-column">
 
-  <nav class="pagination-nav top-nav">
-    {% if prevPage %}
-      <a href="{{ prevPage.url | url }}">&lt;- {{ prevPage.data.title | escape }}</a>
-    {% else %}
-      <span></span> {# Empty span for layout consistency #}
-    {% endif %}
-    <span>~~~</span>
-    {% if nextPage %}
-      <a href="{{ nextPage.url | url }}">{{ nextPage.data.title | escape }} -&gt;</a>
-    {% else %}
-      <span></span> {# Empty span for layout consistency #}
-    {% endif %}
-  </nav>
+        {% if 'esbd_topic' in tags %}
+            {% set showPrevNextBottom = true %}
+            {% if orderESBD != 1 %}
+                {% set showPrevNextTop = true %}
+            {% endif %}
+        {% endif %}
+        {% if showPrevNextTop or showPrevNextBottom %}
+            {% set currentCollection = collections.esbd_topic %}
+            {% set currentPageUrl = page.url %}
+            {% set currentIndex = -1 %}
+            {% set prevPage = null %}
+            {% set nextPage = null %}
+
+            {# Find index (corrected loop without break) #}
+            {% for item in currentCollection %}
+              {% if item.url == currentPageUrl %}
+                {% set currentIndex = loop.index0 %}
+              {% endif %}
+            {% endfor %}
+
+            {# Assign prev/next #}
+            {% if currentIndex > 0 %}
+              {% set prevPage = currentCollection[currentIndex - 1] %}
+            {% endif %}
+            {% if currentIndex >= 0 and currentIndex < currentCollection.length - 1 %}
+              {% set nextPage = currentCollection[currentIndex + 1] %}
+            {% endif %}
+        {% endif %}
+
+        {% if showPrevNextTop %}
+            {# --- Previous/Next Navigation Bar --- #}
+            <nav class="pagination-nav page-nav-top"> {# Specific class for styling #}
+                <div class="nav-prev">
+                    {% if prevPage %}
+                        <a href="{{ prevPage.url | url }}">&lt;- {{ prevPage.data.title | escape }}</a>
+                    {% else %}
+                        <span>&nbsp;</span> {# Placeholder to maintain structure #}
+                    {% endif %}
+                </div>
+                <div class="nav-next">
+                    {% if nextPage %}
+                        <a href="{{ nextPage.url | url }}">{{ nextPage.data.title | escape }} -&gt;</a>
+                    {% else %}
+                        <span>&nbsp;</span> {# Placeholder to maintain structure #}
+                    {% endif %}
+                </div>
+            </nav> {# End pagination-nav #}
+        {% endif %} {# End conditional block for prev/next #}
+        {# --- End Previous/Next Logic Block --- #}
+
             <main>
-
                 {# Content from individual pages goes here #}
                 {{ content | safe }}
             </main>
-            </div>
+
+        {% if showPrevNextBottom %}
+            {# --- Previous/Next Navigation Bar --- #}
+            <nav class="pagination-nav page-nav-top"> {# Specific class for styling #}
+                <div class="nav-prev">
+                    {% if prevPage %}
+                        <a href="{{ prevPage.url | url }}">&lt;- {{ prevPage.data.title | escape }}</a>
+                    {% else %}
+                        <span>&nbsp;</span> {# Placeholder to maintain structure #}
+                    {% endif %}
+                </div>
+                <div class="nav-next">
+                    {% if nextPage %}
+                        <a href="{{ nextPage.url | url }}">{{ nextPage.data.title | escape }} -&gt;</a>
+                    {% else %}
+                        <span>&nbsp;</span> {# Placeholder to maintain structure #}
+                    {% endif %}
+                </div>
+            </nav> {# End pagination-nav #}
+        {% endif %} {# showPrevNextBottom #}
+
+            </div> {# End main-column div #}
 
         </div> {# End layout-wrapper #}
 

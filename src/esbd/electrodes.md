@@ -9,8 +9,6 @@ eleventyNavigation:
     order: 1 # Order within the parent menu
 ---
 
-([&#x2190; Back to ESBD landing page](/esbd/))
-
 # {{title}}
 
 Electrodes create interfaces where electrons (in metal) and ions (in solution) meet. A classic example, used as a standard reference for electrochemical studies, is the silver chloride electrode:
