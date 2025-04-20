@@ -1,21 +1,21 @@
 ---
 layout: layouts/base.njk
-title: 'ESBD: Electrode Reactions & Li-ion Batteries'
+title: 'ESBD: Electrodes'
 tags: [page, esbd_topic] # Assign to 'page' and 'esbd_topic' collections
 orderESBD: 2
 eleventyNavigation:
-    key: Electrodes & Li-ion # Text used in navigation menus
+    key: Electrodes # Text used in navigation menus
     parent: ESBD # Optional: Assumes you have a main 'ESBD' menu item defined elsewhere
     order: 1 # Order within the parent menu
 ---
 
 # {{title}}
 
-Electrodes create interfaces where electrons (in metal) and ions (in solution) meet. A classic example, used as a standard reference for electrochemical studies, is the silver chloride electrode:
+Electrodes are interfaces where electrons (in metal) and ions (in solution) meet and react. A classic example, used as a standard reference for electrochemical studies, is the silver chloride electrode:
 
 >    $\mathrm{Ag}$ metal | $\mathrm{AgCl}$ coating | Solution containing $\mathrm{Cl}^-$ ions
 
-The characteristic and reversible reaction here is that the silver chloride can take an electron from the metal, and release a $\mathrm{Cl}^-$ ion, in the process leaving behind some Ag that deposits on the metal. Let's write down that reaction:
+The characteristic and reversible reaction here is that (in effect) the silver chloride can take an electron from the metal, and release a $\mathrm{Cl}^-$ ion. In the process this leaves behind some Ag that deposits on the metal. Let's write down that reaction:
 
 $$ \mathrm{AgCl} + \mathrm{e}^- \rightleftharpoons \mathrm{Ag} + \mathrm{Cl}^-$$
 
@@ -39,17 +39,19 @@ or rearranging,
 
 $$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} =  \frac{1}{F} ( \mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}} )$$
 
-We are going to see this kind of equation occur again and again: where there is a reaction of any kind, the _separation_ between $V_i$ levels is controlled by some neutral species' chemical potentials. We will always see a balance of $V_i$ levels (never any sensitivity to absolute $V_i$) because legitimate reactions are always charge-balanced.
+We are going to see this kind of equation occur again and again: where there is a reaction of any kind, the _separation_ between $V_i$ levels is related to some neutral species' chemical potentials. Reactions are always charge-balanced, so we will never see one $V$ value on its own, only balanced $V_x - V_y$ differences (in more complicated reactions, sometimes sums of $V_x - V_y$ differences, but we will touch on that in a later Topic).
 
-So let's plot this out on a band diagram:
+Let's plot this on a band diagram:
 
 (...Ag-AgCl-solution ESBD; reaction marker at Ag-AgCl interface...)
 
-The diagram shows the actual quantitative step $V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}$. Let's calculate it now. Since chemical potentials are partial molar Gibbs free energy, we can just look up the Gibbs free energies of formation in a table: $\mu_{\mathrm{Ag}} = 0~\mathrm{kJ/mol}$ and $\mu_{\mathrm{AgCl}} = -109.8~\mathrm{kJ/mol}$ at standard temperature and pressure (STP). Note that we use the common convention that $\mu=0$ for elements in their most stable form, at STP. Plug those in with the faraday constant, and we get:
+The diagram shows the actual quantitative step $V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}$. Let's calculate it now, assuming standard temperature and pressure. Since chemical potentials are partial molar Gibbs free energy, we can just look up the Gibbs free energies of formation in a table: $\mu_{\mathrm{Ag}} = 0~\mathrm{kJ/mol}$ and $\mu_{\mathrm{AgCl}} = -109.8~\mathrm{kJ/mol}$ at standard temperature and pressure (STP). Note that we use the common convention that $\mu=0$ for elements in their most stable form, at STP. Plug those in with the faraday constant, and we get:
 
 $$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} = +1.138~\mathrm{V}$$
 
-(Note this is a very different quantity from electrode potential $V_{\mathrm{e}^-} - \phi$, which is 0.222 V in this case.)
+(Don't confuse this with the electrode potential $E = V_{\mathrm{e}^-} - \phi$, which is approximately 0.2 V with this electrode.)
+
+
 
 ## Elemental metal electrodes
 
@@ -57,7 +59,7 @@ Another classic electrode is the zinc metal electrode, which releases / captures
 
 $$ \mathrm{Zn} \rightleftharpoons \mathrm{Zn}^{2+} + 2\mathrm{e}^-$$
 
-...
+which becomes:
 
 $$ \mu_{\mathrm{Zn}} = 2 F V_{\mathrm{Zn}^{2+}} - 2 F V_{\mathrm{e}^-}$$
 
@@ -69,7 +71,15 @@ Plotting the ESBD now,
 
 (....)
 
-It's a flat line with $V_{\mathrm{Zn}^{2+}} = V_{\mathrm{e}^-}$. This is again because we're assuming the zinc metal is at STP, and we have adopted the convention that elements in stable form have $\mu=0$. So, $\mu_{\mathrm{Zn}} = 0$ and thus $V_{\mathrm{Zn}^{2+}} - V_{\mathrm{e}^-} = 0$. I just want to stress that this flatness, which we will always see for the elemental electrodes, is an accident and we shouldn't imagine this flat condition as meaning equilibrium. Away from STP we may have $\mu_{\mathrm{Zn}} \neq 0$ and still have equilibrium. In the previous $\mathrm{AgCl}$ example, we also had a huge step, and it was also at equilibrium.
+It's a flat line with $V_{\mathrm{Zn}^{2+}} = V_{\mathrm{e}^-}$. I just want to stress that this flatness, which we will often see for the elemental electrodes, is only an accident and we shouldn't think that equilibrium requires this flat connection. We assumed the zinc metal is at STP, and we have adopted the convention that elements in stable form have $\mu=0$, and indeed the zinc metal is the most stable form of $\mathrm{Zn}$. So, $\mu_{\mathrm{Zn}} = 0$ and thus $V_{\mathrm{Zn}^{2+}} - V_{\mathrm{e}^-} = 0$. Yet, away from STP we may have $\mu_{\mathrm{Zn}} \neq 0$ and still have equilibrium. In the previous $\mathrm{AgCl}$ example, we also had a large ~1 V step, and it was also at equilibrium.
+
+## Takeaway
+
+In any case, the main takeaway is that at electrodes, we get a relative step up or down going from $V_{\mathrm{e}^-}$ to $V_{\mathrm{ion}}$, and the precise equilibrium value of that step depends on the chemical potentials of neutral compounds.
+
+This is enough background to tackle our next topic!
+
+[**NEXT TOPIC: Lithium-ion batteries**](../lib/)
 
 ## Optional discussion
 
@@ -79,16 +89,31 @@ For the keen, it's worth noting that the silver metal in the $\mathrm{AgCl}$ exa
 <summary>
 Click to open extended discussion.
 </summary>
-At the silver electrode, we have $\mathrm{Ag}$ $ \rightleftharpoons \mathrm{Ag^{+}} + \mathrm{e}^-$, so 
+At the silver electrode, we have $\mathrm{Ag} \rightleftharpoons \mathrm{Ag^{+}} + \mathrm{e}^-$, so 
 
-$$ V_{\mathrm{Ag}^{+}} - V_{\mathrm{e}^-} =  \frac{1}{F} \mu_{\mathrm{Ag}} $$
+$$ V_{\mathrm{Ag}^{+}} - V_{\mathrm{e}^-} =  \frac{1}{F} \mu_{\mathrm{Ag}} = 0~\mathrm{V}$$
 
-adfsd
-as
+Again, 0 V because we're assuming STP and this is the elemental standard reference state of silver. Together with the previous reaction I gave, this also sets a difference in the solution:
 
-asd
+$$ V_{\mathrm{Cl}^-} - V_{\mathrm{Ag}^{+}} =  - \frac{1}{F}\mu_{\mathrm{AgCl}} = 1.138~\mathrm{V}$$
+
+And note that we could have gotten this equation directly based on the dissociation reaction $\mathrm{AgCl} \rightleftharpoons \mathrm{Ag^{+}} + \mathrm{Cl}^-$. In other words, as far as equilibrium is concerned, the $\mathrm{AgCl}$ just acts to dissolve until saturation (it doesn't take much -- silver chloride has a quite low solubility in water).
+
+It is interesting though that this 1.138&nbsp;V value does not directly depend on the actual concentration of ions. In contrast, the electrode potential of standard electrochemistry _does_ depend on chloride concentration: a massive excess of $\mathrm{Cl}^-$ ions are typically supplied by dissolving $\mathrm{KCl}$ salt into the solution at a concentration of 0.5 to 3 mol/L, and the commonly quoted value of 0.222&nbsp;V refers specifically to the case of 'unit activity' of chloride ions, which occurs around 2 mol/L of dissolved $\mathrm{KCl}$.
+
+Let's use the definition of electrode potential, $E = V_{\mathrm{e}^-} - \phi$, together with the value we found for $V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} = \frac{1}{F} ( \mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}} ) = 1.138~\mathrm{V}$, and finally substitute the partitioned form $V_{\mathrm{Cl}^-} = \phi -\frac{1}{F}\mu^\ominus_{\mathrm{Cl}^-} - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-})$. Then we get:
+
+\begin{align}
+ E  & \equiv V_{\mathrm{e}^-} - \phi \notag \\\\
+    & = \Big[V_{\mathrm{Cl}^-} - [V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}] \Big] - \phi \notag \\\\
+    & = \Big[\phi -\frac{1}{F}\mu^\ominus_{\mathrm{Cl}^-} - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-}) - [V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}] \Big] - \phi \notag \\\\
+    & = \Big[-\frac{1}{F}\mu^\ominus_{\mathrm{Cl}^-} - [V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}] \Big] - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-}) \notag \\\\
+    & = \big[1.360~\mathrm{V} - 1.138~\mathrm{V} \big] - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-}) \notag \\\\
+    & = 0.222~\mathrm{V} - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-}) \notag
+\end{align}
+
+where we've used $\mu^\ominus_{\mathrm{Cl}^-} = -F \cdot 1.360~\mathrm{V}$, the standard internal chemical potential for chloride ions.
+
+We will further discuss ionic concentrations, ionic standard states, and ionic activities in the next-next topic.
+
 </details>
-
-In any case, the main takeaway is that at electrodes, we get a step in $V_i$ levels between $V_{\mathrm{e}^-}$ and $V_{\mathrm{ion}}$, and that step depends on the chemical potentials of neutral compounds.
-
-{# OPTIONAL -  #}
