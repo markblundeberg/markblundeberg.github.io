@@ -76,11 +76,9 @@ module.exports = function (eleventyConfig) {
 
     eleventyConfig.addPlugin(eleventyNavigationPlugin);
 
-
-    eleventyConfig.addCollection("esbd_topic", function(collectionApi) {
+    eleventyConfig.addCollection('esbd_topic', function (collectionApi) {
         // Get all content tagged with 'topics'
-        return collectionApi.getFilteredByTag("esbd_topic")
-        .sort((a, b) => {
+        return collectionApi.getFilteredByTag('esbd_topic').sort((a, b) => {
             // Sort by the 'orderESBD' front matter field
             return (a.data.orderESBD || 0) - (b.data.orderESBD || 0);
         });

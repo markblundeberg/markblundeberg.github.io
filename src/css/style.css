@@ -65,18 +65,18 @@ body {
 
 /* Styling for the Previous/Next Navigation */
 .pagination-nav {
-    display: flex;              /* Use flexbox for layout */
+    display: flex; /* Use flexbox for layout */
     justify-content: space-between; /* Push prev/next divs to opposite ends */
-    align-items: center;        /* Vertically align items */
-    padding: 0.5em 0;          /* Vertical padding */
-  }
+    align-items: center; /* Vertically align items */
+    padding: 0.5em 0; /* Vertical padding */
+}
 
 .pagination-nav .nav-prev {
-    text-align: left;           /* Align text within the left div (default) */
+    text-align: left; /* Align text within the left div (default) */
 }
 
 .pagination-nav .nav-next {
-    text-align: right;          /* Align text within the right div */
+    text-align: right; /* Align text within the right div */
 }
 
 /* Make sure the divs don't shrink if content is small */
@@ -103,7 +103,6 @@ body {
     min-height: 1.2em; /* Match approximate line height */
     color: #aaa; /* Optional: make placeholder less visible */
 }
-
 
 .main-column {
     /* Example: Allow main column to grow */
@@ -200,7 +199,7 @@ pre code {
 
 main > ul,
 main > ol {
-    margin-left:2em;
+    margin-left: 2em;
 }
 
 details {
