@@ -13,7 +13,7 @@ eleventyNavigation:
 
 Electrodes are interfaces where electrons (in metal) and ions (in solution) meet and react. A classic example, used as a standard reference for electrochemical studies, is the silver chloride electrode:
 
->    $\mathrm{Ag}$ metal | $\mathrm{AgCl}$ coating | Solution containing $\mathrm{Cl}^-$ ions
+> $\mathrm{Ag}$ metal | $\mathrm{AgCl}$ coating | Solution containing $\mathrm{Cl}^-$ ions
 
 The characteristic and reversible reaction here is that (in effect) the silver chloride can take an electron from the metal, and release a $\mathrm{Cl}^-$ ion. In the process this leaves behind some Ag that deposits on the metal. Let's write down that reaction:
 
@@ -51,6 +51,7 @@ $$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} = +1.138~\mathrm{V}$$
 
 (Don't confuse this with the electrode potential $E = V_{\mathrm{e}^-} - \phi$, which is approximately 0.2 V with this electrode.)
 
+In the diagrams, we will show a symbol with the marker ⇌ to indicate an equlibrium reaction, especially at the electrodes.
 
 
 ## Elemental metal electrodes
@@ -71,11 +72,13 @@ Plotting the ESBD now,
 
 (....)
 
-It's a flat line with $V_{\mathrm{Zn}^{2+}} = V_{\mathrm{e}^-}$. I just want to stress that this flatness, which we will often see for the elemental electrodes, is only an accident and we shouldn't think that equilibrium requires this flat connection. We assumed the zinc metal is at STP, and we have adopted the convention that elements in stable form have $\mu=0$, and indeed the zinc metal is the most stable form of $\mathrm{Zn}$. So, $\mu_{\mathrm{Zn}} = 0$ and thus $V_{\mathrm{Zn}^{2+}} - V_{\mathrm{e}^-} = 0$. Yet, away from STP we may have $\mu_{\mathrm{Zn}} \neq 0$ and still have equilibrium. In the previous $\mathrm{AgCl}$ example, we also had a large ~1 V step, and it was also at equilibrium.
+It's a flat line with $V_{\mathrm{Zn}^{2+}} = V_{\mathrm{e}^-}$.
+
+Don't mistake this flat connection as being required for equilibrium in general. We assumed the zinc metal is at STP, and we have adopted the convention that elements in most stable form have $\mu=0$ at STP, and indeed the zinc metal is the most stable form of $\mathrm{Zn}$. So, $\mu_{\mathrm{Zn}} = 0$ and thus $V_{\mathrm{Zn}^{2+}} - V_{\mathrm{e}^-} = 0$. Yet, away from STP we may have $\mu_{\mathrm{Zn}} \neq 0$ and still have equilibrium. In the previous $\mathrm{AgCl}$ example, we also had a large ~1 V step, and it was also at equilibrium.
 
 ## Takeaway
 
-In any case, the main takeaway is that at electrodes, we get a relative step up or down going from $V_{\mathrm{e}^-}$ to $V_{\mathrm{ion}}$, and the precise equilibrium value of that step depends on the chemical potentials of neutral compounds.
+The main point is that at electrodes, we get a relative step up or down going from $V_{\mathrm{e}^-}$ to $V_{\mathrm{ion}}$. The quantitative value of that step at equilibrium depends on the chemical potentials of neutral species, depending on the specifics of the reaction. In the diagrams, we will mark these reactions with a ⇌ symbol.
 
 This is enough background to tackle our next topic!
 
