@@ -43,7 +43,7 @@ We are going to see this kind of equation occur again and again: where there is 
 
 Let's plot this on a band diagram:
 
-(...Ag-AgCl-solution ESBD; reaction marker at Ag-AgCl interface...)
+{% include "esbd-diagrams/esbd-ag-agcl-electrode.html" %}
 
 The diagram shows the actual quantitative step $V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}$. Let's calculate it now, assuming standard temperature and pressure. Since chemical potentials are partial molar Gibbs free energy, we can just look up the Gibbs free energies of formation in a table: $\mu_{\mathrm{Ag}} = 0~\mathrm{kJ/mol}$ and $\mu_{\mathrm{AgCl}} = -109.8~\mathrm{kJ/mol}$ at standard temperature and pressure (STP). Note that we use the common convention that $\mu=0$ for elements in their most stable form, at STP. Plug those in with the faraday constant, and we get:
 
