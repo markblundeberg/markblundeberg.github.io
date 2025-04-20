@@ -26,7 +26,7 @@ body {
 .layout-wrapper {
     max-width: 1200px; /* Optional: Max width for the whole layout */
     margin: 0 auto; /* Center the wrapper */
-    padding: 0 1em; /* Side padding for mobile */
+    padding: 0 0.2em; /* Side padding for mobile */
 }
 
 /* Sidebar Navigation Styling */
@@ -111,7 +111,7 @@ body {
     /* Or just use standard block layout */
     max-width: 900px; /* Example max width */
     margin: 0 auto; /* Center if needed */
-    padding: 0 1em; /* Padding */
+    padding: 0 0; /* Padding */
 }
 
 /* Main Content Area Styling */
