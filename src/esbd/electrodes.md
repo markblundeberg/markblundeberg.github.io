@@ -1,6 +1,6 @@
 ---
 layout: layouts/base.njk
-title: 'ESBD: Electrodes'
+title: 'Electrodes'
 tags: [page, esbd_topic] # Assign to 'page' and 'esbd_topic' collections
 orderESBD: 2
 eleventyNavigation:
