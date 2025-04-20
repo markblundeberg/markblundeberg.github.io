@@ -76,11 +76,15 @@ It's a flat line with $V_{\mathrm{Zn}^{2+}} = V_{\mathrm{e}^-}$.
 
 Don't mistake this flat connection as being required for equilibrium in general. We assumed the zinc metal is at STP, and we have adopted the convention that elements in most stable form have $\mu=0$ at STP, and indeed the zinc metal is the most stable form of $\mathrm{Zn}$. So, $\mu_{\mathrm{Zn}} = 0$ and thus $V_{\mathrm{Zn}^{2+}} - V_{\mathrm{e}^-} = 0$. Yet, away from STP we may have $\mu_{\mathrm{Zn}} \neq 0$ and still have equilibrium. In the previous $\mathrm{AgCl}$ example, we also had a large ~1 V step, and it was also at equilibrium.
 
-## Takeaway
+## Takeaways
 
-The main point is that at electrodes, we get a relative step up or down going from $V_{\mathrm{e}^-}$ to $V_{\mathrm{ion}}$. The quantitative value of that step at equilibrium depends on the chemical potentials of neutral species, depending on the specifics of the reaction. In the diagrams, we will mark these reactions with a ⇌ symbol.
+The main point is that at electrodes,
+* We get a relative step up or down going from $V_{\mathrm{e}^-}$ to $V_{\mathrm{ion}}$.
+* The quantitative value of that step at equilibrium depends on the chemical potentials of neutral species, depending on the specifics of the reaction.
+* This step should not be confused with the electrode potential of standard electrochemistry.
+* In the diagrams, we will mark these reactions with a ⇌ symbol.
 
-This is enough background to tackle our next topic!
+Alright, we're ready now to tackle a real application!
 
 [**NEXT TOPIC: Lithium-ion batteries**](../lib/)
 
