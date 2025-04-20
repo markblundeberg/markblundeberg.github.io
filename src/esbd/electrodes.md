@@ -41,11 +41,54 @@ $$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} =  \frac{1}{F} ( \mu_{\mathrm{Ag}} - \mu
 
 We are going to see this kind of equation occur again and again: where there is a reaction of any kind, the _separation_ between $V_i$ levels is controlled by some neutral species' chemical potentials. We will always see a balance of $V_i$ levels (never any sensitivity to absolute $V_i$) because legitimate reactions are always charge-balanced.
 
-So, what is this difference? Well, since chemical potentials are partial molar Gibbs free energy, we can just look up the Gibbs free energies of formation in a table: $\mu_{\mathrm{Ag}} = 0~\mathrm{kJ/mol}$ and $\mu_{\mathrm{AgCl}} = -109.8~\mathrm{kJ/mol}$ at standard temperature and pressure (STP). Note that we use the convention that $\mu=0$ for elements in their most stable form, at STP. Plug those in with the faraday constant, and we get:
+So let's plot this out on a band diagram:
+
+(...Ag-AgCl-solution ESBD; reaction marker at Ag-AgCl interface...)
+
+The diagram shows the actual quantitative step $V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}$. Let's calculate it now. Since chemical potentials are partial molar Gibbs free energy, we can just look up the Gibbs free energies of formation in a table: $\mu_{\mathrm{Ag}} = 0~\mathrm{kJ/mol}$ and $\mu_{\mathrm{AgCl}} = -109.8~\mathrm{kJ/mol}$ at standard temperature and pressure (STP). Note that we use the common convention that $\mu=0$ for elements in their most stable form, at STP. Plug those in with the faraday constant, and we get:
 
 $$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} = +1.138~\mathrm{V}$$
 
-So let's plot this out on a band diagram:
+(Note this is a very different quantity from electrode potential $V_{\mathrm{e}^-} - \phi$, which is 0.222 V in this case.)
 
-(...)
+## Elemental metal electrodes
 
+Another classic electrode is the zinc metal electrode, which releases / captures $\mathrm{Zn}^{2+}$ ions. Let's quickly run through the reaction:
+
+$$ \mathrm{Zn} \rightleftharpoons \mathrm{Zn}^{2+} + 2\mathrm{e}^-$$
+
+...
+
+$$ \mu_{\mathrm{Zn}} = 2 F V_{\mathrm{Zn}^{2+}} - 2 F V_{\mathrm{e}^-}$$
+
+Here the 2 in front of the $V_{\mathrm{Zn}^{2+}}$ came because of its ionic charge, whereas the 2 in front of $V_{\mathrm{e}^-}$ came from the original formula; the latter also flipped sign. We see again this sets a $V_i$ difference,
+
+$$ V_{\mathrm{Zn}^{2+}} - V_{\mathrm{e}^-} =  \frac{1}{2F} \mu_{\mathrm{Zn}} $$
+
+Plotting the ESBD now,
+
+(....)
+
+It's a flat line with $V_{\mathrm{Zn}^{2+}} = V_{\mathrm{e}^-}$. This is again because we're assuming the zinc metal is at STP, and we have adopted the convention that elements in stable form have $\mu=0$. So, $\mu_{\mathrm{Zn}} = 0$ and thus $V_{\mathrm{Zn}^{2+}} - V_{\mathrm{e}^-} = 0$. I just want to stress that this flatness, which we will always see for the elemental electrodes, is an accident and we shouldn't imagine this flat condition as meaning equilibrium. Away from STP we may have $\mu_{\mathrm{Zn}} \neq 0$ and still have equilibrium. In the previous $\mathrm{AgCl}$ example, we also had a huge step, and it was also at equilibrium.
+
+## Optional discussion
+
+For the keen, it's worth noting that the silver metal in the $\mathrm{AgCl}$ example is also acting as an elemental electrode for $\mathrm{Ag}^{+}$ ions. I discuss this and the relation to the normal electrode potential in the following optional content:
+
+<details>
+<summary>
+Click to open extended discussion.
+</summary>
+At the silver electrode, we have $\mathrm{Ag}$ $ \rightleftharpoons \mathrm{Ag^{+}} + \mathrm{e}^-$, so 
+
+$$ V_{\mathrm{Ag}^{+}} - V_{\mathrm{e}^-} =  \frac{1}{F} \mu_{\mathrm{Ag}} $$
+
+adfsd
+as
+
+asd
+</details>
+
+In any case, the main takeaway is that at electrodes, we get a step in $V_i$ levels between $V_{\mathrm{e}^-}$ and $V_{\mathrm{ion}}$, and that step depends on the chemical potentials of neutral compounds.
+
+{# OPTIONAL -  #}

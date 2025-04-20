@@ -203,6 +203,10 @@ main > ol {
     margin-left:2em;
 }
 
+details {
+    border: 1px dashed #ccc;
+}
+
 p.diagram-placeholder {
     border: 1px dashed #ccc;
     padding: 20px;
