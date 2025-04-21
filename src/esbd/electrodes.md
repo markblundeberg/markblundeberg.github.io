@@ -70,6 +70,7 @@ $$ V_{\mathrm{Zn}^{2+}} - V_{\mathrm{e}^-} =  \frac{1}{2F} \mu_{\mathrm{Zn}} $$
 
 Plotting the ESBD now,
 
+{# TODO - also fix mentions of STP on this page !!! #}
 (....)
 
 It's a flat line with $V_{\mathrm{Zn}^{2+}} = V_{\mathrm{e}^-}$.
