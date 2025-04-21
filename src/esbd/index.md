@@ -124,7 +124,7 @@ Intrigued? The real power of ESBDs becomes apparent when applied to various syst
 Basics:
 - [_Electrodes_](electrodes/) - Electron-ion interfaces.
 - [_Lithium ion batteries_](lib/) - An application spotlight.
-- _Solutions_ - Concentrations, standard states $V^\ominus$, and lead-acid batteries.
+- [_Solutions_](solutions/) - Concentrations, standard states $V^\ominus$.
 - _Junctions_ - Salt bridges and ion membranes.
 
 Advanced:
