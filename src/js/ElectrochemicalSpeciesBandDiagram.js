@@ -636,6 +636,10 @@ class ElectrochemicalSpeciesBandDiagram {
         );
         this.interactionRect.attr('width', pw).attr('height', ph);
 
+        this._modeButtonContainer
+            .style('left', '0px')
+            .style('top', this.config.height - 50 + 'px');
+
         // Trigger redraw if requested and data exists
         // Debouncing prevents this being called excessively or causing loops
         if (shouldRedraw && this.traceData.length > 0) {
