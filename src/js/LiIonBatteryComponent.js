@@ -2,7 +2,7 @@
 // Component for displaying an ESBD of a Li-ion battery at equilibrium (OCV).
 
 import ElectrochemicalSpeciesBandDiagram from './ElectrochemicalSpeciesBandDiagram.js';
-import { formatPopupBaseContent, throttle } from './utils.js';
+import { throttle } from './utils.js';
 
 // --- Physical Constants ---
 const R = 8.31446; // J / (mol K)
@@ -15,18 +15,6 @@ class LiIonBatteryComponent {
      * Creates and manages a Li-ion battery diagram instance.
      * @param {string} containerSelector - CSS selector for the parent div element.
      * @param {object} componentConfig - Configuration object defining the battery specifics.
-     * Expected fields in componentConfig:
-     * anode: { E0_vs_Li, capacity_sites?, color?, latexPrettyName? }
-     * cathode: { E0_vs_Li, capacity_sites?, color?, latexPrettyName? }
-     * electrolyte: { Li_activity, anion_activity?, anion_z?, anion_mu_std_J_mol?, anion_color?, anion_latex? }
-     * li_ion: { mu_standard_J_mol?, color?, latexPrettyName? } // For Li+ standard state
-     * electron: { color?, latexPrettyName? }
-     * Li_total_norm: number (Total Li relative to single electrode site capacity)
-     * V_span_placeholder: number (Placeholder V_std_Li+ - V_std_Anion)
-     * initialSoC: number (0 to 1)
-     * boundaries: array<number>
-     * regionProps: array<object>
-     * plotHeight: number
      */
     constructor(containerSelector, componentConfig) {
         this.container = document.querySelector(containerSelector);
@@ -46,10 +34,6 @@ class LiIonBatteryComponent {
             0,
             Math.min(100, componentConfig.initialSoCPercent ?? 50)
         );
-        this.currentLiTotalNorm = componentConfig.initialLiTotalNorm ?? 0.95;
-        this.currentElyteConc = componentConfig.initialElyteConc ?? 1.0;
-        this.showStdStates = componentConfig.initialShowStdStates ?? false;
-        this.showAnion = componentConfig.initialShowAnion ?? false;
         this.currentXAnode = null;
         this.currentYCathode = null;
 
@@ -73,15 +57,9 @@ class LiIonBatteryComponent {
 
     /** Creates the HTML structure for controls and plot */
     _createInternalHTML() {
-        const config = this.config;
         const instanceId = this.plotDivId;
         const socSliderId = `soc-${instanceId}`;
-        const showStdId = `showStd-${instanceId}`;
-        const showAnionId = `showAnion-${instanceId}`;
-        const totalLiSliderId = `totalLi-${instanceId}`;
-        const elyteConcSliderId = `elyteConc-${instanceId}`;
         const voltageOutputId = `volt-out-${instanceId}`; // Give output an ID
-
         this.container.innerHTML = `
             <div class="plot-container" id="${this.plotDivId}""></div>
             <div class="controls esbd-controls">
@@ -94,29 +72,6 @@ class LiIonBatteryComponent {
                     <label class="control-label" for="${voltageOutputId}">Cell Voltage (OCV):</label>
                     <output class="cell-voltage" id="${voltageOutputId}">?.???</output> V
                 </div>
-                <details class="advanced-controls">
-                    <summary style="cursor:pointer; font-size: 0.9em; margin-top: 5px;">Advanced Controls</summary>
-                    <div style="padding-left: 20px; margin-top: 5px;">
-                        <div class="control-row">
-                            <label class="control-label" for="${totalLiSliderId}">Total Li Inventory (Norm.):</label>
-                            <input type="range" class="total-li-slider" id="${totalLiSliderId}" min="0.1" max="1.0" step="0.01" value="${this.currentLiTotalNorm}">
-                            <output class="total-li-value">${this.currentLiTotalNorm.toFixed(2)}</output>
-                        </div>
-                        <div class="control-row">
-                            <label class="control-label" for="${elyteConcSliderId}">Electrolyte Conc (M):</label>
-                            <input type="range" class="elyte-conc-slider" id="${elyteConcSliderId}" min="0.1" max="2.0" step="0.01" value="${this.currentElyteConc}">
-                            <output class="elyte-conc-value">${this.currentElyteConc.toFixed(3)}</output> M
-                        </div>
-                        <div class="control-row">
-                             <input type="checkbox" class="show-std-checkbox" id="${showStdId}" ${this.showStdStates ? 'checked' : ''}>
-                             <label for="${showStdId}" style="min-width: initial; font-weight: normal;">Show Standard States</label>
-                        </div>
-                        <div class="control-row">
-                             <input type="checkbox" class="show-anion-checkbox" id="${showAnionId}" ${this.showAnion ? 'checked' : ''}>
-                             <label for="${showAnionId}" style="min-width: initial; font-weight: normal;">Show Anion Potentials</label>
-                        </div>
-                    </div>
-                </details>
             </div>
         `;
     }
@@ -126,17 +81,7 @@ class LiIonBatteryComponent {
         this.socSlider = this.container.querySelector('.soc-slider');
         this.socValue = this.container.querySelector('.soc-value');
         this.cellVoltageOut = this.container.querySelector('.cell-voltage');
-        this.showStdCheckbox =
-            this.container.querySelector('.show-std-checkbox');
-        this.showAnionCheckbox = this.container.querySelector(
-            '.show-anion-checkbox'
-        );
         this.plotDiv = this.container.querySelector('.plot-container');
-        this.totalLiSlider = this.container.querySelector('.total-li-slider');
-        this.totalLiValue = this.container.querySelector('.total-li-value');
-        this.elyteConcSlider =
-            this.container.querySelector('.elyte-conc-slider');
-        this.elyteConcValue = this.container.querySelector('.elyte-conc-value');
     }
 
     /** Sets up the ESBD instance */
@@ -156,14 +101,6 @@ class LiIonBatteryComponent {
             }
         );
         this.diagram.addSpeciesInfo(
-            'anion',
-            this.config.anion || {
-                z: -1,
-                color: '#4DAF4A',
-                latexPrettyName: '\\mathrm{PF}_6^{-}',
-            }
-        );
-        this.diagram.addSpeciesInfo(
             'electron',
             this.config.electron || {
                 z: -1,
@@ -176,11 +113,6 @@ class LiIonBatteryComponent {
         this.diagram.setSpatialLayout(
             this.config.boundaries,
             this.config.regionProps
-        );
-
-        // Set general popup callback (for traces)
-        this.diagram.setTracePopupCallback(
-            this._getTracePopupContent.bind(this)
         );
 
         this.diagram.addVerticalMarker('anode_eq', {
@@ -199,37 +131,7 @@ class LiIonBatteryComponent {
 
     /** Attaches event listeners to controls */
     _attachListeners() {
-        // Helper to add listener if element exists
-        const addListener = (element, eventType, handler) => {
-            if (element) {
-                element.addEventListener(eventType, handler);
-            } else {
-                console.warn(
-                    `ESBD Component Warn: Element not found for listener (${eventType})`
-                );
-            }
-        };
-
-        addListener(
-            this.socSlider,
-            'input',
-            throttle(() => this.updateDiagram(), this.throttleDuration)
-        );
-        addListener(this.showStdCheckbox, 'change', (e) => {
-            this.showStdStates = e.target.checked;
-            this.updateDiagram();
-        });
-        addListener(this.showAnionCheckbox, 'change', (e) => {
-            this.showAnion = e.target.checked;
-            this.updateDiagram();
-        });
-        addListener(
-            this.totalLiSlider,
-            'input',
-            throttle(() => this.updateDiagram(), this.throttleDuration)
-        );
-        addListener(
-            this.elyteConcSlider,
+        this.socSlider.addEventListener(
             'input',
             throttle(() => this.updateDiagram(), this.throttleDuration)
         );
@@ -244,28 +146,15 @@ class LiIonBatteryComponent {
         // Read current state from UI controls
         if (this.socSlider)
             this.currentSoCPercent = parseFloat(this.socSlider.value);
-        if (this.totalLiSlider)
-            this.currentLiTotalNorm = parseFloat(this.totalLiSlider.value);
-        if (this.elyteConcSlider)
-            this.currentElyteConc = parseFloat(this.elyteConcSlider.value);
-
         // Update UI displays
         if (this.socValue)
             this.socValue.textContent = this.currentSoCPercent.toFixed(0);
-        if (this.totalLiValue)
-            this.totalLiValue.textContent = this.currentLiTotalNorm.toFixed(2);
-        if (this.elyteConcValue)
-            this.elyteConcValue.textContent = this.currentElyteConc.toFixed(3);
 
         try {
             // Calculate the new state
             const { traceDefs, calculatedVoltage } = this._calculateState(
                 this.currentSoCPercent,
-                this.currentLiTotalNorm,
-                this.currentElyteConc,
-                this.config,
-                this.showStdStates,
-                this.showAnion
+                this.config
             );
             // Update the diagram
             this.diagram.updateTraceData(traceDefs);
@@ -279,14 +168,7 @@ class LiIonBatteryComponent {
     }
 
     /** Calculation logic specific to Li-ion battery OCV */
-    _calculateState(
-        socPercent,
-        LiTotalNormInput,
-        elyteConc,
-        config,
-        showStd,
-        showAnion
-    ) {
+    _calculateState(socPercent, config) {
         const x_anode = (socPercent + 5) / 105.0;
         const y_cathode = 1.0 - x_anode;
 
@@ -298,46 +180,12 @@ class LiIonBatteryComponent {
         const OCV_cathode = config.cathode_ocv.func(y_cathode);
         const cell_voltage = OCV_cathode - OCV_anode;
 
-        // --- Phase 3: Calculate Primary Potential Lines (V_e, V_Li+) ---
+        // Calculate Primary Potential Lines (V_e, V_Li+) ---
         const V_e_anode = 0;
         const V_Li_plus_elyte = -OCV_anode;
         const V_e_cathode = V_e_anode + cell_voltage;
 
-        // --- Phase 4: Calculate Optional Secondary Potentials ---
-        let V_anion = null,
-            V_STD_Li_plus = null,
-            V_STD_anion = null;
-        if (showStd || showAnion) {
-            const C_STD = config.c_std_M || 1.0;
-            // Use current electrolyte concentration
-            const a_Li_plus = Math.max(
-                ((config.electrolyte?.nu_Li || 1) * elyteConc) / C_STD,
-                1e-9
-            ); // Use stoichiometry if provided
-            const a_anion = Math.max(
-                ((config.electrolyte?.nu_Anion || 1) * elyteConc) / C_STD,
-                1e-9
-            );
-
-            const mu_std_Li_plus = config.li_ion?.mu_standard_J_mol;
-            const mu_std_anion = config.anion?.mu_standard_J_mol;
-            const z_anion = config.anion?.z ?? -1;
-            const V_span_placeholder = config.V_span_placeholder ?? 1.0;
-
-            V_STD_Li_plus = V_Li_plus_elyte - (RT_F / 1) * Math.log(a_Li_plus);
-
-            if (mu_std_Li_plus !== undefined && mu_std_anion !== undefined) {
-                const V_STD_Li_abs = mu_std_Li_plus / (1 * F);
-                const V_STD_anion_abs = mu_std_anion / (z_anion * F);
-                const V_span_calculated = V_STD_Li_abs - V_STD_anion_abs;
-                V_STD_anion = V_STD_Li_plus - V_span_calculated;
-            } else {
-                V_STD_anion = V_STD_Li_plus - V_span_placeholder;
-            }
-            V_anion = V_STD_anion + (RT_F / z_anion) * Math.log(a_anion);
-        }
-
-        // --- Prepare trace definitions ---
+        // Prepare trace definitions ---
         const b = config.boundaries;
         if (!b || b.length !== 8) {
             throw new Error('Invalid boundaries configuration for 7 regions.');
@@ -378,45 +226,6 @@ class LiIonBatteryComponent {
             x: [b[1], b[6]],
             y: [V_Li_plus_elyte, V_Li_plus_elyte],
         });
-
-        // Optional Traces
-        if (showStd) {
-            if (V_STD_Li_plus !== null)
-                traceDefs.push({
-                    id: `li_std_${traceIdSuffix}`,
-                    speciesId: 'li+',
-                    curveType: 'standardState',
-                    showLabel: false,
-                    inputUnits: 'V_volt',
-                    xRange: { min: b[2], max: b[5] },
-                    x: [b[2], b[5]],
-                    y: [V_STD_Li_plus, V_STD_Li_plus],
-                });
-            if (showAnion && V_STD_anion !== null)
-                traceDefs.push({
-                    id: `anion_std_${traceIdSuffix}`,
-                    speciesId: 'anion',
-                    curveType: 'standardState',
-                    showLabel: false,
-                    inputUnits: 'V_volt',
-                    xRange: { min: b[2], max: b[5] },
-                    x: [b[2], b[5]],
-                    y: [V_STD_anion, V_STD_anion],
-                });
-        }
-        if (showAnion) {
-            if (V_anion !== null)
-                traceDefs.push({
-                    id: `anion_elyte_${traceIdSuffix}`,
-                    speciesId: 'anion',
-                    curveType: 'potential',
-                    showLabel: true,
-                    inputUnits: 'V_volt',
-                    xRange: { min: b[2], max: b[5] },
-                    x: [b[2], b[5]],
-                    y: [V_anion, V_anion],
-                });
-        }
 
         const anodePopupData = {
             reaction:
@@ -484,41 +293,6 @@ class LiIonBatteryComponent {
         }
         if (args.y !== undefined) {
             content += `<br>Cathode Lithiation y = ${args.y.toFixed(3)}`;
-        }
-        return content;
-    }
-
-    /** Popup callback specific to this Li-ion component instance */
-    _getTracePopupContent(info) {
-        // 1. Get base content
-        let content = formatPopupBaseContent(info);
-
-        // 2. Add Li-ion specific info
-        const config = this.config;
-        const elyteConc = this.currentElyteConc; // Use stored value
-
-        // Add electrode lithiation state using stored values
-        if (info.regionIndex === 1) {
-            content += `<br>Anode x = ${this.currentXAnode?.toFixed(3) ?? 'N/A'}`;
-        } else if (info.regionIndex === 5) {
-            content += `<br>Cathode y = ${this.currentYCathode?.toFixed(3) ?? 'N/A'}`;
-        }
-        // Add electrolyte info
-        else if (info.regionIndex >= 2 && info.regionIndex <= 4) {
-            // Electrolyte / Separator regions
-            const C_STD = config.c_std_M || 1.0;
-            // Assuming 1:1 salt for activity display
-            const a_Li_plus = Math.max(elyteConc / C_STD, 1e-9);
-            content += `<br>Elyte Conc ≈ ${elyteConc.toFixed(3)} M`;
-            content += `<br>Activity($\\mathrm{Li}^{+}$) ≈ ${a_Li_plus.toFixed(3)}`;
-            if (
-                this.showAnion &&
-                (info.speciesId === 'anion' || info.speciesId === 'li+')
-            ) {
-                const a_anion = Math.max(elyteConc / C_STD, 1e-9); // Assume 1:1
-                const anionName = config.anion?.latexPrettyName || 'Anion';
-                content += `<br>Activity($${anionName}$) ≈ ${a_anion.toFixed(3)}`;
-            }
         }
         return content;
     }

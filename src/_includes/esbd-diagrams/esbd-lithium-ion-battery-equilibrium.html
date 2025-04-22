@@ -13,11 +13,6 @@
         // Define species relevant to Li-ion (can reuse some keys if careful)
         // Note: Using generic 'anion' key for PF6- or similar
         li_ion: { z: 1, color: '#E41A1C', latexPrettyName: '\\mathrm{Li}^{+}' }, // Red for Li+
-        anion: {
-            z: -1,
-            color: '#FF7F00',
-            latexPrettyName: '\\mathrm{PF}_6^{-}',
-        }, // Orange for PF6- (example)
         electron: {
             z: -1,
             color: '#377EB8',
@@ -125,7 +120,7 @@
                 liIonContainerId,
                 liIonConfig
             ); // Instantiate the new component
-            comp.diagram.setVRange(-0.9, 4.4);
+            comp.diagram.setVRange(-1.2, 4.7);
             console.log('LiIonBatteryComponent initialized.');
         } catch (error) {
             console.error(
