@@ -25,7 +25,8 @@ Unlike the previous electrodes however, $\mu_{\mathrm{Li}}$ is not a material co
 
 With that, let's show the electrochemical species band diagram for a lithium ion battery cell:
 
-(...)
+
+{% include "esbd-diagrams/esbd-lithium-ion-battery-equilibrium.html" %}
 
 On the left, we have the negative terminal, where the intercalation host material is graphite. On the right, positive, electrode the intercalation host material is {%wiki "Lithium nickel manganese cobalt oxides", "nickel manganese cobalt oxides" %} (NMC for short). There are many other choices for lithium ion electrode materials, however we'll just focus on the graphite-NMC cell as an example.
 

@@ -2,7 +2,7 @@
 // Component for displaying an ESBD of a Li-ion battery at equilibrium (OCV).
 
 import ElectrochemicalSpeciesBandDiagram from './ElectrochemicalSpeciesBandDiagram.js';
-import { formatPopupBaseContent, debounce } from './utils.js';
+import { formatPopupBaseContent, throttle } from './utils.js';
 
 // --- Physical Constants ---
 const R = 8.31446; // J / (mol K)
@@ -35,6 +35,9 @@ class LiIonBatteryComponent {
                 `Container element ${containerSelector} not found.`
             );
         }
+        this.transitionDuration = 500;
+        this.throttleDuration = 100;
+
         this.config = componentConfig;
         this.diagram = null;
         this.plotDivId = `esbd-plot-${Math.random().toString(36).substring(2, 9)}`;
@@ -141,6 +144,7 @@ class LiIonBatteryComponent {
         if (!this.plotDiv) throw new Error('Plot container div not found.');
         this.diagram = new ElectrochemicalSpeciesBandDiagram(this.plotDivId, {
             height: this.config.plotHeight,
+            transitionDuration: this.transitionDuration,
         });
         // Define species known to the diagram
         this.diagram.addSpeciesInfo(
@@ -200,14 +204,17 @@ class LiIonBatteryComponent {
             if (element) {
                 element.addEventListener(eventType, handler);
             } else {
-                // REVIEW: Added warning if element expected but not found
                 console.warn(
                     `ESBD Component Warn: Element not found for listener (${eventType})`
                 );
             }
         };
 
-        addListener(this.socSlider, 'input', () => this.updateDiagram());
+        addListener(
+            this.socSlider,
+            'input',
+            throttle(() => this.updateDiagram(), this.throttleDuration)
+        );
         addListener(this.showStdCheckbox, 'change', (e) => {
             this.showStdStates = e.target.checked;
             this.updateDiagram();
@@ -216,8 +223,16 @@ class LiIonBatteryComponent {
             this.showAnion = e.target.checked;
             this.updateDiagram();
         });
-        addListener(this.totalLiSlider, 'input', () => this.updateDiagram());
-        addListener(this.elyteConcSlider, 'input', () => this.updateDiagram());
+        addListener(
+            this.totalLiSlider,
+            'input',
+            throttle(() => this.updateDiagram(), this.throttleDuration)
+        );
+        addListener(
+            this.elyteConcSlider,
+            'input',
+            throttle(() => this.updateDiagram(), this.throttleDuration)
+        );
     }
 
     /** Reads inputs, calculates state, updates diagram and outputs */

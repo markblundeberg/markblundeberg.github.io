@@ -1,0 +1,95 @@
+<div
+    class="demo-container"
+    id="LIB-cell-eq-container"
+    style="max-width: 600px"
+></div>
+
+<script type="module">
+    import LiIonBatteryComponent from '/js/LiIonBatteryComponent.js';
+    import { throttle } from '/js/utils.js';
+
+    // Configuration for the Li-ion Battery (Using Langmuir OCV model)
+    const liIonConfig = {
+        // Define species relevant to Li-ion (can reuse some keys if careful)
+        // Note: Using generic 'anion' key for PF6- or similar
+        li_ion: { z: 1, color: '#E41A1C', latexPrettyName: '\\mathrm{Li}^{+}' }, // Red for Li+
+        anion: {
+            z: -1,
+            color: '#FF7F00',
+            latexPrettyName: '\\mathrm{PF}_6^{-}',
+        }, // Orange for PF6- (example)
+        electron: {
+            z: -1,
+            color: '#377EB8',
+            latexPrettyName: '\\mathrm{e}^{-}',
+        }, // Blue for electron
+
+        // Electrode definitions with Langmuir E0 vs Li/Li+
+        anode: {
+            // Graphite (simplified)
+            E0_vs_Li: 0.15, // Approx. standard potential vs Li/Li+ for Langmuir model
+            latexPrettyName: 'Graphite',
+            color: '#666666', // Dark Grey
+        },
+        cathode: {
+            // Generic Oxide (simplified)
+            E0_vs_Li: 3.8, // Approx. standard potential vs Li/Li+ for Langmuir model
+            latexPrettyName: 'Oxide',
+            color: '#E41A1C', // Red (same as Li+ maybe?) or different
+        },
+
+        // Electrolyte properties (assuming 1M LiPF6, ideal activity)
+        electrolyte: {
+            Li_activity: 1.0,
+            anion_activity: 1.0,
+            // Standard potentials for solution ions (optional, needed for V_std lines)
+            // If these are omitted, V_span_placeholder will be used.
+            // li_ion_mu_standard_J_mol: ??? , // Difficult to define for non-aqueous
+            // anion_mu_standard_J_mol: ??? ,
+        },
+
+        // Balancing and SoC
+        Li_total_norm: 0.95, // Total Li relative to one electrode's site capacity (assumed equal)
+        initialSoCPercent: 50, // Start at 50% SoC (relative to anode x)
+
+        // Placeholder for relative standard state potential difference if mu_std not provided
+        V_span_placeholder: 1.0, // Placeholder V_std(Li+) - V_std(Anion) in Volts
+
+        // Spatial Layout (7 regions, 8 boundaries based on previous discussion)
+        // Widths: 0.1 | 0.25 | 0.13 | 0.04 | 0.13 | 0.25 | 0.1
+        boundaries: [0, 0.1, 0.35, 0.48, 0.52, 0.65, 0.9, 1.0],
+        regionProps: [
+            { name: 'Collector 1', color: '#AAAAAA' },
+            { name: 'Anode (Graphite)', color: '#DDDDDD' },
+            { name: 'Electrolyte 1', color: '#E6F5FF' },
+            { name: 'Separator', color: '#FFFFE0' }, // Light yellow for separator
+            { name: 'Electrolyte 2', color: '#E6F5FF' }, // Same electrolyte color
+            { name: 'Cathode (Oxide)', color: '#FFDDDD' }, // Light red for cathode
+            { name: 'Collector 2', color: '#AAAAAA' },
+        ],
+
+        // Plot height
+        plotHeight: 300, // Slightly taller for battery?
+    };
+
+    // Initialize Li-ion Battery Component
+    const liIonContainerId = '#LIB-cell-eq-container';
+    const liIonContainer = document.querySelector(liIonContainerId);
+    if (liIonContainer) {
+        try {
+            // Pass the specific config for the Li-ion battery
+            new LiIonBatteryComponent(liIonContainerId, liIonConfig); // Instantiate the new component
+            console.log('LiIonBatteryComponent initialized.');
+        } catch (error) {
+            console.error(
+                `Failed to initialize LiIonBatteryComponent in ${liIonContainerId}:`,
+                error
+            );
+            liIonContainer.innerHTML = `<p style="color: red;">Error loading Li-ion battery diagram.</p>`;
+        }
+    } else {
+        console.warn(
+            `Container ${liIonContainerId} not found for LiIonBatteryComponent.`
+        );
+    }
+</script>
