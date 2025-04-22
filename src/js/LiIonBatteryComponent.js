@@ -77,10 +77,10 @@ class LiIonBatteryComponent {
         const showAnionId = `showAnion-${instanceId}`;
         const totalLiSliderId = `totalLi-${instanceId}`;
         const elyteConcSliderId = `elyteConc-${instanceId}`;
-        const modeSelectId = `mode-${instanceId}`;
         const voltageOutputId = `volt-out-${instanceId}`; // Give output an ID
 
         this.container.innerHTML = `
+            <div class="plot-container" id="${this.plotDivId}""></div>
             <div class="controls esbd-controls">
                 <div class="control-row">
                     <label class="control-label" for="${socSliderId}">State of Charge (%):</label>
@@ -90,14 +90,6 @@ class LiIonBatteryComponent {
                  <div class="control-row">
                     <label class="control-label" for="${voltageOutputId}">Cell Voltage (OCV):</label>
                     <output class="cell-voltage" id="${voltageOutputId}">?.???</output> V
-                </div>
-                 <div class="control-row">
-                    <label class="control-label" for="${modeSelectId}">Display Mode:</label>
-                    <select class="mode-selector" id="${modeSelectId}" style="margin-left: 10px;">
-                         <option value="Volts" selected>Volts</option>
-                         <option value="eV">eV</option>
-                         <option value="kJmol">kJ/mol</option>
-                    </select>
                 </div>
                 <details class="advanced-controls">
                     <summary style="cursor:pointer; font-size: 0.9em; margin-top: 5px;">Advanced Controls</summary>
@@ -123,7 +115,6 @@ class LiIonBatteryComponent {
                     </div>
                 </details>
             </div>
-            <div class="plot-container" id="${this.plotDivId}""></div>
         `;
     }
 
@@ -132,7 +123,6 @@ class LiIonBatteryComponent {
         this.socSlider = this.container.querySelector('.soc-slider');
         this.socValue = this.container.querySelector('.soc-value');
         this.cellVoltageOut = this.container.querySelector('.cell-voltage');
-        this.modeSelector = this.container.querySelector('.mode-selector');
         this.showStdCheckbox =
             this.container.querySelector('.show-std-checkbox');
         this.showAnionCheckbox = this.container.querySelector(
@@ -218,9 +208,6 @@ class LiIonBatteryComponent {
         };
 
         addListener(this.socSlider, 'input', () => this.updateDiagram());
-        addListener(this.modeSelector, 'change', (e) =>
-            this.diagram.setMode(e.target.value)
-        );
         addListener(this.showStdCheckbox, 'change', (e) => {
             this.showStdStates = e.target.checked;
             this.updateDiagram();
