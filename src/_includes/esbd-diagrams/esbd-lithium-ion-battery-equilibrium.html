@@ -8,7 +8,7 @@
     import LiIonBatteryComponent from '/js/LiIonBatteryComponent.js';
     import { throttle } from '/js/utils.js';
 
-    // Configuration for the Li-ion Battery (Using Langmuir OCV model)
+    // Configuration for the Li-ion Battery
     const liIonConfig = {
         // Define species relevant to Li-ion (can reuse some keys if careful)
         // Note: Using generic 'anion' key for PF6- or similar
@@ -48,6 +48,48 @@
             // anion_mu_standard_J_mol: ??? ,
         },
 
+        // Define electrode
+        charge_units: 'mAh/cm$^{-2}$',
+        default_Li_inventory: 5.0,
+        cathode_ocv: {
+            // NMC cathode OCV curve
+            // From Chang-Hui Chen, Ferran Brosa Planella, Kieran O’Regan, Dominika Gastol, W.
+            // Dhammika Widanage, and Emma Kendrick. "Development of Experimental Techniques for
+            // Parameterization of Multi-scale Lithium-ion Battery Models." Journal of the
+            // Electrochemical Society 167 (2020): 080534.
+            span_charge: 5.0,
+            func: (x) => {
+                // x from 0 to 1
+                const sto = 0.25 + x * 0.75; // map x=0 to 0.25 and x=1 to 1.0
+                return (
+                    -0.809 * sto +
+                    4.4875 -
+                    0.0428 * Math.tanh(18.5138 * (sto - 0.5542)) -
+                    17.7326 * Math.tanh(15.789 * (sto - 0.3117)) +
+                    17.5842 * Math.tanh(15.9308 * (sto - 0.312))
+                );
+            },
+        },
+        anode_ocv: {
+            // Graphite anode OCV curve
+            // From Chang-Hui Chen, Ferran Brosa Planella, Kieran O’Regan, Dominika Gastol, W.
+            // Dhammika Widanage, and Emma Kendrick. "Development of Experimental Techniques for
+            // Parameterization of Multi-scale Lithium-ion Battery Models." Journal of the
+            // Electrochemical Society 167 (2020): 080534.
+            span_charge: 5.0,
+            func: (x) => {
+                // x from 0 to 1
+                const sto = x;
+                return (
+                    1.9793 * Math.exp(-39.3631 * sto) +
+                    0.2482 -
+                    0.0909 * Math.tanh(29.8538 * (sto - 0.1234)) -
+                    0.04478 * Math.tanh(14.9159 * (sto - 0.2769)) -
+                    0.0205 * Math.tanh(30.4444 * (sto - 0.6103))
+                );
+            },
+        },
+
         // Balancing and SoC
         Li_total_norm: 0.95, // Total Li relative to one electrode's site capacity (assumed equal)
         initialSoCPercent: 50, // Start at 50% SoC (relative to anode x)
@@ -71,6 +113,7 @@
         // Plot height
         plotHeight: 300, // Slightly taller for battery?
     };
+    window.liIonConfig = liIonConfig;
 
     // Initialize Li-ion Battery Component
     const liIonContainerId = '#LIB-cell-eq-container';
@@ -78,7 +121,11 @@
     if (liIonContainer) {
         try {
             // Pass the specific config for the Li-ion battery
-            new LiIonBatteryComponent(liIonContainerId, liIonConfig); // Instantiate the new component
+            const comp = new LiIonBatteryComponent(
+                liIonContainerId,
+                liIonConfig
+            ); // Instantiate the new component
+            comp.diagram.setVRange(-0.9, 4.4);
             console.log('LiIonBatteryComponent initialized.');
         } catch (error) {
             console.error(

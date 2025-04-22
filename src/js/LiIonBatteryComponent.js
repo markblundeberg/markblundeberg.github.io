@@ -287,46 +287,21 @@ class LiIonBatteryComponent {
         showStd,
         showAnion
     ) {
-        // --- Phase 1: Determine Lithiation State ---
-        const x_min = config.anode?.x_min ?? 0.01;
-        const x_max = config.anode?.x_max ?? 0.99;
-        const y_min = config.cathode?.y_min ?? 0.01;
-        const y_max = config.cathode?.y_max ?? 0.99;
-
-        // Clamp total Li used in calculation to valid range based on min/max limits
-        // Min possible sum: x_min + y_min
-        // Max possible sum for full range: x_max + y_min == x_min + y_max (assuming equal spans)
-        const LiTotalNorm = Math.max(
-            x_min + y_min,
-            Math.min(x_max + y_min, LiTotalNormInput)
-        );
-
-        // Calculate the amount of lithium that can actually be shifted between electrodes
-        const Li_movable = LiTotalNorm - (x_min + y_min);
-        const socFrac = socPercent / 100.0;
-        const x_anode = x_min + Li_movable * socFrac;
-        const y_cathode = y_min + Li_movable * (1.0 - socFrac);
+        const x_anode = (socPercent + 5) / 105.0;
+        const y_cathode = 1.0 - x_anode;
 
         // Store calculated values for popup use
         this.currentXAnode = x_anode;
         this.currentYCathode = y_cathode;
 
-        // --- Phase 2: Determine Electrode OCVs using Langmuir model ---
-        const E0_anode = config.anode?.E0_vs_Li ?? 0.15;
-        const E0_cathode = config.cathode?.E0_vs_Li ?? 3.8;
-        // Langmuir term: ln(x/(1-x)) - ensure x is strictly between 0 and 1
-        const langmuir_term = (x) => {
-            const x_safe = Math.max(1e-9, Math.min(1.0 - 1e-9, x));
-            return (RT_F / 1) * Math.log(x_safe / (1 - x_safe));
-        };
-        const OCV_anode = E0_anode - langmuir_term(x_anode);
-        const OCV_cathode = E0_cathode - langmuir_term(y_cathode);
+        const OCV_anode = config.anode_ocv.func(x_anode);
+        const OCV_cathode = config.cathode_ocv.func(y_cathode);
+        const cell_voltage = OCV_cathode - OCV_anode;
 
         // --- Phase 3: Calculate Primary Potential Lines (V_e, V_Li+) ---
-        const V_Li_plus_elyte = 0; // Set electrolyte Li+ potential as reference V=0
-        const V_e_anode = OCV_anode; // V_e = OCV vs Li/Li+ when V_Li+ = 0 ref
-        const V_e_cathode = OCV_cathode;
-        const cell_voltage = V_e_cathode - V_e_anode;
+        const V_e_anode = 0;
+        const V_Li_plus_elyte = -OCV_anode;
+        const V_e_cathode = V_e_anode + cell_voltage;
 
         // --- Phase 4: Calculate Optional Secondary Potentials ---
         let V_anion = null,
@@ -399,8 +374,8 @@ class LiIonBatteryComponent {
             curveType: 'potential',
             showLabel: true,
             inputUnits: 'V_volt',
-            xRange: { min: b[2], max: b[5] },
-            x: [b[2], b[5]],
+            xRange: { min: b[1], max: b[6] },
+            x: [b[1], b[6]],
             y: [V_Li_plus_elyte, V_Li_plus_elyte],
         });
 
@@ -450,7 +425,7 @@ class LiIonBatteryComponent {
             x: this.currentXAnode, // Pass lithiation state
         };
         this.diagram.updateVerticalMarker('anode_eq', {
-            x: b[2], // Anode/Elyte1 interface boundary index
+            x: 0.5 * (b[1] + b[2]), // Anode/Elyte1 interface boundary index
             y1: V_e_anode, // Electron potential (speciesId1 = 'electron')
             y2: V_Li_plus_elyte, // Li+ potential (speciesId2 = 'li+')
             inputUnits: 'V_volt', // Units of potentials passed
@@ -464,7 +439,7 @@ class LiIonBatteryComponent {
             y: this.currentYCathode, // Pass lithiation state
         };
         this.diagram.updateVerticalMarker('cathode_eq', {
-            x: b[5], // Elyte2/Cathode interface boundary index
+            x: 0.5 * (b[5] + b[6]), // Elyte2/Cathode interface boundary index
             y1: V_e_cathode, // Electron potential (speciesId1 = 'electron')
             y2: V_Li_plus_elyte, // Li+ potential (speciesId2 = 'li+')
             inputUnits: 'V_volt',
