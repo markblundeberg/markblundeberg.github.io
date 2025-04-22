@@ -59,7 +59,8 @@ For the next topic, we'll return to general discussions.
 <summary>
 Click to open extended discussion.
 </summary>
-
+#}
+{#
 Gemini suggested outline
 
 Proposed Structure & Main Points:
@@ -111,4 +112,22 @@ Solid Electrolyte Interphase (SEI): Briefly explain its formation on the anode d
 Kinetics & Operating Voltage: Explain that the OCV is the equilibrium potential. When current flows, overpotentials (due to charge transfer resistance, ion transport limits in electrolyte/solids) cause the actual operating voltage to be lower during discharge and higher during charge than the OCV. Show a simple diagram illustrating this deviation.
 Energy Density vs. Power Density: Briefly relate the voltage (from Δμ_Li) and capacity (amount of Li stored) to energy density, and relate kinetics/overpotentials to power density.
 
+
+===
+
+Kinetics ideas:
+- Just draw a sketch.
+- V_Li+ gradient inside electrodes.
+- TWO distinct V_Li+ levels in cathode representing 'desync' of in-particle Li+ vs in-solution Li+.
+- Noticeable V_e- gradient in cathode due to electron hopping being low conductivity.
+- Overall V_Li+ gradient in the electrolyte (linear?), and a sudden V_Li+ voltage drop across the SEI (SEI resistance).
+
+Kinetics 1 particle:
+- Let's say we're discharging fast from 100% and we have reached 50%.
+- Look at a single graphite spherical particle.
+- Let's say center SoC is 70-80% (100mV) and surface is 30% (150 mV)
+- Draw V_Li+ as parabola going from V_e- - 100mV at center down to V_e- - 150mV at surface.
+- Draw a further drop of V_Li+ of ~50 mV going through the SEI.
+
+"The total overpotential was estimated around 400 mV in our example. The SEI drop (estimated at 50 mV) is a noticeable chunk (~12.5%), but not necessarily the single dominant factor in that specific scenario. Other factors contributed comparable amounts (e.g., electrolyte 50mV, anode kinetics ~100mV, cathode kinetics/ohmic ~200mV)."
 #}
