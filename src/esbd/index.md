@@ -127,7 +127,7 @@ Basics:
 - _Junctions_ - Salt bridges and ion membranes.
 
 Advanced:
-- [_Potentials_](std-electrochem/) - How the usual potentials of electrochemistry relate to $V_i$.
+- [_Potentials_](potentials/) - How the usual potentials of electrochemistry relate to $V_i$.
 - _Semiconductors_ - Electrons and holes, and classic band diagrams. {# comes after solutions so we can talk in detail about electron and hole standard states vs band edges. #}
 - _Corrosion_ - Local inhomogeneities
 - _General electrodes_ - Gas, redox, multi-ion, and lead acid batteries.
