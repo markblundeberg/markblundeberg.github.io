@@ -86,7 +86,7 @@ $$ \mathrm{pH} = \frac{V^\ominus_{\mathrm{H}^+} - V_{\mathrm{H}^+}}{59~\mathrm{m
 ## Takeaways
 
 
-[**NEXT TOPIC: aaaaa**](../aaaaa/)
+[**NEXT TOPIC: Semiconductors**](../semiconductors/)
 
 {#   
 
@@ -96,8 +96,4 @@ $$ \mathrm{pH} = \frac{V^\ominus_{\mathrm{H}^+} - V_{\mathrm{H}^+}}{59~\mathrm{m
 <summary>
 Click to open extended discussion.
 </summary>
-#}
-
-{#
-"...These standard state potentials (V^⊖ᵢ or Y^⊖ᵢ) form a rigid 'ladder' whose relative positions are fixed by thermodynamics. Conceptually, these standard state lines function much like conduction and valence band edges (E<sub>C</sub>, E<sub>V</sub>) do in semiconductor physics – they act as reference energy/potential levels. The actual potential (Vᵢ) deviates from this reference based on the 'filling level' or activity (aᵢ), just as the Fermi level (μ̄ₑ⁻) sits relative to the band edges based on carrier concentration. (For readers interested in the precise mathematical relationship between standard states and band edge energies, which involves factors like effective mass and temperature, please see the Appendix.)"
 #}
