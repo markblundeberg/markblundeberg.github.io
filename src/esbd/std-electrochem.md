@@ -15,17 +15,13 @@ So far we've mostly avoided describing the connections to the various potentials
 
 ## The electrostatic potential $\phi$
 
-We have no fundamental physical basis to assign an electrostatic potential $\phi$ inside of materials, only conventions that vary from material to material. Although $\phi$ is well defined in vacuum, it offers only false hope when it comes to defining $\phi$ in bulk materials, since $\phi$ in vacuum is a mess that varies capriciously from place to place based on surface conditions and surface contaminations.
-
 At least for water-based solutions, the relationship between $\phi$ and our $V_i$ values comes about via a convention that the Gibbs formation energy of ideal standard-state $\mathrm{H}^+$ is 0 at all conditions. This may seem unphysical, but $\mathrm{H}^+$ will always come together neutrally with other ions, and the Gibbs energies of the other ions can 'absorb the error' so to speak, so it works out thermodynamically. With our $V_i$'s we've adopted the convention of setting chemical potentials based on Gibbs formation energies, therefore this means we can take $\mu^\ominus_{\mathrm{int},\mathrm{H}^+} = 0$ under all conditions. Since $V^\ominus_{\mathrm{H}^+} = \phi + \mu^\ominus_{\mathrm{int},\mathrm{H}^+}/F$, then,
 
 $$ V^\ominus_{\mathrm{H}^+} = \phi.$$
 
 In the below I'll just use $V^\ominus_{\mathrm{H}^+}$ but you can sub in $\phi$.
 
-There is also the question of which convention we should use to assign $\phi$ inside metals. Anyway, since voltmeters measure $V_\mathrm{e}^-$, not $\phi$, this lets us sidestep the question of which $\phi$ value we choose inside metals.
-
-Accordingly, the change in $\phi$ at interfaces / junctions is not useful, except for the case of water-to-water junctions. In that case, the step $\Delta \phi = \Delta V^\ominus_{\mathrm{H}^+}$ is known as Galvani potential or liquid junction potential.
+There are various debates about the reality of $\phi$ in materials, whether it is measurable or not, which convention to use for $\phi$ in metals, and so on, however I'll leave those for a later topic. For the moment let's focus on how measurables relate to the new $V_i$ quantities.
 
 ## Standard hydrogen electrode (SHE)
 
@@ -39,11 +35,11 @@ $$ V_{\mathrm{e}^-}(\text{SHE}) = V^\ominus_{\mathrm{H}^+} - \frac{\mu^\ominus_{
 
 A further simplification occurs if we are at the standard reference temperature (usually 25&nbsp;°C): $\mu^\ominus_{\mathrm{H}_2}(T) = 0$. Therefore we can say for short that $ V_{\mathrm{e}^-}(\text{SHE}) = V^\ominus_{\mathrm{H}^+} $ if we're operating at standard temperature.
 
-Practically, it's not actually necessary to achieve these ideal conditions (such as the extreme pH of 0 implied by `a_H⁺ = 1`), nor is it desirable given the uncertainties about when unit activity is exactly reached. Instead, the most precise determinations of potentials relative to the SHE reference point are made using cells without liquid junctions (like the Harned cell) where measurements are performed in well-defined dilute solutions. The results are then extrapolated back to the idealized standard state conditions. In this sense, any reference to $V_{\mathrm{e}^-}(\text{SHE})$ represents this theoretical, extrapolated potential defined relative to the standard state of the aqueous proton, $V^\ominus_{\mathrm{H}^+}$.
+Practically, it's not actually necessary to achieve these ideal conditions (such as the extreme pH of 0 implied by $a_{\mathrm{H}^+} = 1$), nor is it even desirable to do so, given the uncertainties about when unit activity is exactly reached. Instead, the most precise determinations of potentials relative to the SHE reference point are made using cells without liquid junctions (like the Harned cell) where measurements are performed in well-defined dilute solutions. The results are then extrapolated back to the idealized standard state conditions. In this sense, any reference to $V_{\mathrm{e}^-}(\text{SHE})$ represents this theoretical, extrapolated potential defined relative to the standard state of the aqueous proton, $V^\ominus_{\mathrm{H}^+}$.
 
 ## Reduction potentials
 
-Generally, electrode potentials / reduction potentials are defined operationally via measurements referenced to the SHE:
+Generally, reduction potentials are defined operationally via measurements referenced to the SHE:
 
 $$ E(\text{target}) = V_{\mathrm{e}^-}(\text{target}) - V_{\mathrm{e}^-}(\text{SHE}). $$
 
@@ -53,49 +49,59 @@ Substituting the expression we found for $V_{\mathrm{e}^-}(\text{SHE})$:
 $$ E(\text{target}, T) = V_{\mathrm{e}^-}(\text{target}, T) - \left[ V^\ominus_{\mathrm{H}^+}(aq, T) - \frac{\mu^\ominus_{\mathrm{H}_2}(T)}{2F} \right] $$
 $$ E = V_{\mathrm{e}^-} - V^\ominus_{\mathrm{H}^+} + \frac{\mu^\ominus_{\mathrm{H}_2}(T)}{2F} $$
 
-This equation provides the precise link between the electrode potential $E$ and the $V_i$ levels at any temperature $T$. Again, for simplicity, near 25°C where $\mu^\ominus_{\mathrm{H}_2}(T) \approx 0$, the small $\mu^\ominus_{\mathrm{H}_2}(T)$ term is neglected, leading to the common approximation:
+This equation provides the precise link between the reduction potential $E$ and the $V_i$ levels at any temperature $T$. Again, for simplicity, near 25°C where $\mu^\ominus_{\mathrm{H}_2}(T) \approx 0$, the small $\mu^\ominus_{\mathrm{H}_2}(T)$ term is neglected:
 
 $$ E \approx V_{\mathrm{e}^-} - V^\ominus_{\mathrm{H}^+} $$
 
-(And this corresponds to $E \approx -\tfrac{1}{F}\bar\mu_{\mathrm{e}^-} - \phi$, and expression sometimes seen.)
+(And this corresponds to a commonly-seen expression $E = -\tfrac{1}{F}\bar\mu_{\mathrm{e}^-} - \phi$.)
 
-Since $V^\ominus_{\mathrm{H}^+}$ itself serves as a reference point for the $V^\ominus_{i}$ standard state ladder, this means the electrode potential describes the position of the electron species voltage relative to the standard state ladder.
+Since $V^\ominus_{\mathrm{H}^+}$ itself serves as a reference point for the $V^\ominus_{i}$ standard state ladder, this means the reduction potential describes the position of the electron species voltage relative to the standard state ladder.
 
-It is not even necessary for there to be an actual electrode present, such as with in-solution redox couples.. Redox couples define an effective $V_{\mathrm{e}^-}$ (such as $V_{\mathrm{e}^-} = 3V_{\mathrm{Fe}^{3+}} - 2V_{\mathrm{Fe}^{2+}} $ for the $\mathrm{Fe}^{2+}$-$\mathrm{Fe}^{3+}$ couple) and thus they have a reduction potential, usually called redox potential.
+It is not even necessary for there to be an actual electrode present, such as with in-solution redox couples. Redox couples define an effective $V_{\mathrm{e}^-}$ (such as $V_{\mathrm{e}^-} = 3V_{\mathrm{Fe}^{3+}} - 2V_{\mathrm{Fe}^{2+}} $ for the $\mathrm{Fe}^{2+}$-$\mathrm{Fe}^{3+}$ couple) and thus they have a reduction potential, usually called redox potential.
 
 ## Standard reduction potentials
 
 Consider a metal electrode and its reduction reaction:
 
-$$ \mathrm{M}^{n+} + n \mathrm{e}^- \rightleftharpoons \mathrm{M(s)}$$
+$$ \mathrm{M}^{n+} + n \mathrm{e}^- \rightleftharpoons \mathrm{M(s)} , $$
 
-Giving as usual our $V_i$ difference:
+giving as usual our $V_i$ difference:
 
 $$ V_{\mathrm{M}^{n+}} - V_{\mathrm{e}^-} = \frac{1}{nF} \mu_{\mathrm{M(s)}} .$$
 
-The standard reduction potential $E^\ominus$ is the value of $E$ when the $M$ ions have unit activity ($V_{\mathrm{M}^{n+}} = V^\ominus_{\mathrm{M}^{n+}}$) and the metal is in its standard state ($\mu_{\mathrm{M(s)}} = \mu^\ominus_{\mathrm{M(s)}}$). Substituting the precise expression for $E$ (valid at any temperature T) into this gives:
+The **standard reduction potential** $E^\ominus_{\mathrm{M}}$ is the value of $E$ when:
 
-$$ E^\ominus(T) = V^\ominus_{\mathrm{M}^{n+}}(T) - V^\ominus_{\mathrm{H}^+}(T) - \frac{1}{nF} \mu^\ominus_{\mathrm{M(s)}}(T) + \frac{\mu^\ominus_{\mathrm{H}_2}(T)}{2F} .$$
+* $\mathrm{M}^{n+}$ ions have unit activity ($V_{\mathrm{M}^{n+}} = V^\ominus_{\mathrm{M}^{n+}}$).
+* The temperature is 25&nbsp;°C and the pressure is 1 bar (actually, 1 atm is commonly used but we'll ignore this distinction).
 
-This is the general expression relating the standard potential at temperature T to the standard state potentials of the species involved.
+Plugging the above definition of $E$, we get:
 
-If we specifically consider the standard reference conditions (25°C and 1 bar) then by convention, the standard chemical potentials of elements in their stable reference states are zero: $\mu^\ominus_{\mathrm{M(s)}} = 0$ and $\mu^\ominus_{\mathrm{H}_2} = 0$. Under these specific conditions, the equation simplifies to:
+$$ E^\ominus_{\mathrm{M}} = V^\ominus_{\mathrm{M}^{n+}} - V^\ominus_{\mathrm{H}^+} .$$
 
-$$ E^\ominus = V^\ominus_{\mathrm{M}^{n+}} - V^\ominus_{\mathrm{H}^+} .$$
+(where we have used $\mu^\ominus_{\mathrm{M(s)}} = 0 $ and $\mu^\ominus_{\mathrm{H}_2} = 0$ under these standard conditions)
 
-Thus, at the standard reference conditions, our $V^\ominus_i$ ladder (relative to $V^\ominus_{\mathrm{H}^+}$) directly maps onto the standard reduction potentials $E^\ominus$. At other conditions, however, the small offsets due to the non-zero $\mu^\ominus_{\mathrm{M(s)}}$ and $\mu^\ominus_{\mathrm{H}_2}$ do affect this correpondence.
+Thus, our $V^\ominus_i$ ladder (relative to $V^\ominus_{\mathrm{H}^+}$) directly maps onto the standard reduction potentials $E^\ominus_{\mathrm{M}}$.
 
 ## pH
 
+The pH of a solution is defined thus:
+
 $$ \mathrm{pH} = -\log_{10}(a_{\mathrm{H}^+}) = -\frac{\ln(a_{\mathrm{H}^+})}{\ln(10)} = -\frac{1}{\ln(10)} \frac{F}{RT}(V_{\mathrm{H}^+} - V^\ominus_{\mathrm{H}^+})$$
 
-At 25 deg C (where $RT/F \approx 25.69$ mV and $\ln(10) \approx 2.303$):
+At 25&nbsp;°C, where $\ln(10)RT/F \approx 59.16~\mathrm{mV}$, this is:
 
-$$ \mathrm{pH} \approx \frac{V^\ominus_{\mathrm{H}^+} - V_{\mathrm{H}^+}}{59.16~\mathrm{mV}}$$
+$$ \mathrm{pH} \approx \frac{V^\ominus_{\mathrm{H}^+} - V_{\mathrm{H}^+}}{59.16~\mathrm{mV}}.$$
 
+So $\mathrm{pH}$ is a kind of scaled voltage analogous to reduction potential $E$; this is not surprising since the best pH measurements are done electrically. A pH of 0 corresponds to $V^\ominus_{\mathrm{H}^+} - V_{\mathrm{H}^+} = 0$, a pH of 7 corresponds to $V^\ominus_{\mathrm{H}^+} - V_{\mathrm{H}^+} = 0.414~\mathrm{V}$, and a pH of 14 corresponds to $V^\ominus_{\mathrm{H}^+} - V_{\mathrm{H}^+} = 0.828~\mathrm{V}$.
 
-## Pourbaix diagrams
+As an aside, it is common to plot the value of $E$ in a solution against its $\mathrm{pH}$ value, yielding a quasi-phase diagram known as as the {%wiki "Pourbaix diagram" %}. Note the similarity between the two axes' definitions:
 
+\begin{align}
+E & =  V_{\mathrm{e}^-} - V^\ominus_{\mathrm{H}^+} \notag \\\\
+ \mathrm{pH} & \propto V^\ominus_{\mathrm{H}^+} - V_{\mathrm{H}^+} \notag
+\end{align}
+
+This suggests that it is interesting to instead plot the voltage quantity $V^\ominus_{\mathrm{H}^+} - V_{\mathrm{H}^+}$ on the bottom axis, so that both axes will have volt units. The usual characteristic thermal slopes on a Pourbaix diagram would then be converted to simple fractional slopes such as 1:1, 1:2, and so on, directly reflecting the number of electrons and protons that are transferred when converting the species on one side to the other.
 
 ## Takeaways
 
