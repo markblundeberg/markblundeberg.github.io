@@ -45,7 +45,7 @@ Let's plot this on a band diagram:
 
 {% include "esbd-diagrams/esbd-ag-agcl-electrode.html" %}
 
-The diagram shows the actual quantitative step $V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}$. Let's calculate it now, assuming standard temperature and pressure. Since chemical potentials are partial molar Gibbs free energy, we can just look up the Gibbs free energies of formation in a table: $\mu_{\mathrm{Ag}} = 0~\mathrm{kJ/mol}$ and $\mu_{\mathrm{AgCl}} = -109.8~\mathrm{kJ/mol}$ at standard temperature and pressure (STP). Note that we use the common convention that $\mu=0$ for elements in their most stable form, at STP. Plug those in with the faraday constant, and we get:
+The diagram shows the actual quantitative step $V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}$. Let's calculate it now, assuming standard temperature and pressure. Since chemical potentials are partial molar Gibbs free energy, we can just look up the Gibbs free energies of formation in a table: $\mu_{\mathrm{Ag}} = 0~\mathrm{kJ/mol}$ and $\mu_{\mathrm{AgCl}} = -109.8~\mathrm{kJ/mol}$ at standard conditions. Note that we use the common convention that $\mu=0$ for elements in their most stable form, at the standard reference conditions (25&nbsp;°C and 1 bar). Plug those in with the faraday constant, and we get:
 
 $$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} = +1.138~\mathrm{V}$$
 
@@ -70,16 +70,15 @@ $$ V_{\mathrm{Zn}^{2+}} - V_{\mathrm{e}^-} =  \frac{1}{2F} \mu_{\mathrm{Zn}} $$
 
 Plotting the ESBD now,
 
-{# TODO - also fix mentions of STP on this page !!! #}
 (....)
 
 It's a flat line with $V_{\mathrm{Zn}^{2+}} = V_{\mathrm{e}^-}$.
 
-Don't mistake this flat connection as being required for equilibrium in general. We assumed the zinc metal is at STP, and we have adopted the convention that elements in most stable form have $\mu=0$ at STP, and indeed the zinc metal is the most stable form of $\mathrm{Zn}$. So, $\mu_{\mathrm{Zn}} = 0$ and thus $V_{\mathrm{Zn}^{2+}} - V_{\mathrm{e}^-} = 0$. Yet, away from STP we may have $\mu_{\mathrm{Zn}} \neq 0$ and still have equilibrium. In the previous $\mathrm{AgCl}$ example, we also had a large ~1 V step, and it was also at equilibrium.
+Don't mistake this flat connection as being required for equilibrium in general, as it's only an 'accidental' consequence of $\mu_{\mathrm{Zn}}$ being zero under our conditions and conventions: the zinc metal is at standard reference conditions, and we have adopted the convention that elements in most stable form have $\mu=0$, and indeed the zinc metal is the most stable form of $\mathrm{Zn}$. So, $\mu_{\mathrm{Zn}} = 0$ and thus $V_{\mathrm{Zn}^{2+}} - V_{\mathrm{e}^-} = 0$. Yet, away from standard conditions will have $\mu_{\mathrm{Zn}} \neq 0$ and thus have equilibrium with $V_{\mathrm{Zn}^{2+}} \neq V_{\mathrm{e}^-}$. In the previous $\mathrm{AgCl}$ example, we also had a large ~1 V step, and it was also at equilibrium.
 
 ## Takeaways
 
-The main point is that at electrodes,
+The main point is that at electrodes reacting with a single species of ion,
 * We get a relative step up or down going from $V_{\mathrm{e}^-}$ to $V_{\mathrm{ion}}$.
 * The quantitative value of that step at equilibrium depends on the chemical potentials of neutral species, depending on the specifics of the reaction.
 * This step should not be confused with the electrode potential of standard electrochemistry.
@@ -101,13 +100,13 @@ At the silver electrode, we have $\mathrm{Ag} \rightleftharpoons \mathrm{Ag^{+}}
 
 $$ V_{\mathrm{Ag}^{+}} - V_{\mathrm{e}^-} =  \frac{1}{F} \mu_{\mathrm{Ag}} = 0~\mathrm{V}$$
 
-Again, 0 V because we're assuming STP and this is the elemental standard reference state of silver. Together with the previous reaction I gave, this also sets a difference in the solution:
+Again, 0 V because we're assuming standard conditions and this is the elemental standard reference state of silver. Together with the previous reaction I gave, this also sets a difference in the solution:
 
 $$ V_{\mathrm{Cl}^-} - V_{\mathrm{Ag}^{+}} =  - \frac{1}{F}\mu_{\mathrm{AgCl}} = 1.138~\mathrm{V}$$
 
 And note that we could have gotten this equation directly based on the dissociation reaction $\mathrm{AgCl} \rightleftharpoons \mathrm{Ag^{+}} + \mathrm{Cl}^-$. In other words, as far as equilibrium is concerned, the $\mathrm{AgCl}$ just acts to dissolve until saturation (it doesn't take much -- silver chloride has a quite low solubility in water).
 
-It is interesting though that this 1.138&nbsp;V value does not directly depend on the actual concentration of ions. In contrast, the electrode potential of standard electrochemistry _does_ depend on chloride concentration: a massive excess of $\mathrm{Cl}^-$ ions are typically supplied by dissolving $\mathrm{KCl}$ salt into the solution at a concentration of 0.5 to 3 mol/L, and the commonly quoted value of 0.222&nbsp;V refers specifically to the case of 'unit activity' of chloride ions, which occurs around 2 mol/L of dissolved $\mathrm{KCl}$.
+We saw the $V_i$ step does not depend at all on the actual concentration of ions. In contrast, the electrode potential of standard electrochemistry _does_ depend on chloride concentration: a massive excess of $\mathrm{Cl}^-$ ions are typically supplied by dissolving $\mathrm{KCl}$ salt into the solution at a concentration of 0.5 to 3 mol/L, and the commonly quoted value of 0.222&nbsp;V refers specifically to the case of 'unit activity' of chloride ions, which occurs around 2 mol/L of dissolved $\mathrm{KCl}$.
 
 Let's use the definition of electrode potential, $E = V_{\mathrm{e}^-} - \phi$, together with the value we found for $V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} = \frac{1}{F} ( \mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}} ) = 1.138~\mathrm{V}$, and finally substitute the partitioned form $V_{\mathrm{Cl}^-} = \phi -\frac{1}{F}\mu^\ominus_{\mathrm{Cl}^-} - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-})$. Then we get:
 
