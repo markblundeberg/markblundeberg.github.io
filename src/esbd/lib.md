@@ -21,10 +21,9 @@ thereby setting the chemical potential of $\mathrm{Li}$ via $ \bar\mu_{\mathrm{L
 
 $$ V_{\mathrm{Li}^+} - V_{\mathrm{e}^-} =  \frac{1}{F} \mu_{\mathrm{Li}}.$$
 
-Unlike the previous electrodes however, $\mu_{\mathrm{Li}}$ is not a material constant but varies depending on the amount of $\mathrm{Li}$ or $\mathrm{Li}^+$ present in the electrode, as well as the nature of the electrode material that hosts the lithium. Thus, we will see variations in the step $V_{\mathrm{Li}^+} - V_{\mathrm{e}^-}$.
+Unlike the previous electrodes however, $\mu_{\mathrm{Li}}$ is not a material constant but varies depending on the amount of $\mathrm{Li}$ or $\mathrm{Li}^+$ present in the electrode, as well as the nature of the electrode material that hosts the lithium. Thus, we will see variations in the step $ V_{\mathrm{e}^-} - V_{\mathrm{Li}^+} $.
 
 With that, let's show the electrochemical species band diagram for a lithium ion battery cell:
-
 
 {% include "esbd-diagrams/esbd-lithium-ion-battery-equilibrium.html" %}
 
@@ -32,17 +31,15 @@ On the left, we have the negative terminal, where the intercalation host materia
 
 In the middle is the electrolyte / separator. Its job is simple: 1) allow $\mathrm{Li}^+$ ions to flow smoothly (keeping $V_{\mathrm{Li}^+}$ flat), and 2) do not permit electrons to flow (providing a break in $V_{\mathrm{e}^-}$), nor anything else. To allow an appreciable density of $\mathrm{Li}^+$, the electrolyte also contains some counterions ($\mathrm{PF}_6^-$) to maintain charge neutrality, however they otherwise do not significantly influence the cell operation.
 
-The fact that the step $V_{\mathrm{Li}^+} - V_{\mathrm{e}^-}$ is so hugely different on the left and right sides reflects how weakly bound the lithium ions are in graphite, compared to NMC. And of course this difference in step sizes is what sets the voltage of the cell, $V_{\mathrm{e}^-}(\text{right}) -  V_{\mathrm{e}^-}(\text{left}) \approx 3\text{--}4~\mathrm{V}$. We can also see however that the step size varies with the state of charge: at a nominal 0% charge, most of the lithium is in the NMC (increasing its $\mu_{\mathrm{Li}}$), and at a nominal 100% charge level, most of the lithium has moved into the graphite (increasing its $\mu_{\mathrm{Li}}$).
+The fact that the step $V_{\mathrm{e}^-} - V_{\mathrm{Li}^+}$ is so hugely different on the left and right sides reflects how weakly bound the lithium ions are in graphite, compared to NMC. And of course this difference in step sizes is what sets the voltage of the cell. We can also see however that the step size varies with the state of charge: at a nominal 0% charge, most of the lithium is in the NMC (increasing its $\mu_{\mathrm{Li}}$), and at a nominal 100% charge level, most of the lithium has moved into the graphite (increasing its $\mu_{\mathrm{Li}}$).
 
-Below I've plotted the step $V_{\mathrm{Li}^+} - V_{\mathrm{e}^-}$ for both graphite and NMC used for the above plot. (this is based on publicly available experimental data [cite]; it is far beyond our scope here to model!)
+In the lithium-ion battery field, the step size is known as the OCV value, and I adopted OCV curves from the following open-access paper:
 
-(...)
+> [Chen et al. 2020 "Development of Experimental Techniques for Parameterization of Multi-scale Lithium-ion Battery Models"](https://dx.doi.org/10.1149/1945-7111/ab9050)
+>
+> Equations 8 and 9, which are fits to Figure 12.
 
-These curves are known in the field as OCV curves (open circuit voltage). Technically, OCV curves are measured for each electrode against a pure lithium metal reference, but since we use an elemental reference of $\mu_{\mathrm{Li(metal)}}=0$, the OCV curve is one and the same as $V_{\mathrm{e}^-} - V_{\mathrm{Li}^+}$.
-
-
-
-
+(OCV curves are measured for each electrode sepearately against a pure lithium metal reference electrode, and so $\mathrm{OCV} = V_{\mathrm{e}^-} - V_{\mathrm{Li}^+} + \mu_{\mathrm{Li(metal)}}$. We're assuming standard reference conditions where $\mu_{\mathrm{Li(metal)}}=0$, and so $\mathrm{OCV} = V_{\mathrm{e}^-} - V_{\mathrm{Li}^+}$.)
 
 ## Takeaways
 
