@@ -1,23 +1,23 @@
 ---
 layout: layouts/base.njk
-title: 'Traditional electrochemistry'
+title: 'Potentials'
 tags: [page, esbd_topic] # Assign to 'page' and 'esbd_topic' collections
 orderESBD: 5
 eleventyNavigation:
-    key: Traditional electrochemistry # Text used in navigation menus
+    key: Potentials # Text used in navigation menus
     parent: ESBD # Optional: Assumes you have a main 'ESBD' menu item defined elsewhere
     order: 1 # Order within the parent menu
 ---
 
 # {{title}}
 
-So far we've mostly avoided describing the connections to the standard electrochemistry quantifiers, but let's state them now.
+So far we've mostly avoided describing the connections to the various potentials found in standard electrochemistry, but let's state them now.
 
 ## The electrostatic potential $\phi$
 
-The relationship between $\phi$ and our $V_i$ values comes about via a convention that $\mu^\ominus_{\mathrm{int},\mathrm{H}^+} = 0$ under all conditions. That is, if you look up the standard Gibbs formation energies of ions, you'll see $\mathrm{H}^+$ listed as 0 at all temperatures, and we've adopted the convention of setting chemical potentials based on Gibbs formation energies. Therefore, this gives
+The relationship between $\phi$ and our $V_i$ values comes about via a convention that $\mu^\ominus_{\mathrm{int},\mathrm{H}^+} = 0$ under all conditions. That is, if you look up the standard Gibbs formation energies of ions, you'll see $\mathrm{H}^+$ listed as 0 at all temperatures, and we've adopted the convention of setting chemical potentials based on Gibbs formation energies. Therefore, since $V^\ominus_{\mathrm{H}^+} = \phi + \mu^\ominus_{\mathrm{int},\mathrm{H}^+}/F$, this gives
 
-$$ \phi = V^\ominus_{\mathrm{H}^+} .$$
+$$ V^\ominus_{\mathrm{H}^+} = \phi.$$
 
 In the below I'll just use $V^\ominus_{\mathrm{H}^+}$ but you can sub in $\phi$.
 
@@ -25,17 +25,19 @@ In the below I'll just use $V^\ominus_{\mathrm{H}^+}$ but you can sub in $\phi$.
 
 A generic hydrogen electrode interconverts hydrogen ions with hydrogen gas, $ \mathrm{H}^+ + \mathrm{e}^- \rightleftharpoons \tfrac{1}{2}\mathrm{H}_2 $, which in terms of $V_i$ gives:
 
-$$ V_{\mathrm{H}^+} - V_{\mathrm{e}^-} = \tfrac{1}{2}\mu_{\mathrm{H}_2}/F $$
+$$ V_{\mathrm{H}^+} - V_{\mathrm{e}^-} = \tfrac{1}{2F}\mu_{\mathrm{H}_2}. $$
 
-The standard hydrogen electrode (SHE) is an aqueous system that assumes activity of $\mathrm{H}^+$ is 1, which implies:
+The standard hydrogen electrode (SHE) is an aqueous system that has activity of $\mathrm{H}^+$ is 1 (i.e., pH of 0), which implies:
 
-$$ V_{\mathrm{H}^+}(\text{SHE}) = V^\ominus_{\mathrm{H}^+} $$
+$$ V_{\mathrm{H}^+}(\text{SHE}) = V^\ominus_{\mathrm{H}^+} . $$
 
-And moreover, the SHE is exposed to $\mathrm{H}_2$ gas at a fugacity (effective pressure) of 1 bar, which at least at 25&nbsp;°C are the standard reference conditions for hydrogen so $\mu_{\mathrm{H}_2} = 0$. (Technically for other temperatures, we are supposed to maintain a fugacity of 1 bar which means $\mu_{\mathrm{H}_2}$ varies from 0, but it seems to be common to neglect this contribution.)
+Moreover, the SHE is exposed to $\mathrm{H}_2$ gas at a fugacity (effective pressure) of 1 bar. If we are also at 25&nbsp;°C then this means the $\mathrm{H}_2$ is at the standard reference conditions for hydrogen, thus $\mu_{\mathrm{H}_2} = 0$. Technically for other temperatures, we are supposed to maintain a fugacity of 1 bar which means $\mu_{\mathrm{H}_2}$ varies from 0. As far as I can tell, the usual procedure is to simply set $\mu_{\mathrm{H}_2} = 0$.
 
-This gives the key defining relationship, that the SHE serves as a measuring point for $V^\ominus_{\mathrm{H}^+}$:
+Therefore, the SHE serves as a measuring point for $V^\ominus_{\mathrm{H}^+}$ (which is also $\phi$ as we have seen above):
 
-$$ V_{\mathrm{e}^-}(\text{SHE}) = V^\ominus_{\mathrm{H}^+}. $$
+$$ V_{\mathrm{e}^-}(\text{SHE}) = V^\ominus_{\mathrm{H}^+} = \phi .$$
+
+Practically, it's not actually necessary to achieve these conditions (such as the extreme 0 pH), nor is it actually desirable to do so given the uncertainties about when unit $\mathrm{H}^+$ activity is exactly reached. To the contrary, the most precise measurements of $V_{\mathrm{e}^-}(\text{SHE})$, as in e.g. a Harned cell, are actually extrapolated from more dilute solutions where the $\mathrm{H}^+$ activity is more predictably related to concentration (such as using the Debye-Huckel limiting law). In other words, any reference to $V_{\mathrm{e}^-}(\text{SHE})$ is theoretical, and more concretely we can say we are actually referencing $V^\ominus_{\mathrm{H}^+}$, or $\phi$.
 
 ## Reduction potentials
 
@@ -43,7 +45,7 @@ Generally, electrode potentials / reduction potentials are in principle voltmete
 
 $$ E(\text{target}) = V_{\mathrm{e}^-}(\text{target}) - V_{\mathrm{e}^-}(\text{SHE}). $$
 
-Practically we might not always be able to install an SHE with its highly acidic solution, but the preceding discussion showed us that $ V_{\mathrm{e}^-}(\text{SHE}) $ would actually just measure $V^\ominus_{\mathrm{H}^+} $ anyway. And so, we get a local description of the electrode potential:
+The preceding discussion showed us that $ V_{\mathrm{e}^-}(\text{SHE}) $ is a proxy for $V^\ominus_{\mathrm{H}^+} $. Thus, we have a local description of the reduction potential:
 
 $$ E = V_{\mathrm{e}^-} - V^\ominus_{\mathrm{H}^+}. $$
 
