@@ -45,19 +45,19 @@ $$ E(\text{target}) = V_{\mathrm{e}^-}(\text{target}) - V_{\mathrm{e}^-}(\text{S
 
 (Note that this means the reduction potential of the SHE is defined as zero at all temperatures: $E(\text{SHE}, T) = 0$.)
 
+The key assumption in these measurements is the lack of any kind of junction potential between the target and the SHE. In particular, this means that $V^\ominus_{\mathrm{H}^+}$ is the same value for both the solution near the target, and the solution near the SHE.
+
 Substituting the expression we found for $V_{\mathrm{e}^-}(\text{SHE})$:
-$$ E(\text{target}, T) = V_{\mathrm{e}^-}(\text{target}, T) - \left[ V^\ominus_{\mathrm{H}^+}(aq, T) - \frac{\mu^\ominus_{\mathrm{H}_2}(T)}{2F} \right] $$
+$$ E(\text{target}, T) = V_{\mathrm{e}^-}(\text{target}, T) - \left[ V^\ominus_{\mathrm{H}^+}(T) - \frac{\mu^\ominus_{\mathrm{H}_2}(T)}{2F} \right] $$
 $$ E = V_{\mathrm{e}^-} - V^\ominus_{\mathrm{H}^+} + \frac{\mu^\ominus_{\mathrm{H}_2}(T)}{2F} $$
 
 This equation provides the precise link between the reduction potential $E$ and the $V_i$ levels at any temperature $T$. Again, for simplicity, near 25°C where $\mu^\ominus_{\mathrm{H}_2}(T) \approx 0$, the small $\mu^\ominus_{\mathrm{H}_2}(T)$ term is neglected:
 
 $$ E \approx V_{\mathrm{e}^-} - V^\ominus_{\mathrm{H}^+} $$
 
-(And this corresponds to a commonly-seen expression $E = -\tfrac{1}{F}\bar\mu_{\mathrm{e}^-} - \phi$.)
+(And this corresponds to a sometimes-seen expression $E = -\tfrac{1}{F}\bar\mu_{\mathrm{e}^-} - \phi_{\text{(soln)}}$.)
 
 Since $V^\ominus_{\mathrm{H}^+}$ itself serves as a reference point for the $V^\ominus_{i}$ standard state ladder, this means the reduction potential describes the position of the electron species voltage relative to the standard state ladder.
-
-It is not even necessary for there to be an actual electrode present, such as with in-solution redox couples. Redox couples define an effective $V_{\mathrm{e}^-}$ (such as $V_{\mathrm{e}^-} = 3V_{\mathrm{Fe}^{3+}} - 2V_{\mathrm{Fe}^{2+}} $ for the $\mathrm{Fe}^{2+}$-$\mathrm{Fe}^{3+}$ couple) and thus they have a reduction potential, usually called redox potential.
 
 ## Standard reduction potentials
 
@@ -101,7 +101,7 @@ E & =  V_{\mathrm{e}^-} - V^\ominus_{\mathrm{H}^+} \notag \\\\
  \mathrm{pH} & \propto V^\ominus_{\mathrm{H}^+} - V_{\mathrm{H}^+} \notag
 \end{align}
 
-This suggests that it is interesting to instead plot the voltage quantity $V^\ominus_{\mathrm{H}^+} - V_{\mathrm{H}^+}$ on the bottom axis, so that both axes will have volt units. The usual characteristic thermal slopes on a Pourbaix diagram would then be converted to simple fractional slopes such as 1:1, 1:2, and so on, directly reflecting the number of electrons and protons that are transferred when converting the species on one side to the other.
+This suggests that it is interesting to instead plot the voltage quantity $V^\ominus_{\mathrm{H}^+} - V_{\mathrm{H}^+}$ on the bottom axis, so that both axes will have volt units. The usual characteristic thermal slopes on a Pourbaix diagram would then be converted to simple rational slopes such as 1:1, 1:2, and so on, directly reflecting the number of electrons and protons that are transferred when converting the species on one side to the other.
 
 ## Takeaways
 
