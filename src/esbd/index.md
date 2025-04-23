@@ -124,7 +124,7 @@ Basics:
 - [_Electrodes_](electrodes/) - Electron-ion interfaces.
 - [_Lithium ion batteries_](lib/) - An application spotlight.
 - [_Solutions_](solutions/) - Concentrations, standard states $V^\ominus$.
-- _Junctions_ - Salt bridges and ion membranes.
+- [_Junctions_](junctions/) - Salt bridges and ion membranes.
 
 Advanced:
 - [_Potentials_](potentials/) - How the usual potentials of electrochemistry relate to $V_i$.
