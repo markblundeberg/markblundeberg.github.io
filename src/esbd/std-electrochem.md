@@ -55,7 +55,7 @@ Substituting the expression we found for $V_{\mathrm{e}^-}(\text{SHE})$:
 $$ E(\text{target}, T) = V_{\mathrm{e}^-}(\text{target}, T) - \left[ V^\ominus_{\mathrm{H}^+}(aq, T) - \frac{\mu^\ominus_{\mathrm{H}_2}(T)}{2F} \right] $$
 $$ E = V_{\mathrm{e}^-} - V^\ominus_{\mathrm{H}^+} + \frac{\mu^\ominus_{\mathrm{H}_2}(T)}{2F} $$
 
-This equation provides the precise link between the electrode potential `E` and the $V_i$ levels. Often, for simplicity especially near 25°C where $\mu^\ominus_{\mathrm{H}_2}(T) \approx 0$, the small $\mu^\ominus_{\mathrm{H}_2}(T)$ term is neglected, leading to the common approximation:
+This equation provides the precise link between the electrode potential `E` and the $V_i$ levels at any temperature $T$. Often, for simplicity especially near 25°C where $\mu^\ominus_{\mathrm{H}_2}(T) \approx 0$, the small $\mu^\ominus_{\mathrm{H}_2}(T)$ term is neglected, leading to the common approximation:
 
 $$ E \approx V_{\mathrm{e}^-} - V^\ominus_{\mathrm{H}^+} $$
 
@@ -75,15 +75,17 @@ Giving as usual our $V_i$ difference:
 
 $$ V_{\mathrm{M}^{n+}} - V_{\mathrm{e}^-} = \frac{1}{nF} \mu_{\mathrm{M(s)}} .$$
 
-The standard reduction potential $E^\ominus$ is the value of $E$ when the $M$ ions have unit activity ($V_{\mathrm{M}^{n+}} = V^\ominus_{\mathrm{M}^{n+}}$) and the metal is in its standard state ($\mu_{\mathrm{M(s)}} = \mu^\ominus_{\mathrm{M(s)}}$). Substituting the precise expression for $E$ into this gives:
+The standard reduction potential $E^\ominus$ is the value of $E$ when the $M$ ions have unit activity ($V_{\mathrm{M}^{n+}} = V^\ominus_{\mathrm{M}^{n+}}$) and the metal is in its standard state ($\mu_{\mathrm{M(s)}} = \mu^\ominus_{\mathrm{M(s)}}$). Substituting the precise expression for $E$ (valid at any temperature T) into this gives:
 
-$$ E^\ominus = V^\ominus_{\mathrm{M}^{n+}} - V^\ominus_{\mathrm{H}^+} - \frac{1}{nF} \mu^\ominus_{\mathrm{M(s)}} + \frac{\mu^\ominus_{\mathrm{H}_2}(T)}{2F} .$$
+$$ E^\ominus(T) = V^\ominus_{\mathrm{M}^{n+}}(T) - V^\ominus_{\mathrm{H}^+}(T) - \frac{1}{nF} \mu^\ominus_{\mathrm{M(s)}}(T) + \frac{\mu^\ominus_{\mathrm{H}_2}(T)}{2F} .$$
 
-Assuming we adopt the convention that $\mu^\ominus_{\mathrm{M(s)}} = 0$ for elements in their standard reference state, this simplifies to:
+This is the general expression relating the standard potential at temperature T to the standard state potentials of the species involved.
 
-$$ E^\ominus = V^\ominus_{\mathrm{M}^{n+}} - V^\ominus_{\mathrm{H}^+} + \frac{\mu^\ominus_{\mathrm{H}_2}(T)}{2F} .$$
+If we specifically consider the standard temperature (usually 25°C = 298.15 K), then by convention, the standard chemical potentials of elements in their reference states are zero: $\mu^\ominus_{\mathrm{M(s)}}(298\text{K}) = 0$ and $\mu^\ominus_{\mathrm{H}_2}(298\text{K}) = 0$. Under these specific conditions, the equation simplifies to:
 
-Thus, our $V^\ominus_i$ ladder (relative to $V^\ominus_{\mathrm{H}^+}$) has exactly the structure of the standard reduction potentials $E^\ominus$, offset by the small temperature-dependent hydrogen chemical potential term. This confirms that $V^\ominus_i$ can be shifted up and down together (by changing $\phi$ or the $\mu^\ominus_{\mathrm{H}^+}=0$ convention) without affecting measurable potential differences like $E^\ominus$ (as the offset term cancels when taking differences).
+$$ E^\ominus(298\text{K}) = V^\ominus_{\mathrm{M}^{n+}}(298\text{K}) - V^\ominus_{\mathrm{H}^+}(298\text{K}) .$$
+
+Thus, at the standard temperature, our $V^\ominus_i$ ladder (relative to $V^\ominus_{\mathrm{H}^+}$) directly maps onto the standard reduction potentials $E^\ominus$. At other temperatures, the small offsets due to the non-zero chemical potentials of the elements must be considered for full rigor. This confirms that $V^\ominus_i$ can be shifted up and down together (by changing $\phi$ or the $\mu^\ominus_{\mathrm{H}^+}=0$ convention) without affecting measurable potential differences like $E^\ominus$ (as the offset terms cancel when taking differences).
 
 ## pH
 
