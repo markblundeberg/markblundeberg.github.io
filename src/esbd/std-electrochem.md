@@ -2,7 +2,7 @@
 layout: layouts/base.njk
 title: 'Potentials'
 tags: [page, esbd_topic] # Assign to 'page' and 'esbd_topic' collections
-orderESBD: 5
+orderESBD: 6
 eleventyNavigation:
     key: Potentials # Text used in navigation menus
     parent: ESBD # Optional: Assumes you have a main 'ESBD' menu item defined elsewhere
@@ -15,11 +15,17 @@ So far we've mostly avoided describing the connections to the various potentials
 
 ## The electrostatic potential $\phi$
 
-The relationship between $\phi$ and our $V_i$ values comes about via a convention that $\mu^\ominus_{\mathrm{int},\mathrm{H}^+} = 0$ under all conditions. That is, if you look up the standard Gibbs formation energies of ions, you'll see $\mathrm{H}^+$ listed as 0 at all temperatures, and we've adopted the convention of setting chemical potentials based on Gibbs formation energies. Therefore, since $V^\ominus_{\mathrm{H}^+} = \phi + \mu^\ominus_{\mathrm{int},\mathrm{H}^+}/F$, this gives
+We have no fundamental physical basis to assign an electrostatic potential $\phi$ inside of materials, only conventions that vary from material to material. Although $\phi$ is well defined in vacuum, it offers only false hope when it comes to defining $\phi$ in bulk materials, since $\phi$ in vacuum is a mess that varies capriciously from place to place based on surface conditions and surface contaminations.
+
+At least for water-based solutions, the relationship between $\phi$ and our $V_i$ values comes about via a convention that the Gibbs formation energy of ideal standard-state $\mathrm{H}^+$ is 0 at all conditions. This may seem unphysical, but $\mathrm{H}^+$ will always come together neutrally with other ions, and the Gibbs energies of the other ions can 'absorb the error' so to speak, so it works out thermodynamically. With our $V_i$'s we've adopted the convention of setting chemical potentials based on Gibbs formation energies, therefore this means we can take $\mu^\ominus_{\mathrm{int},\mathrm{H}^+} = 0$ under all conditions. Since $V^\ominus_{\mathrm{H}^+} = \phi + \mu^\ominus_{\mathrm{int},\mathrm{H}^+}/F$, then,
 
 $$ V^\ominus_{\mathrm{H}^+} = \phi.$$
 
 In the below I'll just use $V^\ominus_{\mathrm{H}^+}$ but you can sub in $\phi$.
+
+There is also the question of which convention we should use to assign $\phi$ inside metals. Anyway, since voltmeters measure $V_\mathrm{e}^-$, not $\phi$, this lets us sidestep the question of which $\phi$ value we choose inside metals.
+
+Accordingly, the change in $\phi$ at interfaces / junctions is not useful, except for the case of water-to-water junctions. In that case, the step $\Delta \phi = \Delta V^\ominus_{\mathrm{H}^+}$ is known as Galvani potential or liquid junction potential.
 
 ## Standard hydrogen electrode (SHE)
 
@@ -27,43 +33,35 @@ A generic hydrogen electrode interconverts hydrogen ions with hydrogen gas, $ \m
 
 $$ V_{\mathrm{H}^+} - V_{\mathrm{e}^-} = \frac{\mu_{\mathrm{H}_2}}{2F}. $$
 
-The standard hydrogen electrode (SHE) is an aqueous system defined with the activity of $\mathrm{H}^+$ ions at unity (`a_H⁺ = 1`), which implies:
-
-$$ V_{\mathrm{H}^+}(\text{SHE}) = V^\ominus_{\mathrm{H}^+} . $$
-
-Furthermore, the SHE is defined with $\mathrm{H}_2$ gas at a standard fugacity (effective pressure) of 1 bar. The chemical potential of hydrogen under these conditions is $\mu_{\mathrm{H}_2}(\text{SHE}, T) = \mu^\ominus_{\mathrm{H}_2}(T)$. This standard chemical potential is zero by convention only at the reference temperature (usually 25&nbsp;°C), and varies at other temperatures.
-
-Combining the equilibrium condition $V_{\mathrm{H}^+} - V_{\mathrm{e}^-} = \mu_{\mathrm{H}_2}/(2F)$ with the standard condition $V_{\mathrm{H}^+}(\text{SHE}) = V^\ominus_{\mathrm{H}^+}$, we find the electron potential in the SHE's conductor:
+The standard hydrogen electrode (SHE) is an aqueous system defined with the activity of $\mathrm{H}^+$ ions at unity ($a_{\mathrm{H}^+} = 1$), which implies $ V_{\mathrm{H}^+}(\text{SHE}) = V^\ominus_{\mathrm{H}^+} $. Furthermore, the SHE is defined with $\mathrm{H}_2$ gas at a standard fugacity (effective pressure) of 1 bar, so we will write its chemical potential as $\mu^\ominus_{\mathrm{H}_2}(T)$. Combining the equilibrium condition $V_{\mathrm{H}^+} - V_{\mathrm{e}^-} = \mu_{\mathrm{H}_2}/(2F)$ with the standard condition $V_{\mathrm{H}^+}(\text{SHE}) = V^\ominus_{\mathrm{H}^+}$, we find:
 
 $$ V_{\mathrm{e}^-}(\text{SHE}) = V^\ominus_{\mathrm{H}^+} - \frac{\mu^\ominus_{\mathrm{H}_2}(T)}{2F}. $$
 
-This specific electron potential level serves as the fundamental reference point against which electrode potentials are measured, as we will discuss in the next section.
-
-And since we established $V^\ominus_{\mathrm{H}^+} = \phi$ (due to the $\mu^\ominus_{\mathrm{H}^+}=0$ convention), we can also write:
-
-$$ V_{\mathrm{e}^-}(\text{SHE}) = \phi - \frac{\mu^\ominus_{\mathrm{H}_2}(T)}{2F}. $$
+A further simplification occurs if we are at the standard reference temperature (usually 25&nbsp;°C): $\mu^\ominus_{\mathrm{H}_2}(T) = 0$. Therefore we can say for short that $ V_{\mathrm{e}^-}(\text{SHE}) = V^\ominus_{\mathrm{H}^+} $ if we're operating at standard temperature.
 
 Practically, it's not actually necessary to achieve these ideal conditions (such as the extreme pH of 0 implied by `a_H⁺ = 1`), nor is it desirable given the uncertainties about when unit activity is exactly reached. Instead, the most precise determinations of potentials relative to the SHE reference point are made using cells without liquid junctions (like the Harned cell) where measurements are performed in well-defined dilute solutions. The results are then extrapolated back to the idealized standard state conditions. In this sense, any reference to $V_{\mathrm{e}^-}(\text{SHE})$ represents this theoretical, extrapolated potential defined relative to the standard state of the aqueous proton, $V^\ominus_{\mathrm{H}^+}$.
 
 ## Reduction potentials
 
-Generally, electrode potentials / reduction potentials are defined operationally via measurements referenced to the SHE. The standard potential of the SHE is defined as zero at all temperatures, `E°(SHE) = 0`. This means the measured potential of a target electrode is:
+Generally, electrode potentials / reduction potentials are defined operationally via measurements referenced to the SHE:
 
 $$ E(\text{target}) = V_{\mathrm{e}^-}(\text{target}) - V_{\mathrm{e}^-}(\text{SHE}). $$
+
+(Note that this means the reduction potential of the SHE is defined as zero at all temperatures: $E(\text{SHE}, T) = 0$.)
 
 Substituting the expression we found for $V_{\mathrm{e}^-}(\text{SHE})$:
 $$ E(\text{target}, T) = V_{\mathrm{e}^-}(\text{target}, T) - \left[ V^\ominus_{\mathrm{H}^+}(aq, T) - \frac{\mu^\ominus_{\mathrm{H}_2}(T)}{2F} \right] $$
 $$ E = V_{\mathrm{e}^-} - V^\ominus_{\mathrm{H}^+} + \frac{\mu^\ominus_{\mathrm{H}_2}(T)}{2F} $$
 
-This equation provides the precise link between the electrode potential `E` and the $V_i$ levels at any temperature $T$. Often, for simplicity especially near 25°C where $\mu^\ominus_{\mathrm{H}_2}(T) \approx 0$, the small $\mu^\ominus_{\mathrm{H}_2}(T)$ term is neglected, leading to the common approximation:
+This equation provides the precise link between the electrode potential $E$ and the $V_i$ levels at any temperature $T$. Again, for simplicity, near 25°C where $\mu^\ominus_{\mathrm{H}_2}(T) \approx 0$, the small $\mu^\ominus_{\mathrm{H}_2}(T)$ term is neglected, leading to the common approximation:
 
 $$ E \approx V_{\mathrm{e}^-} - V^\ominus_{\mathrm{H}^+} $$
 
-(And sometimes this may be encountered as $E \approx -\tfrac{1}{F}\bar\mu_{\mathrm{e}^-} - \phi$, recognizing that $V^\ominus_{\mathrm{H}^+} = \phi$ by convention.)
+(And this corresponds to $E \approx -\tfrac{1}{F}\bar\mu_{\mathrm{e}^-} - \phi$, and expression sometimes seen.)
 
 Since $V^\ominus_{\mathrm{H}^+}$ itself serves as a reference point for the $V^\ominus_{i}$ standard state ladder, this means the electrode potential describes the position of the electron species voltage relative to the standard state ladder.
 
-It is not even necessary for there to be an actual electrode present, such as with in-solution redox couples like $\mathrm{Fe}^{2+}$-$\mathrm{Fe}^{3+}$. Redox couples define an effective $V_{\mathrm{e}^-}$ and thus a reduction potential (usually called redox potential).
+It is not even necessary for there to be an actual electrode present, such as with in-solution redox couples.. Redox couples define an effective $V_{\mathrm{e}^-}$ (such as $V_{\mathrm{e}^-} = 3V_{\mathrm{Fe}^{3+}} - 2V_{\mathrm{Fe}^{2+}} $ for the $\mathrm{Fe}^{2+}$-$\mathrm{Fe}^{3+}$ couple) and thus they have a reduction potential, usually called redox potential.
 
 ## Standard reduction potentials
 
@@ -81,11 +79,11 @@ $$ E^\ominus(T) = V^\ominus_{\mathrm{M}^{n+}}(T) - V^\ominus_{\mathrm{H}^+}(T) -
 
 This is the general expression relating the standard potential at temperature T to the standard state potentials of the species involved.
 
-If we specifically consider the standard temperature (usually 25°C = 298.15 K), then by convention, the standard chemical potentials of elements in their reference states are zero: $\mu^\ominus_{\mathrm{M(s)}}(298\text{K}) = 0$ and $\mu^\ominus_{\mathrm{H}_2}(298\text{K}) = 0$. Under these specific conditions, the equation simplifies to:
+If we specifically consider the standard reference conditions (25°C and 1 bar) then by convention, the standard chemical potentials of elements in their stable reference states are zero: $\mu^\ominus_{\mathrm{M(s)}} = 0$ and $\mu^\ominus_{\mathrm{H}_2} = 0$. Under these specific conditions, the equation simplifies to:
 
-$$ E^\ominus(298\text{K}) = V^\ominus_{\mathrm{M}^{n+}}(298\text{K}) - V^\ominus_{\mathrm{H}^+}(298\text{K}) .$$
+$$ E^\ominus = V^\ominus_{\mathrm{M}^{n+}} - V^\ominus_{\mathrm{H}^+} .$$
 
-Thus, at the standard temperature, our $V^\ominus_i$ ladder (relative to $V^\ominus_{\mathrm{H}^+}$) directly maps onto the standard reduction potentials $E^\ominus$. At other temperatures, the small offsets due to the non-zero chemical potentials of the elements must be considered for full rigor. This confirms that $V^\ominus_i$ can be shifted up and down together (by changing $\phi$ or the $\mu^\ominus_{\mathrm{H}^+}=0$ convention) without affecting measurable potential differences like $E^\ominus$ (as the offset terms cancel when taking differences).
+Thus, at the standard reference conditions, our $V^\ominus_i$ ladder (relative to $V^\ominus_{\mathrm{H}^+}$) directly maps onto the standard reduction potentials $E^\ominus$. At other conditions, however, the small offsets due to the non-zero $\mu^\ominus_{\mathrm{M(s)}}$ and $\mu^\ominus_{\mathrm{H}_2}$ do affect this correpondence.
 
 ## pH
 
