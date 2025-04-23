@@ -64,7 +64,7 @@ What if we could regularize the charge-dependent shifts in $\bar{\mu}_i$ some ot
 
 ## Meet $V_i$: a voltage for ions, too
 
-As a solid-state physicist, I had to unlearn the idea that voltmeters let us probe the electrostatic potential $\phi$. The truth is that a voltmeter is a thermodynamic device: it lets electrons flow in and do thermodynamic work on it, and it measures that work. To make a long story short, the "true" voltage probed by a voltmeter is $V = -\bar{\mu}_{\mathrm{e}^-} / F$ (or $/e$ if working per-particle). Voltmeters measure differences in this absolute voltage $V$.
+As a solid-state physicist, I had to unlearn the idea that voltmeters let us probe the electrostatic potential $\phi$. The truth is that a voltmeter is a thermodynamic device: it lets electrons flow in and do thermodynamic work on it, and it measures that work. To make a long story short, the "true" voltage probed by a voltmeter is $V_{\mathrm{e}^-} = -\bar{\mu}_{\mathrm{e}^-} / F$ (or $/e$ if working per-particle). When you attach a voltmeter to body 1 and body 2, the number you see on its display is literally $ \Delta V = V_{\mathrm{e}^-}[\text{body 1}] - V_{\mathrm{e}^-}[\text{body 2}]$.
 
 {# Specifically, when we attach a voltmeter to any electron-conductive materials 1 and 2, the measured voltage difference between those points 1 and 2 is $V(1) - V(2) = -[\bar{\mu}_{\mathrm{e}^-}(1) - \bar{\mu}_{\mathrm{e}^-}(2)]/e$ (or ${}/F$ for the chemists). #}
 
@@ -80,7 +80,7 @@ Let's try shifting that electrostatic offset one final time:
 
 {% include "esbd-diagrams/mu-V-unison-shift.html" %}
 
-_Aha_! The $V_i$ levels for all charged species **shift together** by the exact same amount ($\Delta V_i = \Delta \phi$)! It's no longer as messy, although, we haven't fully gotten rid of the effect of $\Delta \phi$? Also there is no $V_{\rm C}$ for the neutral species. That's all okay, we actually want it that way.
+_Aha_! The $V_i$ levels for all charged species **shift together** by the exact same amount ($\Delta V_i = \Delta \phi$)! It's no longer as messy, although, we haven't fully gotten rid of the effect of $\Delta \phi$? Also there is no $V_{\rm C}$ for our uncharged $C$ species. That's all okay, we actually want it that way.
 
 (Readers who know semiconductor band diagrams might recognize this shifting-together property. It is a fundamental trait of band diagrams that makes them work.)
 
@@ -88,10 +88,9 @@ Remember before when we talked about particles going downhill in $\bar\mu$? Welc
 
 - **Cations ($z > 0$)** want to move from **high $V_+$ to low $V_+$**. (They "fall down" their $V_i$ landscape).
 - **Anions ($z < 0$)** want to move from **low $V_-$ to high $V_-$**. (They "float up" their $V_i$ landscape).
+- If the $V_i$ for a given species is flat, then that species is in equilibrium and there is no driving force.
 
-That might sound familiar too, it's just the thermodynamic version of positive charges in a vacuum getting pushed from high $\phi$ to low $\phi$, or vice versa for negative charges! The big difference is, now each species of particle experiences a different voltage landscape $V_i$. That's because $V_i$ includes some chemical energy, which will differ from species to species.
-
-$V_i$ can have a landscape (dependence on position)? Let's see what it looks like.
+That might sound familiar too, it's just the thermodynamic version of positive charges in a vacuum getting pushed from high $\phi$ to low $\phi$, or vice versa for negative charges! The big difference is, now each species of particle experiences a different voltage landscape $V_i$. That's because $V_i$ includes some chemical energy, which will differ from species to species. 
 
 ## Introducing the Diagram: $V_i$ vs $x$
 
@@ -111,7 +110,7 @@ It's just like a band diagram!
 - The standard states $V^\ominus_i$ are like the band edges, rigidly keeping space with each other by a constant 'bandgap'.
 - All the relative levels are invariant to global shifts in electrostatic potential (the shifting-together property), and the y-axis offset has no meaning.
 
-To the semiconductor people: It's not just an analogy; if we applied this method to a semiconductor device, our diagram would be _exactly_ a band diagram... only upside down. To make it a bit more comfortable, I've added an 'eV' button that plots energy $E_i = -e V_i$, flipping it to what we're used to. But I have come to believe the $V_i$ form is the more natural form, it just takes getting used to. We'll explore the connection to classic band diagrams in a later topic below.
+To the semiconductor people: It's not just an analogy; if we applied this method to a semiconductor device, our diagram would be _exactly_ a band diagram... only upside down. To make it a bit more comfortable, I've added an 'eV' button that plots "electronic energy" $E_i = -e V_i$, flipping it to what we're used to and making $E_{\mathrm{e}^-} = \text{Fermi level}$. But I have come to believe the $V_i$ form is the more natural form when we want to include ionics, and it just takes getting used to. We'll explore the connection to classic band diagrams in a later topic below.
 
 To the electrochemists: if you find $V_i$ and these diagrams strange, just remember we can connect it back: $V_i = \phi + \tfrac{1}{z_i F}\mu_{\mathrm{int},i} = \phi + \tfrac{1}{z_i F} \mu^\ominus_i + \tfrac{RT}{z_i F} \ln a_i$. In general I'm going to avoid plotting $\phi$ and prioritize discussions of $V_i$. We'll get back to that more in a later topic where we discuss how the usual electrochemical potentials (electrode, junction, redox, etc.) are precisely connected to $V_i$.
 
@@ -128,11 +127,11 @@ Basics:
 - _Junctions_ - Salt bridges and ion membranes.
 
 Advanced:
-- _General electrodes_ - Gas, redox, multi-ion, and lead acid batteries.
 - _Electrochemistry_ - Traditional electrochemical quantities in terms of $V_i$.
 - _Semiconductors_ - Electrons and holes, and classic band diagrams. {# comes after solutions so we can talk in detail about electron and hole standard states vs band edges. #}
 - _Corrosion_ - Local inhomogeneities
-- _Non-ideal solutions_ -
+- _General electrodes_ - Gas, redox, multi-ion, and lead acid batteries.
+- _Non-ideal solutions_ - subtleties, lead acid batteries.
 - _Non-equilibrium_ - Overpotentials
 
 Appendices:
