@@ -8,9 +8,10 @@ module.exports = function (eleventyConfig) {
     eleventyConfig.addPassthroughCopy('src/css');
     eleventyConfig.addPassthroughCopy('src/js');
     eleventyConfig.addPassthroughCopy('src/img');
+    eleventyConfig.addPassthroughCopy({ 'src/esbd/js': '/esbd/js/' });
     // If you have other static assets like fonts, add them here
 
-    eleventyConfig.addGlobalData('esbdJsPath', '/js/');
+    eleventyConfig.addGlobalData('esbdJsPath', '/esbd/js/');
 
     // --- Markdown Options ---
     // Optional: Configure markdown-it library if needed
