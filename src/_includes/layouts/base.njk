@@ -1,173 +1,55 @@
-{# Base layout #}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        {# Use title from front matter or provide a default #}
-        <title>{{ title or "ESBD Visualization" }}</title>
-        <link rel="icon" href="/img/favicon.ico" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {# Use front matter title or a default #}
+  <title>{{ title | default("My Site") }}</title>
 
-        {# Link to your CSS file (path relative to output site root) #}
-        <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" href="/img/favicon.ico" />
 
-        {# KaTeX CSS & JS (Core + Auto-render) #}
-        <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css"
-            integrity="sha384-zh0CIslj+VczCZtlzBcjt5ppRcsAmDnRem7ESsYwWwg3m/OaJ2l4x7YBZl9Kxxib"
-            crossorigin="anonymous"
-        />
-        <!-- The loading of KaTeX is deferred to speed up page rendering -->
-        <script
-            defer
-            src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"
-            integrity="sha384-Rma6DA2IPUwhNxmrB/7S3Tno0YY7sFu9WSYMCuulLhIqYSGZ2gKCJWIqhBWqMQfh"
-            crossorigin="anonymous"
-        ></script>
-        <!-- To automatically render math in text elements, include the auto-render extension: -->
-        <script
-            defer
-            src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js"
-            integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh"
-            crossorigin="anonymous"
-        ></script>
+  <link rel="stylesheet" href="/css/style.css" />
 
-        {# KaTeX auto render hook - although we use markdown-it-katex, this
-        catches any stragglers in e.g. html #}
-        <script>
-            // Optional: Customize KaTeX auto-render delimiters if needed
-            document.addEventListener('DOMContentLoaded', function () {
-                renderMathInElement(document.body, {
-                    delimiters: [
-                        {left: "$$", right: "$$", display: true},
-                        {left: "$", right: "$", display: false},
-                        {left: "\\(", right: "\\)", display: false},
-                        {left: "\\begin{equation}", right: "\\end{equation}", display: true},
-                        {left: "\\begin{align}", right: "\\end{align}", display: true},
-                        {left: "\\begin{alignat}", right: "\\end{alignat}", display: true},
-                        {left: "\\begin{gather}", right: "\\end{gather}", display: true},
-                        {left: "\\begin{CD}", right: "\\end{CD}", display: true},
-                        {left: "\\[", right: "\\]", display: true}
-                    ],
-                    throwOnError: false,
-                });
-            });
-        </script>
+  {# Block for additional CSS in child layouts #}
+  {% block head_css %}{% endblock %}
 
-        {# D3 Library #}
-        <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-    </head>
-    <body>
+  {# Block for additional head elements (scripts, meta tags) #}
+  {% block head_extra %}{% endblock %}
+</head>
+<body>
 
-{#        <header>
-            <h1><a href="/esbd/">ESBD Visualizations</a></h1>
-            <hr />
-        </header> #}
+    <div class="layout-wrapper">
+        {# Sidebar Navigation #}
+        <nav class="site-nav">
+            <h3>Navigation</h3> {# Optional heading #}
+            {# Render the Eleventy Navigation menu here #}
+            {# Example using a simple list #}
+            <ul>
+                {%- for entry in collections.all | eleventyNavigation %}
+                <li><a href="{{ entry.url | url }}"{% if entry.url == page.url %} aria-current="page"{% endif %}>{{ entry.title }}</a></li>
+                {%- endfor %}
+            </ul>
+            {# Or use the filter for nested lists if you have hierarchy: #}
+            {# {{ collections.all | eleventyNavigation | eleventyNavigationToHtml | safe }} #}
+        </nav>
 
-        {# NEW: Wrapper div for the main layout columns #}
-        <div class="layout-wrapper">
+        {# Main content block - child layouts will insert content here #}
+        <div class="main-content-area">
+            {% block content %}
+                <main>
+                    {# Content from individual pages goes here #}
+                    {{ content | safe }}
+                </main>
+            {% endblock %}
+        </div>
+    </div>
 
-            {# Sidebar Navigation #}
-            <nav class="site-nav">
-                <h3>Navigation</h3> {# Optional heading #}
-                {# Render the Eleventy Navigation menu here #}
-                {# Example using a simple list #}
-                <ul>
-                    {%- for entry in collections.all | eleventyNavigation %}
-                    <li><a href="{{ entry.url | url }}"{% if entry.url == page.url %} aria-current="page"{% endif %}>{{ entry.title }}</a></li>
-                    {%- endfor %}
-                </ul>
-                {# Or use the filter for nested lists if you have hierarchy: #}
-                {# {{ collections.all | eleventyNavigation | eleventyNavigationToHtml | safe }} #}
-            </nav>
+    <footer>
+        <p><small>Made with 11ty, KaTeX, D3, and help from some LLMs.</small></p>
+    </footer>
 
-            {# Main Content Area #}
-            <div class="main-column">
+    {# Block for JavaScript loaded at the end of the body #}
+    {% block footer_scripts %}{% endblock %}
 
-        {% if 'esbd_topic' in tags %}
-            {% set showPrevNextBottom = true %}
-            {% if orderESBD != 1 %}
-                {% set showPrevNextTop = true %}
-            {% endif %}
-        {% endif %}
-        {% if showPrevNextTop or showPrevNextBottom %}
-            {% set currentCollection = collections.esbd_topic %}
-            {% set currentPageUrl = page.url %}
-            {% set currentIndex = -1 %}
-            {% set prevPage = null %}
-            {% set nextPage = null %}
-
-            {# Find index (corrected loop without break) #}
-            {% for item in currentCollection %}
-              {% if item.url == currentPageUrl %}
-                {% set currentIndex = loop.index0 %}
-              {% endif %}
-            {% endfor %}
-
-            {# Assign prev/next #}
-            {% if currentIndex > 0 %}
-              {% set prevPage = currentCollection[currentIndex - 1] %}
-            {% endif %}
-            {% if currentIndex >= 0 and currentIndex < currentCollection.length - 1 %}
-              {% set nextPage = currentCollection[currentIndex + 1] %}
-            {% endif %}
-        {% endif %}
-
-        {% if showPrevNextTop %}
-            {# --- Previous/Next Navigation Bar --- #}
-            <nav class="pagination-nav page-nav-top"> {# Specific class for styling #}
-                <div class="nav-prev">
-                    {% if prevPage %}
-                        <a href="{{ prevPage.url | url }}">&lt;- {{ prevPage.data.title | escape }}</a>
-                    {% else %}
-                        <span>&nbsp;</span> {# Placeholder to maintain structure #}
-                    {% endif %}
-                </div>
-                <div class="nav-next">
-                    {% if nextPage %}
-                        <a href="{{ nextPage.url | url }}">{{ nextPage.data.title | escape }} -&gt;</a>
-                    {% else %}
-                        <span>&nbsp;</span> {# Placeholder to maintain structure #}
-                    {% endif %}
-                </div>
-            </nav> {# End pagination-nav #}
-        {% endif %} {# End conditional block for prev/next #}
-        {# --- End Previous/Next Logic Block --- #}
-
-            <main>
-                {# Content from individual pages goes here #}
-                {{ content | safe }}
-            </main>
-
-        {% if showPrevNextBottom %}
-            {# --- Previous/Next Navigation Bar --- #}
-            <nav class="pagination-nav page-nav-top"> {# Specific class for styling #}
-                <div class="nav-prev">
-                    {% if prevPage %}
-                        <a href="{{ prevPage.url | url }}">&lt;- {{ prevPage.data.title | escape }}</a>
-                    {% else %}
-                        <span>&nbsp;</span> {# Placeholder to maintain structure #}
-                    {% endif %}
-                </div>
-                <div class="nav-next">
-                    {% if nextPage %}
-                        <a href="{{ nextPage.url | url }}">{{ nextPage.data.title | escape }} -&gt;</a>
-                    {% else %}
-                        <span>&nbsp;</span> {# Placeholder to maintain structure #}
-                    {% endif %}
-                </div>
-            </nav> {# End pagination-nav #}
-        {% endif %} {# showPrevNextBottom #}
-
-            </div> {# End main-column div #}
-
-        </div> {# End layout-wrapper #}
-
-        <footer>
-            <hr />
-            {# Optional: Add a consistent site footer here #}
-            <p><small>Made with 11ty, KaTeX, D3, and help from some LLMs.</small></p>
-        </footer>
-    </body>
+</body>
 </html>

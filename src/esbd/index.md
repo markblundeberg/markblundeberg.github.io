@@ -1,5 +1,5 @@
 ---
-layout: layouts/base.njk
+layout: layouts/esbd_topic.njk
 title: 'ESBD: Intro'
 tags: [page, esbd_topic]
 orderESBD: 1

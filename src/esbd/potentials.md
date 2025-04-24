@@ -1,5 +1,5 @@
 ---
-layout: layouts/base.njk
+layout: layouts/esbd_topic.njk
 title: 'Potentials'
 tags: [page, esbd_topic] # Assign to 'page' and 'esbd_topic' collections
 orderESBD: 6

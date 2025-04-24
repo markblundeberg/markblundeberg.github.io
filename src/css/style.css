@@ -104,7 +104,7 @@ body {
     color: #aaa; /* Optional: make placeholder less visible */
 }
 
-.main-column {
+.main-content-area {
     /* Example: Allow main column to grow */
     /* flex-grow: 1; */
     /* Or just use standard block layout */
