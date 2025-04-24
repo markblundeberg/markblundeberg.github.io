@@ -5,8 +5,8 @@
 <script type="module">
     const plotContainerId = 'ag-agcl-electrode-container';
 
-    import ElectrochemicalSpeciesBandDiagram from '/js/ElectrochemicalSpeciesBandDiagram.js';
-    import { formatPopupBaseContent, throttle } from '/js/utils.js';
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { formatPopupBaseContent, throttle } from '{{ esbdJsPath }}utils.js';
 
     const diagram = new ElectrochemicalSpeciesBandDiagram(plotContainerId, {
         height: 250,
