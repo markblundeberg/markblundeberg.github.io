@@ -13,7 +13,7 @@ eleventyNavigation:
 
 On a purely exact thermodynamic level, we can talk about having a solid compound such as $\mathrm{NaCl}$ in equilibrium with water, where part of it dissolves and dissociates into $\mathrm{Na}^+$ and $\mathrm{Cl}^-$ ions, leading to
 
-$$V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}= \frac{1}{F}\mu_{\mathrm{NaCl}} \approx ~ -4.1~\mathrm{V}.$$
+$$V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}= \frac{1}{F}\mu_{\mathrm{NaCl}} \approx -4.0~\mathrm{V}.$$
 
 This is going to correspond to some specific saturated concentration, which we can of course measure.
 
@@ -44,13 +44,15 @@ For example, for a 10x ('decade') concentration increase at room temperature, th
 
 ## Standard state ladder
 
-We now have this $V^\ominus_i$, which unfortunately _cannot_ be tabulated since it is sensitive to arbitrary electrostatic offsets. We're not stuck though, as we can compare the relative $V^\ominus_i$ values of different ions. As we've seen, differences in $V_i$'s are insensitive to the electrostatic offset, and they are going to be invariant properties of the solvent in question However, chemists have not tabulated $V_i$ differences for us.
+We now have this $V^\ominus_i$, which unfortunately _cannot_ be tabulated since it is sensitive to arbitrary electrostatic offsets. We're not stuck though, as we can compare the relative $V^\ominus_i$ values of different ions. As we've seen, differences in $V_i$'s are insensitive to the electrostatic offset, and they are going to be invariant properties of the solvent in question. Let's see how we can get these values from existing chemical literature.
 
-When you look at a table of Gibbs energy of formation, the values for ions are _internal_: $\mu^\ominus_{\mathrm{int},i} = z_i F(V_i - \phi)$, for whichever value of $\phi$ they chose. Importantly though, the choice of $\phi$ is consistent. Thus, the $\phi$ cancels out in the difference:
+When you look at a table of Gibbs energy of formation, the values for ions are _internal_: $\mu^\ominus_{\mathrm{int},i}$, which defines $\bar\mu^\ominus_i = \mu^\ominus_{\mathrm{int},i} + \phi$ according to whatever convention of $\phi$ was used for that solvent. Using this, we get (the $\phi$'s cancel):
 
-$$V^\ominus_i - V^\ominus_j = \tfrac{\mu^\ominus_{\mathrm{int},i}}{z_i F} - \tfrac{\mu^\ominus_{\mathrm{int},i}}{z_i F}. $$
+$$V^\ominus_i - V^\ominus_j = \frac{\mu^\ominus_{\mathrm{int},i}}{z_i F} - \frac{\mu^\ominus_{\mathrm{int},j}}{z_j F}. $$
 
-Thus we find for example that in water, $V^\ominus_{\mathrm{Na}^+} - V^\ominus_{\mathrm{Cl}^-} = -1.3544~\mathrm{V}$. We also see on the tables that $\mathrm{H}^+$ is often defined to have exactly 0 standard Gibbs energy of formation, which we won't rely on, but it is interesting nonetheless.
+Thus we find for example that in water, $V^\ominus_{\mathrm{Na}^+} - V^\ominus_{\mathrm{Cl}^-} = -4.0746~\mathrm{V}$ -- this is the _extrapolated_ estimate of $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ that we would get if both sodium and chloride ions were present at each a concentration of 1 mol/L. Going to a more ideal concentration of 0.001 mol/L, then $\log_{10}(c/c^\ominus) = -3$, and $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = -4.43~\mathrm{V}$.
+
+We also see on the tables that $\mathrm{H}^+$ is often defined to have exactly 0 standard Gibbs energy of formation, which we won't rely on, but it is interesting nonetheless.
 
 In any case, we can tabulate all the $V^\ominus_i$ using any one of them as a common reference (let's use $V^\ominus_{\mathrm{H}^+}$). Here I've taken some selected values from Atkins' _Physical Chemistry_ (8th edition, Table 2.7 in the back pages), and converted them. Note these are all for **dilute ions in water** at 298 K and 1 bar.
 
