@@ -106,6 +106,23 @@ In any case, we can tabulate all the $V^\ominus_i$ using any one of them as a co
 
 Conceptually, these standard state lines function much like conduction and valence band edges ($E_\mathrm{C}$, $E_\mathrm{V}$) do in semiconductor physics – they act as reference energy/potential levels. The actual potential ($V_i$) deviates from the reference $V^\ominus_i$ based on the concentration, just as the Fermi level ($E_\mathrm{F}$) deviates from the band edges based on carrier concentration. Actually, as we have alluded to before, and we will talk about in much more depth in the Semiconductors topic, we can cram semiconductors into our electrochemical $V_i$ framework too! For silicon we find that $V^\ominus_\mathrm{h^+} - V^\ominus_\mathrm{e^-} = 1.27~\mathrm{V}$ (for a 1 mol/L reference concentration). I.e. the 'standard state ladder' for a semiconductor really only has two entries, one for conduction band electrons ($\mathrm{e^-}$), and the other for valence band holes ($\mathrm{h^+}$). The reason this 1.27 V value differs from the bandgap of silicon ($E_\mathrm{C} - E_\mathrm{V} = 1.1~\mathrm{eV}$) is simply that the band edges each correspond to less than a 1 mol/L concentration, so, $V^\ominus_\mathrm{h^+}$ sits slightly higher than $-E_\mathrm{V}/e$ and $V^\ominus_\mathrm{e^-}$ sits slightly lower than $-E_\mathrm{C}/e$.
 
+## Example: common ion effect
+
+Earlier in the Electrodes topic we talked about the silver / silver chloride electrode. Let's consider what happens when we add some potassium chloride salt to its solution:
+
+{% include "esbd-diagrams/esbd-agcl-kcl-common-ion.html" %}
+
+Here, the value of $V_\mathrm{Ag^+}$ is fixed to the electrode's $V_\mathrm{e^-}$
+
+
+## Example: fixed $V_i$'s
+
+
+This example is a little more unusual.
+
+Suppose we have a solution connected to two 
+
+
 ## Takeaways
 
 For the next topic, we'll talk about what happens where two solutions come into contact.

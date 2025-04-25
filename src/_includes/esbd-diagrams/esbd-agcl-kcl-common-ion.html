@@ -1,0 +1,252 @@
+{% set idprefix = ["esbd-agcl-kcl-common-ion", idsuffix] | join %}
+<div class="demo-container" style="max-width: 300px">
+    <div
+        id="{{idprefix}}-plot-container"
+        class="plot-container"
+        style="height: 300px; width: 100%"
+    ></div>
+
+    <label for="kclSlider"
+        >Added KCl Concentration:
+        <span id="{{idprefix}}-kclValue">1e-7</span>&nbsp;mol/L</label
+    >
+    <input
+        type="range"
+        id="{{idprefix}}-kclSlider"
+        min="-7"
+        max="-2"
+        step="0.1"
+        value="-7"
+    />
+
+    <div class="output">
+        <p>Calculated Concentrations:</p>
+        <p><strong>[K⁺]:</strong> <span id="{{idprefix}}-kConc"></span> M</p>
+        <p><strong>[Ag⁺]:</strong> <span id="{{idprefix}}-agConc"></span> M</p>
+        <p>
+            <strong>Total [Cl⁻]:</strong>
+            <span id="{{idprefix}}-clConc"></span> M
+        </p>
+    </div>
+</div>
+
+<script type="module">
+    // --- DOM Elements from the above ---
+    const kclSlider = document.getElementById('{{idprefix}}-kclSlider');
+    const kclValueSpan = document.getElementById('{{idprefix}}-kclValue');
+    const kConcSpan = document.getElementById('{{idprefix}}-kConc');
+    const agConcSpan = document.getElementById('{{idprefix}}-agConc');
+    const clConcSpan = document.getElementById('{{idprefix}}-clConc');
+    const plotContainerId = '{{idprefix}}-plot-container';
+
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { formatPopupBaseContent, throttle } from '{{ esbdJsPath }}utils.js';
+
+    // --- Constants ---
+    const R = 8.31446261815324; // Gas constant (J/mol·K)
+    const F = 96485.3321233100184; // Faraday constant (C/mol)
+    const c_std = 1.0; // Standard concentration (mol/L)
+
+    // --- Thermo data ---
+
+    // Assumed temperature for these values
+    const T = 298.15; // Temperature (K, 25°C)
+
+    // V_Ag+ - V_e- = mu_Ag / F   (which is 0)
+    const V_Ag_e = 0;
+
+    // V_Ag+ - V_Cl- = mu_AgCl/F   (for saturated AgCl)
+    const V_AgCl = -109.79e3 / F; // ~ -1.1 V
+
+    // Ion standard states 'ladder'
+    const V_std_H_H = 0; // reference point
+    const V_std_Ag_H = +77.11e3 / F; // ~ +0.8 V
+    const V_std_Cl_H = -131.23e3 / -F; // ~ +1.3 V
+    const V_std_K_H = -283.27e3 / F; // ~ -2.9 V
+
+    // --- Set up diagram ---
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(plotContainerId, {
+        height: 250,
+    });
+
+    // Boundaries
+    const boundaries = [0.0, 0.3, 0.7, 1.0];
+    // Set layout
+    diagram.setSpatialLayout(boundaries, [
+        { name: 'Silver wire', color: '#E0E0E0' },
+        { name: 'AgCl coating', color: '#ccc' },
+        { name: 'Solution', color: '#E6F5FF' },
+    ]);
+
+    // Define species info
+    diagram.addSpeciesInfo('ag_ion', {
+        z: 1,
+        color: '#E4572E',
+        latexPrettyName: '\\mathrm{Ag}^{+}',
+    });
+    diagram.addSpeciesInfo('k_ion', {
+        z: 1,
+        color: '#B84E83',
+        latexPrettyName: '\\mathrm{K}^{+}',
+    });
+    diagram.addSpeciesInfo('cl_ion', {
+        z: 1,
+        color: '#30B030',
+        latexPrettyName: '\\mathrm{Cl}^{-}',
+    });
+    diagram.addSpeciesInfo('electron', {
+        z: -1,
+        color: '#377EB8',
+        latexPrettyName: '\\mathrm{e}^{-}',
+    });
+    diagram.addSpeciesInfo('h_ion', {
+        z: 1,
+        color: '#606060',
+        latexPrettyName: '\\mathrm{H}^{+}',
+    });
+
+    // --- Calculation Function ---
+    function doUpdate() {
+        const log_c_KCl_added = parseFloat(kclSlider.value);
+        const c_KCl_added = Math.pow(10, log_c_KCl_added);
+
+        // Update slider value display
+        kclValueSpan.textContent = c_KCl_added.toExponential(2);
+
+        // Thermal voltage ~ 0.026 V
+        const Vth = (R * T) / F;
+
+        // Solubility product of AgCl (in units of c_std^2)
+        const K_sp = Math.exp((V_AgCl - V_std_Ag_H + V_std_Cl_H) / Vth); // around 1.8e-10
+
+        // Calculate c_Ag+ using the quadratic formula derived from K_sp:
+        // c_Ag+^2 + c_KCl_added * c_Ag+ - K_sp * c_std^2 = 0
+
+        // Calculate discriminant
+        const discriminant = c_KCl_added * c_KCl_added - 4 * -K_sp;
+
+        let c_Ag_plus = 0;
+        if (discriminant >= 0) {
+            // Only the positive root makes physical sense for concentration
+            c_Ag_plus = (-c_KCl_added + Math.sqrt(discriminant)) / 2;
+        } else {
+            console.error('Negative discriminant - calculation error');
+            // Should not happen if K_sp is positive
+        }
+
+        // Calculate other concentrations
+        const c_K_plus = c_KCl_added;
+        const c_Cl_total = c_KCl_added + c_Ag_plus; // Cl- from KCl + Cl- from dissolved AgCl
+
+        // Display results
+        kConcSpan.textContent = c_K_plus.toExponential(3);
+        agConcSpan.textContent = c_Ag_plus.toExponential(3);
+        clConcSpan.textContent = c_Cl_total.toExponential(3);
+
+        // Now update the diagram.
+        const V_el = +0;
+        const V_Ag = V_el + V_Ag_e;
+        const V_Cl = V_Ag - V_AgCl;
+        const V_Cl_std = V_Cl - -1 * Vth * Math.log(c_Cl_total);
+        const V_Ag_std = V_Cl_std + V_std_Ag_H - V_std_Cl_H;
+        const V_K_std = V_Cl_std + V_std_K_H - V_std_Cl_H;
+        const V_H_std = V_Cl_std + V_std_H_H - V_std_Cl_H;
+        const V_K = V_K_std + +1 * Vth * Math.log(c_K_plus);
+        //console.log(V_Ag, V_Ag_std, V_Cl, V_Cl_std, V_K, V_K_std);
+
+        const b = boundaries;
+        diagram.updateTraceData([
+            {
+                id: `electron_trace`,
+                speciesId: 'electron',
+                curveType: 'potential',
+                showLabel: true,
+                inputUnits: 'V_volt',
+                x: [b[0], b[1]],
+                y: [V_el, V_el],
+            },
+            {
+                id: `Cl_trace`,
+                speciesId: 'cl_ion',
+                curveType: 'potential',
+                showLabel: true,
+                inputUnits: 'V_volt',
+                x: [b[1], b[3]],
+                y: [V_Cl, V_Cl],
+            },
+            {
+                id: `Cl_std_trace`,
+                speciesId: 'cl_ion',
+                curveType: 'standardState',
+                showLabel: true,
+                inputUnits: 'V_volt',
+                x: [b[1], b[3]],
+                y: [V_Cl_std, V_Cl_std],
+            },
+            {
+                id: `Ag_trace`,
+                speciesId: 'ag_ion',
+                curveType: 'potential',
+                showLabel: true,
+                inputUnits: 'V_volt',
+                x: [b[1], b[3]],
+                y: [V_Ag, V_Ag],
+            },
+            {
+                id: `Ag_std_trace`,
+                speciesId: 'ag_ion',
+                curveType: 'standardState',
+                showLabel: true,
+                inputUnits: 'V_volt',
+                x: [b[1], b[3]],
+                y: [V_Ag_std, V_Ag_std],
+            },
+            {
+                id: `K_trace`,
+                speciesId: 'k_ion',
+                curveType: 'potential',
+                showLabel: true,
+                inputUnits: 'V_volt',
+                x: [b[1], b[3]],
+                y: [V_K, V_K],
+            },
+            {
+                id: `K_std_trace`,
+                speciesId: 'k_ion',
+                curveType: 'standardState',
+                showLabel: true,
+                inputUnits: 'V_volt',
+                x: [b[1], b[3]],
+                y: [V_K_std, V_K_std],
+            },
+            {
+                id: `H_std_trace`,
+                speciesId: 'h_ion',
+                curveType: 'standardState',
+                showLabel: true,
+                inputUnits: 'V_volt',
+                x: [b[1], b[3]],
+                y: [V_H_std, V_H_std],
+            },
+        ]);
+
+        diagram.setVRange(V_el - 4.2, V_el + 1.6);
+
+        // --- Placeholder for ESBD Diagram Update ---
+        // Here you would calculate the V° ladder position and V_K+ position
+        // based on these concentrations and update your D3 diagram.
+        // Example: Calculate V°_Ag+ position relative to V_Ag+ = 0
+        // const V_naught_Ag_plus = -(R * T / F) * Math.log(c_Ag_plus / c_std);
+        // You'd need V° differences to position other V° levels relative to this.
+        // esbdPlaceholder.textContent = `V°_Ag+ ≈ ${V_naught_Ag_plus.toFixed(3)} V (relative to V_Ag+)`;
+
+        diagram.redraw();
+    }
+
+    // --- Event Listener ---
+    kclSlider.addEventListener('input', throttle(doUpdate, 100));
+
+    // --- Initial Calculation ---
+    doUpdate();
+</script>
