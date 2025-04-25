@@ -1,0 +1,339 @@
+{# Hacked down version of mu-V-unison-shift #} {% set idprefix =
+["V-sd-ladder-", idsuffix] | join %}
+<div class="demo-container" style="max-width: 200px">
+    <div style="display: flex; gap: 8px">
+        <div
+            id="{{ idprefix }}-diagram-container"
+            style="
+                flex: 1;
+                height: 600px;
+                min-width: 150px;
+                border: 1px solid #eee;
+            "
+        ></div>
+    </div>
+    <div style="text-align: center">
+        <div>
+            <label for="{{ idprefix }}-dphi-slider" style="font-size: 0.85em"
+                >Electrostatic / chemical change:</label
+            >
+            <br />
+            <input
+                type="range"
+                id="{{ idprefix }}-dphi-slider"
+                min="-1.5"
+                max="1.5"
+                step="any"
+                value="0.0"
+                style="width: 100px"
+            />
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
+    import { throttle } from '{{ esbdJsPath }}utils.js';
+
+    // DOM identifiers - must match above HTML!
+    const sliderId = '{{ idprefix }}-dphi-slider';
+    const diagramContainerId = '{{ idprefix }}-diagram-container';
+
+    const ionData = [
+        {
+            label: '\\mathrm{Al}^{3+}',
+            V_std: -1.6755569277623847,
+            formula: 'Al',
+            z: 3,
+        },
+        {
+            label: '\\mathrm{Ba}^{2+}',
+            V_std: -2.9059857475710698,
+            formula: 'Ba',
+            z: 2,
+        },
+        {
+            label: '\\mathrm{Br}^{-}',
+            V_std: 1.0774694734650156,
+            formula: 'Br',
+            z: -1,
+        },
+        {
+            label: '\\mathrm{Cd}^{2+}',
+            V_std: -0.40219584828090993,
+            formula: 'Cd',
+            z: 2,
+        },
+        {
+            label: '\\mathrm{Cs}^{+}',
+            V_std: -3.02657402502168,
+            formula: 'Cs',
+            z: 1,
+        },
+        {
+            label: '\\mathrm{Ca}^{2+}',
+            V_std: -2.868726198156807,
+            formula: 'Ca',
+            z: 2,
+        },
+        {
+            label: '\\mathrm{HCO_3}^{-}',
+            V_std: 6.081442506204956,
+            formula: 'HCO_3',
+            z: -1,
+        },
+        {
+            label: '\\mathrm{CO_3}^{2-}',
+            V_std: 2.735182583635869,
+            formula: 'CO_3',
+            z: -2,
+        },
+        {
+            label: '\\mathrm{CN}^{-}',
+            V_std: -1.786800088739599,
+            formula: 'CN',
+            z: -1,
+        },
+        {
+            label: '\\mathrm{Cl}^{-}',
+            V_std: 1.3601031069912852,
+            formula: 'Cl',
+            z: -1,
+        },
+        {
+            label: '\\mathrm{CrO_4}^{2-}',
+            V_std: 3.7712986211723987,
+            formula: 'CrO_4',
+            z: -2,
+        },
+        {
+            label: '\\mathrm{Cr_2O_7}^{2-}',
+            V_std: 6.742475624881357,
+            formula: 'Cr_2O_7',
+            z: -2,
+        },
+        {
+            label: '\\mathrm{Cu}^{+}',
+            V_std: 0.5180061974199834,
+            formula: 'Cu',
+            z: 1,
+        },
+        {
+            label: '\\mathrm{Cu}^{2+}',
+            V_std: 0.33937800989430483,
+            formula: 'Cu',
+            z: 2,
+        },
+        {
+            label: '\\mathrm{F}^{-}',
+            V_std: 2.8894547374693316,
+            formula: 'F',
+            z: -1,
+        },
+        { label: '\\mathrm{H}^{+}', V_std: 0.0, formula: 'H', z: 1 },
+        {
+            label: '\\mathrm{I}^{-}',
+            V_std: 0.5344853861734403,
+            formula: 'I',
+            z: -1,
+        },
+        {
+            label: '\\mathrm{Fe}^{2+}',
+            V_std: -0.40887043793954275,
+            formula: 'Fe',
+            z: 2,
+        },
+        {
+            label: '\\mathrm{Fe}^{3+}',
+            V_std: -0.01623735579481074,
+            formula: 'Fe',
+            z: 3,
+        },
+        {
+            label: '\\mathrm{Pb}^{2+}',
+            V_std: -0.12659955385124247,
+            formula: 'Pb',
+            z: 2,
+        },
+        {
+            label: '\\mathrm{Li}^{+}',
+            V_std: -3.0399439328782583,
+            formula: 'Li',
+            z: 1,
+        },
+        {
+            label: '\\mathrm{Mg}^{2+}',
+            V_std: -2.3568349198340184,
+            formula: 'Mg',
+            z: 2,
+        },
+        {
+            label: '\\mathrm{Hg}^{2+}',
+            V_std: 0.8519429657447507,
+            formula: 'Hg',
+            z: 2,
+        },
+        {
+            label: '\\mathrm{Hg_2}^{2+}',
+            V_std: 0.7955613388146845,
+            formula: 'Hg_2',
+            z: 2,
+        },
+        {
+            label: '\\mathrm{NO_3}^{-}',
+            V_std: 1.1270106824219488,
+            formula: 'NO_3',
+            z: -1,
+        },
+        {
+            label: '\\mathrm{NH_4}^{+}',
+            V_std: -0.821990226438153,
+            formula: 'NH_4',
+            z: 1,
+        },
+        {
+            label: '\\mathrm{OH}^{-}',
+            V_std: 1.6296777607506643,
+            formula: 'OH',
+            z: -1,
+        },
+        {
+            label: '\\mathrm{PO_4}^{3-}',
+            V_std: 3.519360499611426,
+            formula: 'PO_4',
+            z: -3,
+        },
+        {
+            label: '\\mathrm{K}^{+}',
+            V_std: -2.9358866655293863,
+            formula: 'K',
+            z: 1,
+        },
+        {
+            label: '\\mathrm{Ag}^{+}',
+            V_std: 0.7991888331943763,
+            formula: 'Ag',
+            z: 1,
+        },
+        {
+            label: '\\mathrm{Na}^{+}',
+            V_std: -2.7145058656716263,
+            formula: 'Na',
+            z: 1,
+        },
+        {
+            label: '\\mathrm{S}^{2-}',
+            V_std: -0.4446271682536473,
+            formula: 'S',
+            z: -2,
+        },
+        {
+            label: '\\mathrm{SO_4}^{2-}',
+            V_std: 3.8582548435884383,
+            formula: 'SO_4',
+            z: -2,
+        },
+        {
+            label: '\\mathrm{HSO_4}^{-}',
+            V_std: 7.83445507586514,
+            formula: 'HSO_4',
+            z: -1,
+        },
+        {
+            label: '\\mathrm{HS}^{-}',
+            V_std: -0.12520037744764706,
+            formula: 'HS',
+            z: -1,
+        },
+        {
+            label: '\\mathrm{Sn}^{2+}',
+            V_std: -0.14095406732516558,
+            formula: 'Sn',
+            z: 2,
+        },
+        {
+            label: '\\mathrm{Zn}^{2+}',
+            V_std: -0.7620847478249577,
+            formula: 'Zn',
+            z: 2,
+        },
+    ];
+
+    const chargeColors = new Map();
+    chargeColors[-3] = '#984ea3'; // Purple
+    chargeColors[-2] = '#377eb8'; // Blue
+    chargeColors[-1] = '#088'; // Teal
+    chargeColors[0] = '#4daf4a'; // Green - unused
+    chargeColors[+1] = '#ff7f00'; // Orange
+    chargeColors[+2] = '#e41a1c'; // Red
+    chargeColors[+3] = '#ff0000'; // SuperRed
+
+    // Configuration for the Diagrams
+    const commonConfig = {
+        width: 100,
+        height: 200,
+        showYTicks: true,
+        categories: [{ id: 'levels', label: '' }],
+        margin: { top: 10, right: 0, bottom: 20, left_compact: 25 }, // Minimal margins if no Y axis label/ticks
+        transitionDuration: 500,
+    };
+    const throttleDuration = 100; // should be 1/5 or less of transitionDuration
+
+    const muBarConfig = {
+        ...commonConfig,
+        yAxisLabel:
+            'Standard state voltage $V^\\ominus_i$ (V) - arbirary offset', // KaTeX label
+        initialYRange: [-5, 10], // Calculated range + padding
+    };
+
+    // Launcher code
+    function doit() {
+        // DOM References
+        const dPhiSlider = document.getElementById(sliderId);
+        const diagramContainer = document.getElementById(diagramContainerId);
+
+        if (!(dPhiSlider && diagramContainer))
+            throw 'Could not find all elements';
+        const levelsDiagram = new EnergyLevelsDiagram(
+            diagramContainerId,
+            muBarConfig
+        );
+
+        // Update callback
+        function updateDiagrams() {
+            // Slider represents a shift in electrostatic potential from
+            // whatever initial value that would have defined ecp_init.
+            const dphi = parseFloat(dPhiSlider.value);
+
+            const VLevelsData = [];
+
+            ionData.forEach((d) => {
+                const color = chargeColors[d.z];
+                VLevelsData.push({
+                    categoryId: 'levels',
+                    levelId: d.formula + '_' + d.z,
+                    yValue: d.V_std + dphi,
+                    label: d.label, // Raw LaTeX for component
+                    color: color,
+                });
+            });
+            // Update the diagrams
+            levelsDiagram.setLevels(VLevelsData);
+        }
+
+        // Slider event listener - throttle it.
+        dPhiSlider.addEventListener(
+            'input',
+            throttle((event) => updateDiagrams(), throttleDuration)
+        );
+
+        // Initial update
+        updateDiagrams();
+        console.log('{{ idprefix }} demo initialized.');
+    }
+    try {
+        doit();
+    } catch (error) {
+        console.error('Failed to initialize {{ idprefix }} demo!', error);
+    }
+</script>

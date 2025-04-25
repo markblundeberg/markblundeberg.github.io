@@ -50,7 +50,7 @@ For example, for an ×10 ('decade') concentration increase at room temperature, 
 
 We now have this $V^\ominus_i$, which unfortunately _cannot_ be tabulated since it is sensitive to arbitrary electrostatic offsets. We're not stuck though, as we can compare the relative $V^\ominus_i$ values of different ions. As we've seen, _differences_ in $V_i$'s are insensitive to the electrostatic offset, and that now includes $V^\ominus_i$'s too. So _differences_ in $V^\ominus_i$ are **electrically-invariant** properties of the solvent. And they are going to be **concentration-invariant** too (since they apply to the ideally dilute limit). Here are a number of selected $V^\ominus_i$ values for real water, with an arbitrary offset:
 
-(... ELD DIAGRAM GOES HERE ...)
+{% include "esbd-diagrams/V-std-ladder.html" %}
 
 I call this the **standard state ladder** for water. The standard state ladder is a rigid ladder: as we change the electrical or chemical conditions of the solution, the $V^\ominus_i$ values may move up and down but they have to all stay rigidly locked to one another. In contrast, $V_i$ values are not rigid and will change with composition.
 
