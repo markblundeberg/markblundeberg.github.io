@@ -121,23 +121,58 @@ Here I've taken some selected ionic thermodynamic data from Atkins' _Physical Ch
 
 ## Example: common-ion effect
 
-Earlier in the Electrodes topic we talked about the silver / silver chloride electrode. Let's consider what happens when we add some potassium chloride salt to its solution:
+Earlier in the Electrodes topic we talked about the silver / silver chloride electrode. Let's consider what happens when we dissolve some potassium chloride salt into its solution:
 
 {% include "esbd-diagrams/esbd-agcl-kcl-common-ion.html" %}
 
-As you can see, adding $\mathrm{KCl}$ causes the concentration of $\mathrm{Ag^+}$ ions to decrease. This is known as a {%wiki "common-ion effect" %}.
+The solution is initially saturated with $\mathrm{AgCl}$, and as you can see, adding $\mathrm{KCl}$ causes the concentration of $\mathrm{Ag^+}$ ions to decrease. This is known as a {%wiki "common-ion effect" %}. Visually, we can see that adding the $\mathrm{KCl}$ pushes up the standard state ladder in order to increase the $\mathrm{Cl^-}$ concentration. Since the ladder is rigid, this also moves $V^\ominus_\mathrm{Ag^+}$ away from $V_\mathrm{Ag^+}$ thereby decreasing its concentration. If we were to do this experiment, we would likely see the solution turn cloudy with $\mathrm{AgCl}$ precipitates, but the excess $\mathrm{AgCl}$ could also collect on the electrode.
 
-Here, under all conditions value of $V_\mathrm{Ag^+}$ is fixed to the electrode's $V_\mathrm{e^-}$ (as $\mathrm{Ag} \rightleftharpoons \mathrm{Ag^+} + \mathrm{e^-} $), and in turn, this fixes $V_\mathrm{Cl^-}$ since the $\mathrm{AgCl}$ salt is saturating the solution (with $\mathrm{AgCl} \rightleftharpoons \mathrm{Ag^+} + \mathrm{Cl^-} $).
+And, this relates to the saturated salt defining a solubility product, which we can calculate from the diagram too:
+$$c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-} = 1.76\times 10^{-10}~(\mathrm{mol/L})^2.$$
 
-Initially there are only $\mathrm{Ag^+}$ and $\mathrm{Cl^-}$ ions, so by charge neutrality their concentrations have to be equal, and that means the standard states $V^\ominus_\mathrm{Ag^+}$, $V^\ominus_\mathrm{Cl^-}$ have to fit equidistant from $V_\mathrm{Ag^+}$ and $V_\mathrm{Cl^-}$ respectively. Thus we find $c_\mathrm{Ag^+} = c_\mathrm{Cl^-} = 1.3\times10^{-5}~\mathrm{mol/L}$.
+We may also consider adding a common-cation salt like silver nitrate, donating $\mathrm{Ag^+}$ and $\mathrm{NO_3^-}$ ions. In that case, it will suppress the $\mathrm{Cl^-}$ concentration instead. And if we added both $\mathrm{KCl}$ and $\mathrm{AgNO_3}$ into the same beaker, we'd see massive precipitation of $\mathrm{AgCl}$ as we cannot exceed the solubility product. (In the above diagram, you can enable this with a checkbox.)
 
-When we add some $\mathrm{KCl}$ salt, we are increasing the $c_\mathrm{Cl^-}$ concentration, and thus $V^\ominus_\mathrm{Cl^-}$ has to move upwards. But if one part of the "ladder" moves, then all of the ladder moves. As a result, $V^\ominus_\mathrm{Ag^+}$ moves further from $V_\mathrm{Ag^+}$, decreasing its concentration $c_\mathrm{Ag^+}$.
+<details>
+<summary>
+The math.
+</summary>
+Using our definition equation for $V^\ominus_i$, we have:
 
-This example also shows how the electrode potential, $E = V_\mathrm{e^-} - V^\ominus_\mathrm{H^+}$ (which we will derive in the Potentials topic), is a function of the $c_\mathrm{Cl^-}$ concentration. When we bring our ideal $\mathrm{Cl^-}$ ions up to $c_\mathrm{Cl^-} = c^\ominus = 1~\mathrm{mol/L}$, there we find $E = 0.222~\mathrm{V}$.
+$$ c_\mathrm{Ag^+} = c^\ominus \exp(+\tfrac{F}{RT}(V_\mathrm{Ag^+} - V^\ominus_\mathrm{Ag^+})). $$
+$$ c_\mathrm{Cl^-} = c^\ominus \exp(-\tfrac{F}{RT}(V_\mathrm{Cl^-} - V^\ominus_\mathrm{Cl^-})). $$
+
+Here, under all conditions the saturated $\mathrm{AgCl}$ sets $V_\mathrm{Ag^+} - V_\mathrm{Cl^-} = \tfrac{1}{F}\mu_\mathrm{AgCl} = -1.1379~\mathrm{V}$, whereas $V^\ominus_\mathrm{Ag^+} - V^\ominus_\mathrm{Cl^-} = -0.5609~\mathrm{V}$. We are also at temperature $\tfrac{RT}{F} = 0.02569~\mathrm{V}$. Thus:
+
+\begin{align}
+c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-} & = (c^\ominus)^2 \exp(\tfrac{F}{RT} [V_\mathrm{Ag^+} - V_\mathrm{Cl^-} - (V^\ominus_\mathrm{Ag^+} - V^\ominus_\mathrm{Cl^-})]) \notag \\\\
+& = \exp \bigg(\frac{-1.1379~\mathrm{V} + 0.5609~\mathrm{V}}{0.02569~\mathrm{V}} \bigg) \notag \\\\
+& = 1.76\times 10^{-10}~(\mathrm{mol/L})^2, \notag
+\end{align}
+
+And this value is independent of the relative shift of the $V_i$'s vs. the $V^\ominus_i$'s.
+
+Initially there are only $\mathrm{Ag^+}$ and $\mathrm{Cl^-}$ ions, so by charge neutrality their concentrations have to be equal, and we find $c_\mathrm{Ag^+} = c_\mathrm{Cl^-} = \sqrt{c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-}} = 1.33\times10^{-5}~\mathrm{mol/L}$. This also means the standard states $V^\ominus_\mathrm{Ag^+}$, $V^\ominus_\mathrm{Cl^-}$ have to fit equidistantly from $V_\mathrm{Ag^+}$ and $V_\mathrm{Cl^-}$ respectively.
+
+When we add some $\mathrm{KCl}$ salt, we are controlling $c_\mathrm{K^+}$ and modifying the charge neutrality equilibrium:
+
+$$ c_\mathrm{Ag^+} - c_\mathrm{Cl^-} + c_\mathrm{K^+} = 0 .$$
+
+And thus, we get a quadratic equation in terms of $c_\mathrm{Ag^+}$ :
+
+$$ (c_\mathrm{Ag^+})^2 - (c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-}) + c_\mathrm{K^+} c_\mathrm{Ag^+} = 0 ,$$
+
+where $(c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-})$ and $c_\mathrm{K^+}$ are given values.
+</details>
+
+This example also shows how the electrode potential, $E = V_\mathrm{e^-} - V^\ominus_\mathrm{H^+}$ (which we will derive in the Potentials topic), is a function of the $c_\mathrm{Cl^-}$ concentration. When we bring our ideal $\mathrm{Cl^-}$ ions up to $c_\mathrm{Cl^-} = c^\ominus = 1~\mathrm{mol/L}$, there we find $E = 0.222~\mathrm{V}$, which is the standard electrode potential for the {%wiki "silver chloride electrode" %}.
 
 ## Relation to semiconductor bands
 
-Conceptually, these standard state lines function much like conduction and valence band edges ($E_\mathrm{C}$, $E_\mathrm{V}$) do in semiconductor physics – they act as reference energy/potential levels. The actual potential ($V_i$) deviates from the reference $V^\ominus_i$ based on the concentration, just as the Fermi level ($E_\mathrm{F}$) deviates from the band edges based on carrier concentration. Actually, as we have alluded to before, and we will talk about in much more depth in the Semiconductors topic, we can cram semiconductors into our electrochemical $V_i$ framework too! For silicon we find that $V^\ominus_\mathrm{h^+} - V^\ominus_\mathrm{e^-} = 1.27~\mathrm{V}$ (for a 1 mol/L reference concentration). I.e. the 'standard state ladder' for a semiconductor really only has two entries, one for conduction band electrons ($\mathrm{e^-}$), and the other for valence band holes ($\mathrm{h^+}$). The reason this 1.27 V value differs from the bandgap of silicon ($E_\mathrm{C} - E_\mathrm{V} = 1.1~\mathrm{eV}$) is simply that the band edges each correspond to less than a 1 mol/L concentration, so, $V^\ominus_\mathrm{h^+}$ sits slightly higher than $-E_\mathrm{V}/e$ and $V^\ominus_\mathrm{e^-}$ sits slightly lower than $-E_\mathrm{C}/e$.
+Conceptually, these standard state lines function much like conduction and valence band edges ($E_\mathrm{C}$, $E_\mathrm{V}$) do in semiconductor physics – they act as reference energy/potential levels. The actual potential ($V_i$) deviates from the reference $V^\ominus_i$ based on the concentration, just as the Fermi level ($E_\mathrm{F}$) deviates from the band edges based on carrier concentration.
+
+Actually, as we have alluded to before, and we will talk about in much more depth in the Semiconductors topic, we can cram semiconductors into our electrochemical $V_i$ framework too! For silicon we find that $V^\ominus_\mathrm{h^+} - V^\ominus_\mathrm{e^-} = 1.27~\mathrm{V}$ (for a 1 mol/L reference concentration). I.e. the 'standard state ladder' for a semiconductor really only has two entries, one for conduction band electrons ($\mathrm{e^-}$), and the other for valence band holes ($\mathrm{h^+}$). The reason this 1.27 V value differs from the bandgap of silicon ($E_\mathrm{C} - E_\mathrm{V} = 1.1~\mathrm{eV}$) is simply that the band edges each correspond to less than a 1 mol/L concentration, so, $V^\ominus_\mathrm{h^+}$ sits slightly higher than $-E_\mathrm{V}/e$ and $V^\ominus_\mathrm{e^-}$ sits slightly lower than $-E_\mathrm{C}/e$.
+
+The above example of salt solubility is also similar to the semiconductor {% wiki "Mass_action_law_(electronics)", "law of mass action" %}; in a semiconductor, $c_{\mathrm{e^-}} c_{\mathrm{h^+}} = (c_\mathrm{i})^2$ for some value $c_\mathrm{i}$, and donor dopants (such as phosphorus $\mathrm{P^+}$) play the same role as the $\mathrm{K^+}$ ions above in terms of shifting the balance of concentration.
 
 ## Takeaways
 
