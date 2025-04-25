@@ -206,6 +206,30 @@ details {
     border: 1px dashed #ccc;
 }
 
+table {
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+th,
+td {
+    border: 1px solid #eee;
+    padding: 5px;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+th {
+    background-color: #cae4ff;
+}
+
 p.diagram-placeholder {
     border: 1px dashed #ccc;
     padding: 20px;
