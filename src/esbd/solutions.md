@@ -25,13 +25,15 @@ For this topic, we'll focus primarily on the _ideally dilute_ case, and put off 
 
 A familiar expression from chemistry is the dependence of a solute's chemical potential on its concentration $c$:
 $$ \mu_i(c_i) \approx \mu^\ominus_i + RT \ln(c_i/c^\ominus) $$
-This approximation only holds for small $c$ values, but it captures a behaviour known as _ideally dilute_. Here, $c^\ominus$ is a reference concentration level of 1 mol/L, and $\mu^\ominus_i$ is a reference value that extrapolates the value $\mu_i(c^\ominus)$ based off its behaviour in the infinite dilution limit. Chemists have done great work cataloguing $\mu^\ominus_i$ values for various solutes, in the form of molar Gibbs energies of formation for solutes (which, remember, we directly map to $\mu$!).
+This approximation only holds for small $c$ values, but it captures a behaviour known as _ideally dilute_. Here, $c^\ominus$ is a reference concentration level of 1 mol/L, and $\mu^\ominus_i$ is a reference value that extrapolates the value $\mu_i(c^\ominus)$ based off its behaviour in the infinite dilution limit. The reason for this logarithmic dependence on $c_i$ is fundamental and entropic, having to do with each particle in $c_i$ acting independently and exploring the volume of the solvent.
+
+Chemists have done heroic work cataloguing $\mu^\ominus_i$ values for various solutes in various solvents, in the form of molar standard Gibbs energies of formation for solutes. And, we have adopted the convention that $\mu$ is be equal to Gibbs formation energy, so these tables directly give us $\mu^\ominus_i$, at least for the standard conditions listed in the data source.
 
 Well, let's try adapting that equation to ions. No problem, we just use the electrochemical potential:
 
 $$ \bar\mu_i(c_i) \approx \bar\mu^\ominus_i + RT \ln(c_i/c^\ominus). $$
 
-But, remember how $\bar\mu_i$ had the charge-dependent offset? Well, that must affect its reference value $\bar\mu^\ominus_i$ too. OK, well, let's just force that reference value into a species voltage too! Divide _all the things_ by $z_i F$!
+But, remember how $\bar\mu_i$ had the charge-dependent offset? Well, that must affect its reference value $\bar\mu^\ominus_i$ too. OK, well, let's just force that reference value into a species voltage too! _Divide all the things_ by $z_i F$!
 
 $$ V_i(c_i) \approx V^\ominus_i + \frac{RT}{z_i F} \ln(c_i/c^\ominus). $$
 
@@ -40,30 +42,38 @@ The following is the operational definition of $V^\ominus_i$ by the way: make th
 OK, so that is still kind of of like our familiar neutral solutes' $\mu_i(c_i)$ equation, except:
 * Cations: Still $V_{\mathrm{X}^+}$ does grow higher relative to $V^\ominus_{\mathrm{X}^+}$ as concentration $c_i$ increases.
 * Anions: Now $V_{\mathrm{Y}^-}$ _goes lower_ relative to $V^\ominus_{\mathrm{Y}^-}$ as concentration increases!
-* Higher charges: For a strong ion with charge $|z_i|>1$, its $V_i$ moves proportionally slower relative to $V^\ominus_i$ as concentration increases!
+* Higher charges: For a strong ion with charge $|z|>1$, its $V_{\mathrm{Z}^z}$ moves proportionally slower relative to $V^\ominus_{\mathrm{Z}^z}$ as concentration increases!
 
-For example, for a 10x ('decade') concentration increase at room temperature, the relative voltage's change $\frac{RT}{z_i F}\ln(10)$ is +59&nbsp;mV/decade for a 1+ ion, and would be -20&nbsp;mV/decade for a 3- ion.
+For example, for an ×10 ('decade') concentration increase at room temperature, the change $V_i - V^\ominus_i$ would be $\frac{RT}{z_i F}\ln(10)$. That would be +59&nbsp;mV/decade for a 1+ ion, and -20&nbsp;mV/decade for a 3- ion.
 
-## The $V^\ominus_i$ rigid ladder
+## The $V^\ominus_i$ standard state ladder
 
-We now have this $V^\ominus_i$, which unfortunately _cannot_ be tabulated since it is sensitive to arbitrary electrostatic offsets. We're not stuck though, as we can compare the relative $V^\ominus_i$ values of different ions. As we've seen, _differences_ in $V_i$'s are insensitive to the electrostatic offset, and that now includes $V^\ominus_i$'s too. So _differences_ in $V^\ominus_i$ are **electrically-invariant** properties of the solvent. And they are going to be **concentration-invariant** too (since they apply to the ideally dilute limit). Here are a number of selected $V^\ominus_i$ values for real water, all relative to each other of course:
+We now have this $V^\ominus_i$, which unfortunately _cannot_ be tabulated since it is sensitive to arbitrary electrostatic offsets. We're not stuck though, as we can compare the relative $V^\ominus_i$ values of different ions. As we've seen, _differences_ in $V_i$'s are insensitive to the electrostatic offset, and that now includes $V^\ominus_i$'s too. So _differences_ in $V^\ominus_i$ are **electrically-invariant** properties of the solvent. And they are going to be **concentration-invariant** too (since they apply to the ideally dilute limit). Here are a number of selected $V^\ominus_i$ values for real water, with an arbitrary offset:
 
 (... ELD DIAGRAM GOES HERE ...)
 
-Now let's see how I calculated those values from existing chemical literature.
+I call this the **standard state ladder** for water. The standard state ladder is a rigid ladder: as we change the electrical or chemical conditions of the solution, the $V^\ominus_i$ values may move up and down but they have to all stay rigidly locked to one another. In contrast, $V_i$ values are not rigid and will change with composition.
 
+In effect, the standard state ladder of $V^\ominus_i$ is a stand-in for the notion of electrostatic potential $\phi$, but combining it with the average differences in the local electrostatic potentials that each ion 'feels', as well the ion's chemical structure, and the way it disturbs its solvent environment with "solvation shells". Conversely, we can imagine $\phi$ as the single degree of freedom describing the offset of the rigid ladder. Specifically, the usual convention for $\phi$ sets it at exactly $V^\ominus_{\mathrm{H^+}}$.
+
+For the interested, let's see how I calculated those values from existing chemical literature:
+
+<details>
+<summary>
+Click to open ion $V^\ominus_i$ table.
+</summary>
 When you look at a table of Gibbs energy of formation, the values for ions are _internal_: $\mu^\ominus_{\mathrm{int},i}$, which defines $\bar\mu^\ominus_i = \mu^\ominus_{\mathrm{int},i} + z_i F \phi$ according to whatever convention of $\phi$ was used for that solvent. Using this and $V^\ominus_i = \bar\mu^\ominus_i/(z_i F)$, we get (the $\phi$'s cancel):
 
 $$V^\ominus_i - V^\ominus_j = \frac{\mu^\ominus_{\mathrm{int},i}}{z_i F} - \frac{\mu^\ominus_{\mathrm{int},j}}{z_j F}. $$
 
-Thus we find for example that in water, $V^\ominus_{\mathrm{Na}^+} - V^\ominus_{\mathrm{Cl}^-} = -4.0746~\mathrm{V}$ -- this is the _extrapolated_ estimate of $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ that we would get if both sodium and chloride ions were present at each a concentration of 1 mol/L, if they behave ideally (and in reality, they don't). Going to a more dilute concentration of 0.001 mol/L, which is closer to the infinitely dilute ideal, then $\log_{10}(c/c^\ominus) = -3$, and $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = -4.43~\mathrm{V}$.
+This means we can re-tabulate all the $V^\ominus_i$ using any one of them as a common reference.
 
-In any case, we can tabulate all the $V^\ominus_i$ using any one of them as a common reference (let's use $V^\ominus_{\mathrm{H}^+}$). Here I've taken some selected values from Atkins' _Physical Chemistry_ (8th edition, Table 2.7 in the back pages), and converted them. Note these are all for **ideally dilute ions in water** at 298 K and 1 bar, and they are for a reference ionic concentration of $c^\ominus = 1~\mathrm{mol/L}$.
+Here I've taken some selected ionic thermodynamic data from Atkins' _Physical Chemistry_ (8th edition, Table 2.7 in the back pages), and converted them. Note these are all for:
 
-<details>
-<summary>
-Click to open extended discussion.
-</summary>
+* **ideally dilute** ions in **water**,
+* at 298 K and 1 bar,
+* a reference ionic concentration of $c^\ominus = 1~\mathrm{mol/L}$, and,
+* all referenced to $V^\ominus_{\mathrm{H}^+}$.
 
 | Ion $i$ | $\Delta_{\mathrm{f}} G^\ominus$ (kJ/mol) | $V^\ominus_i - V^\ominus_{\mathrm{H}^+}$ (V) |
 | ---: | ---: | ---: |
@@ -105,15 +115,17 @@ Click to open extended discussion.
 | $\mathrm{Cs}^{+}$ | -292.02&#8199; | -3.0266&#8199; |
 | $\mathrm{Li}^{+}$ | -293.31&#8199; | -3.0399&#8199; |
 
-</details>
-
 (We also see on the $\Delta_{\mathrm{f}} G^\ominus$ tables that $\mathrm{H}^+$ is often defined to have exactly 0 standard Gibbs energy of formation. This will have no effect on us as it's more related to defining $\phi$, which we will talk about in our later topic Potentials.)
+
+</details>
 
 ## Example: common-ion effect
 
-Earlier in the Electrodes topic we talked about the silver / silver chloride electrode. Let's consider what happens when we add some potassium chloride salt to its solution, inducing a {%wiki "common-ion effect" %}:
+Earlier in the Electrodes topic we talked about the silver / silver chloride electrode. Let's consider what happens when we add some potassium chloride salt to its solution:
 
 {% include "esbd-diagrams/esbd-agcl-kcl-common-ion.html" %}
+
+As you can see, adding $\mathrm{KCl}$ causes the concentration of $\mathrm{Ag^+}$ ions to decrease. This is known as a {%wiki "common-ion effect" %}.
 
 Here, under all conditions value of $V_\mathrm{Ag^+}$ is fixed to the electrode's $V_\mathrm{e^-}$ (as $\mathrm{Ag} \rightleftharpoons \mathrm{Ag^+} + \mathrm{e^-} $), and in turn, this fixes $V_\mathrm{Cl^-}$ since the $\mathrm{AgCl}$ salt is saturating the solution (with $\mathrm{AgCl} \rightleftharpoons \mathrm{Ag^+} + \mathrm{Cl^-} $).
 
@@ -121,7 +133,7 @@ Initially there are only $\mathrm{Ag^+}$ and $\mathrm{Cl^-}$ ions, so by charge 
 
 When we add some $\mathrm{KCl}$ salt, we are increasing the $c_\mathrm{Cl^-}$ concentration, and thus $V^\ominus_\mathrm{Cl^-}$ has to move upwards. But if one part of the "ladder" moves, then all of the ladder moves. As a result, $V^\ominus_\mathrm{Ag^+}$ moves further from $V_\mathrm{Ag^+}$, decreasing its concentration $c_\mathrm{Ag^+}$.
 
-This example also shows how the electrode potential, $E = V_\mathrm{e^-} - V^\ominus_\mathrm{H^+}$ (which we will derive in the next Topic), is a function of the $c_\mathrm{Cl^-}$ concentration. When we bring our ideal $\mathrm{Cl^-}$ ions up to $c_\mathrm{Cl^-} = c^\ominus = 1~\mathrm{mol/L}$, there we find $E = 0.222~\mathrm{V}$.
+This example also shows how the electrode potential, $E = V_\mathrm{e^-} - V^\ominus_\mathrm{H^+}$ (which we will derive in the Potentials topic), is a function of the $c_\mathrm{Cl^-}$ concentration. When we bring our ideal $\mathrm{Cl^-}$ ions up to $c_\mathrm{Cl^-} = c^\ominus = 1~\mathrm{mol/L}$, there we find $E = 0.222~\mathrm{V}$.
 
 ## Relation to semiconductor bands
 
@@ -162,11 +174,11 @@ $$ \gamma_i ' = \gamma_i \exp([z_i F / (RT)] \cdot \psi) , $$
 
 $$ {V^{\ominus}_i}' = V^{\ominus}_i - \psi , $$
 
-for any value of $\psi$. For example, with $\psi=-59~\mathrm{mV}$ we can lower the entire $V^{\ominus}_i$ ladder by 59 mV, and multiply $\gamma_i$ for 1+ ions by ×10, multiply $\gamma_i$ for 2- ions by ×0.01, and so on. If you are using electrostatic potential $\phi$, then $\phi' = \phi - \psi$ too. The problem is, we can't tell the difference, because all we can measure are $c_i$ and $V_i$.
+for any value of $\psi$. For example, with $\psi=-59~\mathrm{mV}$ we can lower the entire $V^{\ominus}_i$ ladder by 59 mV, and multiply $\gamma_i$ for $\mathrm{X^+}$ ions by ×10, multiply $\gamma_i$ for $\mathrm{Y^{2-}}$ ions by ×0.01, and so on. If you are using electrostatic potential $\phi$, then $\phi' = \phi - \psi$ too. The problem is, we can't tell the difference, because all we can measure are $c_i$ and $V_i$.
 
-The arbitrariness is _severe_: we can choose a different value of $\psi$ for every possible composition of solution at every temperature and every pressure, completely arbitrarily. It would make no measurable difference. **Once we permit the presence of activity coefficients, we no longer have _any_ anchor on how to set the electrostatic potential $\phi$ nor how we should offset the $V^{\ominus}_i$ ladder.**
+The arbitrariness is _severe_: we can choose a different value of $\psi$ for every possible composition of solution at every temperature and every pressure, completely arbitrarily. It would make no measurable difference. **Once we permit the presence of activity coefficients, we no longer have _any_ anchor on how to offset the $V^{\ominus}_i$ ladder**, nor the electrostatic potential $\phi$.
 
-The only unambiguously measureable ion activity coefficients are charge-neutral products like $\gamma_{\mathrm{Na}^+}\cdot\gamma_{\mathrm{Cl}^-}$, or $\sqrt{\gamma_{\mathrm{Zn}^{2+}}} \cdot \gamma_{\mathrm{Cl}^-}$ where the $\psi$ arbitrariness cancels out. These charge-neutral $\gamma_i$ products are the mean activity coefficients.
+The only unambiguously measureable ion activity coefficients are charge-neutral products like $\gamma_{\mathrm{Na}^+}\cdot\gamma_{\mathrm{Cl}^-}$, or $\sqrt{\gamma_{\mathrm{Zn}^{2+}}} \cdot \gamma_{\mathrm{Cl}^-}$ where the $\psi$ arbitrariness cancels out. These charge-neutral $\gamma_i$ products are the mean activity coefficients, and they directly relate to measurable balanced differences like $\sum_i w_i V_i$ with $\sum_i w_i = 0$.
 
 Anyway, that is one reason I'm just going to focus on ideal dilute case for now. There's a lot more to say on this, but I'll leave that for the dedicated topic on non-ideal solutions.
 
