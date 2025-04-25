@@ -153,15 +153,16 @@ And this value is independent of the relative shift of the $V_i$'s vs. the $V^\o
 
 Initially there are only $\mathrm{Ag^+}$ and $\mathrm{Cl^-}$ ions, so by charge neutrality their concentrations have to be equal, and we find $c_\mathrm{Ag^+} = c_\mathrm{Cl^-} = \sqrt{c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-}} = 1.33\times10^{-5}~\mathrm{mol/L}$. This also means the standard states $V^\ominus_\mathrm{Ag^+}$, $V^\ominus_\mathrm{Cl^-}$ have to fit equidistantly from $V_\mathrm{Ag^+}$ and $V_\mathrm{Cl^-}$ respectively.
 
-When we add some $\mathrm{KCl}$ salt, we are controlling $c_\mathrm{K^+}$ and modifying the charge neutrality equilibrium:
+When we add some $\mathrm{KCl}$ and/or $\mathrm{AgNO_3}$ salt, we are controlling $c_\mathrm{K^+}$ and $c_\mathrm{NO_3^-}$ and modifying the charge neutrality equilibrium:
 
-$$ c_\mathrm{Ag^+} - c_\mathrm{Cl^-} + c_\mathrm{K^+} = 0 .$$
+$$ c_\mathrm{Ag^+} - c_\mathrm{Cl^-} + c_\mathrm{K^+} - c_\mathrm{NO_3^-}= 0 .$$
 
 And thus, we get a quadratic equation in terms of $c_\mathrm{Ag^+}$ :
 
-$$ (c_\mathrm{Ag^+})^2 - (c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-}) + c_\mathrm{K^+} c_\mathrm{Ag^+} = 0 ,$$
+$$ (c_\mathrm{Ag^+})^2 - (c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-}) + (c_\mathrm{K^+} - c_\mathrm{NO_3^-}) c_\mathrm{Ag^+} = 0 ,$$
 
-where $(c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-})$ and $c_\mathrm{K^+}$ are given values.
+where $(c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-})$ and $(c_\mathrm{K^+} - c_\mathrm{NO_3^-})$ are given values.
+
 </details>
 
 This example also shows how the electrode potential, $E = V_\mathrm{e^-} - V^\ominus_\mathrm{H^+}$ (which we will derive in the Potentials topic), is a function of the $c_\mathrm{Cl^-}$ concentration. When we bring our ideal $\mathrm{Cl^-}$ ions up to $c_\mathrm{Cl^-} = c^\ominus = 1~\mathrm{mol/L}$, there we find $E = 0.222~\mathrm{V}$, which is the standard electrode potential for the {%wiki "silver chloride electrode" %}.
@@ -172,7 +173,7 @@ Conceptually, these standard state lines function much like conduction and valen
 
 Actually, as we have alluded to before, and we will talk about in much more depth in the Semiconductors topic, we can cram semiconductors into our electrochemical $V_i$ framework too! For silicon we find that $V^\ominus_\mathrm{h^+} - V^\ominus_\mathrm{e^-} = 1.27~\mathrm{V}$ (for a 1 mol/L reference concentration). I.e. the 'standard state ladder' for a semiconductor really only has two entries, one for conduction band electrons ($\mathrm{e^-}$), and the other for valence band holes ($\mathrm{h^+}$). The reason this 1.27 V value differs from the bandgap of silicon ($E_\mathrm{C} - E_\mathrm{V} = 1.1~\mathrm{eV}$) is simply that the band edges each correspond to less than a 1 mol/L concentration, so, $V^\ominus_\mathrm{h^+}$ sits slightly higher than $-E_\mathrm{V}/e$ and $V^\ominus_\mathrm{e^-}$ sits slightly lower than $-E_\mathrm{C}/e$.
 
-The above example of salt solubility is also similar to the semiconductor {% wiki "Mass_action_law_(electronics)", "law of mass action" %}; in a semiconductor, $c_{\mathrm{e^-}} c_{\mathrm{h^+}} = (c_\mathrm{i})^2$ for some value $c_\mathrm{i}$, and donor dopants (such as phosphorus $\mathrm{P^+}$) play the same role as the $\mathrm{K^+}$ ions above in terms of shifting the balance of concentration.
+The above example of salt solubility is also similar to the semiconductor {% wiki "Mass_action_law_(electronics)", "law of mass action" %}; in a semiconductor, $c_{\mathrm{e^-}} c_{\mathrm{h^+}} = (c_\mathrm{i})^2$ for some value $c_\mathrm{i}$, and donor dopants (such as phosphorus $\mathrm{P^+}$) and acceptor dopants (such as boron $\mathrm{B^-}$) play the same role as above in terms of shifting the balance of concentration.
 
 ## Takeaways
 
