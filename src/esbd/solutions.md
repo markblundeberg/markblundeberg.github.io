@@ -112,16 +112,13 @@ Earlier in the Electrodes topic we talked about the silver / silver chloride ele
 
 {% include "esbd-diagrams/esbd-agcl-kcl-common-ion.html" %}
 
-Here, the value of $V_\mathrm{Ag^+}$ is fixed to the electrode's $V_\mathrm{e^-}$
+Here, under all conditions value of $V_\mathrm{Ag^+}$ is fixed to the electrode's $V_\mathrm{e^-}$, and in turn, this fixes $V_\mathrm{Cl^-}$ since the $\mathrm{AgCl}$ salt is saturating the solution.
 
+Initially there are only $\mathrm{Ag^+}$ and $\mathrm{Cl^-}$ ions, so by charge neutrality their concentrations have to be equal, and that means the standard states $V^\ominus_\mathrm{Ag^+}$, $V^\ominus_\mathrm{Cl^-}$ have to fit equidistant from $V_\mathrm{Ag^+}$ and $V_\mathrm{Cl^-}$ respectively. Thus we find $c_\mathrm{Ag^+} = c_\mathrm{Cl^-} = 1.3\times10^{-5}~\mathrm{mol/L}$.
 
-## Example: fixed $V_i$'s
+When we add some $\mathrm{KCl}$ salt, we are increasing the $c_\mathrm{Cl^-}$ concentration, and thus $V^\ominus_\mathrm{Cl^-}$ has to move upwards. But if one part of the "ladder" moves, then all of the ladder moves. As a result, $V^\ominus_\mathrm{Ag^+}$ moves further from $V_\mathrm{Ag^+}$, decreasing its concentration $c_\mathrm{Ag^+}$.
 
-
-This example is a little more unusual.
-
-Suppose we have a solution connected to two 
-
+This example also shows how the electrode potential, $E = V_\mathrm{e^-} - V^\ominus_\mathrm{H^+}$, is a function of the $c_\mathrm{Cl^-}$ concentration, and assuming the ideally dilute behaviour continues to $c_\mathrm{Cl^-} = c^\ominus = 1~\mathrm{mol/L}$, there we will find $E = 0.222~\mathrm{V}$.
 
 ## Takeaways
 
