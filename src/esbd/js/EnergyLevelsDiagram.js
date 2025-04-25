@@ -341,10 +341,7 @@ class EnergyLevelsDiagram {
         );
 
         // Update Y scale
-        this.yScale
-            .domain(this.config.yRange)
-            .range([this.plotHeight, 0])
-            .nice();
+        this.yScale.domain(this.config.yRange).range([this.plotHeight, 0]);
 
         // Update X scale
         this.xScale
@@ -361,7 +358,7 @@ class EnergyLevelsDiagram {
             'transform',
             `translate(${yLabelX}, ${yLabelY}) rotate(-90)`
         );
-        const labelWidthEstimate = 200;
+        const labelWidthEstimate = 300;
         const labelHeightEstimate = 20; // Estimates
         this.yAxisLabel
             .attr('width', labelWidthEstimate)
