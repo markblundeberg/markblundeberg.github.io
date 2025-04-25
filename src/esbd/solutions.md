@@ -11,11 +11,11 @@ eleventyNavigation:
 
 # {{title}}
 
-On a purely exact thermodynamic level, we can talk about having a solid compound such as $\mathrm{NaCl}$ in equilibrium with a solvent (such as water), where part of it dissolves and dissociates into $\mathrm{Na}^+$ and $\mathrm{Cl}^-$ ions, leading to
+On a purely exact thermodynamic level, we can talk about having a solid compound such as $\mathrm{NaCl}$ in equilibrium with a solvent (such as water), where part of it dissolves and dissociates into $\mathrm{Na}^+$ and $\mathrm{Cl}^-$ ions and saturates the solvent, leading to
 
-$$V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}= \frac{1}{F}\mu_{\mathrm{NaCl}} \approx -3.9813~\mathrm{V}.$$
+$$V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}= \frac{1}{F}\mu_{\mathrm{NaCl}} = -3.9813~\mathrm{V}.$$
 
-This value of $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ is a thermodynamic guarantee for an $\mathrm{NaCl}$-saturated solution, at least for the standard conditions that gave us the value $\mu_{\mathrm{NaCl}} = -384.14~\mathrm{kJ/mol}$ for salt. But its value will not change depending on solvent nor the presence of any other ions in solution.
+This value of $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ is a thermodynamic guarantee for an $\mathrm{NaCl}$-saturated solution, at least for the standard conditions (25&nbsp;°C, 1 bar) listed in the table where I found the value $\mu_{\mathrm{NaCl}} = -384.14~\mathrm{kJ/mol}$. Its value will not change depending on solvent nor the presence of any other ions in solution.
 
 But suppose we only dissolve a small amount of salt, then $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ will be a lower value than its saturated value. How _exactly_ does the $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ difference depend on concentration? And what if there are many ions present, then how much of each ion do we have and where do all their $V_i$'s lie in relation to each other?
 
@@ -60,6 +60,11 @@ Thus we find for example that in water, $V^\ominus_{\mathrm{Na}^+} - V^\ominus_{
 
 In any case, we can tabulate all the $V^\ominus_i$ using any one of them as a common reference (let's use $V^\ominus_{\mathrm{H}^+}$). Here I've taken some selected values from Atkins' _Physical Chemistry_ (8th edition, Table 2.7 in the back pages), and converted them. Note these are all for **ideally dilute ions in water** at 298 K and 1 bar, and they are for a reference ionic concentration of $c^\ominus = 1~\mathrm{mol/L}$.
 
+<details>
+<summary>
+Click to open extended discussion.
+</summary>
+
 | Ion $i$ | $\Delta_{\mathrm{f}} G^\ominus$ (kJ/mol) | $V^\ominus_i - V^\ominus_{\mathrm{H}^+}$ (V) |
 | ---: | ---: | ---: |
 | $\mathrm{HSO_4}^{-}$ | -755.91&#8199; | +7.8345&#8199; |
@@ -100,25 +105,27 @@ In any case, we can tabulate all the $V^\ominus_i$ using any one of them as a co
 | $\mathrm{Cs}^{+}$ | -292.02&#8199; | -3.0266&#8199; |
 | $\mathrm{Li}^{+}$ | -293.31&#8199; | -3.0399&#8199; |
 
+</details>
+
 (We also see on the $\Delta_{\mathrm{f}} G^\ominus$ tables that $\mathrm{H}^+$ is often defined to have exactly 0 standard Gibbs energy of formation. This will have no effect on us as it's more related to defining $\phi$, which we will talk about in our later topic Potentials.)
 
-## Relation to semiconductor bands
+## Example: common-ion effect
 
-Conceptually, these standard state lines function much like conduction and valence band edges ($E_\mathrm{C}$, $E_\mathrm{V}$) do in semiconductor physics – they act as reference energy/potential levels. The actual potential ($V_i$) deviates from the reference $V^\ominus_i$ based on the concentration, just as the Fermi level ($E_\mathrm{F}$) deviates from the band edges based on carrier concentration. Actually, as we have alluded to before, and we will talk about in much more depth in the Semiconductors topic, we can cram semiconductors into our electrochemical $V_i$ framework too! For silicon we find that $V^\ominus_\mathrm{h^+} - V^\ominus_\mathrm{e^-} = 1.27~\mathrm{V}$ (for a 1 mol/L reference concentration). I.e. the 'standard state ladder' for a semiconductor really only has two entries, one for conduction band electrons ($\mathrm{e^-}$), and the other for valence band holes ($\mathrm{h^+}$). The reason this 1.27 V value differs from the bandgap of silicon ($E_\mathrm{C} - E_\mathrm{V} = 1.1~\mathrm{eV}$) is simply that the band edges each correspond to less than a 1 mol/L concentration, so, $V^\ominus_\mathrm{h^+}$ sits slightly higher than $-E_\mathrm{V}/e$ and $V^\ominus_\mathrm{e^-}$ sits slightly lower than $-E_\mathrm{C}/e$.
-
-## Example: common ion effect
-
-Earlier in the Electrodes topic we talked about the silver / silver chloride electrode. Let's consider what happens when we add some potassium chloride salt to its solution:
+Earlier in the Electrodes topic we talked about the silver / silver chloride electrode. Let's consider what happens when we add some potassium chloride salt to its solution, inducing a {%wiki "common-ion effect" %}:
 
 {% include "esbd-diagrams/esbd-agcl-kcl-common-ion.html" %}
 
-Here, under all conditions value of $V_\mathrm{Ag^+}$ is fixed to the electrode's $V_\mathrm{e^-}$, and in turn, this fixes $V_\mathrm{Cl^-}$ since the $\mathrm{AgCl}$ salt is saturating the solution.
+Here, under all conditions value of $V_\mathrm{Ag^+}$ is fixed to the electrode's $V_\mathrm{e^-}$ (as $\mathrm{Ag} \rightleftharpoons \mathrm{Ag^+} + \mathrm{e^-} $), and in turn, this fixes $V_\mathrm{Cl^-}$ since the $\mathrm{AgCl}$ salt is saturating the solution (with $\mathrm{AgCl} \rightleftharpoons \mathrm{Ag^+} + \mathrm{Cl^-} $).
 
 Initially there are only $\mathrm{Ag^+}$ and $\mathrm{Cl^-}$ ions, so by charge neutrality their concentrations have to be equal, and that means the standard states $V^\ominus_\mathrm{Ag^+}$, $V^\ominus_\mathrm{Cl^-}$ have to fit equidistant from $V_\mathrm{Ag^+}$ and $V_\mathrm{Cl^-}$ respectively. Thus we find $c_\mathrm{Ag^+} = c_\mathrm{Cl^-} = 1.3\times10^{-5}~\mathrm{mol/L}$.
 
 When we add some $\mathrm{KCl}$ salt, we are increasing the $c_\mathrm{Cl^-}$ concentration, and thus $V^\ominus_\mathrm{Cl^-}$ has to move upwards. But if one part of the "ladder" moves, then all of the ladder moves. As a result, $V^\ominus_\mathrm{Ag^+}$ moves further from $V_\mathrm{Ag^+}$, decreasing its concentration $c_\mathrm{Ag^+}$.
 
-This example also shows how the electrode potential, $E = V_\mathrm{e^-} - V^\ominus_\mathrm{H^+}$, is a function of the $c_\mathrm{Cl^-}$ concentration, and assuming the ideally dilute behaviour continues to $c_\mathrm{Cl^-} = c^\ominus = 1~\mathrm{mol/L}$, there we will find $E = 0.222~\mathrm{V}$.
+This example also shows how the electrode potential, $E = V_\mathrm{e^-} - V^\ominus_\mathrm{H^+}$ (which we will derive in the next Topic), is a function of the $c_\mathrm{Cl^-}$ concentration. When we bring our ideal $\mathrm{Cl^-}$ ions up to $c_\mathrm{Cl^-} = c^\ominus = 1~\mathrm{mol/L}$, there we find $E = 0.222~\mathrm{V}$.
+
+## Relation to semiconductor bands
+
+Conceptually, these standard state lines function much like conduction and valence band edges ($E_\mathrm{C}$, $E_\mathrm{V}$) do in semiconductor physics – they act as reference energy/potential levels. The actual potential ($V_i$) deviates from the reference $V^\ominus_i$ based on the concentration, just as the Fermi level ($E_\mathrm{F}$) deviates from the band edges based on carrier concentration. Actually, as we have alluded to before, and we will talk about in much more depth in the Semiconductors topic, we can cram semiconductors into our electrochemical $V_i$ framework too! For silicon we find that $V^\ominus_\mathrm{h^+} - V^\ominus_\mathrm{e^-} = 1.27~\mathrm{V}$ (for a 1 mol/L reference concentration). I.e. the 'standard state ladder' for a semiconductor really only has two entries, one for conduction band electrons ($\mathrm{e^-}$), and the other for valence band holes ($\mathrm{h^+}$). The reason this 1.27 V value differs from the bandgap of silicon ($E_\mathrm{C} - E_\mathrm{V} = 1.1~\mathrm{eV}$) is simply that the band edges each correspond to less than a 1 mol/L concentration, so, $V^\ominus_\mathrm{h^+}$ sits slightly higher than $-E_\mathrm{V}/e$ and $V^\ominus_\mathrm{e^-}$ sits slightly lower than $-E_\mathrm{C}/e$.
 
 ## Takeaways
 
