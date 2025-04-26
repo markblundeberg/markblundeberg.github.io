@@ -56,7 +56,7 @@ I call this the **standard state ladder** for water. The standard state ladder i
 
 In effect, the standard state ladder of $V^\ominus_i$ is a stand-in for the notion of electrostatic potential $\phi$, but combining it with the average differences in the local electrostatic potentials that each ion 'feels', as well the ion's chemical structure, and the way it disturbs its solvent environment with "solvation shells". Conversely, we can imagine $\phi$ as the single degree of freedom describing the offset of the rigid ladder. Specifically, the usual convention for $\phi$ sets it at exactly $V^\ominus_{\mathrm{H^+}}$.
 
-For the interested, let's see how I calculated those values from existing chemical literature:
+Below is the data table of relative $V^\ominus_i$ values for water, that was plotted above:
 
 <details>
 <summary>
@@ -127,7 +127,7 @@ Earlier in the Electrodes topic we talked about the silver / silver chloride ele
 
 The solution is initially saturated with $\mathrm{AgCl}$, and as you can see, adding $\mathrm{KCl}$ causes the concentration of $\mathrm{Ag^+}$ ions to decrease. This is known as a {%wiki "common-ion effect" %}. Visually, we can see that adding the $\mathrm{KCl}$ pushes up the standard state ladder in order to increase the $\mathrm{Cl^-}$ concentration. Since the ladder is rigid, this also moves $V^\ominus_\mathrm{Ag^+}$ away from $V_\mathrm{Ag^+}$ thereby decreasing its concentration. If we were to do this experiment, we would likely see the solution turn cloudy with $\mathrm{AgCl}$ precipitates, but the excess $\mathrm{AgCl}$ could also collect on the electrode.
 
-And, this relates to the saturated salt defining a solubility product, which we can calculate from the diagram too:
+And, this relates to the saturated salt defining a {% wiki "solubility product" %}, which we can calculate from the diagram too:
 $$c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-} = 1.76\times 10^{-10}~(\mathrm{mol/L})^2.$$
 
 We may also consider adding a common-cation salt like silver nitrate, donating $\mathrm{Ag^+}$ and $\mathrm{NO_3^-}$ ions. In that case, it will suppress the $\mathrm{Cl^-}$ concentration instead. And if we added both $\mathrm{KCl}$ and $\mathrm{AgNO_3}$ into the same beaker, we'd see massive precipitation of $\mathrm{AgCl}$ as we cannot exceed the solubility product. (In the above diagram, you can enable this with a checkbox.)
@@ -173,7 +173,7 @@ Conceptually, these standard state lines function much like conduction and valen
 
 Actually, as we have alluded to before, and we will talk about in much more depth in the Semiconductors topic, we can cram semiconductors into our electrochemical $V_i$ framework too! For silicon we find that $V^\ominus_\mathrm{h^+} - V^\ominus_\mathrm{e^-} = 1.27~\mathrm{V}$ (for a 1 mol/L reference concentration). I.e. the 'standard state ladder' for a semiconductor really only has two entries, one for conduction band electrons ($\mathrm{e^-}$), and the other for valence band holes ($\mathrm{h^+}$). The reason this 1.27 V value differs from the bandgap of silicon ($E_\mathrm{C} - E_\mathrm{V} = 1.1~\mathrm{eV}$) is simply that the band edges each correspond to less than a 1 mol/L concentration, so, $V^\ominus_\mathrm{h^+}$ sits slightly higher than $-E_\mathrm{V}/e$ and $V^\ominus_\mathrm{e^-}$ sits slightly lower than $-E_\mathrm{C}/e$.
 
-The above example of salt solubility is also similar to the semiconductor {% wiki "Mass_action_law_(electronics)", "law of mass action" %}; in a semiconductor, $c_{\mathrm{e^-}} c_{\mathrm{h^+}} = (c_\mathrm{i})^2$ for some value $c_\mathrm{i}$, and donor dopants (such as phosphorus $\mathrm{P^+}$) and acceptor dopants (such as boron $\mathrm{B^-}$) play the same role as above in terms of shifting the balance of concentration.
+The above example of salt solubility is also similar to the semiconductor {% wiki "Mass_action_law_(electronics)", "law of mass action" %}; in a semiconductor, $c_{\mathrm{e^-}} c_{\mathrm{h^+}} = (c_\mathrm{i})^2$ for some value $c_\mathrm{i}$, and donor dopants (such as phosphorus $\mathrm{P^+}$) and acceptor dopants (such as boron $\mathrm{B^-}$) play the same role as above in terms of shifting the balance of concentration. The big difference is that $V_\mathrm{h^+} - V_\mathrm{e^-} = 0$ in the semiconductor, instead of maintaining a fixed separation like we saw with a saturated salt..
 
 ## Takeaways
 
