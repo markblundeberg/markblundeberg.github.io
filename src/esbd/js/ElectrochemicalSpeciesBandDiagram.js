@@ -96,6 +96,7 @@ class ElectrochemicalSpeciesBandDiagram {
         this.regionProps = [];
         this.verticalMarkers = new Map();
         this.lastDrawData = [];
+        this._redrawScheduled = false;
 
         // Callbacks & Interaction state
         this._modeChangeCallback = null;
@@ -151,6 +152,7 @@ class ElectrochemicalSpeciesBandDiagram {
         console.log(
             `ESBD Initialized in #${containerId}. Mode: ${this.config.mode}`
         );
+        this._scheduleRedraw();
     }
 
     // ========================================================================
@@ -184,7 +186,7 @@ class ElectrochemicalSpeciesBandDiagram {
         } else {
             this.traceData = traceDefs;
         }
-        this.redraw();
+        this._scheduleRedraw();
     }
 
     /**
@@ -220,10 +222,7 @@ class ElectrochemicalSpeciesBandDiagram {
             }
         }
         // Redraw static elements immediately if possible
-        if (this.plotArea) {
-            this._drawBackgrounds();
-            this._drawInterfaceLines();
-        }
+        this._scheduleRedraw();
     }
 
     /**
@@ -307,6 +306,7 @@ class ElectrochemicalSpeciesBandDiagram {
             y2_volt: y2_volt,
             popupArgs: data.popupArgs || {}, // Store custom args
         };
+        this._scheduleRedraw();
     }
 
     /** Sets the display mode and triggers redraw and callback. */
@@ -318,7 +318,7 @@ class ElectrochemicalSpeciesBandDiagram {
         this.config.mode = newMode;
         console.log('ESBD Mode switched to:', this.config.mode);
         this._hidePopup();
-        this.redraw(); // Redraw applies new scaling
+        this._scheduleRedraw();
 
         if (this._modeChangeCallback) {
             try {
@@ -346,6 +346,7 @@ class ElectrochemicalSpeciesBandDiagram {
             return;
         }
         this.config.VRange = [min, max];
+        this._scheduleRedraw();
     }
 
     /** Registers a callback function triggered after the mode changes and redraw starts. */
@@ -378,7 +379,7 @@ class ElectrochemicalSpeciesBandDiagram {
         );
 
         // 2. Update Scales
-        const xDomain = d3.extent(
+        let xDomain = d3.extent(
             this.boundaries && this.boundaries.length > 0
                 ? this.boundaries
                 : this.lastDrawData.flatMap((t) => t.points.map((p) => p.x))
@@ -608,6 +609,20 @@ class ElectrochemicalSpeciesBandDiagram {
             });
     }
 
+    _scheduleRedraw() {
+        // If a redraw is already scheduled, do nothing
+        if (this._redrawScheduled) {
+            return;
+        }
+        // Set the flag
+        this._redrawScheduled = true;
+        // Schedule the redraw to run before the next browser paint
+        requestAnimationFrame(() => {
+            this.redraw(); // Call the actual redraw method
+            this._redrawScheduled = false; // Clear the flag after redraw runs
+        });
+    }
+
     _handleResize(width, height, shouldRedraw = true) {
         // Update config dimensions based on container size reported by observer
         this.config.width = width;
@@ -640,11 +655,7 @@ class ElectrochemicalSpeciesBandDiagram {
             .style('left', '0px')
             .style('top', this.config.height - 50 + 'px');
 
-        // Trigger redraw if requested and data exists
-        // Debouncing prevents this being called excessively or causing loops
-        if (shouldRedraw && this.traceData.length > 0) {
-            this.redraw();
-        }
+        this._scheduleRedraw();
     }
 
     /** Processes traceDefs, converts inputs to internal V_volt, then scales to y_display */
