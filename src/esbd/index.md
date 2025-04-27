@@ -102,17 +102,17 @@ This leads us to the **Electrochemical Species Band Diagram (ESBD)**. Here's a f
 
 This is a silver nitrate {%wiki "concentration cell" %}: two solutions with differing concentrations of dissolved $\mathrm{AgNO}_3$, connected to each other by an ionic junction.A measurable voltage ($V_{\mathrm{e}^-}$ difference) develops in two silver metal electrodes that are dipped in the solutions.
 
-You can see different lines representing the $V_i$ for different species ($V_{e^-}$, $V_{\mathrm{Ag}^{+}}$, $V_{\mathrm{NO}_3^{-}}$) across different regions (electrodes, electrolytes). Features like the standard state potentials ($V^\ominus$) or interface reaction markers ($\rightleftharpoons$) provide more context, which we'll explore later. The key idea is visualizing the potential landscape for _all_ relevant charged species vs. position.
+You can see different lines representing the $V_i$ for different species ($V_{e^-}$, $V_{\mathrm{Ag}^{+}}$, $V_{\mathrm{NO}_3^{-}}$) across different regions (electrodes, electrolytes). Features like the standard state potentials ($V^\circ$) or interface reaction markers ($\rightleftharpoons$) provide more context, which we'll explore later. The key idea is visualizing the potential landscape for _all_ relevant charged species vs. position.
 
 It's just like a band diagram!
 
 - $V_i$ are like Fermi levels.
-- The standard states $V^\ominus_i$ are like the band edges, rigidly keeping space with each other by a constant 'bandgap'.
+- The standard states $V^\circ_i$ are like the band edges, rigidly keeping space with each other by a constant 'bandgap'.
 - All the relative levels are invariant to global shifts in electrostatic potential (the shifting-together property), and the y-axis offset has no meaning.
 
 To the semiconductor people: It's not just an analogy; if we applied this method to a semiconductor device, our diagram would be _exactly_ a band diagram... only upside down. To make it a bit more comfortable, I've added an 'eV' button that plots "electronic energy" $E_i = -e V_i$, flipping it to what we're used to and making $E_{\mathrm{e}^-} = \text{Fermi level}$. But I have come to believe the $V_i$ form is the more natural form when we want to include ionics, and it just takes getting used to. We'll explore the connection to classic band diagrams in a later topic below.
 
-To the electrochemists: if you find $V_i$ and these diagrams strange, just remember we can connect it back: $V_i = \phi + \tfrac{1}{z_i F}\mu_{\mathrm{int},i} = \phi + \tfrac{1}{z_i F} \mu^\ominus_i + \tfrac{RT}{z_i F} \ln a_i$. In general I'm going to avoid plotting $\phi$ and prioritize discussions of $V_i$. We'll get back to that more in a later topic where we discuss how the usual electrochemical potentials (electrode, junction, redox, etc.) are precisely connected to $V_i$.
+To the electrochemists: if you find $V_i$ and these diagrams strange, just remember we can connect it back: $V_i = \phi + \tfrac{1}{z_i F}\mu_{\mathrm{int},i} = \phi + \tfrac{1}{z_i F} \mu^\circ_i + \tfrac{RT}{z_i F} \ln a_i$. In general I'm going to avoid plotting $\phi$ and prioritize discussions of $V_i$. We'll get back to that more in a later topic where we discuss how the usual electrochemical potentials (electrode, junction, redox, etc.) are precisely connected to $V_i$.
 
 ## Explore More
 
@@ -123,7 +123,7 @@ Intrigued? The real power of ESBDs becomes apparent when applied to various syst
 Basics:
 - [_Electrodes_](electrodes/) - Electron-ion interfaces.
 - [_Lithium ion batteries_](lib/) - An application spotlight.
-- [_Solutions_](solutions/) - Concentrations, standard states $V^\ominus$.
+- [_Solutions_](solutions/) - Concentrations, standard states $V^\circ$.
 - [_Junctions_](junctions/) - Salt bridges and ion membranes.
 
 Advanced:

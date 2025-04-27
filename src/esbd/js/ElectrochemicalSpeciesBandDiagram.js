@@ -1604,7 +1604,7 @@ class ElectrochemicalSpeciesBandDiagram {
         // Add superscripts or modify symbol/subscript based on curveType
         switch (curveType) {
             case 'standardState':
-                superscript = '\\ominus';
+                superscript = '\\circ';
                 break;
             case 'bandEdge_C':
             case 'bandEdge_V':
@@ -1626,10 +1626,10 @@ class ElectrochemicalSpeciesBandDiagram {
 
         // Construct final label string (no delimiters)
         if (subscript) {
-            // Format like V_{Ag^{+}}^{\ominus} or E^{band}_{e^{-}}
+            // Format like V_{Ag^{+}}^{\circ} or E^{band}_{e^{-}}
             return `${symbol}${superscript ? `^{${superscript}}` : ''}_{${subscript}}`;
         } else {
-            // Format like \phi or V^{\ominus} (if prettyName was cleared)
+            // Format like \phi or V^{\circ} (if prettyName was cleared)
             return `${symbol}${superscript ? `^{${superscript}}` : ''}`;
         }
     }

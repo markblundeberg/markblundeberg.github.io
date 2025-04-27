@@ -108,18 +108,18 @@ And note that we could have gotten this equation directly based on the dissociat
 
 We saw the $V_i$ step does not depend at all on the actual concentration of ions. In contrast, the electrode potential of standard electrochemistry _does_ depend on chloride concentration: a massive excess of $\mathrm{Cl}^-$ ions are typically supplied by dissolving $\mathrm{KCl}$ salt into the solution at a concentration of 0.5 to 3 mol/L, and the commonly quoted value of 0.222&nbsp;V refers specifically to the case of 'unit activity' of chloride ions, which occurs around 2 mol/L of dissolved $\mathrm{KCl}$.
 
-Let's use the definition of electrode potential, $E = V_{\mathrm{e}^-} - \phi$, together with the value we found for $V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} = \frac{1}{F} ( \mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}} ) = 1.138~\mathrm{V}$, and finally substitute the partitioned form $V_{\mathrm{Cl}^-} = \phi -\frac{1}{F}\mu^\ominus_{\mathrm{Cl}^-} - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-})$. Then we get:
+Let's use the definition of electrode potential, $E = V_{\mathrm{e}^-} - \phi$, together with the value we found for $V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} = \frac{1}{F} ( \mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}} ) = 1.138~\mathrm{V}$, and finally substitute the partitioned form $V_{\mathrm{Cl}^-} = \phi -\frac{1}{F}\mu^\circ_{\mathrm{Cl}^-} - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-})$. Then we get:
 
 \begin{align}
  E  & \equiv V_{\mathrm{e}^-} - \phi \notag \\\\
     & = \Big[V_{\mathrm{Cl}^-} - [V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}] \Big] - \phi \notag \\\\
-    & = \Big[\phi -\frac{1}{F}\mu^\ominus_{\mathrm{Cl}^-} - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-}) - [V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}] \Big] - \phi \notag \\\\
-    & = \Big[-\frac{1}{F}\mu^\ominus_{\mathrm{Cl}^-} - [V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}] \Big] - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-}) \notag \\\\
+    & = \Big[\phi -\frac{1}{F}\mu^\circ_{\mathrm{Cl}^-} - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-}) - [V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}] \Big] - \phi \notag \\\\
+    & = \Big[-\frac{1}{F}\mu^\circ_{\mathrm{Cl}^-} - [V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}] \Big] - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-}) \notag \\\\
     & = \big[1.360~\mathrm{V} - 1.138~\mathrm{V} \big] - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-}) \notag \\\\
     & = 0.222~\mathrm{V} - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-}) \notag
 \end{align}
 
-where we've used $\mu^\ominus_{\mathrm{Cl}^-} = -F \cdot 1.360~\mathrm{V}$, the standard internal chemical potential for chloride ions.
+where we've used $\mu^\circ_{\mathrm{Cl}^-} = -F \cdot 1.360~\mathrm{V}$, the standard internal chemical potential for chloride ions.
 
 We will further discuss ionic concentrations, ionic standard states, and ionic activities in the next-next topic.
 
