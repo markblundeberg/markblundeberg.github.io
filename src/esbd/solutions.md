@@ -25,26 +25,24 @@ For this topic, we'll focus primarily on the _ideally dilute_ case, and put off 
 
 A familiar expression from chemistry is the dependence of a solute's chemical potential on its concentration $c$:
 $$ \mu_i(c_i) \approx \mu^\circ_i + RT \ln(c_i/c^\circ) $$
-This approximation only holds for small $c$ values, but it captures a behaviour known as _ideally dilute_. Here, $c^\circ$ is a reference concentration level of 1 mol/L, and $\mu^\circ_i$ is a reference value that extrapolates the value $\mu_i(c^\circ)$ based off its behaviour in the infinite dilution limit. The reason for this logarithmic dependence on $c_i$ is fundamental and entropic, having to do with each particle in $c_i$ acting independently and exploring the volume of the solvent.
+This approximation only holds for small $c$ values, but it captures a behaviour known as _ideally dilute_, where the solute particles only interact with solvent and not with other solute particles (and the $RT\ln(c)$ dependence is purely entropic in origin). Here, $c^\circ \equiv 1~\mathrm{mol/L}$ is the reference concentration level, and $\mu^\circ_i$ is a reference value that extrapolates the value $\mu_i(c^\circ)$ based off its behaviour in the infinite dilution limit.
 
-Chemists have done heroic work cataloguing $\mu^\circ_i$ values for various solutes in various solvents, in the form of molar standard Gibbs energies of formation for solutes. And, we have adopted the convention that $\mu$ is be equal to Gibbs formation energy, so these tables directly give us $\mu^\circ_i$, at least for the standard conditions listed in the data source.
+Chemists have done heroic work cataloguing $\mu^\circ_i$ values for various solutes in various solvents, in the form of molar standard Gibbs energies of formation for solutes. And, we have adopted the convention that $\mu$ is equal to Gibbs formation energy, so these tables directly give us $\mu^\circ_i$, at least for the standard conditions listed in the data source.
 
-Well, let's try adapting that equation to ions. No problem, we just use the electrochemical potential:
+The above equation is applicable to non-ionic solutes, but, we can just as easily make the same equation work with electrochemical potential:
 
 $$ \bar\mu_i(c_i) \approx \bar\mu^\circ_i + RT \ln(c_i/c^\circ). $$
 
-But, remember how $\bar\mu_i$ had the charge-dependent offset? Well, that must affect its reference value $\bar\mu^\circ_i$ too. OK, well, let's just force that reference value into a species voltage too! _Divide all the things_ by $z_i F$!
+However, $\bar\mu^\circ_i$ ($= \mu_{\mathrm{int},i} + z_i F \phi$) here has an electrostatic contribution just like $\bar\mu_i$, and it will also have charge-dependent shifts. So, let's convert this equation into species voltages too. _Divide all the things_ by $z_i F$!
 
 $$ V_i(c_i) \approx V^\circ_i + \frac{RT}{z_i F} \ln(c_i/c^\circ). $$
-
-The following is the operational definition of $V^\circ_i$ by the way: make the above curve approach accuracy as we approach pure solvent. (i.e., as _all the solutes_' concentrations go to zero, including ion $i$.)
 
 OK, so that is still kind of of like our familiar neutral solutes' $\mu_i(c_i)$ equation, except:
 * Cations: Still $V_{\mathrm{X}^+}$ does grow higher relative to $V^\circ_{\mathrm{X}^+}$ as concentration $c_i$ increases.
 * Anions: Now $V_{\mathrm{Y}^-}$ _goes lower_ relative to $V^\circ_{\mathrm{Y}^-}$ as concentration increases!
 * Higher charges: For a strong ion with charge $|z|>1$, its $V_{\mathrm{Z}^z}$ moves proportionally slower relative to $V^\circ_{\mathrm{Z}^z}$ as concentration increases!
 
-For example, for an ×10 ('decade') concentration increase at room temperature, the change $V_i - V^\circ_i$ would be $\frac{RT}{z_i F}\ln(10)$. That would be +59&nbsp;mV/decade for a 1+ ion, and -20&nbsp;mV/decade for a 3- ion.
+For example, for an ×10 ('decade') concentration increase at room temperature, the difference $V_i - V^\circ_i$ would change by $\frac{RT}{z_i F}\ln(10)$. That would be +59&nbsp;mV/decade for a 1+ ion, and -20&nbsp;mV/decade for a 3- ion.
 
 ## The $V^\circ_i$ standard state ladder
 
@@ -60,8 +58,9 @@ Below is the data table of relative $V^\circ_i$ values for water, that was plott
 
 <details>
 <summary>
-Click to open ion $V^\circ_i$ table.
+Click to open ion data table.
 </summary>
+
 When you look at a table of Gibbs energy of formation, the values for ions are _internal_: $\mu^\circ_{\mathrm{int},i}$, which defines $\bar\mu^\circ_i = \mu^\circ_{\mathrm{int},i} + z_i F \phi$ according to whatever convention of $\phi$ was used for that solvent. Using this and $V^\circ_i = \bar\mu^\circ_i/(z_i F)$, we get (the $\phi$'s cancel):
 
 $$V^\circ_i - V^\circ_j = \frac{\mu^\circ_{\mathrm{int},i}}{z_i F} - \frac{\mu^\circ_{\mathrm{int},j}}{z_j F}. $$
@@ -127,31 +126,34 @@ Earlier in the Electrodes topic we talked about the silver / silver chloride ele
 
 The solution is initially saturated with $\mathrm{AgCl}$, and as you can see, adding $\mathrm{KCl}$ causes the concentration of $\mathrm{Ag^+}$ ions to decrease. This is known as a {%wiki "common-ion effect" %}. Visually, we can see that adding the $\mathrm{KCl}$ pushes up the standard state ladder in order to increase the $\mathrm{Cl^-}$ concentration. Since the ladder is rigid, this also moves $V^\circ_\mathrm{Ag^+}$ away from $V_\mathrm{Ag^+}$ thereby decreasing its concentration. If we were to do this experiment, we would likely see the solution turn cloudy with $\mathrm{AgCl}$ precipitates, but the excess $\mathrm{AgCl}$ could also collect on the electrode.
 
-And, this relates to the saturated salt defining a {% wiki "solubility product" %}, which we can calculate from the diagram too:
+And, this relates to the saturated salt defining a {% wiki "solubility product" %}, which we can calculate from the $V_i$ and $V^\circ_i$ values (see math below):
 $$c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-} = 1.76\times 10^{-10}~(\mathrm{mol/L})^2.$$
 
-We may also consider adding a common-cation salt like silver nitrate, donating $\mathrm{Ag^+}$ and $\mathrm{NO_3^-}$ ions. In that case, it will suppress the $\mathrm{Cl^-}$ concentration instead. And if we added both $\mathrm{KCl}$ and $\mathrm{AgNO_3}$ into the same beaker, we'd see massive precipitation of $\mathrm{AgCl}$ as we cannot exceed the solubility product. (In the above diagram, you can enable this with a checkbox.)
+We may also consider adding a common-cation salt like silver nitrate, donating $\mathrm{Ag^+}$ and $\mathrm{NO_3^-}$ ions; in the above diagram, you can enable this with a checkbox. In that case, it will suppress the $\mathrm{Cl^-}$ concentration instead. And if we added both $\mathrm{KCl}$ and $\mathrm{AgNO_3}$ into the same beaker, [then we would see significant precipitation](https://www.youtube.com/watch?v=kt8cJQKDxfE) of $\mathrm{AgCl}$ since we cannot exceed the solubility product stated above.
 
 <details>
 <summary>
-The math.
+Click here to see the math.
 </summary>
+
 Using our definition equation for $V^\circ_i$, we have:
 
 $$ c_\mathrm{Ag^+} = c^\circ \exp(+\tfrac{F}{RT}(V_\mathrm{Ag^+} - V^\circ_\mathrm{Ag^+})). $$
 $$ c_\mathrm{Cl^-} = c^\circ \exp(-\tfrac{F}{RT}(V_\mathrm{Cl^-} - V^\circ_\mathrm{Cl^-})). $$
 
+And so, their product is:
+
+$$ c_\mathrm{Ag^+} c_\mathrm{Cl^-} = (c^\circ)^2 \exp(\tfrac{F}{RT} [(V_\mathrm{Ag^+} - V_\mathrm{Cl^-}) - (V^\circ_\mathrm{Ag^+} - V^\circ_\mathrm{Cl^-})]) $$
+
 Here, under all conditions the saturated $\mathrm{AgCl}$ sets $V_\mathrm{Ag^+} - V_\mathrm{Cl^-} = \tfrac{1}{F}\mu_\mathrm{AgCl} = -1.1379~\mathrm{V}$, whereas $V^\circ_\mathrm{Ag^+} - V^\circ_\mathrm{Cl^-} = -0.5609~\mathrm{V}$. We are also at temperature $\tfrac{RT}{F} = 0.02569~\mathrm{V}$. Thus:
 
 \begin{align}
-c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-} & = (c^\circ)^2 \exp(\tfrac{F}{RT} [V_\mathrm{Ag^+} - V_\mathrm{Cl^-} - (V^\circ_\mathrm{Ag^+} - V^\circ_\mathrm{Cl^-})]) \notag \\\\
-& = \exp \bigg(\frac{-1.1379~\mathrm{V} + 0.5609~\mathrm{V}}{0.02569~\mathrm{V}} \bigg) \notag \\\\
-& = 1.76\times 10^{-10}~(\mathrm{mol/L})^2, \notag
+c_\mathrm{Ag^+} c_\mathrm{Cl^-}
+& = (c^\circ)^2 \exp \bigg(\frac{-1.1379~\mathrm{V} + 0.5609~\mathrm{V}}{0.02569~\mathrm{V}} \bigg) \notag \\\\
+& = 1.76\times 10^{-10}~(\mathrm{mol/L})^2. \notag
 \end{align}
 
-And this value is independent of the relative shift of the $V_i$'s vs. the $V^\circ_i$'s.
-
-Initially there are only $\mathrm{Ag^+}$ and $\mathrm{Cl^-}$ ions, so by charge neutrality their concentrations have to be equal, and we find $c_\mathrm{Ag^+} = c_\mathrm{Cl^-} = \sqrt{c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-}} = 1.33\times10^{-5}~\mathrm{mol/L}$. This also means the standard states $V^\circ_\mathrm{Ag^+}$, $V^\circ_\mathrm{Cl^-}$ have to fit equidistantly from $V_\mathrm{Ag^+}$ and $V_\mathrm{Cl^-}$ respectively.
+Initially there are only $\mathrm{Ag^+}$ and $\mathrm{Cl^-}$ ions, so by charge neutrality their concentrations have to be equal, and we find $c_\mathrm{Ag^+} = c_\mathrm{Cl^-} = \sqrt{c_\mathrm{Ag^+} c_\mathrm{Cl^-}} = 1.33\times10^{-5}~\mathrm{mol/L}$. This also means the standard states $V^\circ_\mathrm{Ag^+}$, $V^\circ_\mathrm{Cl^-}$ have to fit equidistantly from $V_\mathrm{Ag^+}$ and $V_\mathrm{Cl^-}$ respectively.
 
 When we add some $\mathrm{KCl}$ and/or $\mathrm{AgNO_3}$ salt, we are controlling $c_\mathrm{K^+}$ and $c_\mathrm{NO_3^-}$ and modifying the charge neutrality equilibrium:
 
@@ -159,9 +161,9 @@ $$ c_\mathrm{Ag^+} - c_\mathrm{Cl^-} + c_\mathrm{K^+} - c_\mathrm{NO_3^-}= 0 .$$
 
 And thus, we get a quadratic equation in terms of $c_\mathrm{Ag^+}$ :
 
-$$ (c_\mathrm{Ag^+})^2 - (c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-}) + (c_\mathrm{K^+} - c_\mathrm{NO_3^-}) c_\mathrm{Ag^+} = 0 ,$$
+$$ (c_\mathrm{Ag^+})^2 - (c_\mathrm{Ag^+} c_\mathrm{Cl^-}) + (c_\mathrm{K^+} - c_\mathrm{NO_3^-}) c_\mathrm{Ag^+} = 0 ,$$
 
-where $(c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-})$ and $(c_\mathrm{K^+} - c_\mathrm{NO_3^-})$ are given values.
+where $(c_\mathrm{Ag^+} c_\mathrm{Cl^-})$ and $(c_\mathrm{K^+} - c_\mathrm{NO_3^-})$ are given values.
 
 </details>
 
