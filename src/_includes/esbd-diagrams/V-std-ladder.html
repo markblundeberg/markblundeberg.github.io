@@ -39,47 +39,49 @@
     const sliderId = '{{ idprefix }}-dphi-slider';
     const diagramContainerId = '{{ idprefix }}-diagram-container';
 
+    // Ion data adapted from Atkins.
+    // Some entries removed due to overlapping in diagram.
     const ionData = [
         {
-            label: '\\mathrm{Al}^{3+}',
-            V_std: -1.6755569277623847,
-            formula: 'Al',
-            z: 3,
-        },
-        {
-            label: '\\mathrm{Ba}^{2+}',
-            V_std: -2.9059857475710698,
-            formula: 'Ba',
-            z: 2,
-        },
-        {
-            label: '\\mathrm{Br}^{-}',
-            V_std: 1.0774694734650156,
-            formula: 'Br',
+            label: '\\mathrm{HSO_4}^{-}',
+            V_std: 7.83445507586514,
+            formula: 'HSO_4',
             z: -1,
         },
         {
-            label: '\\mathrm{Cd}^{2+}',
-            V_std: -0.40219584828090993,
-            formula: 'Cd',
-            z: 2,
-        },
-        {
-            label: '\\mathrm{Cs}^{+}',
-            V_std: -3.02657402502168,
-            formula: 'Cs',
-            z: 1,
-        },
-        {
-            label: '\\mathrm{Ca}^{2+}',
-            V_std: -2.868726198156807,
-            formula: 'Ca',
-            z: 2,
+            label: '\\mathrm{Cr_2O_7}^{2-}',
+            V_std: 6.742475624881357,
+            formula: 'Cr_2O_7',
+            z: -2,
         },
         {
             label: '\\mathrm{HCO_3}^{-}',
             V_std: 6.081442506204956,
             formula: 'HCO_3',
+            z: -1,
+        },
+        {
+            label: '\\mathrm{SO_4}^{2-}',
+            V_std: 3.8582548435884383,
+            formula: 'SO_4',
+            z: -2,
+        },
+        {
+            label: '\\mathrm{CrO_4}^{2-}',
+            V_std: 3.7712986211723987,
+            formula: 'CrO_4',
+            z: -2,
+        },
+        {
+            label: '\\mathrm{PO_4}^{3-}',
+            V_std: 3.519360499611426,
+            formula: 'PO_4',
+            z: -3,
+        },
+        {
+            label: '\\mathrm{F}^{-}',
+            V_std: 2.8894547374693316,
+            formula: 'F',
             z: -1,
         },
         {
@@ -89,9 +91,9 @@
             z: -2,
         },
         {
-            label: '\\mathrm{CN}^{-}',
-            V_std: -1.786800088739599,
-            formula: 'CN',
+            label: '\\mathrm{OH}^{-}',
+            V_std: 1.6296777607506643,
+            formula: 'OH',
             z: -1,
         },
         {
@@ -101,16 +103,28 @@
             z: -1,
         },
         {
-            label: '\\mathrm{CrO_4}^{2-}',
-            V_std: 3.7712986211723987,
-            formula: 'CrO_4',
-            z: -2,
+            label: '\\mathrm{NO_3}^{-}',
+            V_std: 1.1270106824219488,
+            formula: 'NO_3',
+            z: -1,
         },
         {
-            label: '\\mathrm{Cr_2O_7}^{2-}',
-            V_std: 6.742475624881357,
-            formula: 'Cr_2O_7',
-            z: -2,
+            label: '\\mathrm{Br}^{-}',
+            V_std: 1.0774694734650156,
+            formula: 'Br',
+            z: -1,
+        },
+        {
+            label: '\\mathrm{Ag}^{+}',
+            V_std: 0.7991888331943763,
+            formula: 'Ag',
+            z: 1,
+        },
+        {
+            label: '\\mathrm{I}^{-}',
+            V_std: 0.5344853861734403,
+            formula: 'I',
+            z: -1,
         },
         {
             label: '\\mathrm{Cu}^{+}',
@@ -124,121 +138,7 @@
             formula: 'Cu',
             z: 2,
         },
-        {
-            label: '\\mathrm{F}^{-}',
-            V_std: 2.8894547374693316,
-            formula: 'F',
-            z: -1,
-        },
         { label: '\\mathrm{H}^{+}', V_std: 0.0, formula: 'H', z: 1 },
-        {
-            label: '\\mathrm{I}^{-}',
-            V_std: 0.5344853861734403,
-            formula: 'I',
-            z: -1,
-        },
-        {
-            label: '\\mathrm{Fe}^{2+}',
-            V_std: -0.40887043793954275,
-            formula: 'Fe',
-            z: 2,
-        },
-        {
-            label: '\\mathrm{Fe}^{3+}',
-            V_std: -0.01623735579481074,
-            formula: 'Fe',
-            z: 3,
-        },
-        {
-            label: '\\mathrm{Pb}^{2+}',
-            V_std: -0.12659955385124247,
-            formula: 'Pb',
-            z: 2,
-        },
-        {
-            label: '\\mathrm{Li}^{+}',
-            V_std: -3.0399439328782583,
-            formula: 'Li',
-            z: 1,
-        },
-        {
-            label: '\\mathrm{Mg}^{2+}',
-            V_std: -2.3568349198340184,
-            formula: 'Mg',
-            z: 2,
-        },
-        {
-            label: '\\mathrm{Hg}^{2+}',
-            V_std: 0.8519429657447507,
-            formula: 'Hg',
-            z: 2,
-        },
-        {
-            label: '\\mathrm{Hg_2}^{2+}',
-            V_std: 0.7955613388146845,
-            formula: 'Hg_2',
-            z: 2,
-        },
-        {
-            label: '\\mathrm{NO_3}^{-}',
-            V_std: 1.1270106824219488,
-            formula: 'NO_3',
-            z: -1,
-        },
-        {
-            label: '\\mathrm{NH_4}^{+}',
-            V_std: -0.821990226438153,
-            formula: 'NH_4',
-            z: 1,
-        },
-        {
-            label: '\\mathrm{OH}^{-}',
-            V_std: 1.6296777607506643,
-            formula: 'OH',
-            z: -1,
-        },
-        {
-            label: '\\mathrm{PO_4}^{3-}',
-            V_std: 3.519360499611426,
-            formula: 'PO_4',
-            z: -3,
-        },
-        {
-            label: '\\mathrm{K}^{+}',
-            V_std: -2.9358866655293863,
-            formula: 'K',
-            z: 1,
-        },
-        {
-            label: '\\mathrm{Ag}^{+}',
-            V_std: 0.7991888331943763,
-            formula: 'Ag',
-            z: 1,
-        },
-        {
-            label: '\\mathrm{Na}^{+}',
-            V_std: -2.7145058656716263,
-            formula: 'Na',
-            z: 1,
-        },
-        {
-            label: '\\mathrm{S}^{2-}',
-            V_std: -0.4446271682536473,
-            formula: 'S',
-            z: -2,
-        },
-        {
-            label: '\\mathrm{SO_4}^{2-}',
-            V_std: 3.8582548435884383,
-            formula: 'SO_4',
-            z: -2,
-        },
-        {
-            label: '\\mathrm{HSO_4}^{-}',
-            V_std: 7.83445507586514,
-            formula: 'HSO_4',
-            z: -1,
-        },
         {
             label: '\\mathrm{HS}^{-}',
             V_std: -0.12520037744764706,
@@ -252,10 +152,70 @@
             z: 2,
         },
         {
+            label: '\\mathrm{Fe}^{2+}',
+            V_std: -0.40887043793954275,
+            formula: 'Fe',
+            z: 2,
+        },
+        {
+            label: '\\mathrm{S}^{2-}',
+            V_std: -0.4446271682536473,
+            formula: 'S',
+            z: -2,
+        },
+        {
             label: '\\mathrm{Zn}^{2+}',
             V_std: -0.7620847478249577,
             formula: 'Zn',
             z: 2,
+        },
+        {
+            label: '\\mathrm{NH_4}^{+}',
+            V_std: -0.821990226438153,
+            formula: 'NH_4',
+            z: 1,
+        },
+        {
+            label: '\\mathrm{Al}^{3+}',
+            V_std: -1.6755569277623847,
+            formula: 'Al',
+            z: 3,
+        },
+        {
+            label: '\\mathrm{CN}^{-}',
+            V_std: -1.786800088739599,
+            formula: 'CN',
+            z: -1,
+        },
+        {
+            label: '\\mathrm{Mg}^{2+}',
+            V_std: -2.3568349198340184,
+            formula: 'Mg',
+            z: 2,
+        },
+        {
+            label: '\\mathrm{Na}^{+}',
+            V_std: -2.7145058656716263,
+            formula: 'Na',
+            z: 1,
+        },
+        {
+            label: '\\mathrm{Ca}^{2+}',
+            V_std: -2.868726198156807,
+            formula: 'Ca',
+            z: 2,
+        },
+        {
+            label: '\\mathrm{K}^{+}',
+            V_std: -2.9358866655293863,
+            formula: 'K',
+            z: 1,
+        },
+        {
+            label: '\\mathrm{Li}^{+}',
+            V_std: -3.0399439328782583,
+            formula: 'Li',
+            z: 1,
         },
     ];
 
@@ -279,10 +239,11 @@
     };
     const throttleDuration = 100; // should be 1/5 or less of transitionDuration
 
+    const V_arb_offset = -0.45;
     const muBarConfig = {
         ...commonConfig,
         yAxisLabel: 'Standard state voltage $V^\\circ_i$ (V) - arbirary offset',
-        initialYRange: [-4.6, 9.6], // Calculated range + padding
+        initialYRange: [-3.1 + V_arb_offset, 4.1 + V_arb_offset], // Calculated range + padding
     };
 
     // Launcher code
@@ -302,7 +263,7 @@
         function updateDiagrams() {
             // Slider represents a shift in electrostatic potential from
             // whatever initial value that would have defined ecp_init.
-            const dphi = parseFloat(dPhiSlider.value);
+            const dphi = parseFloat(dPhiSlider.value) + V_arb_offset;
 
             const VLevelsData = [];
 
