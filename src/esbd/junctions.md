@@ -100,8 +100,6 @@ which is the famous Nernst voltage for a concentration cell that uses a salt bri
 
 [**NEXT TOPIC: Potentials**](../potentials/)
 
-{#   
-
 ## Optional discussion
 
 <details>
@@ -109,5 +107,59 @@ which is the famous Nernst voltage for a concentration cell that uses a salt bri
 Click to open extended discussion.
 </summary>
 
+{# Likely to be moved to nonequilibrium topic? #}
+
+Suppose that we have a cation and anion (having arbitrary $z_+$ and $z_-$) with their $V_+$ and $V_-$ respectively, both varying along the $x$ space coordinate.
+We can expect a general continuum linear response of the following form:
+
+$$
+\begin{pmatrix}J_+ \\ J_-\end{pmatrix} = \begin{pmatrix}\sigma_{++} & \sigma_{+-} \\ \sigma_{+-} & \sigma_{--}\end{pmatrix} \begin{pmatrix}-\partial_x V_+ \\ -\partial_x V_-\end{pmatrix}
+$$
+
+where $J_\pm$ are electric currents of each ion, and $\partial_x V_\pm$ are the gradients in species voltage, and the $\sigma_{ij}$ are a conductivity matrix (in the usual units of electrical conductivity). Note that the above is a kind of Onsager transport matrix, as the $V_\pm$ are scaled electrochemical potentials and the $J_\pm$ are scaled particle fluxes, and so reciprocity requires $\sigma_{-+} = \sigma_{+-}$ in zero magnetic field.
+
+Here we would expect a diagonal conductivity matrix in the very dilute limit with each conductivity given by that ion's mobility and concentration, however going beyond the dilute limit, we can expect the ions to drag on each other thereby creating off-diagonal contributions (electrophoretic effects) as well as on-diagonal perturbations. Moreover some fraction of ions might not participate in conduction anyway due to ion pairing. The cross terms would also be important for e.g. intercalated lithium vs electrons inside graphite.
+Anyway, let's consider two cases:
+
+### Case 1: bulk transport driven by field
+
+Suppose we have a homogeneous bulk solution and we apply a net electric field $E \hat x$, then $\partial_x V_+ = \partial_x V_- = -E $. We will measure a total current $J_+ + J_-$ of which some fraction is due to cations and some to anions:
+
+$$ J_+ = (\sigma_{++} + \sigma_{+-}) E , $$
+$$ J_- = (\sigma_{+-} + \sigma_{--}) E . $$
+
+Of interest are the ion transfer numbers, defined as $t_+ = J_+ / (J_+ + J_-)$, and $t_- = J_- / (J_+ + J_-)$, and in particular we are interested in their ratio $t_+ / t_- = J_+ / J_-$. This ratio is:
+
+$$ \frac{t_+}{t_-} = \frac{\sigma_{++} + \sigma_{+-}}{\sigma_{+-} + \sigma_{--}} . $$
+
+### Case 2: diffusion in open circuit
+
+Now, consider the diffusion case under the condition that the net electric current is zero: $J_+ + J_- = 0$. This has the character of the inverse problem, where the current vector is $(J, -J)$, and so it can be solved by inverting the conductivity matrix. We get:
+
+$$ - \partial_x V_+ = \frac{\sigma_{--} + \sigma_{+-}}{\operatorname{det}(\sigma)} J $$
+
+$$ - \partial_x V_- = \frac{- \sigma_{+-} - \sigma_{++}}{\operatorname{det}(\sigma)} J $$
+
+where $\operatorname{det}(\sigma) = \sigma_{++}\sigma_{--} - {\sigma_{+-}}^2 $.
+
+Therefore:
+
+$$ -\frac{\partial_x V_+}{\partial_x V_-} = \frac{\sigma_{--} + \sigma_{+-}}{\sigma_{+-} + \sigma_{++}} = \frac{t_-}{t_+}. $$
+
+### Case 3: single-ion transport
+
+Another case of interest is that of lithium-ion battery electrolyte, where the cationic current $J_+ = J$ is forced by the battery discharge rate, whereas the spectator counter-ion has $J_- = 0$. In general this would also be the case during electroplating.
+
+We then have the local voltage drop in the cation determined by:
+
+$$ - \partial_x V_+ = \frac{\sigma_{--}}{\operatorname{det}(\sigma)} J ,$$
+
+and integrating this would give the overall voltage drop due to the cation travel through the electrolyte.
+
+However, the counter-ion also experiences a voltage drop, as:
+
+$$ - \partial_x V_- = \frac{-\sigma_{+-}}{\operatorname{det}(\sigma)} J .$$
+
+The counter-ion voltage drop matters too: if $V_+ - V_-$ grow too far apart (on the scale of $RT/F$) at one end or the other, then this means the concentrations of the ions will drop (and so the overall conductivity will drop too), and there will tend to be a starvation effect.
+
 </details>
-#}
