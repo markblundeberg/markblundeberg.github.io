@@ -128,4 +128,26 @@ Kinetics 1 particle:
 - Draw a further drop of V_Li+ of ~50 mV going through the SEI.
 
 "The total overpotential was estimated around 400 mV in our example. The SEI drop (estimated at 50 mV) is a noticeable chunk (~12.5%), but not necessarily the single dominant factor in that specific scenario. Other factors contributed comparable amounts (e.g., electrolyte 50mV, anode kinetics ~100mV, cathode kinetics/ohmic ~200mV)."
+
+
+
+===
+
+Kinetics and cross terms:
+
+In general we might expect [J_+, J_-] = -[sigma matrix] * [grad V_+, grad V_-].
+sigma_-- will be very large (electronic conductivity), dominating this matrix.
+sigma_++ would be the lithium ionic mobility
+sigma_+- the cross term would be what?
+
+Ultimately not relevant for this case because V_- is basically flat.
+But we would notice the difference if we measured bulk conductivity (V_- and V_+ same slope).
+
+If the Li were actually present in a neutral form (with a specific stuck-on electron), then sigma_++ + sigma_+- ~= 0 and it wouldn't move much in bulk conductivity.
+I.e. neutral Li would only diffuse per mu_Li = (F/RT) * (V_Li+ - V_e-).
+More realistically, Li is actually present as Li+ surrounded by a *screening cloud*, which is not sticky. And so Li would move as per the ionic mobility, thus sigma_+- ~= 0.
+I.e. ionic Li diffuses per V_Li+ .
+
+For the V_- flat case, either way the Li+ diffuses as if it was neutral, but it likely is only superficial.
+
 #}
