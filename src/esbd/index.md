@@ -138,3 +138,4 @@ Appendices:
 
 - _Thermodynamics_ - Subtleties of the basic thermodynamics of charged systems.
 - _Nuances_ - Are $V_i$ "real voltages"? Is $\phi$ real?
+- [_About_](about/) - How this project came about.
