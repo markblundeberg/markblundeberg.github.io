@@ -132,7 +132,7 @@ Advanced:
 - _Corrosion_ - Local inhomogeneities
 - _General electrodes_ - Gas, redox, multi-ion, and lead acid batteries.
 - _Non-ideal solutions_ - subtleties, lead acid batteries.
-- _Non-equilibrium_ - Overpotentials
+- [_Non-equilibrium_](nonequilibrium/) - Overpotentials
 
 Appendices:
 
