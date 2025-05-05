@@ -17,19 +17,20 @@ $$V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}= \frac{1}{F}\mu_{\mathrm{NaCl}} = -3.981
 
 This value of $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ is a thermodynamic guarantee for an $\mathrm{NaCl}$-saturated solution, at least for the standard conditions (25&nbsp;°C, 1 bar) listed in the table where I found the value $\mu_{\mathrm{NaCl}} = -384.14~\mathrm{kJ/mol}$. Its value will not change depending on solvent nor the presence of any other ions in solution.
 
-But suppose we only dissolve a small amount of salt, then $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ will be a lower value than its saturated value. How _exactly_ does the $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ difference depend on concentration? And what if there are many ions present, then how much of each ion do we have and where do all their $V_i$'s lie in relation to each other?
+But suppose we only dissolve a small amount of salt, then $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ will be a lower value than its saturated value. How does $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ depend on concentration? And what if there are many ions present, then how much of each ion do we have and where do all their $V_i$'s lie in relation to each other?
 
 For this topic, we'll focus primarily on the _ideally dilute_ case, and then briefly discuss the non-ideal case involving ion activity coefficients.
 
 ## Ideally dilute and the standard species voltage $V^\circ_i$
 
 A familiar expression from chemistry is the dependence of a solute's chemical potential on its concentration $c$:
-$$ \mu_i(c_i) \approx \mu^\circ_i + RT \ln(c_i/c^\circ) $$
-This approximation only holds for small $c$ values, but it captures a behaviour known as _ideally dilute_, where the solute particles only interact with solvent and not with other solute particles (and the $RT\ln(c)$ dependence is purely entropic in origin). Here, $c^\circ \equiv 1~\mathrm{mol/L}$ is the reference concentration level, and $\mu^\circ_i$ is a reference value that extrapolates the value $\mu_i(c^\circ)$ based off its behaviour in the infinite dilution limit.
+$$ \mu_i(c_i) \approx \mu^\circ_i + RT \ln(c_i/c^\circ) . $$
+Here, $c^\circ \equiv 1~\mathrm{mol/L}$ is the reference concentration level, and $\mu^\circ_i$ is a reference value that extrapolates the value $\mu_i(c^\circ)$ based off its behaviour in the infinite dilution limit.
+This approximation only holds for small $c$ values, but it captures a behaviour known as _ideally dilute_, where the solute particles only interact with solvent and not with other solute particles. The logarithmic dependence on $c_i$ is purely entropic in origin. 
 
-Chemists have done heroic work cataloguing $\mu^\circ_i$ values for various solutes in various solvents, in the form of molar standard Gibbs energies of formation for solutes. And, we have adopted the convention that $\mu$ is equal to Gibbs formation energy, so these tables directly give us $\mu^\circ_i$, at least for the standard conditions listed in the data source.
+Chemists have done heroic work in measuring and tabulating $\mu^\circ_i$ values for various solutes in various solvents, in the form of molar standard Gibbs energies of formation for solutes. And, we have adopted the convention that $\mu$ is equal to Gibbs formation energy, so these tables directly give us $\mu^\circ_i$, at least for the standard conditions listed in the data source. This is all for non-ionic solutes however, and for ions it will get slightly more tricky.
 
-The above equation is applicable to non-ionic solutes, but, we can just as easily make the same equation work with electrochemical potential:
+Let's try to make the same equation work with electrochemical potential:
 
 $$ \bar\mu_i(c_i) \approx \bar\mu^\circ_i + RT \ln(c_i/c^\circ). $$
 
@@ -39,20 +40,26 @@ $$ V_i(c_i) \approx V^\circ_i + \frac{RT}{z_i F} \ln(c_i/c^\circ). $$
 
 OK, so that is still kind of of like our familiar neutral solutes' $\mu_i(c_i)$ equation, except:
 * Cations: Still $V_{\mathrm{X}^+}$ does grow higher relative to $V^\circ_{\mathrm{X}^+}$ as concentration $c_i$ increases.
-* Anions: Now $V_{\mathrm{Y}^-}$ _goes lower_ relative to $V^\circ_{\mathrm{Y}^-}$ as concentration increases!
-* Higher charges: For a strong ion with charge $|z|>1$, its $V_{\mathrm{Z}^z}$ moves proportionally slower relative to $V^\circ_{\mathrm{Z}^z}$ as concentration increases!
+* Anions: Now $V_{\mathrm{Y}^-}$ _goes lower_ relative to $V^\circ_{\mathrm{Y}^-}$ as concentration increases.
+* Higher charges: For a strong ion with charge $|z|>1$, its $V_{\mathrm{Z}^z}$ moves proportionally slower relative to $V^\circ_{\mathrm{Z}^z}$ as concentration increases.
 
-For example, for an ×10 ('decade') concentration increase at room temperature, the difference $V_i - V^\circ_i$ would change by $\frac{RT}{z_i F}\ln(10)$. That would be +59&nbsp;mV/decade for a 1+ ion, and -20&nbsp;mV/decade for a 3- ion.
+For example, for an ×10 ('decade') concentration increase, the difference $V_i - V^\circ_i$ would change by $\frac{RT}{z_i F}\ln(10)$. At 25&nbsp;°C that would be +59&nbsp;mV/decade for a $[]^{1+}$ ion, and -20&nbsp;mV/decade for a $[]^{3-}$ ion.
+
+This is still 'slippery' however, as $V_i$ and $V^\circ_i$ can move up and down together while keeping the same concentration. Let's see how they relate to other ions.
 
 ## The $V^\circ_i$ standard state ladder
 
-We now have this $V^\circ_i$, which unfortunately _cannot_ be tabulated since it is sensitive to arbitrary electrostatic offsets. We're not stuck though, as we can compare the relative $V^\circ_i$ values of different ions. As we've seen, _differences_ in $V_i$'s are insensitive to the electrostatic offset, and that now includes $V^\circ_i$'s too. So _differences_ in $V^\circ_i$ are **electrically-invariant** properties of the solvent. And they are going to be **concentration-invariant** too (since they apply to the ideally dilute limit). Here are a number of selected $V^\circ_i$ values for real water, with an arbitrary offset:
+We now have this $V^\circ_i$, which unfortunately _cannot_ be tabulated since it is sensitive to arbitrary electrostatic offsets. We're not stuck though, as we can compare the relative $V^\circ_i$ values of different ions, and these differences are **electrically-invariant** properties of the solvent. But also, they are going to be **concentration-invariant** too (since they apply to the ideally dilute limit). So, the $V^\circ_i$ differences will be fixed properties of the solvent at a given temperature and pressure.
+
+Here are a number of selected $V^\circ_i$ values for water at standard conditions (25&nbsp;°C, 1 bar):
 
 {% include "esbd-diagrams/V-std-ladder.html" %}
 
-I call this the **standard state ladder** for water. The standard state ladder is a rigid ladder: as we change the electrical or chemical conditions of the solution, the $V^\circ_i$ values may move up and down but they have to all stay rigidly locked to one another. In contrast, $V_i$ values are not rigid and will change with composition.
+I call this the **standard state ladder** for water. The standard state ladder is a rigid ladder: as we change the electrical or chemical conditions of the solution, the $V^\circ_i$ values may move up and down but they have to all stay rigidly locked to one another. In contrast, $V_i$ values are not rigid and their relative positions will change with composition.
 
 In effect, the standard state ladder of $V^\circ_i$ is a stand-in for the notion of electrostatic potential $\phi$, but combining it with the average differences in the local electrostatic potentials that each ion 'feels', as well the ion's chemical structure, and the way it disturbs its solvent environment with "solvation shells". Conversely, we can imagine $\phi$ as the single degree of freedom describing the offset of the rigid ladder. Specifically, the usual convention for $\phi$ sets it at exactly $V^\circ_{\mathrm{H^+}}$.
+
+The standard state ladder is also analogous to the conduction and valence band edges in semiconductors, insofar as it 'floats' rigidly to keep charge neutrality. We'll talk more about this analogy to semiconductors in a later topic.
 
 Below is the data table of relative $V^\circ_i$ values for water, that was plotted above:
 
@@ -72,7 +79,7 @@ Here I've taken some selected ionic thermodynamic data from Atkins' _Physical Ch
 * **ideally dilute** ions in **water**,
 * at 298 K and 1 bar,
 * a reference ionic concentration of $c^\circ = 1~\mathrm{mol/L}$, and,
-* all referenced to $V^\circ_{\mathrm{H}^+}$.
+* all referenced to $\mathrm{H}^+$.
 
 | Ion $i$ | $\Delta_{\mathrm{f}} G^\circ$ (kJ/mol) | $V^\circ_i - V^\circ_{\mathrm{H}^+}$ (V) |
 | ---: | ---: | ---: |
@@ -114,17 +121,19 @@ Here I've taken some selected ionic thermodynamic data from Atkins' _Physical Ch
 | $\mathrm{Cs}^{+}$ | -292.02&#8199; | -3.0266&#8199; |
 | $\mathrm{Li}^{+}$ | -293.31&#8199; | -3.0399&#8199; |
 
-(We also see on the $\Delta_{\mathrm{f}} G^\circ$ tables that $\mathrm{H}^+$ is often defined to have exactly 0 standard Gibbs energy of formation. This will have no effect on us as it's more related to defining $\phi$, which we will talk about in our later topic Potentials.)
+Note that $\Delta_{\mathrm{f}} G^\circ = 0$ for $\mathrm{H^+}$, which is just a convention. We aren't actually able to measure the absolute $\mu^\circ_{\mathrm{int},i}$ for any of these ions, as that would correspond to determining the electrostatic potential $\phi$.
 
 </details>
 
 ## Example: common-ion effect
 
+Let's try using this $V^\circ$ ladder in an example, just to see how it works.
+
 Earlier in the Electrodes topic we talked about the silver / silver chloride electrode. Let's consider what happens when we dissolve some potassium chloride salt into its solution:
 
 {% include "esbd-diagrams/esbd-agcl-kcl-common-ion.html" %}
 
-The solution is initially saturated with $\mathrm{AgCl}$, and as you can see, adding $\mathrm{KCl}$ causes the concentration of $\mathrm{Ag^+}$ ions to decrease. This is known as a {%wiki "common-ion effect" %}. Visually, we can see that adding the $\mathrm{KCl}$ pushes up the standard state ladder in order to increase the $\mathrm{Cl^-}$ concentration. Since the ladder is rigid, this also moves $V^\circ_\mathrm{Ag^+}$ away from $V_\mathrm{Ag^+}$ thereby decreasing its concentration. If we were to do this experiment, we would likely see the solution turn cloudy with $\mathrm{AgCl}$ precipitates, but the excess $\mathrm{AgCl}$ could also collect on the electrode.
+The solution is initially saturated with $\mathrm{AgCl}$, and as you can see, adding $\mathrm{KCl}$ causes the concentration of $\mathrm{Ag^+}$ ions to decrease. This is known as a {%wiki "common-ion effect" %}. Visually, we can see that adding the $\mathrm{KCl}$ pushes up the standard state ladder in order to increase the $\mathrm{Cl^-}$ concentration. Since the ladder is rigid, this also moves $V^\circ_\mathrm{Ag^+}$ away from $V_\mathrm{Ag^+}$ thereby decreasing its concentration. If we were to do this experiment, we would likely see the solution turn cloudy with $\mathrm{AgCl}$ precipitates.
 
 And, this relates to the saturated salt defining a {% wiki "solubility product" %}, which we can calculate from the $V_i$ and $V^\circ_i$ values (see math below):
 $$c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-} = 1.76\times 10^{-10}~(\mathrm{mol/L})^2.$$
@@ -169,6 +178,7 @@ where $(c_\mathrm{Ag^+} c_\mathrm{Cl^-})$ and $(c_\mathrm{K^+} - c_\mathrm{NO_3^
 
 This example also shows how the electrode potential, $E = V_\mathrm{e^-} - V^\circ_\mathrm{H^+}$ (which we will derive in the Potentials topic), is a function of the $c_\mathrm{Cl^-}$ concentration. When we bring our ideal $\mathrm{Cl^-}$ ions up to $c_\mathrm{Cl^-} = c^\circ = 1~\mathrm{mol/L}$, there we find $E = 0.222~\mathrm{V}$, which is the standard electrode potential for the {%wiki "silver chloride electrode" %}.
 
+{#
 ## Relation to semiconductor bands
 
 Conceptually, these standard state lines function much like conduction and valence band edges ($E_\mathrm{C}$, $E_\mathrm{V}$) do in semiconductor physics – they act as reference energy/potential levels. The actual potential ($V_i$) deviates from the reference $V^\circ_i$ based on the concentration, just as the Fermi level ($E_\mathrm{F}$) deviates from the band edges based on carrier concentration.
@@ -176,16 +186,17 @@ Conceptually, these standard state lines function much like conduction and valen
 Actually, as we have alluded to before, and we will talk about in much more depth in the Semiconductors topic, we can cram semiconductors into our electrochemical $V_i$ framework too! For silicon we find that $V^\circ_\mathrm{h^+} - V^\circ_\mathrm{e^-} = 1.27~\mathrm{V}$ (for a 1 mol/L reference concentration). I.e. the 'standard state ladder' for a semiconductor really only has two entries, one for conduction band electrons ($\mathrm{e^-}$), and the other for valence band holes ($\mathrm{h^+}$). The reason this 1.27 V value differs from the bandgap of silicon ($E_\mathrm{C} - E_\mathrm{V} = 1.1~\mathrm{eV}$) is simply that the band edges each correspond to less than a 1 mol/L concentration, so, $V^\circ_\mathrm{h^+}$ sits slightly higher than $-E_\mathrm{V}/e$ and $V^\circ_\mathrm{e^-}$ sits slightly lower than $-E_\mathrm{C}/e$.
 
 The above example of salt solubility is also similar to the semiconductor {% wiki "Mass_action_law_(electronics)", "law of mass action" %}; in a semiconductor, $c_{\mathrm{e^-}} c_{\mathrm{h^+}} = (c_\mathrm{i})^2$ for some value $c_\mathrm{i}$, and donor dopants (such as phosphorus $\mathrm{P^+}$) and acceptor dopants (such as boron $\mathrm{B^-}$) play the same role as above in terms of shifting the balance of concentration. The big difference is that $V_\mathrm{h^+} - V_\mathrm{e^-} = 0$ in the semiconductor, instead of maintaining a fixed separation like we saw with a saturated salt..
+#}
 
 ## Non-ideal solutions
 
-The usual practice to include solute non-idealities is to add an activity coefficient $\gamma_i$ next to $c_i/c^\circ$.
+The usual practice to include solute non-idealities is to add an {%wiki "activity coefficient" %} $\gamma_i$ next to $c_i/c^\circ$.
 
 $$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(\gamma_i c_i/c^\circ). $$
 
 This $\gamma_i$ captures all the deviations from ideality, and of course we have $\gamma_i \rightarrow 1$ as all solutes' concentrations go to zero (including $c_i \rightarrow 0$). We can also write in terms of activity $a_i = \gamma_i c_i/c^\circ$, either is fine.
 
-(Note that this is the _molar_ activity coefficient and _molar_ activity, defined for a particular $c^\circ$! There are also molal, mole fraction, and pressure activities, which can sometimes be similar but they are quantitatively different. [It can get a bit confusing](https://adamprada.net/blog/on-chemical-activities/)!)
+(Note that this is the _molar_ activity coefficient and _molar_ activity, defined for a particular $c^\circ$! There are also molal, mole fraction, and pressure activities, which can sometimes be similar but they are quantitatively different and each will have a distinct standard state, including different $\mu^\circ_i$ and $V^\circ_i$. [It can get a bit confusing](https://adamprada.net/blog/on-chemical-activities/)!)
 
 For example, with our saturated salt $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = -3.9813~\mathrm{V}$, this would correspond to $c_{\mathrm{Na}^+} c_{\mathrm{Cl}^-} = 37.8~\mathrm{mol^2/L^2}$ if it were ideal-dilute (using the aqueous $V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-} = -4.0746~\mathrm{V}$). But measurements of the actual amount of $\mathrm{NaCl}$ that we can dissolve in water show instead $c_{\mathrm{Na}^+} c_{\mathrm{Cl}^-} = 29~\mathrm{mol^2/L^2}$, and so we must have $\gamma_{\mathrm{Na}^+} \gamma_{\mathrm{Cl}^-} = 0.77$.
 
@@ -197,6 +208,7 @@ For the next topic, we'll talk about what happens where two solutions come into 
 
 [**NEXT TOPIC: Junctions**](../junctions/)
 
+{#
 ## Optional discussion
 
 Chemists may be begging me to introduce activities and activity coefficients, and go beyond the ideally dilute limit. Fair enough! We'll get more into that in the later topic about non-ideal solutions, but let's talk a bit about that now:
@@ -235,6 +247,7 @@ The only unambiguously measureable ion activity coefficients are charge-neutral 
 Anyway, that is one reason I'm just going to focus on ideal dilute case for now. There's a lot more to say on this, but I'll leave that for the dedicated topic on non-ideal solutions.
 
 </details>
+#}
 
 {#
 Neutral, or internal chem pot
