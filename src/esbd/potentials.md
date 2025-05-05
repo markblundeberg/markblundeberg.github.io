@@ -15,13 +15,9 @@ So far we've mostly avoided describing the connections to the various potentials
 
 ## The electrostatic potential $\phi$
 
-At least for water-based solutions, the relationship between $\phi$ and our $V_i$ values comes about via a convention that the Gibbs formation energy of ideal standard-state $\mathrm{H}^+$ is 0 at all conditions. This may seem unphysical, but $\mathrm{H}^+$ will always come together neutrally with other ions, and the Gibbs energies of the other ions can 'absorb the error' so to speak, so it works out thermodynamically. With our $V_i$'s we've adopted the convention of setting chemical potentials based on Gibbs formation energies, therefore this means we can take $\mu^\circ_{\mathrm{int},\mathrm{H}^+} = 0$ under all conditions. Since $V^\circ_{\mathrm{H}^+} = \phi + \mu^\circ_{\mathrm{int},\mathrm{H}^+}/F$, then,
+The electrostatic potential inside a material is nominally of importance in standard electrochemistry, yet, with our $V_i$'s and band diagrams, so far we have avoided relying on it. This is not particularly surprising since the values of $\phi$ generally tend to cancel out in every thermodynamic observable, and indeed $\phi$ is generally regarded as unmeasurable, except when comparing two bodies of exactly identical composition (in which case $\Delta\phi = \Delta V_i$). Since $\phi$ is not thermodynamically important, I will continue with the trend of trying to refer to $\phi$ as little as possible.
 
-$$ V^\circ_{\mathrm{H}^+} = \phi.$$
-
-In the below I'll just use $V^\circ_{\mathrm{H}^+}$ but you can sub in $\phi$.
-
-There are various debates about the reality of $\phi$ in materials, whether it is measurable or not, which convention to use for $\phi$ in metals, and so on, however I'll leave those for a later topic. For the moment let's focus on how measurables relate to the new $V_i$ quantities.
+Inside of a dilute solution, we know that $\phi$ sits somewhere on our 'standard state ladder' of $V^\circ_i$'s, but, I honestly don't know where that would be. If we did take $\mu^\circ_{\mathrm{int},\mathrm{H}^+} = 0$ for the solvent, then that would imply $\phi = V^\circ_{\mathrm{H}^+}$, however that would just be a convention and it would not correspond to any sort of average microscopic potential in the solvent.
 
 ## Standard hydrogen electrode (SHE)
 
