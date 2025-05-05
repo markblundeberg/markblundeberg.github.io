@@ -82,7 +82,11 @@ Thus, our $V^\circ_i$ ladder (relative to $V^\circ_{\mathrm{H}^+}$) directly map
 
 The pH of a solution is defined thus:
 
-$$ \mathrm{pH} = -\log_{10}(a_{\mathrm{H}^+}) = -\frac{\ln(a_{\mathrm{H}^+})}{\ln(10)} = -\frac{1}{\ln(10)} \frac{F}{RT}(V_{\mathrm{H}^+} - V^\circ_{\mathrm{H}^+})$$
+$$ \mathrm{pH} = -\log_{10}(a_{\mathrm{H}^+}) , $$
+
+which is known to a bit ambiguous due to its reliance on a single-ion activity. Anyway, we can rewrite this exactly in terms of our $V_i$:
+
+$$ \mathrm{pH} = -\frac{1}{\ln(10)} \frac{F}{RT}(V_{\mathrm{H}^+} - V^\circ_{\mathrm{H}^+})$$
 
 At 25&nbsp;°C, where $\ln(10)RT/F \approx 59.16~\mathrm{mV}$, this is:
 
@@ -90,7 +94,9 @@ $$ \mathrm{pH} \approx \frac{V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+}}{59.16~\m
 
 So $\mathrm{pH}$ is a kind of scaled voltage analogous to reduction potential $E$; this is not surprising since the best pH measurements are done electrically. A pH of 0 corresponds to $V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+} = 0$, a pH of 7 corresponds to $V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+} = 0.414~\mathrm{V}$, and a pH of 14 corresponds to $V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+} = 0.828~\mathrm{V}$.
 
-As an aside, it is common to plot the value of $E$ in a solution against its $\mathrm{pH}$ value, yielding a quasi-phase diagram known as as the {%wiki "Pourbaix diagram" %}. Note the similarity between the two axes' definitions:
+## Pourbaix diagram
+
+It is common to plot the value of $E$ in a solution against its $\mathrm{pH}$ value, yielding a quasi-phase diagram known as as the {%wiki "Pourbaix diagram" %}. Note the similarity between the two axes' definitions:
 
 \begin{align}
 E & =  V_{\mathrm{e}^-} - V^\circ_{\mathrm{H}^+} \notag \\\\
@@ -98,6 +104,8 @@ E & =  V_{\mathrm{e}^-} - V^\circ_{\mathrm{H}^+} \notag \\\\
 \end{align}
 
 This suggests that it is interesting to instead plot the voltage quantity $V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+}$ on the bottom axis, so that both axes will have volt units. The usual characteristic thermal slopes on a Pourbaix diagram would then be converted to simple rational slopes such as 1:1, 1:2, and so on, directly reflecting the number of electrons and protons that are transferred when converting the species on one side to the other.
+
+For example, $\mu_{\mathrm{H}} = V_{\mathrm{H}^+} - V_{\mathrm{e}^-} $ represents the availability of neutral hydrogen in reactions. This $\mu_{\mathrm{H}}$ is constant along a line of 1:1 slope ($\Delta E \approx -59~\mathrm{mV} \cdot \Delta \mathrm{pH}$). As we move up (increasing $V_{\mathrm{e}^-}$) and to the right (decreasing $V_{\mathrm{H}^+}$) we get less and less hydrogen availability. In water this _also_ means more and more neutral oxygen availability $\mu_{\mathrm{O}} = \mu_{\mathrm{H_2O}} - 2\mu_{\mathrm{H}}$, and so we see the classic 1:1 slopes separating compounds with more hydrogen (lower left) or more oxygen (upper right). Other slopes will necessarily involve other ions besides $\mathrm{H}^+$ (and in water, $\mathrm{OH}^-$).
 
 ## Takeaways
 
