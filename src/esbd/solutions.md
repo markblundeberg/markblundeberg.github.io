@@ -19,7 +19,7 @@ This value of $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ is a thermodynamic guarant
 
 But suppose we only dissolve a small amount of salt, then $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ will be a lower value than its saturated value. How _exactly_ does the $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ difference depend on concentration? And what if there are many ions present, then how much of each ion do we have and where do all their $V_i$'s lie in relation to each other?
 
-For this topic, we'll focus primarily on the _ideally dilute_ case, and put off discussions of the (surprisingly tricky!) concept of ion activities until we get to the advanced topics.
+For this topic, we'll focus primarily on the _ideally dilute_ case, and then briefly discuss the non-ideal case involving ion activity coefficients.
 
 ## Ideally dilute and the standard species voltage $V^\circ_i$
 
@@ -176,6 +176,20 @@ Conceptually, these standard state lines function much like conduction and valen
 Actually, as we have alluded to before, and we will talk about in much more depth in the Semiconductors topic, we can cram semiconductors into our electrochemical $V_i$ framework too! For silicon we find that $V^\circ_\mathrm{h^+} - V^\circ_\mathrm{e^-} = 1.27~\mathrm{V}$ (for a 1 mol/L reference concentration). I.e. the 'standard state ladder' for a semiconductor really only has two entries, one for conduction band electrons ($\mathrm{e^-}$), and the other for valence band holes ($\mathrm{h^+}$). The reason this 1.27 V value differs from the bandgap of silicon ($E_\mathrm{C} - E_\mathrm{V} = 1.1~\mathrm{eV}$) is simply that the band edges each correspond to less than a 1 mol/L concentration, so, $V^\circ_\mathrm{h^+}$ sits slightly higher than $-E_\mathrm{V}/e$ and $V^\circ_\mathrm{e^-}$ sits slightly lower than $-E_\mathrm{C}/e$.
 
 The above example of salt solubility is also similar to the semiconductor {% wiki "Mass_action_law_(electronics)", "law of mass action" %}; in a semiconductor, $c_{\mathrm{e^-}} c_{\mathrm{h^+}} = (c_\mathrm{i})^2$ for some value $c_\mathrm{i}$, and donor dopants (such as phosphorus $\mathrm{P^+}$) and acceptor dopants (such as boron $\mathrm{B^-}$) play the same role as above in terms of shifting the balance of concentration. The big difference is that $V_\mathrm{h^+} - V_\mathrm{e^-} = 0$ in the semiconductor, instead of maintaining a fixed separation like we saw with a saturated salt..
+
+## Non-ideal solutions
+
+The usual practice to include solute non-idealities is to add an activity coefficient $\gamma_i$ next to $c_i/c^\circ$.
+
+$$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(\gamma_i c_i/c^\circ). $$
+
+This $\gamma_i$ captures all the deviations from ideality, and of course we have $\gamma_i \rightarrow 1$ as all solutes' concentrations go to zero (including $c_i \rightarrow 0$). We can also write in terms of activity $a_i = \gamma_i c_i/c^\circ$, either is fine.
+
+(Note that this is the _molar_ activity coefficient and _molar_ activity, defined for a particular $c^\circ$! There are also molal, mole fraction, and pressure activities, which can sometimes be similar but they are quantitatively different. [It can get a bit confusing](https://adamprada.net/blog/on-chemical-activities/)!)
+
+For example, with our saturated salt $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = -3.9813~\mathrm{V}$, this would correspond to $c_{\mathrm{Na}^+} c_{\mathrm{Cl}^-} = 37.8~\mathrm{mol^2/L^2}$ if it were ideal-dilute (using the aqueous $V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-} = -4.0746~\mathrm{V}$). But measurements of the actual amount of $\mathrm{NaCl}$ that we can dissolve in water show instead $c_{\mathrm{Na}^+} c_{\mathrm{Cl}^-} = 29~\mathrm{mol^2/L^2}$, and so we must have $\gamma_{\mathrm{Na}^+} \gamma_{\mathrm{Cl}^-} = 0.77$.
+
+The above leaves open the question of how much of this non-ideality product is due to $\gamma_{\mathrm{Na}^+}$ and how much due to $\gamma_{\mathrm{Cl}^-}$, but that is actually not answerable since we only have measurement access to $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$, not $V_{\mathrm{Na}^+} - V^\circ_{\mathrm{Na}^+}$. This demonstrates the well-known issue that single-ion activity coefficients are actually ambiguous, and we can only measure charge-neutral products like $\gamma_{\mathrm{Na}^+} \gamma_{\mathrm{Cl}^-}$. Once we permit $\gamma_i \neq 1$ for the solutes, we actually have a degree of freedom in how to allocate non-ideality between different ions, and that shows up as ambiguity in the positioning of the $V^\circ_i$ ladder.
 
 ## Takeaways
 
