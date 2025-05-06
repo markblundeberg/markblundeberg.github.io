@@ -13,11 +13,13 @@ eleventyNavigation:
 
 So far we've mostly avoided describing the connections to the various potentials found in standard electrochemistry, but let's state them now.
 
-## The electrostatic potential $\phi$
+## The electrostatic potential
 
-The electrostatic potential inside a material is nominally of importance in standard electrochemistry, yet, with our $V_i$'s and band diagrams, so far we have avoided relying on it. This is not particularly surprising since the values of $\phi$ generally tend to cancel out in every thermodynamic observable, and indeed $\phi$ is generally regarded as unmeasurable, except when comparing two bodies of exactly identical composition (in which case $\Delta\phi = \Delta V_i$). Since $\phi$ is not thermodynamically important, I will continue with the trend of trying to refer to $\phi$ as little as possible.
+The electrostatic potential inside a material, $\phi$, is nominally of importance in standard electrochemistry, yet, with our $V_i$'s and band diagrams, so far we have avoided relying on it. This is not particularly surprising since the values of $\phi$ generally tend to cancel out in every thermodynamic observable, and indeed $\phi$ is generally regarded as unmeasurable, except when comparing two bodies of exactly identical composition (in which case $\Delta\phi = \Delta V_i$).
 
-Inside of a dilute solution, we know that $\phi$ sits somewhere on our 'standard state ladder' of $V^\circ_i$'s, but, I honestly don't know where that would be. If we did take $\mu^\circ_{\mathrm{int},\mathrm{H}^+} = 0$ for the solvent, then that would imply $\phi = V^\circ_{\mathrm{H}^+}$, however that would just be a convention and it would not correspond to any sort of average microscopic potential in the solvent.
+Inside of a dilute solution, we do know that $\phi$ sits somewhere on our 'standard state ladder' of $V^\circ_i$'s, but, I honestly don't know where that would be. If we did take $\mu^\circ_{\mathrm{int},\mathrm{H}^+} = 0$ (as suggested by tables of Gibbs formation energies), then that would imply $\phi = V^\circ_{\mathrm{H}^+}$, however that would just be a convention and it would not correspond to any sort of average microscopic potential in the solvent.
+
+That's not to say that $\phi$ is not real; to the contrary, there must be some average value of the physical microscopic electrostatic potential inside a homogeneous and conductive material. But such an average would include all sorts of strange contributions such as the tens-of-volt spikes in microscopic potential around atomic nuclei, which are far removed from any kind of measurable solvation energy. Since $\phi$ is so thermodynamically elusive, I will continue with the trend of trying to refer to $\phi$ as little as possible.
 
 ## Standard hydrogen electrode (SHE)
 
