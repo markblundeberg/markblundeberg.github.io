@@ -137,5 +137,6 @@ Advanced:
 Appendices:
 
 - _Thermodynamics_ - Subtleties of the basic thermodynamics of charged systems.
-- _Nuances_ - Are $V_i$ "real voltages"? Is $\phi$ real?
+- _Nuances_ - Are $V_i$ "real voltages"?
+- [_About $\phi$_](phi/) - Why can/should we bypass using the electrostatic potential.
 - [_About_](about/) - How this project came about.

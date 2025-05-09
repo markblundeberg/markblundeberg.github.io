@@ -34,7 +34,7 @@ There are actually many other attempts at band diagrams for electrochemistry. To
 * 2014 Roqueta & Santiso ["Band diagrams for electrochemical devices"](https://dx.doi.org/10.13140/2.1.5078.2726)
 * 2018 Young et al. ["Unified Electrochemical Band Diagram"](https://doi.org/10.1002/adfm.201803439)
 
-I haven't investigated them in detail but a quick glance shows they are very different. One thing I notice is a reliance on "vacuum level" as a useful concept, which [immediately makes me skeptical](../vacuum/).
+I haven't investigated them in detail but a quick glance shows they are very different. One thing I notice is a reliance on "vacuum level" as a useful concept, which [immediately makes me skeptical](../phi/).
 
 ## Why "species voltage"?
 
