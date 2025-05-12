@@ -21,6 +21,8 @@ That's the idea behind **Electrochemical Species Band Diagrams (ESBDs)**. We are
 
 This site explores this framework, with the goal of building <em>intuition</em> for scientists and engineers working across disciplines involving charged species in materials. This page will give a review of basic thermodynamics, and give a quick primer on the new idea. Further articles (coming soon) will explore a wide variety of concepts. Let's dive in!
 
+(If you are already familiar with chemical potential and electrochemical potential, feel free to [skip ahead](#skip_background)!)
+
 ## Chemical potential: 'temperature' for particle flow
 
 How do mobile particles know where to move and when to react? For any individual particle, this is a mess of microscopic forces. On average though, we can zoom out and talk about statistical tendencies of similar particles, and these tendencies are characterized by the {%wiki "chemical_potential" %} $\mu_i$ for the type/_species_ of particle labelled $i$. Chemical potentials are to particles what temperature $T$ is to energy: when two bodies are in equilibrium they equalize their $\mu_i$'s and $T$'s by exchanging the fungible particles and energy. The chemical potential combines all the per-particle energy, the entropy, the diffusion, the <em>mess</em> ... in just the right way.
@@ -62,7 +64,7 @@ This approach of partitioning off the $\phi$ dependence is quite helpful as $z_i
 
 What if we could regularize the charge-dependent shifts in $\bar{\mu}_i$ some other way?
 
-## Meet $V_i$: a voltage for ions, too
+## <a name="skip_background"></a> Meet $V_i$: a voltage for ions, too
 
 As a solid-state physicist, I had to unlearn the idea that voltmeters let us probe the electrostatic potential $\phi$. The truth is that a voltmeter is a thermodynamic device: it lets electrons flow in and do thermodynamic work on it, and it measures that work. To make a long story short, the "true" voltage probed by a voltmeter is $V_{\mathrm{e}^-} = -\bar{\mu}_{\mathrm{e}^-} / F$ (or $/e$ if working per-particle). When you attach a voltmeter to body 1 and body 2, the number you see on its display is literally $ \Delta V = V_{\mathrm{e}^-}[\text{body 1}] - V_{\mathrm{e}^-}[\text{body 2}]$.
 
