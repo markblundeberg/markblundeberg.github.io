@@ -1,6 +1,6 @@
 ---
 layout: layouts/esbd_topic.njk
-title: 'About ϕ'
+title: 'The case against ϕ'
 tags: [page, esbd_topic]
 orderESBD: 98
 eleventyNavigation:
@@ -9,13 +9,13 @@ eleventyNavigation:
     order: 998
 ---
 
-# {{title}}
+# The case against $\phi$
 
 When I came up with these $V_i$ band diagrams, it quickly became apparent that it is possible to entirely avoid invoking the electrostatic potential $\phi$. This was not surprising given my semiconductor physics background, yet this is so dissonant with $\phi$ being so fundamental in the usual electrochemistry analysis. Digging a little bit deeper, however, we find that the theoretical electrochemists are already uncomfortable with the unmeasurable $\phi$. This dates back to Guggenheim's [1929](https://doi.org/10.1021/j150300a003) and [1930](https://doi.org/10.1021/j150313a014) papers, and even earlier to Taylor and perhaps Gibbs.
 
 I reaffirm Guggenheim's thesis, and I would modernize it further that it is not even necessary to reference $\phi$ in electrodes: voltmeters measure $V_{\mathrm{e}^-}$!
 
-On this page I'll ramble on a bit about why we ought to *actively* avoid $\phi$ in both semiconductors and electrochemistry. While $\phi$ is okay in principle, it is a factory of misconceptions.
+On this page I'll ramble on a bit about why we ought to *actively* avoid $\phi$ in both semiconductors and electrochemistry. While $\phi$ is okay in principle, it actually complicates matters and also has become a minefield of misconceptions.
 
 ## What is $\phi$?
 

@@ -17,5 +17,5 @@ Appendices:
 
 - _Thermodynamics_ - Subtleties of the basic thermodynamics of charged systems.
 - _Nuances_ - Are $V_i$ "real voltages"?
-- [_About $\phi$_](/esbd/phi/) - Why can/should we bypass using the electrostatic potential.
+- [_The case against $\phi$_](/esbd/phi/) - Why we should bypass using an electrostatic potential.
 - [_About_](/esbd/about/) - How this project came about.
