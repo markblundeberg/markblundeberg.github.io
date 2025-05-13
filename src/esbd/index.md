@@ -40,19 +40,19 @@ Particles want to go from high $\mu_i$ to low $\mu_i$, as surely as energy wants
 
 There is also **{%wiki "electrochemical potential" %}**, denoted with a little bar on top: $\bar{\mu}_i$. To avoid some terminology ambiguities, when we talk about charged particles (electrons and ions) we will refer to their proper thermodynamic $\mu_i$ as the electrochemical potential $\bar{\mu}_i$. It works the same in many ways, like charged particles want to go from high $\bar{\mu}_i$ to low $\bar{\mu}_i$. But thermodynamics can get weird with charged particles, as the energy (and thus $\bar\mu_i$) of a charge is sensitive to the average electrostatic potential. So although $\bar\mu_i$ is perfectly well defined in theory, it is not simply dependent on the local material environment.
 
-{# Caveat - actually neutral particles' mu are sensitve to gravitational potential too! Important in e.g. water potential. #}
+Unfortunately, when we keep material composition the same but simply change the electrostatic potential by $\Delta\phi$, each charged species' $\bar\mu_i$ is going to depend differently on electrostatic potential. Here $\Delta\phi$ could represent anything from a deliberate control variable to the arbitrary global offset in electrostatic potentials.
 
 Here's an interactive visualization of how different particles' electrochemical potentials would vary solely due to a change $\Delta\phi$ in the electrostatic potential:
 
 {% include "esbd-diagrams/mu-shift-only.html" %}
 
-Here we've considered hypothetical charged species $\mathrm{A}^{2-}$, $\mathrm{B}^{-}$, $\mathrm{D}^{+}$, $\mathrm{E}^{2+}$, and a neutral species $\mathrm{C}$, all together in a thermodnamic body. The $\bar{\mu}_i$ levels move all over the place, seemingly at random! Actually, they're moving an amount $z_iF\Delta \phi$ per mole ($F$ is {%wiki "Faraday's constant" %} and $z_i$ is the ionic charge level, $-2$ or $+1$ etc.). If you prefer per-particle, that's $z_i e\Delta \phi$. Here $\Delta\phi$ could represent anything from a deliberate control variable to the arbitrary global offset in electric potentials.
+Here we've considered hypothetical charged species $\mathrm{A}^{2-}$, $\mathrm{B}^{-}$, $\mathrm{D}^{+}$, $\mathrm{E}^{2+}$, and a neutral species $\mathrm{C}$, all together in a thermodnamic body. The $\bar{\mu}_i$ levels move all over the place, seemingly at random! Actually, they're moving an amount $z_iF\Delta \phi$ per mole ($F$ is {%wiki "Faraday's constant" %} and $z_i$ is the ionic charge level, $-2$ or $+1$ etc.). If you prefer per-particle, that's $z_i e\Delta \phi$. 
 
 Ionic systems always include at least one positive species and one negative species, and so these charge-dependent shifts in electrochemical potentials make it rather annoying to directly compare $\bar{\mu}_i$ values in different materials or conditions.
 
 ## How to tame your ion, the usual way
 
-The traditional approach to deal with the charge-dependent shifts in electrochemical potential is to define a **material electrostatic potential** $\phi$, and then subtract off each particle's electrostatic energy $z_i F \phi$ to arrive at a clean "internal" chemical potential, $\mu_{\mathrm{int},i} = \bar{\mu}_i - z_i F \phi$.
+The traditional approach to deal with the charge-dependent shifts in electrochemical potential is to define an absolute material electrostatic potential $\phi$, and then subtract off each particle's electrostatic energy $z_i F \phi$ to arrive at a clean *internal* chemical potential, $\mu_{\mathrm{int},i} = \bar{\mu}_i - z_i F \phi$.
 
 (Often $\mu_{\mathrm{int},i}$ is called "the chemical potential" and given symbol $\mu_i$, which can create ambiguity. To avoid confusion, I've adopted the unambiguous term "electrochemical potential" $\bar\mu_i$ for the proper, _total_ chemical potential of ions.)
 
@@ -64,7 +64,7 @@ This approach of partitioning off the $\phi$ dependence is quite helpful as $z_i
 
 What if we could regularize the charge-dependent shifts in $\bar{\mu}_i$ some other way?
 
-## <a name="skip_background"></a> We observe electronic voltages, not abstract potentials
+## <a name="skip_background"></a> We observe electrochemical potentials
 
 Voltmeters are our primary instrument for measuring electrical phenomena. What do they _actually_ measure? What is "voltage" really?
 
@@ -76,7 +76,7 @@ and so $ \Delta V = V_{\mathrm{e}^-}(\text{body 2})- V_{\mathrm{e}^-}(\text{body
 
 We cannot make $\phi$ work so easily as we have in general $\Delta V \neq \phi(\text{body 2}) - \phi(\text{body 1})$ unless the two bodies are identical materials. Rather than bloat this $\phi$ formula with corrections involving $\mu_{\mathrm{int},\mathrm{e}^-}$, it is far more elegant to say that our everyday ordinary voltage is simply $V_{\mathrm{e}^-}$. For semiconductor device engineers, this notion of giving primacy to $\bar\mu_{\mathrm{e}^-}$ (Fermi level) is crucial for grokking semiconductor band diagrams, that relate internals of semiconductor devices to external voltages.
 
-But why privilege electrons? Yes, practical voltmeters are usually electron-only. But let's at least mathematically try to treat ions on equal footing with electrons.
+But why privilege electrons? Yes, everyday voltmeters are electron-only. But let's at least mathematically try to treat ions on equal footing with electrons.
 
 ## Meet $V_i$: a voltage for ions, too
 
