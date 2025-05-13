@@ -11,55 +11,59 @@ eleventyNavigation:
 
 # {{title}}
 
-On a purely exact thermodynamic level, we can talk about having a solid compound such as $\mathrm{NaCl}$ in equilibrium with a solvent (such as water), where part of it dissolves and dissociates into $\mathrm{Na}^+$ and $\mathrm{Cl}^-$ ions and saturates the solvent, leading to
+On a purely exact thermodynamic level, we can talk about having a solid compound such as $\mathrm{NaCl}$ in equilibrium with a solvent (such as water), where part of it dissolves and dissociates into $\mathrm{Na}^+$ and $\mathrm{Cl}^-$ ions and saturates the solvent. At standard conditions (25&nbsp;°C, 1&nbsp;bar) we have $\mu_{\mathrm{NaCl}} = -384.14~\mathrm{kJ/mol}$ for solid $\mathrm{NaCl}$, and so, using $\bar\mu_{\mathrm{Na}^+} + \bar\mu_{\mathrm{Cl}^-} = \mu_{\mathrm{NaCl}}$ we have:
 
 $$V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}= \frac{1}{F}\mu_{\mathrm{NaCl}} = -3.9813~\mathrm{V}.$$
 
-This value of $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ is a thermodynamic guarantee for an $\mathrm{NaCl}$-saturated solution, at least for the standard conditions (25&nbsp;°C, 1 bar) listed in the table where I found the value $\mu_{\mathrm{NaCl}} = -384.14~\mathrm{kJ/mol}$. Its value will not change depending on solvent nor the presence of any other ions in solution.
+This value of $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ is a thermodynamic guarantee for an $\mathrm{NaCl}$-saturated solution: its value will not change depending on solvent nor the presence of any other ions in solution.
 
-But suppose we only dissolve a small amount of salt, then $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ will be a lower value than its saturated value. How does $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ depend on concentration? And what if there are many ions present, then how much of each ion do we have and where do all their $V_i$'s lie in relation to each other?
+But suppose we only dissolve a small amount of salt, then $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ will be a lower value (more negative) than its saturated value stated above. How does $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ depend on concentration? And what if there are many ions present, then where do all their $V_i$'s lie in relation to each other?
 
 For this topic, we'll focus primarily on the _ideally dilute_ case, and then briefly discuss the non-ideal case involving ion activity coefficients.
 
 ## Ideally dilute and the standard species voltage $V^\circ_i$
 
-A familiar expression from chemistry is the dependence of a solute's chemical potential on its concentration $c$:
+A familiar expression from chemistry is the dependence of a solute's chemical potential on its concentration, $c_i$:
 $$ \mu_i(c_i) \approx \mu^\circ_i + RT \ln(c_i/c^\circ) . $$
 Here, $c^\circ \equiv 1~\mathrm{mol/L}$ is the reference concentration level, and $\mu^\circ_i$ is a reference value that extrapolates the value $\mu_i(c^\circ)$ based off its behaviour in the infinite dilution limit.
-This approximation only holds for small $c$ values, but it captures a behaviour known as _ideally dilute_, where the solute particles only interact with solvent and not with other solute particles. The logarithmic dependence on $c_i$ is purely entropic in origin. 
+This approximation only holds for small $c$ values, but it captures a behaviour known as _ideally dilute_.
+
+The logarithmic dependence on $c_i$ is purely entropic in origin. In essence, we assume that the solute particles can have strong and nontrivial interactions with the nearby solvent (captured in $\mu^\circ_i$), but each solute particle with its disturbed 'shell' of solvent moves around independently and interacts negligibly with other solute particles.
 
 Chemists have done heroic work in measuring and tabulating $\mu^\circ_i$ values for various solutes in various solvents, in the form of molar standard Gibbs energies of formation for solutes. And, we have adopted the convention that $\mu$ is equal to Gibbs formation energy, so these tables directly give us $\mu^\circ_i$, at least for the standard conditions listed in the data source. This is all for non-ionic solutes however, and for ions it will get slightly more tricky.
 
-Let's try to make the same equation work with electrochemical potential:
+Let's try to make the same equation work with the electrochemical potential of an ion:
 
 $$ \bar\mu_i(c_i) \approx \bar\mu^\circ_i + RT \ln(c_i/c^\circ). $$
 
-However, $\bar\mu^\circ_i$ ($= \mu_{\mathrm{int},i} + z_i F \phi$) here has an electrostatic contribution just like $\bar\mu_i$, and it will also have charge-dependent shifts. So, let's convert this equation into species voltages too. _Divide all the things_ by $z_i F$!
+This is fine, however, we have those electrostatic shifts in $\bar\mu_i$, and those must be captured by $\bar\mu^\circ_i$. This means that $\bar\mu^\circ_i$ cannot be so simply tabulated, since it is going to depend on both solvent and electrostatic state. Anyway, let's convert this equation into species voltages. _Divide all the things_ by $z_i F$!
 
 $$ V_i(c_i) \approx V^\circ_i + \frac{RT}{z_i F} \ln(c_i/c^\circ). $$
+
+where we have defined $V^\circ_i = \bar\mu^\circ_i / (z_i F)$.
 
 OK, so that is still kind of of like our familiar neutral solutes' $\mu_i(c_i)$ equation, except:
 * Cations: Still $V_{\mathrm{X}^+}$ does grow higher relative to $V^\circ_{\mathrm{X}^+}$ as concentration $c_i$ increases.
 * Anions: Now $V_{\mathrm{Y}^-}$ _goes lower_ relative to $V^\circ_{\mathrm{Y}^-}$ as concentration increases.
 * Higher charges: For a strong ion with charge $|z|>1$, its $V_{\mathrm{Z}^z}$ moves proportionally slower relative to $V^\circ_{\mathrm{Z}^z}$ as concentration increases.
 
-For example, for an ×10 ('decade') concentration increase, the difference $V_i - V^\circ_i$ would change by $\frac{RT}{z_i F}\ln(10)$. At 25&nbsp;°C that would be +59&nbsp;mV/decade for a $[]^{1+}$ ion, and -20&nbsp;mV/decade for a $[]^{3-}$ ion.
+For example, for an ×10 ('decade') concentration increase, the difference $V_i - V^\circ_i$ would change by $\frac{RT}{z_i F}\ln(10)$. At 25&nbsp;°C that would be $+59~\mathrm{mV/decade}$ for a $[]^{1+}$ ion, and $-20~\mathrm{mV/decade}$ for a $[]^{3-}$ ion.
 
-This is still 'slippery' however, as $V_i$ and $V^\circ_i$ can move up and down together while keeping the same concentration. Let's see how they relate to other ions.
+This is still 'slippery' however, as $V_i$ and $V^\circ_i$ can move up and down together while keeping the same concentration. We now have to establish how $V_i$ and $V^\circ_i$ relate to other ions.
 
 ## The $V^\circ_i$ standard state ladder
 
-We now have this $V^\circ_i$, which unfortunately _cannot_ be tabulated since it is sensitive to arbitrary electrostatic offsets. We're not stuck though, as we can compare the relative $V^\circ_i$ values of different ions, and these differences are **electrically-invariant** properties of the solvent. But also, they are going to be **concentration-invariant** too (since they apply to the ideally dilute limit). So, the $V^\circ_i$ differences will be fixed properties of the solvent at a given temperature and pressure.
+We now have this $V^\circ_i$, which unfortunately _cannot_ be tabulated since it is sensitive to arbitrary electrostatic offsets. We're not stuck though, as we can compare the relative $V^\circ_i$ values of different ions. All differences $V^\circ_i - V^\circ_j$ are **electrically-invariant** properties of the solvent. They are going to be **concentration-invariant** too (since they apply to the ideally dilute limit). So, the $V^\circ_i$ differences will be fixed properties of the solvent at a given temperature and pressure.
 
 Here are a number of selected $V^\circ_i$ values for water at standard conditions (25&nbsp;°C, 1 bar):
 
 {% include "esbd-diagrams/V-std-ladder.html" %}
 
-I call this the **standard state ladder** for water. The standard state ladder is a rigid ladder: as we change the electrical or chemical conditions of the solution, the $V^\circ_i$ values may move up and down but they have to all stay rigidly locked to one another. In contrast, $V_i$ values are not rigid and their relative positions will change with composition.
+I call this the **standard state ladder** for water. The standard state ladder is a rigid ladder: as we change the electrical state or solute composition of the solution, the $V^\circ_i$ values may move up and down but they have to all stay rigidly locked to one another. In contrast, $V_i$ values are not rigid and their relative positions will change with composition.
 
-In effect, the standard state ladder of $V^\circ_i$ is a stand-in for the notion of electrostatic potential $\phi$, but combining it with the average differences in the local electrostatic potentials that each ion 'feels', as well the ion's chemical structure, and the way it disturbs its solvent environment with "solvation shells". Conversely, we can imagine $\phi$ as the single degree of freedom describing the offset of the rigid ladder. Specifically, the usual convention for $\phi$ sets it at exactly $V^\circ_{\mathrm{H^+}}$.
+In effect, the standard state ladder of $V^\circ_i$ is a stand-in for the notion of electrostatic potential $\phi$, but combining it with the average differences in the local electrostatic potentials that each ion 'feels', as well the ion's chemical structure, and the way it disturbs its solvent environment with "solvation shells". We can use any rung on the ladder as a reference point - once one rung is determined, we know the position of all the other rungs. The usual reference point is $V^\circ_{\mathrm{H}^+}$, but that's not strictly required.
 
-The standard state ladder is also analogous to the conduction and valence band edges in semiconductors, insofar as it 'floats' rigidly to keep charge neutrality. We'll talk more about this analogy to semiconductors in a later topic.
+The standard state ladder is also analogous to the band edges in semiconductors, insofar as it 'floats' rigidly to keep charge neutrality. We'll talk more about this analogy to semiconductors in a later topic.
 
 Below is the data table of relative $V^\circ_i$ values for water, that was plotted above:
 
@@ -68,20 +72,25 @@ Below is the data table of relative $V^\circ_i$ values for water, that was plott
 Click to open ion data table.
 </summary>
 
-When you look at a table of Gibbs energy of formation, the values for ions are _internal_: $\mu^\circ_{\mathrm{int},i}$, which defines $\bar\mu^\circ_i = \mu^\circ_{\mathrm{int},i} + z_i F \phi$ according to whatever convention of $\phi$ was used for that solvent. Using this and $V^\circ_i = \bar\mu^\circ_i/(z_i F)$, we get (the $\phi$'s cancel):
+Chemical tables commonly list Gibbs energy of formation for aqueous ions, however there is some subtlety to this. Technically speaking it is delicate to even *define* any single ion's Gibbs formation energy, and as a result all the ionic formation energies are listed with a convention that $\Delta_{\mathrm{f}} G^\circ = 0$ for ideal-dilute $\mathrm{H^+}$ extrapolated to a concentration of $c^\circ$. This is an *electrostatic convention*, quite different from the usual convention that elements in their most stable state have $\Delta_{\mathrm{f}} G = 0$.
 
-$$V^\circ_i - V^\circ_j = \frac{\mu^\circ_{\mathrm{int},i}}{z_i F} - \frac{\mu^\circ_{\mathrm{int},j}}{z_j F}. $$
+It works to plow ahead with our usual convention that $\mu$ is equal to molar Gibbs energy of formation, but we will have to modify it thus:
 
-This means we can re-tabulate all the $V^\circ_i$ using any one of them as a common reference.
+$$\bar\mu^\circ_i = \Delta_{\mathrm{f}} G^\circ_i + z_i F \phi^*$$
 
-Here I've taken some selected ionic thermodynamic data from Atkins' _Physical Chemistry_ (8th edition, Table 2.7 in the back pages), and converted them. Note these are all for:
+where $\phi^*$ is some unknown electrostatic potential (with some unknown offset from $\phi$) that would enforce $\Delta_{\mathrm{f}} G^\circ_{\mathrm{H}^+} = 0$ under whatever conditions were assumed in the table. Fortunately, this $\phi^*$ doesn't matter since we are only interested in differences $V^\circ_i - V^\circ_j$, and then $\phi^*$ cancels out:
 
-* **ideally dilute** ions in **water**,
+$$V^\circ_i - V^\circ_j = \frac{\Delta_{\mathrm{f}} G^\circ_i}{z_i F} - \frac{\Delta_{\mathrm{f}} G^\circ_j}{z_j F}. $$
+
+This means we can pretty much directly re-tabulate all the $\Delta_{\mathrm{f}} G^\circ_i$ values into $V^\circ_i$ values, by simply dividing by $z_i F$. We'll keep $\mathrm{H}^+$ as our reference.
+
+Here I've taken some selected ionic thermodynamic data from Atkins' _Physical Chemistry_ (8th edition, Table 2.7 in the back pages), and converted them. Note these are all:
+
+* for **ideally dilute** ions in **water**,
 * at 298 K and 1 bar,
-* a reference ionic concentration of $c^\circ = 1~\mathrm{mol/L}$, and,
-* all referenced to $\mathrm{H}^+$.
+* using a reference ionic concentration of $c^\circ = 1~\mathrm{mol/L}$.
 
-| Ion $i$ | $\Delta_{\mathrm{f}} G^\circ$ (kJ/mol) | $V^\circ_i - V^\circ_{\mathrm{H}^+}$ (V) |
+| Ion $i$ | $\Delta_{\mathrm{f}} G^\circ_i$ (kJ/mol) | $V^\circ_i - V^\circ_{\mathrm{H}^+}$ (V) |
 | ---: | ---: | ---: |
 | $\mathrm{HSO_4}^{-}$ | -755.91&#8199; | +7.8345&#8199; |
 | $\mathrm{Cr_2O_7}^{2-}$ | -1301.1&#8199;&#8199; | +6.742&#8199;&#8199; |
@@ -121,7 +130,9 @@ Here I've taken some selected ionic thermodynamic data from Atkins' _Physical Ch
 | $\mathrm{Cs}^{+}$ | -292.02&#8199; | -3.0266&#8199; |
 | $\mathrm{Li}^{+}$ | -293.31&#8199; | -3.0399&#8199; |
 
-Note that $\Delta_{\mathrm{f}} G^\circ = 0$ for $\mathrm{H^+}$, which is just a convention. We aren't actually able to measure the absolute $\mu^\circ_{\mathrm{int},i}$ for any of these ions, as that would correspond to determining the electrostatic potential $\phi$.
+These are the values shown in the plot above, although a few were removed from the plot just because they were overlapping too tightly. Note the plot starts with the ladder offset arbitrarily to have $V^\circ_{\mathrm{H}^+} = -0.45~\mathrm{V}$, just to emphasize that there is no preferred absolute position.
+
+Some readers will notice that many of these entries coincide with {% wiki "Standard electrode potential (data page)", "standard electrode potentials" %}, and that is for good reason! As we will see in the later [topic on potentials](../potentials/), for elemental metals (with $\mu_{\mathrm{M}}=0$) in equilibrium with an ideal-dilute $c^\circ$ concentration of their ion $\mathrm{M}^{n+}$, we do expect $E = V^\circ_{\mathrm{M}^{n+}} - V^\circ_{\mathrm{H}^+}$.
 
 </details>
 
@@ -129,16 +140,16 @@ Note that $\Delta_{\mathrm{f}} G^\circ = 0$ for $\mathrm{H^+}$, which is just a 
 
 Let's try using this $V^\circ$ ladder in an example, just to see how it works.
 
-Earlier in the Electrodes topic we talked about the silver / silver chloride electrode. Let's consider what happens when we dissolve some potassium chloride salt into its solution:
+In the [Electrodes topic](../electrodes/) we talked about the silver / silver chloride electrode. The aqueous solution around the electrode is saturated by silver chloride (which has a low solubility). Let's consider what happens when we add some potassium chloride salt that dissolves into the solution:
 
 {% include "esbd-diagrams/esbd-agcl-kcl-common-ion.html" %}
 
-The solution is initially saturated with $\mathrm{AgCl}$, and as you can see, adding $\mathrm{KCl}$ causes the concentration of $\mathrm{Ag^+}$ ions to decrease. This is known as a {%wiki "common-ion effect" %}. Visually, we can see that adding the $\mathrm{KCl}$ pushes up the standard state ladder in order to increase the $\mathrm{Cl^-}$ concentration. Since the ladder is rigid, this also moves $V^\circ_\mathrm{Ag^+}$ away from $V_\mathrm{Ag^+}$ thereby decreasing its concentration. If we were to do this experiment, we would likely see the solution turn cloudy with $\mathrm{AgCl}$ precipitates.
+The solution is initially saturated with $\mathrm{AgCl}$, and as you can see, adding $\mathrm{KCl}$ causes the concentration of $\mathrm{Ag^+}$ ions to decrease. This is known as a {%wiki "common-ion effect" %}. Visually, we can see that adding the $\mathrm{KCl}$ pushes up the standard state ladder in order to increase the $\mathrm{Cl^-}$ concentration (to push $V^\circ_\mathrm{Cl^-}$ closer to $V_\mathrm{Cl^-}$). Since the ladder is rigid, this also moves $V^\circ_\mathrm{Ag^+}$ away from $V_\mathrm{Ag^+}$ thereby decreasing its concentration. If we were to do this experiment, we would likely see the solution turn cloudy with $\mathrm{AgCl}$ precipitates.
 
-And, this relates to the saturated salt defining a {% wiki "solubility product" %}, which we can calculate from the $V_i$ and $V^\circ_i$ values (see math below):
+And, this relates to the saturated salt defining a {% wiki "solubility product" %}, which we can calculate from the fixed $V_\mathrm{Ag^+} - V_\mathrm{Cl^-}$ and $V^\circ_\mathrm{Ag^+} - V^\circ_\mathrm{Cl^-}$ differences (see math below):
 $$c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-} = 1.76\times 10^{-10}~(\mathrm{mol/L})^2.$$
 
-We may also consider adding a common-cation salt like silver nitrate, donating $\mathrm{Ag^+}$ and $\mathrm{NO_3^-}$ ions; in the above diagram, you can enable this with a checkbox. In that case, it will suppress the $\mathrm{Cl^-}$ concentration instead. And if we added both $\mathrm{KCl}$ and $\mathrm{AgNO_3}$ into the same beaker, [then we would see significant precipitation](https://www.youtube.com/watch?v=kt8cJQKDxfE) of $\mathrm{AgCl}$ since we cannot exceed the solubility product stated above.
+We may also consider adding a common-cation salt like silver nitrate, donating $\mathrm{Ag^+}$ and $\mathrm{NO_3^-}$ ions; in the above diagram, you can enable this with a checkbox. In that case, it will suppress the $\mathrm{Cl^-}$ concentration instead. And if we added both $\mathrm{KCl}$ and $\mathrm{AgNO_3}$ into the same beaker, [then we would see significant precipitation](https://www.youtube.com/watch?v=kt8cJQKDxfE) of $\mathrm{AgCl}$ since we cannot exceed the solubility product $c_\mathrm{Ag^+} \cdot c_\mathrm{Cl^-}$ stated above.
 
 <details>
 <summary>
