@@ -41,9 +41,44 @@ In the lithium-ion battery field, the step size is known as the OCV value, and I
 
 (OCV curves are measured for each electrode sepearately against a pure lithium metal reference electrode, and so $\mathrm{OCV} = V_{\mathrm{e}^-} - V_{\mathrm{Li}^+} + \mu_{\mathrm{Li(metal)}}$. We're assuming standard reference conditions where $\mu_{\mathrm{Li(metal)}}=0$, and so $\mathrm{OCV} = V_{\mathrm{e}^-} - V_{\mathrm{Li}^+}$.)
 
+## Battery discharge
+
+The above diagram suggests that the anode and cathode materials are monolithic blocks of graphite or NMC, which is actually an inaccurate picture of what the real materials look like. Due to the slow diffusion of lithium ions inside these materials, it is desirable that the anode and cathode are instead porous to the electrolyte, and so typically they are basically granular matrices, like in the following schematic:
+
+<div class="demo-container" style="max-width: 200px">
+<img src="/esbd/img/chen2020_fig1_schematic.jpg" style="max-width:100%"/>
+
+<small>From [Chen et al. 2020](https://dx.doi.org/10.1149/1945-7111/ab9050), license: [Creative Commons Attribution Non-Commercial No Derivatives 4.0](http://creativecommons.org/licenses/by-nc-nd/4.0/)</small>
+</div>
+
+During battery discharge, the output voltage drops below the normal equilibrium voltage. For rapid discharges (like "C/1" - a rate that fully discharges the battery in 1 hour), the voltage drops can be quite significant. Using our $V_i$'s, we can actually attribute this external voltage drop to being a sum or various $V_i$ drops.
+
+* Anode electronic resistance: a drop in $V_{\mathrm{e}^-}$ moving from the negative battery terminal to the anode graphite particles.
+* Anode lithium diffusion: a drop in $V_{\mathrm{Li}^+}$ from the center of anode granules to their surface.
+* SEI diffusion: a drop in $V_{\mathrm{Li}^+}$ as it penetrates the solid electrolyte interphase (SEI) that surrounds each anode granule.
+* Electrolyte resistance: A drop in $V_{\mathrm{Li}^+}$ in the electrolyte as lithium ions move through the electrolyte.
+* Cathode lithium diffusion: a drop in $V_{\mathrm{Li}^+}$ from the surface of cathode granules to their center.
+* Cathode electronic resistance: a drop in $V_{\mathrm{e}^-}$ moving from the cathode particles to the positive battery terminal.
+
+We can illustrate this using our band diagrams. For example, in an anode particle we might see something like this:
+
+... TODO ...
+
+And if we want to plot the entire cell, we might draw something like this:
+
+... TODO ...
+
+Here we draw two $V_{\mathrm{Li}^+}$ levels - one for the core of granules, and one for the lithium ions inside the electrolytes.
+
+This type of diagram is a simplification of the gold standard of battery modelling, which is the "pseudo-2D" model: one axis is the physical distance between electrodes, and the other axis is the radius inside the electrodes' granules (which are assumed to have uniform sizes).
+
+During charging, we see many of these voltage drops happen, only in reverse. And something else can happen, which is that if $V_{\mathrm{Li}^+}$ rises above $V_{\mathrm{e}^-}$ then it is thermodynamically favourable ($\mu_{\mathrm{Li}} > \mu_{\mathrm{Li(metal)}}$) to precipitate out solid lithium metal! This is known as "lithium plating" and is a serious problem that limits fast charging. Typically, the lithium precipitates as needles and dendrites. Only some of the precipitated lithium is able to re-dissolve later on, as any chunk of lithium that becomes electronically disconnected becomes "dead lithium" with its internal $V_{\mathrm{e}^-}$ and $V_{\mathrm{Li}^+}$ falling down to the ambient electrolyte value of $V_{\mathrm{Li}^+}$.
+
 ## Takeaways
 
 As we saw, the ESBD diagram is quite simple in a lithium-ion battery, where the main operation involves only $V_{\mathrm{Li}^+}$ and $V_{\mathrm{e}^-}$ levels, and we can visually see the per-electrode OCV value.
+
+During charge and discharge, the $V_i$ voltages form a direct visualization of how various electronic and ionic resistances are responsible for the total "internal resistance".
 
 For the next topic, we'll return to general discussions.
 
