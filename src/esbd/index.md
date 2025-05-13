@@ -34,7 +34,7 @@ Particles want to go from high $\mu_i$ to low $\mu_i$, as surely as energy wants
 
 {% include "esbd-diagrams/mu-driving-force.html" %}
 
-{# Note - we're assuming bodies with equal temperature for now! #}
+(Note that this assumes the bodies have equal temperature $T$. From here on I'm going to make the assumption that all the bodies have equal temperature.)
 
 ## The electrochemical potential ($\bar\mu_i$)
 
@@ -101,6 +101,8 @@ Remember before when we talked about particles going downhill in $\bar\mu$? Welc
 - If the $V_i$ for a given species is flat, then that species is in equilibrium and there is no driving force.
 
 That might sound familiar too, it's just the thermodynamic version of positive charges in a vacuum getting pushed from high $\phi$ to low $\phi$, or vice versa for negative charges! The big difference is, now each species of particle experiences a different voltage landscape $V_i$. That's because $V_i$ includes some chemical energy, which will differ from species to species.
+
+Let me highlight the mental shift we want to make: **Inside a conductive material with multiple mobile species of charges, there is no single potential. Every charged species $i$ "rides" a slightly different voltage $V_i$.**
 
 ## Introducing the Diagram: $V_i$ vs $x$
 
