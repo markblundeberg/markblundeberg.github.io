@@ -36,9 +36,9 @@ Particles want to go from high $\mu_i$ to low $\mu_i$, as surely as energy wants
 
 {# Note - we're assuming bodies with equal temperature for now! #}
 
-## The electrochemical potential ($\bar{\mu}_i$)
+## The electrochemical potential ($\bar\mu_i$)
 
-There is also **{%wiki "electrochemical potential" %}**, denoted with a little bar on top: $\bar{\mu}_i$. To avoid some terminology ambiguities, when we talk about charged particles (electrons and ions) we will refer to their proper thermodynamic $\mu_i$ as the electrochemical potential $\bar{\mu}_i$. It works the same in many ways, like charged particles want to go from high $\bar{\mu}_i$ to low $\bar{\mu}_i$. But thermodynamics can get weird with charged particles, as the energy (and thus $\bar\mu_i$) of a charge is sensitive to the average electrostatic potential. So although $\bar\mu_i$ is perfectly well defined in theory, it is not simply dependent on the local material environment.
+There is also **{%wiki "electrochemical potential" %}**, denoted with a little bar on top: $\bar\mu_i$. To avoid some terminology ambiguities, when we talk about charged particles (electrons and ions) we will refer to their proper thermodynamic $\mu_i$ as the electrochemical potential $\bar\mu_i$. It works the same in many ways, like charged particles want to go from high $\bar\mu_i$ to low $\bar\mu_i$. But thermodynamics can get weird with charged particles, as the energy (and thus $\bar\mu_i$) of a charge is sensitive to the average electrostatic potential. So although $\bar\mu_i$ is perfectly well defined in theory, it is not simply dependent on the local material environment.
 
 Unfortunately, when we keep material composition the same but simply change the electrostatic potential by $\Delta\phi$, each charged species' $\bar\mu_i$ is going to depend differently on electrostatic potential. Here $\Delta\phi$ could represent anything from a deliberate control variable to the arbitrary global offset in electrostatic potentials.
 
@@ -46,13 +46,13 @@ Here's an interactive visualization of how different particles' electrochemical 
 
 {% include "esbd-diagrams/mu-shift-only.html" %}
 
-Here we've considered hypothetical charged species $\mathrm{A}^{2-}$, $\mathrm{B}^{-}$, $\mathrm{D}^{+}$, $\mathrm{E}^{2+}$, and a neutral species $\mathrm{C}$, all together in a thermodnamic body. The $\bar{\mu}_i$ levels move all over the place, seemingly at random! Actually, they're moving an amount $z_iF\Delta \phi$ per mole ($F$ is {%wiki "Faraday's constant" %} and $z_i$ is the ionic charge level, $-2$ or $+1$ etc.). If you prefer per-particle, that's $z_i e\Delta \phi$. 
+Here we've considered hypothetical charged species $\mathrm{A}^{2-}$, $\mathrm{B}^{-}$, $\mathrm{D}^{+}$, $\mathrm{E}^{2+}$, and a neutral species $\mathrm{C}$, all together in a thermodnamic body. The $\bar\mu_i$ levels move all over the place, seemingly at random! Actually, they're moving an amount $z_iF\Delta \phi$ per mole ($F$ is {%wiki "Faraday's constant" %} and $z_i$ is the ionic charge level, $-2$ or $+1$ etc.). If you prefer per-particle, that's $z_i e\Delta \phi$. 
 
-Ionic systems always include at least one positive species and one negative species, and so these charge-dependent shifts in electrochemical potentials make it rather annoying to directly compare $\bar{\mu}_i$ values in different materials or conditions.
+Ionic systems always include at least one positive species and one negative species, and so these charge-dependent shifts in electrochemical potentials make it rather annoying to directly compare $\bar\mu_i$ values in different materials or conditions. If we tried to make a band diagram plotting $\bar\mu_i$ of ions vs position, it would be incredibly hard to interpret as each ion would have different arbitrary offsets.
 
 ## How to tame your ion, the usual way
 
-The traditional approach to deal with the charge-dependent shifts in electrochemical potential is to define an absolute material electrostatic potential $\phi$, and then subtract off each particle's electrostatic energy $z_i F \phi$ to arrive at a clean *internal* chemical potential, $\mu_{\mathrm{int},i} = \bar{\mu}_i - z_i F \phi$.
+The traditional approach to deal with the charge-dependent shifts in electrochemical potential is to define an absolute material electrostatic potential $\phi$, and then subtract off each particle's electrostatic energy $z_i F \phi$ to arrive at a clean *internal* chemical potential, $\mu_{\mathrm{int},i} = \bar\mu_i - z_i F \phi$.
 
 (Often $\mu_{\mathrm{int},i}$ is called "the chemical potential" and given symbol $\mu_i$, which can create ambiguity. To avoid confusion, I've adopted the unambiguous term "electrochemical potential" $\bar\mu_i$ for the proper, _total_ chemical potential of ions.)
 
@@ -60,9 +60,9 @@ Adapting the previous demo, you can see now that $\mu_{\mathrm{int},i}$ are unaf
 
 {% include "esbd-diagrams/mu-shift-mu-internal.html" %}
 
-This approach of partitioning off the $\phi$ dependence is quite helpful as $z_i F \phi$ seems simple and $\mu_{\mathrm{int},i}$ contains normal-ish chemistry. It does however mean that for electrochemical processes, it doubles the driving forces that we have to consider: an internal chemical component and an electrostatic component, which anyway sum to the measurable total driving force (from $\bar{\mu}_i$). And there is some difficulty with directly accessing $\phi$ in the lab. So this does complicate our mental picture too.
+This approach of partitioning off the $\phi$ dependence is quite helpful as $z_i F \phi$ seems simple and $\mu_{\mathrm{int},i}$ contains normal-ish chemistry. It does however mean that for electrochemical processes, it doubles the driving forces that we have to consider: an internal chemical component and an electrostatic component, which anyway sum to the total driving force (from $\bar\mu_i$). And there are serious difficulties with actually measuring $\phi$ in the lab. And it doesn't bring us close to having an ionic band diagram. So this decomposition with $\phi$ does complicate things.
 
-What if we could regularize the charge-dependent shifts in $\bar{\mu}_i$ some other way?
+What if we could regularize the charge-dependent shifts in $\bar\mu_i$ some other way?
 
 ## <a name="skip_background"></a> We observe electrochemical potentials
 
@@ -74,17 +74,17 @@ $$V_{\mathrm{e}^-} = \frac{\bar{\mu}_{\mathrm{e}^-}}{-F}.$$
 
 and so $ \Delta V = V_{\mathrm{e}^-}(\text{body 2})- V_{\mathrm{e}^-}(\text{body 1})$. The voltmeter reads 0 when there is no driving force (equal $\bar\mu_{\mathrm{e}^-}$ and equal $V_{\mathrm{e}^-} $), easy! 
 
-We cannot make $\phi$ work so easily as we have in general $\Delta V \neq \phi(\text{body 2}) - \phi(\text{body 1})$ unless the two bodies are identical materials. Rather than bloat this $\phi$ formula with corrections involving $\mu_{\mathrm{int},\mathrm{e}^-}$, it is far more elegant to say that our everyday ordinary voltage is simply $V_{\mathrm{e}^-}$. For semiconductor device engineers, this notion of giving primacy to $\bar\mu_{\mathrm{e}^-}$ (Fermi level) is crucial for grokking semiconductor band diagrams, that relate internals of semiconductor devices to external voltages.
+Unfortunately, the common view is that voltmeters access differences in electrostatic potential $\phi$. But this is only true in special cases where the $\phi$ difference happens to match the $V_{\mathrm{e}^-}$ difference, like if the two probed bodies have identical material composition. Unlearning the "voltmeters measure $\phi$" idea is crucial for semiconductor engineers who want to really grok semiconductor band diagrams, that relate internals of semiconductor devices to external voltages. The Fermi level, which is $\bar{\mu}_{\mathrm{e}^-}$, plays a central role in all semiconductor devices.
 
-But why privilege electrons? Yes, everyday voltmeters are electron-only. But let's at least mathematically try to treat ions on equal footing with electrons.
+But what about ions? This $V_{\mathrm{e}^-}$ is such a powerful concept for electronics, and yet, we don't have "ionic voltages". Of course everyday voltmeters are electron-only. But let's at least _mathematically_ try to treat ions on equal footing with electrons and see where that gets us.
 
 ## Meet $V_i$: a voltage for ions, too
 
 Let's define a **species voltage, $V_i$**, for _any_ charged species $i$:
 
-$$V_i = \frac{\bar{\mu}_i}{z_i F}$$
+$$V_i = \frac{\bar\mu_i}{z_i F}$$
 
-This is the big idea. We just divide the energy per mole by the charge per mole (for per-particle that's $V_i = \bar{\mu}_i / (z_i e)$). That seems simple, maybe _too_ simple? Stick around, because this scaling has a profound consequence on the way that we can visualize electrochemistry.
+This is the big idea. We just divide the energy per mole by the charge per mole (for per-particle that's $V_i = \bar\mu_i / (z_i e)$). That seems simple, maybe _too_ simple? Stick around, because this scaling has a profound consequence on the way that we can visualize electrochemistry.
 
 Let's try shifting that electrostatic offset one final time, for those variously charged species:
 
