@@ -20,6 +20,10 @@ body {
     background-color: #fafaf4; /* Slightly off-white background */
 }
 
+.katex {
+    font-size: 1.1em !important;
+}
+
 /* ====== Layout Styles ====== */
 
 /* Wrapper for nav and main content */
