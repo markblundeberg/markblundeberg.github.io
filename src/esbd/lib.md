@@ -80,74 +80,11 @@ As we saw, the ESBD diagram is quite simple in a lithium-ion battery, where the 
 
 During charge and discharge, the $V_i$ voltages form a direct visualization of how various electronic and ionic resistances are responsible for the total "internal resistance".
 
-For the next topic, we'll return to general discussions.
+For the next topic, we'll return to general discussions, and get into detail about how the $V_i$'s work inside of solutions.
 
 [**NEXT TOPIC: Solutions**](../solutions/)
 
 {#   
-
-## Optional discussion
-
-<details>
-<summary>
-Click to open extended discussion.
-</summary>
-#}
-{#
-Gemini suggested outline
-
-Proposed Structure & Main Points:
-
-Introduction: What Makes LIBs Special?
-
-Briefly state their importance (energy density, rechargeability).
-Introduce the core components: Anode (e.g., Graphite), Cathode (e.g., LCO), Electrolyte (Li⁺ conductor), Separator.
-Key Idea: Unlike simple metal electrodes, LIBs work by intercalation – inserting/removing Li ions into/from host materials.
-Intercalation and Chemical Potential (μ_Li)
-
-Explain the concept: xLi⁺ + xe⁻ + Host ⇌ LiₓHost.
-Crucial Point: The energy required to add/remove lithium (its chemical potential, μ_Li) changes depending on how much lithium is already in the host (x, the state of charge). Analogy: Like parking cars in a multi-level garage, the first spots are easy (low energy), the last ones are harder (high energy).
-Briefly mention this contrasts with plating pure Li metal where μ_Li is constant (μ°(Li)).
-The ESBD Picture - Open Circuit Voltage (OCV)
-
-Introduce a representative ESBD for a partially charged LIB (e.g., Graphite || LCO).
-Show Levels:
-V_e⁻ for anode (Graphite) current collector.
-V_e⁻ for cathode (LCO) current collector.
-V_Li⁺ level in the electrolyte (flat at OCV).
-Show V_Li⁺ penetrating into both anode and cathode hosts, continuous with the electrolyte level.
-Show V_e⁻ levels within each host (same as collector).
-Highlight the Steps: Show the different potential steps within each electrode:
-Anode: V_Li⁺ - V_e⁻ = μ_Li_anode / F
-Cathode: V_Li⁺ - V_e⁻ = μ_Li_cathode / F
-Place Reaction Markers: Put the ⇌ marker within the anode phase (connecting V_Li⁺ and V_e⁻ there) and within the cathode phase (connecting V_Li⁺ and V_e⁻ there), representing the internal Li⁺ + e⁻ ⇌ Li equilibrium in each host.
-Define OCV: Clearly show that OCV = V_e⁻_cathode - V_e⁻_anode. Explain this difference arises because μ_Li_cathode is different from μ_Li_anode at a given SOC.
-Why Voltage Changes: Electrode Potential vs. State of Charge (SOC)
-
-Focus on μ_Li vs x: Explain that because μ_Li changes with x differently in the anode and cathode, the steps V_Li⁺ - V_e⁻ change differently as Li moves.
-Anode Example (Graphite): Show its characteristic OCV curve vs Li/Li⁺ (low voltage, relatively flat plateaus). Explain this reflects specific energy levels for Li in graphite stages. Relate flat plateaus to regions where μ_Li_anode is constant (two-phase coexistence during staging). On ESBD: V_e⁻_anode stays relatively constant during plateaus.
-Cathode Example (LCO): Show its characteristic OCV curve vs Li/Li⁺ (higher voltage, generally sloping). Explain this reflects gradual changes in Co oxidation state / Li interaction energy. On ESBD: V_e⁻_cathode changes more continuously.
-Full Cell Voltage: Explain that the overall cell OCV curve results from the difference between the cathode and anode OCV curves (V_e⁻_cathode - V_e⁻_anode).
-Visualizing Charge / Discharge with ESBD
-
-Discharge: Start with charged state ESBD (large V_e⁻ difference). Show Li⁺ moving anode -> cathode, e⁻ moving anode -> cathode externally. Explain how x changes, causing μ_Li_anode to increase (making V_e⁻_anode go down) and μ_Li_cathode to decrease (making V_e⁻_cathode go up). Show the V_e⁻ levels moving closer, reducing cell voltage.
-Charge: Start with discharged state ESBD (small V_e⁻ difference). Show external voltage forcing e⁻ cathode -> anode, Li⁺ moving cathode -> anode. Explain how x changes, causing μ_Li_anode to decrease (V_e⁻_anode goes up) and μ_Li_cathode to increase (V_e⁻_cathode goes down). Show V_e⁻ levels moving apart, increasing cell voltage.
-Conclusion & Takeaways
-
-Summarize: LIB voltage is determined by the difference in Li chemical potential (μ_Li) between anode and cathode hosts. μ_Li varies with SOC, causing voltage changes. ESBD visualizes these changing energy levels (V_Li⁺, V_e⁻) and the resulting voltage.
-Reiterate the power of the ESBD approach for understanding this complex system.
-NEXT Link: To Topic 3 (Solutions).
-
-Optional Discussion Ideas:
-
-Variety of Materials: Briefly show OCV curves and mention the resulting ESBD differences for other common materials (LFP's flat plateau, NMC's slope, Si anode's low potential and large volume change).
-Solid Electrolyte Interphase (SEI): Briefly explain its formation on the anode during the first charge, its necessity (preventing continuous electrolyte reduction), and its character (ion conductor, electron insulator). Mentioning how it might affect the ESBD at the interface (e.g., adding a resistive or tunneling barrier) could be interesting but complex.
-Kinetics & Operating Voltage: Explain that the OCV is the equilibrium potential. When current flows, overpotentials (due to charge transfer resistance, ion transport limits in electrolyte/solids) cause the actual operating voltage to be lower during discharge and higher during charge than the OCV. Show a simple diagram illustrating this deviation.
-Energy Density vs. Power Density: Briefly relate the voltage (from Δμ_Li) and capacity (amount of Li stored) to energy density, and relate kinetics/overpotentials to power density.
-
-
-===
-
 Kinetics ideas:
 - Just draw a sketch.
 - V_Li+ gradient inside electrodes.
