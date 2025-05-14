@@ -207,3 +207,19 @@ export function renderSpanMath(spanElement, newLabelText, forceRender = false) {
         spanElement.textContent = currentLabel; // Fallback on error
     }
 }
+
+// ========================================================================
+// Numerics
+// ========================================================================
+
+export function linspace(start, end, numPoints) {
+    if (numPoints < 2) {
+        return numPoints === 1 ? [start] : [];
+    }
+    const arr = [];
+    const step = (end - start) / (numPoints - 1);
+    for (let i = 0; i < numPoints; i++) {
+        arr.push(start + step * i);
+    }
+    return arr;
+}

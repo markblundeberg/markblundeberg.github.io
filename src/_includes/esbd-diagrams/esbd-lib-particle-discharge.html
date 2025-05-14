@@ -1,0 +1,92 @@
+<div class="demo-container" style="max-width: 300px">
+    <div class="plot-container" id="esbd-lib-particle-discharge"></div>
+</div>
+
+<script type="module">
+    const plotContainerId = 'esbd-lib-particle-discharge';
+
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { throttle, linspace } from '{{ esbdJsPath }}utils.js';
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(plotContainerId, {
+        height: 250,
+    });
+
+    // Define species info
+    diagram.addSpeciesInfo('li_ion', {
+        z: 1,
+        color: '#E41A1C',
+        latexPrettyName: '\\mathrm{Li}^{+}',
+    });
+    diagram.addSpeciesInfo('electron', {
+        z: -1,
+        color: '#377EB8',
+        latexPrettyName: '\\mathrm{e}^{-}',
+    });
+
+    // Boundaries
+    const boundaries = [0.0, 0.5, 0.7, 1.0];
+    // Set layout
+    diagram.setSpatialLayout(boundaries, [
+        { name: 'Graphite', color: '#DDDDDD' },
+        { name: 'SEI', color: '#E0E0F0' },
+        { name: 'Electrolyte', color: '#E6F5FF' },
+    ]);
+
+    const V_el = -0.02;
+
+    const V_lion_core = V_el - 0.1;
+    const V_lion_surface = V_el - 0.15;
+    const V_lion_electrolyte = V_el - 0.2;
+
+    const x_lion = linspace(0.0, 1.0, 101);
+    const V_lion = [];
+
+    for (const x of x_lion) {
+        let v;
+        if (x <= boundaries[1]) {
+            // Parabolic inside graphite
+            const xs = x / boundaries[1];
+            v = V_lion_core + (V_lion_surface - V_lion_core) * xs * xs;
+        } else if (x <= boundaries[2]) {
+            // Linear SEI section
+            const xs = (x - boundaries[1]) / (boundaries[2] - boundaries[1]);
+            v = V_lion_surface * (1 - xs) + V_lion_electrolyte * xs;
+        } else {
+            v = V_lion_electrolyte;
+        }
+        V_lion.push(v);
+    }
+
+    diagram.setVRange(V_lion_electrolyte - 0.05, V_el + 0.05);
+
+    const b = boundaries;
+    diagram.updateTraceData([
+        {
+            id: `electron_trace`,
+            speciesId: 'electron',
+            curveType: 'potential',
+            showLabel: true,
+            inputUnits: 'V_volt',
+            xRange: {
+                min: b[0],
+                max: b[1],
+            },
+            x: [b[0], b[1]],
+            y: [V_el, V_el],
+        },
+        {
+            id: `li_ion_trace`,
+            speciesId: 'li_ion',
+            curveType: 'potential',
+            showLabel: true,
+            inputUnits: 'V_volt',
+            xRange: {
+                min: b[0],
+                max: b[3],
+            },
+            x: x_lion,
+            y: V_lion,
+        },
+    ]);
+</script>
