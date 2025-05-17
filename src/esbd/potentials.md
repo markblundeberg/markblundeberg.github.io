@@ -49,9 +49,15 @@ This equation provides the precise link between the reduction potential $E$ and 
 
 $$ E \approx V_{\mathrm{e}^-} - V^\circ_{\mathrm{H}^+} $$
 
-(And this corresponds to a sometimes-seen expression $E = -\tfrac{1}{F}\bar\mu_{\mathrm{e}^-} - \phi_{\text{(soln)}}$.)
-
 Since $V^\circ_{\mathrm{H}^+}$ itself serves as a reference point for the $V^\circ_{i}$ standard state ladder, this means the reduction potential describes the position of the electron species voltage relative to the standard state ladder.
+
+## Electrode potentials
+
+Electrode potentials are closely related to reduction potentials but can be defined slightly differently. We often see an expression $E = -\tfrac{1}{F}\bar\mu_{\mathrm{e}^-} - \phi_{\text{(soln)}}$ ([Trasatti 1986](https://publications.iupac.org/pac/1986/pdf/5807x0955.pdf)) for the electrode potential. This is a more abstract form of single electrode potential that is referenced to the unmeasurable $\phi$ instead of the SHE. Differences of $E$'s will of course match, as the $V^\circ_{\mathrm{H}^+}$ or $\phi_{\text{(soln)}}$ will just cancel out.
+
+Nevertheless, the *standard* electrode potential and *standard* reduction potential (defined next) are both defined in reference to the SHE.
+
+There is also the so-called "absolute electrode potential" which instead is $V_{\mathrm{e}^-} - \phi_{\mathrm{vac}}$, where $\phi_{\mathrm{vac}}$ is the (measurable!) electrostatic potential just above the solution surface, in vacuum. Although absolute electrode potential is measurable (with difficulty and uncertainty), it is of limited utility. Absolute electrode potential is really a surface-specific quantity, analogous to work function, and its value is of limited value for any application that doesn't literally involve charges moving through the vacuum above the solution surface. You can try to use it to estimate interface properties using a vacuum-contact assumption, but as I'll argue in a later topic, [this is often far from correct](../phi/) as it misses specific interface interactions.
 
 ## Standard reduction potentials
 
@@ -86,11 +92,13 @@ which is known to a bit ambiguous due to its reliance on a single-ion activity. 
 
 $$ \mathrm{pH} = -\frac{1}{\ln(10)} \frac{F}{RT}(V_{\mathrm{H}^+} - V^\circ_{\mathrm{H}^+})$$
 
+So $\mathrm{pH}$ is a kind of scaled voltage analogous to reduction potential $E$; this is not surprising since the best pH measurements are done electrically.
+
 At 25&nbsp;°C, where $\ln(10)RT/F \approx 59.16~\mathrm{mV}$, this is:
 
 $$ \mathrm{pH} \approx \frac{V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+}}{59.16~\mathrm{mV}}.$$
 
-So $\mathrm{pH}$ is a kind of scaled voltage analogous to reduction potential $E$; this is not surprising since the best pH measurements are done electrically. A pH of 0 corresponds to $V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+} = 0$, a pH of 7 corresponds to $V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+} = 0.414~\mathrm{V}$, and a pH of 14 corresponds to $V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+} = 0.828~\mathrm{V}$.
+A pH of 0 corresponds to $V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+} = 0.000~\mathrm{V}$, a pH of 7 corresponds to $V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+} = 0.414~\mathrm{V}$, and a pH of 14 corresponds to $V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+} = 0.828~\mathrm{V}$.
 
 ## Pourbaix diagram
 
