@@ -143,13 +143,13 @@ Even with a single perfectly homogeneous bulk material, $\phi_\mathrm{vac}$ will
 * A perfect crystal will have $\phi_\mathrm{vac}$ varying between its crystal faces. Even within a single perfectly-aligned crystal face, there will be variations in $\phi_\mathrm{vac}$ due to {% wiki "surface reconstruction"%}.
 * With conductive liquids, the surface state is especially sensitive to adsorption, even adsorption of dilute solutes that are intentionally added.
 
-(A technique like kelvin probe force microscopy can actually actually directly measure and visualize these microscopic variations in $\phi_\mathrm{vac}$.)
+(A technique like kelvin probe force microscopy can directly measure and visualize these microscopic variations in $\phi_\mathrm{vac}$.)
 
 When discussing in-material phenomena, there is a tendency to casually refer to the outer potential $\psi$ (which is $\phi_\mathrm{vac}$) as if it is a well-defined property of a bulk material. From the above it can be seen that this is not justified. At very least, $\psi$ for a bulk material is only defined if we further precisely specify the method of surface preparation. Thus, when discussing in-material phenomena, any reference to 'the vacuum' is ambiguous, even for a single material.
 
 ### The limited utility of 'real' vacuum references
 
-Notwithstanding all the above, let's say we have a single homogeneous conductor and we nail down its surface preparation, defining the "real" vacuum level $\psi = \phi_\mathrm{real,vac}$. We can then define vacuum-referenced potential differences like $V_i - \psi$. Such quantities are actually measurable surface properties.
+Notwithstanding all the above, let's say we have a single homogeneous conductor and we nail down its surface preparation, defining the "real" vacuum level $\psi = \phi_\mathrm{real,vac}$. We can then define vacuum-referenced potential differences like $V_i - \psi$. Such quantities are actually measurable properties of a surface.
 
 The electron work function $W$ is one such quantity: $W/e = V_{\mathrm{e}^-} - \psi = -e\psi - \bar\mu_{\mathrm{e}^-} $. It has been measured and tabulated for many materials.
 
@@ -178,8 +178,6 @@ There are actually a few variants of this thought experiment:
 No matter how far we try to refine this vacuum contact thought experiment, we have made a major blunder in assuming that the $\phi_\mathrm{vac}$ levels will fuse together so nicely. In fact, what happens when materials meet is a detailed chemical bonding process that depends quite sensitively on microscopic details, and in general this detailed chemistry tends to completely wash out any prediction made by this vacuum contact idea. For semiconductors at least, vacuum contact does not even provide a useful first approximation. Measurable Schottky barriers are almost completely decorrelated from the Schottky–Mott rule, and likewise for real band alignments vs. Anderson's rule.
 
 [As argued by R. Tung](https://doi.org/10.1063/1.4858400), the vacuum contact thought experiment basically supposes that the two materials come together without any interaction, in a weird unphysical sort of superposition. Arguably the vacuum contact thought experiment may have pedagogical value in introducing students to band bending (which truly does occur!). Yet, it has to be immediately stressed that its quantitative predictions are not naturally expected to work.
-
-Unfortunately, the vacuum contact misconception persists in serious scientific papers. Often the vacuum contact assumption is made quite implicitly with concepts like 'contact potential difference'. As an example, the original [1986 paper defining absolute electrode potential scale](https://publications.iupac.org/pac/1986/pdf/5807x0955.pdf), and references therein like Farrell & McTigue, are littered with this.
 
 Conceptually, it is simply wrong to view vacuum surfaces as basic building blocks from which material interfaces are made. Materials are not legos. Rather, a vacuum surface is just another kind of interface, with its own special considerations. A material-material interface will entirely lose the special vacuum considerations of each side, and then will gain its own new considerations.
 
