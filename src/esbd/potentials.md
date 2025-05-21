@@ -45,7 +45,7 @@ Substituting the expression we found for $V_{\mathrm{e}^-}(\text{SHE})$:
 $$ E(\text{target}, T) = V_{\mathrm{e}^-}(\text{target}, T) - \left[ V^\circ_{\mathrm{H}^+}(T) - \frac{\mu^\circ_{\mathrm{H}_2}(T)}{2F} \right] $$
 $$ E = V_{\mathrm{e}^-} - V^\circ_{\mathrm{H}^+} + \frac{\mu^\circ_{\mathrm{H}_2}(T)}{2F} $$
 
-This equation provides the precise link between the reduction potential $E$ and the $V_i$ levels at any temperature $T$. Again, for simplicity, near 25°C where $\mu^\circ_{\mathrm{H}_2}(T) \approx 0$, the small $\mu^\circ_{\mathrm{H}_2}(T)$ term is neglected:
+This equation provides the precise link between the reduction potential $E$ and the $V_i$ levels at any temperature $T$. Again, for simplicity, near 25°C where $\mu^\circ_{\mathrm{H}_2}(T) \approx 0$, the small $\mu^\circ_{\mathrm{H}_2}(T)$ can be neglected:
 
 $$ E \approx V_{\mathrm{e}^-} - V^\circ_{\mathrm{H}^+} $$
 
@@ -53,7 +53,7 @@ Since $V^\circ_{\mathrm{H}^+}$ itself serves as a reference point for the $V^\ci
 
 ## Electrode potentials
 
-Electrode potentials are closely related to reduction potentials but can be defined slightly differently. We often see an expression $E = -\tfrac{1}{F}\bar\mu_{\mathrm{e}^-} - \phi_{\text{(soln)}}$ ([Trasatti 1986](https://publications.iupac.org/pac/1986/pdf/5807x0955.pdf)) for the electrode potential. This is a more abstract form of single electrode potential that is referenced to the unmeasurable $\phi$ instead of the SHE. Differences of $E$'s will of course match, as the $V^\circ_{\mathrm{H}^+}$ or $\phi_{\text{(soln)}}$ will just cancel out.
+Electrode potentials are closely related to reduction potentials, and usually defined the same way. But, we sometimes see an expression $E = -\tfrac{1}{F}\bar\mu_{\mathrm{e}^-} - \phi_{\text{(soln)}}$ ([Trasatti 1986](https://publications.iupac.org/pac/1986/pdf/5807x0955.pdf)) for the electrode potential. This is a more abstract form of single electrode potential that is referenced to the unmeasurable $\phi$ instead of the SHE. Differences of $E$'s will of course match, as the $V^\circ_{\mathrm{H}^+}$ or $\phi_{\text{(soln)}}$ will just cancel out.
 
 Nevertheless, the *standard* electrode potential and *standard* reduction potential (defined next) are both defined in reference to the SHE.
 
@@ -61,7 +61,13 @@ There is also the so-called "absolute electrode potential" which instead is $V_{
 
 ## Standard reduction potentials
 
-Consider a metal electrode and its reduction reaction:
+Also known as the standard electrode potential, the standard reduction potential $E^\circ$ is the reduction potential for a reaction that involves species in their standard states. In particular this means that dissolved ions are at a hypothetical ideally-dilute concentration of $c^\circ = 1~\mathrm{mol/L}$; practically this means that these standard reduction potentials are best extrapolated from dilute solutions.
+
+It is also assumed that the temperature is 25&nbsp;°C and the pressure is 1 bar. (Actually, 1 atm is commonly used, which tweaks $\mu_{\mathrm{H}_2} / 2F$ by a millivolt-level correction, but we'll ignore that.)
+
+The consequence of the standard-ideal-concentration (or unit activity) condition is that all $V_i$ for dissolved ions are replaced by $V^\circ_i$.
+
+For example, consider metal ions and their reduction reaction at their solid metal electrode:
 
 $$ \mathrm{M}^{n+} + n \mathrm{e}^- \rightleftharpoons \mathrm{M(s)} , $$
 
@@ -69,12 +75,7 @@ giving as usual our $V_i$ difference:
 
 $$ V_{\mathrm{M}^{n+}} - V_{\mathrm{e}^-} = \frac{1}{nF} \mu_{\mathrm{M(s)}} .$$
 
-The **standard reduction potential** $E^\circ_{\mathrm{M}}$ is the value of $E$ when:
-
-* $\mathrm{M}^{n+}$ ions have unit activity ($V_{\mathrm{M}^{n+}} = V^\circ_{\mathrm{M}^{n+}}$).
-* The temperature is 25&nbsp;°C and the pressure is 1 bar (actually, 1 atm is commonly used but we'll ignore this distinction).
-
-Plugging the above definition of $E$, we get:
+For the standard reduction potential, then the $\mathrm{M}^{n+}$ ions have unit activity ($V_{\mathrm{M}^{n+}} = V^\circ_{\mathrm{M}^{n+}}$). Plugging the above definition of $E$, we get:
 
 $$ E^\circ_{\mathrm{M}} = V^\circ_{\mathrm{M}^{n+}} - V^\circ_{\mathrm{H}^+} .$$
 
@@ -111,7 +112,15 @@ E & =  V_{\mathrm{e}^-} - V^\circ_{\mathrm{H}^+} \notag \\\\
 
 This suggests that it is interesting to instead plot the voltage quantity $V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+}$ on the bottom axis, so that both axes will have volt units. The usual characteristic thermal slopes on a Pourbaix diagram would then be converted to simple rational slopes such as 1:1, 1:2, and so on, directly reflecting the number of electrons and protons that are transferred when converting the species on one side to the other.
 
-For example, $\mu_{\mathrm{H}} = V_{\mathrm{H}^+} - V_{\mathrm{e}^-} $ represents the availability of neutral hydrogen in reactions. This $\mu_{\mathrm{H}}$ is constant along a line of 1:1 slope ($\Delta E \approx -59~\mathrm{mV} \cdot \Delta \mathrm{pH}$). As we move up (increasing $V_{\mathrm{e}^-}$) and to the right (decreasing $V_{\mathrm{H}^+}$) we get less and less hydrogen availability. In water this _also_ means more and more neutral oxygen availability $\mu_{\mathrm{O}} = \mu_{\mathrm{H_2O}} - 2\mu_{\mathrm{H}}$, and so we see the classic 1:1 slopes separating compounds with more hydrogen (lower left) or more oxygen (upper right). Other slopes will necessarily involve other ions besides $\mathrm{H}^+$ (and in water, $\mathrm{OH}^-$).
+For example, $\mu_{\mathrm{H}} = FV_{\mathrm{H}^+} - F V_{\mathrm{e}^-} $ represents the availability of neutral hydrogen in reactions. This $\mu_{\mathrm{H}}$ is constant along a line of 1:1 slope ($\Delta E \approx -59~\mathrm{mV} \cdot \Delta \mathrm{pH}$). As we move up (increasing $V_{\mathrm{e}^-}$) and to the right (decreasing $V_{\mathrm{H}^+}$) we get less and less hydrogen availability. In water this _also_ means more and more neutral oxygen availability $\mu_{\mathrm{O}} = \mu_{\mathrm{H_2O}} - 2\mu_{\mathrm{H}}$, and so we see the classic 1:1 slopes separating compounds with more hydrogen (lower left) or more oxygen (upper right).
+
+There are also pure pH-dependent reactions, which involve the ion $\mathrm{H}^+$. By charge neutrality a pH-dependent reaction has to involve other ions. For example, the acidic dissolution of rust into ferric ions, $\mathrm{Fe_2O_3} + 6\mathrm{H}^+ \rightleftharpoons 2\mathrm{Fe}^{3+} + 3\mathrm{H_2O}$, appears as voltage difference $V_{\mathrm{Fe}^{3+}} - V_{\mathrm{H}^+} = \tfrac{1}{6F}\mu_{\mathrm{Fe_2O_3}} - \tfrac{1}{2F} \mu_{\mathrm{H_2O}}$. For concentrations, we are more interested in $V_{\mathrm{Fe}^{3+}} - V^\circ_{\mathrm{Fe}^{3+}}$ and $V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+}$. Thus, the concentration of $\mathrm{Fe}^{3+}$ ions ends up varying with the cube of the concentration of $\mathrm{H}^+$ ions (if the environment is saturated with both water and rust), i.e. $c_{\mathrm{Fe}^{3+}} \propto 10^{-3\cdot\mathrm{pH}}$.
+
+{#
+$V_{\mathrm{Fe}^{3+}} - V_{\mathrm{H}^+} = -0.053~\mathrm{V}$ if the environment is saturated with both water and rust. This assumes Fe2O3 has chem pot of hematite though, which may differ from proper hydrated rust.
+
+compared to $V^\circ_{\mathrm{Fe}^{3+}} - V^\circ_{\mathrm{H}^+} = -0.016~\mathrm{V}$.
+#}
 
 ## Takeaways
 
