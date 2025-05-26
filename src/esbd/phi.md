@@ -127,27 +127,36 @@ Unlike the inner potential $\phi$, we can actually access $\psi$! The distinctio
 
 So, given all the difficulties with the inner potential $\phi$ that we've discussed above, it seems attractive to build our analysis of materials off the real and accessible $\psi$ that sits nearby. Wait though... it's clear we can only strictly expect this vacuum-surface property to be useful for phenomena that actually relate to vacuum (thermionic emission, photoemission, Kelvin probe), and not for phenomena that occur strictly inside materials. But maybe we get lucky, and $\psi$ is actually useful (even approximately) in discussing material phenomena? Nope! Rather: **when it comes to describing *in-material* phenomena, references to vacuum level are often highly inaccurate and/or misleading**.
 
-There are two major issues with $\psi$. First, $\psi$ is a poor reference, as it introduces all sorts of special surface considerations that shouldn't matter inside conductors. Second, $\psi$ is often misused to predict the interface between two materials.
+There are two major issues with $\psi$. First, $\psi$ is a poor reference, as it introduces all sorts of special surface considerations and in fact *complicates* the discussion of what is happening inside materials. Second, $\psi$ is often misused to predict the interface between two materials.
 
-### The vacuum is not a good reference
+### The vacuum is a not a good reference
 
-It is common to see energies in a material referenced "relative to vacuum". Frequently we see energy level charts with 'vacuum level' drawn flat across the top as a zero line, a common reference point for different materials.
+It is common to see energies in a material referenced "relative to vacuum".
 
-We do have to be specific of course, as electrically the vacuum is inhomogeneous. Since vacuum contains no mobile charges, it cannot flatten out its $\phi_\mathrm{vac}$. This is important even at perfect equilibrium since every conductor will set its surface $\phi_\mathrm{vac} = \psi$ differently, for example every metal surface has a different {% wiki "work function" %}. Inbetween conductors, the vacuum level interpolates according to the Laplace equation $\nabla^2 \phi_\mathrm{vac} = 0$. And conductors need not be charge-neutral overall.
+#### The vacuum is not flat
 
-But usually, a casual reference to "the vacuum" in fact refers to the outer potential $\psi$ just outside a specific material surface. In that case there are many "the vacuum"s: a different $\psi$ for every point on every surface.
+First, a point about ambiguity.
 
-(Sometimes 'the vacuum' refers to vacuum at infinity $\phi_\mathrm{vac}(\infty)$. Although this seems like a useful *absolute* reference point, it can be quite subtle. Often $\phi_\mathrm{vac}(\infty)$ is ill-specified or irrelevant to experiment, and it may even be mathematically undefined. In particular, $\phi_\mathrm{vac}(\infty)$ is a poor choice of reference for an electronic or electrochemical device that is attached to electrodes.)
+Frequently we see energy level charts with 'vacuum level' drawn flat across the top as a zero line, a common reference point for different materials. Likewise a casual reference to "the vacuum" may assume $\phi_\mathrm{vac}$ is flat.
 
-#### The outer potential is not a bulk property
+But, the vacuum is naturally an electrically inhomogeneous "material". Since vacuum contains no mobile charges, i.e., it is an insulator, it cannot flatten out its $\phi_\mathrm{vac}$. This is important even at perfect equilibrium since every conductor will set its surface $\phi_\mathrm{vac} = \psi$ differently, for example every metal surface has a different {% wiki "work function" %}. Inbetween conductors, the vacuum level interpolates according to the Laplace equation $\nabla^2 \phi_\mathrm{vac} = 0$.
 
-Even with a single perfectly homogeneous bulk material, $\psi$ will vary over its surface due to all kinds of surface phenomena, especially surface contamination and surface oxidation. (In solids there are further variations in $\psi$ due to surface roughness, crystallinity, and surface reconstructions, but that is a bit beside the point.)
+Achieving flat $\phi_\mathrm{vac}$ would require all surfaces to have the same outer potential $\psi$. To achieve this, it is necessary that 1. for each electrically self-connected body, its surface has been prepared with a uniform work function, and 2. each body has carefully had its total charge neutralized. 
 
-Nevertheless, we can imagine nailing down our surface preparation to such a degree that $\psi$ is well-defined for a surface with that specific preparation. However, that is besides the point. A particle inside a material does not care about how well we have chosen to prepare the surfaces of the material, nor does it care whether the material even has exposed vacuum surfaces at all.
+Aside from that unlikely, artificially engineered special case, we always have to contend with $\phi_\mathrm{vac}$ variations. There are two answers to this:
 
-If $\psi$ were to be a consistent bulk property, what it would refer to is "what $\psi$ *would be* if we created a surface with such and such surface condition". But, our experiments are taking place with certain real surfaces. Why would we want to use this hypothetical bulk $\psi$ instead of the real $\psi$ for our actual surface?
+* *Local*: refer to the outer potential $\psi$ just outside a specific material surface. In that case there are many "the vacuum"s, as there may be (and often is) a different $\psi$ for every point on every surface.
+* *Absolute*: refer to $\phi_\mathrm{vac}$ at some specific reference point, which might be far removed. Sometimes this is "vacuum at infinity" $\phi_\mathrm{vac}(\infty)$, however even that can be ill-specified, irrelevant, or even undefined. In particular, $\phi_\mathrm{vac}(\infty)$ is a poor choice of reference for an electronic or electrochemical device that is attached to electrodes.
 
-#### Outer potential is not a valid "binding energy" reference
+#### The outer potential is not a "natural" bulk property
+
+Even with a single perfectly homogeneous bulk material, $\psi$ will vary over its surface due to all kinds of surface phenomena, especially surface contamination and surface oxidation. In solids there are further static variations in $\psi$ depending on crystal facet, surface roughness, surface termination, and even spontaneous {% wiki "surface reconstruction" %}.
+
+Nevertheless, we can imagine nailing down our surface preparation to such a degree that $\psi$ is well-defined for that surface. So, if $\psi$ is to be a consistent bulk property, what it would refer to is "what $\psi$ *would be* if we created a surface with such and such surface condition". This is unsatisfactory as we really hoped to have a natural bulk $\psi$ that all the particles inside the material are somehow connected to and "aware" of.
+
+The reality is that for a particle that is deep inside a material, it does not care about what is happening at some distant hypothetical surface. It doesn't care how well we have chosen to prepare the surfaces of the material, or whether its host material even has any exposed surfaces at all. Any bulk $\psi$ that we define is merely notional and artificial.
+
+#### Work function is a surface barrier height, not a bulk binding energy
 
 Notwithstanding the above, let's suppose that 'bulk $\psi$' was actually a reliable property for every material. It is then a reliable reference, but is it a *meaningful* reference?
 
@@ -157,20 +166,24 @@ $$\alpha_i = \bar\mu_i - z_i F \psi$$
 
 a quantity that is unfortunately called "real chemical potential".
 
-The work function $W$ of electrons is one such quantity, actually a negative: $W = -\alpha_{\mathrm{e}^-}$. We can generalize that to other charged species:
+The work function $W$ of electrons is one such quantity, actually a negative: $W = -\alpha_{\mathrm{e}^-}$. And we can generalize the idea of work function to other charged species:
 
 $$ W_i = \varepsilon_{i,0} - \alpha_{\mathrm{e}^-}, $$
 
-where $\varepsilon_{i,0}$ is the internal rest energy of the particle in vacuum. (In general $\varepsilon_{i,0}$ includes things like molecular binding energies but also arbitrary offsets that have to be consistent with our convention of setting chemical potentials. Anyway, that's a bit of a tangent -- we can say $\varepsilon_{i,0}$ is just a constant for each kind of ion, and conventionally we set it to 0 for electrons.)
+where $\varepsilon_{i,0}$ is the internal rest energy of the particle in vacuum. (In general $\varepsilon_{i,0}$ includes things like molecular binding energies but also arbitrary offsets that have to be consistent with our convention of setting chemical potentials. Anyway, we can say $\varepsilon_{i,0}$ is just a constant for each kind of ion, and conventionally we set it to 0 for electrons.)
 
 The naive notion is that $W_i$ describes the strength with which species $i$ is bound inside that material. With uncharged solutes we can imagine dropping them in from vacuum and $\varepsilon_{i,0} - \mu_i$ gives us an energy of solvation. This sure looks similar to $\varepsilon_{i,0} - \alpha_{\mathrm{e}^-}$, so why can't we just say that work function $W_i$ is the equivalent energy of solvation for charged solutes?
 
-Well, $W_i$ is only the energy of solvation for an electron or ion that starts out exactly just outside the surface. Its starting energy is sensitive to $\psi$, in other words, its starting energy already under the control of the surface! This is quite different from uncharged solutes where we don't care where they start in vacuum.
+Well, $W_i$ is only the energy of solvation for an electron or ion that starts out exactly just outside the surface. Its starting energy is sensitive to $\psi$, in other words, *its starting energy already under the control of the surface*! This is quite different from uncharged solutes where we don't care where they start in vacuum, and their energy is totally independent of proximity to surfaces.
 
-* $\psi$ may vary over the surface: as an example, consider a "[Janus particle](https://pubs.acs.org/doi/10.1021/acs.langmuir.6b01282)" made up of two metals: the proper definition of its electron binding energy (ionization energy) is the same value for both metals despite their different $W_i$, because ionization energy requires moving the ejected electron far away, not just moving it to the surface. The exact value of this binding energy is sensitive to geometrical details, to both $W_i$ values.
+Examples of where this matters:
+
+* $\psi$ may vary over the surface. Consider a "[Janus particle](https://pubs.acs.org/doi/10.1021/acs.langmuir.6b01282)" made up of two metals: the proper definition of its electron binding energy (ionization energy) is the same value for both metals despite their different $W_i$, because ionization energy requires moving the ejected electron far away, not just moving it to the surface. The exact value of this binding energy is sensitive to geometrical details, to both $W_i$ values.
 * Even if $\psi$ is uniform, the energy required to remove a particle still depends on the total charge of the parent body.
 
-This is just like how when we define ionization energies for molecules floating in vacuum, we require the electron to be moved far away, not just to the "surface" of the molecule where it is sensitive to the parent molecule's 'surface variations' (electric dipole) and total charge. $W_i$ only represents the binding energy of charged solutes in contrived special cases.
+This is just like how when we define ionization energies for molecules floating in vacuum, we require the electron to be moved far away, not just to the "surface" of the molecule where it is sensitive to the parent molecule's 'surface variations' (electric dipole) and total charge.
+
+So, work function $W_i$ only represents the binding energy of charged solutes in very special cases of uncharged parent bodies with totally uniform surface $\psi$. The "semiconductor electron affinity" and "semiconductor ionization energy" share this characteristic, which makes them really misnomers. In general these are all strictly surface properties; they do not have the character of binding energies, but rather they are more like interfacial *barrier heights*.
 
 All these criticisms of using outer potential as reference may seem like nitpicking. But it does connect to a serious and impactful error, which I will discuss next.
 
@@ -180,9 +193,9 @@ It is unfortunately [very common](https://www.google.com/search?q="band+diagram"
 
 > Suppose we have two uncharged materials floating in vacuum some distance apart. Since they are uncharged, $\phi_\mathrm{vac}$ is flat inbetween them and equal to $\psi$ of both bodies. We then bring the materials closer and closer together until their $\psi$ levels *magically fuse together*.
 
-> (From contact assumption, we then derive the degree of semiconductor band bending. Since the electrochemical potentials of the various charged species in the materials likely started out unequal, then some charges will thereafter move between the materials. The net movement of charge raises the potentials in one material vs. the other until there is no net movement of charges.)
+> From contact assumption, we then derive the degree of semiconductor {% wiki "band bending" %} or a solution's {% wiki "diffuse layer" %}. (Since the electrochemical potentials of the various charged species in the materials likely started out unequal, then some charges will move between the materials. The net movement of charge raises the potentials in one material vs. the other until there is no net movement of charges.)
 
-What actually happens when materials meet is a detailed chemical bonding process that depends quite sensitively on microscopic details. In *all* cases there will be some kind of atomic-scale rearrangement of bonds and charges, right at the interface. This creates an additional atomic-scale double-layer that cannot be predicted from $\psi$ and electrochemical potentials.
+[As argued by R. Tung](https://doi.org/10.1063/1.4858400), the vacuum contact thought experiment basically supposes that the two materials come together without any interaction, in a weird unphysical sort of superposition. What actually happens when materials meet is a detailed chemical bonding process that depends quite sensitively on microscopic details, and the specific identities of all atoms involved. In *all* cases there will be some kind of atomic-scale rearrangement of atoms, bonds, and charges, right there at the interface. This creates an additional atomic-scale double-layer that cannot be predicted from macroscopic observables ($\psi$ and electrochemical potentials).
 
 (Often this vacuum contact is described as "the vacuum level is continuous", and frequently drawn as such on band diagrams:
 
@@ -192,23 +205,23 @@ What actually happens when materials meet is a detailed chemical bonding process
 <small>Common naive view of metal-to-semiconductor junction, where electron vacuum energy $E_0 = -e \psi$ is drawn as continuous. [from wikimedia commons user Giulio.galderisi, CC-BY-SA-4.0 license](https://commons.wikimedia.org/wiki/File:Msemictoghandsep.png)</small>
 </div>
 
-This is wrong on two fronts: 1) the vacuum level $\psi$ is not a bulk property, see previous section, and 2) if there was a bulk $\psi$, it would have to be discontinuous! There will be an atomic-scale jump in $\psi$ due to interface-specific chemical bonding.)
+This is wrong on two fronts: 1. the outer potential $\psi$ should not be depicted as a bulk property, see previous section, and 2. if there was a bulk $\psi$, it would in fact be discontinuous, due to the interface-specific effect.)
 
 In semiconductor physics, the vacuum contact idea gives {%wiki "Schottky–Mott rule" %} and {%wiki "Anderson's rule" %}. These are very testable predictions and they are **almost completely wrong**, not even being a useful first approximation. Measurable Schottky barriers are [almost completely decorrelated](http://academic.brooklyn.cuny.edu/physics/tung/Schottky/systematics.htm) from the Schottky–Mott rule, and likewise semiconductor heterojunction alignment disagrees with Anderson's rule.
 
-[As argued by R. Tung](https://doi.org/10.1063/1.4858400), the vacuum contact thought experiment basically supposes that the two materials come together without any interaction, in a weird unphysical sort of superposition. Arguably the vacuum contact thought experiment may have pedagogical value in introducing students to band bending (which truly does occur!). Yet, it has to be immediately stressed that its quantitative predictions are not naturally expected to work, that $\psi$ is in fact allowed to be discontinuous, and that in fact the vacuum contact idea is known to fail spectacularly.
-
-Sadly, the vacuum contact myth is not only contained to educational settings, but rather it regularly appears in scientific papers as a core unstated assumption.
+Arguably the vacuum contact thought experiment may have pedagogical value in introducing students to band bending, which truly does occur. Yet, it has to be immediately stressed that its quantitative predictions are not naturally expected to work, that $\psi$ is in fact allowed to be discontinuous, and that indeed the vacuum contact idea is known to fail spectacularly. Sadly, the vacuum contact myth is not only contained to educational settings. Vacuum alignment ideas regularly appear in scientific papers not just as an assumption, but even worse, as an *unstated* assumption.
 
 Conceptually, it is simply wrong to view vacuum surfaces as basic building blocks from which material interfaces are made. Materials are not legos. A vacuum surface is one kind of interface, with its own special considerations. A material-material interface is another kind of interface, with its own special conserations.
 
 ## A plea to the theoretical and computational electrochemists
 
-These days, we have fantastic computers and algorithms that are able to properly simulate materials, and $\phi$ becomes almost a real quantity in these simulations. The electric scalar potential basically comes for free, as it's necessary to model the precise microscopic electric interactions. And so, it is no problem to [smooth this out](https://doi.org/10.1021/acsomega.0c04420) to obtain $\phi$. [It may even be computationally advantageous](https://www.nature.com/articles/s41524-023-01184-4) to make $\phi$ of various materials as the control variables in the simulation.
+These days, we have fantastic computers and algorithms that are able to properly simulate materials, and $\phi$ is a tangible quantity in these simulations. The electric scalar potential basically comes for free, as it's necessary to model the precise microscopic electric interactions. And so, it is no problem to [smooth this out](https://doi.org/10.1021/acsomega.0c04420) to obtain $\phi$. [It may even be computationally advantageous](https://www.nature.com/articles/s41524-023-01184-4) to use $\phi$ as a control variable in the simulation.
 
-But, even in computation, the inner potential $\phi$ *still* only corresponds to the energy of an infinitesimal ghost charge. So, if you report results referenced to $\phi$, or equivalently if you set $\phi=0$ and your results are unreferenced, then your results have lost physical significance. And regarding vacuum level $\psi$, that can be even worse: unless you are explicitly taking care to accurately model the surface, then your surface potential is going to be way off.
+But, even in computation, the inner potential $\phi$ *still* only corresponds to the energy of an infinitesimal ghost charge. So it is calculable, but it is not physically relevant. So, if you report results referenced to $\phi$, or equivalently if you set $\phi=0$ and your results are unreferenced, then your results have lost physical significance.
 
-So, please do the work to calculate electrochemical potentials $\bar\mu_i$ and any meaningful energies that are actually experienced by the electrons/ions, and then output the differences in these real quantities. Not only will this aid in comparison with experiments, but it will also put your results on more rigorous thermodynamic grounds and simplify comparison with other theoretical results.
+Regarding vacuum level (and specifically, outer potential $\psi$), all of the considerations I stated about vacuum levels still apply! If you don't take sufficient consideration in modelling the surface conditions (analogous to the experimentalist reproducibly creating certain surface conditions), then the $\psi$ value you obtain is going to be an unreliable reference. But even if $\psi$ is carefully modelled, remember that a work function does not represent a binding energy reference level, but only a surface barrier height. As for the vacuum contact myth, molecular simulations of course easily reveal this.
+
+Ideally, please do the work to calculate electrochemical potentials $\bar\mu_i$ and any meaningful energies that are actually experienced by the electrons/ions, and then output the differences in these real quantities. Not only will this aid in comparison with experiments, but it will also put your results on more rigorous thermodynamic grounds and simplify comparison with other theoretical results.
 
 ## Takeaways
 
