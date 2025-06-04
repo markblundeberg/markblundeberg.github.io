@@ -189,6 +189,8 @@ where $(c_\mathrm{Ag^+} c_\mathrm{Cl^-})$ and $(c_\mathrm{K^+} - c_\mathrm{NO_3^
 
 This example also shows how the electrode potential, $E = V_\mathrm{e^-} - V^\circ_\mathrm{H^+}$ (which we will derive in the Potentials topic), is a function of the $c_\mathrm{Cl^-}$ concentration. When we bring our ideal $\mathrm{Cl^-}$ ions up to $c_\mathrm{Cl^-} = c^\circ = 1~\mathrm{mol/L}$, there we find $E = 0.222~\mathrm{V}$, which is the standard electrode potential for the {%wiki "silver chloride electrode" %}.
 
+(In general, with single-solution chemistry we don't see much new insight with the $V_i$ approach compared to the traditional chemistry approach that uses internal chemical potentials. That is because the reactions are strictly charge-neutral and the value of electrostatic potential $\phi$ cancels out.)
+
 {#
 ## Relation to semiconductor bands
 
@@ -222,40 +224,10 @@ For the next topic, we'll talk about what happens where two solutions come into 
 {#
 ## Optional discussion
 
-Chemists may be begging me to introduce activities and activity coefficients, and go beyond the ideally dilute limit. Fair enough! We'll get more into that in the later topic about non-ideal solutions, but let's talk a bit about that now:
-
 <details>
 <summary>
 Click to open extended discussion.
 </summary>
-
-Yes, you are right, we can just tack on in the (molar) activity activity coefficient $\gamma_i$ next to $c_i/c^\circ$!
-
-$$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(\gamma_i c_i/c^\circ). $$
-
-(Or, define activity $a_i = \gamma_i c_i/c^\circ$, but let's just stick to $\gamma_i$.) 
-
-Of course, $\gamma_i \rightarrow 1$ as all solutes' concentrations go to zero (including $c_i \rightarrow 0$). This is a perfectly legitimate mathematical re-representation of the electrochemical potentials into two numbers $V^\circ_i$ and $\gamma_i$. Now we can pack all the imperfections into $\gamma_i$.
-
-However...
-
-You may have heard that single-ion activities are ill defined, or unmeasurable; or, that only mean ionic activity coefficients can be measured. That is the truth, and let's talk about why that is the case.
-
-Suppose we have solution of specific composition, containing various ions and solutes, at known concentrations $c_i$, and certain measurable values of ionic $V_i$. We have somehow determined a collection of $\gamma_i$ values that correctly and consistently relate the various $V_i$ to their $V^{\circ}_i$. All seems good, but our conclusion is non-unique.
-
-The following transformation produces an equally valid collection of values $\gamma_i '$ and ${V^{\circ}_i}'$:
-
-$$ \gamma_i ' = \gamma_i \exp([z_i F / (RT)] \cdot \psi) , $$
-
-$$ {V^{\circ}_i}' = V^{\circ}_i - \psi , $$
-
-for any value of $\psi$. For example, with $\psi=-59~\mathrm{mV}$ we can lower the entire $V^{\circ}_i$ ladder by 59 mV, and multiply $\gamma_i$ for $\mathrm{X^+}$ ions by ×10, multiply $\gamma_i$ for $\mathrm{Y^{2-}}$ ions by ×0.01, and so on. If you are using electrostatic potential $\phi$, then $\phi' = \phi - \psi$ too. The problem is, we can't tell the difference, because all we can measure are $c_i$ and $V_i$.
-
-The arbitrariness is _severe_: we can choose a different value of $\psi$ for every possible composition of solution at every temperature and every pressure, completely arbitrarily. It would make no measurable difference. **Once we permit the presence of activity coefficients, we no longer have _any_ anchor on how to offset the $V^{\circ}_i$ ladder**, nor the electrostatic potential $\phi$.
-
-The only unambiguously measureable ion activity coefficients are charge-neutral products like $\gamma_{\mathrm{Na}^+}\cdot\gamma_{\mathrm{Cl}^-}$, or $\sqrt{\gamma_{\mathrm{Zn}^{2+}}} \cdot \gamma_{\mathrm{Cl}^-}$ where the $\psi$ arbitrariness cancels out. These charge-neutral $\gamma_i$ products are the mean activity coefficients, and they directly relate to measurable balanced differences like $\sum_i w_i V_i$ with $\sum_i w_i = 0$.
-
-Anyway, that is one reason I'm just going to focus on ideal dilute case for now. There's a lot more to say on this, but I'll leave that for the dedicated topic on non-ideal solutions.
 
 </details>
 #}
