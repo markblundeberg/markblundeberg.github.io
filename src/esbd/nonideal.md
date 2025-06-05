@@ -19,15 +19,21 @@ $$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(\gamma_i c_i/c^\circ). $$
 
 for reference concentration $c^\circ = 1~\mathrm{mol/L}$.
 
-The expectation is that when *all* solutes' concentrations go 0, then $\gamma_i$ should approach 1 for all solutes. Note however that if one solute's concentration is nonzero, then all other solutes' $\gamma_i$ may be nonzero, even if they are infinitely dilute.
+The expectation is that when *all* solutes' concentrations go 0, then $\gamma_i$ should approach 1 for all solutes. This is a definitional convention: if $\gamma_i$ converged to some different value other than 1 then its corresponding $V^\circ_i$ would have to be redefined.
 
-And again, a common shorthand is 'activity' $a_i = \gamma_i c_i/c^\circ$, so that:
+Note: if *any* solute's concentration is significantly nonzero, then *all* $\gamma_i$ may be nonzero, even for other solutes that themselves are infinitely dilute. The other dilute solutes will still behave ideally dilutely for low concentrations, however they will start out with $\gamma_i \neq 1$. This reflects that their medium is not the original pure solvent that was used to define $V^\circ_i$.
+
+And again, a common shorthand is activity, defined as:
+
+$$a_i = \gamma_i c_i/c^\circ$$
+
+so that:
 
 $$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(a_i), $$
 
 and finally I stress again that this is a *molarity* activity in the sense that it is relative to a reference state $V^\circ_i$ that is calculated based on a reference molarity of $c^\circ$. [Not all activities are such molarity activities](https://adamprada.net/blog/on-chemical-activities/), so activities can be subtly incompatible. I will only discuss the molarity form of activity and activity coefficient here.
 
-(Note: there is another kind of ideal solution, perhaps better called an *ideal mixture* where the solute's chemical potential depends on mole fraction, not concentration. That corresponds to {% wiki "Raoult's law" %}, and reflects a case where solute-solvent, solute-solute, and solvent-solvent interactions all have the same character. That is distinct from the *ideal-dilute* form, which we are interested in, which represents a case where solute particles are all independent, being more like an ideal gas and instead corresponding to {% wiki "Henry's law" %}.)
+(Note: there is another kind of ideal solution, perhaps better called an *ideal mixture* where the solute's chemical potential varies with the logarithm of mole fraction, not concentration. That corresponds to {% wiki "Raoult's law" %}, and reflects a case where solute-solvent, solute-solute, and solvent-solvent interactions all have the same character. That is distinct from the *ideal-dilute* form, which we are interested in, which represents a case where solute particles are all independent, being more like an ideal gas and instead corresponding to {% wiki "Henry's law" %}.)
 
 ## Ionic non-idealities matter
 
@@ -52,31 +58,41 @@ Quantitatively, we expect to see disturbances in the activity coefficients that 
 
 ## The fundamental ambiguity of ionic activity
 
-You may have heard that single-ion activities are ill defined, or unmeasurable; or, that only mean ionic activity coefficients can be measured. Let's talk about why that is the case.
+You may have heard that single-ion activities are ill defined, or unmeasurable; or, that only mean ionic activities can be measured. Let's talk about why that is the case.
 
-Suppose we have solution of specific composition, containing various ions and solutes, at known concentrations $c_i$, and certain measurable values of ionic $V_i$. We have somehow determined a collection of $\gamma_i$ values that correctly and consistently relate the various $V_i$ to their $V^{\circ}_i$. All seems good, but our conclusion is non-unique.
+Suppose we have solution of specific composition, containing various ions and solutes, at known concentrations $c_i$. We perform certain measurements of $V_i$, and compare to the $V^{\circ}_i$ ladders that occurs in the same solvent but in the ideally-dilute limit. This will yield certain $\gamma_i$ values that describe the non-ideality in our solution. All seems good, but our conclusion is non-unique, and there are other sets of $\gamma_i$ that equally well describe the non-ideality!
 
 The following transformation produces an equally valid collection of values $\gamma_i '$ and ${V^{\circ}_i}'$:
 
 $$ \gamma_i ' = \gamma_i \exp([z_i F / (RT)] \cdot \lambda) , $$
 
+$$ a_i ' = a_i \exp([z_i F / (RT)] \cdot \lambda) , $$
+
 $$ {V^{\circ}_i}' = V^{\circ}_i - \lambda , $$
 
-for any value of $\lambda$. For example, with $\lambda=-59~\mathrm{mV}$ we can lower the entire $V^{\circ}_i$ ladder by 59 mV, and multiply $\gamma_i$ for $\mathrm{X^+}$ ions by ×10, multiply $\gamma_i$ for $\mathrm{Y^{2-}}$ ions by ×0.01, and so on. The problem is, we can't tell the difference, because all we can measure are $c_i$ and $V_i$.
+for any value of $\lambda$. For example, with $\lambda=\tfrac{RT}{F}\ln(0.1) = -59~\mathrm{mV}$ we can lower the entire $V^{\circ}_i$ ladder by 59 mV, and multiply $a_i$ and $\gamma_i$ for $\mathrm{X^+}$ ions by ×10, multiply $a_i$ and $\gamma_i$ for $\mathrm{Y^{2-}}$ ions by ×0.01, and so on. The problem is, we can't tell the difference, because all we can measure are $c_i$ and $V_i$.
 
-The arbitrariness is _severe_: we can choose a different value of $\lambda$ for every possible composition of solution at every temperature and every pressure, completely arbitrarily. It would make no measurable difference. This ambiguity seems troublesome, but on the other hand, it has no impact: if we found a phenomenon that depended precisely on single-ion activities, then that would equally well provide a way to settle the ambiguity.
+The arbitrariness is _severe_: we can choose a different value of $\lambda$ for every possible composition of solution at every temperature and every pressure, completely arbitrarily. It would make no measurable difference. This ambiguity seems troublesome, but on the other hand, it is purely a mathematical obstacle that we have unintentionally created, by trying to relate non-ideal solutions to ideal solutions.
 
-### Mean activity / mean activity coefficients
+### Mean activity / mean activity coefficient
 
-The only unambiguously measurable ion activity coefficients are combinations that are overall charge-neutral, and so the the $\lambda$ arbitrariness cancels out. These are known as mean activity coefficients. For example, products like $\gamma_{\mathrm{Na}^+}\cdot\gamma_{\mathrm{Cl}^-}$, or $\sqrt{\gamma_{\mathrm{Zn}^{2+}}} \cdot \gamma_{\mathrm{Cl}^-}$ are measurable. These relate to species voltage differences like $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ and $V_{\mathrm{Zn}^{2+}} - V_{\mathrm{Cl}^-}$, respectively.
+The only unambiguously measurable ion activity coefficients are combinations that are overall charge-neutral, and so the the $\lambda$ arbitrariness cancels out. These are known as **mean activities** or **mean activity coefficients**.
 
-In general such a measurable mean activity coefficient has the form $\prod_{i} \gamma_i ^{w_i / z_i}$ where the weights $w_i$ are zero-sum: $\sum_i w_i = 0$. This corresponds to a linear combination of voltages $\sum_i w_i V_i$ with zero-sum weights (equivalent to a sum of $V_i - V_j$ differences), specifically:
+For example, products like $\gamma_{\mathrm{Na}^+}\cdot\gamma_{\mathrm{Cl}^-}$, or $\sqrt{\gamma_{\mathrm{Zn}^{2+}}} \cdot \gamma_{\mathrm{Cl}^-}$ are measurable. These relate to species voltage differences like $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ and $V_{\mathrm{Zn}^{2+}} - V_{\mathrm{Cl}^-}$, respectively.
+
+In general such a measurable mean activity (or coefficient) has the form $\prod_{i} a_i ^{w_i / z_i}$ for some weights $w_i$. We can perform the $\lambda$-transformation on $\prod_{i} a_i ^{w_i / z_i}$ and see that:
+$$\prod_{i} (a_i) ^{w_i / z_i} = \Big[\prod_{i} (a_i') ^{w_i / z_i}\Big] \cdot \exp\Big(\tfrac{RT}{F} \lambda \times \sum_i w_i \Big) . $$
+Therefore, in order to be insensitive to $\lambda$, the weights $w_i$ must be zero-sum:
+$$\sum_i w_i = 0.$$
+Then $\prod_{i} (a_i) ^{w_i / z_i} = \prod_{i} (a_i') ^{w_i / z_i}$, and likewise $\prod_{i} (\gamma_i) ^{w_i / z_i} = \prod_{i} (\gamma_i') ^{w_i / z_i}$.
+
+A mean activity like this corresponds to a sum of $V_i - V_j$ differences, i.e., a linear combination of voltages $\sum_i w_i V_i$ with zero-sum weights $w_i$:
 
 $$
-\sum_i w_i V_i = \sum_i w_i V^\circ_i + \tfrac{RT}{F} \ln \prod_i [\gamma_i c_i/c^\circ]^{w_i / z_i}.
+\sum_i w_i V_i = \sum_i w_i V^\circ_i + \tfrac{RT}{F} \ln \prod_i a_i^{w_i / z_i}.
 $$
 
-Here, $\sum_i w_i V^\circ_i$ is insensitive to the $\lambda$ arbitrariness because it has zero-sum weights, so it is a constant for given solvent and $w_i$'s. If we also know the concentrations $c_i$ of each ion then we can factor it out and isolate $\prod_{i} \gamma_i ^{w_i / z_i}$.
+Here, $\sum_i w_i V^\circ_i$ is also insensitive to the overall offset (including $\lambda$ arbitrariness) because it has zero-sum weights, so it is a constant for given solvent and $w_i$'s.
 
 ### The ambiguity in standard chemistry of ions
 
@@ -84,7 +100,7 @@ In the standard chemistry of ions we nominally decompose the electrochemical pot
 
 $$\bar\mu_i = z_i F\phi + \mu^\circ_{\mathrm{int},i} + RT \ln a_i . $$
 
-Here the electrostatic potential $\phi$ is in principle a well-defined physical quantity independent of the thermodynamics, and the standard state's $\mu^\circ_{\mathrm{int},i}$ is a constant for solute $i$ in given solvent. It seems this should leave no ambiguity at all, and it should fix a 'true' ionic activity $a_i$. Using those activities would also fix the 'true' $V^{\circ}_i$ ladder position.
+Here the electrostatic potential $\phi$ is in principle a well-defined physical quantity independent of the thermodynamics, and the standard state's $\mu^\circ_{\mathrm{int},i}$ is a constant for solute $i$ in given solvent. Compared to the above discussion, it seems this should leave no ambiguity at all. There is a specific 'true $\phi$' so this defines a 'true ionic activity $a_i$'.
 
 But, there is a problem, which is that $\phi$ is experimentally inaccessible. This means the true ionic activities $a_i$ are also inaccessible.
 
@@ -94,23 +110,23 @@ $$\bar\mu_i = z_i F\phi' + \mu^\circ_{\mathrm{int},i} + RT \ln a_i $$
 
 where $\phi'$ is an alternative conventionally defined potential that is displaced from the true $\phi$. Here we can see that $V^{\circ}_i = \phi' + \mu^\circ_{\mathrm{int},i}/(z_i F)$, and the flexibility in defining $\phi'$ corresponds exactly to the $\lambda$-shifting property described in the previous section.
 
-Since the true $\phi$ is not accessible, the redefinition using $\phi'$ ends up being the actual decomposition of $\bar\mu_i$ that gets used. Note that there is still a remaining simple offset in $\phi'$ which is undetermined here. So, for convenience we can go ahead assign the standard internal chemical potential of $\mathrm{H}^+$ to zero: $\mu^\circ_{\mathrm{int},\mathrm{H}^+} = 0$. This gives exactly $\phi' = V^{\circ}_{\mathrm{H}^+}$!
+Since the true $\phi$ is not accessible, the redefinition using $\phi'$ ends up being the actual decomposition of $\bar\mu_i$ that gets used. Note that there is still a single overall degree of freedom in $\phi'$ which is undetermined here. (Optional: we can go ahead assign the standard internal chemical potential of $\mathrm{H}^+$ to zero: $\mu^\circ_{\mathrm{int},\mathrm{H}^+} = 0$. This gives exactly $\phi' = V^{\circ}_{\mathrm{H}^+}$. Thus in some sense $V^{\circ}_{\mathrm{H}^+}$ is equivalent to the practical and conventional electrostatic potential.)
 
-This does create a subtlety though in the definition of liquid junction potentials (the step in $\phi$ between solutions or across a salt bridge). In order for the redefined $a_i$ to work properly with classic electrochemistry formulas like the {% wiki "Nernst equation" %}, it is necessary that liquid junction potentials be defined in terms of $\phi'$, not the 'true' $\phi$. So, not only are single-ion activities ambiguous, but so are liquid junction potentials for the same reason.
+The usage of an alternative $\phi'$ and conventional $a_i$ does create a subtlety though in the definition of liquid junction potentials (the step in $\phi$ between solutions or across a salt bridge). In order for the redefined $a_i$ to work properly with classic electrochemistry formulas like the {% wiki "Nernst equation" %}, it is necessary that liquid junction potentials be defined in terms of $\phi'$, not the 'true' $\phi$. So, not only are single-ion activities ambiguous, but so are liquid junction potentials for the same reason. This is a well-known issue in discussions of electrochemistry fundamentals.
 
-There has actually been a huge amount of debate about the problem of single-ion activities and whether they are merely operationally difficult to access, or they are fundamentally ill-defined. My viewpoint, [which I'll argue more in my later topic about $\phi$](../phi/), is that we can actually in principle establish a true electrostatic potential $\phi$ (and thus a true single-ion activity), but then it doesn't matter anyway because there is no physical meaning to the decomposition of $\bar\mu_i$ into $\mu_{\mathrm{int},i} + z_i F \phi$! For that reason, a conventionally-defined $\phi'$ (or $V^\circ_i$) is preferable since it is at least convenient.
+There has actually been a huge amount of debate about the problem of single-ion activities and whether they are merely operationally difficult to access, or they are fundamentally ill-defined. My viewpoint, [which I'll argue more in my later topic about $\phi$](../phi/), is that we can actually in principle establish a true electrostatic potential $\phi$ (and thus a true single-ion activity). But that is besides the point, because there is no real physical meaning to the decomposition of $\bar\mu_i$ into $\mu_{\mathrm{int},i} + z_i F \phi$! For that reason, a conventionally-defined $\phi'$ (or $V^\circ_i$) is preferable since it is at least experimentally accessible.
 
 ### Activity-fixing conventions
 
-Now, let's touch on some various conventions that are used to set ionic activities. In general these conventions are all regarded as "extra-thermodynamic", based on some approximate microscopic argument about what the real activity or $\phi'$ ought to be. But they don't have to be perfect, since even a totally unrealistic convention will work just fine as the convention has no impact on observable results.
+Now, let's touch on some various conventions that are used to set ionic activities. In general these conventions are all regarded as "extra-thermodynamic", based on some approximate microscopic argument about what the real activity or $\phi'$ ought to be. Regardless of whether the microscopic argument is valid, it always produces a valid activity convention since the convention has no impact on observable results.
 
-**{% wiki "Bates–Guggenheim Convention" %}**: this assigns a specific activity function for chloride ions as a function of their concentration. It is primarily used in defining the activity of $\mathrm{H}^+$ ions as used to calculate pH values.
+**{% wiki "Bates–Guggenheim convention" %}**: this assigns a specific activity function for chloride ions as a function of their concentration, and seems to be based on arguments about the hydration levels around chloride ions. Anyway, it is primarily used in defining the activity of $\mathrm{H}^+$ ions as used to calculate pH values.
 
-**MacInnes Convention**: this assigns equal activity coefficients to the potassium and chloride ions: $\gamma_{\mathrm{K}^+} = \gamma_{\mathrm{Cl}^-}$. It appears to be popular for tabulated ion activities that are fitted to empirical {% wiki "Pitzer equations" %}.
+**MacInnes convention**: this assigns equal activity coefficients to the potassium and chloride ions: $\gamma_{\mathrm{K}^+} = \gamma_{\mathrm{Cl}^-}$. It appears to be popular for tabulated ion activities that are fitted to empirical {% wiki "Pitzer equations" %}.
 
-**LJP Convention**: this is usually more of a sloppy, implicit assumption. In certain experiments there will be a salt bridge or liquid junction, and it will be assumed that the liquid junction potential difference is zero between the two solutions ($\phi_2 - \phi_1 = 0$). This can actually be made exactly true, provided we redefine all ionic activities to make it so (then $\phi_2' - \phi_1' = 0$).
+**Liquid junction convention**: this is usually more of a sloppy, implicit assumption. In certain experiments there will be a salt bridge or liquid junction, and it will be assumed that the liquid junction potential difference is zero between the two solutions ($\phi_2 - \phi_1 = 0$). This can actually be made exactly true, provided we redefine all ionic activities to make it so (then $\phi_2' - \phi_1' = 0$).
 
-What really matters is that the conventions are *incompatible*. For example if we measure the pH value of a certain solution according to the Bates–Guggenheim Convention, then technically we cannot use that pH value in an experiment where we assume a zero liquid junction potential.
+What really matters is that the conventions are *incompatible*. For example if we measure the pH value of a certain solution according to the Bates–Guggenheim convention, then technically we cannot use that pH value in an experiment where we assume a zero liquid junction potential.
 
 ## Concentration ambiguity
 
@@ -118,7 +134,7 @@ It is worth mentioning that there is another ambiguity that affects activity coe
 
 As a classic example, consider the salt copper (ii) sulfate, $\mathrm{CuSO_4}$, dissolving into water. If you look up data for this, you will see that the mean activity coefficient $\gamma_{\mathrm{Cu}^{2+}} \gamma_{\mathrm{SO_4}^{2-}}$ plummets rapidly towards zero as the salt concentration is increased. But this is largely because we are formally counting the $\mathrm{Cu}^{2+}$ and $\mathrm{SO_4}^{2-}$ concentrations as if they are fully dissociated free ions, but in fact they are readily forming ion pairs. If we count the "paired" aqeuous $\mathrm{CuSO_4}\cdot n\mathrm{H_2O}$ as a separate species, then it will reduce our count of $\mathrm{Cu}^{2+}$ and $\mathrm{SO_4}^{2-}$ ions. But this mental recounting cannot affect the actual $V_i$'s or activities, so, if we are only counting the "actually free" ions, giving them lower concentrations, then accordingly the activity coefficients must increase to compensate. So, even the mean activity coefficient $\gamma_{\mathrm{Cu}^{2+}} \gamma_{\mathrm{SO_4}^{2-}}$ is vague in the sense that we must define how we are counting the ions.
 
-{# Similarly, in describing the activity coefficient of aqueous sulfuric acid $\mathrm{H_2SO_4}$, we might describe it as dissociating into $\mathrm{SO_4}^{2-}$ and two $\mathrm{H}^+$, which will be reasonable at dilute concentrations but break down due to 'pairing' into $\mathrm{HSO_4}^-$ at higher concentrations, giving very low activity coefficients. Alternatively we could describe it as dissociating into $\mathrm{HSO_4}^-$ and one $\mathrm{H}^+$, which would give activity coefficients nearer to 1 in concentrated solutions, but then give very high activity coefficients for dilute concentrations (not even approaching 1 in the infinitely dilute limit!). #}
+Similarly, in describing the activity coefficient of aqueous sulfuric acid $\mathrm{H_2SO_4}$, we might describe it as dissociating into $\mathrm{SO_4}^{2-}$ and two $\mathrm{H}^+$, which will be reasonable at dilute concentrations. At high concentrations however, the 'pairing' into $\mathrm{HSO_4}^-$ becomes siginificant. In the [Solutions topic](../solutions/) data table for aqueous ions, we saw $V^\circ_{\mathrm{SO_4}^{2-}} - V^\circ_{\mathrm{H}^+} = +3.8583~\mathrm{V}$, but also a level defined for the associated form, $V^\circ_{\mathrm{HSO_4}^{-}} - V^\circ_{\mathrm{H}^+} = +7.8345~\mathrm{V}$. The latter only becomes relevant for high enough $\mathrm{H}^+$ concentration. Specifically from this data and assuming ideally-dilute behaviour, we see that at concentration $c_{\mathrm{H}^+} = 0.0102~\mathrm{mol/L}$ (i.e., a pH of 1.99), the $\mathrm{SO_4}^{2-}$ and $\mathrm{HSO_4}^-$ concentrations become equal. Depending on how we count the ions, the mean activity $(\gamma_{\mathrm{H}^{+}})^2 \gamma_{\mathrm{SO_4}^{2-}}$ will change.
 
 Basically, this is the distinction between a formal/nominal solute concentration, as compared to a "real" free solute concentration. It can be advantageous to explicitly include more forms of solutes in our analysis (like the ion pairs), which will allow their various dissociation equilibria to appear more naturally and ideal-dilute behaviour will continue to higher concentrations (i.e., activity coefficients will stay closer to 1). That is particularly useful with ions that exhibit strong ion pairing (including weak acids and bases, or higher-charged metal salts). But in highly concentrated solutions which are anyway non-ideal, having the extra forms can become annoying as it leads to more mathematical entities that must be tracked. There might not even be a clean distinction between associated and dissociated ions, so trying to include more forms of solutes might create more vagueness.
 
