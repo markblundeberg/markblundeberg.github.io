@@ -71,7 +71,15 @@ Really, $\mu_{\mathrm{int},i}$ does not deserve the name "chemical potential" si
 * it is not any meaningful partial molar Gibbs energy (except in charge-neutral combinations of $\mu_{\mathrm{int},i}$, such as $\mu_{\mathrm{int},i} - \tfrac{z_i}{z_j}\mu_{\mathrm{int},j} = \bar\mu_i - \tfrac{z_i}{z_j}\bar\mu_j = (V_i - V_j)z_i F$).
 * $\mu_{\mathrm{int},i}$ is not even experimentally accessible, since $\phi$ is experimentally inaccessible.
 
-The one benefit of $z_i F \phi$ is that it is at least consistently applied to all ions in the same place. But this would be satisfied by any random number in place of $\phi$ -- the $\mu_{\mathrm{int},i}$ values would fully adjust to compensate for that too!
+## Actually $\phi$ doesn't even have to be real
+
+The one benefit of $z_i F \phi$ is that it is at least consistently applied to all ions in the same place. This means that any local chemical reaction within a bulk solution, such as
+$$ \bar\mu_{\mathrm{H}^+} + \bar\mu_{\mathrm{OH}^-} = \mu_{\mathrm{H_2O}} $$
+looks the same in terms of the internal chemical potentials (since $\phi$ is the same for both ions):
+$$ \mu_{\mathrm{int},\mathrm{H}^+} + \mu_{\mathrm{int},\mathrm{OH}^-} = \mu_{\mathrm{H_2O}} $$
+
+But this would be satisfied by any random number in place of $\phi$ -- the $\mu_{\mathrm{int},i}$ values would fully adjust to compensate for that too!
+As we saw [in the case of non-ideal solutions](../nonideal/), that is precisely what happens when ion activity conventions are adopted: the practically used $\phi'$ no longer corresponds to any physically-based electrostatic potential.
 
 ## Galvani potentials and double layers
 
@@ -119,11 +127,14 @@ Of course, it is possible to get the right thermoelectric voltage using $\phi$ (
 
 ## Vacuum levels (outer potentials / Volta potentials)
 
-It is unfortunately common to see discussions of material interfaces that involve the concept of 'vacuum level' / outer potential / Volta potential, denoted $\psi$. Outer potential $\psi$ is the value of the electrostatic potential just outside a surface.
+It is unfortunately common to see discussions of material interfaces that involve the concept of 'vacuum level' / outer potential / Volta potential, denoted $\psi$. Here to be precise, I am going to draw a distinction:
+
+* Vacuum potential $\phi_{\mathrm{vac}}$: the value of the electrostatic potential anywhere in the vacuum.
+* Outer potential $\psi$: the value of the electrostatic potential just outside a surface (there, $\psi = $\phi_{\mathrm{vac}}$).
 
 In general, for any material surface, there will generally be some kind of charge double layer, so there will be some step $\psi - \phi = -\chi$, where $\chi$ is the surface potential (usually positive).
 
-Unlike the inner potential $\phi$, we can actually access $\psi$! The distinction between infinitesimal test charges and real charge disappears when there are no other particles around. I.e. for a real charged particle that is launched into an otherwise-empty vacuum, $z_i F \phi_{\mathrm{vac}}$ really is its electrostatic potential energy, and when it nears a surface then $\phi_{\mathrm{vac}}$ approaches the $\psi$ for that surface. We don't even need to perform any kind of microscopic smoothing process, since the microscopic electric scalar potential is automatically smooth in the vacuum.
+Unlike the inner potential $\phi$, we can actually access $\psi$ and $\phi_{\mathrm{vac}}$! The distinction between infinitesimal test charges and real charge disappears when there are no other particles around. I.e. for a real charged particle that is launched into an otherwise-empty vacuum, $z_i F \phi_{\mathrm{vac}}$ really is its electrostatic potential energy, and when it nears a surface then $\phi_{\mathrm{vac}}$ approaches the $\psi$ for that surface. We don't even need to perform any kind of microscopic smoothing process, since the microscopic electric scalar potential is automatically smooth in the vacuum.
 
 So, given all the difficulties with the inner potential $\phi$ that we've discussed above, it seems attractive to build our analysis of materials off the real and accessible $\psi$ that sits nearby. Strictly speaking, we should only expect this vacuum-surface property to be useful for phenomena that actually relate to vacuum (thermionic emission, photoemission, Kelvin probe), and not for phenomena that occur strictly inside materials. But maybe we get lucky, and $\psi$ is actually useful (even approximately) in discussing material phenomena? I would say the answer here is *no*. Rather: **when it comes to describing *in-material* phenomena, references to vacuum level are often highly inaccurate and/or misleading**.
 
