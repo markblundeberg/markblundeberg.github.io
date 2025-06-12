@@ -15,7 +15,7 @@ Advanced:
 
 Appendices:
 
-- _Thermodynamics_ - Subtleties of the basic thermodynamics of charged systems.
+- [_Thermodynamics_](/esbd/thermodynamics) - Subtleties of the basic thermodynamics of charged systems.
 - [_Nuances_](/esbd/nuances/) - Are $V_i$ "real voltages"?
 - [_The case against $\phi$_](/esbd/phi/) - Why we should bypass using an electrostatic potential.
 - [_About_](/esbd/about/) - How this project came about.
