@@ -4,11 +4,11 @@ Basics:
 - [_Lithium ion batteries_](/esbd/lib/) - An application spotlight.
 - [_Solutions_](/esbd/solutions/) - Concentrations, standard states $V^\circ$.
 - [_Junctions_](/esbd/junctions/) - Salt bridges and ion membranes.
+- [_Redox_](/esbd/redox) - Electrons "in" solution?
 
 Advanced:
 - [_Potentials_](/esbd/potentials/) - How the usual potentials of electrochemistry relate to $V_i$.
 - [_Semiconductors_](/esbd/semiconductors/) - Electrons and holes, and classic band diagrams.
-- _Redox_ - 
 - ...
 - [_Non-ideal solutions_](/esbd/nonideal) - Focussing on technical difficulties of single-ion activities.
 - [_Non-equilibrium_](/esbd/nonequilibrium/) - Overpotentials
