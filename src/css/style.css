@@ -393,6 +393,62 @@ p.diagram-placeholder {
 
 /* ====== End ElectrochemicalSpeciesBandDiagram Styles ====== */
 
+/* ====== Start BandDiagram Styles ====== */
+
+/* SVG Element created by ESBD module */
+.bd-svg {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* D3 Axis Styling */
+.bd-x-axis path,
+.bd-y-axis path,
+.bd-x-axis line,
+.bd-y-axis line {
+    stroke: #aaa; /* Slightly lighter axis lines */
+    shape-rendering: geometricPrecision;
+}
+.bd-x-axis text,
+.bd-y-axis text {
+    font-size: 9px; /* Smaller axis text */
+    fill: #555;
+}
+
+/* Interactive Y-Axis Label */
+.bd-y-axis-label {
+    font-size: 10px; /* Smaller axis label */
+    fill: #333;
+}
+
+/* D3 Data Line Defaults */
+.bd-data-line {
+    fill: none;
+}
+/* Other D3 element styles (.esbd-connector-line, .esbd-interface-line, etc.) as before */
+
+/* KaTeX Labels on Plot */
+.bd-line-label .katex-label-container {
+    font-size: 10px; /* Slightly smaller labels */
+    /* background set inline currently */
+}
+
+/* popup */
+.bd-popup {
+    max-width: 250px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    font-size: 11px;
+    padding: 2px;
+    border-radius: 5px;
+    background: rgba(245, 245, 245, 0.95);
+}
+
+/* ====== End BandDiagram Styles ====== */
+
 /* ====== EnergyLevelsDiagram Styles ====== */
 
 /* SVG container for the level diagram */
