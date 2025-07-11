@@ -1178,9 +1178,12 @@ class BandDiagram {
             targetY = containerHeight - popupHeight - 5;
         }
         this._popupDiv
+            .style('visibility', 'visible')
+            .transition()
+            .duration(this.config.transitionDuration)
+            .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
             .style('left', `${targetX}px`)
             .style('top', `${targetY}px`)
-            .style('visibility', 'visible')
             .style('opacity', 1);
     }
 
