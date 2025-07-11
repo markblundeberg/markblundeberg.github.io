@@ -28,6 +28,8 @@ module.exports = function (eleventyConfig) {
     // Brutal hammer if markdown screws with underscores in TeX:
     // md.disable('emphasis');
 
+    md.use(require('markdown-it-footnote'));
+
     // --- Collections ---
     // Optional: Define collections later for things like blog posts
     // eleventyConfig.addCollection("posts", function(collectionApi) {
