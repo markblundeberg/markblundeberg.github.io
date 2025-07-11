@@ -1,4 +1,5 @@
 // Eleventy configuration file
+const markdownIt = require('markdown-it');
 const eleventyNavigationPlugin = require('@11ty/eleventy-navigation');
 
 module.exports = function (eleventyConfig) {
@@ -12,13 +13,20 @@ module.exports = function (eleventyConfig) {
     eleventyConfig.addPassthroughCopy({ 'src/esbd/img': '/esbd/img/' });
     // If you have other static assets like fonts, add them here
 
+    // --- Set variables ---
     eleventyConfig.addGlobalData('esbdJsPath', '/esbd/js/');
 
     // --- Markdown Options ---
-    // Optional: Configure markdown-it library if needed
-    // let markdownIt = require("markdown-it");
-    // let options = { html: true, breaks: true, linkify: true };
-    // eleventyConfig.setLibrary("md", markdownIt(options));
+    const md = new markdownIt({
+        html: true, // Allow HTML tags
+    });
+    eleventyConfig.setLibrary('md', md);
+
+    // Static TeX rendering:
+    const markdownItKatex = require('@vscode/markdown-it-katex').default;
+    md.use(markdownItKatex);
+    // Brutal hammer if markdown screws with underscores in TeX:
+    // md.disable('emphasis');
 
     // --- Collections ---
     // Optional: Define collections later for things like blog posts
@@ -66,12 +74,6 @@ module.exports = function (eleventyConfig) {
             return `<a href="${url}" class="wikipedia-link" target="_blank" rel="noopener noreferrer">${displayText}${iconHTML}</a>`;
         }
     );
-
-    // Static TeX rendering:
-    const markdownItKatex = require('@vscode/markdown-it-katex').default;
-    eleventyConfig.amendLibrary('md', (mdLib) => mdLib.use(markdownItKatex));
-    // Brutal hammer if markdown screws with underscores in TeX:
-    //  eleventyConfig.amendLibrary('md', (mdLib) => mdLib.disable('emphasis'));
 
     eleventyConfig.setNunjucksEnvironmentOptions({
         throwOnUndefined: true,
