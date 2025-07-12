@@ -332,66 +332,8 @@ p.diagram-placeholder {
     margin-bottom: 5px;
     /* Height determined by flex layout in parent */
     flex-grow: 1; /* Allow plot to take remaining vertical space */
-    min-height: 250px;
+    height: 250px;
 }
-
-/* ====== Start ElectrochemicalSpeciesBandDiagram Styles ====== */
-
-/* SVG Element created by ESBD module */
-.esbd-svg {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    -webkit-user-select: none; /* Safari/Chrome/Opera/Edge */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* IE */
-    user-select: none; /* Standard */
-}
-
-/* D3 Axis Styling */
-.esbd-x-axis path,
-.esbd-y-axis path,
-.esbd-x-axis line,
-.esbd-y-axis line {
-    stroke: #aaa; /* Slightly lighter axis lines */
-    shape-rendering: crispEdges;
-}
-.esbd-x-axis text,
-.esbd-y-axis text {
-    font-size: 9px; /* Smaller axis text */
-    fill: #555;
-}
-
-/* Interactive Y-Axis Label */
-.esbd-y-axis-label {
-    font-size: 10px; /* Smaller axis label */
-    fill: #333;
-}
-
-/* D3 Data Line Defaults */
-.esbd-data-line {
-    fill: none;
-}
-/* Other D3 element styles (.esbd-connector-line, .esbd-interface-line, etc.) as before */
-
-/* KaTeX Labels on Plot */
-.esbd-line-label .katex-label-container {
-    font-size: 10px; /* Slightly smaller labels */
-    /* background set inline currently */
-}
-
-/* popup */
-.esbd-popup {
-    max-width: 250px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    font-size: 11px; /* Smaller popup text */
-    /* Other static styles */
-}
-
-/* ====== End ElectrochemicalSpeciesBandDiagram Styles ====== */
 
 /* ====== Start BandDiagram Styles ====== */
 

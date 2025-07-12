@@ -24,7 +24,6 @@ class ConcentrationCellComponent {
                 `Container element ${containerSelector} not found.`
             );
         }
-        this.transitionDuration = 500;
         this.throttleDuration = 100;
 
         this.diagram = null;
@@ -45,11 +44,8 @@ class ConcentrationCellComponent {
                 `ConcentrationCellComponent initialized in ${containerSelector}`
             );
         } catch (error) {
-            console.error(
-                `Error initializing ConcentrationCellComponent in ${containerSelector}:`,
-                error
-            );
             this.container.innerHTML = `<p style="color: red;">Error initializing diagram component: ${error.message}</p>`;
+            throw error;
         }
     }
 
@@ -117,15 +113,15 @@ class ConcentrationCellComponent {
     /** Sets up the ESBD instance */
     _setupESBD() {
         if (!this.plotDiv) throw new Error('Plot container div not found.');
-        this.diagram = new ElectrochemicalSpeciesBandDiagram(this.plotDivId, {
-            height: this.config.plotHeight,
-            transitionDuration: this.transitionDuration,
-        });
-
-        // Define species info
-        this.diagram.addSpeciesInfo('cation', this.config.cation);
-        this.diagram.addSpeciesInfo('anion', this.config.anion);
-        this.diagram.addSpeciesInfo('electron', this.config.electron);
+        this.diagram = new ElectrochemicalSpeciesBandDiagram(
+            this.plotDivId,
+            {
+                cation: this.config.cation,
+                anion: this.config.anion,
+                electron: this.config.electron,
+            },
+            {}
+        );
 
         // Set layout
         this.diagram.setSpatialLayout(
@@ -328,11 +324,6 @@ class ConcentrationCellComponent {
                 speciesId: 'cation',
                 curveType: 'potential',
                 showLabel: true,
-                inputUnits: 'V_volt',
-                xRange: {
-                    min: b[1],
-                    max: junctionType == 'cation' ? mid : b[2],
-                },
                 x: [b[1], junctionType == 'cation' ? mid : b[2]],
                 y: [V_cation_1, V_cation_1],
             },
@@ -341,11 +332,6 @@ class ConcentrationCellComponent {
                 speciesId: 'cation',
                 curveType: 'potential',
                 showLabel: true,
-                inputUnits: 'V_volt',
-                xRange: {
-                    min: junctionType == 'cation' ? mid : b[3],
-                    max: b[4],
-                },
                 x: [junctionType == 'cation' ? mid : b[3], b[4]],
                 y: [V_cation_2, V_cation_2],
             },
@@ -354,8 +340,6 @@ class ConcentrationCellComponent {
                 speciesId: 'cation',
                 curveType: 'standardState',
                 showLabel: false,
-                inputUnits: 'V_volt',
-                xRange: { min: b[1], max: b[2] },
                 x: [b[1], b[2]],
                 y: [V_STD_cation_1, V_STD_cation_1],
             },
@@ -364,8 +348,6 @@ class ConcentrationCellComponent {
                 speciesId: 'cation',
                 curveType: 'standardState',
                 showLabel: false,
-                inputUnits: 'V_volt',
-                xRange: { min: b[3], max: b[4] },
                 x: [b[3], b[4]],
                 y: [V_STD_cation_2, V_STD_cation_2],
             },
@@ -374,11 +356,6 @@ class ConcentrationCellComponent {
                 speciesId: 'anion',
                 curveType: 'potential',
                 showLabel: true,
-                inputUnits: 'V_volt',
-                xRange: {
-                    min: b[1],
-                    max: junctionType == 'anion' ? mid : b[2],
-                },
                 x: [b[1], junctionType == 'anion' ? mid : b[2]],
                 y: [V_anion_1, V_anion_1],
             },
@@ -387,11 +364,6 @@ class ConcentrationCellComponent {
                 speciesId: 'anion',
                 curveType: 'potential',
                 showLabel: true,
-                inputUnits: 'V_volt',
-                xRange: {
-                    min: junctionType == 'anion' ? mid : b[3],
-                    max: b[4],
-                },
                 x: [junctionType == 'anion' ? mid : b[3], b[4]],
                 y: [V_anion_2, V_anion_2],
             },
@@ -400,8 +372,6 @@ class ConcentrationCellComponent {
                 speciesId: 'anion',
                 curveType: 'standardState',
                 showLabel: false,
-                inputUnits: 'V_volt',
-                xRange: { min: b[1], max: b[2] },
                 x: [b[1], b[2]],
                 y: [V_STD_anion_1, V_STD_anion_1],
             },
@@ -410,8 +380,6 @@ class ConcentrationCellComponent {
                 speciesId: 'anion',
                 curveType: 'standardState',
                 showLabel: false,
-                inputUnits: 'V_volt',
-                xRange: { min: b[3], max: b[4] },
                 x: [b[3], b[4]],
                 y: [V_STD_anion_2, V_STD_anion_2],
             },
@@ -420,8 +388,6 @@ class ConcentrationCellComponent {
                 speciesId: 'electron',
                 curveType: 'potential',
                 showLabel: true,
-                inputUnits: 'V_volt',
-                xRange: { min: b[0], max: b[1] },
                 x: [b[0], b[1]],
                 y: [V_e_1, V_e_1],
             },
@@ -430,15 +396,13 @@ class ConcentrationCellComponent {
                 speciesId: 'electron',
                 curveType: 'potential',
                 showLabel: true,
-                inputUnits: 'V_volt',
-                xRange: { min: b[4], max: b[5] },
                 x: [b[4], b[5]],
                 y: [V_e_2, V_e_2],
             },
         ];
 
         const leftpopupArgs = {
-            reaction: `${cation.latexPrettyName} + ${cation.z}\\mathrm{e}^{-} \\rightleftharpoons \\mathrm{Ag(s)}`, // General form
+            reaction: `${cation.mathLabel} + ${cation.z}\\mathrm{e}^{-} \\rightleftharpoons \\mathrm{Ag(s)}`, // General form
             potential_diff_volt: V_cation_1 - V_e_1, // Should be V_reaction (approx 0)
             interfaceName: 'Electrode 1 / Elyte 1',
         };
@@ -446,12 +410,11 @@ class ConcentrationCellComponent {
             x: b[1], // Interface boundary
             y1: V_e_1, // Electron potential
             y2: V_cation_1, // Cation potential
-            inputUnits: 'V_volt',
             popupArgs: leftpopupArgs,
         });
 
         const rightpopupArgs = {
-            reaction: `${cation.latexPrettyName} + ${cation.z}\\mathrm{e}^{-} \\rightleftharpoons \\mathrm{Ag(s)}`,
+            reaction: `${cation.mathLabel} + ${cation.z}\\mathrm{e}^{-} \\rightleftharpoons \\mathrm{Ag(s)}`,
             potential_diff_volt: V_cation_2 - V_e_2, // Should be V_reaction (approx 0)
             interfaceName: 'Elyte 2 / Electrode 2',
         };
@@ -459,7 +422,6 @@ class ConcentrationCellComponent {
             x: b[4], // Interface boundary
             y1: V_e_2, // Electron potential
             y2: V_cation_2, // Cation potential
-            inputUnits: 'V_volt',
             popupArgs: rightpopupArgs,
         });
 
@@ -490,7 +452,7 @@ class ConcentrationCellComponent {
             const nu = this.config.compound_stoichiometry[info.speciesId];
             activity = (nu * conc) / this.config.c_std_M;
             content += `<br>Formal Conc ≈ ${conc.toFixed(3)} M`;
-            content += `<br>Activity($${species.latexPrettyName}$) ≈ ${activity.toFixed(3)}`;
+            content += `<br>Activity($${species.mathLabel}$) ≈ ${activity.toFixed(3)}`;
         }
         return content;
     }
@@ -505,7 +467,7 @@ class ConcentrationCellComponent {
         const args = info.customArgs || {};
         const reaction =
             args.reaction ||
-            `${this.config.cation.latexPrettyName} + ${this.config.cation.z}e^- \\rightleftharpoons \\text{Electrode}`;
+            `${this.config.cation.mathLabel} + ${this.config.cation.z}e^- \\rightleftharpoons \\text{Electrode}`;
         const potentialDiff = args.potential_diff_volt; // V_cation - V_e = V_reaction
         const mode = info.currentMode;
 
@@ -514,10 +476,10 @@ class ConcentrationCellComponent {
 
         // Display the equilibrium condition V_cation - V_e = V_reaction
         if (potentialDiff !== undefined) {
-            content += `Equilibrium: $V_{${this.config.cation.latexPrettyName}} - V_{\\mathrm{e}^{-}} = ${potentialDiff.toFixed(3)}$ V`;
+            content += `Equilibrium: $V_{${this.config.cation.mathLabel}} - V_{\\mathrm{e}^{-}} = ${potentialDiff.toFixed(3)}$ V`;
             // Explain if V_reaction is zero
             if (Math.abs(potentialDiff) < 1e-6) {
-                content += ` (\$= \\mu_{\\mathrm{${this.config.cation.latexPrettyName.replace('+', '')}(s)}} / ${this.config.cation.z}F = 0\$)`;
+                content += ` (\$= \\mu_{\\mathrm{${this.config.cation.mathLabel.replace('+', '')}(s)}} / ${this.config.cation.z}F = 0\$)`;
             } else {
                 content += ` (\$= \\mu_{\\text{electrode}} / nF\$)`;
             }

@@ -8,21 +8,22 @@
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
     import { throttle, linspace } from '{{ esbdJsPath }}utils.js';
 
-    const diagram = new ElectrochemicalSpeciesBandDiagram(plotContainerId, {
-        height: 250,
-    });
-
-    // Define species info
-    diagram.addSpeciesInfo('li_ion', {
-        z: 1,
-        color: '#E41A1C',
-        latexPrettyName: '\\mathrm{Li}^{+}',
-    });
-    diagram.addSpeciesInfo('electron', {
-        z: -1,
-        color: '#377EB8',
-        latexPrettyName: '\\mathrm{e}^{-}',
-    });
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        plotContainerId,
+        {
+            li_ion: {
+                z: 1,
+                color: '#E41A1C',
+                mathLabel: '\\mathrm{Li}^{+}',
+            },
+            electron: {
+                z: -1,
+                color: '#377EB8',
+                mathLabel: '\\mathrm{e}^{-}',
+            },
+        },
+        {}
+    );
 
     // Boundaries
     const boundaries = [0.0, 0.7, 0.8, 1.0];
@@ -67,11 +68,6 @@
             speciesId: 'electron',
             curveType: 'potential',
             showLabel: true,
-            inputUnits: 'V_volt',
-            xRange: {
-                min: b[0],
-                max: b[1],
-            },
             x: [b[0], b[1]],
             y: [V_el, V_el],
         },
@@ -80,11 +76,6 @@
             speciesId: 'li_ion',
             curveType: 'potential',
             showLabel: true,
-            inputUnits: 'V_volt',
-            xRange: {
-                min: b[0],
-                max: b[3],
-            },
             x: x_lion,
             y: V_lion,
         },

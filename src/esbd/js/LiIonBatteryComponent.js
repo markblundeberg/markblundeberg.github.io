@@ -23,7 +23,6 @@ class LiIonBatteryComponent {
                 `Container element ${containerSelector} not found.`
             );
         }
-        this.transitionDuration = 500;
         this.throttleDuration = 100;
 
         this.config = componentConfig;
@@ -87,27 +86,23 @@ class LiIonBatteryComponent {
     /** Sets up the ESBD instance */
     _setupESBD() {
         if (!this.plotDiv) throw new Error('Plot container div not found.');
-        this.diagram = new ElectrochemicalSpeciesBandDiagram(this.plotDivId, {
-            height: this.config.plotHeight,
-            transitionDuration: this.transitionDuration,
-        });
+        this.diagram = new ElectrochemicalSpeciesBandDiagram(
+            this.plotDivId,
+            {
+                li_ion: this.config.li_ion || {
+                    z: 1,
+                    color: '#E41A1C',
+                    mathLabel: '\\mathrm{Li}^{+}',
+                },
+                electron: this.config.electron || {
+                    z: -1,
+                    color: '#377EB8',
+                    mathLabel: '\\mathrm{e}^{-}',
+                },
+            },
+            {}
+        );
         // Define species known to the diagram
-        this.diagram.addSpeciesInfo(
-            'li+',
-            this.config.li_ion || {
-                z: 1,
-                color: '#E41A1C',
-                latexPrettyName: '\\mathrm{Li}^{+}',
-            }
-        );
-        this.diagram.addSpeciesInfo(
-            'electron',
-            this.config.electron || {
-                z: -1,
-                color: '#377EB8',
-                latexPrettyName: '\\mathrm{e}^{-}',
-            }
-        );
 
         // Set layout
         this.diagram.setSpatialLayout(
@@ -118,13 +113,13 @@ class LiIonBatteryComponent {
         this.diagram.addVerticalMarker('anode_eq', {
             symbol: '⇌', // Or use config.anode.symbol?
             speciesId1: 'electron', // Corresponds to y1 in update call (V_e_anode)
-            speciesId2: 'li+', // Corresponds to y2 in update call (V_Li_plus_elyte)
+            speciesId2: 'li_ion', // Corresponds to y2 in update call (V_Li_plus_elyte)
             popupCallback: this._getAnodeEqPopup.bind(this), // Dedicated callback
         });
         this.diagram.addVerticalMarker('cathode_eq', {
             symbol: '⇌',
             speciesId1: 'electron', // Corresponds to y1 (V_e_cathode)
-            speciesId2: 'li+', // Corresponds to y2 (V_Li_plus_elyte)
+            speciesId2: 'li_ion', // Corresponds to y2 (V_Li_plus_elyte)
             popupCallback: this._getCathodeEqPopup.bind(this), // Dedicated callback
         });
     }
@@ -199,8 +194,6 @@ class LiIonBatteryComponent {
             speciesId: 'electron',
             curveType: 'potential',
             showLabel: true,
-            inputUnits: 'V_volt',
-            xRange: { min: b[0], max: b[2] },
             x: [b[0], b[2]],
             y: [V_e_anode, V_e_anode],
         });
@@ -209,8 +202,6 @@ class LiIonBatteryComponent {
             speciesId: 'electron',
             curveType: 'potential',
             showLabel: true,
-            inputUnits: 'V_volt',
-            xRange: { min: b[5], max: b[7] },
             x: [b[5], b[7]],
             y: [V_e_cathode, V_e_cathode],
         });
@@ -218,11 +209,9 @@ class LiIonBatteryComponent {
         // V_Li+ Trace (Spans Elyte1, Separator, Elyte2)
         traceDefs.push({
             id: `li_elyte_${traceIdSuffix}`,
-            speciesId: 'li+',
+            speciesId: 'li_ion',
             curveType: 'potential',
             showLabel: true,
-            inputUnits: 'V_volt',
-            xRange: { min: b[1], max: b[6] },
             x: [b[1], b[6]],
             y: [V_Li_plus_elyte, V_Li_plus_elyte],
         });
@@ -236,8 +225,7 @@ class LiIonBatteryComponent {
         this.diagram.updateVerticalMarker('anode_eq', {
             x: 0.5 * (b[1] + b[2]), // Anode/Elyte1 interface boundary index
             y1: V_e_anode, // Electron potential (speciesId1 = 'electron')
-            y2: V_Li_plus_elyte, // Li+ potential (speciesId2 = 'li+')
-            inputUnits: 'V_volt', // Units of potentials passed
+            y2: V_Li_plus_elyte, // Li+ potential (speciesId2 = 'li_ion')
             popupArgs: anodePopupData,
         });
 
@@ -250,8 +238,7 @@ class LiIonBatteryComponent {
         this.diagram.updateVerticalMarker('cathode_eq', {
             x: 0.5 * (b[5] + b[6]), // Elyte2/Cathode interface boundary index
             y1: V_e_cathode, // Electron potential (speciesId1 = 'electron')
-            y2: V_Li_plus_elyte, // Li+ potential (speciesId2 = 'li+')
-            inputUnits: 'V_volt',
+            y2: V_Li_plus_elyte, // Li+ potential (speciesId2 = 'li_ion')
             popupArgs: cathodePopupData,
         });
 

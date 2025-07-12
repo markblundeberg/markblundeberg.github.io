@@ -12,24 +12,24 @@
     const liIonConfig = {
         // Define species relevant to Li-ion (can reuse some keys if careful)
         // Note: Using generic 'anion' key for PF6- or similar
-        li_ion: { z: 1, color: '#E41A1C', latexPrettyName: '\\mathrm{Li}^{+}' }, // Red for Li+
+        li_ion: { z: 1, color: '#E41A1C', mathLabel: '\\mathrm{Li}^{+}' }, // Red for Li+
         electron: {
             z: -1,
             color: '#377EB8',
-            latexPrettyName: '\\mathrm{e}^{-}',
+            mathLabel: '\\mathrm{e}^{-}',
         }, // Blue for electron
 
         // Electrode definitions with Langmuir E0 vs Li/Li+
         anode: {
             // Graphite (simplified)
             E0_vs_Li: 0.15, // Approx. standard potential vs Li/Li+ for Langmuir model
-            latexPrettyName: 'Graphite',
+            mathLabel: 'Graphite',
             color: '#666666', // Dark Grey
         },
         cathode: {
             // Generic Oxide (simplified)
             E0_vs_Li: 3.8, // Approx. standard potential vs Li/Li+ for Langmuir model
-            latexPrettyName: 'Oxide',
+            mathLabel: 'Oxide',
             color: '#E41A1C', // Red (same as Li+ maybe?) or different
         },
 

@@ -8,30 +8,31 @@
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
     import { formatPopupBaseContent, throttle } from '{{ esbdJsPath }}utils.js';
 
-    const diagram = new ElectrochemicalSpeciesBandDiagram(plotContainerId, {
-        height: 250,
-    });
+    const speciesInfo = {
+        cation: {
+            z: 1,
+            color: '#E6AB02',
+            mathLabel: '\\mathrm{Ag}^{+}',
+        },
+        anion: {
+            z: 1,
+            color: '#E6AB02',
+            mathLabel: '\\mathrm{Cl}^{-}',
+        },
+        electron: {
+            z: -1,
+            color: '#377EB8',
+            mathLabel: '\\mathrm{e}^{-}',
+        },
+    };
 
-    // Define species info
-    diagram.addSpeciesInfo('cation', {
-        z: 1,
-        color: '#E6AB02',
-        latexPrettyName: '\\mathrm{Ag}^{+}',
-    });
-    diagram.addSpeciesInfo('anion', {
-        z: 1,
-        color: '#E6AB02',
-        latexPrettyName: '\\mathrm{Cl}^{-}',
-    });
-    diagram.addSpeciesInfo('electron', {
-        z: -1,
-        color: '#377EB8',
-        latexPrettyName: '\\mathrm{e}^{-}',
-    });
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        plotContainerId,
+        speciesInfo
+    );
 
-    // Boundaries
-    const boundaries = [0.0, 0.3, 0.7, 1.0];
     // Set layout
+    const boundaries = [0.0, 0.3, 0.7, 1.0];
     diagram.setSpatialLayout(boundaries, [
         { name: 'Silver wire', color: '#E0E0E0' },
         { name: 'AgCl coating', color: '#ccc' },
@@ -49,11 +50,6 @@
             speciesId: 'electron',
             curveType: 'potential',
             showLabel: true,
-            inputUnits: 'V_volt',
-            xRange: {
-                min: b[0],
-                max: b[1],
-            },
             x: [b[0], b[1]],
             y: [V_el, V_el],
         },
@@ -62,11 +58,6 @@
             speciesId: 'anion',
             curveType: 'potential',
             showLabel: true,
-            inputUnits: 'V_volt',
-            xRange: {
-                min: b[1],
-                max: b[3],
-            },
             x: [b[1], b[3]],
             y: [V_Cl, V_Cl],
         },
@@ -85,7 +76,6 @@
         x: b[1],
         y1: V_el,
         y2: V_Cl,
-        inputUnits: 'V_volt',
         popupArgs: 'yo popupArgs',
     });
 </script>

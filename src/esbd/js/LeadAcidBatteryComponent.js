@@ -277,8 +277,6 @@ class LeadAcidBatteryComponent {
             speciesId: 'e-',
             curveType: 'potential',
             showLabel: true,
-            inputUnits: 'V_volt',
-            xRange: { min: b[0], max: b[2] },
             x: [b[0], b[2]],
             y: [V_e_anode, V_e_anode],
         });
@@ -287,8 +285,6 @@ class LeadAcidBatteryComponent {
             speciesId: 'e-',
             curveType: 'potential',
             showLabel: true,
-            inputUnits: 'V_volt',
-            xRange: { min: b[3], max: b[5] },
             x: [b[3], b[5]],
             y: [V_e_cathode, V_e_cathode],
         });
@@ -297,8 +293,6 @@ class LeadAcidBatteryComponent {
             speciesId: 'H+',
             curveType: 'potential',
             showLabel: true,
-            inputUnits: 'V_volt',
-            xRange: { min: b[2], max: b[3] },
             x: [b[2], b[3]],
             y: [V_H_plus, V_H_plus],
         });
@@ -308,8 +302,6 @@ class LeadAcidBatteryComponent {
                 speciesId: 'H+',
                 curveType: 'standardState',
                 showLabel: false,
-                inputUnits: 'V_volt',
-                xRange: { min: b[2], max: b[3] },
                 x: [b[2], b[3]],
                 y: [V_STD_H_plus, V_STD_H_plus],
             });
@@ -320,8 +312,6 @@ class LeadAcidBatteryComponent {
                 speciesId: 'HSO4-',
                 curveType: 'potential',
                 showLabel: true,
-                inputUnits: 'V_volt',
-                xRange: { min: b[2], max: b[3] },
                 x: [b[2], b[3]],
                 y: [V_HSO4_minus, V_HSO4_minus],
             });
@@ -331,8 +321,6 @@ class LeadAcidBatteryComponent {
                     speciesId: 'HSO4-',
                     curveType: 'standardState',
                     showLabel: false,
-                    inputUnits: 'V_volt',
-                    xRange: { min: b[2], max: b[3] },
                     x: [b[2], b[3]],
                     y: [V_STD_HSO4_minus, V_STD_HSO4_minus],
                 });
@@ -351,7 +339,6 @@ class LeadAcidBatteryComponent {
                 x: b[2], // Pb/Elyte interface boundary index
                 y1: V_e_anode, // Electron potential
                 y2: V_H_plus, // Use H+ potential as the other anchor
-                inputUnits: 'V_volt',
                 popupArgs: anodeTooltipArgs,
             });
 
@@ -366,7 +353,6 @@ class LeadAcidBatteryComponent {
                 x: b[3], // Elyte/PbO2 interface boundary index
                 y1: V_e_cathode, // Electron potential
                 y2: V_H_plus, // Use H+ potential as the other anchor
-                inputUnits: 'V_volt',
                 popupArgs: cathodeTooltipArgs,
             });
         }

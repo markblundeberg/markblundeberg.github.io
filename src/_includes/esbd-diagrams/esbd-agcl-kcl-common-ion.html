@@ -113,9 +113,42 @@
 
     // --- Set up diagram ---
 
-    const diagram = new ElectrochemicalSpeciesBandDiagram(plotContainerId, {
-        height: 250,
-    });
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        plotContainerId,
+        {
+            ag_ion: {
+                z: 1,
+                color: '#E4572E',
+                mathLabel: '\\mathrm{Ag}^{+}',
+            },
+            k_ion: {
+                z: 1,
+                color: '#B84E63',
+                mathLabel: '\\mathrm{K}^{+}',
+            },
+            cl_ion: {
+                z: 1,
+                color: '#80B030',
+                mathLabel: '\\mathrm{Cl}^{-}',
+            },
+            no3_ion: {
+                z: -1,
+                color: '#30B090',
+                mathLabel: '\\mathrm{NO_3}^{-}',
+            },
+            electron: {
+                z: -1,
+                color: '#377EB8',
+                mathLabel: '\\mathrm{e}^{-}',
+            },
+            h_ion: {
+                z: 1,
+                color: '#606060',
+                mathLabel: '\\mathrm{H}^{+}',
+            },
+        },
+        {}
+    );
 
     // Boundaries
     const boundaries = [0.0, 0.3, 0.7, 1.0];
@@ -127,36 +160,6 @@
     ]);
 
     // Define species info
-    diagram.addSpeciesInfo('ag_ion', {
-        z: 1,
-        color: '#E4572E',
-        latexPrettyName: '\\mathrm{Ag}^{+}',
-    });
-    diagram.addSpeciesInfo('k_ion', {
-        z: 1,
-        color: '#B84E63',
-        latexPrettyName: '\\mathrm{K}^{+}',
-    });
-    diagram.addSpeciesInfo('cl_ion', {
-        z: 1,
-        color: '#80B030',
-        latexPrettyName: '\\mathrm{Cl}^{-}',
-    });
-    diagram.addSpeciesInfo('no3_ion', {
-        z: -1,
-        color: '#30B090',
-        latexPrettyName: '\\mathrm{NO_3}^{-}',
-    });
-    diagram.addSpeciesInfo('electron', {
-        z: -1,
-        color: '#377EB8',
-        latexPrettyName: '\\mathrm{e}^{-}',
-    });
-    diagram.addSpeciesInfo('h_ion', {
-        z: 1,
-        color: '#606060',
-        latexPrettyName: '\\mathrm{H}^{+}',
-    });
 
     // --- Calculation Function ---
     function doUpdate() {
@@ -237,7 +240,6 @@
                 speciesId: 'electron',
                 curveType: 'potential',
                 showLabel: true,
-                inputUnits: 'V_volt',
                 x: [b[0], b[1]],
                 y: [V_el, V_el],
             },
@@ -246,7 +248,6 @@
                 speciesId: 'cl_ion',
                 curveType: 'potential',
                 showLabel: true,
-                inputUnits: 'V_volt',
                 x: [b[1], b[3]],
                 y: [V_Cl, V_Cl],
             },
@@ -255,7 +256,6 @@
                 speciesId: 'cl_ion',
                 curveType: 'standardState',
                 showLabel: true,
-                inputUnits: 'V_volt',
                 x: [b[1], b[3]],
                 y: [V_Cl_std, V_Cl_std],
             },
@@ -264,7 +264,6 @@
                 speciesId: 'ag_ion',
                 curveType: 'potential',
                 showLabel: true,
-                inputUnits: 'V_volt',
                 x: [b[1], b[3]],
                 y: [V_Ag, V_Ag],
             },
@@ -273,7 +272,6 @@
                 speciesId: 'ag_ion',
                 curveType: 'standardState',
                 showLabel: true,
-                inputUnits: 'V_volt',
                 x: [b[1], b[3]],
                 y: [V_Ag_std, V_Ag_std],
             },
@@ -282,7 +280,6 @@
                 speciesId: 'k_ion',
                 curveType: 'potential',
                 showLabel: true,
-                inputUnits: 'V_volt',
                 x: [b[1], b[3]],
                 y: [V_K, V_K],
             },
@@ -291,7 +288,6 @@
                 speciesId: 'k_ion',
                 curveType: 'standardState',
                 showLabel: true,
-                inputUnits: 'V_volt',
                 x: [b[1], b[3]],
                 y: [V_K_std, V_K_std],
             },
@@ -300,7 +296,6 @@
                 speciesId: 'h_ion',
                 curveType: 'standardState',
                 showLabel: true,
-                inputUnits: 'V_volt',
                 x: [b[1], b[3]],
                 y: [V_H_std, V_H_std],
             },
@@ -311,7 +306,6 @@
                 speciesId: 'no3_ion',
                 curveType: 'potential',
                 showLabel: true,
-                inputUnits: 'V_volt',
                 x: [b[1], b[3]],
                 y: [V_NO3, V_NO3],
             });
@@ -320,7 +314,6 @@
                 speciesId: 'no3_ion',
                 curveType: 'standardState',
                 showLabel: true,
-                inputUnits: 'V_volt',
                 x: [b[1], b[3]],
                 y: [V_NO3_std, V_NO3_std],
             });
