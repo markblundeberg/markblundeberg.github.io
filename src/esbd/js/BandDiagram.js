@@ -136,6 +136,13 @@ class BandDiagram {
     // Public API Methods
     // ========================================================================
 
+    setYLabel(yLabelStr) {
+        if (!typeof yLabelStr == 'string') {
+            throw TypeError('not a string');
+        }
+        this._yAxisLabelStr = yLabelStr;
+    }
+
     /** Updates the complete set of trace data to be plotted.
      * @param {string} traceDefs[].id - Must be unique.  Match on subsequent calls for smooth transitions.
      * @param {Array<number>} traceDefs[].x - x values (positions), must be ascending
