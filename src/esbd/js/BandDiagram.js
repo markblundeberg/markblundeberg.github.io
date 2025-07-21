@@ -150,7 +150,7 @@ class BandDiagram {
      * @param {string} [traceDefs[].color] - line color
      * @param {object} [traceDefs[].style] - line styling
      * @param {string} [traceDefs[].label] - (TeX math mode) visual label to plot, leave empty if unwanted
-     * @param {string} [traceDefs[].tooltip] - (TeX text mode) tooltip text, defaults to '$ label $'
+     * @param {string} [traceDefs[].toolTip] - (TeX text mode) tooltip text, defaults to '$ label $'
      * @param {object} [traceDefs[].extraData] - arbitrary extra data (will be returned e.g. during popup callback)
      *
      */
@@ -169,9 +169,17 @@ class BandDiagram {
                     color,
                     style,
                     label,
-                    tooltip,
+                    showLabel = true,
+                    toolTip,
                     extraData = {},
+                    ...extraFields
                 } = traceDef;
+                if (Object.keys(extraFields).length > 0) {
+                    const unexpectedKeys = Object.keys(extraFields).join(', ');
+                    throw new Error(
+                        `Unexpected fields were provided: ${unexpectedKeys}`
+                    );
+                }
 
                 if (typeof id !== 'string') throw Error('missing/bad id');
                 if (seenIds.has(id)) throw Error('duplicate id');
@@ -201,9 +209,9 @@ class BandDiagram {
 
                 label = String(label ?? '');
                 // place label at right end of trace
-                const labelPos = label && points[len - 1];
+                const labelPos = showLabel && label ? points[len - 1] : null;
 
-                tooltip = String(tooltip ?? '') || `$${label}$`;
+                toolTip = String(toolTip ?? '') || `$${label}$`;
 
                 const processedTrace = {
                     id: id,
@@ -212,7 +220,7 @@ class BandDiagram {
                     style: style,
                     label: label,
                     labelPos: labelPos,
-                    tooltip: tooltip,
+                    toolTip: toolTip,
                     extraData: extraData,
                 };
                 this.traceData.push(processedTrace);
@@ -1074,7 +1082,7 @@ class BandDiagram {
         if (closestResult && closestResult.minDistPx < hoverThresholdPx) {
             const trace = closestResult.trace;
             // Generate brief content
-            const briefContent = trace.tooltip + ' ›'; // Add hint arrow
+            const briefContent = trace.toolTip + ' ›'; // Add hint arrow
 
             this._setPopup(event, briefContent); // Show brief tooltip
             this._setActiveHighlight({ type: 'trace', id: trace.id }); // Show temp highlight
