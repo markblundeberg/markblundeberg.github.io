@@ -251,6 +251,10 @@ p.diagram-placeholder {
     background-color: #fdfdfd;
 }
 
+.demo-container > figcaption {
+    font-size: small;
+}
+
 /* Styles for ESBD examples' frame and controls */
 
 .controls.esbd-controls {

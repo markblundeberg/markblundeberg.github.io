@@ -45,11 +45,15 @@ In the lithium-ion battery field, the step size is known as the OCV value, and I
 
 The above diagram suggests that the anode and cathode materials are monolithic blocks of graphite or NMC, which is actually an inaccurate picture of what the real materials look like. Due to the slow diffusion of lithium ions inside these materials, it is desirable that the anode and cathode are instead porous to the electrolyte, and so typically they are basically granular matrices, like in the following schematic:
 
-<div class="demo-container" style="max-width: 200px">
+<figure class="demo-container" style="max-width: 200px">
 <img src="/esbd/img/chen2020_fig1_schematic.jpg" style="max-width:100%"/>
 
-<small>From [Chen et al. 2020](https://dx.doi.org/10.1149/1945-7111/ab9050), license: [Creative Commons Attribution Non-Commercial No Derivatives 4.0](http://creativecommons.org/licenses/by-nc-nd/4.0/)</small>
-</div>
+<figcaption>
+
+From [Chen et al. 2020](https://dx.doi.org/10.1149/1945-7111/ab9050), license: [Creative Commons Attribution Non-Commercial No Derivatives 4.0](http://creativecommons.org/licenses/by-nc-nd/4.0/)
+
+</figcaption>
+</figure>
 
 During battery discharge, the output voltage always drops below the normal equilibrium voltage that it would have at that state of charge. For rapid discharges that would discharge the entire capacity in less than an hour, the voltage drops can be quite significant. Using our $V_i$'s, we can actually attribute this external voltage drop to being a sum of various $V_i$ drops.
 
