@@ -1,8 +1,8 @@
 {% set idprefix = ["esbd-agcl-kcl-common-ion", idsuffix] | join %}
 <div class="demo-container" style="max-width: 300px">
     <div
-        id="{{idprefix}}-plot-container"
-        class="plot-container"
+        id="{{idprefix}}-bd-container"
+        class="bd-container"
         style="height: 300px; width: 100%"
     ></div>
 
@@ -83,7 +83,7 @@
         '{{idprefix}}-agno3SliderHider'
     );
     const no3ConcHider = document.getElementById('{{idprefix}}-no3ConcHider');
-    const plotContainerId = '{{idprefix}}-plot-container';
+    const plotContainerId = '{{idprefix}}-bd-container';
 
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
     import { formatPopupBaseContent, throttle } from '{{ esbdJsPath }}utils.js';

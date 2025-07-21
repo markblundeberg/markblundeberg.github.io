@@ -60,7 +60,7 @@ class LiIonBatteryComponent {
         const socSliderId = `soc-${instanceId}`;
         const voltageOutputId = `volt-out-${instanceId}`; // Give output an ID
         this.container.innerHTML = `
-            <div class="plot-container" id="${this.plotDivId}""></div>
+            <div class="bd-container" id="${this.plotDivId}""></div>
             <div class="controls esbd-controls">
                 <div class="control-row">
                     <label class="control-label" for="${socSliderId}">State of Charge (%):</label>
@@ -80,7 +80,7 @@ class LiIonBatteryComponent {
         this.socSlider = this.container.querySelector('.soc-slider');
         this.socValue = this.container.querySelector('.soc-value');
         this.cellVoltageOut = this.container.querySelector('.cell-voltage');
-        this.plotDiv = this.container.querySelector('.plot-container');
+        this.plotDiv = this.container.querySelector('.bd-container');
     }
 
     /** Sets up the ESBD instance */

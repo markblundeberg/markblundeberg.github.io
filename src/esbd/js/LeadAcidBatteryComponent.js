@@ -115,7 +115,7 @@ class LeadAcidBatteryComponent {
                     </div>
                 </details>
             </div>
-            <div class="plot-container" id="${this.plotDivId}""></div>
+            <div class="bd-container" id="${this.plotDivId}""></div>
         `;
     }
 
@@ -130,7 +130,7 @@ class LeadAcidBatteryComponent {
         this.showHSO4Checkbox = this.container.querySelector(
             '.show-hso4-checkbox'
         );
-        this.plotDiv = this.container.querySelector('.plot-container');
+        this.plotDiv = this.container.querySelector('.bd-container');
     }
 
     /** Sets up the ESBD instance */

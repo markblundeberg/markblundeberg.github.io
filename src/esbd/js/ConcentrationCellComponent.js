@@ -62,7 +62,7 @@ class ConcentrationCellComponent {
 
         // Note: Using classes for elements that JS needs to find within the component instance
         this.container.innerHTML = `
-            <div class="plot-container" id="${this.plotDivId}" "></div>
+            <div class="bd-container" id="${this.plotDivId}" "></div>
             <div class="controls esbd-controls">
                 <div class="control-row">
                     <label class="control-label" for="${c1SliderId}">Concentration C₁ (Left, M):</label>
@@ -107,7 +107,7 @@ class ConcentrationCellComponent {
             `input[type="radio"][name="${this.junctionSelectorName}"]`
         );
         this.cellVoltageOut = this.container.querySelector('.cell-voltage');
-        this.plotDiv = this.container.querySelector('.plot-container'); // Found by class
+        this.plotDiv = this.container.querySelector('.bd-container'); // Found by class
     }
 
     /** Sets up the ESBD instance */
