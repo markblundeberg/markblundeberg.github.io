@@ -7,129 +7,102 @@ eleventyNavigation:
     key: ESBD
 ---
 
-# Band Diagrams for Batteries? An Intuitive Visualization
+# Band Diagrams for Batteries: An Electrochemical Visualization
 
-Mark Lundeberg // 2025 April
+<p align='right'><small><em>Mark Lundeberg // 2025 August</em></small></p>
 
-{# **(Optional: Compelling Header Image/Animation showing a finished ESBD)** #}
+What is the electrical state deep inside of a battery?
 
-Ever looked at a semiconductor device {%wiki "band diagram" %} and thought, "Wow, that makes intuitive sense!"? They clearly show electron and hole energy levels, band bending, equilibria, and driving forces. Band diagrams are the universal visual language of semiconductor devices.
+Plotting the voltage vs. position,
 
-Compare that to electrochemistry — trying to track electrode potentials, reference electrodes, solution potentials ($\phi$), ion chemical potentials ($\mu_i$), activities, junction potentials... it often feels like a confusing soup of concepts, right? What if we could bring some of that band diagram clarity to batteries, fuel cells, electrolysis, and more?
+<figure class="diagram-placeholder">
 
-That's the idea behind **Electrochemical Species Band Diagrams (ESBDs)**. We are going back to basics, using fundamental thermodynamics to define a **species voltage $V_i$** and create a unified visual landscape that handles both electrons and ions. This site explores this framework, with the goal of building <em>intuition</em> for scientists and engineers working across disciplines involving charged species in materials.
+  **plot V vs position with ??? in middle** .<br>
+  vert axis reads 'Voltage'<br>
 
-This page gives a review of basic thermodynamics, and ends with a quick primer on the new $V_i$ idea. At the end, I'll link to further articles that apply this concept to electrochemistry. Let's dive in!
+</figure>
 
-*(If you are already strongly familiar with chemical potential and electrochemical potential, feel free to [skip ahead](#skip_background)!)*
 
-## Chemical potential: 'temperature' for particle flow
+what are we supposed to draw in place of the '???'? A straight line? A sudden jump? Something else? Or is there no useful/meaningful voltage in the electrolyte at all? What about when a battery is discharged, how do we visualize the lossy voltage drops (internal resistances)?
 
-How do mobile particles know where to move and when to react? For any individual particle, this is a mess of microscopic forces. On average though, we can zoom out and talk about statistical tendencies of similar particles, and these tendencies are characterized by the {%wiki "chemical_potential" %} $\mu_i$ for the type/_species_ of particle labelled $i$. Chemical potentials are to particles what temperature $T$ is to energy: when two bodies are in equilibrium they equalize their $\mu_i$'s and $T$'s by exchanging the fungible particles and energy. The chemical potential combines all the per-particle energy, the entropy, the diffusion, the <em>mess</em> ... in just the right way.
+While the equations of electrochemistry are precise, the visual tools for building intuition are often lacking. There is a head-smackingly simple solution to this, which generalizes to vizualize all of electrochemistry, but until now it has been unused and possibly undiscovered.
 
-The dimensions of $\mu_i$ are energy per particle (or for chemists, energy per mole), often units of electron-volts $\mathrm{eV}$ (or for chemists, $\mathrm{kJ/mol}$).
-You may already know the chemical potential by another representation or name: Fugacity. Activity. Water potential. Fermi level. They all encode $\mu_i$.
+## The energy problem
 
-Particles want to go from high $\mu_i$ to low $\mu_i$, as surely as energy wants to go from high $T$ to low $T$. You can think of it as 'particles want to roll downhill'! It's that easy, check out this interactive demo:
+Semiconductor physicists are used to understanding everything in terms of electronic energies, and we use the term "{%wiki "band diagram" %}" referring to a plot electronic energies vs. position. These band diagrams are the primary visual and pedagogical tool for showing what is happening, thermodynamically, inside of semiconductor devices. So, what happens when we try to represent a battery with a regular band diagram?
 
-{% include "esbd-diagrams/mu-driving-force.html" %}
+<figure class="diagram-placeholder">
 
-(Note that this assumes the bodies have equal temperature $T$. From here on I'm going to make the assumption that all the bodies have equal temperature.)
+  **plot $\bar\mu_{\mathrm{e}^-}$ vs position with empty space in middle**.<br>
+  vert axis reads 'Energy'<br>
 
-## The electrochemical potential ($\bar\mu_i$)
+</figure>
 
-There is also **{%wiki "electrochemical potential" %}**, denoted with a little bar on top: $\bar\mu_i$. To avoid some terminology ambiguities, when we talk about charged particles (electrons and ions) we will refer to their proper thermodynamic $\mu_i$ as the electrochemical potential $\bar\mu_i$. It works the same in many ways, like charged particles want to go from high $\bar\mu_i$ to low $\bar\mu_i$. But thermodynamics can get weird with charged particles, as the energy (and thus $\bar\mu_i$) of a charge is sensitive to the average electrostatic potential. So although $\bar\mu_i$ is perfectly well defined in theory, it is not simply dependent on the local material environment.
+We still have a missing middle! But we can be more precise and say _the middle is undefined_: there simply are no free electrons inside the electrolyte.
 
-Unfortunately, when we keep material composition the same but simply change the electrostatic potential by $\Delta\phi$, each charged species' $\bar\mu_i$ is going to depend differently on electrostatic potential. Here $\Delta\phi$ could represent anything from a deliberate control variable to the arbitrary global offset in electrostatic potentials.
+Note: The plotted quantity $\bar\mu_{\mathrm{e}^-}$ is the chemical potential of electrons (also known as {% wiki "electrochemical potential" %} of electrons, or {% wiki "Fermi level" %}). And in fact, it is directly related to the the _thermodynamic_ voltage —i.e., the voltage you can read from a voltmeter, and the useful voltage in terms of driving power— via $V = -\bar\mu_{\mathrm{e}^-}/e$ where $-e$ is the electron charge.
 
-Here's an interactive visualization of how different particles' electrochemical potentials would vary solely due to a change $\Delta\phi$ in the electrostatic potential:
+So our energy diagram literally is an upside down voltage diagram, and this seems to answer firmly "there is no meaningful voltage inside of a battery".
 
-{% include "esbd-diagrams/mu-shift-only.html" %}
+But it is quite unsatisfying to stop at this point. To paraphrase Herbert Kroemer, "if you don't draw a band diagram, then nobody knows what you're talking about".^[https://www.nobelprize.org/uploads/2018/06/kroemer-lecture.pdf] The need for visualizations means that band diagrams do get anyway drawn for batteries, but are often full of misconceptions and unphysical ideas^[cite Peljo] (something I will address in a later article).
 
-Here we've considered hypothetical charged species $\mathrm{A}^{2-}$, $\mathrm{B}^{-}$, $\mathrm{D}^{+}$, $\mathrm{E}^{2+}$, and a neutral species $\mathrm{C}$, all together in a thermodnamic body. The $\bar\mu_i$ levels move all over the place, seemingly at random! Actually, they're moving an amount $z_iF\Delta \phi$ per mole ($F$ is {%wiki "Faraday's constant" %} and $z_i$ is the ionic charge level, $-2$ or $+1$ etc.). If you prefer per-particle, that's $z_i e\Delta \phi$. 
+To make headway, let's recognize something crucial: in batteries, we have both electrons and ions as charge carriers. For example $\mathrm{Li}^+$ ions in the case of lithium-ion batteries. Why should we expect that we can get away with only talking about electronic energies? Why shouldn't we treat the lithium ions on equal footing with the electrons? After all, ions have their own well-defined chemical potential, such as $\bar\mu_{\mathrm{Li}^+}$.
 
-Ionic systems always include at least one positive species and one negative species, and so these charge-dependent shifts in electrochemical potentials make it rather annoying to directly compare $\bar\mu_i$ values in different materials or conditions. If we tried to make a band diagram plotting $\bar\mu_i$ of ions vs position, it would be incredibly hard to interpret as each ion would have different arbitrary offsets.
+Let's try generalizing our plot to include ionic energies:
 
-## How to tame your ion, the usual way
+<figure class="diagram-placeholder">
 
-The traditional approach to deal with the charge-dependent shifts in electrochemical potential is to define an absolute material electrostatic potential $\phi$, and then subtract off each particle's electrostatic energy $z_i F \phi$ to arrive at a clean *internal* chemical potential, $\mu_{\mathrm{int},i} = \bar\mu_i - z_i F \phi$.
+  **plot $\bar\mu_{\mathrm{e}^-}$ and $\bar\mu_{\mathrm{Li}^+}$ vs position**.<br>
+  vert axis reads 'Energy'<br>
+  <br>
+  Sliders let us change 
 
-(Often $\mu_{\mathrm{int},i}$ is called "the chemical potential" and given symbol $\mu_i$, which can create ambiguity. To avoid confusion, I've adopted the unambiguous term "electrochemical potential" $\bar\mu_i$ for the proper, _total_ chemical potential of ions.)
+</figure>
 
-Adapting the previous demo, you can see now that $\mu_{\mathrm{int},i}$ are unaffected by $\Delta\phi$:
+Fantastic, we have filled the gap and closed the circuit! Unfortunately, such a diagram has a serious flaw: if we change the overall voltage offset (try moving the slider above), the energies do not move in unison (because the electron and ion have different charges). In other words, this loses an important _vertical invariance_ feature of band diagrams, which is that the overall vertical offset is arbtrary, and it is only the energy differences that are of interest. So, just one more small but crucial tweak is needed...
 
-{% include "esbd-diagrams/mu-shift-mu-internal.html" %}
+## The $V_i$ solution
 
-This approach of partitioning off the $\phi$ dependence is quite helpful as $z_i F \phi$ seems simple and $\mu_{\mathrm{int},i}$ contains normal-ish chemistry. It does however mean that for electrochemical processes, it doubles the driving forces that we have to consider: an internal chemical component and an electrostatic component, which anyway sum to the total driving force (from $\bar\mu_i$). And there are serious difficulties with actually measuring $\phi$ in the lab. And it doesn't bring us close to having an ionic band diagram. So this decomposition with $\phi$ does complicate things.
+Before we saw our electronic voltage, why not just generalize this to ions as well:
 
-What if we could regularize the charge-dependent shifts in $\bar\mu_i$ some other way?
+$$ V_i = \frac{\bar\mu_i}{q_i}, $$
 
-## <a name="skip_background"></a> We observe electrochemical potentials
+where $q_i$ is the charge of the species: $-e$ for electrons, $+e$ for lithium ions, and so on for any kind of charge carrier. I call this quantity $V_i$ the **species voltage** -- it can be either the usual electronic voltage (now $V_{\mathrm{e}^-}$), or an ionic voltage ($V_{\mathrm{Li}^+}$).
 
-Voltmeters are our primary instrument for measuring electrical phenomena. What do they _actually_ measure? What is "voltage" really?
+>If we are working in chemistry units, then both $\bar\mu_i$ and $q_i$ should be molar quantities, i.e., $q_i = z_i F$ where $z_i$ is the charge level (-2, +1, etc.) and $F$ is the Faraday constant. So $\bar\mu_i$ would be in joule/mol and $q_i$ in coulomb/mol. Then:
 
-The truth is that a voltmeter is a thermodynamic device: it lets a tiny number of electrons flow in, and it measures their potential for work, according to their electrochemical potential $\bar\mu_{\mathrm{e}^-}$. When you attach a voltmeter's probes to body 1 and body 2, the number you see on its display is $ \Delta V = -[\bar\mu_{\mathrm{e}^-}(\text{body 2}) - \bar\mu_{\mathrm{e}^-}(\text{body 1})]/F$, or if you prefer per-particle then $/e$. In other words, the 'absolute voltage' probed by a voltmeter is not electrostatic potential $\phi$ but instead something that depends on the electrochemical potential of electrons. Let's define our absolute voltage $V_{\mathrm{e}^-}$ as:
+>$$ V_i = \frac{\bar\mu_i}{z_i F}, $$
 
-$$V_{\mathrm{e}^-} = \frac{\bar{\mu}_{\mathrm{e}^-}}{-F}.$$
+> Either way, the final answer $V_i$ is a voltage quantity (measured in V: volts). 
 
-and so $ \Delta V = V_{\mathrm{e}^-}(\text{body 2})- V_{\mathrm{e}^-}(\text{body 1})$. The voltmeter reads 0 when there is no driving force (equal $\bar\mu_{\mathrm{e}^-}$ and equal $V_{\mathrm{e}^-} $), easy! 
+Let's re-plot our battery with this new representation. I call these diagrams **electrochemical species band diagrams** (ESBD).
 
-Unfortunately, the common view is that voltmeters access differences in electrostatic potential $\phi$. But this is only true in special cases where the $\phi$ difference happens to match the $V_{\mathrm{e}^-}$ difference, like if the two probed bodies have identical material composition. Unlearning the "voltmeters measure $\phi$" idea is crucial for semiconductor engineers who want to really grok semiconductor band diagrams, that relate internals of semiconductor devices to external voltages. The Fermi level, which is $\bar{\mu}_{\mathrm{e}^-}$, plays a central role in all semiconductor devices.
+<figure class="diagram-placeholder">
 
-But what about ions? This $V_{\mathrm{e}^-}$ is such a powerful concept for electronics, and yet, we don't have "ionic voltages". Of course everyday voltmeters are electron-only. But let's at least _mathematically_ try to treat ions on equal footing with electrons and see where that gets us.
+  **plot $V_i$ vs position**.<br>
+  vert axis reads 'Species voltage'<br>
+  <br>
+  Same data and sliders as previous plot -- only change is the representation.
 
-## Meet $V_i$: a voltage for ions, too
+</figure>
 
-Let's define a **species voltage, $V_i$**, for _any_ charged species $i$:
+(and you can try moving a slider again to see: everything moves together!)
 
-$$V_i = \frac{\bar\mu_i}{z_i F}$$
+Here we can finally see how the battery works, and a satisfying answer to 'what is in the middle of a battery' -- it's ionic voltages!
 
-This is the big idea. We just divide the energy per mole by the charge per mole (for per-particle that's $V_i = \bar\mu_i / (z_i e)$). That seems simple, maybe _too_ simple? Stick around, because this scaling has a profound consequence on the way that we can visualize electrochemistry.
+I want to emphasize why this is uniquely powerful:
 
-Let's try shifting that electrostatic offset one final time, for those variously charged species:
+* It represents electrons and ions equally.
+* It takes energy diagrams back into the hands-on realm of electronics (voltages).
+* Charge movement is clear, as each species diffuses according to its $V_i$ curve: downhill for positive charges, and uphill for negative charges.
+* Electrochemical reactions now manifest as voltage differences, $V_i - V_j$.
+* We will even see electrochemical standard states manifest as reference levels $V_i^\circ$, much like semiconductor band edges.
+* It remains directly connected to the most fundamental thermodynamic descriptor of charged species: their electrochemical potentials.
 
-{% include "esbd-diagrams/mu-V-unison-shift.html" %}
-
-_Aha_! The $V_i$ levels for all charged species **shift together** by the exact same amount ($\Delta V_i = \Delta \phi$)! It's no longer as messy, although, we haven't fully gotten rid of the effect of $\Delta \phi$? Also there is no $V_{\rm C}$ for our uncharged $C$ species. That's all okay, we actually want it that way.
-
-(Readers who know semiconductor band diagrams might recognize this shifting-together property. It is a fundamental trait of band diagrams that makes them work.)
-
-Remember before when we talked about particles going downhill in $\bar\mu$? Welcome to the the $V_i$ world, it's a little different but you'll get used to it:
-
-- **Cations ($z > 0$)** want to move from **high $V_+$ to low $V_+$**. (They "fall down" their $V_i$ landscape).
-- **Anions ($z < 0$)** want to move from **low $V_-$ to high $V_-$**. (They "float up" their $V_i$ landscape).
-- If the $V_i$ for a given species is flat, then that species is in equilibrium and there is no driving force.
-
-That might sound familiar too, it's just the thermodynamic version of positive charges in a vacuum getting pushed from high $\phi$ to low $\phi$, or vice versa for negative charges! The big difference is, now each species of particle experiences a different voltage landscape $V_i$. That's because $V_i$ includes some chemical energy, which will differ from species to species.
-
-Let me highlight the mental shift we want to make: **Inside a conductive material with multiple mobile species of charges, there is no single potential. Every charged species $i$ "rides" a slightly different voltage $V_i$.**
-
-## Introducing the Diagram: $V_i$ vs $x$
-
-Okay, so $V_i$ gives us a consistent way to view potentials that shift uniformly. But devices have different materials and potentials change with _position_, $x$. We need to plot $V_i$ vs. $x$!
-
-This leads us to the **Electrochemical Species Band Diagram (ESBD)**. Here's a first look at one for a textbook system (don't worry about understanding every line just yet!):
-
-{% include "esbd-diagrams/esbd-concentration-cell-agno3.html" %}
-
-This is a silver nitrate {%wiki "concentration cell" %}: two solutions with differing concentrations of dissolved $\mathrm{AgNO}_3$, connected to each other by an ionic junction.A measurable voltage ($V_{\mathrm{e}^-}$ difference) develops in two silver metal electrodes that are dipped in the solutions.
-
-You can see different lines representing the $V_i$ for different species ($V_{e^-}$, $V_{\mathrm{Ag}^{+}}$, $V_{\mathrm{NO}_3^{-}}$) across different regions (electrodes, electrolytes). Features like the standard state potentials ($V^\circ$) or interface reaction markers ($\rightleftharpoons$) provide more context, which we'll explore later. The key idea is visualizing the potential landscape for _all_ relevant charged species vs. position.
-
-It's just like a band diagram!
-
-- $V_i$ are like Fermi levels.
-- The standard states $V^\circ_i$ are like the band edges, rigidly keeping space with each other by a constant 'bandgap'.
-- All the relative levels are invariant to global shifts in electrostatic potential (the shifting-together property), and the y-axis offset has no meaning.
-
-To the semiconductor people: It's not just an analogy; if we applied this method to a semiconductor device, our diagram would be _exactly_ a band diagram... only upside down. To make it a bit more comfortable, I've added an 'eV' button that plots "electronic energy" $E_i = -e V_i$, flipping it to what we're used to and making $E_{\mathrm{e}^-} = \text{Fermi level}$. But I have come to believe the $V_i$ form is the more natural form when we want to include ionics, and it just takes getting used to. We'll explore the connection to classic band diagrams in a later topic below.
-
-To the electrochemists: if you find $V_i$ and these diagrams strange, just remember we can connect it back: $V_i = \phi + \tfrac{1}{z_i F}\mu_{\mathrm{int},i} = \phi + \tfrac{1}{z_i F} \mu^\circ_i + \tfrac{RT}{z_i F} \ln a_i$. In general I'm going to avoid plotting $\phi$ and prioritize discussions of $V_i$. We'll get back to that more in a later topic where we discuss how the usual electrochemical potentials (electrode, junction, redox, etc.) are precisely connected to $V_i$.
+And, this goes beyond just batteries, as it really offers an alternative mental framework for how to think about all electrochemical phenomena. In this framework it is never even needed to bring up the inaccessible concept of an in-material electrostatic potential ($\phi$).
 
 ## Explore More
 
 Intrigued? The real power of ESBDs becomes apparent when applied to various systems. Explore these topics through interactive diagrams and detailed explanations by clicking on a topic below:
-
-[work in progress below!]
 
 {% include "esbd_topic_list.md" %}
