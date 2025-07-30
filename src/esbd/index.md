@@ -59,7 +59,7 @@ Let's re-plot our battery with this new representation. I call these diagrams **
 
 (You can try moving the offset slider again to see vertical invariance is restored: everything shifts together nicely now.)
 
-Here we can finally see how the battery works, and we have a satisfying answer to 'what is in the middle of a battery' — it's the landscape of ionic voltages!
+Here we can finally see how the battery works, and we have a satisfying answer to 'what is in the middle of a battery' — it's the landscape of ionic voltages! In this case, the voltage $V_{\mathrm{Li}^+}$ sits just below $V_{\mathrm{e}^-}$ in the anode due to how loosely the ions are bound in the anode (typically graphite), whereas the $V_{\mathrm{Li}^+}$ sits far below $V_{\mathrm{e}^-}$ in the cathode (e.g. $\mathrm{LiFePO_4}$) due to the lithium ions being very tightly bound there. Anyway, we will get back more into the details of lithium-ion batteries later on.
 
 I want to emphasize why this is uniquely powerful:
 
