@@ -15,12 +15,7 @@ What is the electrical state deep inside of a battery?
 
 If we try to visualize this by plotting voltage versus position, we immediately run into a mystery. We know the voltage at the anode (negative terminal) and the cathode (positive terminal), but what about the electrolyte in between?
 
-<figure class="diagram-placeholder">
-
-  **Plot: Voltage vs. Position**<br>
-  (Anode) ---- ??? ---- (Cathode)<br>
-
-</figure>
+{% include "esbd-diagrams/bd-basicbattery-voltage-missing.html" %}
 
 What are we supposed to draw in place of the '???'? A straight line? A sudden jump? The mystery deepens when we try to understand more complex situations; how can we visualize the voltage drops from internal resistance during battery discharge?
 
@@ -30,12 +25,7 @@ While the equations of electrochemistry are precise, the visual tools for buildi
 
 Semiconductor physicists are used to understanding everything in terms of electronic energies, and we use the term "{%wiki "band diagram" %}" to refer to a plot of electronic energies vs. position. These band diagrams are the primary visual and pedagogical tool for showing what is happening, thermodynamically, inside semiconductor devices. So, what happens when we try to represent a battery with a regular band diagram?
 
-<figure class="diagram-placeholder">
-
-  **Plot: Energy ($\bar\mu_{\mathrm{e}^-}$) vs. Position**<br>
-  (Anode) ---- ??? ---- (Cathode)<br>
-
-</figure>
+{% include "esbd-diagrams/bd-basicbattery-energy-missing.html" %}
 
 We still have a missing middle! We can be more precise and say _the middle is undefined_: there simply are no free electrons inside the electrolyte to define an energy level for.
 
@@ -49,12 +39,7 @@ To make headway, let's recognize something crucial: in batteries, electrons are 
 
 Let's try generalizing our plot to include ionic energies:
 
-<figure class="diagram-placeholder">
-
-  **Interactive Plot: Energy ($\bar\mu_i$ and $\bar\mu_{\mathrm{Li}^+}$) vs. Position**<br>
-  (Sliders would demonstrate the inconsistent shifting of levels)
-
-</figure>
+{% include "esbd-diagrams/bd-basicbattery-energy-ion-too.html" %}
 
 Fantastic, we have filled the gap and closed the circuit! Unfortunately, such a diagram has a serious flaw: if we change the overall electrostatic offset of the system (try moving the slider), the energy levels for the electron and the ion move in opposite directions because of their opposite charges. This breaks a key principle of energy diagrams: the absolute vertical position is arbitrary, and only the *differences* between levels should have physical meaning. Here, the energy gap between the electron and ion levels changes with the offset, making the diagram ambiguous. So, just one more small but crucial tweak is needed...
 
@@ -70,12 +55,7 @@ where $q_i$ is the charge of the species: $-e$ for electrons, $+e$ for lithium i
 
 Let's re-plot our battery with this new representation. I call these diagrams **electrochemical species band diagrams (ESBDs)**.
 
-<figure class="diagram-placeholder">
-
-  **Interactive Plot: Species Voltage ($V_i$) vs. Position**<br>
-  Same data and sliders as previous plot -- only change is the representation.
-
-</figure>
+{% include "esbd-diagrams/bd-basicbattery-voltage-esbd.html" %}
 
 (You can try moving the offset slider again to see vertical invariance is restored: everything shifts together nicely now.)
 

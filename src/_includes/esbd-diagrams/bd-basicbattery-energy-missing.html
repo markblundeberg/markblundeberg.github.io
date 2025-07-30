@@ -1,0 +1,50 @@
+<figure class="demo-container" style="max-width: 300px">
+    <div class="bd-container" id="bd-basicbattery-energy-missing"></div>
+</figure>
+
+<script type="module">
+    const plotContainerId = 'bd-basicbattery-energy-missing';
+
+    import BandDiagram from '{{ esbdJsPath }}BandDiagram.js';
+
+    const diagram = new BandDiagram(plotContainerId);
+
+    // Set layout
+    const boundaries = [0.0, 0.3, 0.7, 1.0];
+    diagram.setSpatialLayout(boundaries, [
+        { name: 'Anode', color: '#AAAAAA' },
+        { name: 'Electrolyte', color: '#E6F5FF' },
+        { name: 'Cathode', color: '#AAAAAA' },
+    ]);
+
+    diagram.setYLabel('Electron energy (eV)');
+    diagram.setYRange(-4.1, +0.8);
+
+    const V_anode = 0.0;
+    const V_cathode = 3.3;
+
+    const b = boundaries;
+    diagram.updateTraceData([
+        {
+            id: 'anode_trace',
+            label: '\\bar\\mu_{\\mathrm{e}^-}',
+            showLabel: true,
+            x: [b[0], b[1]],
+            y: [-V_anode, -V_anode],
+        },
+        // {
+        //     id: 'unk_trace',
+        //     label: '???',
+        //     showLabel: true,
+        //     x: [b[1], b[2]],
+        //     y: [1.5, 3.5],
+        // },
+        {
+            id: 'cathode_trace',
+            label: '\\bar\\mu_{\\mathrm{e}^-}',
+            showLabel: true,
+            x: [b[2], b[3]],
+            y: [-V_cathode, -V_cathode],
+        },
+    ]);
+</script>

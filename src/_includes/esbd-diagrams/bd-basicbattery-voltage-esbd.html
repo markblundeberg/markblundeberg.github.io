@@ -1,0 +1,93 @@
+{% set idprefix = ["bd-basicbattery-energy-esbd-", idsuffix] | join %}
+<figure class="demo-container" style="max-width: 300px">
+    <div class="bd-container" id="{{ idprefix }}"></div>
+
+    <div style="text-align: center">
+        <div>
+            <label for="{{ idprefix }}-dphi-slider" style="font-size: 0.85em"
+                >Electrostatic change $\Delta\phi$:</label
+            >
+            <br />
+            <input
+                type="range"
+                id="{{ idprefix }}-dphi-slider"
+                min="-0.7"
+                max="0.7"
+                step="any"
+                value="0.0"
+                style="width: 100px"
+            />
+        </div>
+    </div>
+</figure>
+
+<script type="module">
+    const plotContainerId = '{{ idprefix }}';
+    const sliderId = '{{ idprefix }}-dphi-slider';
+
+    import BandDiagram from '{{ esbdJsPath }}BandDiagram.js';
+    import { throttle } from '{{ esbdJsPath }}utils.js';
+
+    const throttleDuration = 100; // should be 1/5 or less of transitionDuration
+
+    const diagram = new BandDiagram(plotContainerId);
+    const dPhiSlider = document.getElementById(sliderId);
+
+    // Set layout
+    const boundaries = [0.0, 0.3, 0.7, 1.0];
+    diagram.setSpatialLayout(boundaries, [
+        { name: 'Anode', color: '#AAAAAA' },
+        { name: 'Electrolyte', color: '#E6F5FF' },
+        { name: 'Cathode', color: '#AAAAAA' },
+    ]);
+
+    diagram.setYLabel('Species voltage (V)');
+    diagram.setYRange(-0.8, +4.1);
+
+    const li_color = '#E41A1C';
+    const electron_color = '#377EB8';
+
+    function updateDiagrams() {
+        const dphi = parseFloat(dPhiSlider.value);
+
+        const V_Li = -0.1 + dphi;
+        const V_anode = 0.0 + dphi;
+        const V_cathode = 3.3 + dphi;
+
+        const b = boundaries;
+        diagram.updateTraceData([
+            {
+                id: 'anode_trace',
+                label: 'V_{\\mathrm{e}^-}',
+                showLabel: true,
+                color: electron_color,
+                x: [b[0], b[1]],
+                y: [V_anode, V_anode],
+            },
+            {
+                id: 'li_trace',
+                label: 'V_{\\mathrm{Li}^+}',
+                showLabel: true,
+                color: li_color,
+                x: [b[1], b[2]],
+                y: [V_Li, V_Li],
+            },
+            {
+                id: 'cathode_trace',
+                label: 'V_{\\mathrm{e}^-}',
+                showLabel: true,
+                color: electron_color,
+                x: [b[2], b[3]],
+                y: [V_cathode, V_cathode],
+            },
+        ]);
+    }
+
+    // Slider event listener - throttle it.
+    dPhiSlider.addEventListener(
+        'input',
+        throttle((event) => updateDiagrams(), throttleDuration)
+    );
+
+    updateDiagrams();
+</script>

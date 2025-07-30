@@ -1,0 +1,52 @@
+<figure class="demo-container" style="max-width: 300px">
+    <div class="bd-container" id="bd-basicbattery-voltage-missing"></div>
+</figure>
+
+<script type="module">
+    const plotContainerId = 'bd-basicbattery-voltage-missing';
+
+    import BandDiagram from '{{ esbdJsPath }}BandDiagram.js';
+
+    const diagram = new BandDiagram(plotContainerId);
+
+    // Set layout
+    const boundaries = [0.0, 0.3, 0.7, 1.0];
+    diagram.setSpatialLayout(boundaries, [
+        { name: 'Anode', color: '#AAAAAA' },
+        { name: 'Electrolyte', color: '#E6F5FF' },
+        { name: 'Cathode', color: '#AAAAAA' },
+    ]);
+
+    diagram.setYLabel('Voltage (V)');
+    diagram.setYRange(-0.8, +4.1);
+
+    const V_anode = 0.0;
+    const V_cathode = 3.3;
+
+    const b = boundaries;
+    diagram.updateTraceData([
+        {
+            id: 'anode_trace',
+            label: 'V',
+            showLabel: true,
+            x: [b[0], b[1]],
+            y: [V_anode, V_anode],
+        },
+        {
+            id: 'unk_trace',
+            label: '???',
+            showLabel: true,
+            color: '#666',
+            style: { dasharray: '3,3', lineWidth: 3 },
+            x: [b[1], b[2]],
+            y: [0.5, 3.1],
+        },
+        {
+            id: 'cathode_trace',
+            label: 'V',
+            showLabel: true,
+            x: [b[2], b[3]],
+            y: [V_cathode, V_cathode],
+        },
+    ]);
+</script>
