@@ -13,9 +13,7 @@ eleventyNavigation:
 
 ## How did this come about?
 
-I distinctly recall I first had the idea of the $-\bar\mu_i/z_i$ scaling in 2013 or so, when I was finishing [my thesis](http://hdl.handle.net/2429/45614) and finally learning properly about various subtleties of semiconductor physics. But, I promptly dropped the idea upon recognizing how it would 'compress' the internal energy scales of higher charges which seemed unattractive, and anyway, I had my just started a postdoc and had work to do! In any case, my ongoing passion for statistical mechanics and thermodynamics was born in those days, and it has stayed with me even after I left my postdoc and academia in 2017. One thing I never quite understood was electrochemistry, which made a bit of cognitive dissonance, but I forgot about it for a while.
-
-From time to time, I've updated related articles on wikipedia and created various figures.
+I distinctly recall I first had the idea of the $-\bar\mu_i/z_i$ scaling in 2013 or so, when I was finishing [my PhD thesis](http://hdl.handle.net/2429/45614). I have to admit the embarassing fact that only then was I finally learning properly about various subtleties of semiconductor physics. However I was busy with postdoc work, and I didn't quite appreciate the $-\bar\mu_i/z_i$ thing, so I soon forgot about the idea. But, my ongoing passion for statistical mechanics and thermodynamics was born in those days, and it has stayed with me even after I left my postdoc and academia in 2017. One thing I never quite understood was electrochemistry.
 
 In early 2025, once again I got obsessed about chemical potential. It is a sad thing that this fundamental thermodynamic concept is not more appreciated! See Baierlein's ["The elusive chemical potential"](https://doi.org/10.1119/1.1336839) and Job&Hermann's ["Chemical potential—a quantity in search of recognition"](https://dx.doi.org/10.1088/0143-0807/27/2/018).
 
@@ -23,7 +21,11 @@ So once again I got to wondering how do batteries work (from a solid state physi
 
 Various follow-on points, like moving from 'energy scale' $-\bar\mu_i/z_i$ to 'voltage scale' ($V_i = \bar\mu/(z_i F)$), and the standard states, came later after working out various implications. I also eventually had to switch to Gemini 2.5 Pro model in order to get some help with javascript coding. I am proficient with python and matplotlib but I really wanted to make nice client-side, interactive, and responsive diagrams. Initially we tried [plotly.js](https://plotly.com/javascript/), but ultimately [D3.js](https://d3js.org/) was the way to go.
 
-Insofar as this is a creative research process, I would say that the LLMs are not scientifically creative at all, or at least I didn't prompt them so. However, they were extremely beneficial for bouncing ideas off, and critiquing my ideas (and I come up with plenty of stupid ideas).
+Recently people are interested in how AI can help productivity in research. I would say:
+* Insofar as this is a creative research process, I would say that the LLMs are not scientifically creative at all,
+* AIs are however extremely beneficial for bouncing ideas off, and critiquing my ideas (and I come up with plenty of stupid ideas). They demonstrate a good level of understanding even with entirely novel concepts.
+* Recent updates over the last several months have made them more supportive ('glazing' as people say), which unfortunately means they are too encouraging about every idea (even bad ones), less critical.
+* AIs are seriously fantastic for helping dip your feet into a new programming language, framework, system. Though they don't make the best code, they can quickly help you learn what you need to know to do things right.
 
 ## This can't possibly be new.
 
@@ -66,8 +68,8 @@ So, "species voltage" for $V_i$ because:
 
 * I just can't bring myself to add yet another "potential" to the above list.
 * The concept of "absolute voltage", though technically improper, is widespread as evident by the term "voltage difference".
-* The term "potential" frequently is also unclear as it gets abused the other way, to mean "potential difference".
-* Differences in $V_i$ are (at least in principle) directly observable by generalized 'voltmeters', so they have a more hands-on and less abstract feeling. Many potentials in the above list are not at all hands-on, and tend to be fundamentally ill-defined due to being contaminated by ambiguity in defining $\phi$ inside of materials.
+* The term "potential" is in fact also unclear as it frequently gets abused the other way, to mean "potential difference", even a local potential difference.
+* Not only is $V_{\mathrm{e}^-}$ exactly the voltage in the usual (electronics) sense, but all differences in $V_i$ are in principle just as accessible via generalized 'voltmeters', so they have a more hands-on and less abstract feeling. (Many potentials in the above list are not at all hands-on but rather fundamentally inacessible and ill-defined due to being contaminated by the concept of in-material $\phi$.)
 * I have always loved electronic circuits, and I think it is wonderful that we can bring ions into the world of electronics, where "voltage" is the right term.
 
 ### Why not "ion voltage"?
