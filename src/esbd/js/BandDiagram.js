@@ -523,8 +523,8 @@ class BandDiagram {
         // Scales & Axes
         this.xScale = d3.scaleLinear();
         this.yScale = d3.scaleLinear();
-        this.xAxisGen = d3.axisBottom(this.xScale);
-        this.yAxisGen = d3.axisLeft(this.yScale);
+        this.xAxisGen = d3.axisBottom(this.xScale).tickSizeOuter(0);
+        this.yAxisGen = d3.axisLeft(this.yScale).tickSizeOuter(0);
         this.xAxisGroup = this.plotArea.append('g').attr('class', 'bd-x-axis');
         this.yAxisGroup = this.plotArea.append('g').attr('class', 'bd-y-axis');
 
