@@ -36,9 +36,11 @@ There are actually many other attempts at band diagrams for electrochemistry. To
 
 I haven't investigated them in detail but a quick glance shows they are very different. One thing I notice is a reliance on "vacuum level" as a useful concept, which [immediately makes me skeptical](../phi/).
 
-## Why "species voltage"?
+## Why "species voltage"? Aren't voltages supposed to be differences?
 
-I strugged with this a fair bit. The main problem is that $V_i = \bar\mu_i/(z_i F)$ is an 'absolute' or unreferenced potential, whereas technically a voltage should be a potential difference. So then, I should have named it as "species potential", or maybe "electrochemical potential potential" (just kidding on that one).
+I struggled with this a fair bit! "Species voltage" is an improper term in that the quantity is actually of the type "electric potential", i.e., $V_i$ is an 'absolute' or unreferenced potential. In contrast, technically a voltage means a potential difference. We talk about the voltage on power lines (between wires), or the voltage of a battery (between terminals), but we are not supposed to talk about the voltage on a single wire.
+
+So then, I should have named it as "species potential", or maybe "electrochemical potential potential" (just kidding on that one)?
 
 However, I believe any term with "potential" is just going to add to existing confusion. To quote the fantastic paper by Boettcher et al., ["Potentially Confusing: Potentials in Electrochemistry"](https://doi.org/10.1021/acsenergylett.0c02443), we have already:
 
@@ -54,14 +56,19 @@ Some of these are absolute and some are in fact potential differences. And to ad
 * Liquid junction potential (volt units)
 * Galvani potential (volt units)
 * Donnan potential (volt units)
-* Cell potential (volt units) -- this one is literally voltmeter voltage!
+* Cell potential (volt units)
+
+The last one is particularly ironic as it literally is a voltage in the proper sense.
+
+On the other hand, in the field of electronics and in most casual conversation, we are perfectly comfortable with talking absolute voltages, or at least voltages that are measured *with respect to a globally-defined reference point* (ground/common/earth). This is so common that we often use term "voltage difference" or differential voltage to unambiguously describe what we are technically supposed to simply call "voltage" i.e. potential difference. So, I would say $V_i$ are perfectly acceptable "voltage"s, and indeed my recommendation is to borrow the tradition of using the electrical ground as the our reference point. To be precise, we set $V_{\mathrm{e}^-} = 0$ at the electrical ground. This electronic ground in turn fixes the entire system of $V_i$ values!
 
 So, "species voltage" for $V_i$ because:
 
 * I just can't bring myself to add yet another "potential" to the above list.
-* The concept of "absolute voltage" though technically improper, is widespread as can be seen by the frequent use of the term "voltage difference".
-* Differences in $V_i$ are (at least in principle) directly observable by generalized 'voltmeters', so they have a more hands-on and less abstract feeling.
-* I have always loved electronic circuits. I like the idea of putting electronics and ionics on the same playing field, just perturbed with the idea that 'each charged species rides a slightly different voltage'.
+* The concept of "absolute voltage", though technically improper, is widespread as evident by the term "voltage difference".
+* The term "potential" frequently is also unclear as it gets abused the other way, to mean "potential difference".
+* Differences in $V_i$ are (at least in principle) directly observable by generalized 'voltmeters', so they have a more hands-on and less abstract feeling. Many potentials in the above list are not at all hands-on, and tend to be fundamentally ill-defined due to being contaminated by ambiguity in defining $\phi$ inside of materials.
+* I have always loved electronic circuits, and I think it is wonderful that we can bring ions into the world of electronics, where "voltage" is the right term.
 
 ### Why not "ion voltage"?
 
