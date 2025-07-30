@@ -22,7 +22,7 @@ If we try to visualize this by plotting voltage versus position, we immediately 
 
 </figure>
 
-What are we supposed to draw in place of the '???'? A straight line? A sudden jump? Or is there no useful or meaningful voltage in the electrolyte at all? When a battery is in use, how can we visualize the voltage drops from internal resistance?
+What are we supposed to draw in place of the '???'? A straight line? A sudden jump? Or is there no useful or meaningful voltage in the electrolyte at all? The mystery deepens when we try to understand more complex situations; how can we visualize the lossy voltage drops from internal resistance during battery discharge?
 
 While the equations of electrochemistry are precise, the visual tools for building intuition are often lacking. There is a head-smackingly simple solution to this, which generalizes to visualize all of electrochemistry, but until now it has been unused.
 
@@ -94,20 +94,21 @@ Let's re-plot our battery with this new representation. I call these diagrams **
 
 </figure>
 
-(You can try moving the offset slider again to see: everything moves together nicely now.)
+(You can try moving the offset slider again to see vertical invariance is restored: everything shifts together nicely now.)
 
 Here we can finally see how the battery works, and a satisfying answer to 'what is in the middle of a battery' — it's the landscape of ionic voltages!
 
 I want to emphasize why this is uniquely powerful:
 
-* It represents electrons and ions equally as first-class charge carriers.
-* It takes energy diagrams back into the hands-on realm of electronics (voltages).
-* Charge movement is clear: positive charge moves from high to low $V_i$, and negative charge moves from low to high $V_i$.
-* Electrochemical reactions now manifest as voltage differences, $V_i - V_j$.
-* We will even see ionic standard states manifest as reference levels $V_i^\circ$, much like semiconductor band edges.
-* It remains directly connected to the most fundamental thermodynamic descriptor of charged species: their electrochemical potentials.
+* It **represents electrons and ions equally** as first-class charge carriers.
+* It takes energy diagrams back into the **hands-on** realm of electronics (voltages).
+* **Charge transport is unambiguous**: positive charges want to move from high to low $V_i$, and negative charges move from low to high $V_i$.
+* **Electrochemical reactions appear** as voltage differences, $V_i - V_j$.
+* We will even **see the ionic standard states** as reference levels $V_i^\circ$, functioning like semiconductor band edges.
+* We never rely on the ill-defined extra-thermodynamic concept of an in-material electrostatic potential ($\phi$), rather:
+* We **directly represent the fundamental thermodynamics** of charged species: their electrochemical potentials.
 
-This goes beyond just batteries, offering an alternative mental framework for all electrochemical phenomena, without ever needing to bring up the inaccessible concept of an in-material electrostatic potential ($\phi$).
+Ultimately, I found that what started out as a niche picture about batteries has turned into an refreshing alternative mental framework for all electrochemical phenomena.
 
 ## Explore More
 
