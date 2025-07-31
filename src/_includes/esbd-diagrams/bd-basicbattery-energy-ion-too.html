@@ -4,6 +4,29 @@
 
     <div style="text-align: center">
         <div>
+            <label for="{{ idprefix }}-current-slider" style="font-size: 0.85em"
+                >Current (<b
+                    ><span id="{{ idprefix }}-current-text"
+                        >equilibrium</span
+                    ></b
+                >):</label
+            >
+            <br />
+            <input
+                type="range"
+                id="{{ idprefix }}-current-slider"
+                list="{{ idprefix }}-current-slider-datalist"
+                min="-1"
+                max="1"
+                step="any"
+                value="0.0"
+                style="width: 100px"
+            />
+            <datalist id="{{ idprefix }}-current-slider-datalist">
+                <option value="0" label="0">0</option>
+            </datalist>
+        </div>
+        <div>
             <label for="{{ idprefix }}-dphi-slider" style="font-size: 0.85em"
                 >Electrostatic change $\Delta\phi$:</label
             >
@@ -23,7 +46,9 @@
 
 <script type="module">
     const plotContainerId = '{{ idprefix }}';
-    const sliderId = '{{ idprefix }}-dphi-slider';
+    const dPhiSliderId = '{{ idprefix }}-dphi-slider';
+    const currentSliderId = '{{ idprefix }}-current-slider';
+    const currentTextId = '{{ idprefix }}-current-text';
 
     import BandDiagram from '{{ esbdJsPath }}BandDiagram.js';
     import { throttle } from '{{ esbdJsPath }}utils.js';
@@ -31,7 +56,9 @@
     const throttleDuration = 100; // should be 1/5 or less of transitionDuration
 
     const diagram = new BandDiagram(plotContainerId);
-    const dPhiSlider = document.getElementById(sliderId);
+    const dPhiSlider = document.getElementById(dPhiSliderId);
+    const currentSlider = document.getElementById(currentSliderId);
+    const currentText = document.getElementById(currentTextId);
 
     // Set layout
     const boundaries = [0.0, 0.3, 0.7, 1.0];
@@ -44,15 +71,33 @@
     diagram.setYLabel('Electron/ion energy (eV)');
     diagram.setYRange(-4.1, +0.8);
 
+    const R_anode = 0.05;
+    const R_cathode = R_anode;
+    const R_Li = 0.2;
+    const OCV_anode = 0.1;
+    const OCV_cathode = 3.4;
+
     const li_color = '#E41A1C';
     const electron_color = '#377EB8';
 
     function updateDiagrams() {
         const dphi = parseFloat(dPhiSlider.value);
+        const current = parseFloat(currentSlider.value);
 
-        const V_Li = -0.1 + dphi;
-        const V_anode = 0.0 + dphi;
-        const V_cathode = 3.3 + dphi;
+        if (current > 0) {
+            currentText.textContent = 'discharging⇨';
+        } else if (current < 0) {
+            currentText.textContent = '⇦charging';
+        } else {
+            currentText.textContent = 'equilibrium';
+        }
+
+        const V_left = 0.0 + dphi;
+        const V_anode = V_left - current * R_anode;
+        const V_Li_left = V_anode - OCV_anode;
+        const V_Li_right = V_Li_left - current * R_Li;
+        const V_cathode = V_Li_right + OCV_cathode;
+        const V_right = V_cathode - current * R_cathode;
 
         const b = boundaries;
         diagram.updateTraceData([
@@ -62,7 +107,7 @@
                 showLabel: true,
                 color: electron_color,
                 x: [b[0], b[1]],
-                y: [-V_anode, -V_anode],
+                y: [-V_left, -V_anode],
             },
             {
                 id: 'li_trace',
@@ -70,7 +115,7 @@
                 showLabel: true,
                 color: li_color,
                 x: [b[1], b[2]],
-                y: [+V_Li, +V_Li],
+                y: [+V_Li_left, +V_Li_right],
             },
             {
                 id: 'cathode_trace',
@@ -78,16 +123,18 @@
                 showLabel: true,
                 color: electron_color,
                 x: [b[2], b[3]],
-                y: [-V_cathode, -V_cathode],
+                y: [-V_cathode, -V_right],
             },
         ]);
     }
 
-    // Slider event listener - throttle it.
-    dPhiSlider.addEventListener(
-        'input',
-        throttle((event) => updateDiagrams(), throttleDuration)
+    // Slider event listeners - throttle them.
+    const updateThrottler = throttle(
+        (event) => updateDiagrams(),
+        throttleDuration
     );
+    dPhiSlider.addEventListener('input', updateThrottler);
+    currentSlider.addEventListener('input', updateThrottler);
 
     updateDiagrams();
 </script>
