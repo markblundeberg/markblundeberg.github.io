@@ -475,7 +475,7 @@ class BandDiagram {
         // 5. Draw Data Elements (these use transitions internally)
         this._drawTraces();
         this._drawVerticalMarkers();
-        this._drawLabels();
+        this._drawTraceLabels();
     }
 
     // ========================================================================
@@ -555,9 +555,9 @@ class BandDiagram {
             .append('g')
             .attr('class', 'bd-vertical-markers')
             .style('pointer-events', 'all');
-        this.labelsGroup = this.plotArea
+        this.traceLabelsGroup = this.plotArea
             .append('g')
-            .attr('class', 'bd-labels')
+            .attr('class', 'bd-trace-labels')
             .style('pointer-events', 'none');
         this.customGroup = this.plotArea
             .append('g')
@@ -923,10 +923,10 @@ class BandDiagram {
             });
     }
 
-    _drawLabels() {
+    _drawTraceLabels() {
         const labelData = this.traceData.filter((d) => d.labelPos && d.label);
 
-        this.labelsGroup
+        this.traceLabelsGroup
             .selectAll('foreignObject.bd-line-label')
             .data(labelData, (d) => d.id)
             .join(
