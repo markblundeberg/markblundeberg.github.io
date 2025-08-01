@@ -74,6 +74,7 @@ class BandDiagram {
         this.traceData = [];
         this.boundaries = [];
         this.regionProps = [];
+        this.regionLabels = [];
         this.verticalMarkers = new Map();
         this._redrawScheduled = false;
         this._yAxisLabelStr = 'placeholder';
@@ -241,8 +242,9 @@ class BandDiagram {
      * Sets the spatial layout using boundaries and region properties.
      * @param {Array<number>} boundaries - Sorted array of x-coordinates defining region edges (e.g., [0, 0.2, 0.5, 1.0]). Must include 0 and max x.
      * @param {Array<object>} regionProperties - Array of properties for regions between boundaries. Length must be boundaries.length - 1. E.g., [{name, color}, {name, color}, ...]
+     * @param {Array<object>} [labels] - Override the default labels via [{label, x, y, dx, dy}, ...]
      */
-    setSpatialLayout(boundaries = [], regionProperties = []) {
+    setSpatialLayout(boundaries, regionProperties, labels = null) {
         this.boundaries = [];
         this.regionProps = [];
         // Basic validation
@@ -265,6 +267,48 @@ class BandDiagram {
 
         this.boundaries = boundaries;
         this.regionProps = regionProperties;
+
+        if (!labels) {
+            // Make default labels at region midpoints
+            labels = [];
+            for (let i = 0; i < this.regionProps.length; i++) {
+                const { name, color } = this.regionProps[i];
+                const x = 0.5 * (this.boundaries[i] + this.boundaries[i + 1]);
+                labels.push({ label: name, x: x });
+            }
+        }
+
+        this.regionLabels = [];
+        for (const labelDef of labels) {
+            let {
+                label,
+                x = 0,
+                y = 'bottom',
+                dx = 0,
+                dy = null,
+                ...extraFields
+            } = labelDef;
+            if (Object.keys(extraFields).length > 0) {
+                const unexpectedKeys = Object.keys(extraFields).join(', ');
+                throw new Error(
+                    `Unexpected fields were provided: ${unexpectedKeys}`
+                );
+            }
+            if (dy === null) {
+                if (y === 'bottom') {
+                    dy = '+0.8em';
+                } else if (y === 'top') {
+                    dy = '-0.3em';
+                }
+            }
+            this.regionLabels.push({
+                label,
+                x,
+                y,
+                dx,
+                dy,
+            });
+        }
 
         // Redraw static elements immediately if possible
         this._scheduleRedraw();
@@ -426,6 +470,7 @@ class BandDiagram {
         // 4. Draw Static Elements (backgrounds/interfaces don't usually need transitions)
         this._drawBackgrounds();
         this._drawInterfaceLines();
+        this._drawRegionLabels();
 
         // 5. Draw Data Elements (these use transitions internally)
         this._drawTraces();
@@ -492,13 +537,9 @@ class BandDiagram {
             .append('g')
             .attr('class', 'bd-interfaces')
             .style('pointer-events', 'none');
-        this.gridGroup = this.plotArea
+        this.regionLabelsGroup = this.plotArea
             .append('g')
-            .attr('class', 'bd-grid')
-            .style('pointer-events', 'none');
-        this.connectorsGroup = this.plotArea
-            .append('g')
-            .attr('class', 'bd-connectors')
+            .attr('class', 'bd-labels')
             .style('pointer-events', 'none');
         this.linesGroup = this.plotArea
             .append('g')
@@ -656,6 +697,25 @@ class BandDiagram {
             .attr('stroke', STYLE_DEFAULTS.interface.color)
             .attr('stroke-width', STYLE_DEFAULTS.interface.lineWidth)
             .attr('stroke-dasharray', STYLE_DEFAULTS.interface.dasharray);
+    }
+
+    _drawRegionLabels() {
+        this.regionLabelsGroup
+            .selectAll('.bd-region-label')
+            .data(this.regionLabels)
+            .join('text')
+            .attr('class', 'bd-region-label')
+            .attr('x', (d) => this.xScale(d.x))
+            .attr('y', (d) => {
+                if (d.y === 'top') return -2;
+                else if (typeof d.y === 'number') return this.yScale(d.y);
+                // Default to 'bottom'
+                return this.plotHeight + 2;
+            })
+            .attr('dx', (d) => d.dx)
+            .attr('dy', (d) => d.dy)
+            .attr('text-anchor', 'middle')
+            .text((d) => d.label || '');
     }
 
     _drawTraces() {

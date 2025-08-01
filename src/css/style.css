@@ -370,7 +370,13 @@ figure.diagram-placeholder {
 .bd-data-line {
     fill: none;
 }
-/* Other D3 element styles (.esbd-connector-line, .esbd-interface-line, etc.) as before */
+
+.bd-region-label {
+    font-size: 12px;
+    fill: #555;
+    font-weight: bold;
+    font-variant: small-caps;
+}
 
 /* KaTeX Labels on Plot */
 .bd-line-label .katex-label-container {
