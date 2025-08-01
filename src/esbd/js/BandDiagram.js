@@ -43,6 +43,7 @@ class BandDiagram {
      * Creates an instance of the band diagram.
      * @param {string} containerId - ID of the HTML element (div) to contain the plot.
      * @param {object} [initialConfig={}] - Initial configuration options.
+     * @param {Boolean} [initialConfig.xMode='abstract'] - Should x have 'ticks' or is it more 'abstract'.
      * @param {object} [initialConfig.margin={top: 5, right: 35, bottom: 20, left: 60}] - Plot margins.
      * @param {number} [initialConfig.transitionDuration=250] - Duration for D3 transitions (ms).
      * @param {number} [initialConfig.resizeDebounceDelay=200] - Debounce delay for resize events (ms).
@@ -56,6 +57,7 @@ class BandDiagram {
 
         // Configuration with defaults
         this.config = {
+            xMode: initialConfig.xMode ?? 'abstract',
             margin: initialConfig.margin || {
                 top: 5,
                 right: 35,
@@ -527,6 +529,10 @@ class BandDiagram {
         this.yAxisGen = d3.axisLeft(this.yScale).tickSizeOuter(0);
         this.xAxisGroup = this.plotArea.append('g').attr('class', 'bd-x-axis');
         this.yAxisGroup = this.plotArea.append('g').attr('class', 'bd-y-axis');
+
+        if (this.config.xMode == 'abstract') {
+            this.xAxisGen.tickValues([]);
+        }
 
         // Interactive Y-Axis Label
         this.yAxisLabel = this.svg
