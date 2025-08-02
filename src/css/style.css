@@ -372,15 +372,14 @@ figure.diagram-placeholder {
 }
 
 .bd-region-label {
+    font-family: 'KaTeX_Main', 'Times New Roman', Times, serif;
     font-size: 12px;
     fill: #555;
-    font-weight: bold;
-    font-variant: small-caps;
 }
 
 /* KaTeX Labels on Plot */
 .bd-line-label .katex-label-container {
-    font-size: 10px; /* Slightly smaller labels */
+    font-size: 11px; /* Slightly smaller labels */
     /* background set inline currently */
 }
 

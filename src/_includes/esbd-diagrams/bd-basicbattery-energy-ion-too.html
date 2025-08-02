@@ -34,8 +34,8 @@
             <input
                 type="range"
                 id="{{ idprefix }}-dphi-slider"
-                min="-0.7"
-                max="0.7"
+                min="-0.5"
+                max="0.5"
                 step="any"
                 value="0.0"
                 style="width: 100px"
@@ -81,7 +81,7 @@
     diagram.setYLabel('Electron/ion energy (eV)');
     diagram.setYRange(-4.1, +0.8);
 
-    const R_anode = 0.05;
+    const R_anode = 0.02;
     const R_cathode = R_anode;
     const R_Li = 0.2;
     const OCV_anode = 0.1;
@@ -116,8 +116,8 @@
                 label: '\\bar\\mu_{\\mathrm{e}^-}',
                 showLabel: true,
                 color: electron_color,
-                x: [b[0], b[2]],
-                y: [-V_left, -V_anode],
+                x: [b[0], b[1], b[2]],
+                y: [-V_left, -V_left, -V_anode],
             },
             {
                 id: 'li_trace',
@@ -132,8 +132,8 @@
                 label: '\\bar\\mu_{\\mathrm{e}^-}',
                 showLabel: true,
                 color: electron_color,
-                x: [b[3], b[5]],
-                y: [-V_cathode, -V_right],
+                x: [b[3], b[4], b[5]],
+                y: [-V_cathode, -V_right, -V_right],
             },
         ]);
     }
