@@ -77,7 +77,7 @@ class BandDiagram {
         this.regionLabels = [];
         this.verticalMarkers = new Map();
         this._redrawScheduled = false;
-        this._yAxisLabelStr = 'placeholder';
+        this._yAxisLabelStr = 'Energy';
 
         // Callbacks & Interaction state
         this._tracePopupCallback = null;
@@ -96,8 +96,8 @@ class BandDiagram {
             .style('position', 'relative')
             .style('overflow', 'hidden')
             .style('display', 'block')
-            .style('width', '100%')
-            .style('height', '100%')
+            .style('width', '100%') // 100% of parent
+            .style('height', '100%') // 100% of children
             .style('margin', '0')
             .style('padding', '0')
             .style('border', '0');
@@ -117,7 +117,6 @@ class BandDiagram {
         // --- Responsiveness ---
         const initialWidth = this.container.node().clientWidth;
         const initialHeight = this.container.node().clientHeight;
-        //    this._handleResize(initialWidth, initialHeight, false); // Initial size calculation, no redraw
 
         // Debounced resize handler
         this._debouncedHandleResize = debounce((width, height) => {
@@ -132,7 +131,7 @@ class BandDiagram {
         });
         this._resizeObserver.observe(this.container.node());
 
-        // Note ResizeObserver is guaranteed to be fired.
+        // Note ResizeObserver is guaranteed to be fired, will set our size appropriately.
     }
 
     // ========================================================================
@@ -217,14 +216,14 @@ class BandDiagram {
                 toolTip = String(toolTip ?? '') || `$${label}$`;
 
                 const processedTrace = {
-                    id: id,
-                    points: points,
-                    color: color,
-                    style: style,
-                    label: label,
-                    labelPos: labelPos,
-                    toolTip: toolTip,
-                    extraData: extraData,
+                    id,
+                    points,
+                    color,
+                    style,
+                    label,
+                    labelPos,
+                    toolTip,
+                    extraData,
                 };
                 this.traceData.push(processedTrace);
                 seenIds.add(processedTrace.id);
@@ -1107,7 +1106,6 @@ class BandDiagram {
             xValue: currentData.x,
             y1_display: y1_display,
             y2_display: y2_display,
-            currentMode: this.config.mode,
             customArgs: currentData.popupArgs,
             pointEvent: event,
         };
