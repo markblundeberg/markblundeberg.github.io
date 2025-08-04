@@ -531,15 +531,15 @@ class BandDiagram {
         // Layer groups (order matters for rendering)
         this.backgroundGroup = this.plotArea
             .append('g')
-            .attr('class', 'bd-backgrounds')
+            .attr('class', 'bd-region-backgrounds')
             .style('pointer-events', 'none');
         this.interfaceGroup = this.plotArea
             .append('g')
-            .attr('class', 'bd-interfaces')
+            .attr('class', 'bd-region-interfaces')
             .style('pointer-events', 'none');
         this.regionLabelsGroup = this.plotArea
             .append('g')
-            .attr('class', 'bd-labels')
+            .attr('class', 'bd-region-labels')
             .style('pointer-events', 'none');
         this.linesGroup = this.plotArea
             .append('g')
