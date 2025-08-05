@@ -28,7 +28,7 @@
         </div>
         <div>
             <label for="{{ idprefix }}-dphi-slider" style="font-size: 0.85em"
-                >Electrostatic change $\Delta\phi$:</label
+                >Electrostatic offset $\Delta\phi$:</label
             >
             <br />
             <input
@@ -61,7 +61,7 @@
     const currentText = document.getElementById(currentTextId);
 
     // Set layout
-    const boundaries = [0.0, 0.2, 0.3, 0.7, 0.8, 1.0];
+    const boundaries = [0.0, 0.15, 0.3, 0.7, 0.85, 1.0];
     diagram.setSpatialLayout(
         boundaries,
         [
@@ -81,7 +81,7 @@
     diagram.setYLabel('Species voltage (V)');
     diagram.setYRange(-0.8, +4.1);
 
-    const R_anode = 0.02;
+    const R_anode = 0.03;
     const R_cathode = R_anode;
     const R_Li = 0.2;
     const OCV_anode = 0.1;
@@ -103,11 +103,11 @@
         }
 
         const V_left = 0.0 + dphi;
-        const V_anode = V_left - current * R_anode;
-        const V_Li_left = V_anode - OCV_anode;
+        const V_Li_left = V_left - OCV_anode;
         const V_Li_right = V_Li_left - current * R_Li;
-        const V_cathode = V_Li_right + OCV_cathode;
-        const V_right = V_cathode - current * R_cathode;
+        const V_right = V_Li_right + OCV_cathode;
+        const V_anode = V_left - current * R_anode;
+        const V_cathode = V_right + current * R_cathode;
 
         const b = boundaries;
         diagram.updateTraceData([
