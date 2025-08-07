@@ -88,6 +88,7 @@ Alright, we're ready now to tackle a real application!
 
 [**NEXT TOPIC: Lithium-ion batteries**](../lib/)
 
+{#
 ## Optional discussion
 
 For the keen, it's worth noting that the silver metal in the $\mathrm{AgCl}$ example is also acting as an elemental electrode for $\mathrm{Ag}^{+}$ ions. I discuss this and the relation to the normal electrode potential in the following optional content:
@@ -124,3 +125,4 @@ where we've used $\mu^\circ_{\mathrm{Cl}^-} = -F \cdot 1.360~\mathrm{V}$, the st
 We will further discuss ionic concentrations, ionic standard states, and ionic activities in the next-next topic.
 
 </details>
+#}
