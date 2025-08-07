@@ -1,0 +1,71 @@
+<figure class="demo-container" style="max-width: 230px">
+    <div class="bd-container" id="zn-electrode-container"></div>
+</figure>
+
+<script type="module">
+    const plotContainerId = 'zn-electrode-container';
+
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { formatPopupBaseContent, throttle } from '{{ esbdJsPath }}utils.js';
+
+    const speciesInfo = {
+        cation: {
+            z: 1,
+            color: '#E6AB02',
+            mathLabel: '\\mathrm{Zn}^{2+}',
+        },
+        electron: {
+            z: -1,
+            color: '#377EB8',
+            mathLabel: '\\mathrm{e}^{-}',
+        },
+    };
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        plotContainerId,
+        speciesInfo
+    );
+
+    // Set layout
+    const boundaries = [0.0, 0.5, 1.0];
+    diagram.setSpatialLayout(boundaries, [
+        { name: 'Zinc metal', color: '#E0E0E0' },
+        { name: 'Solution', color: '#E6F5FF' },
+    ]);
+
+    const V_el = +0;
+    const V_Zn = V_el;
+    diagram.setVRange(V_el - 0.2, V_el + 0.2);
+
+    const b = boundaries;
+    diagram.updateTraceData([
+        {
+            id: `electron_trace`,
+            speciesId: 'electron',
+            curveType: 'potential',
+            showLabel: true,
+            x: [b[0], b[1]],
+            y: [V_el, V_el],
+        },
+        {
+            id: `cation_trace`,
+            speciesId: 'cation',
+            curveType: 'potential',
+            showLabel: true,
+            x: [b[1], b[2]],
+            y: [V_Zn, V_Zn],
+        },
+    ]);
+
+    diagram.addVerticalMarker('zn', {
+        symbol: '⇌',
+        speciesId1: 'electron',
+        speciesId2: 'cation',
+        popupCallback: () => 'popup',
+    });
+    diagram.updateVerticalMarker('zn', {
+        x: b[1],
+        y1: V_el,
+        y2: V_Zn,
+    });
+</script>
