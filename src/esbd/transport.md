@@ -1,55 +1,27 @@
 ---
 layout: layouts/esbd_topic.njk
-title: 'Redox'
+title: 'Transport'
 tags: [page, esbd_topic]
-orderESBD: 16
+orderESBD: 14
 eleventyNavigation:
-    key: Redox
+    key: Transport
     parent: ESBD
-    order: 16
+    order: 14
 ---
 
 # {{title}}
 
 **WORK IN PROGRESS**
 
-Electrode potential of a particular solution is $E = V_{\mathrm{e}^-} - V^\circ_0$, where $V^\circ_0$ is a chosen position on the standard state ladder of that solution.
-
-## Electrons in redox-active solutions
-
-In some solutions, $V_{\mathrm{e}^-}$ is directly defined by the presence of species which are readily exchanging electrons.
-
-Iron
-
-In effect it is as if there are electrons dissolved in solution, though not physically so.
-
-$$ \bar\mu_{\mathrm{Fe}^{2+}} = \bar\mu_{\mathrm{Fe}^{3+}} + \bar\mu_{\mathrm{e}^-} $$
-
-$$ 2 V_{\mathrm{Fe}^{2+}} = 3 V_{\mathrm{Fe}^{3+}} - V_{\mathrm{e}^-}$$
-
-$$ V_{\mathrm{e}^-} = 3 V_{\mathrm{Fe}^{3+}} - 2 V_{\mathrm{Fe}^{2+}} $$
-
-as avg + offset:
-$$ V_{\mathrm{e}^-} = 0.5 (V_{\mathrm{Fe}^{3+}} + V_{\mathrm{Fe}^{2+}}) + 2.5 (V_{\mathrm{Fe}^{3+}} - V_{\mathrm{Fe}^{2+}} )$$
-
-GEM-- Measurement: Explain that an inert electrode (like Platinum) acts as a probe, aligning its electron potential with this V_e⁻(solution), which allows the redox potential (E) to be measured.
-
-## Electrons in "inert" solutions - limits
-
-Often a solution does not have a well defined $V_{\mathrm{e}^-}$ value, though it can be said to be within a certain range.
-
-$$ V_{\mathrm{e}^-} (\text{oxidation}) < V_{\mathrm{e}^-} < V_{\mathrm{e}^-} (\text{reduction}) $$
-
-
-## Water & air
-
-$$ \mathrm{O_2} \rightleftharpoons \mathrm{OH}^- $$
-
-$V_{\mathrm{e}^-}$
+- Steal some stuff from non-equilibrium.md.
+- Address conductivity variations with concentration. Set the stage for junctions topic.
+- Less emphasis on matrix (put in Optional)
+- Mention induction $\partial A / \partial t$ driving force (non-conservative).
+- Diagrams Diagrams Diagrams!!!!
 
 ## Takeaways
 
-[**NEXT TOPIC: Potentials**](../potentials/)
+[**NEXT TOPIC: Junctions**](../junctions/)
 
 {#
 ## Optional discussion

@@ -11,6 +11,8 @@ eleventyNavigation:
 
 # {{title}}
 
+**WORK IN PROGRESS**
+
 Now that we've investigated our generalized electron/ion band diagrams in full, it's worth looking at how the good old semiconductors would look if treated the same way.
 
 Themes:
@@ -69,7 +71,7 @@ Band diagram of PN junction in voltage mode.
 ## Takeaways
 
 
-[**NEXT TOPIC: Redox**](../redox/)
+[**NEXT TOPIC: XXX**](../xxx/)
 
 {#   
 

@@ -2,11 +2,11 @@
 layout: layouts/esbd_topic.njk
 title: 'Lithium ion batteries'
 tags: [page, esbd_topic] # Assign to 'page' and 'esbd_topic' collections
-orderESBD: 3
+orderESBD: 12
 eleventyNavigation:
     key: Lithium ion batteries # Text used in navigation menus
     parent: ESBD # Optional: Assumes you have a main 'ESBD' menu item defined elsewhere
-    order: 1 # Order within the parent menu
+    order: 12 # Order within the parent menu
 ---
 
 # {{title}}

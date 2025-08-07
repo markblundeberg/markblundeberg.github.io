@@ -2,11 +2,11 @@
 layout: layouts/esbd_topic.njk
 title: 'Solutions'
 tags: [page, esbd_topic] # Assign to 'page' and 'esbd_topic' collections
-orderESBD: 4
+orderESBD: 13
 eleventyNavigation:
     key: Solutions # Text used in navigation menus
     parent: ESBD # Optional: Assumes you have a main 'ESBD' menu item defined elsewhere
-    order: 1 # Order within the parent menu
+    order: 13 # Order within the parent menu
 ---
 
 # {{title}}
@@ -209,7 +209,7 @@ The above leaves open the question of how much of this non-ideality product is d
 
 For the next topic, we'll talk about what happens where two solutions come into contact.
 
-[**NEXT TOPIC: Junctions**](../junctions/)
+[**NEXT TOPIC: Transport**](../transport/)
 
 {#
 ## Optional discussion

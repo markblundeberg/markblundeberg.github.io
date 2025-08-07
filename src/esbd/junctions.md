@@ -2,11 +2,11 @@
 layout: layouts/esbd_topic.njk
 title: 'Junctions'
 tags: [page, esbd_topic]
-orderESBD: 5
+orderESBD: 15
 eleventyNavigation:
     key: Junctions
     parent: ESBD
-    order: 5
+    order: 15
 ---
 
 # {{title}}
@@ -98,7 +98,7 @@ which is the famous Nernst voltage for a concentration cell that uses a salt bri
 ## Takeaways
 
 
-[**NEXT TOPIC: Potentials**](../potentials/)
+[**NEXT TOPIC: Redox**](../redox/)
 
 {#
 ## Optional discussion

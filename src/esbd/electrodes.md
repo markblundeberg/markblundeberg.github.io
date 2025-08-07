@@ -2,11 +2,11 @@
 layout: layouts/esbd_topic.njk
 title: 'Electrodes'
 tags: [page, esbd_topic] # Assign to 'page' and 'esbd_topic' collections
-orderESBD: 2
+orderESBD: 11
 eleventyNavigation:
     key: Electrodes # Text used in navigation menus
     parent: ESBD # Optional: Assumes you have a main 'ESBD' menu item defined elsewhere
-    order: 1 # Order within the parent menu
+    order: 11 # Order within the parent menu
 ---
 
 # {{title}}
