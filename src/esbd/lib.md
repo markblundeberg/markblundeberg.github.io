@@ -70,13 +70,20 @@ We can illustrate this using our band diagrams. For example, in an anode particl
 
 This shows the $V_{\mathrm{Li}^+}$ voltage drops due to the slow diffusion of $\mathrm{Li}^+$ inside a single graphite anode particle, and the SEI layer surrounding it. Note that $V_{\mathrm{e}^-}$ is quite flat since the electrons in the graphite are very conductive. As our radial coordinate increases, we have a lower value of $V_{\mathrm{Li}^+} - V_{\mathrm{e}^-}$. Since $V_{\mathrm{Li}^+} - V_{\mathrm{e}^-}$ directly corresponds to the local lithium concentration, it means we have a lower concentration of $\mathrm{Li}^+$ ions at the surface compared to the core.
 
-And if we want to plot the entire cell, we might draw something like this:
+The gold standard of battery modelling is the "pseudo-2D" model: one axis is the physical distance between electrodes, and the other axis is the radius inside the electrodes' particles (which are assumed to have uniform sizes). Using the [PyBaMM battery simulator](https://pybamm.org/), I ran the default simulation and extracted the necessary data to get $V_{\mathrm{Li}^+}$, giving a realistic visualization of the entire cell:
 
-... TODO ...
+<figure class="demo-container" style="max-width: 400px">
+<img src="/esbd/img/PyBaMM_DFN_V_Li.png" style="max-width:100%"/>
+
+<figcaption>
+
+([Fullsize image](/esbd/img/PyBaMM_DFN_V_Li.png))
+(From: [Colab notebook](https://colab.research.google.com/gist/markblundeberg/b7dbaeb80ae5e69350701feeeb27bb91/dfn-v_li-plot-working.ipynb))
+
+</figcaption>
+</figure>
 
 Here we draw two $V_{\mathrm{Li}^+}$ levels - one for the core of particles, and one for the lithium ions inside the electrolytes.
-
-This type of diagram is a simplification of the gold standard of battery modelling, which is the "pseudo-2D" model: one axis is the physical distance between electrodes, and the other axis is the radius inside the electrodes' particles (which are assumed to have uniform sizes).
 
 During charging, we see many of these voltage drops happen, only in reverse. And something else can happen, which is that if $V_{\mathrm{Li}^+}$ rises above $V_{\mathrm{e}^-}$ then it is thermodynamically favourable ($\mu_{\mathrm{Li}} > \mu_{\mathrm{Li(metal)}}$) to precipitate out solid lithium metal! This is known as "lithium plating" and is a serious problem that limits fast charging. Typically, the lithium precipitates as needles and dendrites. Only some of the precipitated lithium is able to re-dissolve later on, as any chunk of lithium that becomes electronically disconnected becomes "dead lithium" with its internal $V_{\mathrm{e}^-}$ and $V_{\mathrm{Li}^+}$ falling down to the ambient electrolyte value of $V_{\mathrm{Li}^+}$.
 
