@@ -97,3 +97,32 @@ During charge and discharge, the $V_i$ voltages form a direct visualization of h
 For the next topic, we'll return to general discussions, and get into detail about how the $V_i$'s work inside of solutions.
 
 [**NEXT TOPIC: Solutions**](../solutions/)
+
+## Optional discussion
+
+<details>
+<summary>
+We'll discuss more about the battery simulation results, below.
+</summary>
+
+To remind, this is a battery being discharged at a quite high rate "2C", meaning it will go from 100% to 0% charge level in just 30 minutes. The higher the discharge rate, the more serious the various voltage drops become.
+
+### Anode
+
+At the leftmost part of the plot, we see that $V_{\mathrm{Li}^+}$ is equal between the core and surface of the particles. This indicates that these graphite particles have been barely used at all yet.
+
+As we move more right, we see the surface $V_{\mathrm{Li}^+}$ drop quickly, indicating that those graphite particles there are being heavily delithiated. And finally as we approach the separator, we see that even the core $V_{\mathrm{Li}^+}$ level has dropped, indicating that these particles are being fully depleted.
+
+We see a roughly constant gap between $V_{\mathrm{Li}^+}$ on the surface and $V_{\mathrm{Li}^+}$ in the electrolyte, even next to the particles that are barely used yet. This is because even a tiny $\mathrm{Li}^+$ current out of the graphite needs an 'activation overpotential', or more precisely, the current is exponential in the overpotential, and there is almost no current for small overpotentials.
+
+### Electrolyte
+
+We see significant gradients in $V_{\mathrm{Li}^+}$ in the electrolyte because these dissolved lithium ions have to work their way through the narrow and twisty spaces between the particles in the electrolyte material. We do see $V_{\mathrm{Li}^+}$ flatten out in the middle separator region however. Even though the separator is a porous material, its pores are bigger and let the lithium ions pass more easily.
+
+Another aspect that is not very visible is a depletion of $V_{\mathrm{Li}^+}$ ions in the cathode region, known as concentration gradient. This is not solely due to the $\mathrm{Li}^+$ ions behaviour, but rather has to do with a depletion of the more mobile counterion ($\mathrm{PF_6}^-$). We will talk about this two-ion transport effect in a later topic.
+
+### Cathode
+
+Unlike the anode, here we do not see any part of the electrode being 'untouched'. Instead, there is a vast difference in $V_{\mathrm{Li}^+}$ between surface and core, indicating very slow diffusion inside each particle. As a consequence, the near-separator cathode particles have basically had their surfaces become fully lithiated, and they are letting lithium go past them accordingly.
+
+</details>
