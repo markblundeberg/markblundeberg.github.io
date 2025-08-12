@@ -15,8 +15,12 @@ eleventyNavigation:
 
 - Steal some stuff from non-equilibrium.md.
 - Address conductivity variations with concentration. Set the stage for junctions topic.
-- Less emphasis on matrix (put in Optional)
+    - DIAGRAM - V_i not linear with position
+- Less emphasis on matrix cross terms (put in Optional)
+- Compare to Nernst–Planck equation; Einstein relation.
 - Mention induction $\partial A / \partial t$ driving force (non-conservative).
+- Mention advection term!
+- Thermoelectric term (Seebeck-ish)
 - Diagrams Diagrams Diagrams!!!!
 
 ## Takeaways
