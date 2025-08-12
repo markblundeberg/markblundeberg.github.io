@@ -43,7 +43,9 @@ In the lithium-ion battery field, the step size is known as the OCV value, and I
 
 ## Battery discharge
 
-The above diagram suggests that the anode and cathode materials are monolithic blocks of graphite or NMC, which is actually an inaccurate picture of what the real materials look like. Due to the slow diffusion of lithium ions inside these materials, it is desirable that the anode and cathode are instead porous to the electrolyte, and so typically they are basically granular matrices, like in the following schematic:
+During battery discharge, the output voltage always drops below the normal equilibrium voltage that it would have at the current state of charge. For rapid discharges that would discharge the entire capacity in less than an hour, the voltage drops can be quite significant. Using our $V_i$'s, we can actually attribute this external voltage drop to being a sum of various $V_i$ drops.
+
+First, let's clarify a bit about the actual structure inside of a lithium-ion battery. In fact, both electrodes are porous structures, sort of resembling a compressed powder:
 
 <figure class="demo-container" style="max-width: 200px">
 <img src="/esbd/img/chen2020_fig1_schematic.jpg" style="max-width:100%"/>
@@ -55,41 +57,37 @@ From [Chen et al. 2020](https://dx.doi.org/10.1149/1945-7111/ab9050), license: [
 </figcaption>
 </figure>
 
-During battery discharge, the output voltage always drops below the normal equilibrium voltage that it would have at that state of charge. For rapid discharges that would discharge the entire capacity in less than an hour, the voltage drops can be quite significant. Using our $V_i$'s, we can actually attribute this external voltage drop to being a sum of various $V_i$ drops.
+This porous structure is quite beneficial for the battery functioning: it is far easier for the lithium ions to move inside of the electrolyte than to move through the solid electrode materials. So, by providing ample electrolyte channels, it means the lithium ions do not have to move as far through the solid materials. Around each particle, there is a thin film layer called SEI (solid electrolyte interphase), a form of passivation that protects the solvent from being destroyed by battery.
 
-* Anode electronic resistance: a drop in $V_{\mathrm{e}^-}$ moving from the negative battery terminal to the anode graphite particle.
-* Anode lithium diffusion: a drop in $V_{\mathrm{Li}^+}$ from the center of anode particles to their surface.
-* SEI diffusion: a drop in $V_{\mathrm{Li}^+}$ as it penetrates the solid electrolyte interphase (SEI) that surrounds each anode particle.
-* Electrolyte resistance: A drop in $V_{\mathrm{Li}^+}$ in the electrolyte as lithium ions move through the electrolyte.
-* Cathode lithium diffusion: a drop in $V_{\mathrm{Li}^+}$ from the surface of cathode particles to their center.
-* Cathode electronic resistance: a drop in $V_{\mathrm{e}^-}$ moving from the cathode particles to the positive battery terminal.
-
-We can illustrate this using our band diagrams. For example, in an anode particle we might see something like this where the $x$-axis represents a *radial* coordinate:
+Still, the particle sizes are not so small that we can neglect the lithium diffision. We can illustrate this using our $V_i$ band diagrams. For example, in an anode particle during discharge ($\mathrm{Li}^+$ being sucked out of it) we might see something like this where the $x$-axis represents a *radial* coordinate:
 
 {% include "esbd-diagrams/esbd-lib-particle-discharge.html" %}
 
-This shows the $V_{\mathrm{Li}^+}$ voltage drops due to the slow diffusion of $\mathrm{Li}^+$ inside a single graphite anode particle, and the SEI layer surrounding it. Note that $V_{\mathrm{e}^-}$ is quite flat since the electrons in the graphite are very conductive. As our radial coordinate increases, we have a lower value of $V_{\mathrm{Li}^+} - V_{\mathrm{e}^-}$. Since $V_{\mathrm{Li}^+} - V_{\mathrm{e}^-}$ directly corresponds to the local lithium concentration, it means we have a lower concentration of $\mathrm{Li}^+$ ions at the surface compared to the core.
+This shows the $V_{\mathrm{Li}^+}$ voltage drops due to:
 
-> *Note on charging*: During charging, we see many of these voltage drops happen, only in reverse. And something else can happen, which is that if $V_{\mathrm{Li}^+}$ rises above $V_{\mathrm{e}^-}$ then it is thermodynamically favourable ($\mu_{\mathrm{Li}} > \mu_{\mathrm{Li(metal)}}$) to precipitate out solid lithium metal! This is known as "lithium plating" and is a serious problem that limits fast charging. Typically, the lithium precipitates as needles and dendrites. Only some of the precipitated lithium is able to re-dissolve later on, as any chunk of lithium that becomes electronically disconnected becomes "dead lithium" with its internal $V_{\mathrm{e}^-}$ and $V_{\mathrm{Li}^+}$ falling down to the ambient electrolyte value of $V_{\mathrm{Li}^+}$.
+* the slow diffusion of $\mathrm{Li}^+$ inside a single graphite anode particle.
+* the slow diffusion through the SEI layer surrounding the anode particle.
 
-The gold standard of battery modelling is the "pseudo-2D" model: one axis is the physical distance between electrodes, and the other axis is the radius inside the electrodes' particles (which are assumed to have uniform sizes). Using the [PyBaMM battery simulator](https://pybamm.org/), I ran the following simulation and extracted the necessary data to get $V_{\mathrm{Li}^+}$, giving a realistic visualization of the entire cell:
+Note that in contrast, $V_{\mathrm{e}^-}$ is quite flat since the electrons in the graphite are very conductive. As our radial coordinate increases, we have a lower value of $V_{\mathrm{Li}^+} - V_{\mathrm{e}^-}$, and since $V_{\mathrm{Li}^+} - V_{\mathrm{e}^-}$ directly corresponds to the local lithium concentration, it means we have a lower concentration of $\mathrm{Li}^+$ ions at the surface compared to the core.
+
+But that is not the whole story of course, as a full picture of the battery requires understanding the voltage drop in the electrolyte, and the voltage drop in the cathode materials too. And each electrode particle is going to have different dynamics due to being positioned differently in the electrolyte! The following picture comes out of a realistic battery simulation that captures all this:
 
 <figure class="demo-container" style="max-width: 400px">
 <img src="/esbd/img/PyBaMM_DFN_V_Li_cathodetoo.svg" style="max-width:100%"/>
 
 <figcaption>
 
-Internal voltages during a 2C discharge, at around 40% remaining capacity.
-(Source: [my notebook](https://gist.github.com/markblundeberg/b7dbaeb80ae5e69350701feeeb27bb91))
+Internal voltages during a 2C discharge, at around 40% remaining capacity. Simulation done with DFN model in [PyBaMM](https://pybamm.org/) and converted to $V_{\mathrm{e}^-}$, $V_{\mathrm{Li}^+}$ values.
+See [my source code here](https://gist.github.com/markblundeberg/b7dbaeb80ae5e69350701feeeb27bb91).
 
 </figcaption>
 </figure>
 
-What's important is that this detailed landscape reveals all sorts of local dissipation mechanisms and interesting mechanics. Because we know $V_{\mathrm{Li}^+}$ would be perfectly flat at equilibrium, then that means every variation in $V_{\mathrm{Li}^+}$ represents some kind of dissipation or resistance. In the optional discussion below, we'll dig more into these mechanisms.
+What's important is that this detailed landscape reveals all sorts of local dissipation mechanisms and interesting mechanics. We know $V_{\mathrm{Li}^+}$ would be perfectly flat at equilibrium, and therefore every variation in $V_{\mathrm{Li}^+}$ represents some kind of dissipation or resistance. In the optional discussion below, we'll dig more into these mechanisms.
 
 ## Takeaways
 
-As we saw, the ESBD diagram is quite simple in a lithium-ion battery, where the main operation involves only $V_{\mathrm{Li}^+}$ and $V_{\mathrm{e}^-}$ levels, and we can visually see the per-electrode OCV value.
+As we saw, the ESBD diagram is quite simple in a lithium-ion battery at equilibrium, where the main operation involves only $V_{\mathrm{Li}^+}$ and $V_{\mathrm{e}^-}$ levels, and we can visually see the per-electrode OCV value.
 
 During charge and discharge, the $V_i$ voltages form a direct visualization of how various electronic and ionic resistances are responsible for the total "internal resistance".
 
@@ -101,7 +99,7 @@ For the next topic, we'll return to general discussions, and get into detail abo
 
 <details>
 <summary>
-We'll discuss more about the battery simulation results, below.
+More about the battery simulation mechanisms and results; click to open.
 </summary>
 
 The higher the discharge rate, the more serious the various voltage drops become. I simulated a battery being discharged at a quite high rate "2C", meaning it will go from 100% to 0% charge level in just 30 minutes, which is quite fast.
@@ -131,5 +129,9 @@ Another aspect (that is not very visible) is a concentration gradient in the $\m
 ### Cathode
 
 Unlike the anode, here we do not see any part of the electrode being 'untouched'. Instead, there is a vast difference in $V_{\mathrm{Li}^+}$ between surface and core, indicating very slow diffusion inside each particle. As a consequence, the near-separator cathode particles have basically had their surfaces become fully lithiated, and they are letting lithium go past them accordingly.
+
+### Charging
+
+During charging, we see many of these voltage drops happen, only in reverse. And something else can happen, which is that if $V_{\mathrm{Li}^+}$ rises above $V_{\mathrm{e}^-}$ then it is thermodynamically favourable ($\mu_{\mathrm{Li}} > \mu_{\mathrm{Li(metal)}}$) to precipitate out solid lithium metal! This is known as "lithium plating" and is a serious problem that limits fast charging. Typically, the lithium precipitates as needles and dendrites. Only some of the precipitated lithium is able to re-dissolve later on, as any chunk of lithium that becomes electronically disconnected becomes "dead lithium" with its internal $V_{\mathrm{e}^-}$ and $V_{\mathrm{Li}^+}$ falling down to the ambient electrolyte value of $V_{\mathrm{Li}^+}$.
 
 </details>
