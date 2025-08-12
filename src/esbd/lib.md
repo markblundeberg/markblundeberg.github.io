@@ -75,12 +75,11 @@ This shows the $V_{\mathrm{Li}^+}$ voltage drops due to the slow diffusion of $\
 The gold standard of battery modelling is the "pseudo-2D" model: one axis is the physical distance between electrodes, and the other axis is the radius inside the electrodes' particles (which are assumed to have uniform sizes). Using the [PyBaMM battery simulator](https://pybamm.org/), I ran the following simulation and extracted the necessary data to get $V_{\mathrm{Li}^+}$, giving a realistic visualization of the entire cell:
 
 <figure class="demo-container" style="max-width: 400px">
-<img src="/esbd/img/PyBaMM_DFN_V_Li.svg" style="max-width:100%"/>
+<img src="/esbd/img/PyBaMM_DFN_V_Li_cathodetoo.svg" style="max-width:100%"/>
 
 <figcaption>
 
 Internal voltages during a 2C discharge, at around 40% remaining capacity.
-([plot with cathode's $V_{\mathrm{e}^-}$](/esbd/img/PyBaMM_DFN_V_Li_cathodetoo.svg))
 (Source: [my notebook](https://gist.github.com/markblundeberg/b7dbaeb80ae5e69350701feeeb27bb91))
 
 </figcaption>
