@@ -85,7 +85,7 @@ Internal voltages during a 2C discharge, at around 40% remaining capacity.
 </figcaption>
 </figure>
 
-What's important is that this detailed landscape reveals all sorts of local dissipation mechanisms and interesting mechanics. Because we know $V_{\mathrm{Li}^+}$ would be perfectly flat at equilibrium, then that means every variation in $V_{\mathrm{Li}^+}$ represents some kind of dissipation or resistance.
+What's important is that this detailed landscape reveals all sorts of local dissipation mechanisms and interesting mechanics. Because we know $V_{\mathrm{Li}^+}$ would be perfectly flat at equilibrium, then that means every variation in $V_{\mathrm{Li}^+}$ represents some kind of dissipation or resistance. In the optional discussion below, we'll dig more into these mechanisms.
 
 ## Takeaways
 
@@ -104,21 +104,29 @@ For the next topic, we'll return to general discussions, and get into detail abo
 We'll discuss more about the battery simulation results, below.
 </summary>
 
-To remind, this is a battery being discharged at a quite high rate "2C", meaning it will go from 100% to 0% charge level in just 30 minutes. The higher the discharge rate, the more serious the various voltage drops become.
+The higher the discharge rate, the more serious the various voltage drops become. I simulated a battery being discharged at a quite high rate "2C", meaning it will go from 100% to 0% charge level in just 30 minutes, which is quite fast.
+
+Let's zoom in on the $V_{\mathrm{Li}^+}$ variations:
+
+<figure class="demo-container" style="max-width: 400px">
+<img src="/esbd/img/PyBaMM_DFN_V_Li.svg" style="max-width:100%"/>
+</figure>
+
+Again, these are a snapshot taken midway through this discharge process, when about 40% of the capacity is remaining.
 
 ### Anode
 
-At the leftmost part of the plot, we see that $V_{\mathrm{Li}^+}$ is equal between the core and surface of the particles. This indicates that these graphite particles have been barely used at all yet.
+At the leftmost part of the plot, we see that $V_{\mathrm{Li}^+}$ is equal between the core and surface of the particles. This indicates that these graphite particles have a uniform lithiation; they have been barely used at all yet.
 
-As we move more right, we see the surface $V_{\mathrm{Li}^+}$ drop quickly, indicating that those graphite particles there are being heavily delithiated. And finally as we approach the separator, we see that even the core $V_{\mathrm{Li}^+}$ level has dropped, indicating that these particles are being fully depleted.
+As we move more right, we see the surface $V_{\mathrm{Li}^+}$ drop quickly, indicating that the graphite particles there are being heavily delithiated. And finally as we approach the separator, we see that even the core $V_{\mathrm{Li}^+}$ level has dropped, indicating that these particles are being fully depleted.
 
-We see a roughly constant gap between $V_{\mathrm{Li}^+}$ on the surface and $V_{\mathrm{Li}^+}$ in the electrolyte, even next to the particles that are barely used yet. This is because even a tiny $\mathrm{Li}^+$ current out of the graphite needs an 'activation overpotential', or more precisely, the current is exponential in the overpotential, and there is almost no current for small overpotentials.
+We see a roughly constant gap between $V_{\mathrm{Li}^+}$ on the surface and $V_{\mathrm{Li}^+}$ in the electrolyte, even with the particles that are barely used yet. This is because the model uses an "activation" type of equation for the $\mathrm{Li}^+$ moving between the particle and electrolyte. Thus, even a tiny $\mathrm{Li}^+$ current out of the graphite corresponds to a significant $V_{\mathrm{Li}^+}$ step, and a slight increase in $V_{\mathrm{Li}^+}$ gives a much larger current.
 
 ### Electrolyte
 
 We see significant gradients in $V_{\mathrm{Li}^+}$ in the electrolyte because these dissolved lithium ions have to work their way through the narrow and twisty spaces between the particles in the electrolyte material. We do see $V_{\mathrm{Li}^+}$ flatten out in the middle separator region however. Even though the separator is a porous material, its pores are bigger and let the lithium ions pass more easily.
 
-Another aspect that is not very visible is a depletion of $V_{\mathrm{Li}^+}$ ions in the cathode region, known as concentration gradient. This is not solely due to the $\mathrm{Li}^+$ ions behaviour, but rather has to do with a depletion of the more mobile counterion ($\mathrm{PF_6}^-$). We will talk about this two-ion transport effect in a later topic.
+Another aspect (that is not very visible) is a concentration gradient in the $\mathrm{Li}^+$ ions in the electrolyte, which further reduces the electrolyte conductivity on the cathode side. This is not solely due to the $\mathrm{Li}^+$ ions behaviour, but rather has to do with a depletion of the more mobile counterion ($\mathrm{PF_6}^-$). We will talk about this two-ion transport effect in a later topic.
 
 ### Cathode
 
