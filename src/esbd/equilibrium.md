@@ -11,7 +11,13 @@ eleventyNavigation:
 
 # {{title}}
 
-One of the key principles with $V_i$ is how different species connect to each other. We can't simply have charge turn from one charged species into another, but instead there has to be a reaction that *transfers* charge. As a result, we will see different species' $V_i$ connect with offsets depending on the nature of the reaction (and the nature of the neutral species in the reaction).
+One of the key principles with $V_i$ is how different species connect to each other. We can't simply have charge turn from one charged species into another, but instead there has to be a reaction that *transfers* charge. As a result, we will see different species' $V_i$ connect with offsets depending on the nature of the reaction (and the nature of the neutral species in the reaction). We will quite commonly see equations like:
+
+$$ V_i - V_j = \frac{1}{F}\mu_{\mathrm{neutral}}. $$
+
+For charged species $i$ and $j$, and some neutral species.
+
+A few classic examples below will demonstrate how this can appear.
 
 ## Reactions
 
@@ -31,23 +37,25 @@ Thus, auto-ionization in water directly sets up an offset between $V_{\mathrm{H}
 
 {% include "esbd-diagrams/esbd-h2o-autoionization.html" %}
 
-How large is this offset in reality? It's given by the value of the chemical potential $\mu_{\mathrm{H_2O}}$, which is the partial molar Gibbs energy for $\mathrm{H_2O}$. We can look up Gibbs *formation* energy energies for neutral chemicals like $\mathrm{H_2O}$ in chemical data tables, but to turn a Gibbs formation energy into a concrete chemical potential (and thus make a concrete statement about differences $V_i - V_j$), we first have to make a choice about our reference system. The best choice is thus:
+How large is this offset in reality? It depends on the value of the chemical potential $\mu_{\mathrm{H_2O}}$, which is the partial molar Gibbs energy for $\mathrm{H_2O}$. We can look up Gibbs *formation* energy energies for neutral chemicals like $\mathrm{H_2O}$ in chemical data tables, but to turn a Gibbs formation energy into a concrete chemical potential (and thus make a concrete statement about differences $V_i - V_j$), we first have to make a choice about our reference system.
 
-> **Important**: For these ESBDs, I adopt the common convention that $\mu=0$ for elements in their most stable form (such as $\mathrm{H_2}$ and $\mathrm{O_2}$), at the specific reference conditions that are used to define the tabulated Gibbs formation energies. This is convenient since it means all Gibbs formation energies are *equal* to the chemical potentials.
+For these ESBDs, I adopt the common convention that $\mu=0$ for elements in their most stable form (such as $\mathrm{H_2}$ and $\mathrm{O_2}$), at the specific reference conditions that are used to define the tabulated Gibbs formation energies. This is convenient since it means all Gibbs formation energies are *equal* to the chemical potentials.
 
 For pure water at standard conditions we know from chemical data tables that the Gibbs formation energy of $\mathrm{H_2O}$ is $-237.1~\mathrm{kJ/mol}$. This means for pure water we have $\mu_{\mathrm{H_2O}} = -237.1~\mathrm{kJ/mol}$, and thus $\mu_{\mathrm{H_2O}}/F = -2.457~\mathrm{V}$. So,
 
 $$ V_{\mathrm{H}^+} - V_{\mathrm{OH}^-} = -2.457~\mathrm{V} $$
 
-is the precise offset we draw in pure water. Note that $V_{\mathrm{H}^+}$ and $V_{\mathrm{OH}^-}$ are still free to move up and down, but they have to keep this $2.457~\mathrm{V}$ constant spacing.
+is the precise offset we draw in pure water. Note that $V_{\mathrm{H}^+}$ and $V_{\mathrm{OH}^-}$ are still free to move up and down (changing electrical state), but they have to keep this $2.457~\mathrm{V}$ constant spacing.
 
-Similarly, we can consider a solution that is fully saturated with salt, which means that it is in equilibrium with solid salt. We get:
-
-$$ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = \frac{\mu_{\mathrm{NaCl}}}{F} = -3.9813~\mathrm{V}.$$
+Similarly, we might consider a reaction for the dissociation of sodium chloride salt:
+$$ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = \frac{\mu_{\mathrm{NaCl}}}{F} . $$
+If the solution is fully saturated with salt (meaning it is in equilibrium with solid salt), then we get $\mu_{\mathrm{NaCl}}/ F = -3.9813~\mathrm{V}$, so:
 
 {% include "esbd-diagrams/esbd-nacl-saturation.html" %}
 
-This is an example of heterogeneous equilibrium (the salt is a separate solid phase), whereas the previous autoionization example is a form of homogeneous equilibrium.
+This is an example of heterogeneous equilibrium (the salt is a separate solid phase), whereas the previous autoionization example is a form of homogeneous equilibrium. Note that this $3.9813~\mathrm{V}$ spacing from $\mathrm{NaCl}$ applies to any solvent, not just water; the only assumption we made was that of saturation.
+
+(This still leaves a question: where does $V_{\mathrm{Na}^+}$ sit relative to $V_{\mathrm{H}^+}$? As we'll see in later topics, this difference is well-defined, but is going to depend on the solvent and on pH!)
 
 ## Electrodes
 
