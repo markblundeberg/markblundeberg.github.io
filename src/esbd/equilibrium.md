@@ -1,15 +1,55 @@
 ---
 layout: layouts/esbd_topic.njk
 title: 'Equilibrium'
-tags: [page, esbd_topic] # Assign to 'page' and 'esbd_topic' collections
+tags: [page, esbd_topic]
 orderESBD: 11
 eleventyNavigation:
-    key: Equilibrium # Text used in navigation menus
-    parent: ESBD # Optional: Assumes you have a main 'ESBD' menu item defined elsewhere
-    order: 11 # Order within the parent menu
+    key: Equilibrium
+    parent: ESBD
+    order: 11
 ---
 
 # {{title}}
+
+One of the key principles with $V_i$ is how different species connect to each other. We can't simply have charge turn from one charged species into another, but instead there has to be a reaction that *transfers* charge. As a result, we will see different species' $V_i$ connect with offsets depending on the nature of the reaction (and the nature of the neutral species in the reaction).
+
+## Reactions
+
+Consider the auto-ionization of water,
+
+$$ \mathrm{H}^+ + \mathrm{OH}^- \rightleftharpoons \mathrm{H_2O}. $$
+
+We can write the equilibrium in terms of the (electro-) chemical potentials:
+
+$$ \bar\mu_{\mathrm{H}^+} + \bar\mu_{\mathrm{OH}^-} = \mu_{\mathrm{H_2O}}. $$
+
+To translate this to $V_i$, we sub in our $\bar{\mu}_i = z_i F V_i$, to get:
+
+$$ V_{\mathrm{H}^+} - V_{\mathrm{OH}^-} = \frac{\mu_{\mathrm{H_2O}}}{F}. $$
+
+Thus, auto-ionization in water directly sets up an offset between $V_{\mathrm{H}^+}$ and $V_{\mathrm{OH}^-}$:
+
+{% include "esbd-diagrams/esbd-h2o-autoionization.html" %}
+
+How large is this offset in reality? It's given by the value of the chemical potential $\mu_{\mathrm{H_2O}}$, which is the partial molar Gibbs energy for $\mathrm{H_2O}$. We can look up Gibbs *formation* energy energies for neutral chemicals like $\mathrm{H_2O}$ in chemical data tables, but to turn a Gibbs formation energy into a concrete chemical potential (and thus make a concrete statement about differences $V_i - V_j$), we first have to make a choice about our reference system. The best choice is thus:
+
+> **Important**: For these ESBDs, I adopt the common convention that $\mu=0$ for elements in their most stable form (such as $\mathrm{H_2}$ and $\mathrm{O_2}$), at the specific reference conditions that are used to define the tabulated Gibbs formation energies. This is convenient since it means all Gibbs formation energies are *equal* to the chemical potentials.
+
+For pure water at standard conditions we know from chemical data tables that the Gibbs formation energy of $\mathrm{H_2O}$ is $-237.1~\mathrm{kJ/mol}$. This means for pure water we have $\mu_{\mathrm{H_2O}} = -237.1~\mathrm{kJ/mol}$, and thus $\mu_{\mathrm{H_2O}}/F = -2.457~\mathrm{V}$. So,
+
+$$ V_{\mathrm{H}^+} - V_{\mathrm{OH}^-} = -2.457~\mathrm{V} $$
+
+is the precise offset we draw in pure water. Note that $V_{\mathrm{H}^+}$ and $V_{\mathrm{OH}^-}$ are still free to move up and down, but they have to keep this $2.457~\mathrm{V}$ constant spacing.
+
+Similarly, we can consider a solution that is fully saturated with salt, which means that it is in equilibrium with solid salt. We get:
+
+$$ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = \frac{\mu_{\mathrm{NaCl}}}{F} = -3.9813~\mathrm{V}.$$
+
+{% include "esbd-diagrams/esbd-nacl-saturation.html" %}
+
+This is an example of heterogeneous equilibrium (the salt is a separate solid phase), whereas the previous autoionization example is a form of homogeneous equilibrium.
+
+## Electrodes
 
 Electrodes are interfaces where electrons (in metal) and ions (in solution) meet and react. A classic example, used as a standard reference for electrochemical studies, is the silver chloride electrode:
 
