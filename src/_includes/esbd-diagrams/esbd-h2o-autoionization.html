@@ -11,12 +11,13 @@
     const speciesInfo = {
         cation: {
             z: 1,
-            color: '#E6AB02',
+            color: '#c04040',
+            // color: '#E4572E',
             mathLabel: '\\mathrm{H}^{+}',
         },
         anion: {
             z: -1,
-            color: '#377EB8',
+            color: '#40a0a0',
             mathLabel: '\\mathrm{OH}^{-}',
         },
     };
@@ -60,7 +61,8 @@
         symbol: '⇌',
         speciesId1: 'anion',
         speciesId2: 'cation',
-        popupCallback: () => 'popup',
+        popupCallback: () =>
+            '$ \\mathrm{H}^+ + \\mathrm{OH}^- \\rightleftharpoons \\mathrm{H_2O}. $',
     });
     diagram.updateVerticalMarker('zn', {
         x: 0.5,

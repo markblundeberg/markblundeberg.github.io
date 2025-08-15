@@ -11,7 +11,7 @@
     const speciesInfo = {
         cation: {
             z: 1,
-            color: '#E6AB02',
+            color: '#c04060',
             mathLabel: '\\mathrm{Zn}^{2+}',
         },
         electron: {
@@ -61,7 +61,8 @@
         symbol: '⇌',
         speciesId1: 'electron',
         speciesId2: 'cation',
-        popupCallback: () => 'popup',
+        popupCallback: () =>
+            '$\\mathrm{Zn} \\rightleftharpoons \\mathrm{Zn}^{2+} + 2\\mathrm{e}^-$',
     });
     diagram.updateVerticalMarker('zn', {
         x: b[1],

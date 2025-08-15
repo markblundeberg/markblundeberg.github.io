@@ -16,7 +16,7 @@
         },
         anion: {
             z: 1,
-            color: '#E6AB02',
+            color: '#80B030',
             mathLabel: '\\mathrm{Cl}^{-}',
         },
         electron: {
@@ -70,12 +70,12 @@
         symbol: '⇌',
         speciesId1: 'electron',
         speciesId2: 'anion',
-        popupCallback: () => 'popup',
+        popupCallback: () =>
+            '$\\mathrm{AgCl} + \\mathrm{e}^- \\rightleftharpoons \\mathrm{Ag} + \\mathrm{Cl}^-$',
     });
     diagram.updateVerticalMarker('ag-cl-', {
         x: b[1],
         y1: V_el,
         y2: V_Cl,
-        popupArgs: 'yo popupArgs',
     });
 </script>

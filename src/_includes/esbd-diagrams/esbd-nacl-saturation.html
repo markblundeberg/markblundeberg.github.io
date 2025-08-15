@@ -11,12 +11,12 @@
     const speciesInfo = {
         cation: {
             z: 1,
-            color: '#E6AB02',
+            color: '#d87E37',
             mathLabel: '\\mathrm{Na}^{+}',
         },
         anion: {
             z: -1,
-            color: '#377EB8',
+            color: '#80B030',
             mathLabel: '\\mathrm{Cl}^{-}',
         },
     };
@@ -63,7 +63,8 @@
         symbol: '⇌',
         speciesId1: 'anion',
         speciesId2: 'cation',
-        popupCallback: () => 'popup',
+        popupCallback: () =>
+            '$ \\mathrm{Na}^+ + \\mathrm{Cl}^- \\rightleftharpoons \\mathrm{NaCl}. $',
     });
     diagram.updateVerticalMarker('zn', {
         x: 0.5,
