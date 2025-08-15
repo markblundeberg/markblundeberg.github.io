@@ -2,11 +2,11 @@
 layout: layouts/esbd_topic.njk
 title: 'Solutions'
 tags: [page, esbd_topic] # Assign to 'page' and 'esbd_topic' collections
-orderESBD: 13
+orderESBD: 21
 eleventyNavigation:
     key: Solutions # Text used in navigation menus
     parent: ESBD # Optional: Assumes you have a main 'ESBD' menu item defined elsewhere
-    order: 13 # Order within the parent menu
+    order: 21 # Order within the parent menu
 ---
 
 # {{title}}
@@ -207,9 +207,9 @@ The above leaves open the question of how much of this non-ideality product is d
 
 ## Takeaways
 
-For the next topic, we'll talk about what happens where two solutions come into contact.
+For the next topic, we'll talk about the close analogies in semiconductors and other solid state electronic materials.
 
-[**NEXT TOPIC: Transport**](../transport/)
+[**NEXT TOPIC: Solid state**](../solidstate/)
 
 {#
 ## Optional discussion

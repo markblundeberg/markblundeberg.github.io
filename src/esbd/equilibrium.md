@@ -1,10 +1,10 @@
 ---
 layout: layouts/esbd_topic.njk
-title: 'Electrodes'
+title: 'Equilibrium'
 tags: [page, esbd_topic] # Assign to 'page' and 'esbd_topic' collections
 orderESBD: 11
 eleventyNavigation:
-    key: Electrodes # Text used in navigation menus
+    key: Equilibrium # Text used in navigation menus
     parent: ESBD # Optional: Assumes you have a main 'ESBD' menu item defined elsewhere
     order: 11 # Order within the parent menu
 ---

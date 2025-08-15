@@ -2,11 +2,11 @@
 layout: layouts/esbd_topic.njk
 title: 'Non-equilibrium'
 tags: [page, esbd_topic]
-orderESBD: 26
+orderESBD: 41
 eleventyNavigation:
     key: Non-equilibrium
     parent: ESBD
-    order: 26
+    order: 41
 ---
 
 # {{title}}

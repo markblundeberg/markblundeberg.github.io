@@ -93,7 +93,7 @@ During charge and discharge, the $V_i$ voltages form a direct visualization of h
 
 For the next topic, we'll return to general discussions, and get into detail about how the $V_i$'s work inside of solutions.
 
-[**NEXT TOPIC: Solutions**](../solutions/)
+[**NEXT TOPIC: Driving forces**](../drive/)
 
 ## Optional discussion
 

@@ -2,11 +2,11 @@
 layout: layouts/esbd_topic.njk
 title: 'The case against ϕ'
 tags: [page, esbd_topic]
-orderESBD: 98
+orderESBD: 84
 eleventyNavigation:
     key: About *ϕ*
     parent: ESBD
-    order: 998
+    order: 84
 ---
 
 # The case against $\phi$
