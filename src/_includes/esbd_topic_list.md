@@ -14,7 +14,7 @@
 - Charge neutrality.
 - Solubility products.
 - [_Potentials_](/esbd/potentials/) - Redox potentials in terms of $V_i$.
-- pH
+- [_pH_](/esbd/ph/) - The standard measure of acidity, in terms of $V_i$.
 
 *Spatial variations*:
 - [_Transport_](/esbd/transport2/) - Steady state transport & concentration gradients. (esp. two-ion)
