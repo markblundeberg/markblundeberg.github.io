@@ -11,13 +11,15 @@ eleventyNavigation:
 
 # {{title}}
 
-One of the key principles with $V_i$ is how different species connect to each other. We can't simply have charge turn from one charged species into another, but instead there has to be a reaction that *transfers* charge. As a result, we will see different species' $V_i$ connect with offsets depending on the nature of the reaction (and the nature of the neutral species in the reaction). We will quite commonly see equations like:
+One of the key questions with these $V_i$ is how different species' $V_i$ values relate to each other. Charge cannot move between charged species without an accompanying chemical reaction taking place. As a result, we will see different species' $V_i$ connect with offsets depending on the nature of the reaction (and the nature of the neutral species in the reaction). We will quite commonly see equations like:
 
-$$ V_i - V_j = \frac{1}{F}\mu_{\mathrm{neutral}}. $$
+$$ V_i - V_j = \Delta, $$
 
-For charged species $i$ and $j$, and some neutral species.
+where $\Delta$ is some nonzero offset (usually depending on neutral reactants or products). In the diagrams, we will show a symbol with the marker ⇌ to indicate an equlibrium reaction.
 
 A few classic examples below will demonstrate how this can appear.
+
+> **Important technical note**: For these ESBDs, I adopt the common convention that $\mu=0$ for elements in their most stable form (such as $\mathrm{H_2}$, or $\mathrm{O_2}$, or $\mathrm{Zn}$ metal), at the usual reference conditions (25&nbsp;°C and 1 bar). This is convenient since it means tabulated Gibbs formation energies of neutral species (such as $\mathrm{H_2O}$) directly give their chemical potentials.
 
 ## Reactions
 
@@ -33,13 +35,11 @@ To translate this to $V_i$, we sub in our $\bar{\mu}_i = z_i F V_i$, to get:
 
 $$ V_{\mathrm{H}^+} - V_{\mathrm{OH}^-} = \frac{\mu_{\mathrm{H_2O}}}{F}. $$
 
-Thus, auto-ionization in water directly sets up an offset between $V_{\mathrm{H}^+}$ and $V_{\mathrm{OH}^-}$:
+Thus, auto-ionization in water directly sets up an offset between $V_{\mathrm{H}^+}$ and $V_{\mathrm{OH}^-}$.
 
 {% include "esbd-diagrams/esbd-h2o-autoionization.html" %}
 
-How large is this offset in reality? It depends on the value of the chemical potential $\mu_{\mathrm{H_2O}}$, which is the partial molar Gibbs energy for $\mathrm{H_2O}$. We can look up Gibbs *formation* energy energies for neutral chemicals like $\mathrm{H_2O}$ in chemical data tables, but to turn a Gibbs formation energy into a concrete chemical potential (and thus make a concrete statement about differences $V_i - V_j$), we first have to make a choice about our reference system.
-
-For these ESBDs, I adopt the common convention that $\mu=0$ for elements in their most stable form (such as $\mathrm{H_2}$ and $\mathrm{O_2}$), at the specific reference conditions that are used to define the tabulated Gibbs formation energies. This is convenient since it means all Gibbs formation energies are *equal* to the chemical potentials.
+How large is this offset? The chemical potential $\mu_{\mathrm{H_2O}}$ is the partial molar Gibbs energy for $\mathrm{H_2O}$. We can look up Gibbs *formation* energy energies for neutral chemicals like $\mathrm{H_2O}$ in chemical data tables, and for convenience, we adopt the chemical potential system that makes chemical potentials equal to Gibbs formation energies.
 
 For pure water at standard conditions we know from chemical data tables that the Gibbs formation energy of $\mathrm{H_2O}$ is $-237.1~\mathrm{kJ/mol}$. This means for pure water we have $\mu_{\mathrm{H_2O}} = -237.1~\mathrm{kJ/mol}$, and thus $\mu_{\mathrm{H_2O}}/F = -2.457~\mathrm{V}$. So,
 
@@ -59,62 +59,17 @@ This is an example of heterogeneous equilibrium (the salt is a separate solid ph
 
 ## Electrodes
 
-Electrodes are interfaces where electrons (in metal) and ions (in solution) meet and react. A classic example, used as a standard reference for electrochemical studies, is the silver chloride electrode:
+Electrodes are interfaces where electrons (in metal) and ions (in solution) meet and react. In ordinary electrochemistry, the electrons are given special status, but with these $V_i$ diagrams we see they are no more complicated than the preceding ionic reactions. The only minor difference is that now the two charged reactants live in different materials.
 
-> $\mathrm{Ag}$ metal | $\mathrm{AgCl}$ coating | Solution containing $\mathrm{Cl}^-$ ions
+For example, consider a zinc metal electrode, which may dissolve into zinc ions, separating off *two* electrons per ion.
 
-The characteristic and reversible reaction here is that (in effect) the silver chloride can take an electron from the metal, and release a $\mathrm{Cl}^-$ ion. In the process this leaves behind some Ag that deposits on the metal. Let's write down that reaction:
-
-$$ \mathrm{AgCl} + \mathrm{e}^- \rightleftharpoons \mathrm{Ag} + \mathrm{Cl}^-$$
-
-Let's convert this reversible reaction to (electro)-chemical potentials:
-
-$$ \mu_{\mathrm{AgCl}} + \bar\mu_{\mathrm{e}^-} = \mu_{\mathrm{Ag}} + \bar\mu_{\mathrm{Cl}^-}$$
-
-As this is our first time seeing a reaction, let's break this down:
-
-* $\mu_{\mathrm{AgCl}}$ is the chemical potential of the salt. It's also the electrochemical potential, but since this is a neutral species, we just leave off the overbar.
-* $\bar\mu_{\mathrm{e}^-}$ is the electrochemical potential for electrons, in the silver metal.
-* The equality ($=$) of these two sides is because we are assuming equilibrium.
-* $\mu_{\mathrm{Ag}}$ is the chemical potential associated to silver atoms, in the solid metal state.
-* $\bar\mu_{\mathrm{Cl}^-}$ is the electrochemical potential for chloride ions, _in solution_.
-
-Now for the ionic species, we just sub in $\bar{\mu}_i = z_i F V_i$, and this becomes:
-
-$$ \mu_{\mathrm{AgCl}} - F V_{\mathrm{e}^-} = \mu_{\mathrm{Ag}} - F V_{\mathrm{Cl}^-}$$
-
-or rearranging,
-
-$$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} =  \frac{1}{F} ( \mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}} )$$
-
-We are going to see this kind of equation occur again and again: where there is a reaction of any kind, the _separation_ between $V_i$ levels is related to some neutral species' chemical potentials. Reactions are always charge-balanced, so we will never see one $V$ value on its own, only balanced $V_x - V_y$ differences (in more complicated reactions, sometimes sums of $V_x - V_y$ differences, but we will touch on that in a later Topic).
-
-Let's plot this on a band diagram:
-
-{% include "esbd-diagrams/esbd-ag-agcl-electrode.html" %}
-
-The diagram shows the actual quantitative step $V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}$. Let's calculate it now, assuming standard temperature and pressure. Since chemical potentials are partial molar Gibbs free energy, we can just look up the Gibbs free energies of formation in a table: $\mu_{\mathrm{Ag}} = 0~\mathrm{kJ/mol}$ and $\mu_{\mathrm{AgCl}} = -109.8~\mathrm{kJ/mol}$ at standard conditions. Note that we use the common convention that $\mu=0$ for elements in their most stable form, at the standard reference conditions (25&nbsp;°C and 1 bar). Plug those in with the faraday constant, and we get:
-
-$$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} = +1.138~\mathrm{V}$$
-
-(Don't confuse this with the electrode potential $E = V_{\mathrm{e}^-} - \phi$, which is approximately 0.2 V with this electrode.)
-
-In the diagrams, we will show a symbol with the marker ⇌ to indicate an equlibrium reaction, especially at the electrodes.
-
-
-## Elemental metal electrodes
-
-Another classic electrode is the zinc metal electrode, which releases / captures $\mathrm{Zn}^{2+}$ ions. Let's quickly run through the reaction:
-
-$$ \mathrm{Zn} \rightleftharpoons \mathrm{Zn}^{2+} + 2\mathrm{e}^-$$
+$$ \mathrm{Zn}^{2+} + 2\mathrm{e}^- \rightleftharpoons \mathrm{Zn} $$
 
 which becomes:
 
-$$ \mu_{\mathrm{Zn}} = 2 F V_{\mathrm{Zn}^{2+}} - 2 F V_{\mathrm{e}^-}$$
-
-Here the 2 in front of the $V_{\mathrm{Zn}^{2+}}$ came because of its ionic charge, whereas the 2 in front of $V_{\mathrm{e}^-}$ came from the original formula; the latter also flipped sign. We see again this sets a $V_i$ difference,
-
 $$ V_{\mathrm{Zn}^{2+}} - V_{\mathrm{e}^-} =  \frac{1}{2F} \mu_{\mathrm{Zn}} $$
+
+Note there is a factor of $1/2$, a consequence of the double charged nature of the reaction, but we still see a balanced $V_i - V_j$ on the left hand side. We will *always* see balanced differences like this (and never something like $V_i - 2V_j$), as a consequence of the reactions being charge-neutral overall.
 
 Plotting the ESBD now,
 
@@ -122,15 +77,38 @@ Plotting the ESBD now,
 
 It's a flat line with $V_{\mathrm{Zn}^{2+}} = V_{\mathrm{e}^-}$.
 
-Don't mistake this flat connection as being required for equilibrium in general, as it's only an 'accidental' consequence of $\mu_{\mathrm{Zn}}$ being zero under our conditions and conventions: the zinc metal is at standard reference conditions, and we have adopted the convention that elements in most stable form have $\mu=0$, and indeed the zinc metal is the most stable form of $\mathrm{Zn}$. So, $\mu_{\mathrm{Zn}} = 0$ and thus $V_{\mathrm{Zn}^{2+}} - V_{\mathrm{e}^-} = 0$. Yet, away from standard conditions will have $\mu_{\mathrm{Zn}} \neq 0$ and thus have equilibrium with $V_{\mathrm{Zn}^{2+}} \neq V_{\mathrm{e}^-}$. In the previous $\mathrm{AgCl}$ example, we also had a large ~1 V step, and it was also at equilibrium.
+> **Note**: Don't mistake this flat connection as being required for equilibrium in general, as it's only an 'accidental' consequence of $\mu_{\mathrm{Zn}}$ being zero under our conditions and conventions. Similarly we would see $V_{\mathrm{M}^{n+}} - V_{\mathrm{e}^-} = \mu_{\mathrm{M}}/(nF) = 0$ for *all* elemental electrodes of metal $M$. But if we change the temperature or pressure, or adopt a different chemical potential convention, then we would see $V_{\mathrm{M}^{n+}} \neq V_{\mathrm{e}^-}$ at equilibrium. 
+
+Another classic example, used as a standard reference for electrochemical studies, is the silver chloride electrode:
+
+> $\mathrm{Ag}$ metal | $\mathrm{AgCl}$ coating | Solution containing $\mathrm{Cl}^-$ ions
+
+The characteristic and reversible reaction here is that (in effect) the $\mathrm{AgCl}$ can take an electron from the metal, and release a $\mathrm{Cl}^-$ ion. In the process this leaves behind some $\mathrm{Ag}$ that deposits on the metal (and the silver chloride is in fact porous, so this happens in direct contact). Let's write down that reaction:
+
+$$ \mathrm{AgCl} + \mathrm{e}^- \rightleftharpoons \mathrm{Ag} + \mathrm{Cl}^-$$
+
+which results:
+
+$$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} =  \frac{1}{F} ( \mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}} ). $$
+
+Let's plot this on a band diagram once again:
+
+{% include "esbd-diagrams/esbd-ag-agcl-electrode.html" %}
+
+Since we have $\mu_{\mathrm{Ag}} = 0~\mathrm{kJ/mol}$ and $\mu_{\mathrm{AgCl}} = -109.8~\mathrm{kJ/mol}$ we get:
+
+$$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} = +1.138~\mathrm{V}$$
+
+By the way, don't confuse this with the electrode potential $E = V_{\mathrm{e}^-} - V_{\mathrm{SHE}}$, which is approximately 0.2 V with this electrode.
 
 ## Takeaways
 
-The main point is that at electrodes reacting with a single species of ion,
-* We get a relative step up or down going from $V_{\mathrm{e}^-}$ to $V_{\mathrm{ion}}$.
-* The quantitative value of that step at equilibrium depends on the chemical potentials of neutral species, depending on the specifics of the reaction.
-* This step should not be confused with the electrode potential of standard electrochemistry.
+The main point is that reactions and electrodes,
+* We establish a difference $V_i - V_j$, connecting charged species $i$ and $j$.
 * In the diagrams, we will mark these reactions with a ⇌ symbol.
+* At electrodes we get a relative step up or down going from $V_{\mathrm{e}^-}$ to $V_{\mathrm{ion}}$. This step should not be confused with the electrode potential of standard electrochemistry.
+* The quantitative value of that step at equilibrium depends on the chemical potentials of neutral species involved in the reaction.
+* Our convention that chemical potentials are equal to Gibbs formation energy is a choice that influences the quantitative $V_i - V_j$ and in turn the visual appearance of our band diagrams. This is however a fairly universal choice.
 
 Alright, we're ready now to tackle a real application!
 
