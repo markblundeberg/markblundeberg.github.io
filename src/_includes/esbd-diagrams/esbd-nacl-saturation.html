@@ -35,8 +35,8 @@
 
     const Delta = -3.9813; // V
 
-    const V_cat = +0.789; //random
-    const V_an = V_cat + Delta;
+    const V_cat = -0.789; //random
+    const V_an = V_cat - Delta;
     diagram.setVRange(Math.min(V_cat, V_an) - 0.2, Math.max(V_cat, V_an) + 0.2);
 
     const b = boundaries;
