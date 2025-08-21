@@ -17,13 +17,13 @@ Let's talk a bit about how charge moves in this $V_i$ framework, when we have a 
 
 ## Charge moves from high voltage to low voltage
 
-One of the basic facts of electricity is that charge "wants" to move from high to low voltage. With these $V_i$, we see the more precise thermodynamic statement is **"the charge as carried by species $i$ will spontaneously move from high $V_i$ to low $V_i$"**.
+One of the basic facts of electricity is that charge wants to move from high to low voltage. With these $V_i$, we see the more precise thermodynamic statement is **"the charge as carried by species $i$ will spontaneously move from high $V_i$ to low $V_i$"**.
 
-This is a special case of the general statement in thermodynamics that all species (including uncharged species) move from high to low chemical potential $\mu_i$. Such flows produce an increase in entropy, and reverse flows cannot happen because they would decrease entropy. For charged species, their electrochemical potential *is* their proper chemical potential ($\bar\mu_i$ is just an alias for $\mu_i$). So, electrons move from high to low $\bar\mu_{\mathrm{e}^-}$, meaning they move from low to high $V_{\mathrm{e}^-}$; but since they are negatively charged, this means the charge carried by electrons moves from high to low $V_{\mathrm{e}^-}$. For positive charges like a lithium ion, of course the particle flow is in the same direction as the charge flow: from high to low $V_{\mathrm{Li}^+}$.
+Thermodynamically, all species (charged or uncharged) move from high to low chemical potential $\mu_i$. The difference in $\mu_i$ represents available work (i.e. free energy difference), and spontaneous flows dissipate the work as heat, increasing entropy.^[It need not happen that all available free energy is lost to entropy, e.g. the spontaneous flow  in an LED will might emit light. But if not harvested, then such side effects do finally end up as entropy.] For charged species, the electrochemical potential is their full chemical potential. So, electrons move from high to low $\bar\mu_{\mathrm{e}^-}$, meaning they move from low to high $V_{\mathrm{e}^-}$; but since they are negatively charged, this means the charge carried by electrons moves from high to low $V_{\mathrm{e}^-}$. For positive charges like a lithium ion, of course the particle flow is in the same direction as the charge flow: from high to low $V_{\mathrm{Li}^+}$.
 
 {% include "esbd-diagrams/V-driving-force-two.html" %}
 
-Naively, the motion of charge is often explained in terms of microscopic mechanics, that charges are accelerated towards lower electrostatic potential $\phi$. But such microscopic mechanics are fully reversible, and so charges can move uphill just as often as downhill. To explain the spontaneous and irreversible motion of charges we have to turn to irreversible frameworks of statistical mechanics and thermodynamics. This is why our thermodynamic voltage $V_i$ is the key player, not the microscopic electrostatic potential.
+Naively, the motion of charge is often explained in terms of microscopic mechanics, that charges are accelerated towards lower electrostatic potential $\phi$. But such microscopic mechanics are fully reversible, and so charges can move uphill just as often as downhill. To explain the spontaneous and irreversible motion of charges we have to turn to irreversible frameworks of statistical mechanics and thermodynamics. This is why our thermodynamic voltage $V_i$ is the key player, not the electrostatic potential $\phi$.
 
 ## Conduction
 
@@ -81,7 +81,7 @@ For the most part, junctions between electronic conductors have negligible inter
 
 > DIAGRAM - schottky diode V_e- zoomed out
 
-It is often the case that this interfacial current is exponentially dependent on the interfacial voltage drop, i.e. roughly $J_i \propto \exp(\Delta V_i \cdot z_i F/RT)$. In electrochemistry this exponential form is best represented by the {% wiki "Butler–Volmer equation" %}. In electronics, there is the {% wiki "Shockley diode equation" %}, which is a special case of the Butler–Volmer equation with one of the charge-transfer coefficients set to 0.^[The charge-transfer coefficients could be better named as "barrier lowering coefficients", as they nominally reflect the degree to which the bias/overpotential $\Delta V$ controls the reaction barrier in the specified direction. In a diode, the reverse bias has zero influence on the barrier height, which is why it evaluates to $\exp(0) = 1$. Practically though, the charge-transfer coefficients just end up as empirical fitting parameters, much like the ideality factor in the diode equation.] The idea is that there is a barrier that normally keeps the reaction happening at a slow rate, and $\Delta V_i$ is able to speed the reaction by lowering the barrier for either the reverse or forward reaction.
+It is often the case that this interfacial current is exponentially dependent on the interfacial voltage drop, i.e. roughly $J_i \propto \exp(\Delta V_i \cdot z_i F/RT) - 1$. In electrochemistry this exponential form is best represented by the {% wiki "Butler–Volmer equation" %}. In electronics, there is the {% wiki "Shockley diode equation" %}, which is a special case of the Butler–Volmer equation with one of the charge-transfer coefficients set to 0.^[The charge-transfer coefficients could be better named as "barrier lowering coefficients", as they nominally reflect the degree to which the bias/overpotential $\Delta V$ controls the reaction barrier in the specified direction. In a diode, the reverse bias has zero influence on the barrier height, which is why it evaluates to $\exp(0) = 1$. Practically though, the charge-transfer coefficients just end up as empirical fitting parameters, much like the ideality factor in the diode equation.] The idea is that there is a barrier that normally keeps the reaction happening at a slow rate, and $\Delta V_i$ is able to speed the reaction by lowering the barrier for either the reverse or forward reaction.
 
 > Plot - exponential IV relationship
 
@@ -92,6 +92,8 @@ It is often the case that this interfacial current is exponentially dependent on
 At electrodes
 
 > Another example with V_e- implied level? Electroplating?
+
+Note on blocking interfaces: If the interface blocks the species then $V_i$ difference can build up (e.g. capacitor). It may appear that the current is going 'through' the interface.
 
 ## Reactions in general
 
@@ -113,6 +115,16 @@ It does raise a question though, with multiple $V_i$ which one is the overpotent
 - Diagrams Diagrams Diagrams!!!!
 
 - Matrix cross terms? (put in Optional?)
+
+## The time dynamics
+
+Local thermal equilibrium always assumed.
+
+* Level 0 Steady-state assumption (kinetics only). Not quite the same as charge neutral, rather, conserved-current.
+* Level 1 Pseudocapacitance - the conserved-current assumption (V landscape is changing gradually, but deposited charges for adjusting V landscape are negligible)
+* Level 1.5 Localized capacitances - Allow interfacial DLs and also insulating regions to actually have D field.
+* Level 2 Distributed capacitance - Bulk D field is important. Final result within quasielectrostatic framework, letting us address high frequency response.
+* Level 3 Electromagnetism
 
 ## Takeaways
 
