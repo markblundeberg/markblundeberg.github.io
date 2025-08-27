@@ -17,6 +17,10 @@ $$ V_i - V_j = \Delta, $$
 
 where $\Delta$ is some nonzero offset (usually depending on neutral reactants or products). In the diagrams, we will show a symbol with the marker ⇌ to indicate an equlibrium reaction.
 
+{% include "esbd-diagrams/esbd-reaction-generic.html" %}
+
+And of course, at equilibrium every species equilibrates with itself via $ V_i - V_i = 0 $, and so we see $V_i$ being perfectly flat throughout each domain where the species $i$ can move freely.
+
 A few classic examples below will demonstrate how this can appear.
 
 > **Important technical note**: For these ESBDs, I adopt the common convention that $\mu=0$ for elements in their most stable form (such as $\mathrm{H_2}$, or $\mathrm{O_2}$, or $\mathrm{Zn}$ metal), at the usual reference conditions (25&nbsp;°C and 1 bar). This is convenient since it means tabulated Gibbs formation energies of neutral species (such as $\mathrm{H_2O}$) directly give their chemical potentials.
@@ -55,11 +59,11 @@ If the solution is fully saturated with salt (meaning it is in equilibrium with 
 
 This is an example of heterogeneous equilibrium (the salt is a separate solid phase), whereas the previous autoionization example is a form of homogeneous equilibrium. Note that this $3.9813~\mathrm{V}$ spacing from $\mathrm{NaCl}$ applies to any solvent, not just water; the only assumption we made was that of saturation.
 
-(This still leaves a question: where does $V_{\mathrm{Na}^+}$ sit relative to $V_{\mathrm{H}^+}$? As we'll see in later topics, this difference is well-defined, but is going to depend on the solvent and on pH!)
+(This still leaves a question: salt water has both $\mathrm{Na}^+$ and $\mathrm{H}^+$ ions. So, where does $V_{\mathrm{Na}^+}$ sit relative to $V_{\mathrm{H}^+}$? As we'll see in later topics, this difference is well-defined, but is going to depend on the solvent and on pH. Likewise for unsaturated salt water, we will see how $ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ varies with concentration.)
 
 ## Electrodes
 
-Electrodes are interfaces where electrons (in metal) and ions (in solution) meet and react. In ordinary electrochemistry, the electrons are given special status, but with these $V_i$ diagrams we see they are no more complicated than the preceding ionic reactions. The only minor difference is that now the two charged reactants live in different materials.
+Electrodes are interfaces where electrons (in metal) and ions (in solution) meet and react. This is just another kind of reaction that follows the same patterns.
 
 For example, consider a zinc metal electrode, which may dissolve into zinc ions, separating off *two* electrons per ion.
 

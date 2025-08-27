@@ -1,0 +1,70 @@
+<figure class="demo-container" style="max-width: 230px">
+    <div class="bd-container" id="reaction-generic-container"></div>
+</figure>
+
+<script type="module">
+    const plotContainerId = 'reaction-generic-container';
+
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { formatPopupBaseContent, throttle } from '{{ esbdJsPath }}utils.js';
+
+    const speciesInfo = {
+        cation: {
+            z: 1,
+            color: '#111',
+            mathLabel: 'i',
+        },
+        anion: {
+            z: -1,
+            color: '#111',
+            mathLabel: 'j',
+        },
+    };
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        plotContainerId,
+        speciesInfo
+    );
+
+    // Set layout
+    const boundaries = [0, 1];
+    diagram.setSpatialLayout(boundaries, [{ name: '', color: '#e8e8e8' }]);
+
+    const Delta = +1.2345; // V
+
+    const V_cat = +0.789; //random
+    const V_an = V_cat - Delta;
+    diagram.setVRange(Math.min(V_cat, V_an) - 0.2, Math.max(V_cat, V_an) + 0.2);
+
+    const b = boundaries;
+    diagram.updateTraceData([
+        {
+            id: `anion_trace`,
+            speciesId: 'anion',
+            curveType: 'potential',
+            showLabel: true,
+            x: [0, 0.5],
+            y: [V_an, V_an],
+        },
+        {
+            id: `cation_trace`,
+            speciesId: 'cation',
+            curveType: 'potential',
+            showLabel: true,
+            x: [0.5, 1],
+            y: [V_cat, V_cat],
+        },
+    ]);
+
+    diagram.addVerticalMarker('zn', {
+        symbol: '⇌',
+        speciesId1: 'anion',
+        speciesId2: 'cation',
+        popupCallback: () => '$V_i - V_j = \\Delta$',
+    });
+    diagram.updateVerticalMarker('zn', {
+        x: 0.5,
+        y1: V_an,
+        y2: V_cat,
+    });
+</script>
