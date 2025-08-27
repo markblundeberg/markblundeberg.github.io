@@ -1,7 +1,7 @@
 
 *The $V_i$ landscape*:
 
-- [$V_i$](/esbd/v_i/) - the fundamentals
+- [_Species voltage_](/esbd/v_i/) - the fundamentals of species voltage $V_i$.
 - [_Equilibrium_](/esbd/equilibrium/) - electrodes and reactions.
 - [_Lithium ion batteries_](/esbd/lib/) - An application spotlight.
 - [_Driving forces_](/esbd/drive/) - Transport and reactions out of equilibrium.

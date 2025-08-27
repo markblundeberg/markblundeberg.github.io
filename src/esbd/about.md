@@ -38,6 +38,8 @@ There are actually many other attempts at band diagrams for electrochemistry. To
 
 I haven't investigated them in detail but a quick glance shows they are very different. One thing I notice is a reliance on "vacuum level" as a useful concept, which [immediately makes me skeptical](../phi/).
 
+<a id="whyvoltage"></a>
+
 ## Why "species voltage"? Aren't voltages supposed to be differences?
 
 I struggled with this a fair bit! "Species voltage" is an improper term in that the quantity is actually of the type "electric potential", i.e., $V_i$ is an 'absolute' or unreferenced potential. In contrast, technically a voltage means a potential difference. We talk about the voltage on power lines (between wires), or the voltage of a battery (between terminals), but we are not supposed to talk about the voltage on a single wire.
