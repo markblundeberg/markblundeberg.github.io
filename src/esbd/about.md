@@ -59,10 +59,13 @@ Some of these are absolute and some are in fact potential differences. And to ad
 
 * Liquid junction potential (volt units)
 * Galvani potential (volt units)
+* Volta potential (volt units)
+* Contact potential (volt units)
+* Surface potential (volt units)
 * Donnan potential (volt units)
 * Cell potential (volt units)
 
-The last one is particularly ironic as it literally is a voltage in the proper sense.
+(The last one is particularly ironic as it literally is a voltage in the voltmeter sense.)
 
 On the other hand, in the field of electronics and in most casual conversation, we are perfectly comfortable with talking absolute voltages, or at least voltages that are measured *with respect to a globally-defined reference point* (ground/common/earth). This is so common that we often use term "voltage difference" or differential voltage to unambiguously describe what we are technically supposed to simply call "voltage" i.e. potential difference. So, I would say $V_i$ are perfectly acceptable "voltage"s, and indeed my recommendation is to borrow the tradition of using the electrical ground as the our reference point. To be precise, we set $V_{\mathrm{e}^-} = 0$ at the electrical ground. This electronic ground in turn fixes the entire system of $V_i$ values!
 
@@ -72,7 +75,7 @@ So, "species voltage" for $V_i$ because:
 * The concept of "absolute voltage", though technically improper, is widespread as evident by the term "voltage difference".
 * The term "potential" is in fact also unclear as it frequently gets abused the other way, to mean "potential difference", even a local potential difference.
 * Not only is $V_{\mathrm{e}^-}$ exactly the voltage in the usual (electronics) sense, but all differences in $V_i$ are in principle just as accessible via generalized 'voltmeters', so they have a more hands-on and less abstract feeling. (Many potentials in the above list are not at all hands-on but rather fundamentally inacessible and ill-defined due to being contaminated by the concept of in-material $\phi$.)
-* I have always loved electronic circuits, and I think it is wonderful that we can bring ions into the world of electronics, where "voltage" is the right term.
+* I have always loved electronic circuits, and I think it is wonderful that we can bring ions into the world of electronics, where "voltage" is the common term.
 
 ### Why not "ion voltage"?
 
