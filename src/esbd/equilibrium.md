@@ -19,7 +19,7 @@ where $\Delta$ is some nonzero offset (usually depending on neutral reactants or
 
 {% include "esbd-diagrams/esbd-reaction-generic.html" %}
 
-And of course, at equilibrium every species equilibrates with itself via $ V_i - V_i = 0 $, and so we see $V_i$ being perfectly flat throughout each domain where the species $i$ can move freely.
+And of course, at equilibrium every species equilibrates with itself (which can be understood as a trivial reaction $ V_i - V_i = 0 $), and so we see $V_i$ being perfectly flat throughout each domain where the species $i$ can move freely.
 
 A few classic examples below will demonstrate how this can appear.
 
@@ -45,7 +45,7 @@ Thus, auto-ionization in water directly sets up an offset between $V_{\mathrm{H}
 
 How large is this offset? The chemical potential $\mu_{\mathrm{H_2O}}$ is the partial molar Gibbs energy for $\mathrm{H_2O}$. We can look up Gibbs *formation* energy energies for neutral chemicals like $\mathrm{H_2O}$ in chemical data tables, and for convenience, we adopt the chemical potential system that makes chemical potentials equal to Gibbs formation energies.
 
-For pure water at standard conditions we know from chemical data tables that the Gibbs formation energy of $\mathrm{H_2O}$ is $-237.1~\mathrm{kJ/mol}$. This means for pure water we have $\mu_{\mathrm{H_2O}} = -237.1~\mathrm{kJ/mol}$, and thus $\mu_{\mathrm{H_2O}}/F = -2.457~\mathrm{V}$. So,
+For pure water at standard conditions we know from chemical data tables that the Gibbs formation energy of $\mathrm{H_2O}$ is $-237.1~\mathrm{kJ/mol}$. This means for pure water we have $\mu_{\mathrm{H_2O}} = -237.1~\mathrm{kJ/mol}$, and as a reminder the Faraday constant is $F = 96.485~\mathrm{kJ/mol/V}$. Thus $\mu_{\mathrm{H_2O}}/F = -2.457~\mathrm{V}$. So,
 
 $$ V_{\mathrm{H}^+} - V_{\mathrm{OH}^-} = -2.457~\mathrm{V} $$
 
