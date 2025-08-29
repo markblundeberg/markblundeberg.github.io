@@ -1,10 +1,10 @@
 ---
 layout: layouts/esbd_topic.njk
-title: V_i
+title: Species voltage
 tags: [page, esbd_topic]
 orderESBD: 10
 eleventyNavigation:
-    key: V_i
+    key: Species voltage
     parent: ESBD
     order: 10
 ---
@@ -15,7 +15,7 @@ Our key player is the **species voltage** $V_i$, a potential defined for every t
 
 $$ V_i = \frac{\bar\mu_i}{q_i}. $$
 
-This may look intimidating for those not versed in the fundamentals of thermodynamics and the meaning of chemical potential. But you do not have to deeply understand $\bar\mu_i$ to understand $V_i$, because you already know how it works:
+This may look intimidating for those not versed in the fundamentals of thermodynamics and the meaning of chemical potential. But you do not have to deeply understand $\bar\mu_i$ to understand $V_i$, because you likely already know how it works:
 
 > **The electronic quantity $V_{\mathrm{e}^-}$ is precisely the voltage seen in basic electronic circuits.**
 
@@ -40,7 +40,7 @@ That is,
 * $V_{\mathrm{e}^-}$ is conventionally assigned to $0$ for the electrical ground,
 * and so on, you get the idea.
 
-Of course, the common teaching is that circuit voltage is determined by the electrostatic potential $\phi$. But in mixed materials, and really with any inhomogeneities, $\phi$ immediately stops behaving like a circuit voltage.^[Riess, I. (1997). [What does a voltmeter measure?](https://doi.org/10.1016/s0167-2738(96)00542-5) Solid State Ionics, 95(3–4), 327–328.]^[Kittel & Kroemer (2000), *Thermal Physics*]^[Datta, S. (2005), *Quantum Transport*]^[Newman & Balsara (2005), *Electrochemical Systems*] This happens already in trivial cases like the connection between a copper wire and a blob of solder where circuit voltage is clearly the same, yet $\phi$ differs. I have a lot more to say about this in [an appendix](../phi/), but in short there is a distinction between "what does a voltmeter measure" vs. "what is the potential difference seen by an imaginary non-interacting test charge". Both of these are called voltages, an unfortunate ambiguity. Traditionally, we stick with "$\phi$ is voltage" and swallow its inevitable awkwardness, and say that electronic circuits are a naive simplification. But myself I believe that practical voltmeters are more important, and to sweeten the deal, voltmeters access a thermodynamically rigorous physical quantity. So, **$V_{\mathrm{e}^-}$ is voltage**!
+Of course, the common teaching is that circuit voltage is determined by the electrostatic potential $\phi$. But in mixed materials, and really with any inhomogeneities, $\phi$ immediately stops behaving like a circuit voltage once you dig into the material properties.^[Riess, I. (1997). [What does a voltmeter measure?](https://doi.org/10.1016/s0167-2738(96)00542-5) Solid State Ionics, 95(3–4), 327–328.]^[Kittel & Kroemer (2000), *Thermal Physics*]^[Datta, S. (2005), *Quantum Transport*]^[Newman & Balsara (2005), *Electrochemical Systems*] This happens already in trivial cases like a metal-metal connection between a copper wire and a blob of solder where circuit voltage is clearly the same, yet $\phi$ differs. I have a lot more to say about this in [an appendix](../phi/), but in short there is a distinction between "what does a voltmeter measure" vs. "what is the potential difference seen by an imaginary non-interacting test charge". Both of these are called voltages, an unfortunate ambiguity. Traditionally, we stick with "$\phi$ is voltage" and swallow its inevitable awkwardness, and say that electronic circuits are a naive simplification. But myself I believe that practical voltmeters are more important, and to sweeten the deal, voltmeters access a thermodynamically rigorous physical quantity. So, **$V_{\mathrm{e}^-}$ is voltage**!
 
 Accepting that $V_{\mathrm{e}^-}$ is the familiar *electronic* circuit voltage, we only have to make a couple more conceptual leaps to arrive at a voltage for ions too:
 * It's not only electrons and $V_{\mathrm{e}^-}$, but by extension $V_i$ for any charged species that ought to satisfy the meaning of 'voltage', and consequently,
@@ -74,7 +74,7 @@ For ions' $V_i$, a regular voltmeter with its metallic probes cannot directly co
 
 There is an important caveat: the hidden choice of chemical potential convention imparts a global offset on each ion's $V_i$. The impact of this hidden assumption is to apply a consistent (but somewhat arbitrary) offset to all values $V_i - V_j$ for each pair of distinct species $i\neq j$. But we'll see there is one fairly universal chemical potential convention that we can adopt, and we will discuss this quantitatively in the next topic.
 
-In fact we could have defined $V_i$ differently by adding various per-species offsets (globally constant but different for each $i$), which would also definitionally impact $V_i - V_j$, and I'll explore these alternative additives in a later topic. But after much thought, I have found the un-offsetted $ V_i = \bar\mu_i / q_i $ is the most concise and elegant choice, so we'll proceed with this definition.
+In fact we could have defined $V_i$ differently by adding various per-species offsets (globally constant but different for each $i$), which would also definitionally impact $V_i - V_j$, and I'll explore these alternative additives in a later topic. Of particular interest is the redox band diagram picture which removes the arbitrariness of the chemical potential (but introduces its own nuances). But after much thought, I have found the un-offsetted $ V_i = \bar\mu_i / q_i $ is the most concise and elegant choice, so we'll proceed with this definition.
 
 Regardless, all of this does not affect ionic $V_i$ differences within the same species (e.g. we can exactly define and measure the difference in $V_{\mathrm{H}^+}$ between two solutions, even if they have different solvents).
 
