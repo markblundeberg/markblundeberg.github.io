@@ -1,6 +1,6 @@
 ---
 layout: layouts/esbd_topic.njk
-title: 'ESBD: Intro'
+title: 'Band Diagrams for Batteries'
 tags: [page, esbd_topic]
 orderESBD: 1
 eleventyNavigation:
