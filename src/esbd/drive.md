@@ -15,6 +15,8 @@ eleventyNavigation:
 
 Let's talk a bit about how charge moves in this $V_i$ framework, when we have a system out of equilibrium.
 
+In fact, non-equilibrium electronics and electrochemistry is an incredibly rich topic, ranging across quantum mechanics in nanostructures^[Supriyo Datta (2017), Lessons from Nanoelectronics], chemical kinetics, thermoelectricity, electromagnetism, and so on. Here I'm just going to cover the bare essentials.
+
 ## Charge moves from high voltage to low voltage
 
 One of the basic facts of electricity is that charge wants to move from high to low voltage. With these $V_i$, we see the more precise thermodynamic statement is **"the charge as carried by species $i$ will spontaneously move from high $V_i$ to low $V_i$"**.
