@@ -19,15 +19,12 @@ This may look intimidating for those not versed in the fundamentals of thermodyn
 
 > **The electronic quantity $V_{\mathrm{e}^-}$ is precisely the voltage seen in basic electronic circuits.**
 
-
 <figure class="demo-container" style="max-width: 250px">
 <img src="/esbd/img/BJT-biasing.svg" style="max-width:100%"/>
-
-
 <figcaption>
 
 Rigorously speaking, electronic circuits are all about the electronic species voltage $V_{\mathrm{e}^-}$. The idea of $V_i$ is to extend this to ions too.
-<small>[From Wikimedia Commons user Michael9422](https://commons.wikimedia.org/wiki/File:Transistor_Simple_Circuit_Diagram_with_NPN_Labels.svg).</small>
+<small>[Image from Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Transistor_Simple_Circuit_Diagram_with_NPN_Labels.svg).</small>
 
 </figcaption>
 </figure>
