@@ -1,0 +1,185 @@
+{% set idprefix = ["mu-V-work-", idsuffix] | join %}
+<figure class="demo-container" style="max-width: 400px">
+    <div style="display: flex; gap: 8px">
+        <div
+            id="{{ idprefix }}-mu-container"
+            style="
+                flex: 1;
+                height: 200px;
+                min-width: 150px;
+                border: 1px solid #eee;
+            "
+        ></div>
+        <div
+            id="{{ idprefix }}-v-container"
+            style="
+                flex: 1;
+                height: 200px;
+                min-width: 150px;
+                border: 1px solid #eee;
+            "
+        ></div>
+    </div>
+    <div style="text-align: center">
+        <div>
+            <label for="{{ idprefix }}-dphi-slider" style="font-size: 0.85em">
+                Offset:
+            </label>
+            <br />
+            <input
+                type="range"
+                id="{{ idprefix }}-dphi-slider"
+                list="{{ idprefix }}-slider-datalist"
+                min="-1.5"
+                max="1.5"
+                step="any"
+                value="-1.0"
+                style="width: 100px"
+            />
+            <datalist id="{{ idprefix }}-slider-datalist">
+                <option value="0" label="0">0</option>
+            </datalist>
+        </div>
+    </div>
+</figure>
+
+<script type="module">
+    import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
+    import { throttle } from '{{ esbdJsPath }}utils.js';
+
+    // DOM identifiers - must match above HTML!
+    const sliderId = '{{ idprefix }}-dphi-slider';
+    const muBarContainerId = '{{ idprefix }}-mu-container';
+    const vContainerId = '{{ idprefix }}-v-container';
+
+    const ion = { z: -1, color: '#377eb8', latex: '\\mathrm{e}^{-}' };
+
+    // Configuration for the Diagrams
+    const commonConfig = {
+        width: 100,
+        height: 200,
+        showYTicks: false, // No numerical ticks
+        categories: [
+            { id: 'left', label: 'Body 1' },
+            { id: 'right', label: 'Body 2' },
+        ],
+        margin: { top: 10, right: 40, bottom: 20, left_compact: 25 }, // Minimal margins if no Y axis label/ticks
+        transitionDuration: 500,
+    };
+    const throttleDuration = 100; // should be 1/5 or less of transitionDuration
+
+    const muBarConfig = {
+        ...commonConfig,
+        yAxisLabel: 'Electrochemical potential $\\bar{\\mu}_i$', // KaTeX label
+        initialYRange: [-2.5, 2.5], // Calculated range + padding
+    };
+
+    const vConfig = {
+        ...commonConfig,
+        yAxisLabel: 'Species voltage $V_i$',
+        initialYRange: [-2.5, 2.5], // Calculated range + padding
+    };
+
+    // Launcher code
+    function doit() {
+        // DOM References
+        const dPhiSlider = document.getElementById(sliderId);
+        const muBarContainer = document.getElementById(muBarContainerId);
+        const vContainer = document.getElementById(vContainerId);
+
+        if (!(dPhiSlider && muBarContainer && vContainer))
+            throw 'Could not find all elements';
+        const muBarDiagram = new EnergyLevelsDiagram(
+            muBarContainerId,
+            muBarConfig
+        );
+        const vDiagram = new EnergyLevelsDiagram(vContainerId, vConfig);
+
+        // Update callback
+        function updateDiagrams() {
+            const dphi = parseFloat(dPhiSlider.value);
+
+            const muLeft = 0;
+            const muRight = muLeft + ion.z * dphi;
+            const VLeft = muLeft / ion.z;
+            const VRight = muRight / ion.z;
+
+            // Update the diagrams
+            muBarDiagram.setLevels([
+                {
+                    categoryId: 'left',
+                    levelId: 'left',
+                    yValue: muLeft,
+                    label: `\\bar{\\mu}_{${ion.latex}}`,
+                    color: ion.color,
+                },
+                {
+                    categoryId: 'right',
+                    levelId: 'right',
+                    yValue: muRight,
+                    label: `\\bar{\\mu}_{${ion.latex}}`,
+                    color: ion.color,
+                },
+            ]);
+            vDiagram.setLevels([
+                {
+                    categoryId: 'left',
+                    levelId: 'left',
+                    yValue: VLeft,
+                    label: `V_{${ion.latex}}`,
+                    color: ion.color,
+                },
+                {
+                    categoryId: 'right',
+                    levelId: 'right',
+                    yValue: VRight,
+                    label: `V_{${ion.latex}}`,
+                    color: ion.color,
+                },
+            ]);
+
+            if (Math.abs(dphi) > 0.01) {
+                // Only draw arrow if there's a difference
+                const muFlowDir = ion.z * dphi < 0;
+                muBarDiagram.setArrows([
+                    {
+                        arrowId: 'flow',
+                        fromLevelId: muFlowDir ? 'left' : 'right',
+                        toLevelId: muFlowDir ? 'right' : 'left',
+                        label: '\\text{Work per electron}',
+                        arrowStyle: '->',
+                        color: '#4daf4a',
+                    },
+                ]);
+                const vFlowDir = dphi < 0;
+                vDiagram.setArrows([
+                    {
+                        arrowId: 'flow',
+                        fromLevelId: vFlowDir ? 'left' : 'right',
+                        toLevelId: vFlowDir ? 'right' : 'left',
+                        label: '\\text{Work per charge}',
+                        arrowStyle: '->',
+                        color: '#4daf4a',
+                    },
+                ]);
+            } else {
+                muBarDiagram.setArrows([]);
+                vDiagram.setArrows([]);
+            }
+        }
+
+        // Slider event listener - throttle it.
+        dPhiSlider.addEventListener(
+            'input',
+            throttle((event) => updateDiagrams(), throttleDuration)
+        );
+
+        // Initial update
+        updateDiagrams();
+    }
+    try {
+        doit();
+    } catch (error) {
+        console.error('Failed to initialize {{ idprefix }} demo!', error);
+    }
+</script>

@@ -53,7 +53,7 @@ The fundamental rule of thermodynamics is that particles flow from high to low c
 
 The available work $\Delta\bar\mu_i$ is free energy per unit of particle count (e.g. kJ/mol or eV/particle). By normalizing $V_i = \bar\mu_i/(z_i F)$, the corresponding $\Delta V_i$ is **available work per unit charge** (volts). But, it's not just the work for *any* charge, rather it is specific to charge transferred via that specific species.
 
-> DIAGRAM - combo plot. \bar\mu_i step annotated with 'work per particle'. V_i step annotated with 'work per charge' consistently with the above. consistent and with slider.
+{% include "esbd-diagrams/levels-mu-V-work.html" %}
 
 ## Differences in $V_i$ are measurable with voltmeters
 
