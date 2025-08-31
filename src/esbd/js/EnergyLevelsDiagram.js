@@ -46,7 +46,7 @@ class EnergyLevelsDiagram {
             width: initialConfig.width || 200,
             height: initialConfig.height || 400,
             margin: { ...defaultMargin, ...(initialConfig.margin || {}) },
-            yAxisLabel: initialConfig.yAxisLabel || 'Potential / Energy',
+            yAxisLabel: initialConfig.yAxisLabel ?? 'Potential / Energy',
             yRange: initialConfig.initialYRange || [0, 1],
             showYTicks: initialConfig.showYTicks !== false, // Default true
             categories: initialConfig.categories || [],
