@@ -1,4 +1,4 @@
-// GenericBandDiagram.js
+// BandDiagram.js
 
 // Assumes D3 and KaTeX (core + auto-render) are loaded globally or imported appropriately.
 
@@ -334,13 +334,9 @@ class BandDiagram extends ResponsivePlot {
      */
     setYRange(min, max) {
         if (typeof min !== 'number' || typeof max !== 'number' || min >= max) {
-            console.error(
-                'EnergyLevelsDiagram Error: Invalid arguments for setYRange.',
-                { min, max }
-            );
-            return;
+            throw new Error('Invalid arguments for setYRange.', { min, max });
         }
-        this.YRange = [min, max];
+        this.yRange = [min, max];
         this.scheduleRedraw();
     }
 
@@ -376,9 +372,9 @@ class BandDiagram extends ResponsivePlot {
         if (xDomain[0] === undefined) xDomain = [0, 1];
         this.xScale.domain(xDomain).nice();
 
-        if (this.YRange) {
-            const ymin = this.YRange[0];
-            const ymax = this.YRange[1];
+        if (this.yRange) {
+            const ymin = this.yRange[0];
+            const ymax = this.yRange[1];
             this.yScale.domain(ymin < ymax ? [ymin, ymax] : [ymax, ymin]);
         } else {
             const allYValues = this.traceData.flatMap((t) =>
