@@ -2,7 +2,7 @@
 
 // Assumes D3 and KaTeX (core + auto-render) are loaded globally or imported appropriately.
 
-import { debounce, renderSpanMath } from './utils.js';
+import { renderSpanMath } from './utils.js';
 import ResponsivePlot from './ResponsivePlot.js';
 
 // Default styling constants
