@@ -43,11 +43,9 @@ class LiIonBatteryComponent {
             this._attachListeners();
             this.updateDiagram();
         } catch (error) {
-            console.error(
-                `Error initializing LiIonBatteryComponent in ${containerSelector}:`,
-                error
-            );
+            this.destroy();
             this.container.innerHTML = `<p style="color: red;">Error initializing diagram component: ${error.message}</p>`;
+            throw error;
         }
     }
 

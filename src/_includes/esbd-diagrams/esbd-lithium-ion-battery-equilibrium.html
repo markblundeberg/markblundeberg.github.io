@@ -5,6 +5,8 @@
 ></div>
 
 <script type="module">
+    const liIonContainerId = '#LIB-cell-eq-container';
+
     import LiIonBatteryComponent from '{{ esbdJsPath }}LiIonBatteryComponent.js';
     import { throttle } from '{{ esbdJsPath }}utils.js';
 
@@ -109,27 +111,7 @@
         plotHeight: 300, // Slightly taller for battery?
     };
 
-    // Initialize Li-ion Battery Component
-    const liIonContainerId = '#LIB-cell-eq-container';
-    const liIonContainer = document.querySelector(liIonContainerId);
-    if (liIonContainer) {
-        try {
-            // Pass the specific config for the Li-ion battery
-            const comp = new LiIonBatteryComponent(
-                liIonContainerId,
-                liIonConfig
-            ); // Instantiate the new component
-            comp.diagram.setVRange(-1.2, 4.7);
-        } catch (error) {
-            console.error(
-                `Failed to initialize LiIonBatteryComponent in ${liIonContainerId}:`,
-                error
-            );
-            liIonContainer.innerHTML = `<p style="color: red;">Error loading Li-ion battery diagram.</p>`;
-        }
-    } else {
-        console.warn(
-            `Container ${liIonContainerId} not found for LiIonBatteryComponent.`
-        );
-    }
+    // Pass the specific config for the Li-ion battery
+    const comp = new LiIonBatteryComponent(liIonContainerId, liIonConfig); // Instantiate the new component
+    comp.diagram.setVRange(-1.2, 4.7);
 </script>
