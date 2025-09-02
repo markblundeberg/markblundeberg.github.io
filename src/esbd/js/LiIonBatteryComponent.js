@@ -42,9 +42,6 @@ class LiIonBatteryComponent {
             this._setupESBD();
             this._attachListeners();
             this.updateDiagram();
-            console.log(
-                `LiIonBatteryComponent initialized in ${containerSelector}`
-            );
         } catch (error) {
             console.error(
                 `Error initializing LiIonBatteryComponent in ${containerSelector}:`,
@@ -289,9 +286,6 @@ class LiIonBatteryComponent {
         if (this.diagram) this.diagram.destroy();
         // Remove listeners if needed (though removing elements might suffice)
         this.container.innerHTML = ''; // Clear generated content
-        console.log(
-            `Component in ${this.container.id || this.containerSelector} destroyed.`
-        );
     }
 }
 

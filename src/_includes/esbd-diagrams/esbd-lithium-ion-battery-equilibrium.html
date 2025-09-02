@@ -108,7 +108,6 @@
         // Plot height
         plotHeight: 300, // Slightly taller for battery?
     };
-    window.liIonConfig = liIonConfig;
 
     // Initialize Li-ion Battery Component
     const liIonContainerId = '#LIB-cell-eq-container';
@@ -121,7 +120,6 @@
                 liIonConfig
             ); // Instantiate the new component
             comp.diagram.setVRange(-1.2, 4.7);
-            console.log('LiIonBatteryComponent initialized.');
         } catch (error) {
             console.error(
                 `Failed to initialize LiIonBatteryComponent in ${liIonContainerId}:`,

@@ -40,9 +40,6 @@ class ConcentrationCellComponent {
             this._setupESBD();
             this._attachListeners();
             this.updateDiagram();
-            console.log(
-                `ConcentrationCellComponent initialized in ${containerSelector}`
-            );
         } catch (error) {
             this.container.innerHTML = `<p style="color: red;">Error initializing diagram component: ${error.message}</p>`;
             throw error;
@@ -498,9 +495,6 @@ class ConcentrationCellComponent {
         if (this.diagram) this.diagram.destroy();
         // Remove listeners if needed (though removing elements might suffice)
         this.container.innerHTML = ''; // Clear generated content
-        console.log(
-            `Component in ${this.container.id || this.containerSelector} destroyed.`
-        );
     }
 }
 

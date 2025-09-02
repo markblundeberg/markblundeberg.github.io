@@ -90,8 +90,6 @@ class EnergyLevelsDiagram {
             }
         });
         this._resizeObserver.observe(this.container.node());
-
-        console.log(`EnergyLevelsDiagram Initialized in #${containerId}.`);
     }
 
     // ========================================================================
@@ -700,7 +698,6 @@ class EnergyLevelsDiagram {
             this._debouncedHandleResize.cancel();
         }
         this.container.html('');
-        console.log(`EnergyLevelsDiagram in #${this.containerId} destroyed.`);
     }
 } // End of class
 
