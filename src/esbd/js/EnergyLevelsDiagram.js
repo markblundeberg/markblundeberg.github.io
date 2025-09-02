@@ -112,7 +112,12 @@ class EnergyLevelsDiagram extends ResponsivePlot {
      * Updates the entire diagram based on current data and config.
      */
     redraw() {
-        this._updateScales();
+        // update scales
+        this.yScale.domain(this.config.yRange).range([this.plotHeight, 0]);
+        this.xScale
+            .domain(this.config.categories.map((c) => c.id))
+            .range([0, this.plotWidth]);
+
         this._drawAxes();
         this._drawLevels();
         this._drawArrows();
@@ -211,36 +216,6 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             .attr('class', 'level-arrows');
     }
 
-    /** Updates the domains and ranges of the D3 scales and positions elements. */
-    _updateScales() {
-        const pw = this.plotWidth;
-        const ph = this.plotHeight;
-
-        // Update Y scale
-        this.yScale.domain(this.config.yRange).range([ph, 0]);
-
-        // Update X scale
-        this.xScale
-            .domain(this.config.categories.map((c) => c.id))
-            .range([0, pw]);
-
-        // Update axis group positions
-        this.xAxisGroup.attr('transform', `translate(0,${ph})`);
-
-        // Update Y axis label position and dimensions
-        this.yAxisLabel.attr(
-            'transform',
-            `translate(${-0.6 * this.margins.left}, ${0.5 * ph}) rotate(-90)`
-        );
-        const labelWidthEstimate = 300;
-        const labelHeightEstimate = 20; // Estimates
-        this.yAxisLabel
-            .attr('width', labelWidthEstimate)
-            .attr('height', labelHeightEstimate)
-            .attr('x', -labelWidthEstimate / 2)
-            .attr('y', -labelHeightEstimate / 2);
-    }
-
     // ========================================================================
     // Private Drawing Helpers
     // ========================================================================
@@ -307,12 +282,25 @@ class EnergyLevelsDiagram extends ResponsivePlot {
         this.xAxisGroup
             .transition()
             .duration(this.config.transitionDuration) // Transition axis update
-            .call(this.xAxisGen);
-        this.xAxisGroup.select('.domain').remove(); // Remove x-axis line
-        this.xAxisGroup
+            .attr('transform', `translate(0,${this.plotHeight})`)
+            .call(this.xAxisGen)
             .selectAll('text')
             .style('text-anchor', 'middle')
             .style('font-size', '11px');
+        this.xAxisGroup.select('.domain').remove(); // Remove x-axis line
+
+        // Update Y axis label position and dimensions
+        this.yAxisLabel.attr(
+            'transform',
+            `translate(${-0.6 * this.margins.left}, ${0.5 * this.plotHeight}) rotate(-90)`
+        );
+        const labelWidthEstimate = 300;
+        const labelHeightEstimate = 20; // Estimates
+        this.yAxisLabel
+            .attr('width', labelWidthEstimate)
+            .attr('height', labelHeightEstimate)
+            .attr('x', -labelWidthEstimate / 2)
+            .attr('y', -labelHeightEstimate / 2);
     }
 
     /** Draws/Updates the energy/potential level lines and labels. */
