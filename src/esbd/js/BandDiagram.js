@@ -3,6 +3,7 @@
 // Assumes D3 and KaTeX (core + auto-render) are loaded globally or imported appropriately.
 
 import { debounce, renderSpanMath } from './utils.js';
+import ResponsivePlot from './ResponsivePlot.js';
 
 // Default styling constants
 const STYLE_DEFAULTS = {
@@ -34,7 +35,7 @@ const STYLE_DEFAULTS = {
  * Caller provides fundamental physical data with explicit units.
  * Interaction model: Click/Tap shows persistent popup and highlight. Click background clears.
  */
-class BandDiagram {
+class BandDiagram extends ResponsivePlot {
     // ========================================================================
     // Constructor
     // ========================================================================
@@ -42,41 +43,21 @@ class BandDiagram {
     /**
      * Creates an instance of the band diagram.
      * @param {string} containerId - ID of the HTML element (div) to contain the plot.
-     * @param {object} [initialConfig={}] - Initial configuration options.
-     * @param {Boolean} [initialConfig.xMode='abstract'] - Should x have 'ticks' or is it more 'abstract'.
-     * @param {object} [initialConfig.margin={top: 5, right: 35, bottom: 20, left: 60}] - Plot margins.
-     * @param {number} [initialConfig.transitionDuration=250] - Duration for D3 transitions (ms).
-     * @param {number} [initialConfig.resizeDebounceDelay=200] - Debounce delay for resize events (ms).
+     * @param {object} [config={}] - Initial configuration options. See ResponsivePlot for more options
+     * @param {Boolean} [config.xMode='abstract'] - Should x have numbered ticks or is it more 'abstract'.
+     * @param {number} [config.hoverThrottleDelay=50] - Mouseover throttling.
      */
-    constructor(containerId, initialConfig = {}) {
-        this.containerId = containerId;
-        this.outerContainer = d3.select(`#${this.containerId}`);
-        if (this.outerContainer.empty()) {
-            throw new Error(`Container element #${containerId} not found.`);
-        }
-
+    constructor(containerId, config = {}) {
         // Configuration with defaults
-        this.config = {
-            xMode: initialConfig.xMode ?? 'abstract',
-            margin: initialConfig.margin || {
-                top: 5,
-                right: 35,
-                bottom: 20,
-                left: 60,
-            },
-            transitionDuration: initialConfig.transitionDuration ?? 250,
-            hoverThrottleDelay: initialConfig.hoverThrottleDelay ?? 50,
-            resizeDebounceDelay: initialConfig.resizeDebounceDelay ?? 200,
-        };
-        // Internal state initialization
-        this.svgWidth = null;
-        this.svgHeight = null;
+        const defaults = { xMode: 'abstract', hoverThrottleDelay: 50 };
+        super({ containerId: containerId, ...defaults, ...config });
+        // ^ sets this.config, with extra defaults
+
         this.traceData = [];
         this.boundaries = [];
         this.regionProps = [];
         this.regionLabels = [];
         this.verticalMarkers = new Map();
-        this._redrawScheduled = false;
         this._yAxisLabelStr = 'Energy';
 
         // Callbacks & Interaction state
@@ -85,22 +66,6 @@ class BandDiagram {
         this._highlightedElementInfo = null; // Stores null or {type, id}
         this._hoverThrottleTimeout = null; // Throttle timer for pointermove highlights
         this._hoverThrottleWaiting = false; // Throttle flag
-
-        // Populate the container
-        this.outerContainer.html('');
-
-        // Wrapper to control positioning and overflow; will be used to observe
-        // container size and size changes.
-        this.container = this.outerContainer
-            .append('div')
-            .style('position', 'relative')
-            .style('overflow', 'hidden')
-            .style('display', 'block')
-            .style('width', '100%') // 100% of parent
-            .style('height', '100%') // 100% of children
-            .style('margin', '0')
-            .style('padding', '0')
-            .style('border', '0');
 
         this._popupDiv = this.container
             .append('div')
@@ -113,25 +78,6 @@ class BandDiagram {
 
         // --- D3 Setup ---
         this._setupD3Structure();
-
-        // --- Responsiveness ---
-        const initialWidth = this.container.node().clientWidth;
-        const initialHeight = this.container.node().clientHeight;
-
-        // Debounced resize handler
-        this._debouncedHandleResize = debounce((width, height) => {
-            this._handleResize(width, height);
-        }, this.config.resizeDebounceDelay);
-
-        this._resizeObserver = new ResizeObserver((entries) => {
-            if (entries[0]) {
-                const { width, height } = entries[0].contentRect;
-                this._debouncedHandleResize(width, height);
-            }
-        });
-        this._resizeObserver.observe(this.container.node());
-
-        // Note ResizeObserver is guaranteed to be fired, will set our size appropriately.
     }
 
     // ========================================================================
@@ -234,7 +180,7 @@ class BandDiagram {
                 );
             }
         }
-        this._scheduleRedraw();
+        this.scheduleRedraw();
     }
 
     /**
@@ -310,7 +256,7 @@ class BandDiagram {
         }
 
         // Redraw static elements immediately if possible
-        this._scheduleRedraw();
+        this.scheduleRedraw();
     }
 
     /**
@@ -378,7 +324,7 @@ class BandDiagram {
             y2: data.y2,
             popupArgs: data.popupArgs || {}, // Store custom args
         };
-        this._scheduleRedraw();
+        this.scheduleRedraw();
     }
 
     /**
@@ -395,7 +341,7 @@ class BandDiagram {
             return;
         }
         this.YRange = [min, max];
-        this._scheduleRedraw();
+        this.scheduleRedraw();
     }
 
     /** Registers a callback function to generate verbose popup content for data traces. */
@@ -405,12 +351,16 @@ class BandDiagram {
 
     /** Main drawing/update function. */
     redraw() {
-        if (!this.svgWidth) {
-            return;
-        }
-        if (!this.svg || !this.plotArea) {
-            throw Error('Attempted redraw before structure setup.');
-        }
+        const pw = this.plotWidth;
+        const ph = this.plotHeight;
+
+        this.xScale.range([0, pw]);
+        this.yScale.range([ph, 0]);
+        this.yAxisLabel.attr(
+            'transform',
+            `translate(${-0.6 * this.margins.left}, ${0.5 * ph}) rotate(-90)`
+        );
+        this.interactionRect.attr('width', pw).attr('height', ph);
 
         // 1. Prepare Data
         const hasPlottableData = this.traceData.some(
@@ -456,13 +406,15 @@ class BandDiagram {
 
         // 3. Update Axes (apply transitions)
         this.xAxisGroup
-            .attr('transform', `translate(0,${this.plotHeight})`)
             .transition()
             .duration(this.config.transitionDuration)
+            .ease(d3.easeExpOut)
+            .attr('transform', `translate(0,${this.plotHeight})`)
             .call(this.xAxisGen);
         this.yAxisGroup
             .transition()
             .duration(this.config.transitionDuration)
+            .ease(d3.easeExpOut)
             .call(this.yAxisGen);
         this.yAxisLabel.text(this._yAxisLabelStr); // Update text immediately
 
@@ -481,52 +433,11 @@ class BandDiagram {
     // Public Accessors (Getters)
     // ========================================================================
 
-    get svgNode() {
-        return this.svg?.node();
-    }
-    get mainGroupNode() {
-        return this.plotArea?.node();
-    }
-    get currentXScale() {
-        return this.xScale;
-    }
-    get currentYScale() {
-        return this.yScale;
-    }
-    get plotWidth() {
-        return Math.max(
-            10,
-            this.svgWidth - this.config.margin.left - this.config.margin.right
-        );
-    }
-    get plotHeight() {
-        return Math.max(
-            10,
-            this.svgHeight - this.config.margin.top - this.config.margin.bottom
-        );
-    }
-
     // ========================================================================
     // Core Private Setup & Update Logic
     // ========================================================================
 
     _setupD3Structure() {
-        this.svg = this.container
-            .append('svg')
-            .attr('class', 'bd-svg')
-            .style('position', 'absolute') // make sure position:absolute to avoid resize infinite loops!
-            .style('-webkit-user-select', 'none')
-            .style('user-select', 'none')
-            .style('-webkit-tap-highlight-color', 'transparent');
-
-        this.plotArea = this.svg
-            .append('g')
-            .attr('class', 'bd-plot-area')
-            .attr(
-                'transform',
-                `translate(${this.config.margin.left},${this.config.margin.top})`
-            );
-
         // Layer groups (order matters for rendering)
         this.backgroundGroup = this.plotArea
             .append('g')
@@ -562,20 +473,23 @@ class BandDiagram {
             .append('g')
             .attr('class', 'bd-custom-drawing');
 
+        this.xAxisGroup = this.plotArea
+            .append('g')
+            .attr('transform', `translate(0,${this.plotHeight})`);
+        this.yAxisGroup = this.plotArea.append('g');
+
         // Scales & Axes
         this.xScale = d3.scaleLinear();
         this.yScale = d3.scaleLinear();
         this.xAxisGen = d3.axisBottom(this.xScale).tickSizeOuter(0);
         this.yAxisGen = d3.axisLeft(this.yScale).tickSizeOuter(0);
-        this.xAxisGroup = this.plotArea.append('g').attr('class', 'bd-x-axis');
-        this.yAxisGroup = this.plotArea.append('g').attr('class', 'bd-y-axis');
 
         if (this.config.xMode == 'abstract') {
             this.xAxisGen.tickValues([]);
         }
 
         // Interactive Y-Axis Label
-        this.yAxisLabel = this.svg
+        this.yAxisLabel = this.yAxisGroup
             .append('text')
             .attr('class', 'bd-y-axis-label bd-interactive')
             .style('text-anchor', 'middle')
@@ -594,48 +508,6 @@ class BandDiagram {
 
         // Note: Listeners for markers (including hover) are added in _drawVerticalMarkers
         // Note: Lines will be added with pointer-events: none
-    }
-
-    _scheduleRedraw() {
-        // If a redraw is already scheduled, do nothing
-        if (this._redrawScheduled) {
-            return;
-        }
-        // Set the flag
-        this._redrawScheduled = true;
-        // Schedule the redraw to run before the next browser paint
-        requestAnimationFrame(() => {
-            this.redraw(); // Call the actual redraw method
-            this._redrawScheduled = false; // Clear the flag after redraw runs
-        });
-    }
-
-    _handleResize(width, height) {
-        this.svgWidth = width;
-        this.svgHeight = height;
-
-        // Update SVG element size to match container
-        //  this.svg.attr('width', this.svgWidth).attr('height', this.svgHeight);
-
-        // Calculate new plot area dimensions using getters
-        const pw = this.plotWidth;
-        const ph = this.plotHeight;
-
-        // Update things that depend directly on pw, ph
-        this.plotArea.attr(
-            'transform',
-            `translate(${this.config.margin.left},${this.config.margin.top})`
-        );
-        this.xScale.range([0, pw]);
-        this.yScale.range([ph, 0]);
-        this.xAxisGroup.attr('transform', `translate(0,${ph})`);
-        this.yAxisLabel.attr(
-            'transform',
-            `translate(${this.config.margin.left / 2.5}, ${this.config.margin.top + ph / 2}) rotate(-90)`
-        );
-        this.interactionRect.attr('width', pw).attr('height', ph);
-
-        this._scheduleRedraw();
     }
 
     // ========================================================================
@@ -1446,18 +1318,9 @@ class BandDiagram {
 
     /** Cleans up resources like observers and listeners. */
     destroy() {
-        if (this._resizeObserver) {
-            this._resizeObserver.disconnect();
-        }
-        if (
-            this._debouncedHandleResize &&
-            typeof this._debouncedHandleResize.cancel === 'function'
-        ) {
-            this._debouncedHandleResize.cancel();
-        }
         clearTimeout(this._hoverThrottleTimeout);
         this._hidePopup();
-        this.container.html('');
+        super.destroy();
     }
 } // End of class
 
