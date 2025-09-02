@@ -62,25 +62,22 @@
 
     // Configuration for the Diagrams
     const commonConfig = {
-        width: 100,
-        height: 200,
-        showYTicks: false, // No numerical ticks
+        showYTicks: false,
         categories: [{ id: 'levels', label: '' }],
-        margin: { top: 10, right: 0, bottom: 20, left_compact: 25 }, // Minimal margins if no Y axis label/ticks
-        transitionDuration: 500,
+        margins: { top: 10, right: 0, bottom: 20, left: 25 },
     };
     const throttleDuration = 100; // should be 1/5 or less of transitionDuration
 
     const muBarConfig = {
         ...commonConfig,
-        yAxisLabel: 'Electrochemical potential $\\bar{\\mu}_i$', // KaTeX label
-        initialYRange: [-2.5, 5.0], // Calculated range + padding
+        yAxisLabel: 'Electrochemical potential $\\bar{\\mu}_i$',
+        yRange: [-2.5, 5.0], // Calculated range + padding
     };
 
     const vConfig = {
         ...commonConfig,
         yAxisLabel: 'Species voltage $V_i$',
-        initialYRange: [-2.0, 2.8], // Calculated range + padding
+        yRange: [-2.0, 2.8], // Calculated range + padding
     };
 
     // Launcher code

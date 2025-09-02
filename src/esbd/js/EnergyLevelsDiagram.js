@@ -5,8 +5,9 @@
 // Assumes D3 and KaTeX (core library AND auto-render extension) are loaded.
 
 import { debounce, renderSpanMath } from './utils.js';
+import ResponsivePlot from './ResponsivePlot.js';
 
-class EnergyLevelsDiagram {
+class EnergyLevelsDiagram extends ResponsivePlot {
     // ========================================================================
     // Constructor
     // ========================================================================
@@ -14,82 +15,34 @@ class EnergyLevelsDiagram {
     /**
      * Creates an instance of the EnergyLevelsDiagram.
      * @param {string} containerId - ID of the HTML element to contain the plot.
-     * @param {object} [initialConfig={}] - Initial configuration options.
-     * @param {number} [initialConfig.width=200] - Width of the SVG element.
-     * @param {number} [initialConfig.height=400] - Height of the SVG element.
-     * @param {object} [initialConfig.margin] - Plot margins. Defaults provided if omitted.
-     * @param {string} [initialConfig.yAxisLabel='Potential / Energy'] - Label for Y axis (can contain KaTeX delimiters like $..$).
-     * @param {Array<number>} [initialConfig.initialYRange=[0, 1]] - Initial [min, max] for Y axis domain.
-     * @param {boolean} [initialConfig.showYTicks=true] - Whether to show Y axis ticks and labels.
-     * @param {Array<object>} [initialConfig.categories=[]] - Categories for the X axis. Array of {id: string, label: string}.
-     * @param {object} [initialConfig.defaultLevelStyle] - Default styles for levels.
-     * @param {number} [initialConfig.transitionDuration=500] - Duration for D3 transitions (ms).
-     * @param {number} [initialConfig.resizeDebounceDelay=200] - Debounce delay for resize events (ms).
+     * @param {object} [config={}] - Initial configuration options. See ResponsivePlot for more options.
+     * @param {string} [config.yAxisLabel='Potential / Energy'] - Label for Y axis (can contain KaTeX delimiters like $..$).
+     * @param {Array<number>} [config.yRange=[0, 1]] - Initial [min, max] for Y axis domain.
+     * @param {boolean} [config.showYTicks=true] - Whether to show Y axis ticks and labels.
+     * @param {Array<object>} [config.categories=[]] - Categories for the X axis. Array of {id: string, label: string}.
+     * @param {object} [config.defaultLevelStyle] - Default styles for levels.
      */
-    constructor(containerId, initialConfig = {}) {
-        this.containerId = containerId;
-        this.container = d3.select('#' + this.containerId);
-        if (this.container.empty()) {
-            throw new Error(`Container element #${containerId} not found.`);
-        }
-
-        // --- Configuration with defaults ---
-        const defaultMargin = {
-            top: 10,
-            right: 5,
-            bottom: 20,
-            left: 45, // Default left margin when ticks are shown
-            left_compact: 20, // Default left margin when ticks are hidden
-        };
-
-        this.config = {
-            width: initialConfig.width || 200,
-            height: initialConfig.height || 400,
-            margin: { ...defaultMargin, ...(initialConfig.margin || {}) },
-            yAxisLabel: initialConfig.yAxisLabel ?? 'Potential / Energy',
-            yRange: initialConfig.initialYRange || [0, 1],
-            showYTicks: initialConfig.showYTicks !== false, // Default true
-            categories: initialConfig.categories || [],
-            defaultLevelStyle: initialConfig.defaultLevelStyle || {
+    constructor(containerId, config = {}) {
+        const defaults = {
+            yAxisLabel: 'Potential / Energy',
+            hoverThrottleDelay: 50,
+            yRange: [0, 1],
+            showYTicks: true,
+            categories: [],
+            defaultLevelStyle: {
                 color: 'black',
                 lineWidth: 2,
                 dasharray: null,
             },
-            transitionDuration: initialConfig.transitionDuration ?? 500,
-            resizeDebounceDelay: initialConfig.resizeDebounceDelay ?? 200,
         };
+        super({ containerId: containerId, ...defaults, ...config });
+        // ^ sets this.config, with extra defaults
 
-        // --- Internal state ---
-        this.plotWidth = 0;
-        this.plotHeight = 0; // Will be calculated by _updateScales
         this.levelsData = [];
         this.arrowData = []; // Stores arrow definitions from setArrows
         this.levelPositions = new Map(); // Stores calculated pixel positions {x_center_px, y_px} for each levelId
-        this._redrawScheduled = false;
 
         this._setupD3Structure();
-        const initialWidth =
-            this.container.node().clientWidth || this.config.width;
-        const initialHeight =
-            this.container.node().clientHeight || this.config.height;
-        this.config.width = initialWidth;
-        this.config.height = initialHeight;
-        this.svg
-            .attr('width', this.config.width)
-            .attr('height', this.config.height);
-        this.redraw(); // Initial draw
-
-        // Setup resize observer
-        this._debouncedHandleResize = debounce((width, height) => {
-            this._handleResize(width, height);
-        }, this.config.resizeDebounceDelay);
-        this._resizeObserver = new ResizeObserver((entries) => {
-            if (entries[0]) {
-                const { width, height } = entries[0].contentRect;
-                this._debouncedHandleResize(width, height);
-            }
-        });
-        this._resizeObserver.observe(this.container.node());
     }
 
     // ========================================================================
@@ -109,7 +62,7 @@ class EnergyLevelsDiagram {
             return;
         }
         this.levelsData = levelsData;
-        this._scheduleRedraw();
+        this.scheduleRedraw();
     }
 
     /**
@@ -125,7 +78,7 @@ class EnergyLevelsDiagram {
             return;
         }
         this.arrowData = arrowData;
-        this._scheduleRedraw();
+        this.scheduleRedraw();
     }
 
     /**
@@ -142,7 +95,7 @@ class EnergyLevelsDiagram {
             return;
         }
         this.config.yRange = [min, max];
-        this._scheduleRedraw();
+        this.scheduleRedraw();
     }
 
     /**
@@ -152,21 +105,13 @@ class EnergyLevelsDiagram {
     setYAxisLabel(label) {
         this.config.yAxisLabel = label || '';
         // Only need to redraw axes for label change if scales/size are unchanged
-        if (this.plotArea) this._drawAxes();
+        this.scheduleRedraw();
     }
 
     /**
      * Updates the entire diagram based on current data and config.
      */
     redraw() {
-        if (!this.svg || !this.plotArea) {
-            console.error(
-                'EnergyLevelsDiagram Error: Attempted redraw before structure setup.'
-            );
-            return;
-        }
-        // Don't change order of the following. Each helper relies on state set by
-        // the previous helpers.
         this._updateScales();
         this._drawAxes();
         this._drawLevels();
@@ -188,20 +133,6 @@ class EnergyLevelsDiagram {
 
     /** Sets up the core D3 and SVG structure. */
     _setupD3Structure() {
-        this.container.html(''); // Clear previous content
-        this.container.attr('overflow', 'hidden'); // reduce resize looping
-
-        this.svg = this.container
-            .append('svg')
-            .attr('class', 'energy-levels-svg') // Use class for CSS
-            .attr('width', this.config.width)
-            .attr('height', this.config.height);
-
-        this.plotArea = this.svg
-            .append('g')
-            .attr('class', 'energy-levels-plot-area');
-        // Transform set in _updateScales
-
         const defs = this.svg.append('defs');
         // Simple arrowhead marker
         defs.append('marker')
@@ -252,7 +183,7 @@ class EnergyLevelsDiagram {
             .attr('class', 'energy-levels-y-axis');
 
         // Y-Axis Label Element using foreignObject for KaTeX
-        this.yAxisLabel = this.svg
+        this.yAxisLabel = this.yAxisGroup
             .append('foreignObject')
             .attr('class', 'energy-levels-y-axis-label')
             .attr('width', 1)
@@ -280,81 +211,26 @@ class EnergyLevelsDiagram {
             .attr('class', 'level-arrows');
     }
 
-    _scheduleRedraw() {
-        // If a redraw is already scheduled, do nothing
-        if (this._redrawScheduled) {
-            return;
-        }
-        // Set the flag
-        this._redrawScheduled = true;
-        // Schedule the redraw to run before the next browser paint
-        requestAnimationFrame(() => {
-            this.redraw(); // Call the actual redraw method
-            this._redrawScheduled = false; // Clear the flag after redraw runs
-        });
-    }
-
-    /** Handles resize events (debounced). Updates config/SVG size and triggers redraw. */
-    _handleResize(width, height) {
-        // Update config dimensions based on container size reported by observer
-        this.config.width = width;
-        this.config.height = height;
-
-        // Update SVG element size to match container
-        this.svg
-            .attr('width', this.config.width)
-            .attr('height', this.config.height);
-
-        // Trigger redraw which will handle scale updates etc.
-        // Debouncer ensures this doesn't fire too often.
-        this.redraw();
-    }
-
     /** Updates the domains and ranges of the D3 scales and positions elements. */
     _updateScales() {
-        // Calculate effective left margin based on tick visibility
-        const effectiveLeftMargin = this.config.showYTicks
-            ? this.config.margin.left
-            : (this.config.margin.left_compact ?? this.config.margin.left / 2);
-
-        // Calculate plot dimensions using effective margin
-        this.plotWidth =
-            this.config.width - effectiveLeftMargin - this.config.margin.right;
-        this.plotHeight =
-            this.config.height -
-            this.config.margin.top -
-            this.config.margin.bottom;
-        if (this.plotWidth <= 0 || this.plotHeight <= 0) {
-            console.warn(
-                'Plot dimensions are not positive after margin calculation.'
-            );
-            this.plotWidth = Math.max(10, this.plotWidth);
-            this.plotHeight = Math.max(10, this.plotHeight);
-        }
-
-        // Update plot area transform
-        this.plotArea.attr(
-            'transform',
-            `translate(${effectiveLeftMargin},${this.config.margin.top})`
-        );
+        const pw = this.plotWidth;
+        const ph = this.plotHeight;
 
         // Update Y scale
-        this.yScale.domain(this.config.yRange).range([this.plotHeight, 0]);
+        this.yScale.domain(this.config.yRange).range([ph, 0]);
 
         // Update X scale
         this.xScale
             .domain(this.config.categories.map((c) => c.id))
-            .range([0, this.plotWidth]);
+            .range([0, pw]);
 
         // Update axis group positions
-        this.xAxisGroup.attr('transform', `translate(0,${this.plotHeight})`);
+        this.xAxisGroup.attr('transform', `translate(0,${ph})`);
 
         // Update Y axis label position and dimensions
-        const yLabelX = effectiveLeftMargin / 2.5;
-        const yLabelY = this.config.margin.top + this.plotHeight / 2;
         this.yAxisLabel.attr(
             'transform',
-            `translate(${yLabelX}, ${yLabelY}) rotate(-90)`
+            `translate(${-0.6 * this.margins.left}, ${0.5 * ph}) rotate(-90)`
         );
         const labelWidthEstimate = 300;
         const labelHeightEstimate = 20; // Estimates
@@ -681,24 +557,6 @@ class EnergyLevelsDiagram {
     // Private Calculation/Utility Helpers
     // ========================================================================
     // (None needed yet)
-
-    // ========================================================================
-    // Destroy Method
-    // ========================================================================
-
-    /** Cleans up the SVG element and observers. */
-    destroy() {
-        if (this._resizeObserver) {
-            this._resizeObserver.disconnect();
-        }
-        if (
-            this._debouncedHandleResize &&
-            typeof this._debouncedHandleResize.cancel === 'function'
-        ) {
-            this._debouncedHandleResize.cancel();
-        }
-        this.container.html('');
-    }
 } // End of class
 
 export default EnergyLevelsDiagram;

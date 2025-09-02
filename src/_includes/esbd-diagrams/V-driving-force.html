@@ -54,17 +54,14 @@
 
     // --- Configuration ---
     const config = {
-        width: 500,
-        height: 200, // Shorter diagram
-        yAxisLabel: 'Voltage $V_i$', // KaTeX requires delimiters
-        initialYRange: [-1.5, 1.5], // Adjust based on base + max diff
-        showYTicks: false, // No ticks needed for this demo
+        yAxisLabel: 'Voltage $V_i$',
+        yRange: [-1.5, 1.5], // Adjust based on base + max diff
+        showYTicks: false,
         categories: [
             { id: 'body1', label: 'Body 1' },
             { id: 'body2', label: 'Body 2' },
         ],
         defaultLevelStyle: { lineWidth: 2 },
-        transitionDuration: 500,
     };
     const throttleDuration = 100; // should be 1/5 or less of above
 

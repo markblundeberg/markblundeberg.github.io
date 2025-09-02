@@ -63,20 +63,16 @@
 
     // Configuration for the Diagrams
     const commonConfig = {
-        width: 100,
-        height: 200,
-        showYTicks: false, // No numerical ticks
-
-        margin: { top: 10, right: 15, bottom: 20, left_compact: 25 }, // Minimal margins if no Y axis label/ticks
-        transitionDuration: 500,
+        showYTicks: false,
+        margins: { top: 10, right: 15, bottom: 20, left: 25 },
     };
     const throttleDuration = 100; // should be 1/5 or less of transitionDuration
 
     const muBarConfig = {
         ...commonConfig,
         categories: [{ id: 'levels', label: '' }],
-        yAxisLabel: 'Electrochemical potential', // KaTeX label
-        initialYRange: [-2.5, 5.0], // Calculated range + padding
+        yAxisLabel: 'Electrochemical potential',
+        yRange: [-2.5, 5.0], // Calculated range + padding
     };
 
     const muIntConfig = {
@@ -85,8 +81,8 @@
             { id: 'phi', label: '' },
             { id: 'levels', label: '' },
         ],
-        yAxisLabel: 'Partitioned energy', // KaTeX label (Volts relative to F=1)
-        initialYRange: [-2.5, 5.0], // Calculated range + padding
+        yAxisLabel: 'Partitioned energy',
+        yRange: [-2.5, 5.0], // Calculated range + padding
     };
 
     // Launcher code

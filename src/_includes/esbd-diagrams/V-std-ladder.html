@@ -230,12 +230,9 @@
 
     // Configuration for the Diagrams
     const commonConfig = {
-        width: 100,
-        height: 200,
         showYTicks: true,
         categories: [{ id: 'levels', label: '' }],
-        margin: { top: 10, right: 0, bottom: 20, left_compact: 25 }, // Minimal margins if no Y axis label/ticks
-        transitionDuration: 500,
+        margins: { top: 10, right: 0, bottom: 20, left: 25 },
     };
     const throttleDuration = 100; // should be 1/5 or less of transitionDuration
 
@@ -243,7 +240,7 @@
     const muBarConfig = {
         ...commonConfig,
         yAxisLabel: 'Standard state voltage $V^\\circ_i$ (V) - arbirary offset',
-        initialYRange: [-3.1 + V_arb_offset, 4.1 + V_arb_offset], // Calculated range + padding
+        yRange: [-3.1 + V_arb_offset, 4.1 + V_arb_offset], // Calculated range + padding
     };
 
     // Launcher code
