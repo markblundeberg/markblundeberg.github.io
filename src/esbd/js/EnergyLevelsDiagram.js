@@ -4,7 +4,7 @@
 
 // Assumes D3 and KaTeX (core library AND auto-render extension) are loaded.
 
-import { debounce, renderSpanMath } from './utils.js';
+import { renderSpanMath } from './utils.js';
 import ResponsivePlot from './ResponsivePlot.js';
 
 class EnergyLevelsDiagram extends ResponsivePlot {
@@ -38,6 +38,8 @@ class EnergyLevelsDiagram extends ResponsivePlot {
         super({ containerId: containerId, ...defaults, ...config });
         // ^ sets this.config, with extra defaults
 
+        this.setYRange(...this.config.yRange);
+
         this.levelsData = [];
         this.arrowData = []; // Stores arrow definitions from setArrows
         this.levelPositions = new Map(); // Stores calculated pixel positions {x_center_px, y_px} for each levelId
@@ -56,10 +58,9 @@ class EnergyLevelsDiagram extends ResponsivePlot {
      */
     setLevels(levelsData = []) {
         if (!Array.isArray(levelsData)) {
-            console.error(
+            throw new Error(
                 'EnergyLevelsDiagram Error: setLevels expects an array.'
             );
-            return;
         }
         this.levelsData = levelsData;
         this.scheduleRedraw();
@@ -72,29 +73,24 @@ class EnergyLevelsDiagram extends ResponsivePlot {
      */
     setArrows(arrowData = []) {
         if (!Array.isArray(arrowData)) {
-            console.error(
+            throw new Error(
                 'EnergyLevelsDiagram Error: setArrows expects an array.'
             );
-            return;
         }
         this.arrowData = arrowData;
         this.scheduleRedraw();
     }
 
     /**
-     * Sets the vertical range (domain) of the Y axis.
+     * Sets the vertical range (domain) of the Y axis
      * @param {number} min - Minimum value for the Y axis.
      * @param {number} max - Maximum value for the Y axis.
      */
     setYRange(min, max) {
         if (typeof min !== 'number' || typeof max !== 'number' || min >= max) {
-            console.error(
-                'EnergyLevelsDiagram Error: Invalid arguments for setYRange.',
-                { min, max }
-            );
-            return;
+            throw new Error('Invalid arguments for setYRange.', { min, max });
         }
-        this.config.yRange = [min, max];
+        this.yRange = [min, max];
         this.scheduleRedraw();
     }
 
@@ -113,7 +109,7 @@ class EnergyLevelsDiagram extends ResponsivePlot {
      */
     redraw() {
         // update scales
-        this.yScale.domain(this.config.yRange).range([this.plotHeight, 0]);
+        this.yScale.domain(this.yRange).range([this.plotHeight, 0]);
         this.xScale
             .domain(this.config.categories.map((c) => c.id))
             .range([0, this.plotWidth]);
@@ -126,11 +122,6 @@ class EnergyLevelsDiagram extends ResponsivePlot {
     // ========================================================================
     // Public Accessors (Getters)
     // ========================================================================
-
-    /** Returns the main SVG DOM node. */
-    get svgNode() {
-        return this.svg?.node();
-    }
 
     // ========================================================================
     // Core Private Setup & Update Logic
@@ -204,7 +195,6 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             .style('display', 'inline-block') // Important for rotation and sizing
             .style('font-size', '11px')
             .style('color', '#333');
-        // Transform set in _updateScales
 
         // Layer group for levels
         this.levelsGroup = this.plotArea
@@ -223,7 +213,6 @@ class EnergyLevelsDiagram extends ResponsivePlot {
     /** Draws/Updates the X and Y axes. */
     _drawAxes() {
         // Update Y Axis
-        this.yAxisGen.scale(this.yScale);
         if (!this.config.showYTicks) {
             this.yAxisGen.tickValues([]);
         } else {
@@ -272,8 +261,20 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             yLabelSpan.textContent = ''; // Clear if no label
         }
 
+        // Update Y axis label position and dimensions
+        this.yAxisLabel.attr(
+            'transform',
+            `translate(${-0.6 * this.margins.left}, ${0.5 * this.plotHeight}) rotate(-90)`
+        );
+        const labelWidthEstimate = 300;
+        const labelHeightEstimate = 20; // Estimates
+        this.yAxisLabel
+            .attr('width', labelWidthEstimate)
+            .attr('height', labelHeightEstimate)
+            .attr('x', -labelWidthEstimate / 2)
+            .attr('y', -labelHeightEstimate / 2);
+
         // Update X Axis (Category Labels)
-        this.xAxisGen.scale(this.xScale);
         this.xAxisGen.tickFormat(
             (categoryId) =>
                 this.config.categories.find((c) => c.id === categoryId)
@@ -288,19 +289,6 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             .style('text-anchor', 'middle')
             .style('font-size', '11px');
         this.xAxisGroup.select('.domain').remove(); // Remove x-axis line
-
-        // Update Y axis label position and dimensions
-        this.yAxisLabel.attr(
-            'transform',
-            `translate(${-0.6 * this.margins.left}, ${0.5 * this.plotHeight}) rotate(-90)`
-        );
-        const labelWidthEstimate = 300;
-        const labelHeightEstimate = 20; // Estimates
-        this.yAxisLabel
-            .attr('width', labelWidthEstimate)
-            .attr('height', labelHeightEstimate)
-            .attr('x', -labelWidthEstimate / 2)
-            .attr('y', -labelHeightEstimate / 2);
     }
 
     /** Draws/Updates the energy/potential level lines and labels. */

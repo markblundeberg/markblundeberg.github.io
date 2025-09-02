@@ -186,6 +186,7 @@
     try {
         doit();
     } catch (error) {
-        console.error('Failed to initialize {{ idprefix }} demo!', error);
+        console.error('Failed to initialize {{ idprefix }} demo!');
+        throw error;
     }
 </script>
