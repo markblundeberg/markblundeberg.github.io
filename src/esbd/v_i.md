@@ -69,7 +69,7 @@ A regular voltmeter with its metallic probes tends to have a poorly controlled c
 
 {% include "esbd-diagrams/esbd-electrode-generic.html" %}
 
-In many cases these electrodes will be particularized to both the target ion and to the environment of that ion. A key criterion is that $V_{\mathrm{e}^-}$ only couples to the target $V_{\mathrm{ion}}$ and not to any other species. There is also a [generic recipe (see later topic)](../nuances/) based on ion-selective membranes that can be used in principle to non-invasively measure any ionic voltage $V_i$.
+In many cases these electrodes will be particularized to both the target ion and to the environment of that ion. A key criterion is that $V_{\mathrm{e}^-}$ only couples to the target $V_{\mathrm{ion}}$ and not to any other charged species. There is also a [generic recipe (see later topic)](../nuances/) that can be used in principle to non-invasively measure any ionic voltage $V_i$, but it is based on ion-selective membranes which are only practically available for some ions in some compatible solutions.
 
 ## About differences $V_i - V_j$
 
