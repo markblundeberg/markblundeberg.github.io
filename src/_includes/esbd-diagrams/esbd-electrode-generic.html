@@ -1,0 +1,86 @@
+<figure class="demo-container" style="max-width: 300px">
+    <div class="bd-container" id="electrode-generic-container"></div>
+</figure>
+
+<script type="module">
+    const plotContainerId = 'electrode-generic-container';
+
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { formatPopupBaseContent, throttle } from '{{ esbdJsPath }}utils.js';
+
+    const speciesInfo = {
+        ion: {
+            z: 1,
+            color: '#E41A1C',
+            mathLabel: '\\mathrm{ion}',
+        },
+        other: {
+            z: 1,
+            color: '#a04080',
+            mathLabel: '\\mathrm{other}',
+        },
+        electron: {
+            z: -1,
+            color: '#377EB8',
+            mathLabel: '\\mathrm{e}^{-}',
+        },
+    };
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        plotContainerId,
+        speciesInfo
+    );
+
+    // Set layout
+    const boundaries = [0.0, 0.333, 0.667, 1.0];
+    diagram.setSpatialLayout(boundaries, [
+        { name: 'Solution', color: '#E6F5FF' },
+        { name: 'Electrode', color: '#E0E0E0' },
+        { name: 'Voltmeter', color: '#a0e0a0' },
+    ]);
+
+    const V_el = +0;
+    const V_ion = V_el - 1.1;
+    const V_other = V_el + 0.3;
+    diagram.setVRange(V_ion - 0.2, V_other + 0.2);
+
+    const b = boundaries;
+    diagram.updateTraceData([
+        {
+            id: `electron_trace`,
+            speciesId: 'electron',
+            curveType: 'potential',
+            showLabel: true,
+            x: [b[1], b[3]],
+            y: [V_el, V_el],
+        },
+        {
+            id: `ion_trace`,
+            speciesId: 'ion',
+            curveType: 'potential',
+            showLabel: true,
+            x: [b[0], b[1]],
+            y: [V_ion, V_ion],
+        },
+        {
+            id: `other_trace`,
+            speciesId: 'other',
+            curveType: 'potential',
+            showLabel: true,
+            x: [b[0], b[1]],
+            y: [V_other, V_other],
+        },
+    ]);
+
+    diagram.addVerticalMarker('react', {
+        symbol: '⇌',
+        speciesId1: 'electron',
+        speciesId2: 'ion',
+        popupCallback: () => 'Ion-electron reaction',
+    });
+    diagram.updateVerticalMarker('react', {
+        x: b[1],
+        y1: V_el,
+        y2: V_ion,
+    });
+</script>

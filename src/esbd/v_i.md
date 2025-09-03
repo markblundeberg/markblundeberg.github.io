@@ -63,9 +63,11 @@ The common voltmeter has metal probes. It measures differences in $V_{\mathrm{e}
 
 {% include "esbd-diagrams/esbd-multi-metal-voltmeter.html" %}
 
-For ions' $V_i$, a regular voltmeter with its metallic probes cannot directly couple to the ions. Or to be more precise, this coupling tends to be poorly controlled. But with careful probe construction, we can make a controlled coupling between $V_i$ and $V_{\mathrm{e}^-}$, and then by measuring $V_{\mathrm{e}^-}$ with a regular voltmeter we therefore have indirect access to $V_i$. In many cases these electrodes will be particularized to the situation and the nature of the target ion. There is also a [generic recipe (see later topic)](../nuances/) based on ion-selective membranes that can be used in principle to measure *any* ionic voltage $V_i$.
+For ions' $V_i$, a regular voltmeter with its metallic probes cannot directly couple to the ions. Or to be more precise, this coupling tends to be poorly controlled. But with careful probe construction, we can make a controlled coupling between $V_{\mathrm{ion}}$ and $V_{\mathrm{e}^-}$, and then by measuring $V_{\mathrm{e}^-}$ with a regular voltmeter. In general there will be a step $V_{\mathrm{e}^-} - V_{\mathrm{ion}} = \Delta$ for some value $\Delta$; provided the $\Delta$ is well controlled, we therefore have indirect access to $V_{\mathrm{ion}}$.
 
-> DIAGRAM - sketch of a generic V_i probe as an interchange between V_i and V_e-
+{% include "esbd-diagrams/esbd-electrode-generic.html" %}
+
+In many cases these electrodes will be particularized to the situation and the nature of the target ion. A key criterion is that $V_{\mathrm{e}^-}$ only couples to the target $V_i$ and not to any other species. There is also a [generic recipe (see later topic)](../nuances/) based on ion-selective membranes that can be used in principle to non-invasively measure any ionic voltage $V_i$.
 
 ## About differences $V_i - V_j$
 
