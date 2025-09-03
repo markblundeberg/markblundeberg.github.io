@@ -1,4 +1,4 @@
-{% set idprefix = ["bd-basicbattery-energy-ion-too-", idsuffix] | join %}
+{% set idprefix = ["bd-basicbattery-multicell-", idsuffix] | join %}
 <figure class="demo-container" style="max-width: 300px">
     <div class="bd-container" id="{{ idprefix }}"></div>
     <div style="text-align: center">
@@ -25,27 +25,11 @@
                 <option value="0" label="0">0</option>
             </datalist>
         </div>
-        <div>
-            <label for="{{ idprefix }}-dphi-slider" style="font-size: 0.85em"
-                >Electrostatic offset $\Delta\phi$:</label
-            >
-            <br />
-            <input
-                type="range"
-                id="{{ idprefix }}-dphi-slider"
-                min="-0.5"
-                max="0.5"
-                step="any"
-                value="0.0"
-                style="width: 100px"
-            />
-        </div>
     </div>
 </figure>
 
 <script type="module">
     const plotContainerId = '{{ idprefix }}';
-    const dPhiSliderId = '{{ idprefix }}-dphi-slider';
     const currentSliderId = '{{ idprefix }}-current-slider';
     const currentTextId = '{{ idprefix }}-current-text';
 
@@ -55,30 +39,33 @@
     const throttleDuration = 100; // should be 1/5 or less of transitionDuration
 
     const diagram = new BandDiagram(plotContainerId);
-    const dPhiSlider = document.getElementById(dPhiSliderId);
     const currentSlider = document.getElementById(currentSliderId);
     const currentText = document.getElementById(currentTextId);
 
     // Set layout
-    const boundaries = [0.0, 0.15, 0.3, 0.7, 0.85, 1.0];
-    diagram.setSpatialLayout(
-        boundaries,
-        [
-            { name: 'Anode', color: '#AAAAAA' },
-            { name: 'Anode-active', color: '#bbb' },
-            { name: 'Electrolyte', color: '#E6F5FF' },
-            { name: 'Cathode-active', color: '#bbb' },
-            { name: 'Cathode', color: '#AAAAAA' },
-        ],
-        [
-            { label: 'Anode', x: 0.15 },
-            { label: 'Electrolyte', x: 0.5 },
-            { label: 'Cathode', x: 0.85 },
-        ]
-    );
+    const cellregions = [
+        [0.15, { name: 'Anode', color: '#AAAAAA' }],
+        [0.3, { name: 'Anode-active', color: '#bbb' }],
+        [0.7, { name: 'Electrolyte', color: '#E6F5FF' }],
+        [0.85, { name: 'Cathode-active', color: '#bbb' }],
+        [1.0, { name: 'Cathode', color: '#AAAAAA' }],
+    ];
 
-    diagram.setYLabel('Electron/ion energy (eV)');
-    diagram.setYRange(-4.1, +0.8);
+    const boundaries = [0.0];
+    const regions = [];
+    const labels = [];
+    for (let cellidx = 0; cellidx < 3; cellidx++) {
+        cellregions.forEach((element) => {
+            const [xright, region] = element;
+            boundaries.push(xright + cellidx);
+            regions.push(region);
+        });
+        labels.push({ label: `Cell ${cellidx + 1}`, x: 0.5 + cellidx });
+    }
+    diagram.setSpatialLayout(boundaries, regions, labels);
+
+    diagram.setYLabel('Species voltage (V)');
+    diagram.setYRange(-1.5, +11.2);
 
     const R_anode = 0.03;
     const R_cathode = R_anode;
@@ -90,7 +77,7 @@
     const electron_color = '#377EB8';
 
     function updateDiagrams() {
-        const dphi = parseFloat(dPhiSlider.value);
+        const dphi = 0;
         const current = parseFloat(currentSlider.value);
 
         if (current > 0) {
@@ -107,34 +94,40 @@
         const V_right = V_Li_right + OCV_cathode;
         const V_anode = V_left - current * R_anode;
         const V_cathode = V_right + current * R_cathode;
+        const V_cell = V_right - V_left;
 
         const b = boundaries;
-        diagram.updateTraceData([
-            {
-                id: 'anode_trace',
-                label: '\\bar\\mu_{\\mathrm{e}^-}',
-                showLabel: true,
+        const bn = cellregions.length;
+        const data = [];
+        for (let cellidx = 0; cellidx < 3; cellidx++) {
+            const b0 = cellregions.length * cellidx;
+            const V0 = V_cell * cellidx;
+            data.push({
+                id: 'anode_trace_' + cellidx,
+                label: 'V_{\\mathrm{e}^-}',
+                showLabel: false,
                 color: electron_color,
-                x: [b[0], b[1], b[2]],
-                y: [-V_left, -V_left, -V_anode],
-            },
-            {
-                id: 'li_trace',
-                label: '\\bar\\mu_{\\mathrm{Li}^+}',
+                x: [b[b0 + 0], b[b0 + 1], b[b0 + 2]],
+                y: [V0 + V_left, V0 + V_left, V0 + V_anode],
+            });
+            data.push({
+                id: 'li_trace_' + cellidx,
+                label: 'V_{\\mathrm{Li}^+}',
                 showLabel: true,
                 color: li_color,
-                x: [b[1], b[4]],
-                y: [+V_Li_left, +V_Li_right],
-            },
-            {
-                id: 'cathode_trace',
-                label: '\\bar\\mu_{\\mathrm{e}^-}',
-                showLabel: true,
+                x: [b[b0 + 1], b[b0 + 4]],
+                y: [V0 + V_Li_left, V0 + V_Li_right],
+            });
+            data.push({
+                id: 'cathode_trace_' + cellidx,
+                label: 'V_{\\mathrm{e}^-}',
+                showLabel: cellidx == 2,
                 color: electron_color,
-                x: [b[3], b[4], b[5]],
-                y: [-V_cathode, -V_right, -V_right],
-            },
-        ]);
+                x: [b[b0 + 3], b[b0 + 4], b[b0 + 5]],
+                y: [V0 + V_cathode, V0 + V_right, V0 + V_right],
+            });
+        }
+        diagram.updateTraceData(data);
     }
 
     // Slider event listeners - throttle them.
@@ -142,7 +135,6 @@
         (event) => updateDiagrams(),
         throttleDuration
     );
-    dPhiSlider.addEventListener('input', updateThrottler);
     currentSlider.addEventListener('input', updateThrottler);
 
     updateDiagrams();

@@ -59,18 +59,22 @@ Let's re-plot our battery with this new representation. I call these diagrams **
 
 {% include "esbd-diagrams/bd-basicbattery-voltage-esbd.html" %}
 
-(You can try moving the offset slider again to see vertical invariance is restored: everything shifts together nicely now.)
+(You can try moving the offset slider again to see vertical invariance is fixed: everything shifts together nicely now.)
 
-Here we can finally see how the battery works, and we have a satisfying answer to 'what is in the middle of a battery' — it's the landscape of ionic voltages! I just want to emphasize a couple of points: 1) the step $V_{\mathrm{e}^-} - V_{\mathrm{Li}^+}$ on each side has a very specific meaning, relating to how tightly bound the (neutral) lithium atoms are in each electrode, much more tightly bound in the cathode material. And 2) the internal resistance appears beautifully as a 'lithium voltage drop'; the plain linear ramp is a simplification, but gets at the heart of the matter. We will return to investigating lithium-ion batteries in more detail [later on](lib/).
+Here we can finally see how the battery works, and we have a satisfying answer to 'what is in the middle of a battery' — it's the landscape of ionic voltages! I just want to emphasize a couple of points: 1) the step $V_{\mathrm{e}^-} - V_{\mathrm{Li}^+}$ on each side has a very specific meaning, relating to how tightly bound the (neutral) lithium atoms are in each electrode, much more tightly bound in the cathode material. And 2) the internal resistance appears beautifully as a 'lithium voltage drop'; the plain linear ramp is a simplification, but gets at the heart of the matter. We will return to investigating the internals of lithium-ion batteries in more detail [later on](lib/).
+
+If we look at a multi-cell battery, the electron and lithium-ion voltages climb together nicely (while they would have moved oppositely in the raw energy picture):
+
+{% include "esbd-diagrams/bd-basicbattery-multicell.html" %}
 
 In fact, what started out as a niche picture about batteries has turned into a refreshing alternative mental framework for all electrochemical phenomena. With the $V_i$ picture and ESBDs,
 
 * We **represent electrons and ions equally** as first-class charge carriers.
 * We take energy diagrams back into the **hands-on** realm of electronics (voltages).
-* **Charge transport is unambiguous**: positive charges move from high to low $V_i$, and negative charges move from low to high $V_i$.
+* **Charge transport is obvious**: Positively-charged species $i$ move from high to low $V_i$, and negatively charged species $j$ move from low to high $V_j$.
 * **Electrochemical reactions appear** as well-defined differences, $V_i - V_j$.
 * We will see that **ionic standard states** appear as reference levels $V_i^\circ$, functioning like semiconductor band edges.
-* We can build a complete picture without ever needing to bring up the inaccessible concept of an in-material electrostatic potential ($\phi$).
+* We can build a complete picture without ever needing to bring up the practically inaccessible concept of an in-material electrostatic potential ($\phi$).
 * We **directly represent the fundamental thermodynamics** of charged species: their electrochemical potentials.
 * This is not just a cheap normalization trick, rather the $V_i$ are **real voltages** that can be [directly probed by specialized electrodes](nuances/).
 
