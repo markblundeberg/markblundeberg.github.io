@@ -77,6 +77,7 @@ class ElectrochemicalSpeciesBandDiagram {
                 speciesId = null,
                 curveType,
                 showLabel = true,
+                labelOverride = null,
                 x,
                 y,
                 ...extraFields
@@ -92,7 +93,8 @@ class ElectrochemicalSpeciesBandDiagram {
             const style = STYLE_DEFAULTS[curveType];
             const curveDescription = describeCurveType(curveType);
             const color = sInfo?.color ?? 'black';
-            const label = this._getAutoLabel(sInfo?.mathLabel, curveType);
+            const autoLabel = this._getAutoLabel(sInfo?.mathLabel, curveType);
+            const label = labelOverride || autoLabel;
 
             outData.push({
                 id: id,
