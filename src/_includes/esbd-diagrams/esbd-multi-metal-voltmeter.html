@@ -1,0 +1,68 @@
+<figure class="demo-container" style="min-width: 280px; max-width: 350px">
+    <div style="height: 150px" id="multi-metal-voltmeter-container"></div>
+    <figcaption>
+        When attaching a voltmeter probe to an electronic device, we don't care
+        which metal the probe is made of because electrons are the only mobile
+        charged species.
+    </figcaption>
+</figure>
+
+<script type="module">
+    const plotContainerId = 'multi-metal-voltmeter-container';
+
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { formatPopupBaseContent, throttle } from '{{ esbdJsPath }}utils.js';
+
+    const speciesInfo = {
+        electron: {
+            z: -1,
+            color: '#377EB8',
+            mathLabel: '\\mathrm{e}^{-}',
+        },
+    };
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        plotContainerId,
+        speciesInfo
+    );
+
+    // Set layout
+    const boundaries = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0];
+    diagram.setSpatialLayout(boundaries, [
+        { name: 'Device', color: '#E0A0A0' },
+        { name: 'Nickel', color: '#b0b0b0' },
+        { name: 'Copper', color: '#DA8A67' },
+        { name: 'Solder', color: '#E0E0E0' },
+        { name: 'Voltmeter', color: '#a0e0a0' },
+    ]);
+
+    const V_el = +1.1;
+    diagram.setVRange(V_el - 0.5, V_el + 0.5);
+
+    const b = boundaries;
+    const data = [
+        {
+            id: `electron_trace`,
+            speciesId: 'electron',
+            curveType: 'potential',
+            showLabel: true,
+            x: [0, 1],
+            y: [V_el, V_el],
+        },
+    ];
+
+    const phis = [0.15, -0.1, +0.4, -0.2, +0.3];
+    for (let i = 0; i < phis.length; i++) {
+        const phi = V_el + phis[i];
+        data.push({
+            id: `phi_${i}`,
+            // speciesId: 'electron',
+            curveType: 'phi',
+            showLabel: true,
+            x: [b[i], b[i + 1]],
+            y: [phi, phi],
+        });
+    }
+
+    diagram.updateTraceData(data);
+</script>

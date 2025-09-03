@@ -49,7 +49,7 @@ Below I'll highlight the key principles of what makes $V_i$ a voltage.
 
 ## Differences in $V_i$ are available work
 
-The fundamental rule of thermodynamics is that particles flow from high to low chemical potential ($\bar\mu_i$) to release free energy. The difference, $\Delta \bar\mu_i$, is the maximum work that can be extracted from this flow. (To be precise, this is only true when both bodies have equal temperatures,^[The equal-temperature requirement means we can transfer any amount of energy between the bodies along with the particle transfer, and the amount of energy transfer does not affect the available work. But where bodies also differ in temperature, we can also extract available work from the thermal difference. Practically with temperature gradients we see thermoelectric effects that complicate the interpretation of voltages.] but we will generally assume isothermal conditions).
+The fundamental rule of thermodynamics is that particles flow from high to low chemical potential ($\bar\mu_i$) to release free energy. The difference, $\Delta \bar\mu_i$, is the maximum work that can be extracted from this flow. (To be precise, this is only true when both bodies have equal temperatures,^[The equal-temperature requirement means we can transfer any amount of energy between the bodies along with the particle transfer, and the amount of energy transfer does not affect the available work. But where bodies also differ in temperature, we can also extract available work from the thermal difference.] but we will generally assume isothermal conditions).
 
 The available work $\Delta\bar\mu_i$ is free energy per unit of particle count (e.g. kJ/mol or eV/particle). By normalizing $V_i = \bar\mu_i/(z_i F)$, the corresponding $\Delta V_i$ is **available work per unit charge** (volts). But, it's not just the work for *any* charge, rather it is specific to charge transferred via that specific species.
 
@@ -61,9 +61,9 @@ The fact that $\Delta V_i$ represents available work means it is in principle me
 
 The common voltmeter has metal probes. It measures differences in $V_{\mathrm{e}^-}$ by permitting a small, ideally negligible, number of electrons to flow in via metal probes. In fact, the reason electronic voltmeters work so directly and conveniently is that so many of our conductors are purely electronic: we can attach wires of many different materials together, and since electrons are the only mobile carriers, then they transmit $V_{\mathrm{e}^-}$ perfectly without any of the complications we see in multi-ion solutions.
 
-> DIAGRAM? - show V_e- with multi-metal sequence leading up to voltmeter 
+{% include "esbd-diagrams/esbd-multi-metal-voltmeter.html" %}
 
-For ions' $V_i$, a regular voltmeter with its metallic probes cannot directly couple to the ions. Or to be more precise, this coupling is badly controlled. But with careful probe construction, we can make a controlled coupling between $V_i$ and $V_{\mathrm{e}^-}$, and then by measuring $V_{\mathrm{e}^-}$ with a regular voltmeter we therefore have indirect access to $V_i$. In many cases these electrodes will be particularized to the situation and the nature of the target ion. There is also a [generic recipe (see later topic)](../nuances/) based on ion-selective membranes that can be used in principle to measure *any* ionic voltage $V_i$.
+For ions' $V_i$, a regular voltmeter with its metallic probes cannot directly couple to the ions. Or to be more precise, this coupling tends to be poorly controlled. But with careful probe construction, we can make a controlled coupling between $V_i$ and $V_{\mathrm{e}^-}$, and then by measuring $V_{\mathrm{e}^-}$ with a regular voltmeter we therefore have indirect access to $V_i$. In many cases these electrodes will be particularized to the situation and the nature of the target ion. There is also a [generic recipe (see later topic)](../nuances/) based on ion-selective membranes that can be used in principle to measure *any* ionic voltage $V_i$.
 
 > DIAGRAM - sketch of a generic V_i probe as an interchange between V_i and V_e-
 
