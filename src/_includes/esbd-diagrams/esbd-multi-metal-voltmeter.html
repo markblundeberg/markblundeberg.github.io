@@ -27,17 +27,18 @@
     );
 
     // Set layout
-    const boundaries = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0];
+    const boundaries = [0.0, 0.18, 0.36, 0.54, 0.72, 1.0];
+    const x_deltaV = 0.86;
     diagram.setSpatialLayout(boundaries, [
-        { name: 'Device', color: '#E0A0A0' },
+        { name: 'Device', color: '#E0E0A0' },
         { name: 'Nickel', color: '#b0b0b0' },
-        { name: 'Copper', color: '#DA8A67' },
+        { name: 'Copper', color: '#F0B090' },
         { name: 'Solder', color: '#E0E0E0' },
         { name: 'Voltmeter', color: '#a0e0a0' },
     ]);
 
-    const V_el = +1.1;
-    diagram.setVRange(V_el - 0.5, V_el + 0.5);
+    const V_el = +0.45;
+    diagram.setVRange(-0.15, V_el + 0.5);
 
     const b = boundaries;
     const data = [
@@ -46,13 +47,22 @@
             speciesId: 'electron',
             curveType: 'potential',
             showLabel: true,
-            x: [0, 1],
+            x: [0, x_deltaV],
             y: [V_el, V_el],
+        },
+        {
+            id: `electron_trace_gnd`,
+            speciesId: 'electron',
+            curveType: 'potential',
+            showLabel: true,
+            labelOverride: '\\mathrm{GND}',
+            x: [x_deltaV, 1],
+            y: [0, 0],
         },
     ];
 
     const phis = [0.15, -0.1, +0.4, -0.2, +0.3];
-    for (let i = 0; i < phis.length; i++) {
+    for (let i = 0; i < phis.length - 1; i++) {
         const phi = V_el + phis[i];
         data.push({
             id: `phi_${i}`,
@@ -65,4 +75,16 @@
     }
 
     diagram.updateTraceData(data);
+
+    diagram.addVerticalMarker('voltmeter', {
+        symbol: 'V',
+        speciesId1: 'electron',
+        speciesId2: 'ion',
+        popupCallback: () => 'Voltmeter',
+    });
+    diagram.updateVerticalMarker('voltmeter', {
+        x: x_deltaV,
+        y1: 0,
+        y2: V_el,
+    });
 </script>

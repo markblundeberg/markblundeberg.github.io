@@ -51,7 +51,7 @@ Below I'll highlight the key principles of what makes $V_i$ a voltage.
 
 The fundamental rule of thermodynamics is that particles flow from high to low chemical potential ($\bar\mu_i$) to release free energy. The difference, $\Delta \bar\mu_i$, is the maximum work that can be extracted from this flow. (To be precise, this is only true when both bodies have equal temperatures,^[The equal-temperature requirement means we can transfer any amount of energy between the bodies along with the particle transfer, and the amount of energy transfer does not affect the available work. But where bodies also differ in temperature, we can also extract available work from the thermal difference.] but we will generally assume isothermal conditions).
 
-The available work $\Delta\bar\mu_i$ is free energy per unit of particle count (e.g. kJ/mol or eV/particle). By normalizing $V_i = \bar\mu_i/(z_i F)$, the corresponding $\Delta V_i$ is **available work per unit charge** (volts). But, it's not just the work for *any* charge, rather it is specific to charge transferred via that specific species.
+The available work $\Delta\bar\mu_i$ is free energy per unit of particle count (e.g. kJ/mol or eV/particle). By normalizing $V_i = \bar\mu_i / q_i$, the corresponding $\Delta V_i$ is **available work per unit charge** (volts). But, it's not just the work for *any* charge, rather it is specific to charge transferred via that specific species.
 
 {% include "esbd-diagrams/levels-mu-V-work.html" %}
 
@@ -63,11 +63,13 @@ The common voltmeter has metal probes. It measures differences in $V_{\mathrm{e}
 
 {% include "esbd-diagrams/esbd-multi-metal-voltmeter.html" %}
 
-For ions' $V_i$, a regular voltmeter with its metallic probes cannot directly couple to the ions. Or to be more precise, this coupling tends to be poorly controlled. But with careful probe construction, we can make a controlled coupling between $V_{\mathrm{ion}}$ and $V_{\mathrm{e}^-}$, and then by measuring $V_{\mathrm{e}^-}$ with a regular voltmeter. In general there will be a step $V_{\mathrm{e}^-} - V_{\mathrm{ion}} = \Delta$ for some value $\Delta$; provided the $\Delta$ is well controlled, we therefore have indirect access to $V_{\mathrm{ion}}$.
+With ions, it is much harder to probe $V_i$ due to practical complications: we generally don't have single-ion conductors (e.g. electrolytes contain at least one positive and one negative ionic species) that we could use to make "ion wires". Even when we do have single-ion wires, we would also need ionic voltmeters to make a full ionic circuit. Due to both of these factors, we will only probe ionic $V_i$ in-situ, and indirectly via coupling to regular (electronic) voltmeters.
+
+A regular voltmeter with its metallic probes tends to have a poorly controlled connection between $V_{\mathrm{ion}}$ and $V_{\mathrm{e}^-}$. But with careful preparation of the probe surface, we can make a controlled coupling between $V_{\mathrm{ion}}$ and $V_{\mathrm{e}^-}$. This manifests as a step $V_{\mathrm{e}^-} - V_{\mathrm{ion}} = \Delta$ for some value $\Delta$ that is determined by chemical equilibration; provided the $\Delta$ is well controlled, we therefore have indirect access to $V_{\mathrm{ion}}$ by probing the $V_{\mathrm{e}^-}$ with a regular voltmeter and subtracting $\Delta$.
 
 {% include "esbd-diagrams/esbd-electrode-generic.html" %}
 
-In many cases these electrodes will be particularized to the situation and the nature of the target ion. A key criterion is that $V_{\mathrm{e}^-}$ only couples to the target $V_i$ and not to any other species. There is also a [generic recipe (see later topic)](../nuances/) based on ion-selective membranes that can be used in principle to non-invasively measure any ionic voltage $V_i$.
+In many cases these electrodes will be particularized to both the target ion and to the environment of that ion. A key criterion is that $V_{\mathrm{e}^-}$ only couples to the target $V_{\mathrm{ion}}$ and not to any other species. There is also a [generic recipe (see later topic)](../nuances/) based on ion-selective membranes that can be used in principle to non-invasively measure any ionic voltage $V_i$.
 
 ## About differences $V_i - V_j$
 

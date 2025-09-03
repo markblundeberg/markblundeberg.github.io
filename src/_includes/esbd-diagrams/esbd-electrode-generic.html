@@ -15,7 +15,10 @@
             mathLabel: '\\mathrm{ion}',
         },
         other: {
-            z: 1,
+            color: '#a04080',
+            mathLabel: '\\mathrm{other}',
+        },
+        other2: {
             color: '#a04080',
             mathLabel: '\\mathrm{other}',
         },
@@ -32,17 +35,20 @@
     );
 
     // Set layout
-    const boundaries = [0.0, 0.333, 0.667, 1.0];
+    const boundaries = [0.0, 0.25, 0.55, 0.75, 1.0];
+    const x_deltaV = 0.875;
     diagram.setSpatialLayout(boundaries, [
         { name: 'Solution', color: '#E6F5FF' },
-        { name: 'Electrode', color: '#E0E0E0' },
+        { name: 'Electrode', color: '#d0d0d0' },
+        { name: 'Wire', color: '#F0B090' },
         { name: 'Voltmeter', color: '#a0e0a0' },
     ]);
 
-    const V_el = +0;
+    const V_el = +0.8;
     const V_ion = V_el - 1.1;
-    const V_other = V_el + 0.3;
-    diagram.setVRange(V_ion - 0.2, V_other + 0.2);
+    const V_other = V_el + 0.5;
+    const V_other2 = V_ion - 0.4;
+    diagram.setVRange(V_other2 - 0.4, V_other + 0.4);
 
     const b = boundaries;
     diagram.updateTraceData([
@@ -51,8 +57,17 @@
             speciesId: 'electron',
             curveType: 'potential',
             showLabel: true,
-            x: [b[1], b[3]],
+            x: [b[1], x_deltaV],
             y: [V_el, V_el],
+        },
+        {
+            id: `electron_trace_gnd`,
+            speciesId: 'electron',
+            curveType: 'potential',
+            showLabel: true,
+            labelOverride: '\\mathrm{GND}',
+            x: [x_deltaV, 1],
+            y: [0, 0],
         },
         {
             id: `ion_trace`,
@@ -70,10 +85,18 @@
             x: [b[0], b[1]],
             y: [V_other, V_other],
         },
+        {
+            id: `other2_trace`,
+            speciesId: 'other2',
+            curveType: 'potential',
+            showLabel: true,
+            x: [b[0], b[1]],
+            y: [V_other2, V_other2],
+        },
     ]);
 
     diagram.addVerticalMarker('react', {
-        symbol: '⇌',
+        symbol: 'Δ',
         speciesId1: 'electron',
         speciesId2: 'ion',
         popupCallback: () => 'Ion-electron reaction',
@@ -82,5 +105,16 @@
         x: b[1],
         y1: V_el,
         y2: V_ion,
+    });
+    diagram.addVerticalMarker('voltmeter', {
+        symbol: 'V',
+        speciesId1: 'electron',
+        speciesId2: 'ion',
+        popupCallback: () => 'Voltmeter',
+    });
+    diagram.updateVerticalMarker('voltmeter', {
+        x: x_deltaV,
+        y1: 0,
+        y2: V_el,
     });
 </script>
