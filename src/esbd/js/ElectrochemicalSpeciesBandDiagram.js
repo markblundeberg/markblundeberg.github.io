@@ -91,8 +91,8 @@ class ElectrochemicalSpeciesBandDiagram {
             const sInfo = this.speciesInfo[speciesId];
             const style = STYLE_DEFAULTS[curveType];
             const curveDescription = describeCurveType(curveType);
-            const color = sInfo.color ?? 'black';
-            const label = this._getAutoLabel(sInfo.mathLabel, curveType);
+            const color = sInfo?.color ?? 'black';
+            const label = this._getAutoLabel(sInfo?.mathLabel, curveType);
 
             outData.push({
                 id: id,
