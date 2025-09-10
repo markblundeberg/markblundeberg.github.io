@@ -112,14 +112,14 @@ class BandDiagram extends ResponsivePlot {
             try {
                 let {
                     id,
-                    x,
-                    y,
+                    x: xData,
+                    y: yData,
                     color,
                     style,
                     label,
                     showLabel = true,
                     toolTip,
-                    extraData = {},
+                    extraData = null,
                     ...extraFields
                 } = traceDef;
                 if (Object.keys(extraFields).length > 0) {
@@ -130,11 +130,9 @@ class BandDiagram extends ResponsivePlot {
                 }
 
                 if (typeof id !== 'string') throw Error('missing/bad id');
-                if (seenIds.has(id)) throw Error('duplicate id');
+                if (seenIds.has(id)) throw Error('duplicate id: ' + id);
 
                 // validate and transform x and y data
-                const xData = x;
-                const yData = y;
                 if (!Array.isArray(xData)) throw Error('missing/bad x array');
                 if (!Array.isArray(yData)) throw Error('missing/bad y array');
                 const len = xData.length;
