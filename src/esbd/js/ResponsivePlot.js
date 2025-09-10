@@ -10,9 +10,11 @@ import { debounce } from './utils.js';
  * It is assumed you will control the plot container's size using HTML/CSS.
  * Important: Parent div must have an explicit known height, so that height:100% works!
  *
+ * .redraw() -- you override this.
  * .svg -- the whole SVG canvas
+ * .svgWidth and .svgHeight -- whole canvas size
  * .plotArea -- translated plot area group (top/left margins applied)
- * .plotWidth and .plotHeight -- computed plot size
+ * .plotWidth and .plotHeight -- computed plot area size
  */
 class ResponsivePlot {
     // ========================================================================
@@ -54,14 +56,15 @@ class ResponsivePlot {
 
         // Internal state initialization
         this._redrawScheduled = false;
-        this.svgWidth = this.outerContainer.node().clientWidth;
-        this.svgHeight = this.outerContainer.node().clientHeight;
-        if (this.svgHeight == 0) {
-            console.warn('initial height is 0 on ', this.config.containerId);
-        }
+        this._requestAnimationFrameID = null;
+        this.svgWidth = null;
+        this.svgHeight = null;
 
         // Populate the container
         this.outerContainer.html('');
+        if (this.outerContainer.node().clientHeight == 0) {
+            console.warn('initial height is 0 on ', this.config.containerId);
+        }
 
         // Wrapper to control positioning and overflow; will be used to observe
         // container size and size changes.
@@ -93,21 +96,31 @@ class ResponsivePlot {
             );
 
         // Debounced resize handler
-        this._debouncedHandleResize = debounce((width, height) => {
-            this.svgWidth = width;
-            this.svgHeight = height;
+        this._debouncedScheduleRedraw = debounce(() => {
             this.scheduleRedraw();
         }, this.config.resizeDebounceDelay);
 
         this._resizeObserver = new ResizeObserver((entries) => {
             if (entries[0]) {
+                const firstRO = this.svgWidth === null;
                 const { width, height } = entries[0].contentRect;
-                this._debouncedHandleResize(width, height);
+
+                if (this.svgWidth === width && this.svgHeight === height) {
+                    console.info('Ignoring unchanged size.');
+                    return;
+                }
+
+                this.svgWidth = width;
+                this.svgHeight = height;
+
+                if (firstRO) this.scheduleRedraw();
+                else this._debouncedScheduleRedraw();
             }
         });
         this._resizeObserver.observe(this.container.node());
 
-        // Note ResizeObserver is guaranteed to be fired, will set our size appropriately.
+        // Note ResizeObserver is guaranteed to be fired, will set our size appropriately
+        // and then schedule our first redraw.
     }
 
     // ========================================================================
@@ -116,14 +129,20 @@ class ResponsivePlot {
 
     // Request a redraw (e.g. due to updated data)
     scheduleRedraw() {
-        if (this._redrawScheduled) {
-            return;
-        }
-        this._redrawScheduled = true;
+        if (this._redrawScheduled) return;
+
+        // Do not proceed if ResizeObserver has not yet fired.
+        if (this.svgWidth === null) return;
+
+        console.assert(this._requestAnimationFrameID === null);
+
         // Schedule the redraw to run before the next browser paint
-        requestAnimationFrame(() => {
-            this._doRedraw();
+        this._requestAnimationFrameID = requestAnimationFrame(() => {
+            this._requestAnimationFrameID = null;
+            this._doRedraw(); // will unset _redrawScheduled
         });
+
+        this._redrawScheduled = true; // only place where this is assigned true.
     }
 
     // To be implemented by child classes - perform the redraw at appropriate time
@@ -161,8 +180,9 @@ class ResponsivePlot {
             this.config.onBeforeRedraw();
 
         // onBeforeRedraw is expected to freely call scheduleRedraw as it makes
-        // final tweaks to art parameters. But, scheduleRedraw should not be called
-        // after this; set to false just so we can detect and flag that.
+        // final tweaks to art parameters. We will silently ignore those. But,
+        // scheduleRedraw should not be called after this; set to false just so
+        // we can detect and flag that.
         this._redrawScheduled = false;
 
         this.plotArea
@@ -179,6 +199,7 @@ class ResponsivePlot {
             console.warn('scheduleRedraw was called during redraw. Ignoring.');
 
         this._redrawScheduled = false;
+        this._debouncedScheduleRedraw.cancel(); // might as well
     }
 
     // ========================================================================
@@ -187,16 +208,13 @@ class ResponsivePlot {
 
     /** Cleans up resources like observers and listeners. */
     destroy() {
-        if (this._resizeObserver) {
-            this._resizeObserver.disconnect();
-        }
-        if (
-            this._debouncedHandleResize &&
-            typeof this._debouncedHandleResize.cancel === 'function'
-        ) {
-            this._debouncedHandleResize.cancel();
-        }
-        this.container.html('');
+        this._resizeObserver.disconnect();
+        this._debouncedScheduleRedraw.cancel();
+        if (this._requestAnimationFrameID !== null)
+            window.cancelAnimationFrame(this._requestAnimationFrameID);
+        this.svgWidth = null; // disable scheduleRedraw just in case
+        this._redrawScheduled = false; // disable _doRedraw just in case
+        this.outerContainer.html('');
     }
 } // End of class
 
