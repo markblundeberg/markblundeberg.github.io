@@ -25,6 +25,7 @@ class ResponsivePlot {
      * @param {object} [margins={top: 5, right: 35, bottom: 20, left: 60}] - Plot margins.
      * @param {number} [transitionDuration=250] - Transition time (ms).
      * @param {number} [resizeDebounceDelay=200] - Debounce delay for resize events (ms).
+     * @param {function} [onBeforeRedraw=null] - Callback for final art parameter tweaks before redraw() is run.
      */
     constructor(config) {
         const defaults = {
@@ -36,6 +37,7 @@ class ResponsivePlot {
             },
             transitionDuration: 250,
             resizeDebounceDelay: 200,
+            onBeforeRedraw: null,
         };
         this.config = { ...defaults, ...config };
         if (!this.config.containerId) {
@@ -114,16 +116,13 @@ class ResponsivePlot {
 
     // Request a redraw (e.g. due to updated data)
     scheduleRedraw() {
-        // If a redraw is already scheduled, do nothing
         if (this._redrawScheduled) {
             return;
         }
-        // Set the flag
         this._redrawScheduled = true;
         // Schedule the redraw to run before the next browser paint
         requestAnimationFrame(() => {
-            this.redraw(); // Call the actual redraw method
-            this._redrawScheduled = false; // Clear the flag after redraw runs
+            this._doRedraw();
         });
     }
 
@@ -155,8 +154,17 @@ class ResponsivePlot {
     // Core Private Update Logic
     // ========================================================================
 
-    /** Main drawing/update function. */
-    _preRedraw() {
+    /** called by requestAnimationFrame */
+    _doRedraw() {
+        if (!this._redrawScheduled) return;
+        if (typeof this.config.onBeforeRedraw === 'function')
+            this.config.onBeforeRedraw();
+
+        // onBeforeRedraw is expected to freely call scheduleRedraw as it makes
+        // final tweaks to art parameters. But, scheduleRedraw should not be called
+        // after this; set to false just so we can detect and flag that.
+        this._redrawScheduled = false;
+
         this.plotArea
             .transition()
             .duration(this.config.transitionDuration)
@@ -166,6 +174,11 @@ class ResponsivePlot {
                 `translate(${this.margins.left},${this.margins.top})`
             );
         this.redraw();
+
+        if (this._redrawScheduled)
+            console.warn('scheduleRedraw was called during redraw. Ignoring.');
+
+        this._redrawScheduled = false;
     }
 
     // ========================================================================
