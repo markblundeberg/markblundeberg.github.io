@@ -57,7 +57,7 @@ class BandDiagram extends ResponsivePlot {
         this.boundaries = [];
         this.regionProps = [];
         this.regionLabels = [];
-        this.verticalMarkers = new Map();
+        this.markerData = [];
         this._yAxisLabelStr = 'Energy';
 
         // Callbacks & Interaction state
@@ -257,71 +257,42 @@ class BandDiagram extends ResponsivePlot {
         this.scheduleRedraw();
     }
 
-    /**
-     * Defines a vertical marker to be displayed, often at an interface or specific point.
-     * Can represent reactions, energy gaps, overpotentials etc. via popup callback.
-     * @param {string} markerId - Unique identifier for this marker.
-     * @param {object} definition - Marker definition.
-     * @param {string} [definition.symbol='↕'] - SVG text symbol to display.
-     * @param {function} definition.popupCallback - Function(info) to generate popup HTML.
-     */
-    addVerticalMarker(markerId, definition) {
-        if (
-            !markerId ||
-            !definition ||
-            typeof definition.popupCallback !== 'function'
-        ) {
-            throw Error(
-                'Invalid definition for addVerticalMarker. Requires markerId and popupCallback.'
-            );
-        }
-        this.verticalMarkers.set(markerId, {
-            definition: {
-                symbol:
-                    definition.symbol || STYLE_DEFAULTS.verticalMarker.symbol,
-                popupCallback: definition.popupCallback,
-            },
-            currentData: null, // Position/data updated via updateVerticalMarker
-        });
-    }
+    updateVerticalMarkers(markerDefs) {
+        const markerData = [];
+        const seenIds = new Set();
+        for (const markerDef of markerDefs) {
+            let {
+                id,
+                x,
+                y1,
+                y2,
+                symbol = STYLE_DEFAULTS.verticalMarker.symbol,
+                popupCallback = null,
+                popupArgs = null,
+                ...extraFields
+            } = markerDef;
+            if (Object.keys(extraFields).length > 0) {
+                const unexpectedKeys = Object.keys(extraFields).join(', ');
+                throw new Error(
+                    `Unexpected fields were provided: ${unexpectedKeys}`
+                );
+            }
 
-    /**
-     * Updates the position and data for a defined vertical marker.
-     * @param {string} markerId - Identifier of the marker to update.
-     * @param {object} data - Data for positioning and popup.
-     * @param {number} data.x - X-coordinate (data units) where the marker should appear.
-     * @param {number} data.y1 - Y-coordinate 1 (in data units).
-     * @param {number} data.y2 - Y-coordinate 2 (in data units).
-     * @param {any} [data.popupArgs={}] - Custom data to pass to the popup callback.
-     */
-    updateVerticalMarker(markerId, data) {
-        if (!this.verticalMarkers.has(markerId)) {
-            console.warn(
-                `No vertical marker found with ID "${markerId}" to update.`
-            );
-            return;
-        }
-        if (
-            !data ||
-            data.x === undefined ||
-            data.y1 === undefined ||
-            data.y2 === undefined
-        ) {
-            console.error(
-                'Invalid data for updateVerticalMarker. Requires x, y1, y2',
-                data
-            );
-            return;
-        }
+            if (typeof id !== 'string') throw Error('missing/bad id');
+            if (seenIds.has(id)) throw Error('duplicate id: ' + id);
+            seenIds.add(id);
 
-        const marker = this.verticalMarkers.get(markerId);
-
-        marker.currentData = {
-            x: data.x,
-            y1: data.y1,
-            y2: data.y2,
-            popupArgs: data.popupArgs || {}, // Store custom args
-        };
+            markerData.push({
+                id,
+                x,
+                y1,
+                y2,
+                symbol,
+                popupCallback,
+                popupArgs,
+            });
+        }
+        this.markerData = markerData;
         this.scheduleRedraw();
     }
 
@@ -624,16 +595,6 @@ class BandDiagram extends ResponsivePlot {
 
     /** Draws or updates the vertical marker symbols. */
     _drawVerticalMarkers() {
-        const markerData = Array.from(this.verticalMarkers.entries())
-            .map(([id, data]) => ({ id, ...data }))
-            .filter(
-                (d) =>
-                    d.currentData &&
-                    d.currentData.x !== undefined &&
-                    d.currentData.y1 !== null &&
-                    d.currentData.y2 !== null
-            );
-
         const markerStyle = STYLE_DEFAULTS.verticalMarker;
         const legThreshold = markerStyle.legThresholdPx;
         const symbolSize = markerStyle.fontSize;
@@ -643,7 +604,7 @@ class BandDiagram extends ResponsivePlot {
 
         this.verticalMarkersGroup
             .selectAll('g.bd-vertical-marker')
-            .data(markerData, (d) => d.id)
+            .data(this.markerData, (d) => d.id)
             .join(
                 (enter) => {
                     const g = enter
@@ -686,7 +647,7 @@ class BandDiagram extends ResponsivePlot {
                         .attr('font-size', symbolSize)
                         .attr('fill', markerStyle.color)
                         .style('pointer-events', 'none')
-                        .text((d) => d.definition.symbol);
+                        .text((d) => d.symbol);
 
                     // Attach listeners to the background circle for reliable interaction area
                     g.select('circle.marker-bg') // Target the background circle
@@ -718,12 +679,11 @@ class BandDiagram extends ResponsivePlot {
             .each((d, i, nodes) => {
                 // Update position, legs, and leg ends
                 const markerG = d3.select(nodes[i]);
-                const data = d.currentData;
 
-                const y1_display = data.y1;
-                const y2_display = data.y2;
+                const y1_display = d.y1;
+                const y2_display = d.y2;
 
-                const x_px = this.xScale(data.x);
+                const x_px = this.xScale(d.x);
                 const y1_px = this.yScale(y1_display);
                 const y2_px = this.yScale(y2_display);
                 const y_mid_px = (y1_px + y2_px) / 2;
@@ -870,9 +830,6 @@ class BandDiagram extends ResponsivePlot {
                 this._showTracePopup(event, closestResult); // Show trace popup
             }
             // If no close trace, _hidePopup was already called, so nothing more to do
-        } else if (this.verticalMarkers.has(targetId)) {
-            // Click was on a vertical marker -> Show marker popup
-            this._showVerticalMarkerPopup(event, targetId);
         }
     }
 
@@ -951,34 +908,26 @@ class BandDiagram extends ResponsivePlot {
 
     /** Gathers info, calls callback, shows popup for a vertical marker */
     _showVerticalMarkerPopup(event, markerId) {
-        const markerData = this.verticalMarkers?.get(markerId);
-        if (
-            !markerData ||
-            !markerData.currentData ||
-            typeof markerData.definition.popupCallback !== 'function'
-        ) {
+        const markerData = this.markerData.find((x) => x.id === markerId);
+        if (!markerData || typeof markerData.popupCallback !== 'function') {
             console.warn(
                 `No marker data or callback found for markerId: ${markerId}`
             );
             this._hidePopup();
             return;
         }
-        const currentData = markerData.currentData;
-        const y1_display = currentData.y1;
-        const y2_display = currentData.y2;
 
         const markerPopupInfo = {
             markerId: markerId,
-            xValue: currentData.x,
-            y1_display: y1_display,
-            y2_display: y2_display,
-            customArgs: currentData.popupArgs,
+            xValue: d.x,
+            y1_display: d.y1,
+            y2_display: d.y2,
+            customArgs: d.popupArgs,
             pointEvent: event,
         };
 
         try {
-            const content =
-                markerData.definition.popupCallback(markerPopupInfo);
+            const content = markerData.popupCallback(markerPopupInfo);
             if (content) {
                 this._setPopup(event, content, ['marker', markerId]); // Show pinned popup
                 this._setActiveHighlight({ type: 'marker', id: markerId });
@@ -1032,8 +981,8 @@ class BandDiagram extends ResponsivePlot {
     _handleMarkerPointerOver(event, markerId) {
         event.stopPropagation();
         if (!this._pinnedPopupInfo) {
-            const markerData = this.verticalMarkers?.get(markerId);
-            const symbol = markerData?.definition?.symbol || '⇌';
+            const markerData = this.markerData.find((x) => x.id === markerId);
+            const symbol = markerData?.symbol || '⇌';
             // Generate generic brief content for marker hover
             let briefContent = null;
             if (symbol == '⇌') {

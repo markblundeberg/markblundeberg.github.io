@@ -95,26 +95,22 @@
         },
     ]);
 
-    diagram.addVerticalMarker('react', {
-        symbol: 'Δ',
-        speciesId1: 'electron',
-        speciesId2: 'ion',
-        popupCallback: () => 'Ion-electron reaction',
-    });
-    diagram.updateVerticalMarker('react', {
-        x: b[1],
-        y1: V_el,
-        y2: V_ion,
-    });
-    diagram.addVerticalMarker('voltmeter', {
-        symbol: 'V',
-        speciesId1: 'electron',
-        speciesId2: 'ion',
-        popupCallback: () => 'Voltmeter',
-    });
-    diagram.updateVerticalMarker('voltmeter', {
-        x: x_deltaV,
-        y1: 0,
-        y2: V_el,
-    });
+    diagram.updateVerticalMarkers([
+        {
+            id: 'react',
+            symbol: 'Δ',
+            x: b[1],
+            y1: V_el,
+            y2: V_ion,
+            popupCallback: () => 'Ion-electron reaction',
+        },
+        {
+            id: 'voltmeter',
+            symbol: 'V',
+            x: x_deltaV,
+            y1: 0,
+            y2: V_el,
+            popupCallback: () => 'Voltmeter',
+        },
+    ]);
 </script>

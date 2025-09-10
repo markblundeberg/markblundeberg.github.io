@@ -76,15 +76,14 @@
 
     diagram.updateTraceData(data);
 
-    diagram.addVerticalMarker('voltmeter', {
-        symbol: 'V',
-        speciesId1: 'electron',
-        speciesId2: 'ion',
-        popupCallback: () => 'Voltmeter',
-    });
-    diagram.updateVerticalMarker('voltmeter', {
-        x: x_deltaV,
-        y1: 0,
-        y2: V_el,
-    });
+    diagram.updateVerticalMarkers([
+        {
+            id: 'voltmeter',
+            symbol: 'V',
+            x: x_deltaV,
+            y1: 0,
+            y2: V_el,
+            popupCallback: () => 'Voltmeter',
+        },
+    ]);
 </script>

@@ -66,16 +66,15 @@
     // No popup callback
     //    this.diagram.setTracePopupCallback(...);
 
-    diagram.addVerticalMarker('ag-cl-', {
-        symbol: '⇌',
-        speciesId1: 'electron',
-        speciesId2: 'anion',
-        popupCallback: () =>
-            '$\\mathrm{AgCl} + \\mathrm{e}^- \\rightleftharpoons \\mathrm{Ag} + \\mathrm{Cl}^-$',
-    });
-    diagram.updateVerticalMarker('ag-cl-', {
-        x: b[1],
-        y1: V_el,
-        y2: V_Cl,
-    });
+    diagram.updateVerticalMarkers([
+        {
+            id: 'ag-cl-',
+            x: b[1],
+            y1: V_el,
+            y2: V_Cl,
+            symbol: '⇌',
+            popupCallback: () =>
+                '$\\mathrm{AgCl} + \\mathrm{e}^- \\rightleftharpoons \\mathrm{Ag} + \\mathrm{Cl}^-$',
+        },
+    ]);
 </script>

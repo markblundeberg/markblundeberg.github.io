@@ -59,16 +59,15 @@
         },
     ]);
 
-    diagram.addVerticalMarker('zn', {
-        symbol: '⇌',
-        speciesId1: 'anion',
-        speciesId2: 'cation',
-        popupCallback: () =>
-            '$ \\mathrm{Na}^+ + \\mathrm{Cl}^- \\rightleftharpoons \\mathrm{NaCl}. $',
-    });
-    diagram.updateVerticalMarker('zn', {
-        x: 0.5,
-        y1: V_an,
-        y2: V_cat,
-    });
+    diagram.updateVerticalMarkers([
+        {
+            id: 'reaction',
+            symbol: '⇌',
+            x: 0.5,
+            y1: V_an,
+            y2: V_cat,
+            popupCallback: () =>
+                '$ \\mathrm{Na}^+ + \\mathrm{Cl}^- \\rightleftharpoons \\mathrm{NaCl}. $',
+        },
+    ]);
 </script>

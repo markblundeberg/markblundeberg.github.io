@@ -131,25 +131,6 @@ class ConcentrationCellComponent {
             this._getTracePopupContent.bind(this)
         );
 
-        this.diagram.addVerticalMarker('left_interface_eq', {
-            symbol: '⇌',
-            speciesId1: 'electron', // Corresponds to y1 in update call (V_e_1)
-            speciesId2: 'cation', // Corresponds to y2 in update call (V_cation_1)
-            popupCallback: this._getInterfacePopupContent.bind(
-                this,
-                'Left Electrode'
-            ), // Pass identifier
-        });
-        this.diagram.addVerticalMarker('right_interface_eq', {
-            symbol: '⇌',
-            speciesId1: 'electron', // Corresponds to y1 (V_e_2)
-            speciesId2: 'cation', // Corresponds to y2 (V_cation_2)
-            popupCallback: this._getInterfacePopupContent.bind(
-                this,
-                'Right Electrode'
-            ), // Pass identifier
-        });
-
         if (this.config.VRange) {
             this.diagram.setVRange(
                 this.config.VRange[0],
@@ -403,24 +384,37 @@ class ConcentrationCellComponent {
             potential_diff_volt: V_cation_1 - V_e_1, // Should be V_reaction (approx 0)
             interfaceName: 'Electrode 1 / Elyte 1',
         };
-        this.diagram.updateVerticalMarker('left_interface_eq', {
-            x: b[1], // Interface boundary
-            y1: V_e_1, // Electron potential
-            y2: V_cation_1, // Cation potential
-            popupArgs: leftpopupArgs,
-        });
-
         const rightpopupArgs = {
             reaction: `${cation.mathLabel} + ${cation.z}\\mathrm{e}^{-} \\rightleftharpoons \\mathrm{Ag(s)}`,
             potential_diff_volt: V_cation_2 - V_e_2, // Should be V_reaction (approx 0)
             interfaceName: 'Elyte 2 / Electrode 2',
         };
-        this.diagram.updateVerticalMarker('right_interface_eq', {
-            x: b[4], // Interface boundary
-            y1: V_e_2, // Electron potential
-            y2: V_cation_2, // Cation potential
-            popupArgs: rightpopupArgs,
-        });
+        this.diagram.updateVerticalMarkers([
+            {
+                id: 'left_interface_eq',
+                symbol: '⇌',
+                x: b[1], // Interface boundary
+                y1: V_e_1, // Electron potential
+                y2: V_cation_1, // Cation potential
+                popupCallback: this._getInterfacePopupContent.bind(
+                    this,
+                    'Left Electrode'
+                ),
+                popupArgs: leftpopupArgs,
+            },
+            {
+                id: 'right_interface_eq',
+                symbol: '⇌',
+                x: b[4], // Interface boundary
+                y1: V_e_2, // Electron potential
+                y2: V_cation_2, // Cation potential
+                popupCallback: this._getInterfacePopupContent.bind(
+                    this,
+                    'Right Electrode'
+                ),
+                popupArgs: rightpopupArgs,
+            },
+        ]);
 
         return { traceDefs, calculatedVoltage: cell_voltage };
     }

@@ -114,24 +114,10 @@ class ElectrochemicalSpeciesBandDiagram {
     }
 
     /**
-     * Defines a vertical marker to be displayed, often at an interface or specific point.
-     * Can represent reactions, energy gaps, overpotentials etc. via popup callback.
-     * @param {string} markerId - Unique identifier for this marker.
-     * @param {object} definition - Marker definition.
-     * @param {string} [definition.symbol='↕'] - SVG text symbol to display.
-     * @param {string} [definition.speciesId1] - Optional: speciesId for potential y1 (for z lookup).
-     * @param {string} [definition.speciesId2] - Optional: speciesId for potential y2 (for z lookup).
-     * @param {function} definition.popupCallback - Function(info) to generate popup HTML.
-     */
-    addVerticalMarker(markerId, definition) {
-        this.diagram.addVerticalMarker(markerId, definition);
-    }
-
-    /**
      * Updates the position and data for a defined vertical marker.
      */
-    updateVerticalMarker(markerId, data) {
-        this.diagram.updateVerticalMarker(markerId, data);
+    updateVerticalMarkers(markerData) {
+        this.diagram.updateVerticalMarkers(markerData);
     }
 
     /**
