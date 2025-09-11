@@ -751,6 +751,12 @@ class BandDiagram extends ResponsivePlot {
     _drawTraceLabels() {
         const labelData = this.traceData.filter((d) => d.labelPos && d.label);
 
+        // TODO: Smarter label positioning to avoid overlaps.
+        const applyLabelTransitionables = (s) =>
+            s
+                .attr('x', (d) => this.xScale(d.labelPos.x) + 5)
+                .attr('y', (d) => this.yScale(d.labelPos.y) - 10);
+
         this.traceLabelsGroup
             .selectAll('foreignObject.bd-line-label')
             .data(labelData, (d) => d.id)
@@ -762,6 +768,7 @@ class BandDiagram extends ResponsivePlot {
                         .attr('width', 1)
                         .attr('height', 1) // Start small, let content expand
                         .style('overflow', 'visible')
+                        .call(applyLabelTransitionables)
                         .html(
                             (d) =>
                                 `<span class="katex-label-container" style="color: ${d.color}; white-space: nowrap; display: inline-block; padding: 1px 3px; background: rgba(255,255,255,0.7); border-radius: 2px;"></span>`
@@ -781,15 +788,10 @@ class BandDiagram extends ResponsivePlot {
                     d.label
                 );
             })
-            // Apply transitions AFTER KaTeX might have changed size (slight delay ok)
             .transition()
             .duration(this.config.transitionDuration)
-            .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
-            .attr('x', (d) => this.xScale(d.labelPos.x) + 5)
-            // Adjust y to roughly center the label vertically on the line end point
-            // This assumes ~1em line height; might need refinement based on actual rendered height
-            .attr('y', (d) => this.yScale(d.labelPos.y) - 10);
-        // TODO: Smarter label positioning to avoid overlaps.
+            .ease(d3.easeExpOut)
+            .call(applyLabelTransitionables);
     }
 
     // ========================================================================
