@@ -225,10 +225,24 @@ export function linspace(start, end, numPoints) {
  * Helper for properly fading in and fading out elements.
  */
 export class Fader {
-    constructor(duration, ease = d3.easeLinear, transitionName = 'fade') {
+    /**
+     *
+     * @param {number} duration - milliseconds.
+     * @param {d3.ease} [ease] - d3 easing function.
+     * @param {string} [transitionName] -
+     * @param {string} [noFadeClass] - this is used internally suppress 'double fades': when both parent and child enter at the same time, only the parent opacity gets a fade transition.
+     */
+
+    constructor(
+        duration,
+        ease = d3.easeLinear,
+        transitionName = 'fade',
+        noFadeClass = 'no-fade-in-children'
+    ) {
         this.duration = duration;
         this.ease = ease;
         this.transitionName = transitionName;
+        this.noFadeClass = noFadeClass;
     }
 
     /**
@@ -247,13 +261,28 @@ export class Fader {
             .append(elementType)
             .classed(className, true);
 
-        // apply opacity transition but don't return a transition
-        newElements
+        if (newElements.empty()) return newElements;
+
+        const noFadeClass = this.noFadeClass;
+
+        // Find which elements to fade in. If an ancestor has just started to
+        // fade in, then we should just appear directly (no double fade).
+        const elementsToFade = newElements.filter(function (d, i, nodes) {
+            return !this.parentNode.closest('.' + noFadeClass);
+        });
+
+        elementsToFade
             .attr('opacity', 0)
+            .classed(noFadeClass, true) // We are entering, so ask our children to not fade in.
             .transition(this.transitionName)
             .duration(this.duration)
             .ease(this.ease)
-            .attr('opacity', 1);
+            .attr('opacity', 1)
+            .on('start', function (d, i, nodes) {
+                // Children who enter after us (even one frame later)
+                // are allowed to fade in.
+                this.classList.remove(noFadeClass);
+            });
 
         return newElements;
     }
