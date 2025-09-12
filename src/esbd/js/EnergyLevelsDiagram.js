@@ -69,7 +69,7 @@ class EnergyLevelsDiagram extends ResponsivePlot {
     /**
      * Updates the arrows displayed between levels.
      * @param {Array<object>} [arrowData=[]] - Flat array of arrow definition objects.
-     * Expected format: [{ arrowId, fromLevelId, toLevelId, label?, arrowStyle?, cssClass? }, ...]
+     * Expected format: [{ arrowId, fromLevelId, toLevelId, label?, arrowStyle? }, ...]
      */
     setArrows(arrowData = []) {
         if (!Array.isArray(arrowData)) {
@@ -220,10 +220,7 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             this.yAxisGen.tickValues(null);
         }
         // Apply axis generator with transition
-        this.yAxisGroup
-            .transition()
-            .duration(this.config.transitionDuration)
-            .call(this.yAxisGen);
+        this.yAxisGroup.call(this.transition(this.yAxisGen));
         // Style grid lines and remove domain line after transition (or immediately)
         this.yAxisGroup
             .selectAll('.tick line')
@@ -280,20 +277,21 @@ class EnergyLevelsDiagram extends ResponsivePlot {
                 this.config.categories.find((c) => c.id === categoryId)
                     ?.label ?? categoryId
         );
-        this.xAxisGroup
-            .transition()
-            .duration(this.config.transitionDuration) // Transition axis update
-            .attr('transform', `translate(0,${this.plotHeight})`)
-            .call(this.xAxisGen)
-            .selectAll('text')
-            .style('text-anchor', 'middle')
-            .style('font-size', '11px');
+        this.xAxisGroup.call(
+            this.transition((s) =>
+                s
+                    .attr('transform', `translate(0,${this.plotHeight})`)
+                    .call(this.xAxisGen)
+                    .selectAll('text')
+                    .style('text-anchor', 'middle')
+                    .style('font-size', '11px')
+            )
+        );
         this.xAxisGroup.select('.domain').remove(); // Remove x-axis line
     }
 
     /** Draws/Updates the energy/potential level lines and labels. */
     _drawLevels() {
-        const transitionDuration = this.config.transitionDuration;
         const bandwidth = this.xScale.bandwidth();
         const lineHalfLength = Math.max(5, bandwidth * 0.5); // Adjusted based on bandwidth
         const labelOffset = 0;
@@ -315,80 +313,64 @@ class EnergyLevelsDiagram extends ResponsivePlot {
                 );
         }
 
-        const levelGroups = this.levelsGroup
+        const mergedGroups = this.levelsGroup
             .selectAll('g.level-group')
-            .data(this.levelsData, (d) => d.levelId);
+            .data(this.levelsData, (d) => d.levelId)
+            .join(
+                (enter) => {
+                    const g = this.fader
+                        .append(enter, 'g', 'level-group')
+                        .attr(
+                            'transform',
+                            (d) =>
+                                `translate(${this.xScale(d.categoryId) + bandwidth / 2}, ${this.yScale(d.yValue)})`
+                        );
 
-        const mergedGroups = levelGroups.join(
-            (enter) => {
-                const g = enter
-                    .append('g')
-                    .attr('class', 'level-group')
-                    .attr(
-                        'transform',
-                        (d) =>
-                            `translate(${this.xScale(d.categoryId) + bandwidth / 2}, ${this.yScale(d.yValue)})`
+                    g.append('line')
+                        .attr('class', 'level-line')
+                        .call(applyLineAttributes);
+
+                    // Label structure (foreignObject + span) positioned relative to group origin
+                    const fo = g
+                        .append('foreignObject')
+                        .attr('class', 'level-label')
+                        .attr('x', lineHalfLength + labelOffset)
+                        .attr('y', -12)
+                        .attr('width', 1)
+                        .attr('height', 1) // Let content define size
+                        .style('overflow', 'visible')
+                        .style('pointer-events', 'none')
+                        .append('xhtml:span')
+                        .attr('class', 'katex-label-container')
+                        .style('white-space', 'nowrap')
+                        .style('display', 'inline-block')
+                        .style('padding', '1px 3px')
+                        .style('font-size', '10px')
+                        .style('background', 'rgba(255,255,255,0.7)')
+                        .style('border-radius', '2px');
+
+                    return g; // Return the entering group
+                },
+                (update) => {
+                    // Update styles that might change immediately (before transition)
+                    update
+                        .select('line.level-line')
+                        .call(this.transition(applyLineAttributes));
+
+                    // Apply position transition
+                    update.call(
+                        this.transition((s) =>
+                            s.attr(
+                                'transform',
+                                (d) =>
+                                    `translate(${this.xScale(d.categoryId) + bandwidth / 2}, ${this.yScale(d.yValue)})`
+                            )
+                        )
                     );
-
-                // Fade-in transition
-                g.style('opacity', 0)
-                    .transition('fade-in')
-                    .duration(transitionDuration)
-                    .style('opacity', 1);
-
-                g.append('line')
-                    .attr('class', 'level-line')
-                    .call(applyLineAttributes);
-
-                // Label structure (foreignObject + span) positioned relative to group origin
-                const fo = g
-                    .append('foreignObject')
-                    .attr('class', 'level-label')
-                    .attr('x', lineHalfLength + labelOffset)
-                    .attr('y', -12)
-                    .attr('width', 1)
-                    .attr('height', 1) // Let content define size
-                    .style('overflow', 'visible')
-                    .style('pointer-events', 'none')
-                    .append('xhtml:span')
-                    .attr('class', 'katex-label-container')
-                    .style('white-space', 'nowrap')
-                    .style('display', 'inline-block')
-                    .style('padding', '1px 3px')
-                    .style('font-size', '10px')
-                    .style('background', 'rgba(255,255,255,0.7)')
-                    .style('border-radius', '2px');
-
-                return g; // Return the entering group
-            },
-            (update) => {
-                // Update styles that might change immediately (before transition)
-                update
-                    .select('line.level-line')
-                    .transition()
-                    .duration(transitionDuration)
-                    .call(applyLineAttributes);
-
-                // Apply position transition
-                update
-                    .transition('position') // Name transition
-                    .duration(transitionDuration)
-                    .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
-                    .attr(
-                        'transform',
-                        (d) =>
-                            `translate(${this.xScale(d.categoryId) + bandwidth / 2}, ${this.yScale(d.yValue)})`
-                    );
-                return update;
-            },
-            (exit) => {
-                exit.transition('fade-out') // Name transition
-                    .duration(transitionDuration)
-                    .style('opacity', 0)
-                    .remove(); // Remove element after transition
-                return exit;
-            }
-        );
+                    return update;
+                },
+                this.fader.exitRemove('level-group')
+            );
 
         // Update label position and render KaTeX
         mergedGroups
@@ -412,7 +394,6 @@ class EnergyLevelsDiagram extends ResponsivePlot {
 
     /** Draws/Updates arrows between specified levels. */
     _drawArrows() {
-        const transitionDuration = this.config.transitionDuration;
         const arrowData = this.arrowData || [];
         const levelPositions = this.levelPositions; // Use cached positions
 
@@ -430,7 +411,6 @@ class EnergyLevelsDiagram extends ResponsivePlot {
                 y2: pos2.y_px,
                 label: arrowDef.label, // Raw LaTeX
                 arrowStyle: arrowDef.arrowStyle || '->', // Default to forward arrow
-                cssClass: arrowDef.cssClass || '',
                 color: arrowDef.color || '#555', // Default arrow color
             });
         }
@@ -457,10 +437,7 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             .data(drawableArrowData, (d) => d.arrowId)
             .join(
                 (enter) => {
-                    const g = enter
-                        .append('g')
-                        .attr('class', (d) => `level-arrow ${d.cssClass || ''}`)
-                        .style('opacity', 0);
+                    const g = this.fader.append(enter, 'g', 'level-arrow');
 
                     const line = g
                         .append('line')
@@ -488,26 +465,13 @@ class EnergyLevelsDiagram extends ResponsivePlot {
                     return g;
                 },
                 (update) => update,
-                (exit) => {
-                    exit.transition()
-                        .duration(transitionDuration)
-                        .style('opacity', 0)
-                        .remove();
-                }
+                this.fader.exitRemove('level-arrow')
             );
-        // Fade-in on both enter and update (sometimes update fires after exit)
-        mergedGroups
-            .transition()
-            .duration(transitionDuration)
-            .style('opacity', 1);
 
         // Update line position and style
         mergedGroups
             .select('line.arrow-line')
-            .transition()
-            .duration(transitionDuration)
-            .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
-            .call(applyLineAttributes)
+            .call(this.transition(applyLineAttributes))
             // Apply arrowheads based on style
             .attr('marker-start', (d) =>
                 d.arrowStyle.includes('<') ? 'url(#arrowhead-start)' : null
@@ -519,10 +483,7 @@ class EnergyLevelsDiagram extends ResponsivePlot {
         // Update label position and render KaTeX
         mergedGroups
             .select('foreignObject.arrow-label')
-            .transition()
-            .duration(transitionDuration)
-            .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
-            .call(applyLabelAttributes)
+            .call(this.transition(applyLabelAttributes))
             .select('span.katex-label-container')
             .each(function (d) {
                 renderSpanMath(this, d.label);

@@ -383,17 +383,14 @@ class BandDiagram extends ResponsivePlot {
         }
 
         // 3. Update Axes (apply transitions)
-        this.xAxisGroup
-            .transition()
-            .duration(this.config.transitionDuration)
-            .ease(d3.easeExpOut)
-            .attr('transform', `translate(0,${this.plotHeight})`)
-            .call(this.xAxisGen);
-        this.yAxisGroup
-            .transition()
-            .duration(this.config.transitionDuration)
-            .ease(d3.easeExpOut)
-            .call(this.yAxisGen);
+        this.xAxisGroup.call(
+            this.transition((s) =>
+                s
+                    .attr('transform', `translate(0,${this.plotHeight})`)
+                    .call(this.xAxisGen)
+            )
+        );
+        this.yAxisGroup.call(this.transition(this.yAxisGen));
         this.yAxisLabel.text(this._yAxisLabelStr); // Update text immediately
 
         // 4. Draw Static Elements (backgrounds/interfaces don't usually need transitions)
@@ -569,31 +566,24 @@ class BandDiagram extends ResponsivePlot {
             .data(this.traceData, (d) => d.id)
             .join(
                 (enter) =>
-                    enter
-                        .append('path')
-                        .attr('class', 'bd-data-line')
+                    this.fader
+                        .append(enter, 'path', 'bd-data-line')
                         .attr('data-trace-id', (d) => d.id)
                         .attr('fill', 'none')
                         .attr('stroke', (d) => d.color)
                         .attr('stroke-width', (d) => d.style.lineWidth)
-                        .attr('stroke-dasharray', (d) => d.style.dasharray)
-                        .style('opacity', 0),
+                        .attr('stroke-dasharray', (d) => d.style.dasharray),
                 (update) => update,
-                (exit) =>
-                    exit
-                        .transition()
-                        .duration(this.config.transitionDuration)
-                        .style('opacity', 0)
-                        .remove() // Fade out removed lines
+                this.fader.exitRemove('bd-data-line')
             )
             .attr('stroke', (d) => d.color) // Update color immediately if changed
             .attr('stroke-width', (d) => d.style.lineWidth)
             .attr('stroke-dasharray', (d) => d.style.dasharray)
-            .transition()
-            .duration(this.config.transitionDuration)
-            .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
-            .style('opacity', 1)
-            .attr('d', (d) => lineGenerator(d.points));
+            .call(
+                this.transition((s) =>
+                    s.attr('d', (d) => lineGenerator(d.points))
+                )
+            );
     }
 
     /** Draws or updates the vertical marker symbols. */
@@ -608,28 +598,15 @@ class BandDiagram extends ResponsivePlot {
             .selectChildren('g.bd-marker-group')
             .data(this.markerData, (d) => d.id)
             .join(
-                (enter) =>
-                    enter
-                        .append('g')
-                        .attr('class', 'bd-marker-group')
-                        .attr('opacity', 0)
-                        .call(applyPerMarkerTransitionables),
+                this.fader.enterAppend(
+                    'g',
+                    'bd-marker-group',
+                    applyPerMarkerTransitionables
+                ),
                 (update) => update,
-                (exit) =>
-                    exit
-                        .transition()
-                        .duration(this.config.transitionDuration)
-                        .attr('opacity', 0)
-                        .remove()
-            );
-
-        // apply transition but keep untransitioned selection around
-        markerGroups
-            .transition()
-            .duration(this.config.transitionDuration)
-            .ease(d3.easeExpOut)
-            .attr('opacity', 1)
-            .call(applyPerMarkerTransitionables);
+                this.fader.exitRemove('bd-marker-group')
+            )
+            .call(this.transition(applyPerMarkerTransitionables));
 
         // Per-marker vertical line
         const applyMarkerLineTransitionables = (s) =>
@@ -648,10 +625,7 @@ class BandDiagram extends ResponsivePlot {
                     .attr('stroke-width', markerStyle.legWidth)
                     .call(applyMarkerLineTransitionables)
             )
-            .transition()
-            .duration(this.config.transitionDuration)
-            .ease(d3.easeExpOut)
-            .call(applyMarkerLineTransitionables);
+            .call(this.transition(applyMarkerLineTransitionables));
 
         // Per-leg dots
         const applyLegDotTransitionables = (s) =>
@@ -675,10 +649,7 @@ class BandDiagram extends ResponsivePlot {
                     .attr('cx', 0)
                     .call(applyLegDotTransitionables)
             )
-            .transition()
-            .duration(this.config.transitionDuration)
-            .ease(d3.easeExpOut)
-            .call(applyLegDotTransitionables);
+            .call(this.transition(applyLegDotTransitionables));
 
         // Per-marker central symbol
         const applyMarkerSymbolTransitionables = (s) =>
@@ -727,10 +698,7 @@ class BandDiagram extends ResponsivePlot {
                     .text((d) => d.symbol);
                 return symbolGroup;
             })
-            .transition()
-            .duration(this.config.transitionDuration)
-            .ease(d3.easeExpOut)
-            .call(applyMarkerSymbolTransitionables);
+            .call(this.transition(applyMarkerSymbolTransitionables));
     }
 
     _drawTraceLabels() {
@@ -747,9 +715,8 @@ class BandDiagram extends ResponsivePlot {
             .data(labelData, (d) => d.id)
             .join(
                 (enter) =>
-                    enter
-                        .append('foreignObject')
-                        .attr('class', 'bd-line-label')
+                    this.fader
+                        .append(enter, 'foreignObject', 'bd-line-label')
                         .attr('width', 1)
                         .attr('height', 1) // Start small, let content expand
                         .style('overflow', 'visible')
@@ -758,14 +725,8 @@ class BandDiagram extends ResponsivePlot {
                             (d) =>
                                 `<span class="katex-label-container" style="color: ${d.color}; white-space: nowrap; display: inline-block; padding: 1px 3px; background: rgba(255,255,255,0.7); border-radius: 2px;"></span>`
                         ),
-                // Added background for readability
                 (update) => update,
-                (exit) =>
-                    exit
-                        .transition()
-                        .duration(this.config.transitionDuration)
-                        .style('opacity', 0)
-                        .remove()
+                this.fader.exitRemove('bd-line-label')
             )
             .each(function (d) {
                 renderSpanMath(
@@ -773,10 +734,7 @@ class BandDiagram extends ResponsivePlot {
                     d.label
                 );
             })
-            .transition()
-            .duration(this.config.transitionDuration)
-            .ease(d3.easeExpOut)
-            .call(applyLabelTransitionables);
+            .call(this.transition(applyLabelTransitionables));
     }
 
     // ========================================================================
@@ -1060,12 +1018,14 @@ class BandDiagram extends ResponsivePlot {
         }
         this._popupDiv
             .style('visibility', 'visible')
-            .transition()
-            .duration(this.config.transitionDuration)
-            .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
-            .style('left', `${targetX}px`)
-            .style('top', `${targetY}px`)
-            .style('opacity', 1);
+            .call(
+                this.transition((s) =>
+                    s
+                        .style('left', `${targetX}px`)
+                        .style('top', `${targetY}px`)
+                        .style('opacity', 1)
+                )
+            );
     }
 
     /** Hides the popup and resets all highlights and pinned state. */
