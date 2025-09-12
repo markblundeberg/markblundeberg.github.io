@@ -603,75 +603,17 @@ class BandDiagram extends ResponsivePlot {
         // function to set initial positions and transition positions
         const applyPerMarkerTransitionables = (s) =>
             s.attr('transform', (d) => `translate(${this.xScale(d.x)}, 0)`);
-        const applyMarkerSymbolTransitionables = (s) =>
-            s.attr(
-                'transform',
-                (d) => `translate(0,${this.yScale(d.ySymbol)})`
-            );
-        const applyMarkerLineTransitionables = (s) =>
-            s
-                .attr('x1', 0)
-                .attr('y1', (d) => this.yScale(d.yMin))
-                .attr('x2', 0)
-                .attr('y2', (d) => this.yScale(d.yMax));
 
-        const merged = this.verticalMarkersGroup
+        const markerGroups = this.verticalMarkersGroup
             .selectChildren('g.bd-marker-group')
             .data(this.markerData, (d) => d.id)
             .join(
-                (enter) => {
-                    const g = enter
+                (enter) =>
+                    enter
                         .append('g')
-                        .attr('class', 'bd-marker-group');
-
-                    g.append('line')
-                        .attr('stroke', markerStyle.legColor)
-                        .attr('stroke-width', markerStyle.legWidth)
-                        .call(applyMarkerLineTransitionables);
-
-                    g.append('g').attr('class', 'bd-marker-leg-dots');
-
-                    const symbolGroup = g
-                        .append('g')
-                        .attr('class', 'bd-marker-symbol')
-                        .call(applyMarkerSymbolTransitionables);
-
-                    // Add background circle for easier hover/click detection
-                    symbolGroup
-                        .append('circle')
-                        .attr('r', markerStyle.backgroundRadius)
-                        .attr('fill', markerStyle.backgroundColor)
-                        .attr('stroke', markerStyle.backgroundStroke)
-                        .attr('stroke-width', 1)
-                        .style('cursor', 'help')
-                        .on('pointerover', (event, d) =>
-                            this._handleMarkerPointerOver(event, d.id)
-                        )
-                        .on('pointerout', (event, d) =>
-                            this._handleMarkerPointerOut(event, d.id)
-                        )
-                        .on('pointermove', (event) => {
-                            // Prevent move reaching interactionRect
-                            event.stopPropagation();
-                        })
-                        .on('click', (event, d) => {
-                            event.stopPropagation();
-                            this._handleClickInteraction(event, d.id);
-                        });
-
-                    symbolGroup
-                        .append('text')
-                        .attr('text-anchor', 'middle')
-                        .attr('dominant-baseline', 'central')
-                        .attr('font-size', markerStyle.fontSize)
-                        .attr('fill', markerStyle.color)
-                        .style('pointer-events', 'none')
-                        .text((d) => d.symbol);
-
-                    g.attr('opacity', 0);
-                    g.call(applyPerMarkerTransitionables);
-                    return g;
-                },
+                        .attr('class', 'bd-marker-group')
+                        .attr('opacity', 0)
+                        .call(applyPerMarkerTransitionables),
                 (update) => update,
                 (exit) =>
                     exit
@@ -682,55 +624,113 @@ class BandDiagram extends ResponsivePlot {
             );
 
         // apply transition but keep untransitioned selection around
-        merged
+        markerGroups
             .transition()
             .duration(this.config.transitionDuration)
             .ease(d3.easeExpOut)
             .attr('opacity', 1)
             .call(applyPerMarkerTransitionables);
 
-        merged
-            .selectChild('line')
+        // Per-marker vertical line
+        const applyMarkerLineTransitionables = (s) =>
+            s
+                .attr('x1', 0)
+                .attr('y1', (d) => this.yScale(d.yMin))
+                .attr('x2', 0)
+                .attr('y2', (d) => this.yScale(d.yMax));
+        markerGroups
+            .selectChildren('line')
+            .data((d) => [d])
+            .join((enter) =>
+                enter
+                    .append('line')
+                    .attr('stroke', markerStyle.legColor)
+                    .attr('stroke-width', markerStyle.legWidth)
+                    .call(applyMarkerLineTransitionables)
+            )
             .transition()
             .duration(this.config.transitionDuration)
             .ease(d3.easeExpOut)
             .call(applyMarkerLineTransitionables);
 
-        merged
-            .selectChild('.bd-marker-symbol')
-            .transition()
-            .duration(this.config.transitionDuration)
-            .ease(d3.easeExpOut)
-            .call(applyMarkerSymbolTransitionables);
-
-        // Now draw dots per leg.
+        // Per-leg dots
         const applyLegDotTransitionables = (s) =>
             s.attr('cy', (d) => this.yScale(d.y));
-        merged
-            .selectChild('.bd-marker-leg-dots')
-            .selectAll('circle')
+        markerGroups
+            .selectChildren('.bd-marker-leg-dots')
+            .data((d) => [d])
+            .join('g')
+            .attr('class', 'bd-marker-leg-dots')
+            .selectChildren('circle')
             .data(
                 (d) => d.legData,
                 (leg) => leg.id
             )
-            .join(
-                (enter) => {
-                    const circle = enter
-                        .append('circle')
-                        .attr('r', markerStyle.legEndRadius)
-                        .attr('stroke-width', 0)
-                        .attr('fill', markerStyle.legColor)
-                        .attr('cx', 0)
-                        .call(applyLegDotTransitionables);
-                    return circle;
-                },
-                (update) => update,
-                (exit) => exit.remove()
+            .join((enter) =>
+                enter
+                    .append('circle')
+                    .attr('r', markerStyle.legEndRadius)
+                    .attr('stroke-width', 0)
+                    .attr('fill', markerStyle.legColor)
+                    .attr('cx', 0)
+                    .call(applyLegDotTransitionables)
             )
             .transition()
             .duration(this.config.transitionDuration)
             .ease(d3.easeExpOut)
             .call(applyLegDotTransitionables);
+
+        // Per-marker central symbol
+        const applyMarkerSymbolTransitionables = (s) =>
+            s.attr(
+                'transform',
+                (d) => `translate(0,${this.yScale(d.ySymbol)})`
+            );
+        markerGroups
+            .selectChildren('.bd-marker-symbol')
+            .data((d) => [d])
+            .join((enter) => {
+                const symbolGroup = enter
+                    .append('g')
+                    .attr('class', 'bd-marker-symbol')
+                    .call(applyMarkerSymbolTransitionables);
+
+                symbolGroup
+                    .append('circle')
+                    .attr('r', markerStyle.backgroundRadius)
+                    .attr('fill', markerStyle.backgroundColor)
+                    .attr('stroke', markerStyle.backgroundStroke)
+                    .attr('stroke-width', 1)
+                    .style('cursor', 'help')
+                    .on('pointerover', (event, d) =>
+                        this._handleMarkerPointerOver(event, d.id)
+                    )
+                    .on('pointerout', (event, d) =>
+                        this._handleMarkerPointerOut(event, d.id)
+                    )
+                    .on('pointermove', (event) => {
+                        // Prevent move reaching interactionRect
+                        event.stopPropagation();
+                    })
+                    .on('click', (event, d) => {
+                        event.stopPropagation();
+                        this._handleClickInteraction(event, d.id);
+                    });
+
+                symbolGroup
+                    .append('text')
+                    .attr('text-anchor', 'middle')
+                    .attr('dominant-baseline', 'central')
+                    .attr('font-size', markerStyle.fontSize)
+                    .attr('fill', markerStyle.color)
+                    .style('pointer-events', 'none')
+                    .text((d) => d.symbol);
+                return symbolGroup;
+            })
+            .transition()
+            .duration(this.config.transitionDuration)
+            .ease(d3.easeExpOut)
+            .call(applyMarkerSymbolTransitionables);
     }
 
     _drawTraceLabels() {
