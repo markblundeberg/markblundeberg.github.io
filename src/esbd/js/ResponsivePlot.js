@@ -2,7 +2,7 @@
 
 // Assumes D3 is loaded globally or imported appropriately.
 
-import { debounce } from './utils.js';
+import { debounce, Fader } from './utils.js';
 
 /**
  * Responsively-sized plot using D3.js
@@ -25,7 +25,10 @@ class ResponsivePlot {
      * Creates an instance of the plot
      * @param {string} containerId - ID of the HTML element (div) to contain the plot.
      * @param {object} [margins={top: 5, right: 35, bottom: 20, left: 60}] - Plot margins.
-     * @param {number} [transitionDuration=250] - Transition time (ms).
+     * @param {number} [transitionDuration=250] - Transition time (ms) for continuous updates.
+     * @param {object} [transitionEase=d3.easeExpOut] - Transition easing function (note this needs a fast start).
+     * @param {number} [fadeDuration=400] - Fade time (ms) for elements fading in/out.
+     * @param {object} [fadeEase=d3.easeCubicInOut] - Fade easing function (anything is ok).
      * @param {number} [resizeDebounceDelay=200] - Debounce delay for resize events (ms).
      * @param {function} [onBeforeRedraw=null] - Callback for final art parameter tweaks before redraw() is run.
      */
@@ -38,6 +41,9 @@ class ResponsivePlot {
                 left: 60,
             },
             transitionDuration: 250,
+            transitionEase: d3.easeExpOut,
+            fadeDuration: 400,
+            fadeEase: d3.easeCubicInOut,
             resizeDebounceDelay: 200,
             onBeforeRedraw: null,
         };
@@ -59,6 +65,12 @@ class ResponsivePlot {
         this._requestAnimationFrameID = null;
         this.svgWidth = null;
         this.svgHeight = null;
+
+        this.fader = new Fader(
+            this.config.fadeDuration,
+            this.config.fadeEase,
+            'fade'
+        );
 
         // Populate the container
         this.outerContainer.html('');
@@ -148,6 +160,24 @@ class ResponsivePlot {
     // To be implemented by child classes - perform the redraw at appropriate time
     redraw() {}
 
+    /**
+     * Helper to apply transitions.
+     * Note: for fade-ins and outs, it's better to use the .fader helper instead.
+     *
+     * Usage example: selection.call(diagram.transition(s=>s.attr('x',newX)))
+     *
+     * @param {function} applyAttrsCallable
+     */
+    transition(applyAttrsCallable, name = undefined) {
+        return (s) =>
+            applyAttrsCallable(
+                s
+                    .transition(name)
+                    .duration(this.config.transitionDuration)
+                    .ease(this.config.transitionEase)
+            );
+    }
+
     // ========================================================================
     // Public Accessors (Getters)
     // ========================================================================
@@ -188,7 +218,7 @@ class ResponsivePlot {
         this.plotArea
             .transition()
             .duration(this.config.transitionDuration)
-            .ease(d3.easeExpOut)
+            .ease(this.config.transitionEase)
             .attr(
                 'transform',
                 `translate(${this.margins.left},${this.margins.top})`

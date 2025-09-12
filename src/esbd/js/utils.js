@@ -216,3 +216,93 @@ export function linspace(start, end, numPoints) {
     }
     return arr;
 }
+
+// ========================================================================
+// D3 helpers
+// ========================================================================
+
+/**
+ * Helper for properly fading in and fading out elements.
+ */
+export class Fader {
+    constructor(duration, ease = d3.easeLinear, transitionName = 'fade') {
+        this.duration = duration;
+        this.ease = ease;
+        this.transitionName = transitionName;
+    }
+
+    /**
+     * A substitute for append that performs a fade-in. Usually used during
+     * the first parameter to .join().
+     *
+     * Immediate non-fade version would be:
+     *      enterSelection.append(elementType).classed(className,true)
+     *
+     * @param {d3.selection} enterSelection
+     * @param {string} elementType
+     * @param {string} className
+     */
+    append(enterSelection, elementType, className) {
+        const newElements = enterSelection
+            .append(elementType)
+            .classed(className, true);
+
+        // apply opacity transition but don't return a transition
+        newElements
+            .attr('opacity', 0)
+            .transition(this.transitionName)
+            .duration(this.duration)
+            .ease(this.ease)
+            .attr('opacity', 1);
+
+        return newElements;
+    }
+
+    /**
+     * You can use this directly as the first argument to .join().
+     * Shorthand for:
+     *   (enter) => this.append(enter, elementType, className).call(initialSetter)
+     */
+    enterAppend(elementType, className, initialSetter = null) {
+        if (initialSetter)
+            return (enter) =>
+                this.append(enter, elementType, className).call(initialSetter);
+        else return (enter) => this.append(enter, elementType, className);
+    }
+
+    /**
+     * A substitute for remove that performs a fade-out before removing.
+     * Includes 'de-zombifying' logic which requires className.
+     *
+     * Immediate non-fade version would be: exitSelection.remove()
+     *
+     * IMPORTANT: when selectAll()ing your elements for the data().join.(),
+     * you must use selectAll('.<className>'). Otherwise the element for a
+     * given ID can get "re-created" during the fade-out, and then the
+     * re-created element will continue the fade-out and disappear.
+     *
+     * @param {d3.selection} exitSelection
+     * @param {string} className
+     */
+    remove(exitSelection, className) {
+        exitSelection
+            .classed(className, false)
+            .transition(this.transitionName)
+            .duration(this.duration)
+            .ease(this.ease)
+            .attr('opacity', 0)
+            .remove();
+        // return value is usually unused, but try to mimic .remove()
+        // by returning a non-transition selection.
+        return exitSelection;
+    }
+
+    /**
+     * You can use this directly as the third argument to .join().
+     * Shorthand for:
+     *   (exit) => this.remove(exit, className)
+     */
+    exitRemove(className) {
+        return (exit) => this.remove(exit, className);
+    }
+}
