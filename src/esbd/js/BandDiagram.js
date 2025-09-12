@@ -480,15 +480,6 @@ class BandDiagram extends ResponsivePlot {
     // ========================================================================
 
     _drawBackgrounds() {
-        if (
-            !this.boundaries ||
-            this.boundaries.length < 2 ||
-            !this.regionProps ||
-            this.regionProps.length !== this.boundaries.length - 1
-        ) {
-            this.backgroundGroup.selectAll('rect.bd-region-bg').remove();
-            return;
-        }
         // Create data pairs: [ { start: b[0], end: b[1], props: r[0] }, { start: b[1], end: b[2], props: r[1] }, ... ]
         const regionDrawData = this.regionProps.map((props, i) => ({
             id: `bg_${i}_${props?.name?.replace(/\s+/g, '-') || i}`, // Unique ID based on index/name
@@ -508,8 +499,7 @@ class BandDiagram extends ResponsivePlot {
                 Math.max(0, this.xScale(d.end) - this.xScale(d.start))
             ) // Ensure non-negative width
             .attr('height', this.plotHeight)
-            .attr('fill', (d) => d.props.color || 'transparent')
-            .lower(); // Ensure backgrounds are behind everything else
+            .attr('fill', (d) => d.props.color || 'transparent');
     }
 
     _drawInterfaceLines() {
