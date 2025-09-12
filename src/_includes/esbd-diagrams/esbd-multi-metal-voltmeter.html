@@ -81,8 +81,7 @@
             id: 'voltmeter',
             symbol: 'V',
             x: x_deltaV,
-            y1: 0,
-            y2: V_el,
+            yDefs: [{ y: 0 }, { y: V_el }],
             popupCallback: () => 'Voltmeter',
         },
     ]);

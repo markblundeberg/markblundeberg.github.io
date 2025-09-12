@@ -22,7 +22,6 @@ const STYLE_DEFAULTS = {
         backgroundStroke: '#AAA',
         legColor: '#666',
         legWidth: 2,
-        legThresholdPx: 15, // Min gap in pixels to draw legs
         legEndRadius: 3,
         highlightColor: 'rgba(0, 123, 255, 0.3)',
         highlightStroke: 'rgba(0, 123, 255, 0.5)',
@@ -261,11 +260,10 @@ class BandDiagram extends ResponsivePlot {
         const markerData = [];
         const seenIds = new Set();
         for (const markerDef of markerDefs) {
-            let {
+            const {
                 id,
                 x,
-                y1,
-                y2,
+                yDefs,
                 symbol = STYLE_DEFAULTS.verticalMarker.symbol,
                 popupCallback = null,
                 popupArgs = null,
@@ -282,11 +280,26 @@ class BandDiagram extends ResponsivePlot {
             if (seenIds.has(id)) throw Error('duplicate id: ' + id);
             seenIds.add(id);
 
+            const legData = [];
+            let yMin = yDefs[0].y;
+            let yMax = yDefs[0].y;
+            for (let i = 0; i < yDefs.length; i++) {
+                const { id: yid, y } = yDefs[i];
+                if (y < yMin) yMin = y;
+                if (y > yMax) yMax = y;
+                legData.push({
+                    id: yid ?? 'leg-' + i,
+                    y: y,
+                });
+            }
+
             markerData.push({
                 id,
                 x,
-                y1,
-                y2,
+                legData,
+                ySymbol: 0.5 * (yMin + yMax),
+                yMin,
+                yMax,
                 symbol,
                 popupCallback,
                 popupArgs,
@@ -586,61 +599,51 @@ class BandDiagram extends ResponsivePlot {
     /** Draws or updates the vertical marker symbols. */
     _drawVerticalMarkers() {
         const markerStyle = STYLE_DEFAULTS.verticalMarker;
-        const legThreshold = markerStyle.legThresholdPx;
-        const symbolSize = markerStyle.fontSize;
-        const bgRadius = markerStyle.backgroundRadius;
 
-        const legEndRadius = markerStyle.legEndRadius || 2.5;
+        // function to set initial positions and transition positions
+        const applyPerMarkerTransitionables = (s) =>
+            s.attr('transform', (d) => `translate(${this.xScale(d.x)}, 0)`);
+        const applyMarkerSymbolTransitionables = (s) =>
+            s.attr(
+                'transform',
+                (d) => `translate(0,${this.yScale(d.ySymbol)})`
+            );
+        const applyMarkerLineTransitionables = (s) =>
+            s
+                .attr('x1', 0)
+                .attr('y1', (d) => this.yScale(d.yMin))
+                .attr('x2', 0)
+                .attr('y2', (d) => this.yScale(d.yMax));
 
-        this.verticalMarkersGroup
-            .selectAll('g.bd-vertical-marker')
+        const merged = this.verticalMarkersGroup
+            .selectChildren('g.bd-marker-group')
             .data(this.markerData, (d) => d.id)
             .join(
                 (enter) => {
                     const g = enter
                         .append('g')
-                        .attr('class', 'bd-vertical-marker')
-                        .attr('data-marker-id', (d) => d.id);
+                        .attr('class', 'bd-marker-group');
 
-                    g.append('circle')
-                        .attr('class', 'marker-leg-end-circle leg-end-1')
-                        .attr('r', legEndRadius)
-                        .attr('stroke-width', 0);
-                    g.append('circle')
-                        .attr('class', 'marker-leg-end-circle leg-end-2')
-                        .attr('r', legEndRadius)
-                        .attr('stroke-width', 0);
+                    g.append('line')
+                        .attr('stroke', markerStyle.legColor)
+                        .attr('stroke-width', markerStyle.legWidth)
+                        .call(applyMarkerLineTransitionables);
 
-                    // Append legs next
-                    g.append('line')
-                        .attr('class', 'marker-leg-1')
-                        .attr('stroke', markerStyle.legColor)
-                        .attr('stroke-width', markerStyle.legWidth);
-                    g.append('line')
-                        .attr('class', 'marker-leg-2')
-                        .attr('stroke', markerStyle.legColor)
-                        .attr('stroke-width', markerStyle.legWidth);
+                    g.append('g').attr('class', 'bd-marker-leg-dots');
+
+                    const symbolGroup = g
+                        .append('g')
+                        .attr('class', 'bd-marker-symbol')
+                        .call(applyMarkerSymbolTransitionables);
 
                     // Add background circle for easier hover/click detection
-                    g.append('circle')
-                        .attr('class', 'marker-bg')
-                        .attr('r', bgRadius)
+                    symbolGroup
+                        .append('circle')
+                        .attr('r', markerStyle.backgroundRadius)
                         .attr('fill', markerStyle.backgroundColor)
                         .attr('stroke', markerStyle.backgroundStroke)
                         .attr('stroke-width', 1)
-                        .style('cursor', 'help');
-
-                    g.append('text')
-                        .attr('class', 'marker-symbol')
-                        .attr('text-anchor', 'middle')
-                        .attr('dominant-baseline', 'central')
-                        .attr('font-size', symbolSize)
-                        .attr('fill', markerStyle.color)
-                        .style('pointer-events', 'none')
-                        .text((d) => d.symbol);
-
-                    // Attach listeners to the background circle for reliable interaction area
-                    g.select('circle.marker-bg') // Target the background circle
+                        .style('cursor', 'help')
                         .on('pointerover', (event, d) =>
                             this._handleMarkerPointerOver(event, d.id)
                         )
@@ -655,6 +658,18 @@ class BandDiagram extends ResponsivePlot {
                             event.stopPropagation();
                             this._handleClickInteraction(event, d.id);
                         });
+
+                    symbolGroup
+                        .append('text')
+                        .attr('text-anchor', 'middle')
+                        .attr('dominant-baseline', 'central')
+                        .attr('font-size', markerStyle.fontSize)
+                        .attr('fill', markerStyle.color)
+                        .style('pointer-events', 'none')
+                        .text((d) => d.symbol);
+
+                    g.attr('opacity', 0);
+                    g.call(applyPerMarkerTransitionables);
                     return g;
                 },
                 (update) => update,
@@ -664,78 +679,58 @@ class BandDiagram extends ResponsivePlot {
                         .duration(this.config.transitionDuration)
                         .attr('opacity', 0)
                         .remove()
+            );
+
+        // apply transition but keep untransitioned selection around
+        merged
+            .transition()
+            .duration(this.config.transitionDuration)
+            .ease(d3.easeExpOut)
+            .attr('opacity', 1)
+            .call(applyPerMarkerTransitionables);
+
+        merged
+            .selectChild('line')
+            .transition()
+            .duration(this.config.transitionDuration)
+            .ease(d3.easeExpOut)
+            .call(applyMarkerLineTransitionables);
+
+        merged
+            .selectChild('.bd-marker-symbol')
+            .transition()
+            .duration(this.config.transitionDuration)
+            .ease(d3.easeExpOut)
+            .call(applyMarkerSymbolTransitionables);
+
+        // Now draw dots per leg.
+        const applyLegDotTransitionables = (s) =>
+            s.attr('cy', (d) => this.yScale(d.y));
+        merged
+            .selectChild('.bd-marker-leg-dots')
+            .selectAll('circle')
+            .data(
+                (d) => d.legData,
+                (leg) => leg.id
             )
-            // Update position and legs with transitions
-            .each((d, i, nodes) => {
-                // Update position, legs, and leg ends
-                const markerG = d3.select(nodes[i]);
-
-                const y1_display = d.y1;
-                const y2_display = d.y2;
-
-                const x_px = this.xScale(d.x);
-                const y1_px = this.yScale(y1_display);
-                const y2_px = this.yScale(y2_display);
-                const y_mid_px = (y1_px + y2_px) / 2;
-                const gap_px = Math.abs(y1_px - y2_px);
-
-                // Transition group position
-                markerG
-                    .transition()
-                    .duration(this.config.transitionDuration)
-                    .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
-                    .attr('transform', `translate(${x_px}, ${y_mid_px})`);
-
-                // Update legs based on gap
-                const showLegs = gap_px > legThreshold;
-                // Calculate leg endpoints relative to the group's center (y_mid_px)
-                const legTargetY1 = y1_px - y_mid_px;
-                const legTargetY2 = y2_px - y_mid_px;
-                // Start legs just outside the background circle radius
-                const legStartY1 = Math.sign(legTargetY1) * bgRadius;
-                const legStartY2 = Math.sign(legTargetY2) * bgRadius;
-                markerG
-                    .select('line.marker-leg-1')
-                    .transition()
-                    .duration(this.config.transitionDuration)
-                    .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
-                    .attr('display', showLegs ? null : 'none')
-                    .attr('x1', 0)
-                    .attr('y1', legStartY1)
-                    .attr('x2', 0)
-                    .attr('y2', legTargetY1);
-
-                markerG
-                    .select('line.marker-leg-2')
-                    .transition()
-                    .duration(this.config.transitionDuration)
-                    .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
-                    .attr('display', showLegs ? null : 'none')
-                    .attr('x1', 0)
-                    .attr('y1', legStartY2)
-                    .attr('x2', 0)
-                    .attr('y2', legTargetY2);
-
-                markerG
-                    .select('circle.leg-end-1')
-                    .transition()
-                    .duration(this.config.transitionDuration)
-                    .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
-                    .attr('display', showLegs ? null : 'none')
-                    .attr('cx', 0)
-                    .attr('cy', legTargetY1) // Position at end of leg
-                    .attr('fill', markerStyle.legColor);
-
-                markerG
-                    .select('circle.leg-end-2')
-                    .transition()
-                    .duration(this.config.transitionDuration)
-                    .ease(d3.easeExpOut) // need fast-start transitions to avoid lag
-                    .attr('display', showLegs ? null : 'none')
-                    .attr('cx', 0)
-                    .attr('cy', legTargetY2) // Position at end of leg
-                    .attr('fill', markerStyle.legColor);
-            });
+            .join(
+                (enter) => {
+                    const circle = enter
+                        .append('circle')
+                        .attr('r', markerStyle.legEndRadius)
+                        .attr('stroke-width', 0)
+                        .attr('fill', markerStyle.legColor)
+                        .attr('cx', 0)
+                        .call(applyLegDotTransitionables);
+                    return circle;
+                },
+                (update) => update,
+                (exit) => exit.remove()
+            )
+            .transition()
+            .duration(this.config.transitionDuration)
+            .ease(d3.easeExpOut)
+            .call(applyLegDotTransitionables);
     }
 
     _drawTraceLabels() {

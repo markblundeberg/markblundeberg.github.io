@@ -70,8 +70,7 @@
         {
             id: 'ag-cl-',
             x: b[1],
-            y1: V_el,
-            y2: V_Cl,
+            yDefs: [{ y: V_el }, { y: V_Cl }],
             symbol: '⇌',
             popupCallback: () =>
                 '$\\mathrm{AgCl} + \\mathrm{e}^- \\rightleftharpoons \\mathrm{Ag} + \\mathrm{Cl}^-$',

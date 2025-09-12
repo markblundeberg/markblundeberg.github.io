@@ -393,9 +393,8 @@ class ConcentrationCellComponent {
             {
                 id: 'left_interface_eq',
                 symbol: '⇌',
-                x: b[1], // Interface boundary
-                y1: V_e_1, // Electron potential
-                y2: V_cation_1, // Cation potential
+                x: b[1],
+                yDefs: [{ y: V_e_1 }, { y: V_cation_1 }],
                 popupCallback: this._getInterfacePopupContent.bind(
                     this,
                     'Left Electrode'
@@ -405,9 +404,8 @@ class ConcentrationCellComponent {
             {
                 id: 'right_interface_eq',
                 symbol: '⇌',
-                x: b[4], // Interface boundary
-                y1: V_e_2, // Electron potential
-                y2: V_cation_2, // Cation potential
+                x: b[4],
+                yDefs: [{ y: V_e_2 }, { y: V_cation_2 }],
                 popupCallback: this._getInterfacePopupContent.bind(
                     this,
                     'Right Electrode'

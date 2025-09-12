@@ -214,18 +214,16 @@ class LiIonBatteryComponent {
             {
                 id: 'anode_eq',
                 symbol: '⇌',
-                x: 0.5 * (b[1] + b[2]), // Anode/Elyte1 interface boundary index
-                y1: V_e_anode, // Electron potential (speciesId1 = 'electron')
-                y2: V_Li_plus_elyte, // Li+ potential (speciesId2 = 'li_ion')
+                x: 0.5 * (b[1] + b[2]),
+                yDefs: [{ y: V_e_anode }, { y: V_Li_plus_elyte }],
                 popupCallback: this._getAnodeEqPopup.bind(this),
                 popupArgs: anodePopupData,
             },
             {
                 id: 'cathode_eq',
                 symbol: '⇌',
-                x: 0.5 * (b[5] + b[6]), // Elyte2/Cathode interface boundary index
-                y1: V_e_cathode, // Electron potential (speciesId1 = 'electron')
-                y2: V_Li_plus_elyte, // Li+ potential (speciesId2 = 'li_ion')
+                x: 0.5 * (b[5] + b[6]),
+                yDefs: [{ y: V_e_cathode }, { y: V_Li_plus_elyte }],
                 popupCallback: this._getAnodeEqPopup.bind(this),
                 popupArgs: cathodePopupData,
             },

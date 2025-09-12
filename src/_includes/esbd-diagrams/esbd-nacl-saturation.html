@@ -64,8 +64,7 @@
             id: 'reaction',
             symbol: '⇌',
             x: 0.5,
-            y1: V_an,
-            y2: V_cat,
+            yDefs: [{ y: V_an }, { y: V_cat }],
             popupCallback: () =>
                 '$ \\mathrm{Na}^+ + \\mathrm{Cl}^- \\rightleftharpoons \\mathrm{NaCl}. $',
         },

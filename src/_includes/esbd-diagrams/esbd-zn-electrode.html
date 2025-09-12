@@ -62,8 +62,7 @@
             id: 'zn',
             symbol: '⇌',
             x: b[1],
-            y1: V_el,
-            y2: V_Zn,
+            yDefs: [{ y: V_el }, { y: V_Zn }],
             popupCallback: () =>
                 '$\\mathrm{Zn} \\rightleftharpoons \\mathrm{Zn}^{2+} + 2\\mathrm{e}^-$',
         },
