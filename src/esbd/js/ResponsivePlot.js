@@ -178,6 +178,60 @@ class ResponsivePlot {
             );
     }
 
+    /**
+     * Helper to draw elements with fade-in and transition support.
+     * The onX functions take a selection and do whatever with it. Return values ignored.
+     *
+     * New elements are appended then they see:
+     *      fadein -> onNew -> onUpdateImmediate -> onUpdateTransition   [immediate, no transition]
+     * Updating elements see:
+     *      onUpdateImmediate -> transition(onUpdateTransition)
+     * Exiting elements see:
+     *      onExiting -> fadeout -> remove
+     */
+    drawElements({
+        parentGroups,
+        element,
+        cssClass,
+        data,
+        dataKey,
+        onNew,
+        onUpdateImmediate,
+        onUpdateTransition,
+        onExiting,
+    }) {
+        const selectedElements = parentGroups
+            .selectChildren(element + '.' + cssClass)
+            .data(data, dataKey);
+
+        // Handle incoming elements
+        const newElements = this.fader.append(
+            selectedElements.enter(),
+            element,
+            cssClass
+        );
+        if (onNew && !newElements.empty()) onNew(newElements);
+
+        // Handle updating elements
+        const updateElements = selectedElements;
+        const mergedElements = newElements.merge(updateElements);
+
+        if (onUpdateImmediate) onUpdateImmediate(mergedElements);
+
+        if (onUpdateTransition) {
+            newElements.empty() || onUpdateTransition(newElements);
+            updateElements.empty() ||
+                this.transition(onUpdateTransition)(updateElements);
+        }
+
+        // Handle exiting elements
+        const exitingElements = selectedElements.exit();
+        if (onExiting && !exitingElements.empty()) onExiting(exitingElements);
+        this.fader.remove(exitingElements, cssClass);
+
+        return mergedElements;
+    }
+
     // ========================================================================
     // Public Accessors (Getters)
     // ========================================================================

@@ -561,111 +561,88 @@ class BandDiagram extends ResponsivePlot {
             .y((d) => this.yScale(d.y))
             .defined((d) => d.y !== null && !isNaN(d.y) && isFinite(d.y));
 
-        this.linesGroup
-            .selectAll('path.bd-data-line')
-            .data(this.traceData, (d) => d.id)
-            .join(
-                (enter) =>
-                    this.fader
-                        .append(enter, 'path', 'bd-data-line')
-                        .attr('data-trace-id', (d) => d.id)
-                        .attr('fill', 'none')
-                        .attr('stroke', (d) => d.color)
-                        .attr('stroke-width', (d) => d.style.lineWidth)
-                        .attr('stroke-dasharray', (d) => d.style.dasharray),
-                (update) => update,
-                this.fader.exitRemove('bd-data-line')
-            )
-            .attr('stroke', (d) => d.color) // Update color immediately if changed
-            .attr('stroke-width', (d) => d.style.lineWidth)
-            .attr('stroke-dasharray', (d) => d.style.dasharray)
-            .call(
-                this.transition((s) =>
-                    s.attr('d', (d) => lineGenerator(d.points))
-                )
-            );
+        this.drawElements({
+            parentGroups: this.linesGroup,
+            element: 'path',
+            cssClass: 'bd-data-line',
+            data: this.traceData,
+            dataKey: (d) => d.id,
+            onNew: (s) =>
+                s
+                    .attr('fill', 'none')
+                    .attr('stroke', (d) => d.color)
+                    .attr('stroke-width', (d) => d.style.lineWidth)
+                    .attr('stroke-dasharray', (d) => d.style.dasharray),
+            onUpdateTransition: (s) =>
+                s.attr('d', (d) => lineGenerator(d.points)),
+        });
     }
 
     /** Draws or updates the vertical marker symbols. */
     _drawVerticalMarkers() {
         const markerStyle = STYLE_DEFAULTS.verticalMarker;
 
-        // function to set initial positions and transition positions
-        const applyPerMarkerTransitionables = (s) =>
-            s.attr('transform', (d) => `translate(${this.xScale(d.x)}, 0)`);
-
-        const markerGroups = this.verticalMarkersGroup
-            .selectChildren('g.bd-marker-group')
-            .data(this.markerData, (d) => d.id)
-            .join(
-                this.fader.enterAppend(
-                    'g',
-                    'bd-marker-group',
-                    applyPerMarkerTransitionables
-                ),
-                (update) => update,
-                this.fader.exitRemove('bd-marker-group')
-            )
-            .call(this.transition(applyPerMarkerTransitionables));
+        // Per-marker overall group
+        const markerGroups = this.drawElements({
+            parentGroups: this.verticalMarkersGroup,
+            element: 'g',
+            cssClass: 'bd-marker',
+            data: this.markerData,
+            dataKey: (d) => d.id,
+            onUpdateTransition: (s) =>
+                s.attr('transform', (d) => `translate(${this.xScale(d.x)}, 0)`),
+        });
 
         // Per-marker vertical line
-        const applyMarkerLineTransitionables = (s) =>
-            s
-                .attr('x1', 0)
-                .attr('y1', (d) => this.yScale(d.yMin))
-                .attr('x2', 0)
-                .attr('y2', (d) => this.yScale(d.yMax));
-        markerGroups
-            .selectChildren('line')
-            .data((d) => [d])
-            .join((enter) =>
-                enter
-                    .append('line')
+        this.drawElements({
+            parentGroups: markerGroups,
+            element: 'line',
+            cssClass: 'bd-marker-line',
+            data: (d) => [d],
+            onNew: (s) =>
+                s
                     .attr('stroke', markerStyle.legColor)
                     .attr('stroke-width', markerStyle.legWidth)
-                    .call(applyMarkerLineTransitionables)
-            )
-            .call(this.transition(applyMarkerLineTransitionables));
+                    .attr('x1', 0)
+                    .attr('x2', 0),
+            onUpdateTransition: (s) =>
+                s
 
-        // Per-leg dots
-        const applyLegDotTransitionables = (s) =>
-            s.attr('cy', (d) => this.yScale(d.y));
-        markerGroups
-            .selectChildren('.bd-marker-leg-dots')
-            .data((d) => [d])
-            .join('g')
-            .attr('class', 'bd-marker-leg-dots')
-            .selectChildren('circle')
-            .data(
-                (d) => d.legData,
-                (leg) => leg.id
-            )
-            .join((enter) =>
-                enter
-                    .append('circle')
+                    .attr('y1', (d) => this.yScale(d.yMin))
+
+                    .attr('y2', (d) => this.yScale(d.yMax)),
+        });
+
+        // Per-marker legs group
+        const markerLegGroups = this.drawElements({
+            parentGroups: markerGroups,
+            element: 'g',
+            cssClass: 'bd-marker-legs',
+            data: (d) => [d],
+        });
+
+        this.drawElements({
+            parentGroups: markerLegGroups,
+            element: 'circle',
+            cssClass: 'bd-marker-leg-dot',
+            data: (d) => d.legData,
+            dataKey: (leg) => leg.id,
+            onNew: (s) =>
+                s
                     .attr('r', markerStyle.legEndRadius)
                     .attr('stroke-width', 0)
                     .attr('fill', markerStyle.legColor)
-                    .attr('cx', 0)
-                    .call(applyLegDotTransitionables)
-            )
-            .call(this.transition(applyLegDotTransitionables));
+                    .attr('cx', 0),
+            onUpdateTransition: (s) => s.attr('cy', (d) => this.yScale(d.y)),
+        });
 
         // Per-marker central symbol
-        const applyMarkerSymbolTransitionables = (s) =>
-            s.attr(
-                'transform',
-                (d) => `translate(0,${this.yScale(d.ySymbol)})`
-            );
-        markerGroups
-            .selectChildren('.bd-marker-symbol')
-            .data((d) => [d])
-            .join((enter) => {
-                const symbolGroup = enter
-                    .append('g')
-                    .attr('class', 'bd-marker-symbol')
-                    .call(applyMarkerSymbolTransitionables);
-
+        this.drawElements({
+            parentGroups: markerGroups,
+            element: 'g',
+            cssClass: 'bd-marker-symbol',
+            data: (d) => [d],
+            onNew: (symbolGroup) => {
                 symbolGroup
                     .append('circle')
                     .attr('r', markerStyle.backgroundRadius)
@@ -696,45 +673,47 @@ class BandDiagram extends ResponsivePlot {
                     .attr('fill', markerStyle.color)
                     .style('pointer-events', 'none')
                     .text((d) => d.symbol);
-                return symbolGroup;
-            })
-            .call(this.transition(applyMarkerSymbolTransitionables));
+            },
+            onUpdateTransition: (s) =>
+                s.attr(
+                    'transform',
+                    (d) => `translate(0,${this.yScale(d.ySymbol)})`
+                ),
+        });
     }
 
     _drawTraceLabels() {
         const labelData = this.traceData.filter((d) => d.labelPos && d.label);
 
         // TODO: Smarter label positioning to avoid overlaps.
-        const applyLabelTransitionables = (s) =>
-            s
-                .attr('x', (d) => this.xScale(d.labelPos.x) + 5)
-                .attr('y', (d) => this.yScale(d.labelPos.y) - 10);
 
-        this.traceLabelsGroup
-            .selectAll('foreignObject.bd-line-label')
-            .data(labelData, (d) => d.id)
-            .join(
-                (enter) =>
-                    this.fader
-                        .append(enter, 'foreignObject', 'bd-line-label')
-                        .attr('width', 1)
-                        .attr('height', 1) // Start small, let content expand
-                        .style('overflow', 'visible')
-                        .call(applyLabelTransitionables)
-                        .html(
-                            (d) =>
-                                `<span class="katex-label-container" style="color: ${d.color}; white-space: nowrap; display: inline-block; padding: 1px 3px; background: rgba(255,255,255,0.7); border-radius: 2px;"></span>`
-                        ),
-                (update) => update,
-                this.fader.exitRemove('bd-line-label')
-            )
-            .each(function (d) {
-                renderSpanMath(
-                    d3.select(this).select('.katex-label-container').node(),
-                    d.label
-                );
-            })
-            .call(this.transition(applyLabelTransitionables));
+        this.drawElements({
+            parentGroups: this.traceLabelsGroup,
+            element: 'foreignObject',
+            cssClass: 'bd-line-label',
+            data: labelData,
+            dataKey: (d) => d.id,
+            onNew: (s) =>
+                s
+                    .attr('width', 1)
+                    .attr('height', 1) // Start small, let content expand
+                    .style('overflow', 'visible')
+                    .html(
+                        (d) =>
+                            `<span class="katex-label-container" style="color: ${d.color}; white-space: nowrap; display: inline-block; padding: 1px 3px; background: rgba(255,255,255,0.7); border-radius: 2px;"></span>`
+                    ),
+            onUpdateImmediate: (s) =>
+                s.each(function (d) {
+                    renderSpanMath(
+                        this.querySelector('.katex-label-container'),
+                        d.label
+                    );
+                }),
+            onUpdateTransition: (s) =>
+                s
+                    .attr('x', (d) => this.xScale(d.labelPos.x) + 5)
+                    .attr('y', (d) => this.yScale(d.labelPos.y) - 10),
+        });
     }
 
     // ========================================================================
