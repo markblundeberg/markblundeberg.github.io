@@ -223,14 +223,17 @@ export function linspace(start, end, numPoints) {
 
 /**
  * Helper for properly fading in and fading out elements.
+ *
+ * - Double fade suppression: does not fade in children that enter at the same time as parents which are anyway fading in.
+ * - No zombies: exiting elements have class removed so they can't be re-selected.
  */
 export class Fader {
     /**
      *
      * @param {number} duration - milliseconds.
      * @param {d3.ease} [ease] - d3 easing function.
-     * @param {string} [transitionName] -
-     * @param {string} [noFadeClass] - this is used internally suppress 'double fades': when both parent and child enter at the same time, only the parent opacity gets a fade transition.
+     * @param {string} [transitionName] - set the d3 transition name for fading in/out.
+     * @param {string} [noFadeClass] - used to suppress double fades.
      */
 
     constructor(
@@ -257,32 +260,33 @@ export class Fader {
      * @param {string} className
      */
     append(enterSelection, elementType, className) {
-        const newElements = enterSelection
-            .append(elementType)
-            .classed(className, true);
-
+        const newElements = enterSelection.append(elementType);
         if (newElements.empty()) return newElements;
+
+        newElements.classed(className, true);
 
         const noFadeClass = this.noFadeClass;
 
         // Find which elements to fade in. If an ancestor has just started to
         // fade in, then we should just appear directly (no double fade).
         const elementsToFade = newElements.filter(function (d, i, nodes) {
+            // `this` is our DOM node.
             return !this.parentNode.closest('.' + noFadeClass);
         });
 
-        elementsToFade
-            .attr('opacity', 0)
-            .classed(noFadeClass, true) // We are entering, so ask our children to not fade in.
-            .transition(this.transitionName)
-            .duration(this.duration)
-            .ease(this.ease)
-            .attr('opacity', 1)
-            .on('start', function (d, i, nodes) {
-                // Children who enter after us (even one frame later)
-                // are allowed to fade in.
-                this.classList.remove(noFadeClass);
-            });
+        if (!elementsToFade.empty())
+            elementsToFade
+                .attr('opacity', 0)
+                .classed(noFadeClass, true) // Ask our children to not fade in.
+                .transition(this.transitionName)
+                .duration(this.duration)
+                .ease(this.ease)
+                .attr('opacity', 1)
+                .on('start', function (d, i, nodes) {
+                    // One frame after we enter, now children are allowed to
+                    // fade in. `this` is our DOM node.
+                    this.classList.remove(noFadeClass);
+                });
 
         return newElements;
     }
@@ -314,6 +318,8 @@ export class Fader {
      * @param {string} className
      */
     remove(exitSelection, className) {
+        if (exitSelection.empty()) return exitSelection;
+
         exitSelection
             .classed(className, false)
             .transition(this.transitionName)
