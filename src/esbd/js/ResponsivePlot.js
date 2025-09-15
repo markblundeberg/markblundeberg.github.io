@@ -194,22 +194,22 @@ class ResponsivePlot {
         element,
         cssClass,
         data,
-        dataKey,
-        onNew,
-        onUpdateImmediate,
-        onUpdateTransition,
-        onExiting,
+        dataKey = undefined,
+        fadeIn = true,
+        onNew = null,
+        onUpdateImmediate = null,
+        onUpdateTransition = null,
+        onExiting = null,
     }) {
         const selectedElements = parentGroups
             .selectChildren(element + '.' + cssClass)
             .data(data, dataKey);
 
         // Handle incoming elements
-        const newElements = this.fader.append(
-            selectedElements.enter(),
-            element,
-            cssClass
-        );
+        const enterParents = selectedElements.enter();
+        const newElements = fadeIn
+            ? this.fader.append(enterParents, element, cssClass)
+            : enterParents.append(element).classed(cssClass, true);
         if (onNew && !newElements.empty()) onNew(newElements);
 
         // Handle updating elements
