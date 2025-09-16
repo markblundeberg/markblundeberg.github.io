@@ -1,8 +1,8 @@
-<div
+<figure
     class="demo-container"
     id="LIB-cell-eq-container"
-    style="max-width: 600px"
-></div>
+    style="max-width: 600px; min-height: 325px"
+></figure>
 
 <script type="module">
     const liIonContainerId = '#LIB-cell-eq-container';
@@ -114,4 +114,5 @@
     // Pass the specific config for the Li-ion battery
     const comp = new LiIonBatteryComponent(liIonContainerId, liIonConfig); // Instantiate the new component
     comp.diagram.setVRange(-1.2, 4.7);
+    document.querySelector(liIonContainerId).style.removeProperty('min-height'); // remove initial render size hint
 </script>
