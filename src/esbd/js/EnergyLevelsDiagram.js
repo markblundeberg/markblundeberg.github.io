@@ -159,7 +159,18 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             .attr('fill', '#555') // Arrow color
             .style('stroke', 'none');
 
-        // Scales
+        // Layer groups for artists
+        this.levelsGroup = this.plotArea.append('g');
+        this.arrowsGroup = this.plotArea.append('g');
+        this.levelLabelsGroup = this.plotArea.append('g');
+        this.arrowLabelsGroup = this.plotArea.append('g');
+
+        // Axis drawing groups
+        this.axesGroup = this.plotArea
+            .append('g')
+            .attr('class', 'energy-levels-axes-group');
+
+        // Set up axis scale functions
         this.xScale = d3
             .scaleBand()
             .paddingInner(0.5) // Space between category bands
@@ -167,41 +178,18 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             .align(0.25); // Shift left
         this.yScale = d3.scaleLinear();
 
-        // Axis Generators
-        this.xAxisGen = d3.axisBottom(this.xScale).tickSize(0).tickPadding(6);
-        this.yAxisGen = d3.axisLeft(this.yScale);
-
-        // Axis Groups
-        this.xAxisGroup = this.plotArea
-            .append('g')
-            .attr('class', 'energy-levels-x-axis');
-        this.yAxisGroup = this.plotArea
-            .append('g')
-            .attr('class', 'energy-levels-y-axis');
-
-        // Y-Axis Label Element using foreignObject for KaTeX
-        this.yAxisLabel = this.yAxisGroup
-            .append('foreignObject')
-            .attr('class', 'energy-levels-y-axis-label')
-            .attr('width', 1)
-            .attr('height', 1) // Size determined by content/transform
-            .style('overflow', 'visible')
-            .style('text-align', 'center')
-            .style('text-anchor', 'middle'); // Note: text-anchor on foreignObject might not work as expected
-
-        // Add span inside foreignObject for KaTeX rendering
-        this.yAxisLabel
-            .append('xhtml:span')
-            .attr('class', 'katex-axis-label-container')
-            .style('display', 'inline-block') // Important for rotation and sizing
-            .style('font-size', '11px')
-            .style('color', '#333');
-
-        // Layer groups for artists
-        this.levelsGroup = this.plotArea.append('g');
-        this.arrowsGroup = this.plotArea.append('g');
-        this.levelLabelsGroup = this.plotArea.append('g');
-        this.arrowLabelsGroup = this.plotArea.append('g');
+        // Axis drawing generators
+        this.xAxisGen = d3
+            .axisBottom(this.xScale)
+            .tickSize(0)
+            .tickPadding(6)
+            .tickFormat(
+                (categoryId) =>
+                    this.config.categories.find((c) => c.id === categoryId)
+                        ?.label ?? categoryId
+            );
+        this.yAxisGen = d3.axisLeft(this.yScale).tickSize(-this.plotWidth);
+        if (!this.config.showYTicks) this.yAxisGen.tickValues([]);
     }
 
     // ========================================================================
@@ -232,82 +220,42 @@ class EnergyLevelsDiagram extends ResponsivePlot {
 
     /** Draws/Updates the X and Y axes. */
     _drawAxes() {
-        // Update Y Axis
-        if (!this.config.showYTicks) {
-            this.yAxisGen.tickValues([]);
-        } else {
-            this.yAxisGen.tickSize(-this.plotWidth);
-            this.yAxisGen.tickValues(null);
-        }
-        // Apply axis generator with transition
-        this.yAxisGroup.call(this.transition(this.yAxisGen));
-        // Style grid lines and remove domain line after transition (or immediately)
-        this.yAxisGroup
-            .selectAll('.tick line')
+        const ph = this.plotHeight;
+
+        const xAxis = this.drawStaticElements({
+            parentGroups: this.axesGroup,
+            element: 'g',
+            cssClass: 'energy-levels-x-axis',
+            onUpdateTransition: (s) =>
+                s.attr('transform', `translate(0,${ph})`).call(this.xAxisGen),
+        });
+        xAxis.selectAll('.domain').remove(); // remove main line
+
+        const yAxis = this.drawStaticElements({
+            parentGroups: this.axesGroup,
+            element: 'g',
+            cssClass: 'energy-levels-y-axis',
+            onUpdateTransition: (s) => s.call(this.yAxisGen),
+        });
+        yAxis
+            .selectAll('line.tick')
             .attr('stroke', '#e0e0e0')
             .attr('stroke-dasharray', '2,2');
-        this.yAxisGroup.select('.domain').remove(); // Remove y-axis line
+        yAxis.selectAll('.domain').remove(); // remove main line
 
-        // Update Y Axis Label Text using renderMathInElement
-        const yLabelSpan = this.yAxisLabel
-            .select('span.katex-axis-label-container')
-            .node();
-        if (yLabelSpan && this.config.yAxisLabel) {
-            // Set the raw text content (including delimiters like $...$)
-            yLabelSpan.textContent = this.config.yAxisLabel;
-            // Call the auto-render function on the span
-            // Ensure KaTeX auto-render script is loaded in HTML
-            if (typeof renderMathInElement === 'function') {
-                try {
-                    renderMathInElement(yLabelSpan, {
-                        delimiters: [
-                            { left: '$$', right: '$$', display: true },
-                            { left: '$', right: '$', display: false },
-                            { left: '\\(', right: '\\)', display: false },
-                            { left: '\\[', right: '\\]', display: true },
-                        ],
-                        throwOnError: false,
-                    });
-                } catch (e) {
-                    console.error('KaTeX render error for Y Axis Label:', e);
-                }
-            } else {
-                console.warn('KaTeX auto-render extension not loaded.');
-            }
-        } else if (yLabelSpan) {
-            yLabelSpan.textContent = ''; // Clear if no label
-        }
-
-        // Update Y axis label position and dimensions
-        this.yAxisLabel.attr(
-            'transform',
-            `translate(${-0.6 * this.margins.left}, ${0.5 * this.plotHeight}) rotate(-90)`
-        );
-        const labelWidthEstimate = 300;
-        const labelHeightEstimate = 20; // Estimates
-        this.yAxisLabel
-            .attr('width', labelWidthEstimate)
-            .attr('height', labelHeightEstimate)
-            .attr('x', -labelWidthEstimate / 2)
-            .attr('y', -labelHeightEstimate / 2);
-
-        // Update X Axis (Category Labels)
-        this.xAxisGen.tickFormat(
-            (categoryId) =>
-                this.config.categories.find((c) => c.id === categoryId)
-                    ?.label ?? categoryId
-        );
-        this.xAxisGroup.call(
-            this.transition((s) =>
+        this.drawStaticElements({
+            parentGroups: this.axesGroup,
+            element: 'text',
+            cssClass: 'energy-levels-y-axis-label',
+            onNew: (s) => s.style('text-anchor', 'middle'),
+            onUpdateTransition: (s) =>
                 s
-                    .attr('transform', `translate(0,${this.plotHeight})`)
-                    .call(this.xAxisGen)
-                    .selectAll('text')
-                    .style('text-anchor', 'middle')
-                    .style('font-size', '11px')
-            )
-        );
-        this.xAxisGroup.select('.domain').remove(); // Remove x-axis line
+                    .attr(
+                        'transform',
+                        `translate(${-0.6 * this.margins.left}, ${0.5 * ph}) rotate(-90)`
+                    )
+                    .text(this.config.yAxisLabel),
+        });
     }
 
     /** Draws/Updates the energy/potential level lines and labels. */

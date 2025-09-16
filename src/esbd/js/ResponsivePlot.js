@@ -232,6 +232,13 @@ class ResponsivePlot {
         return mergedElements;
     }
 
+    /**
+     * Like drawElements() but for static elements (the 'stage').
+     */
+    drawStaticElements({ data = [null], ...fields }) {
+        return this.drawElements({ data, fadeIn: false, ...fields });
+    }
+
     // ========================================================================
     // Public Accessors (Getters)
     // ========================================================================

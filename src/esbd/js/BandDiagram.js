@@ -334,10 +334,6 @@ class BandDiagram extends ResponsivePlot {
 
         this.xScale.range([0, pw]);
         this.yScale.range([ph, 0]);
-        this.yAxisLabel.attr(
-            'transform',
-            `translate(${-0.6 * this.margins.left}, ${0.5 * ph}) rotate(-90)`
-        );
         this.interactionRect.attr('width', pw).attr('height', ph);
 
         // 1. Prepare Data
@@ -382,23 +378,13 @@ class BandDiagram extends ResponsivePlot {
             this.yScale.domain(yDomain).nice();
         }
 
-        // 3. Update Axes (apply transitions)
-        this.xAxisGroup.call(
-            this.transition((s) =>
-                s
-                    .attr('transform', `translate(0,${this.plotHeight})`)
-                    .call(this.xAxisGen)
-            )
-        );
-        this.yAxisGroup.call(this.transition(this.yAxisGen));
-        this.yAxisLabel.text(this._yAxisLabelStr); // Update text immediately
-
-        // 4. Draw Static Elements (backgrounds/interfaces don't usually need transitions)
+        // 4. Draw Static Elements
+        this._drawAxes();
         this._drawBackgrounds();
         this._drawInterfaceLines();
         this._drawRegionLabels();
 
-        // 5. Draw Data Elements (these use transitions internally)
+        // 5. Draw Data Elements
         this._drawTraces();
         this._drawVerticalMarkers();
         this._drawTraceLabels();
@@ -426,10 +412,7 @@ class BandDiagram extends ResponsivePlot {
             .append('g')
             .attr('class', 'bd-region-labels')
             .style('pointer-events', 'none');
-        this.linesGroup = this.plotArea
-            .append('g')
-            .attr('class', 'bd-lines')
-            .style('pointer-events', 'none');
+        this.linesGroup = this.plotArea.append('g').attr('class', 'bd-lines');
         // Interaction rectangle sits ON TOP of lines but BELOW markers/labels
         this.interactionRect = this.plotArea
             .append('rect')
@@ -447,29 +430,19 @@ class BandDiagram extends ResponsivePlot {
         this.customGroup = this.plotArea
             .append('g')
             .attr('class', 'bd-custom-drawing');
-
-        this.xAxisGroup = this.plotArea
+        this.axesGroup = this.plotArea
             .append('g')
-            .attr('transform', `translate(0,${this.plotHeight})`);
-        this.yAxisGroup = this.plotArea.append('g');
+            .attr('class', 'bd-axes')
+            .style('pointer-events', 'none');
 
-        // Scales & Axes
+        // Set up scales & Axes
         this.xScale = d3.scaleLinear();
         this.yScale = d3.scaleLinear();
         this.xAxisGen = d3.axisBottom(this.xScale).tickSizeOuter(0);
         this.yAxisGen = d3.axisLeft(this.yScale).tickSizeOuter(0);
-
         if (this.config.xMode == 'abstract') {
             this.xAxisGen.tickValues([]);
         }
-
-        // Interactive Y-Axis Label
-        this.yAxisLabel = this.yAxisGroup
-            .append('text')
-            .attr('class', 'bd-y-axis-label bd-interactive')
-            .style('text-anchor', 'middle')
-            .style('-webkit-user-select', 'none')
-            .style('user-select', 'none');
 
         // --- Interaction Rect Listeners ---
         this.interactionRect
@@ -489,6 +462,37 @@ class BandDiagram extends ResponsivePlot {
     // Private Drawing Helpers
     // ========================================================================
 
+    _drawAxes() {
+        const ph = this.plotHeight;
+        this.drawStaticElements({
+            parentGroups: this.axesGroup,
+            element: 'g',
+            cssClass: 'bd-x-axis',
+            onUpdateTransition: (s) =>
+                s.attr('transform', `translate(0,${ph})`).call(this.xAxisGen),
+        });
+        this.drawStaticElements({
+            parentGroups: this.axesGroup,
+            element: 'g',
+            cssClass: 'bd-y-axis',
+            onUpdateTransition: (s) => s.call(this.yAxisGen),
+        });
+
+        this.drawStaticElements({
+            parentGroups: this.axesGroup,
+            element: 'text',
+            cssClass: 'bd-y-axis-label',
+            onNew: (s) => s.style('text-anchor', 'middle'),
+            onUpdateTransition: (s) =>
+                s
+                    .attr(
+                        'transform',
+                        `translate(${-0.6 * this.margins.left}, ${0.5 * ph}) rotate(-90)`
+                    )
+                    .text(this._yAxisLabelStr),
+        });
+    }
+
     _drawBackgrounds() {
         // Create data pairs: [ { start: b[0], end: b[1], props: r[0] }, { start: b[1], end: b[2], props: r[1] }, ... ]
         const regionDrawData = this.regionProps.map((props, i) => ({
@@ -498,60 +502,80 @@ class BandDiagram extends ResponsivePlot {
             props: props || {}, // Ensure props object exists
         }));
 
-        this.backgroundGroup
-            .selectAll('rect.bd-region-bg')
-            .data(regionDrawData, (d) => d.id) // Key by generated ID
-            .join('rect')
-            .attr('class', 'bd-region-bg')
-            .attr('x', (d) => this.xScale(d.start))
-            .attr('y', 0)
-            .attr('width', (d) =>
-                Math.max(0, this.xScale(d.end) - this.xScale(d.start))
-            ) // Ensure non-negative width
-            .attr('height', this.plotHeight)
-            .attr('fill', (d) => d.props.color || 'transparent');
+        this.drawStaticElements({
+            parentGroups: this.backgroundGroup,
+            element: 'rect',
+            cssClass: 'bd-region-bg',
+            data: regionDrawData,
+            dataKey: (d) => d.id,
+            onUpdateTransition: (s) =>
+                s
+                    .attr('x', (d) => this.xScale(d.start))
+                    .attr('y', 0)
+                    .attr('width', (d) =>
+                        Math.max(0, this.xScale(d.end) - this.xScale(d.start))
+                    )
+                    .attr('height', this.plotHeight)
+                    .attr('fill', (d) => d.props.color || 'transparent'),
+        });
     }
 
     _drawInterfaceLines() {
-        if (!this.boundaries || this.boundaries.length < 3) {
+        if (this.boundaries.length < 3) {
             // Need at least 3 boundaries for 1 interface line
             this.interfaceGroup.selectAll('line.bd-interface-line').remove();
             return;
         }
         // Draw lines at internal boundaries (excluding start and end)
-        const interfaceData = this.boundaries.slice(1, -1);
+        const interfaceData =
+            this.boundaries.length >= 3 ? this.boundaries.slice(1, -1) : [];
 
-        this.interfaceGroup
-            .selectAll('line.bd-interface-line')
-            .data(interfaceData, (d) => d) // Key by x-coordinate value
-            .join('line')
-            .attr('class', 'bd-interface-line')
-            .attr('x1', (d) => this.xScale(d))
-            .attr('x2', (d) => this.xScale(d))
-            .attr('y1', 0)
-            .attr('y2', this.plotHeight)
-            .attr('stroke', STYLE_DEFAULTS.interface.color)
-            .attr('stroke-width', STYLE_DEFAULTS.interface.lineWidth)
-            .attr('stroke-dasharray', STYLE_DEFAULTS.interface.dasharray);
+        this.drawStaticElements({
+            parentGroups: this.interfaceGroup,
+            element: 'line',
+            cssClass: 'bd-region-line',
+            data: interfaceData,
+            dataKey: undefined, // Key by index
+            onNew: (s) =>
+                s
+                    .attr('y1', 0)
+                    .attr('stroke', STYLE_DEFAULTS.interface.color)
+                    .attr('stroke-width', STYLE_DEFAULTS.interface.lineWidth)
+                    .attr(
+                        'stroke-dasharray',
+                        STYLE_DEFAULTS.interface.dasharray
+                    ),
+            onUpdateTransition: (s) =>
+                s
+                    .attr('x1', (d) => this.xScale(d))
+                    .attr('x2', (d) => this.xScale(d))
+
+                    .attr('y2', this.plotHeight),
+        });
     }
 
     _drawRegionLabels() {
-        this.regionLabelsGroup
-            .selectAll('.bd-region-label')
-            .data(this.regionLabels)
-            .join('text')
-            .attr('class', 'bd-region-label')
-            .attr('x', (d) => this.xScale(d.x))
-            .attr('y', (d) => {
-                if (d.y === 'top') return -2;
-                else if (typeof d.y === 'number') return this.yScale(d.y);
-                // Default to 'bottom'
-                return this.plotHeight + 2;
-            })
-            .attr('dx', (d) => d.dx)
-            .attr('dy', (d) => d.dy)
-            .attr('text-anchor', 'middle')
-            .text((d) => d.label || '');
+        this.drawStaticElements({
+            parentGroups: this.regionLabelsGroup,
+            element: 'text',
+            cssClass: 'bd-region-label',
+            data: this.regionLabels,
+            dataKey: undefined, // Key by index
+            onUpdateTransition: (s) =>
+                s
+                    .attr('x', (d) => this.xScale(d.x))
+                    .attr('y', (d) => {
+                        if (d.y === 'top') return -2;
+                        else if (typeof d.y === 'number')
+                            return this.yScale(d.y);
+                        // Default to 'bottom'
+                        return this.plotHeight + 2;
+                    })
+                    .attr('dx', (d) => d.dx)
+                    .attr('dy', (d) => d.dy)
+                    .attr('text-anchor', 'middle')
+                    .text((d) => d.label || ''),
+        });
     }
 
     _drawTraces() {
