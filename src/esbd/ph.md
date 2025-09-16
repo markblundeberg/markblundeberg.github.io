@@ -31,10 +31,12 @@ A pH of 0 corresponds to $V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+} = 0.000~\mat
 
 It is common to plot the value of $E$ in a solution against its $\mathrm{pH}$ value, yielding a quasi-phase diagram known as as the {%wiki "Pourbaix diagram" %}. Note the similarity between the two axes' definitions:
 
-\begin{align}
-E & =  V_{\mathrm{e}^-} - V^\circ_{\mathrm{H}^+} \notag \\\\
- \mathrm{pH} & \propto V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+} \notag
-\end{align}
+$$
+\begin{aligned}
+E & =  V_{\mathrm{e}^-} - V^\circ_{\mathrm{H}^+} \\
+ \mathrm{pH} & \propto V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+}
+\end{aligned}
+$$
 
 This suggests that it is interesting to instead plot the voltage quantity $V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+}$ on the bottom axis, so that both axes will have volt units. The usual characteristic thermal slopes on a Pourbaix diagram would then be converted to simple rational slopes such as 1:1, 1:2, and so on, directly reflecting the number of electrons and protons that are transferred when converting the species on one side to the other.
 

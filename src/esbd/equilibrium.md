@@ -156,14 +156,16 @@ We saw the $V_i$ step does not depend at all on the actual concentration of ions
 
 Let's use the definition of electrode potential, $E = V_{\mathrm{e}^-} - \phi$, together with the value we found for $V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} = \frac{1}{F} ( \mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}} ) = 1.138~\mathrm{V}$, and finally substitute the partitioned form $V_{\mathrm{Cl}^-} = \phi -\frac{1}{F}\mu^\circ_{\mathrm{Cl}^-} - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-})$. Then we get:
 
-\begin{align}
- E  & \equiv V_{\mathrm{e}^-} - \phi \notag \\\\
-    & = \Big[V_{\mathrm{Cl}^-} - [V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}] \Big] - \phi \notag \\\\
-    & = \Big[\phi -\frac{1}{F}\mu^\circ_{\mathrm{Cl}^-} - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-}) - [V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}] \Big] - \phi \notag \\\\
-    & = \Big[-\frac{1}{F}\mu^\circ_{\mathrm{Cl}^-} - [V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}] \Big] - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-}) \notag \\\\
-    & = \big[1.360~\mathrm{V} - 1.138~\mathrm{V} \big] - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-}) \notag \\\\
-    & = 0.222~\mathrm{V} - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-}) \notag
-\end{align}
+$$
+\begin{aligned}
+ E  & \equiv V_{\mathrm{e}^-} - \phi  \\
+    & = \Big[V_{\mathrm{Cl}^-} - [V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}] \Big] - \phi \\
+    & = \Big[\phi -\frac{1}{F}\mu^\circ_{\mathrm{Cl}^-} - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-}) - [V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}] \Big] - \phi \\
+    & = \Big[-\frac{1}{F}\mu^\circ_{\mathrm{Cl}^-} - [V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-}] \Big] - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-}) \\
+    & = \big[1.360~\mathrm{V} - 1.138~\mathrm{V} \big] - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-}) \\
+    & = 0.222~\mathrm{V} - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-})
+\end{aligned}
+$$
 
 where we've used $\mu^\circ_{\mathrm{Cl}^-} = -F \cdot 1.360~\mathrm{V}$, the standard internal chemical potential for chloride ions.
 

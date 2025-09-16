@@ -167,11 +167,13 @@ $$ c_\mathrm{Ag^+} c_\mathrm{Cl^-} = (c^\circ)^2 \exp(\tfrac{F}{RT} [(V_\mathrm{
 
 Here, under all conditions the saturated $\mathrm{AgCl}$ sets $V_\mathrm{Ag^+} - V_\mathrm{Cl^-} = \tfrac{1}{F}\mu_\mathrm{AgCl} = -1.1379~\mathrm{V}$, whereas $V^\circ_\mathrm{Ag^+} - V^\circ_\mathrm{Cl^-} = -0.5609~\mathrm{V}$. We are also at temperature $\tfrac{RT}{F} = 0.02569~\mathrm{V}$. Thus:
 
-\begin{align}
+$$
+\begin{aligned}
 c_\mathrm{Ag^+} c_\mathrm{Cl^-}
-& = (c^\circ)^2 \exp \bigg(\frac{-1.1379~\mathrm{V} + 0.5609~\mathrm{V}}{0.02569~\mathrm{V}} \bigg) \notag \\\\
-& = 1.76\times 10^{-10}~(\mathrm{mol/L})^2. \notag
-\end{align}
+& = (c^\circ)^2 \exp \bigg(\frac{-1.1379~\mathrm{V} + 0.5609~\mathrm{V}}{0.02569~\mathrm{V}} \bigg) \\
+& = 1.76\times 10^{-10}~(\mathrm{mol/L})^2.
+\end{aligned}
+$$
 
 Initially there are only $\mathrm{Ag^+}$ and $\mathrm{Cl^-}$ ions, so by charge neutrality their concentrations have to be equal, and we find $c_\mathrm{Ag^+} = c_\mathrm{Cl^-} = \sqrt{c_\mathrm{Ag^+} c_\mathrm{Cl^-}} = 1.33\times10^{-5}~\mathrm{mol/L}$. This also means the standard states $V^\circ_\mathrm{Ag^+}$, $V^\circ_\mathrm{Cl^-}$ have to fit equidistantly from $V_\mathrm{Ag^+}$ and $V_\mathrm{Cl^-}$ respectively.
 
