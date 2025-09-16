@@ -1,27 +1,14 @@
 /* style.css */
 
 body {
-    font-family:
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        'Segoe UI',
-        Roboto,
-        Oxygen,
-        Ubuntu,
-        Cantarell,
-        'Open Sans',
-        'Helvetica Neue',
-        sans-serif;
+    --body-font:
+        system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, sans-serif;
+    font-family: var(--body-font);
     line-height: 1.6; /* Improve line spacing */
     color: #333;
     margin: 0; /* Remove default body margin */
     padding: 0;
     background-color: #fafaf4; /* Slightly off-white background */
-}
-
-.katex {
-    font-size: 1.1em !important;
 }
 
 /* ====== Layout Styles ====== */

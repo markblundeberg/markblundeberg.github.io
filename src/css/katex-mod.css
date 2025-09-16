@@ -1,0 +1,11 @@
+/* kated-mod.css - include this AFTER the katex.min.css stylesheet*/
+
+.katex {
+    font-size: 1.1em; /* Slight size inflation to match text. (Overrides KaTeX default 1.21em which is too large). */
+}
+
+/* Special rule for \text{blabla} : render in body font (unserifed)! */
+.katex .text {
+    font-family: var(--body-font);
+    font-size: 0.909090909em; /* Undo the 1.1em size above */
+}
