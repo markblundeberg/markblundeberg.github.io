@@ -4,6 +4,9 @@
 
 import { debounce, Fader } from './utils.js';
 
+const fadeTransitionName = 'fade';
+const noFadeClass = 'no-fade-in-children';
+
 /**
  * Responsively-sized plot using D3.js
  * Makes a single SVG plot area inside.
@@ -69,7 +72,8 @@ class ResponsivePlot {
         this.fader = new Fader(
             this.config.fadeDuration,
             this.config.fadeEase,
-            'fade'
+            fadeTransitionName,
+            noFadeClass
         );
 
         // Populate the container
@@ -96,6 +100,7 @@ class ResponsivePlot {
             .style('width', '100%')
             .style('height', '100%')
             .style('position', 'absolute') // make sure position:absolute to avoid resize infinite loops!
+            .classed(noFadeClass, true)
             .style('-webkit-user-select', 'none')
             .style('user-select', 'none')
             .style('-webkit-tap-highlight-color', 'transparent');
@@ -291,6 +296,7 @@ class ResponsivePlot {
 
         this._redrawScheduled = false;
         this._debouncedScheduleRedraw.cancel(); // might as well
+        this.svg.classed(noFadeClass, false);
     }
 
     // ========================================================================
