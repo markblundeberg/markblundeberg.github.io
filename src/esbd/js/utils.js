@@ -166,35 +166,69 @@ export function throttle(func, wait, options = {}) {
  * Handles clearing old content and potential KaTeX errors.
  * @param {HTMLSpanElement} spanElement - The target span element.
  * @param {string | null | undefined} newLabelText - The raw LaTeX string (no delimiters) or null/empty to clear.
+ * @param {boolean} textMode - Start in text mode or in math mode (default).
  * @param {boolean} forceRender - Render anyway even if label was unchanged.
  */
-export function renderSpanMath(spanElement, newLabelText, forceRender = false) {
+export function renderSpanMath(
+    spanElement,
+    newLabelText,
+    textMode = false,
+    forceRender = false
+) {
     if (!spanElement) return; // Safety check
+
+    const currentLabel = newLabelText ?? '';
+
     if (typeof katex === 'undefined') {
         // Caller forgot to load katex
         spanElement.textContent = currentLabel;
         return;
     }
 
-    const currentLabel = newLabelText || ''; // Treat null/undefined as empty string
+    // For text mode, we also need the auto-render extension.
+    if (textMode && typeof renderMathInElement === 'undefined') {
+        console.warn(
+            'KaTeX auto-render extension not loaded for text mode rendering.'
+        );
+        spanElement.textContent = currentLabel;
+        return;
+    }
+
     const previousLabel = spanElement.dataset.renderedLabel || '';
+    const currentMode = textMode ? 'text' : 'math';
+    const previousMode = spanElement.dataset.renderedMode || currentMode;
 
-    // Avoid re-rendering if no change
-    if (currentLabel === previousLabel && !forceRender) return;
+    // Avoid re-rendering if no change in content or mode
+    if (
+        currentLabel === previousLabel &&
+        currentMode === previousMode &&
+        !forceRender
+    )
+        return;
 
-    // Update stored label first
+    // Update stored label and mode first
     spanElement.dataset.renderedLabel = currentLabel;
-    // Clear existing content
-    spanElement.textContent = '';
+    spanElement.dataset.renderedMode = currentMode;
 
-    if (!currentLabel) return;
+    // Clear existing content
+    if (!currentLabel) {
+        spanElement.textContent = '';
+        return;
+    }
 
     try {
-        katex.render(currentLabel, spanElement, {
-            throwOnError: false,
-            displayMode: false,
-            // Add other KaTeX options if needed
-        });
+        if (textMode) {
+            spanElement.textContent = currentLabel;
+            renderMathInElement(spanElement, {
+                delimiters: [{ left: '$', right: '$', display: false }],
+                throwOnError: false,
+            });
+        } else {
+            katex.render(currentLabel, spanElement, {
+                throwOnError: false,
+                displayMode: false,
+            });
+        }
     } catch (e) {
         console.error('KaTeX render error:', e, '| Input:', currentLabel);
         spanElement.textContent = currentLabel; // Fallback on error

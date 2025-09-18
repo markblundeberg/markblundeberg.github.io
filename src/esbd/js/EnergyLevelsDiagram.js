@@ -243,19 +243,7 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             .attr('stroke-dasharray', '2,2');
         yAxis.selectAll('.domain').remove(); // remove main line
 
-        this.drawStaticElements({
-            parentGroups: this.axesGroup,
-            element: 'text',
-            cssClass: 'energy-levels-y-axis-label',
-            onNew: (s) => s.style('text-anchor', 'middle'),
-            onUpdateTransition: (s) =>
-                s
-                    .attr(
-                        'transform',
-                        `translate(${-0.6 * this.margins.left}, ${0.5 * ph}) rotate(-90)`
-                    )
-                    .text(this.config.yAxisLabel),
-        });
+        this.drawYAxisLabel(this.axesGroup, this.config.yAxisLabel);
     }
 
     /** Draws/Updates the energy/potential level lines and labels. */

@@ -478,19 +478,7 @@ class BandDiagram extends ResponsivePlot {
             onUpdateTransition: (s) => s.call(this.yAxisGen),
         });
 
-        this.drawStaticElements({
-            parentGroups: this.axesGroup,
-            element: 'text',
-            cssClass: 'bd-y-axis-label',
-            onNew: (s) => s.style('text-anchor', 'middle'),
-            onUpdateTransition: (s) =>
-                s
-                    .attr(
-                        'transform',
-                        `translate(${-0.6 * this.margins.left}, ${0.5 * ph}) rotate(-90)`
-                    )
-                    .text(this._yAxisLabelStr),
-        });
+        this.drawYAxisLabel(this.axesGroup, this._yAxisLabelStr);
     }
 
     _drawBackgrounds() {

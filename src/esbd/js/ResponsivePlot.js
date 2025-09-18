@@ -2,7 +2,7 @@
 
 // Assumes D3 is loaded globally or imported appropriately.
 
-import { debounce, Fader } from './utils.js';
+import { debounce, Fader, renderSpanMath } from './utils.js';
 
 const fadeTransitionName = 'fade';
 const noFadeClass = 'no-fade-in-children';
@@ -242,6 +242,52 @@ class ResponsivePlot {
      */
     drawStaticElements({ data = [null], ...fields }) {
         return this.drawElements({ data, fadeIn: false, ...fields });
+    }
+
+    /**
+     * Draws a centered, rotated Y-axis label using a <foreignObject>.
+     * This is a common helper for plots that inherit from ResponsivePlot.
+     * @param {string} labelText - The text for the label, supporting KaTeX.
+     */
+    drawYAxisLabel(axesGroup, labelText) {
+        const ph = this.plotHeight;
+
+        this.drawStaticElements({
+            parentGroups: axesGroup,
+            element: 'foreignObject',
+            cssClass: 'rp-y-axis-label-fo',
+            onNew: (s) =>
+                s
+                    .attr('width', 1)
+                    .attr('height', 1)
+                    .style('overflow', 'visible')
+                    .html(
+                        `<span class="rp-y-axis-label"
+                              style="display: inline-block; white-space: nowrap;">
+                         </span>`
+                    ),
+            onUpdateImmediate: (s) =>
+                s.each((d, i, nodes) => {
+                    const fo = nodes[i];
+                    const container = fo.firstChild;
+
+                    // Render the math/text content
+                    renderSpanMath(container, labelText, true);
+
+                    // After rendering, measure and center using offsetWidth/Height
+                    // which are not affected by transforms.
+                    const width = container.offsetWidth;
+                    const height = container.offsetHeight;
+                    d3.select(fo)
+                        .attr('x', -width / 2)
+                        .attr('y', -height / 2);
+                }),
+            onUpdateTransition: (s) =>
+                s.attr(
+                    'transform',
+                    `translate(${-0.6 * this.margins.left}, ${0.5 * ph}) rotate(-90)`
+                ),
+        });
     }
 
     // ========================================================================

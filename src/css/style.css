@@ -336,6 +336,16 @@ figure {
     height: 250px;
 }
 
+/* ====== Start ResponsivePlot Styles ====== */
+
+/* Y-Axis Label (used by BandDiagram, EnergyLevelsDiagram, etc.) */
+.rp-y-axis-label {
+    font-size: 11px;
+    color: #333;
+}
+
+/* ====== End ResponsivePlot Styles ====== */
+
 /* ====== Start BandDiagram Styles ====== */
 
 /* D3 Axis Styling */
@@ -350,12 +360,6 @@ figure {
 .bd-y-axis text {
     font-size: 9px; /* Smaller axis text */
     fill: #555;
-}
-
-/* Interactive Y-Axis Label */
-.bd-y-axis-label {
-    font-size: 10px; /* Smaller axis label */
-    fill: #333;
 }
 
 /* D3 Data Line Defaults */
@@ -429,13 +433,6 @@ figure {
     /* Optional: Adjustments if category labels overlap */
     /* transform: rotate(-30deg) translate(-5px, -5px); */
     /* text-anchor: end; */
-}
-
-/* Y-Axis Label */
-.energy-levels-y-axis-label {
-    font-size: 11px;
-    fill: #333;
-    text-anchor: middle;
 }
 
 /* Level Group Elements */
