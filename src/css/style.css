@@ -338,8 +338,22 @@ figure {
 
 /* ====== Start ResponsivePlot Styles ====== */
 
+/* For drawLabelsFancy - neutralizes the line-height of the foreignObject
+   so it doesn't interfere with the vertical alignment of its content. */
+.rp-label-foreign-object {
+    line-height: 0;
+}
+
+/* Restore a sensible line-height for the text content itself. */
+.rp-label-foreign-object > .rp-label-span {
+    /* The KaTeX font size is overridden to 1.1em and has a line-height of 1.2.
+       This makes the effective line-height of math content 1.1 * 1.2 = 1.32.
+       We set this on all labels to ensure consistent height. */
+    line-height: 1.32;
+}
+
 /* Y-Axis Label (used by BandDiagram, EnergyLevelsDiagram, etc.) */
-.rp-y-axis-label {
+.rp-y-axis-label > span.rp-label-span {
     font-size: 11px;
     color: #333;
 }

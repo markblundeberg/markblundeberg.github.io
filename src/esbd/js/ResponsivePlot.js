@@ -245,47 +245,109 @@ class ResponsivePlot {
     }
 
     /**
-     * Draws a centered, rotated Y-axis label using a <foreignObject>.
-     * This is a common helper for plots that inherit from ResponsivePlot.
-     * @param {string} labelText - The text for the label, supporting KaTeX.
+     * A generic helper to draw HTML+KaTeX/KaTeX labels using <foreignObject>.
+     * Supports math, multi-line, alignment, and text wrapping.
+     * @param {object} options - The configuration for drawing labels.
+     * @param {d3.Selection} options.parentGroups - The parent D3 selection.
+     * @param {string} options.cssClass - The CSS class for the <foreignObject> elements.
+     * @param {Array<object>|function} options.labelData - Data set for the labels. Each object can have `label`, `mathMode`, `align` ('top/center/bottom left/center/right'), `wrapWidthPx`.
+     * @param {function} [options.dataKey] - The key function for the data join when there are multiple labels.
+     * @param {boolean} [options.fadeIn=true] - Whether to fade in new labels.
+     * @param {function} [options.onUpdateTransition] - A callable to apply transitions for positioning.
      */
-    drawYAxisLabel(axesGroup, labelText) {
-        const ph = this.plotHeight;
-
-        this.drawStaticElements({
-            parentGroups: axesGroup,
+    drawLabelsFancy({
+        parentGroups,
+        cssClass,
+        labelData,
+        dataKey = undefined,
+        fadeIn = true,
+        onUpdateTransition = null,
+    }) {
+        this.drawElements({
+            parentGroups,
             element: 'foreignObject',
-            cssClass: 'rp-y-axis-label-fo',
+            cssClass,
+            data: labelData,
+            dataKey,
+            fadeIn,
             onNew: (s) =>
                 s
+                    .classed('rp-label-foreign-object', true)
                     .attr('width', 1)
                     .attr('height', 1)
                     .style('overflow', 'visible')
                     .html(
-                        `<span class="rp-y-axis-label"
-                              style="display: inline-block; white-space: nowrap;">
-                         </span>`
+                        // raw span: this can be targeted for CSS text styling (colors, borders, etc)
+                        '<span class="rp-label-span" style="display: inline-block;"></span>'
                     ),
             onUpdateImmediate: (s) =>
-                s.each((d, i, nodes) => {
-                    const fo = nodes[i];
-                    const container = fo.firstChild;
+                s.each(function (d) {
+                    const fo = this;
+                    const span = fo.firstChild;
+                    const {
+                        label,
+                        mathMode = false,
+                        hAlign = 'left',
+                        vAlign = 'bottom',
+                        wrapWidthPx,
+                    } = d;
 
-                    // Render the math/text content
-                    renderSpanMath(container, labelText, true);
+                    if (wrapWidthPx === undefined) {
+                        span.style.setProperty('white-space', 'nowrap');
+                        span.style.removeProperty('max-width');
+                    } else {
+                        span.style.setProperty('white-space', 'normal');
+                        span.style.setProperty('max-width', `${wrapWidthPx}px`);
+                    }
 
-                    // After rendering, measure and center using offsetWidth/Height
-                    // which are not affected by transforms.
-                    const width = container.offsetWidth;
-                    const height = container.offsetHeight;
-                    d3.select(fo)
-                        .attr('x', -width / 2)
-                        .attr('y', -height / 2);
+                    renderSpanMath(span, label, !mathMode);
+
+                    const width = span.offsetWidth;
+                    const height = span.offsetHeight;
+
+                    const x =
+                        hAlign === 'left'
+                            ? 0
+                            : hAlign === 'right'
+                              ? -width
+                              : -width / 2;
+                    const y =
+                        vAlign === 'top'
+                            ? 0
+                            : vAlign === 'bottom'
+                              ? -height
+                              : -height / 2;
+
+                    fo.setAttribute('x', x);
+                    fo.setAttribute('y', y);
                 }),
+            onUpdateTransition,
+        });
+    }
+
+    /**
+     * Draws a centered, rotated Y-axis label using a <foreignObject>.
+     * This is a common helper for plots that inherit from ResponsivePlot.
+     * @param {d3.Selection} - Parent group to append to.
+     * @param {string} labelText - The text for the label, supporting KaTeX.
+     * @protected
+     */
+    drawYAxisLabel(axesGroup, labelText) {
+        this.drawLabelsFancy({
+            parentGroups: axesGroup,
+            cssClass: 'rp-y-axis-label',
+            labelData: [
+                {
+                    label: labelText,
+                    hAlign: 'center',
+                    vAlign: 'center',
+                },
+            ],
+            fadeIn: false, // It's a static element
             onUpdateTransition: (s) =>
                 s.attr(
                     'transform',
-                    `translate(${-0.6 * this.margins.left}, ${0.5 * ph}) rotate(-90)`
+                    `translate(${-0.6 * this.margins.left}, ${0.5 * this.plotHeight}) rotate(-90)`
                 ),
         });
     }
