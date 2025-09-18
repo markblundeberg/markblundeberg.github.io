@@ -190,7 +190,7 @@ export function renderSpanMath(
         console.warn(
             'KaTeX auto-render extension not loaded for text mode rendering.'
         );
-        spanElement.textContent = currentLabel;
+        spanElement.innerHTML = currentLabel;
         return;
     }
 
@@ -211,14 +211,12 @@ export function renderSpanMath(
     spanElement.dataset.renderedMode = currentMode;
 
     // Clear existing content
-    if (!currentLabel) {
-        spanElement.textContent = '';
-        return;
-    }
+    spanElement.innerHTML = '';
+    if (!currentLabel) return;
 
     try {
         if (textMode) {
-            spanElement.textContent = currentLabel;
+            spanElement.innerHTML = currentLabel;
             renderMathInElement(spanElement, {
                 delimiters: [{ left: '$', right: '$', display: false }],
                 throwOnError: false,
