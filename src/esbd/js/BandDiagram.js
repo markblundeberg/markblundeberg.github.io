@@ -695,36 +695,32 @@ class BandDiagram extends ResponsivePlot {
     }
 
     _drawTraceLabels() {
-        const labelData = this.traceData.filter((d) => d.labelPos && d.label);
+        // Map trace data to the format expected by drawLabelsFancy
+        const labelData = this.traceData
+            .filter((d) => d.labelPos && d.label)
+            .map((d) => ({
+                ...d, // Pass original data through
+                mathMode: true, // Trace labels are KaTeX math
+                hAlign: 'left',
+                vAlign: 'center',
+            }));
 
         // TODO: Smarter label positioning to avoid overlaps.
 
-        this.drawElements({
+        this.drawLabelsFancy({
             parentGroups: this.traceLabelsGroup,
-            element: 'foreignObject',
             cssClass: 'bd-line-label',
-            data: labelData,
+            labelData: labelData,
             dataKey: (d) => d.id,
-            onNew: (s) =>
-                s
-                    .attr('width', 1)
-                    .attr('height', 1) // Start small, let content expand
-                    .style('overflow', 'visible')
-                    .html(
-                        (d) =>
-                            `<span class="katex-label-container" style="color: ${d.color}; white-space: nowrap; display: inline-block; padding: 1px 3px; background: rgba(255,255,255,0.7); border-radius: 2px;"></span>`
-                    ),
-            onUpdateImmediate: (s) =>
-                s.each(function (d) {
-                    renderSpanMath(
-                        this.querySelector('.katex-label-container'),
-                        d.label
-                    );
-                }),
             onUpdateTransition: (s) =>
                 s
-                    .attr('x', (d) => this.xScale(d.labelPos.x) + 5)
-                    .attr('y', (d) => this.yScale(d.labelPos.y) - 10),
+                    .attr(
+                        'transform',
+                        (d) =>
+                            `translate(${this.xScale(d.labelPos.x) + 5}, ${this.yScale(d.labelPos.y)})`
+                    )
+                    .select('span.rp-label-span')
+                    .style('color', (d) => d.color),
         });
     }
 

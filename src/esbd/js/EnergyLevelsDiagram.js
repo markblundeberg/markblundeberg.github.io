@@ -275,34 +275,25 @@ class EnergyLevelsDiagram extends ResponsivePlot {
                     ),
         });
 
-        this.drawElements({
+        const labelData = levelPositions.map((d) => ({
+            ...d,
+            label: d.level.label,
+            mathMode: true,
+            hAlign: 'left',
+            vAlign: 'center',
+        }));
+
+        this.drawLabelsFancy({
             parentGroups: this.levelLabelsGroup,
-            element: 'foreignObject',
             cssClass: 'level-label',
-            data: levelPositions,
+            labelData: labelData,
             dataKey: (d) => d.id,
-            onNew: (s) =>
-                s
-                    .attr('width', 1)
-                    .attr('height', 1) // Let content define size
-                    .style('overflow', 'visible')
-                    .style('pointer-events', 'none')
-                    .append('xhtml:span')
-                    .attr('class', 'katex-label-container')
-                    .style('white-space', 'nowrap')
-                    .style('display', 'inline-block')
-                    .style('padding', '1px 3px')
-                    .style('font-size', '10px')
-                    .style('background', 'rgba(255,255,255,0.7)')
-                    .style('border-radius', '2px'),
             onUpdateTransition: (s) =>
-                s.attr('x', (d) => d.xLabel).attr('y', (d) => d.y - 12),
-        })
-            .style('color', (d) => d.level.color || defaultStyle.color)
-            .select('span.katex-label-container')
-            .each(function (d) {
-                renderSpanMath(this, d.level.label);
-            });
+                s
+                    .attr('transform', (d) => `translate(${d.xLabel}, ${d.y})`)
+                    .select('span.rp-label-span')
+                    .style('color', (d) => d.level.color || defaultStyle.color),
+        });
     }
 
     /** Draws/Updates arrows between specified levels. */
@@ -332,7 +323,7 @@ class EnergyLevelsDiagram extends ResponsivePlot {
 
         // 2. Data Binding for Arrows
 
-        this.drawElements({
+        const arrowLines = this.drawElements({
             parentGroups: this.arrowsGroup,
             element: 'line',
             cssClass: 'level-arrow',
@@ -341,52 +332,44 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             onNew: (s) => s.attr('stroke-width', 1.5),
             onUpdateTransition: (s) =>
                 s
-                    .attr('stroke', (d) => d.color)
                     .attr('x1', (d) => d.x1)
                     .attr('y1', (d) => d.y1)
                     .attr('x2', (d) => d.x2)
-                    .attr('y2', (d) => d.y2)
-                    .attr('marker-start', (d) =>
-                        d.arrowStyle.includes('<')
-                            ? 'url(#arrowhead-start)'
-                            : null
-                    ) // Assumes marker ID is 'arrowhead'
-                    .attr('marker-end', (d) =>
-                        d.arrowStyle.includes('>')
-                            ? 'url(#arrowhead-end)'
-                            : null
-                    ),
+                    .attr('y2', (d) => d.y2),
         });
+        arrowLines
+            .attr('stroke', (d) => d.color)
+            .attr('marker-start', (d) =>
+                d.arrowStyle.includes('<') ? 'url(#arrowhead-start)' : null
+            ) // Assumes marker ID is 'arrowhead'
+            .attr('marker-end', (d) =>
+                d.arrowStyle.includes('>') ? 'url(#arrowhead-end)' : null
+            );
 
-        this.drawElements({
+        const labelData = drawableArrowData
+            .filter((d) => d.label)
+            .map((d) => ({
+                ...d,
+                mathMode: true,
+                hAlign: 'left',
+                vAlign: 'center',
+            }));
+
+        this.drawLabelsFancy({
             parentGroups: this.arrowLabelsGroup,
-            element: 'foreignObject',
             cssClass: 'level-arrow-label',
-            data: drawableArrowData,
+            labelData: labelData,
             dataKey: (d) => d.arrowId,
-            onNew: (s) =>
-                s
-                    .attr('width', 1)
-                    .attr('height', 1)
-                    .style('overflow', 'visible')
-                    .style('text-align', 'center')
-                    .append('xhtml:span')
-                    .attr('class', 'katex-label-container')
-                    .style('color', (d) => d.color)
-                    .style('white-space', 'nowrap')
-                    .style('display', 'inline-block')
-                    .style('padding', '0px 2px')
-                    .style('font-size', '9px')
-                    .style('background', 'rgba(255,255,255,0.8)'),
             onUpdateTransition: (s) =>
                 s
-                    .attr('x', (d) => (d.x1 + d.x2) / 2 + 5) // Offset slightly right of midpoint
-                    .attr('y', (d) => (d.y1 + d.y2) / 2 - 8), // Offset slightly above midpoint
-        })
-            .select('span.katex-label-container')
-            .each(function (d) {
-                renderSpanMath(this, d.label);
-            });
+                    .attr(
+                        'transform',
+                        (d) =>
+                            `translate(${(d.x1 + d.x2) / 2 + 5}, ${(d.y1 + d.y2) / 2})`
+                    )
+                    .select('span.rp-label-span')
+                    .style('color', (d) => d.color),
+        });
     }
 
     // ========================================================================

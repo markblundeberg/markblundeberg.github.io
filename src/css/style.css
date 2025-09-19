@@ -388,9 +388,11 @@ figure {
 }
 
 /* KaTeX Labels on Plot */
-.bd-line-label .katex-label-container {
+.bd-line-label > span.rp-label-span {
     font-size: 11px; /* Slightly smaller labels */
-    /* background set inline currently */
+    padding: 1px 3px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 2px;
 }
 
 /* popup */
@@ -461,21 +463,17 @@ figure {
     shape-rendering: crispEdges;
 }
 
-.level-label {
-    /* foreignObject itself */
-    overflow: visible !important; /* Ensure KaTeX isn't clipped */
-    pointer-events: none;
-}
-
-.level-label .katex-label-container {
-    /* Span inside foreignObject holding KaTeX */
-    font-size: 10px; /* Adjust KaTeX size */
-    /* Color, background set dynamically/inline */
-    white-space: nowrap;
-    display: inline-block;
+.level-label > span.rp-label-span {
+    font-size: 10px;
     padding: 1px 3px;
     background: rgba(255, 255, 255, 0.7);
     border-radius: 2px;
+}
+
+.level-arrow-label > span.rp-label-span {
+    font-size: 9px;
+    padding: 0px 2px;
+    background: rgba(255, 255, 255, 0.8);
 }
 
 /* ====== End EnergyLevelsDiagram Styles ====== */
