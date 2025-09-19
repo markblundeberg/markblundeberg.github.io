@@ -2,7 +2,7 @@
 
 // Assumes D3 is loaded globally or imported appropriately.
 
-import { debounce, Fader, renderSpanMath } from './utils.js';
+import { debounce, renderSpanMath } from './utils.js';
 
 const fadeTransitionName = 'fade';
 const noFadeClass = 'no-fade-in-children';
@@ -68,13 +68,6 @@ class ResponsivePlot {
         this._requestAnimationFrameID = null;
         this.svgWidth = null;
         this.svgHeight = null;
-
-        this.fader = new Fader(
-            this.config.fadeDuration,
-            this.config.fadeEase,
-            fadeTransitionName,
-            noFadeClass
-        );
 
         // Populate the container
         this.outerContainer.html('');
@@ -167,7 +160,6 @@ class ResponsivePlot {
 
     /**
      * Helper to apply transitions.
-     * Note: for fade-ins and outs, it's better to use the .fader helper instead.
      *
      * Usage example: selection.call(diagram.transition(s=>s.attr('x',newX)))
      *
@@ -187,35 +179,71 @@ class ResponsivePlot {
      * Helper to draw elements with fade-in and transition support.
      * The onX functions take a selection and do whatever with it. Return values ignored.
      *
+     * Roughly parentGroups.selectChildren().data(data,dataKey).join(element)
+     * But with fancy fade-in logic and various hooks.
+     *
      * New elements are appended then they see:
-     *      fadein -> onNew -> onUpdateImmediate -> onUpdateTransition   [immediate, no transition]
+     *      (fadein)              [transition started on enter]
+     *      onNew -> onUpdateImmediate -> onUpdateTransition   [all immediate]
      * Updating elements see:
-     *      onUpdateImmediate -> transition(onUpdateTransition)
+     *      onUpdateImmediate     [immediate]
+     *      (onUpdateTransition)  [via a transition]
      * Exiting elements see:
-     *      onExiting -> fadeout -> remove
+     *      onExiting             [immediate]
+     *      (fadeout -> remove)   [transition started]
      */
     drawElements({
         parentGroups,
-        element,
-        cssClass,
-        data,
+        data = [null],
         dataKey = undefined,
+        element,
+        cssClass = null,
         fadeIn = true,
+        fadeOut = true,
         onNew = null,
         onUpdateImmediate = null,
         onUpdateTransition = null,
         onExiting = null,
     }) {
         const selectedElements = parentGroups
-            .selectChildren(element + '.' + cssClass)
+            .selectAll(
+                ':scope >' + // direct children only (a bit more performant than D3's .selectChildren)
+                    element +
+                    (cssClass ? '.' + cssClass : '') +
+                    ':not([data-join-exited])' // don't revive zombies (see exitingElements below)
+            )
             .data(data, dataKey);
 
         // Handle incoming elements
         const enterParents = selectedElements.enter();
-        const newElements = fadeIn
-            ? this.fader.append(enterParents, element, cssClass)
-            : enterParents.append(element).classed(cssClass, true);
-        if (onNew && !newElements.empty()) onNew(newElements);
+        const newElements = enterParents.append(element);
+        if (!newElements.empty()) {
+            if (cssClass) newElements.classed(cssClass, true);
+            if (fadeIn) {
+                // Find which elements to fade in. If an ancestor has just started to
+                // fade in, then we should just appear directly (no double fade).
+                const elementsToFade = newElements.filter(
+                    function (d, i, nodes) {
+                        // `this` is our DOM node.
+                        return !this.parentNode.closest('.' + noFadeClass);
+                    }
+                );
+                if (!elementsToFade.empty())
+                    elementsToFade
+                        .attr('opacity', 0)
+                        .classed(noFadeClass, true) // Ask our children to not fade in.
+                        .transition(fadeTransitionName)
+                        .duration(this.config.fadeDuration)
+                        .ease(this.config.fadeEase)
+                        .attr('opacity', 1)
+                        .on('start', function (d, i, nodes) {
+                            // One frame after we enter, now children are allowed to
+                            // fade in. `this` is our DOM node.
+                            this.classList.remove(noFadeClass);
+                        });
+            }
+            if (onNew) onNew(newElements);
+        }
 
         // Handle updating elements
         const updateElements = selectedElements;
@@ -224,15 +252,28 @@ class ResponsivePlot {
         if (onUpdateImmediate) onUpdateImmediate(mergedElements);
 
         if (onUpdateTransition) {
-            newElements.empty() || onUpdateTransition(newElements);
-            updateElements.empty() ||
+            if (!newElements.empty()) onUpdateTransition(newElements);
+            if (!updateElements.empty())
                 this.transition(onUpdateTransition)(updateElements);
         }
 
         // Handle exiting elements
         const exitingElements = selectedElements.exit();
-        if (onExiting && !exitingElements.empty()) onExiting(exitingElements);
-        this.fader.remove(exitingElements, cssClass);
+        if (!exitingElements.empty()) {
+            if (onExiting) onExiting(exitingElements);
+            // The data-join-exited attribute is applied here
+            // so that once elements start fading out, they cannot
+            // be picked up again by the selectChildren and re-enter
+            // as 'zombies'.
+            if (fadeOut)
+                exitingElements
+                    .attr('data-join-exited', true)
+                    .transition(fadeTransitionName)
+                    .duration(this.config.fadeDuration)
+                    .ease(this.config.fadeEase)
+                    .attr('opacity', 0)
+                    .remove();
+        }
 
         return mergedElements;
     }
