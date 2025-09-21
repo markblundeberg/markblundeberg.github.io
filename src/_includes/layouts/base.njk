@@ -1,55 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  {# Use front matter title or a default #}
-  <title>{{ title | default("My Site") }}</title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        {# Use front matter title or a default #}
+        <title>{{ title | default("My Site") }}</title>
 
-  <link rel="icon" href="/img/favicon.ico" />
+        <link rel="icon" href="/img/favicon.ico" />
 
-  <link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href="/css/style.css" />
 
-  {# Block for additional CSS in child layouts #}
-  {% block head_css %}{% endblock %}
+        {# Block for additional CSS in child layouts #}
+        {% block head_css %}
+        {% endblock %}
 
-  {# Block for additional head elements (scripts, meta tags) #}
-  {% block head_extra %}{% endblock %}
-</head>
-<body>
+        {# Block for additional head elements (scripts, meta tags) #}
+        {% block head_extra %}
+        {% endblock %}
+    </head>
+    <body>
+        <div class="layout-wrapper">
+            {# Sidebar Navigation #}
+            <nav class="site-nav">
+                <h3>Navigation</h3>
+                {# Optional heading #}
+                {# Render the Eleventy Navigation menu here #}
+                {# Example using a simple list #}
+                <ul>
+                    {%- for entry in collections.all | eleventyNavigation %}
+                        <li>
+                            <a
+                                href="{{ entry.url | url }}"
+                                {% if entry.url == page.url %}aria-current="page"{% endif %}
+                                >{{ entry.title }}</a
+                            >
+                        </li>
+                    {%- endfor %}
+                </ul>
+                {# Or use the filter for nested lists if you have hierarchy: #}
+                {# {{ collections.all | eleventyNavigation | eleventyNavigationToHtml | safe }} #}
+            </nav>
 
-    <div class="layout-wrapper">
-        {# Sidebar Navigation #}
-        <nav class="site-nav">
-            <h3>Navigation</h3> {# Optional heading #}
-            {# Render the Eleventy Navigation menu here #}
-            {# Example using a simple list #}
-            <ul>
-                {%- for entry in collections.all | eleventyNavigation %}
-                <li><a href="{{ entry.url | url }}"{% if entry.url == page.url %} aria-current="page"{% endif %}>{{ entry.title }}</a></li>
-                {%- endfor %}
-            </ul>
-            {# Or use the filter for nested lists if you have hierarchy: #}
-            {# {{ collections.all | eleventyNavigation | eleventyNavigationToHtml | safe }} #}
-        </nav>
-
-        {# Main content block - child layouts will insert content here #}
-        <div class="main-content-area">
-            {% block content %}
-                <main>
-                    {# Content from individual pages goes here #}
-                    {{ content | safe }}
-                </main>
-            {% endblock %}
+            {# Main content block - child layouts will insert content here #}
+            <div class="main-content-area">
+                {% block content %}
+                    <main>
+                        {# Content from individual pages goes here #}
+                        {{ content | safe }}
+                    </main>
+                {% endblock %}
+            </div>
         </div>
-    </div>
 
-    <footer>
-        <p><small>Made with 11ty, KaTeX, D3, and help from some LLMs.</small></p>
-    </footer>
+        <footer>
+            <p>
+                <small
+                    >Made with 11ty, KaTeX, D3, and help from some LLMs.</small
+                >
+            </p>
+        </footer>
 
-    {# Block for JavaScript loaded at the end of the body #}
-    {% block footer_scripts %}{% endblock %}
-
-</body>
+        {# Block for JavaScript loaded at the end of the body #}
+        {% block footer_scripts %}
+        {% endblock %}
+    </body>
 </html>

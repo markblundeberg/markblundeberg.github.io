@@ -32,6 +32,7 @@
 
     {# KaTeX auto render hook - although we use markdown-it-katex, this
     catches any stragglers in e.g. html #}
+    {# prettier-ignore-start #}        
     <script defer>
         // Optional: Customize KaTeX auto-render delimiters if needed
         document.addEventListener('DOMContentLoaded', function () {
@@ -51,6 +52,7 @@
             });
         });
     </script>
+    {# prettier-ignore-end #}
 {% endblock %}
 
 {% block content %}
@@ -70,7 +72,7 @@
         {# Find index (corrected loop without break) #}
         {% for item in currentCollection %}
             {% if item.url == currentPageUrl %}
-            {% set currentIndex = loop.index0 %}
+                {% set currentIndex = loop.index0 %}
             {% endif %}
         {% endfor %}
 
@@ -85,10 +87,13 @@
 
     {% if showPrevNextTop %}
         {# --- Previous/Next Navigation Bar --- #}
-        <nav class="pagination-nav page-nav-top"> {# Specific class for styling #}
+        <nav class="pagination-nav page-nav-top">
+            {# Specific class for styling #}
             <div class="nav-prev">
                 {% if prevPage %}
-                    <a href="{{ prevPage.url | url }}">&lt;- {{ prevPage.data.title | escape }}</a>
+                    <a href="{{ prevPage.url | url }}"
+                        >&lt;- {{ prevPage.data.title | escape }}</a
+                    >
                 {% else %}
                     <span>&nbsp;</span> {# Placeholder to maintain structure #}
                 {% endif %}
@@ -98,26 +103,33 @@
             </div>
             <div class="nav-next">
                 {% if nextPage %}
-                    <a href="{{ nextPage.url | url }}">{{ nextPage.data.title | escape }} -&gt;</a>
+                    <a href="{{ nextPage.url | url }}"
+                        >{{ nextPage.data.title | escape }} -&gt;</a
+                    >
                 {% else %}
                     <span>&nbsp;</span> {# Placeholder to maintain structure #}
                 {% endif %}
             </div>
-        </nav> {# End pagination-nav #}
-    {% endif %} {# End conditional block for prev/next #}
+        </nav>
+        {# End pagination-nav #}
+    {% endif %}
+    {# End conditional block for prev/next #}
     {# --- End Previous/Next Logic Block --- #}
 
-        <main>
-            {# Content from individual pages goes here #}
-            {{ content | safe }}
-        </main>
+    <main>
+        {# Content from individual pages goes here #}
+        {{ content | safe }}
+    </main>
 
     {% if showPrevNextBottom %}
         {# --- Previous/Next Navigation Bar --- #}
-        <nav class="pagination-nav page-nav-top"> {# Specific class for styling #}
+        <nav class="pagination-nav page-nav-top">
+            {# Specific class for styling #}
             <div class="nav-prev">
                 {% if prevPage %}
-                    <a href="{{ prevPage.url | url }}">&lt;- {{ prevPage.data.title | escape }}</a>
+                    <a href="{{ prevPage.url | url }}"
+                        >&lt;- {{ prevPage.data.title | escape }}</a
+                    >
                 {% else %}
                     <span>&nbsp;</span> {# Placeholder to maintain structure #}
                 {% endif %}
@@ -127,11 +139,15 @@
             </div>
             <div class="nav-next">
                 {% if nextPage %}
-                    <a href="{{ nextPage.url | url }}">{{ nextPage.data.title | escape }} -&gt;</a>
+                    <a href="{{ nextPage.url | url }}"
+                        >{{ nextPage.data.title | escape }} -&gt;</a
+                    >
                 {% else %}
                     <span>&nbsp;</span> {# Placeholder to maintain structure #}
                 {% endif %}
             </div>
-        </nav> {# End pagination-nav #}
-    {% endif %} {# showPrevNextBottom #}
+        </nav>
+        {# End pagination-nav #}
+    {% endif %}
+    {# showPrevNextBottom #}
 {% endblock %}
