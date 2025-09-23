@@ -37,7 +37,7 @@ jobs:
                   cache: 'npm' # Enable caching for npm dependencies
 
             - name: Install dependencies
-              run: npm ci # Use 'ci' for cleaner installs in CI environments
+              run: npm ci --production
 
             - name: Build with Eleventy
               run: npx @11ty/eleventy # Run Eleventy build command
