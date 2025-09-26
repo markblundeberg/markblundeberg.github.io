@@ -10,30 +10,23 @@
     <link rel="stylesheet" href="/css/katex-mod.css" />
 {% endblock %}
 
-{# Inject D3 / KaTeX in head since currently the diagrams are inlined as modules, so they expect 'd3' and 'katex' global variables to be loaded. #}
 {% block head_extra %}
-    {# D3 Library #}
-    <script defer src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-
-    {# KaTeX CSS & JS (Core + Auto-render) #}
-    {# Note KaTeX CSS is required! - Loaded in head above. #}
-    <script
-        defer
-        src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"
-        integrity="sha384-Rma6DA2IPUwhNxmrB/7S3Tno0YY7sFu9WSYMCuulLhIqYSGZ2gKCJWIqhBWqMQfh"
-        crossorigin="anonymous"
-    ></script>
-    <script
-        defer
-        src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js"
-        integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh"
-        crossorigin="anonymous"
-    ></script>
+    {# Load D3 and KaTeX. Note KaTeX CSS is required! - Loaded above. #}
+    <script type="importmap">
+        {
+            "imports": {
+                "d3": "https://cdn.jsdelivr.net/npm/d3@7/+esm",
+                "katex": "https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.mjs",
+                "katex/contrib/auto-render": "https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.mjs"
+            }
+        }
+    </script>
 
     {# KaTeX auto render hook - although we use markdown-it-katex, this
     catches any stragglers in e.g. html #}
-    {# prettier-ignore-start #}        
-    <script defer>
+    {# prettier-ignore-start #}
+    <script type="module">
+        import renderMathInElement from 'katex/contrib/auto-render';
         // Optional: Customize KaTeX auto-render delimiters if needed
         document.addEventListener('DOMContentLoaded', function () {
             renderMathInElement(document.body, {

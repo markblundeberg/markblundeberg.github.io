@@ -1,7 +1,6 @@
 // ResponsivePlot.js
 
-// Assumes D3 is loaded globally or imported appropriately.
-
+import * as d3 from 'd3';
 import { debounce, renderSpanMath } from './utils.js';
 
 const fadeTransitionName = 'fade';

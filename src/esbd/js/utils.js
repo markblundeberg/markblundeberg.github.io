@@ -1,6 +1,9 @@
 // utils.js
 // Shared utility functions for the ESBD project.
 
+import { render as katexRender } from 'katex';
+import renderMathInElement from 'katex/contrib/auto-render';
+
 export function describeCurveType(curveType) {
     switch (curveType) {
         case 'potential':
@@ -179,7 +182,7 @@ export function renderSpanMath(
 
     const currentLabel = newLabelText ?? '';
 
-    if (typeof katex === 'undefined') {
+    if (typeof katexRender === 'undefined') {
         // Caller forgot to load katex
         spanElement.textContent = currentLabel;
         return;
@@ -222,7 +225,7 @@ export function renderSpanMath(
                 throwOnError: false,
             });
         } else {
-            katex.render(currentLabel, spanElement, {
+            katexRender(currentLabel, spanElement, {
                 throwOnError: false,
                 displayMode: false,
             });

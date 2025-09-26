@@ -1,7 +1,4 @@
 // ElectrochemicalSpeciesBandDiagram.js
-// ESBD Module using D3.js (v7+)
-
-// Assumes D3 and KaTeX (core + auto-render) are loaded globally or imported appropriately.
 
 import { formatPopupBaseContent, describeCurveType } from './utils.js';
 import BandDiagram from './BandDiagram.js';

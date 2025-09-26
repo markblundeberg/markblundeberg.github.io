@@ -2,9 +2,7 @@
 // A D3 component for drawing simple energy/potential level diagrams
 // with discrete horizontal categories.
 
-// Assumes D3 and KaTeX (core library AND auto-render extension) are loaded.
-
-import { renderSpanMath } from './utils.js';
+import * as d3 from 'd3';
 import ResponsivePlot from './ResponsivePlot.js';
 
 class EnergyLevelsDiagram extends ResponsivePlot {
