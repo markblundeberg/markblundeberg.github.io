@@ -1,8 +1,11 @@
 // Eleventy configuration file
-const markdownIt = require('markdown-it');
-const eleventyNavigationPlugin = require('@11ty/eleventy-navigation');
+import markdownIt from 'markdown-it';
+import eleventyNavigationPlugin from '@11ty/eleventy-navigation';
+import markdownItKatex from '@vscode/markdown-it-katex';
+import markdownItFootnote from 'markdown-it-footnote';
 
-module.exports = function (eleventyConfig) {
+// `export default` is used for ESM
+export default async function myConfig(eleventyConfig) {
     // --- Passthrough Copy ---
     // Copy static assets directly to the output directory (_site)
     // Adjust paths if your structure differs or you add more static folders
@@ -23,12 +26,15 @@ module.exports = function (eleventyConfig) {
     eleventyConfig.setLibrary('md', md);
 
     // Static TeX rendering:
-    const markdownItKatex = require('@vscode/markdown-it-katex').default;
-    md.use(markdownItKatex);
+    // The @vscode/markdown-it-katex package is a CJS module.
+    // The actual plugin function is on the .default property of the imported object.
+    md.use(markdownItKatex.default);
     // Brutal hammer if markdown screws with underscores in TeX:
     // md.disable('emphasis');
 
-    md.use(require('markdown-it-footnote'));
+    // The markdown-it-footnote package is a CJS module without a default export.
+    // The actual plugin function is on the .default property of the imported object.
+    md.use(markdownItFootnote);
 
     // --- Collections ---
     // Optional: Define collections later for things like blog posts
@@ -115,4 +121,4 @@ module.exports = function (eleventyConfig) {
             output: '_site', // Output directory (generated site)
         },
     };
-};
+}
