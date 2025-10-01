@@ -55,7 +55,7 @@
         {
             id: `electron_trace`,
             speciesId: 'electron',
-            curveType: 'potential',
+            curveType: 'voltage',
             showLabel: true,
             x: [b[1], x_deltaV],
             y: [V_el, V_el],
@@ -63,7 +63,7 @@
         {
             id: `electron_trace_gnd`,
             speciesId: 'electron',
-            curveType: 'potential',
+            curveType: 'voltage',
             showLabel: true,
             labelOverride: '\\mathrm{GND}',
             x: [x_deltaV, 1],
@@ -72,7 +72,7 @@
         {
             id: `ion_trace`,
             speciesId: 'ion',
-            curveType: 'potential',
+            curveType: 'voltage',
             showLabel: true,
             x: [b[0], b[1]],
             y: [V_ion, V_ion],
@@ -80,7 +80,7 @@
         {
             id: `other_trace`,
             speciesId: 'other',
-            curveType: 'potential',
+            curveType: 'voltage',
             showLabel: true,
             x: [b[0], b[1]],
             y: [V_other, V_other],
@@ -88,7 +88,7 @@
         {
             id: `other2_trace`,
             speciesId: 'other2',
-            curveType: 'potential',
+            curveType: 'voltage',
             showLabel: true,
             x: [b[0], b[1]],
             y: [V_other2, V_other2],

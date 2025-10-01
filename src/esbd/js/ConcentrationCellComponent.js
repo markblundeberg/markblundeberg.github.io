@@ -300,7 +300,7 @@ class ConcentrationCellComponent {
             {
                 id: `cation_potential_1_${this.plotDivId}`,
                 speciesId: 'cation',
-                curveType: 'potential',
+                curveType: 'voltage',
                 showLabel: true,
                 x: [b[1], junctionType == 'cation' ? mid : b[2]],
                 y: [V_cation_1, V_cation_1],
@@ -308,7 +308,7 @@ class ConcentrationCellComponent {
             {
                 id: `cation_potential_2_${this.plotDivId}`,
                 speciesId: 'cation',
-                curveType: 'potential',
+                curveType: 'voltage',
                 showLabel: true,
                 x: [junctionType == 'cation' ? mid : b[3], b[4]],
                 y: [V_cation_2, V_cation_2],
@@ -332,7 +332,7 @@ class ConcentrationCellComponent {
             {
                 id: `anion_potential_1_${this.plotDivId}`,
                 speciesId: 'anion',
-                curveType: 'potential',
+                curveType: 'voltage',
                 showLabel: true,
                 x: [b[1], junctionType == 'anion' ? mid : b[2]],
                 y: [V_anion_1, V_anion_1],
@@ -340,7 +340,7 @@ class ConcentrationCellComponent {
             {
                 id: `anion_potential_2_${this.plotDivId}`,
                 speciesId: 'anion',
-                curveType: 'potential',
+                curveType: 'voltage',
                 showLabel: true,
                 x: [junctionType == 'anion' ? mid : b[3], b[4]],
                 y: [V_anion_2, V_anion_2],
@@ -364,7 +364,7 @@ class ConcentrationCellComponent {
             {
                 id: `e_electrode1_${this.plotDivId}`,
                 speciesId: 'electron',
-                curveType: 'potential',
+                curveType: 'voltage',
                 showLabel: true,
                 x: [b[0], b[1]],
                 y: [V_e_1, V_e_1],
@@ -372,7 +372,7 @@ class ConcentrationCellComponent {
             {
                 id: `e_electrode2_${this.plotDivId}`,
                 speciesId: 'electron',
-                curveType: 'potential',
+                curveType: 'voltage',
                 showLabel: true,
                 x: [b[4], b[5]],
                 y: [V_e_2, V_e_2],

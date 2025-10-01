@@ -4,29 +4,6 @@
 import { render as katexRender } from 'katex';
 import renderMathInElement from 'katex/contrib/auto-render';
 
-export function describeCurveType(curveType) {
-    switch (curveType) {
-        case 'potential':
-            return 'electrochemical potential';
-            break;
-        case 'standardState':
-            return 'standard state potential';
-            break;
-        case 'bandEdge_C':
-            return 'conduction band edge ($E_\\mathrm{C}$)';
-            break;
-        case 'bandEdge_V':
-            return 'valence band edge ($E_\\mathrm{V}$)';
-            break;
-        case 'phi':
-            return 'electrostatic potential';
-            break;
-        default:
-            return 'unknown';
-            break;
-    }
-}
-
 /**
  * Creates the base HTML content for a popup based on diagram info object.
  * Generic version that does not depend on external config.

@@ -1,19 +1,34 @@
 // ElectrochemicalSpeciesBandDiagram.js
 
-import { formatPopupBaseContent, describeCurveType } from './utils.js';
+import { formatPopupBaseContent } from './utils.js';
 import BandDiagram from './BandDiagram.js';
 
 // --- Constants ---
 const F = 96485.33212331001; // C / mol (Faraday constant)
 
-// Default styling constants
-const STYLE_DEFAULTS = {
-    potential: { lineWidth: 3, dasharray: null },
-    standardState: { lineWidth: 1, dasharray: null },
-    bandEdge_C: { lineWidth: 2, dasharray: '4,2' },
-    bandEdge_V: { lineWidth: 2, dasharray: '4,2' },
-    phi: { lineWidth: 1, dasharray: '5,5' },
-    other: { lineWidth: 1, dasharray: null },
+// curveTypes
+const CURVE_TYPES = {
+    voltage: {
+        name: 'species voltage',
+        style: { lineWidth: 3, dasharray: null },
+    },
+    standardState: {
+        name: 'standard state voltage',
+        style: { lineWidth: 1, dasharray: null },
+    },
+    bandEdge_C: {
+        name: 'conduction band edge',
+        style: { lineWidth: 2, dasharray: '4,2' },
+    },
+    bandEdge_V: {
+        name: 'valence band edge',
+        style: { lineWidth: 2, dasharray: '4,2' },
+    },
+    phi: {
+        name: 'electrostatic potential',
+        style: { lineWidth: 1, dasharray: '5,5' },
+    },
+    other: { name: 'unknown', style: { lineWidth: 1, dasharray: null } },
 };
 
 /**
@@ -73,6 +88,7 @@ class ElectrochemicalSpeciesBandDiagram {
                 id,
                 speciesId = null,
                 curveType,
+                style: styleOverride = {},
                 showLabel = true,
                 labelOverride = null,
                 x,
@@ -87,8 +103,9 @@ class ElectrochemicalSpeciesBandDiagram {
             }
 
             const sInfo = this.speciesInfo[speciesId];
-            const style = STYLE_DEFAULTS[curveType];
-            const curveDescription = describeCurveType(curveType);
+            const curveTypeInfo = CURVE_TYPES[curveType];
+            const style = { ...curveTypeInfo.style, ...styleOverride };
+            const curveDescription = curveTypeInfo.name;
             const color = sInfo?.color ?? 'black';
             const autoLabel = this._getAutoLabel(sInfo?.mathLabel, curveType);
             const label = labelOverride || autoLabel;
@@ -169,7 +186,7 @@ class ElectrochemicalSpeciesBandDiagram {
                 symbol = '\\phi';
                 subscript = '';
                 break;
-            case 'potential': // Default case, no changes needed to symbol/subscript/superscript
+            case 'voltage': // Default case, no changes needed to symbol/subscript/superscript
             default:
                 // Keep symbol from mode, keep subscript from prettyName
                 // Clear subscript if prettyName was null/undefined?

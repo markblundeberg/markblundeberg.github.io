@@ -174,7 +174,7 @@ class LiIonBatteryComponent {
         traceDefs.push({
             id: `e_anode_side_${traceIdSuffix}`,
             speciesId: 'electron',
-            curveType: 'potential',
+            curveType: 'voltage',
             showLabel: true,
             x: [b[0], b[2]],
             y: [V_e_anode, V_e_anode],
@@ -182,7 +182,7 @@ class LiIonBatteryComponent {
         traceDefs.push({
             id: `e_cathode_side_${traceIdSuffix}`,
             speciesId: 'electron',
-            curveType: 'potential',
+            curveType: 'voltage',
             showLabel: true,
             x: [b[5], b[7]],
             y: [V_e_cathode, V_e_cathode],
@@ -192,7 +192,7 @@ class LiIonBatteryComponent {
         traceDefs.push({
             id: `li_elyte_${traceIdSuffix}`,
             speciesId: 'li_ion',
-            curveType: 'potential',
+            curveType: 'voltage',
             showLabel: true,
             x: [b[1], b[6]],
             y: [V_Li_plus_elyte, V_Li_plus_elyte],
