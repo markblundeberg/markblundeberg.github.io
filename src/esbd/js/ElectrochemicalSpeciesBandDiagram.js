@@ -12,6 +12,10 @@ const CURVE_TYPES = {
         name: 'species voltage',
         style: { lineWidth: 3, dasharray: null },
     },
+    voltageImplied: {
+        name: 'implied species voltage',
+        style: { lineWidth: 3, dasharray: '3,3' },
+    },
     standardState: {
         name: 'standard state voltage',
         style: { lineWidth: 1, dasharray: null },
@@ -187,6 +191,7 @@ class ElectrochemicalSpeciesBandDiagram {
                 subscript = '';
                 break;
             case 'voltage': // Default case, no changes needed to symbol/subscript/superscript
+            case 'voltageImplied':
             default:
                 // Keep symbol from mode, keep subscript from prettyName
                 // Clear subscript if prettyName was null/undefined?
