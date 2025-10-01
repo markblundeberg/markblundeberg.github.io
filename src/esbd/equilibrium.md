@@ -112,17 +112,20 @@ It can happen sometimes that a reaction involves more than just two $V_i$'s. For
 $$ \bar\mu_{\mathrm{Fe}^{2+}} \rightleftharpoons \bar\mu_{\mathrm{Fe}^{3+}} + \bar\mu_{\mathrm{e}^{-}} $$
 $$ 2 V_{\mathrm{Fe}^{2+}} = 3 V_{\mathrm{Fe}^{3+}} - V_{\mathrm{e}^-} $$
 
+Note this can still be represented in terms of $V_i - V_j$ differences:
+$$2 (V_{\mathrm{Fe}^{2+}} - V_{\mathrm{Fe}^{3+}}) = V_{\mathrm{Fe}^{3+}} - V_{\mathrm{e}^-}.$$
+
 Such a reaction no longer sets a rigid gap, and now a degree of freedom remains:
 
-> DIAGRAM - include slider for extra DoF.
+{% include "esbd-diagrams/esbd-ferrous-ferric.html" %}
 
-Note that charge neutrality still holds, so this can still be represented in terms of $V_i - V_j$ differences, e.g., $2 (V_{\mathrm{Fe}^{2+}} - V_{\mathrm{Fe}^{3+}}) = V_{\mathrm{Fe}^{3+}} - V_{\mathrm{e}^-}$.
+Much like we discussed with $ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ earlier, the difference like $V_{\mathrm{Fe}^{2+}} - V_{\mathrm{Fe}^{3+}}$ relates to ion concentrations, but we will elaborate this later in a few topics.
 
- - manganous / permanganate?
+Note that the $\mathrm{Fe}^{2+}$/$\mathrm{Fe}^{3+}$ combination acts as an in-solution redox couple: it can supply or remove electrons to other reactions, not just to inert metals. For this reason, I am plotting a "virtual" $V_{\mathrm{e}^-}$ in solution, which corresponds to the notion that a redox-active solution can have a meaningful Fermi level.^[Reiss, H. (1985). [The Fermi level and the redox potential.](https://doi.org/10.1021/j100264a005) The Journal of Physical Chemistry, 89(18), 3783–3791.]^[Peljo, P., Villevieille, C., & Girault, H. H. (2025). [The redox aspects of lithium-ion batteries.](https://doi.org/10.1039/d4ee04560b) Energy &amp; Environmental Science, 18(4), 1658–1672.  ]
 
 ## Takeaways
 
-The main point is that reactions and electrodes,
+The main point is that with reactions (including electrode reactions),
 * We establish a difference $V_i - V_j$, connecting charged species $i$ and $j$.
 * In the diagrams, we will mark these reactions with a ⇌ symbol.
 * At electrodes we get a relative step up or down going from $V_{\mathrm{e}^-}$ to $V_{\mathrm{ion}}$. This step should not be confused with the electrode potential of standard electrochemistry.
