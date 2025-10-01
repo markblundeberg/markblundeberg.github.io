@@ -11,28 +11,33 @@ const CURVE_TYPES = {
     voltage: {
         name: 'species voltage',
         style: { lineWidth: 3, dasharray: null },
+        labelGen: (species) => `V_{${species}}`,
     },
     voltageImplied: {
         name: 'implied species voltage',
         style: { lineWidth: 3, dasharray: '3,3' },
+        labelGen: (species) => `V_{${species}}`,
     },
     standardState: {
         name: 'standard state voltage',
         style: { lineWidth: 1, dasharray: null },
+        labelGen: (species) => `V_{${species}}^\\circ`,
     },
     bandEdge_C: {
         name: 'conduction band edge',
         style: { lineWidth: 2, dasharray: '4,2' },
+        labelGen: (species) => `V_{${species}}^{\\text{band}}`,
     },
     bandEdge_V: {
         name: 'valence band edge',
         style: { lineWidth: 2, dasharray: '4,2' },
+        labelGen: (species) => `V_{${species}}^{\\text{band}}`,
     },
     phi: {
         name: 'electrostatic potential',
         style: { lineWidth: 1, dasharray: '5,5' },
+        labelGen: (species) => `\\phi`,
     },
-    other: { name: 'unknown', style: { lineWidth: 1, dasharray: null } },
 };
 
 /**
@@ -94,7 +99,7 @@ class ElectrochemicalSpeciesBandDiagram {
                 curveType,
                 style: styleOverride = {},
                 showLabel = true,
-                labelOverride = null,
+                label: labelOverride = null,
                 x,
                 y,
                 ...extraFields
@@ -111,8 +116,8 @@ class ElectrochemicalSpeciesBandDiagram {
             const style = { ...curveTypeInfo.style, ...styleOverride };
             const curveDescription = curveTypeInfo.name;
             const color = sInfo?.color ?? 'black';
-            const autoLabel = this._getAutoLabel(sInfo?.mathLabel, curveType);
-            const label = labelOverride || autoLabel;
+            const label =
+                labelOverride ?? curveTypeInfo.labelGen(sInfo?.mathLabel);
 
             outData.push({
                 id: id,
@@ -162,52 +167,6 @@ class ElectrochemicalSpeciesBandDiagram {
     // ========================================================================
     // Private Calculation/Utility Helpers
     // ========================================================================
-
-    /**
-     * Generates default label based on mode, species name, curve type, and species ID.
-     * Returns raw LaTeX string without delimiters.
-     */
-    _getAutoLabel(prettyName, curveType) {
-        let symbol = '?';
-        let subscript = prettyName || '?'; // Default to species name
-        let superscript = '';
-
-        // Determine base symbol based ONLY on mode
-        symbol = 'V';
-
-        // Add superscripts or modify symbol/subscript based on curveType
-        switch (curveType) {
-            case 'standardState':
-                superscript = '\\circ';
-                break;
-            case 'bandEdge_C':
-            case 'bandEdge_V':
-            case 'bandEdge':
-                superscript = '\\text{band}';
-                break;
-            case 'phi':
-                // special case! for volt mode we show \phi, not V_\phi
-                symbol = '\\phi';
-                subscript = '';
-                break;
-            case 'voltage': // Default case, no changes needed to symbol/subscript/superscript
-            case 'voltageImplied':
-            default:
-                // Keep symbol from mode, keep subscript from prettyName
-                // Clear subscript if prettyName was null/undefined?
-                if (!prettyName) subscript = '';
-                break;
-        }
-
-        // Construct final label string (no delimiters)
-        if (subscript) {
-            // Format like V_{Ag^{+}}^{\circ}
-            return `${symbol}${superscript ? `^{${superscript}}` : ''}_{${subscript}}`;
-        } else {
-            // Format like \phi or V^{\circ} (if prettyName was cleared)
-            return `${symbol}${superscript ? `^{${superscript}}` : ''}`;
-        }
-    }
 
     _tracePopupCallbackIntermediary(popupInfo) {
         const ted = popupInfo.traceExtraData;
