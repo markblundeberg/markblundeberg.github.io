@@ -1,0 +1,163 @@
+<figure class="demo-container" style="max-width: 300px">
+    <div
+        class="bd-container"
+        id="electrode-generic-differential-container"
+    ></div>
+</figure>
+
+<script type="module">
+    const plotContainerId = 'electrode-generic-differential-container';
+
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { formatPopupBaseContent, throttle } from '{{ esbdJsPath }}utils.js';
+
+    const speciesInfo = {
+        ion: {
+            z: 1,
+            color: '#E41A1C',
+            mathLabel: '\\mathrm{ion}',
+        },
+        other: {
+            color: '#b080a0',
+            mathLabel: '\\mathrm{other}',
+        },
+        other2: {
+            color: '#80b0a0',
+            mathLabel: "\\mathrm{other'}",
+        },
+        electron: {
+            z: -1,
+            color: '#377EB8',
+            mathLabel: '\\mathrm{e}^{-}',
+        },
+    };
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        plotContainerId,
+        speciesInfo
+    );
+
+    // Set layout
+    const boundaries = [0.0, 0.2, 0.3, 0.4, 0.6, 0.7, 0.8, 1.0];
+    const x_deltaV = 0.5;
+    diagram.setSpatialLayout(
+        boundaries,
+        [
+            { name: 'Solution A', color: '#E6F5FF' },
+            { name: 'Electrode', color: '#d0d0d0' },
+            { name: 'Wire', color: '#F0B090' },
+            { name: 'Voltmeter', color: '#f8f8f8' },
+            { name: 'Wire', color: '#F0B090' },
+            { name: 'Electrode', color: '#d0d0d0' },
+            { name: 'Solution B', color: '#E5EFc6' },
+        ],
+        [
+            { label: 'Solution A', x: 0.1 },
+            { label: 'Solution B', x: 0.9 },
+        ]
+    );
+
+    const Delta = 1.1; // V_e- - V_ion
+    const DeltaV = 0.4; // measured voltage
+    const V_ion_A = -0.3;
+    const V_el_A = V_ion_A + Delta;
+    const V_el_B = V_el_A + DeltaV;
+    const V_ion_B = V_el_B - Delta;
+    const V_other_A = V_ion_A + 1.6;
+    const V_other2_A = V_ion_A - 0.4;
+    const V_other_B = V_ion_B - 0.6;
+    const V_other2_B = V_ion_B - 0.1;
+    diagram.setVRange(-1.1, 1.7);
+
+    const b = boundaries;
+    diagram.updateTraceData([
+        {
+            id: `electron_trace_A`,
+            speciesId: 'electron',
+            curveType: 'voltage',
+            showLabel: true,
+            x: [b[1], x_deltaV],
+            y: [V_el_A, V_el_A],
+        },
+        {
+            id: `electron_trace_B`,
+            speciesId: 'electron',
+            curveType: 'voltage',
+            showLabel: true,
+            x: [x_deltaV, b[6]],
+            y: [V_el_B, V_el_B],
+        },
+        {
+            id: `ion_trace_A`,
+            speciesId: 'ion',
+            curveType: 'voltage',
+            showLabel: true,
+            x: [b[0], b[1]],
+            y: [V_ion_A, V_ion_A],
+        },
+        {
+            id: `ion_trace_B`,
+            speciesId: 'ion',
+            curveType: 'voltage',
+            showLabel: true,
+            x: [b[6], b[7]],
+            y: [V_ion_B, V_ion_B],
+        },
+        {
+            id: `other_trace_A`,
+            speciesId: 'other',
+            curveType: 'voltage',
+            showLabel: false,
+            x: [b[0], b[1]],
+            y: [V_other_A, V_other_A],
+        },
+        {
+            id: `other2_trace_A`,
+            speciesId: 'other2',
+            curveType: 'voltage',
+            showLabel: false,
+            x: [b[0], b[1]],
+            y: [V_other2_A, V_other2_A],
+        },
+        {
+            id: `other_trace_B`,
+            speciesId: 'other',
+            curveType: 'voltage',
+            showLabel: false,
+            x: [b[6], b[7]],
+            y: [V_other_B, V_other_B],
+        },
+        {
+            id: `other2_trace_B`,
+            speciesId: 'other2',
+            curveType: 'voltage',
+            showLabel: false,
+            x: [b[6], b[7]],
+            y: [V_other2_B, V_other2_B],
+        },
+    ]);
+
+    diagram.updateVerticalMarkers([
+        {
+            id: 'react_A',
+            symbol: 'Δ',
+            x: b[1],
+            yDefs: [{ y: V_el_A }, { y: V_ion_A }],
+            popupCallback: () => 'Ion-electron reaction',
+        },
+        {
+            id: 'react_B',
+            symbol: 'Δ',
+            x: b[6],
+            yDefs: [{ y: V_el_B }, { y: V_ion_B }],
+            popupCallback: () => 'Ion-electron reaction',
+        },
+        {
+            id: 'voltmeter',
+            symbol: 'V',
+            x: x_deltaV,
+            yDefs: [{ y: V_el_A }, { y: V_el_B }],
+            popupCallback: () => 'Voltmeter',
+        },
+    ]);
+</script>
