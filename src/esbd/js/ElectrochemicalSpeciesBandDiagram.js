@@ -85,8 +85,8 @@ class ElectrochemicalSpeciesBandDiagram {
      * Sets the spatial layout using boundaries and region properties. A wrapper for
      * {@link BandDiagram.setSpatialLayout }.
      */
-    setSpatialLayout(boundaries, regionProperties) {
-        this.diagram.setSpatialLayout(boundaries, regionProperties);
+    setSpatialLayout(boundaries, regionProperties, labels = null) {
+        this.diagram.setSpatialLayout(boundaries, regionProperties, labels);
     }
 
     /** Updates the complete set of trace data to be plotted. */
