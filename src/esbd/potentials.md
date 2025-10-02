@@ -87,7 +87,7 @@ Thus, our $V^\circ_i$ ladder (relative to $V^\circ_{\mathrm{H}^+}$) directly map
 
 For the next topic, we'll cover the pH, a standard measure of acidity.
 
-[**NEXT TOPIC: pH**](../pH/)
+[**NEXT TOPIC: pH**](../ph/)
 
 {#   
 
