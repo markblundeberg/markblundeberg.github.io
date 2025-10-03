@@ -1,0 +1,68 @@
+<figure class="demo-container" style="max-width: 300px">
+    <div
+        style="height: 150px; max-width:200px; margin:auto"
+        id="esbd-copper-solder-container"
+    ></div>
+    <figcaption>
+        Where two metals come into contact, $V_{\mathrm{e}^-}$ equalizes as
+        expected for an electronic circuit voltage, whereas $\phi$ settles on a
+        nonzero step size&mdash;a so-called "built-in voltage".
+    </figcaption>
+</figure>
+
+<script type="module">
+    const plotContainerId = 'esbd-copper-solder-container';
+
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { formatPopupBaseContent, throttle } from '{{ esbdJsPath }}utils.js';
+
+    const speciesInfo = {
+        electron: {
+            z: -1,
+            color: '#377EB8',
+            mathLabel: '\\mathrm{e}^{-}',
+        },
+    };
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        plotContainerId,
+        speciesInfo
+    );
+
+    // Set layout
+    const boundaries = [0.0, 0.5, 1.0];
+    const x_deltaV = 0.86;
+    diagram.setSpatialLayout(boundaries, [
+        { name: 'Copper', color: '#F0B090' },
+        { name: 'Solder', color: '#E0E0E0' },
+    ]);
+
+    const V_el = +0.45;
+    diagram.setVRange(V_el - 0.35, V_el + 0.55);
+
+    const b = boundaries;
+    const data = [
+        {
+            id: `electron_trace`,
+            speciesId: 'electron',
+            curveType: 'voltage',
+            showLabel: true,
+            x: [0, 1],
+            y: [V_el, V_el],
+        },
+    ];
+
+    const phis = [+0.4, -0.2];
+    for (let i = 0; i < phis.length; i++) {
+        const phi = V_el + phis[i];
+        data.push({
+            id: `phi_${i}`,
+            curveType: 'phi',
+            showLabel: true,
+            x: [b[i], b[i + 1]],
+            y: [phi, phi],
+        });
+    }
+
+    diagram.updateTraceData(data);
+</script>

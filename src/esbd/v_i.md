@@ -15,7 +15,7 @@ Our key player is the **species voltage** $V_i$, a potential defined for every t
 
 $$ V_i = \frac{\bar\mu_i}{q_i}. $$
 
-This may look intimidating for those not versed in the fundamentals of thermodynamics and the meaning of chemical potential. But you do not have to deeply understand $\bar\mu_i$ to understand $V_i$, because you likely already know how it works:
+This may look intimidating for those not versed in the fundamentals of thermodynamics and the meaning of chemical potential. But you do not have to deeply understand electrochemical potential to understand $V_i$, because you likely already know how $V_i$ works:
 
 > **The electronic quantity $V_{\mathrm{e}^-}$ is precisely the voltage seen in basic electronic circuits.**
 
@@ -33,19 +33,28 @@ That is,
 * $V_{\mathrm{e}^-}$ equalizes when we short metal wires together,
 * $V_{\mathrm{e}^-}$ drops across a resistor according to $\Delta V = IR$,
 * $V_{\mathrm{e}^-}$ is thermodynamically analogous to an electronic 'pressure',
+* $V_{\mathrm{e}^-}$ differences are what we measure with voltmeters,^[Riess, I. (1997). [What does a voltmeter measure?](https://doi.org/10.1016/s0167-2738(96)00542-5) Solid State Ionics, 95(3–4), 327–328.]^[Kittel & Kroemer (2000), *Thermal Physics*]
 * it is a $V_{\mathrm{e}^-}$ difference that you measure across a battery's terminals,
 * $V_{\mathrm{e}^-}$ is conventionally assigned to $0$ for the electrical ground,
 * and so on, you get the idea.
 
-Of course, the common teaching is that circuit voltage is determined by the electrostatic potential $\phi$. But in mixed materials, and really with any inhomogeneities, $\phi$ immediately stops behaving like a circuit voltage once you dig into the material properties.^[Riess, I. (1997). [What does a voltmeter measure?](https://doi.org/10.1016/s0167-2738(96)00542-5) Solid State Ionics, 95(3–4), 327–328.]^[Kittel & Kroemer (2000), *Thermal Physics*]^[Datta, S. (2005), *Quantum Transport*]^[Newman & Balsara (2005), *Electrochemical Systems*] This happens already in trivial cases like a metal-metal connection between a copper wire and a blob of solder where circuit voltage is clearly the same, yet $\phi$ differs. I have a lot more to say about this in [an appendix](../phi/), but in short there is a distinction between "what does a voltmeter measure" vs. "what is the potential difference seen by an imaginary non-interacting test charge". Both of these are called voltages, an unfortunate ambiguity. Traditionally, we stick with "$\phi$ is voltage" and swallow its inevitable awkwardness, and say that electronic circuits are a naive simplification. But myself I believe that practical voltmeters are more important, and to sweeten the deal, voltmeters access a thermodynamically rigorous physical quantity. So, **$V_{\mathrm{e}^-}$ is voltage**!
-
-Accepting that $V_{\mathrm{e}^-}$ is the familiar *electronic* circuit voltage, we only have to make a couple more conceptual leaps to arrive at a voltage for ions too:
+We only have to make a couple more conceptual leaps to arrive at a voltage for ions too:
 * It's not only electrons and $V_{\mathrm{e}^-}$, but by extension $V_i$ for any charged species that ought to satisfy the meaning of 'voltage', and consequently,
 * Where multiple charged species are present, there will be *multiple* voltages in the same place.
 
 Below I'll highlight the key principles of what makes $V_i$ a voltage.
 
-> *Terminology note*: Some may object to labelling $V_i$ as a "voltage" rather than potential; technically a voltage should be a potential difference. However, there are [way too many things called "potential" in electrochemistry](../about/#whyvoltage) (including potential differences), and moreover in electronic circuits, an unreferenced single-point voltage simply means a potential difference versus a common electronic ground point, a convention which we may adopt without issue.^[We can freely make $V_{\mathrm{e}^-}(\text{ground}) = 0$ by choosing our electrostatic potential (e.g. via a gauge transformation) such that $\bar\mu_{\mathrm{e}^-}(\text{ground})=0$. The ground definition of course does not change any measurable (difference) quantity. Note that for consistency, we can only declare one ground datum for one species — we do not declare distinct grounds for distinct species.]
+> *Terminology note*: Some may object to labelling $V_i$ as a "voltage" rather than "potential"; technically a voltage should be a potential difference. However, there are [way too many things called "potential" in electrochemistry](../about/#whyvoltage) (including potential differences), and moreover in electronic circuits, an unreferenced single-point voltage simply means a potential difference versus a common electronic ground point, a convention which we may adopt without issue.^[We can freely make $V_{\mathrm{e}^-}(\text{ground}) = 0$ by choosing our electrostatic potential (e.g. via a gauge transformation) such that $\bar\mu_{\mathrm{e}^-}(\text{ground})=0$. The ground definition of course does not change any measurable (difference) quantity. Note that for consistency, we can only declare one ground datum for one species — we do not declare distinct grounds for distinct species.]
+
+## What about electrostatic potential $\phi$?
+
+It is commonly taught that electrostatic potential $\phi$ (from Maxwell's equations) is what defines voltage. But $\phi$ quickly stops behaving like a familiar circuit voltage, for example already in the commonplace connection between a copper wire and a blob of solder:
+
+{% include "esbd-diagrams/esbd-copper-solder.njk" %}
+
+To make matters worse, the notion of "electrostatic potential in a material" is ill-defined in numerous subtle ways,^[Newman & Balsara (2005), *Electrochemical Systems*] and $\phi$ is almost always unmeasurable. These fundamental problems with $\phi$ (which I [elaborate on in an appendix](../phi/)) make it a shaky foundation for any theory, yet traditional electrochemistry and some parts of semiconductor engineering rely on it. To be clear, the $\phi$ view does work after all necessary corrections are applied, cancellations are obtained, and ambiguities are hedged. Unfortunately this complicated apparatus has led to errors, misconceptions, and misguided research. I'm not saying we need to abolish $\phi$, just that it deserves to be regarded as the approximate and often-irrelevant concept that it really is.
+
+The view that $V_{\mathrm{e}^-}$ is voltage^[Datta, S. (2005), *Quantum Transport*] forms a slightly more subtle but far more secure foundation. A goal of this work is to take this elegant view and extend it all the way across solid-state physics and into ionics and electrochemistry.
 
 ## Differences in $V_i$ are available work
 

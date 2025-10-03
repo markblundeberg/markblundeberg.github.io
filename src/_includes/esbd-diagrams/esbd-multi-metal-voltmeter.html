@@ -38,7 +38,7 @@
     ]);
 
     const V_el = +0.45;
-    diagram.setVRange(-0.15, V_el + 0.5);
+    diagram.setVRange(-0.15, V_el + 0.15);
 
     const b = boundaries;
     const data = [
@@ -60,19 +60,6 @@
             y: [0, 0],
         },
     ];
-
-    const phis = [0.15, -0.1, +0.4, -0.2, +0.3];
-    for (let i = 0; i < phis.length - 1; i++) {
-        const phi = V_el + phis[i];
-        data.push({
-            id: `phi_${i}`,
-            // speciesId: 'electron',
-            curveType: 'phi',
-            showLabel: true,
-            x: [b[i], b[i + 1]],
-            y: [phi, phi],
-        });
-    }
 
     diagram.updateTraceData(data);
 
