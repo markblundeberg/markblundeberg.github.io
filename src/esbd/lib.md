@@ -43,12 +43,9 @@ First, let's clarify a bit about the actual structure inside of a lithium-ion ba
 
 <figure class="demo-container" style="max-width: 200px">
 <img src="/esbd/img/chen2020_fig1_schematic.jpg" style="max-width:100%"/>
-
-<figcaption>
-
+{% figcaption %}
 From [Chen et al. 2020](https://dx.doi.org/10.1149/1945-7111/ab9050), license: [Creative Commons Attribution Non-Commercial No Derivatives 4.0](http://creativecommons.org/licenses/by-nc-nd/4.0/)
-
-</figcaption>
+{% endfigcaption %}
 </figure>
 
 This porous structure is quite beneficial for the battery functioning: it is far easier for the lithium ions to move inside of the electrolyte than to move through the solid electrode materials. So, by providing ample electrolyte channels, it means the lithium ions do not have to move as far through the solid materials. Around each particle, there is a thin film layer called SEI (solid electrolyte interphase), a form of passivation that protects the solvent from being destroyed by battery.
@@ -68,13 +65,10 @@ But that is not the whole story of course, as a full picture of the battery requ
 
 <figure class="demo-container" style="max-width: 400px">
 <img src="/esbd/img/PyBaMM_DFN_V_Li_cathodetoo.svg" style="max-width:100%"/>
-
-<figcaption>
-
+{% figcaption %}
 Internal voltages during a 2C discharge, at around 40% remaining capacity. Simulation done with DFN model in [PyBaMM](https://pybamm.org/) and converted to $V_{\mathrm{e}^-}$, $V_{\mathrm{Li}^+}$ values.
 See [my source code here](https://gist.github.com/markblundeberg/b7dbaeb80ae5e69350701feeeb27bb91).
-
-</figcaption>
+{% endfigcaption %}
 </figure>
 
 What's important is that this detailed landscape reveals all sorts of local dissipation mechanisms and interesting mechanics. We know $V_{\mathrm{Li}^+}$ would be perfectly flat at equilibrium, and therefore every variation in $V_{\mathrm{Li}^+}$ represents some kind of dissipation or resistance. In the optional discussion below, we'll dig more into these mechanisms.

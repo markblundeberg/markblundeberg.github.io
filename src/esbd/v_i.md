@@ -21,12 +21,10 @@ This may look intimidating for those not versed in the fundamentals of thermodyn
 
 <figure class="demo-container" style="max-width: 250px">
 <img src="/esbd/img/BJT-biasing.svg" style="max-width:100%"/>
-<figcaption>
-
+{% figcaption %}
 Rigorously speaking, electronic circuits are all about the electronic species voltage $V_{\mathrm{e}^-}$. The idea of $V_i$ is to extend this to ions too.
 <small>[Image from Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Transistor_Simple_Circuit_Diagram_with_NPN_Labels.svg).</small>
-
-</figcaption>
+{% endfigcaption %}
 </figure>
 
 That is,
@@ -70,7 +68,7 @@ The fact that $\Delta V_i$ represents available work means it is in principle me
 
 The common voltmeter has metal probes. It measures differences in $V_{\mathrm{e}^-}$ by permitting a small, ideally negligible, number of electrons to flow in via metal probes. In fact, the reason electronic voltmeters work so directly and conveniently is that so many of our conductors are purely electronic: we can attach wires of many different materials together, and since electrons are the only mobile carriers, then they transmit $V_{\mathrm{e}^-}$ perfectly without any of the complications we see in multi-ion solutions.
 
-{% include "esbd-diagrams/esbd-multi-metal-voltmeter.html" %}
+{% include "esbd-diagrams/esbd-multi-metal-voltmeter.njk" %}
 
 With ions, it is much harder to probe $V_i$ due to practical complications: we generally don't have single-ion conductors (e.g. electrolytes contain at least one positive and one negative ionic species) that we could use to make "ion wires". Even when we do have single-ion wires, we would also need ionic voltmeters to make a full ionic circuit. Due to both of these factors, we will only probe ionic $V_i$ in-situ, and indirectly via coupling to regular (electronic) voltmeters.
 

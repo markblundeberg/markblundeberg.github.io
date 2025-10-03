@@ -83,6 +83,14 @@ export default async function myConfig(eleventyConfig) {
         }
     );
 
+    eleventyConfig.addPairedShortcode('figcaption', (content) => {
+        // Renders markdown inside of it, which avoid the issues from trying
+        // to temporarily escape into the outer markdown. This lets us render
+        // math/links/whatever.
+        // Use the full render method to support paragraphs, lists, etc.
+        return `<figcaption>${md.render(content)}</figcaption>`;
+    });
+
     eleventyConfig.setNunjucksEnvironmentOptions({
         throwOnUndefined: true,
         autoescape: false,

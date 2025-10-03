@@ -109,12 +109,9 @@ One problem is with voltmeters: if we want to say that voltmeters to measure $\p
 
 <figure class="demo-container" style="max-width: 400px">
 <img src="/esbd/img/bard-faulkner-fig1.1.2.png" style="max-width:100%"/>
-
-<figcaption>
-
+{% figcaption %}
 Profile of $\phi$ across a device, as relating to measured voltage $E$. From Bard & Faulkner's [<em>Electrochemical Methods</em> (2022)](https://www.wiley.com/en-kr/Electrochemical+Methods%3A+Fundamentals+and+Applications%2C+3rd+Edition-p-9781119334064) Fig 1.1.2 (fair use reproduction).
-
-</figcaption>
+{% endfigcaption %}
 </figure>
 
 Unlike a proper band diagram, a plot of $\phi$ vs position is cluttered by the matching-metal bookends and all sorts of extra Galvani potentials between metals. A pragmatic electrochemist will soon sweep this tedious $\phi$ visualization under the rug and thereafter focus on the math of electrode potentials.
@@ -216,12 +213,9 @@ It is unfortunately [very common](https://www.google.com/search?q="band+diagram"
 
 <figure class="demo-container" style="max-width: 300px">
 <img src="/esbd/img/vacuum-contact-bad.png" style="max-width:100%"/>
-
-<figcaption>
-
+{% figcaption %}
 Common naive view of metal-to-semiconductor junction, where electron vacuum energy $E_0 = -e \psi$ is drawn as continuous. [from wikimedia commons user Giulio.galderisi, CC-BY-SA-4.0 license](https://commons.wikimedia.org/wiki/File:Msemictoghandsep.png)
-
-</figcaption>
+{% endfigcaption %}
 </figure>
 
 This is wrong on two fronts: 1. the outer potential $\psi$ should not be depicted as a bulk property, see previous section, and 2. if there was a bulk $\psi$, it would in fact be discontinuous, due to the interface-specific effect.)
