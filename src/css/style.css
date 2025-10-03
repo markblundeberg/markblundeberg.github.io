@@ -244,6 +244,14 @@ figure.diagram-placeholder {
     font-size: small;
 }
 
+/* Suppress paragraph first/last margins to be consistent with unparagraphed figcaption. */
+figcaption :first-child {
+    margin-block-start: 0;
+}
+figcaption :last-child {
+    margin-block-end: 0;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
