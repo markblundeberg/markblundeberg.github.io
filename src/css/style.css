@@ -148,9 +148,13 @@ main {
 
 /* Apply side padding to direct children, EXCEPT demo containers */
 main > *:not(.demo-container):not(.full-width-figure) {
-    padding-left: 2em;
-    padding-right: 2em;
-    box-sizing: border-box; /* Include padding in element width */
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+blockquote {
+    border-left: 3px solid #ccc;
+    padding-left: 0.75em;
 }
 
 h1,
@@ -188,9 +192,10 @@ pre code {
     overflow-x: auto;
 }
 
-main > ul,
-main > ol {
-    margin-left: 2em;
+ul,
+ol {
+    /* Controls per-nesting-level indenting */
+    padding-inline-start: 1.5em;
 }
 
 details {
