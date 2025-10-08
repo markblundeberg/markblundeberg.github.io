@@ -29,7 +29,9 @@ Semiconductor physicists are used to understanding everything in terms of electr
 
 We still have a missing middle! We can be more precise and say _the middle is undefined_: there simply are no free electrons inside the electrolyte to define an energy level for.
 
-> **Note**: The plotted quantity $\bar\mu_{\mathrm{e}^-}$ is the electrochemical potential of electrons (also known as the {% wiki "Fermi level" %}). It is directly related to the _thermodynamic_ voltage via $V = -\bar\mu_{\mathrm{e}^-}/e$, where $-e$ is the electron charge (differences in this voltage are what you read using a voltmeter). Our energy band diagram is quite literally an upside-down voltage diagram.
+> **Electrochemical potential**: The plotted quantity $\bar\mu_{\mathrm{e}^-}$ is the {% wiki "electrochemical potential" %} of electrons (also known as the {% wiki "Fermi level" %}). It is directly related to the _thermodynamic_ voltage via $V = -\bar\mu_{\mathrm{e}^-}/e$, where $-e$ is the electron charge (differences in this voltage are what you read using a voltmeter). Our energy band diagram is quite literally an upside-down voltage diagram.
+>
+> Electrochemical potentials and their link to measurable voltages are going to play a central role in our analysis and we'll return to this in more detail in the next Topic page.
 
 This seems to suggest that there is no meaningful way to complete the picture. But it is quite unsatisfying to stop at this point. To paraphrase Herbert Kroemer: "if you don't draw a band diagram, then nobody knows what you're talking about".^[[H. Kroemer (2000). Nobel Lecture.](https://www.nobelprize.org/uploads/2018/06/kroemer-lecture.pdf)] The need for visualizations means that band diagrams do get drawn for batteries anyway, but are often full of irrelevant or even unphysical ideas^[Peljo, P., & Girault, H. (2018). [Electrochemical potential window of battery electrolytes: the HOMO–LUMO misconception.](http://dx.doi.org/10.1039/C8EE01286E) Energy Environ. Sci., 11, 2306-2309.].
 
@@ -77,6 +79,10 @@ In fact, what started out as a niche picture about batteries has turned into a r
 * We can build a complete picture without ever needing to bring up the practically inaccessible concept of an in-material electrostatic potential ($\phi$).
 * We **directly represent the fundamental thermodynamics** of charged species: their electrochemical potentials.
 * This is not just a mere normalization trick, but rather the $V_i$ are **real voltages** that can be directly probed by specialized electrodes.
+
+In the next few topics we're going to dig a little bit more into how $V_i$ works.
+
+[**NEXT TOPIC: Species Voltage**](v_i/)
 
 ## Explore More
 
