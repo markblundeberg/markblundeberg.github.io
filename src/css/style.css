@@ -147,7 +147,7 @@ main {
 /* ====== Basic Page Readability Styles ====== */
 
 /* Apply side padding to direct children, EXCEPT demo containers */
-main > *:not(.demo-container):not(.full-width-figure) {
+main > *:not(figure) {
     margin-left: 1em;
     margin-right: 1em;
 }
@@ -226,26 +226,34 @@ th {
     background-color: #cae4ff;
 }
 
+figure {
+    /* Center figures horizontally (but allow to break past normal text margins), add vertical space */
+    margin: 1.5em auto;
+    break-inside: avoid; /* for printing */
+}
+figure > * {
+    /* Figure contents centered automatically */
+    margin-left: auto;
+    margin-right: auto;
+}
+
 figure.diagram-placeholder {
     height: 250px;
     max-width: 350px;
     border: 1px dashed #ccc;
     padding: 20px;
-    margin: 0 auto;
     text-align: center;
     background-color: rgba(0.5, 0.5, 0.5, 0.05);
 }
 
 .demo-container {
-    display: block; /* Behave like a normal block element */
-    margin: 1.5em auto; /* Center block horizontally, add vertical space */
     padding: 0.5em;
     border: 1px solid #eee;
     border-radius: 5px;
     background-color: #fdfdfd;
 }
 
-.demo-container > figcaption {
+figcaption {
     font-size: small;
 }
 
