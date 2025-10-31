@@ -13,31 +13,47 @@ eleventyNavigation:
 
 In the earlier [topic about equilibrium](../equilibrium/), we talked about how solid $\mathrm{NaCl}$ in equilibrium with a solvent (such as water) would set a fixed $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} =  -3.9813~\mathrm{V}$. But that is for a *fully saturated* solution. What happens when we only have a tiny amount dissolved? How does $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ depend on the concentration of dissolved $\mathrm{NaCl}$? And what if there are many ions present besides just $\mathrm{Na}^+$ and $\mathrm{Cl}^-$, then where do all their $V_i$'s lie in relation to each other?
 
-For this topic, we'll focus primarily on the _ideally dilute_ case, and then briefly discuss the non-ideal case involving ion activities and activity coefficients.
+<figure class="diagram-placeholder">
+{% figcaption %}
+- One slider for concentration of $\mathrm{Na}^+$ (= concentration of $\mathrm{Cl^-}$).
+- Indicator of 'unsaturated / saturated / supersaturated'
+- A second graph has x-axis of concentratation and y axis of $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$.
+- Another slider for overall electrostatic offset.
+- Use non-ideal? Use Pitzer mean activity coef.
+{% endfigcaption %}
+</figure>
 
-## Ideally dilute and the standard species voltage $V^\circ_i$
+As can be seen there is approximately a linear dependence on the logarithm of concentration.
 
-A familiar expression from chemistry is the dependence of a dilute solute's chemical potential on its concentration, $c_i$:
-$$ \mu_i(c_i) = \mu^\circ_i + RT \ln(c_i/c^\circ) . $$
-Here, $c^\circ \equiv 1~\mathrm{mol/L}$ is the reference concentration level, and $\mu^\circ_i$ is a reference value that extrapolates the value $\mu_i(c^\circ)$ based off its behaviour in the infinite dilution limit. The value of $\mu^\circ_i$ varies depending on solvent and the choice of $c^\circ$, as well as temperature and pressure. This approximation only holds for small solute concentrations, but it captures a behaviour known as _ideally dilute_. (There are other ideal forms based on mole fraction or molality, but they generally agree at low solute concentrations.^[The $RT \ln(c_i/c^\circ)$ form is purely due to positional entropy just like in an ideal gas. In essence, we assume that the solute particles can have strong and nontrivial interactions with the nearby solvent (captured in $\mu^\circ_i$), but each solute particle with its disturbed 'shell' of solvent moves around independently of other solute particles. In this manner the solutes are like an ideal gas, which has the $RT \ln(c_i)$ form of chemical potential. Other ideal forms like the logarithm of mole fraction can be justified based on {% wiki "ideal mixtures" %} where the solute/solvent cannot tell each other apart, however that is less relevant for ionic solutes.])
+## Standard species voltage and activity
 
-There's no reason why we shouldn't have the same with ionic solutes:
+At this point it's worth taking a page from chemistry, where the electrochemical potential of an ion is written as exactly:
 
-$$ \bar\mu_i(c_i) = \bar\mu^\circ_i + RT \ln(c_i/c^\circ), $$
+$$ \bar\mu_i = z_i F \phi + \mu^\circ_{\mathrm{int},i} + RT \ln(a_i), $$
 
-though since $\bar\mu_i(c_i)$ is electrically variable (and $c_i$ is not), then that means $\bar\mu^\circ_i$ must be electrically variable. Let's go ahead and divide this equation by $z_i F$ to convert into species voltage quantities:
+for electrostatic energy $z_i F \phi$, internal standard chemical potential $\mu^\circ_{\mathrm{int},i}$, and activity $a_i$. Also $R$ is the universal gas constant and $T$ is the temperature. The same equation applies to non-ionic solutes too, just they have $z_i = 0$.
 
-$$ V_i(c_i) = V^\circ_i + \frac{RT}{z_i F} \ln(c_i/c^\circ). $$
+The key quantity there is *activity* $a_i$ which connects to concentration (which we'll see below). In fact, the above equation basically is the *definition* of activity, and in fact there are multiple different activities depending on how we choose the other quantities. But first, we are going to convert the above into our species voltage language, by dividing both sides by $z_i F$.
 
-where we have defined $V^\circ_i = \bar\mu^\circ_i / (z_i F)$. I call this $V^\circ_i$ the **standard species voltage** for species $i$.
+$$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(a_i), $$
 
-> **A note for the chemists**: in chemisty one usually writes
-> $$\bar\mu_i(c_i) = z_i F \phi + \mu^\circ_{\mathrm{int},i} + RT \ln(c_i/c^\circ),$$
-> where $\mu^\circ_{\mathrm{int},i}$ is a *internal* standard chemical potential (a constant for the given solvent), and $\phi$ is the variable electrostatic potential. This works out to $V^\circ_i = \phi + \mu^\circ_{\mathrm{int},i}/(z_i F)$. And so, each $V^\circ_i$ moves up and down in lockstep with with $\phi$ but with a constant offset that differs for each species $i$.
+where we've defined the **standard species voltage**, as $V^\circ_i = \phi + \mu^\circ_{\mathrm{int},i}$.
+
+## Dilute ions
+
+As we saw above, for dilute solutes, the activity varies proportionally to concentration, by whatever measure (molarity, molality, mole fraction). This occurs for fairly fundamental entropic reasons connected to {% wiki "Entropy of mixing", "mixing" %} / accessible volume.
+
+We are going to prioritize concentration per unit volume, which is {% wiki "molarity" %} $c_i$. We'll generally be employing the following approximation:
+
+$$ a_i \approx c_i/c^\circ $$
+
+where $c^\circ \equiv 1~\mathrm{mol/L}$. We want this to work for very dilute solutes, and so we also must define $V^\circ_i$ such that $a_i$ asymptotically approaches $c_i/c^\circ$ in the limit of a pure solute.
+
+> Note that chemists prefer to use $ a_i \approx b_i/b^\circ$ based on molality (concentration per amount of solvent) when studying solutes in homogeneous solutions, for good reason.^[Molality and mole fraction are easily computed when experimentally weighing out substances, and furthermore they allow simpler formulae when studying homogeneous solutions under constant pressure.] Molarity and molality are distinct because of how adding solutes causes the solution to expand (or sometimes contract). But since we are going to be studying inhomogeneous systems with transport and electrostatic effects, and we also want to connect with semiconductor physics, then molarity is a better choice. We'll discuss molality a bit more below in the section about non-ideality.
 
 ## Example: dilute salt water
 
-Let's return to our specific question of how the saltiness of saltwater affects $V_{\mathrm{Na}^+}$ and $V_{\mathrm{Cl}^-}$, in illustrated form:
+Let's return to our specific question of how the saltiness of saltwater affects $V_{\mathrm{Na}^+}$ and $V_{\mathrm{Cl}^-}$, in illustrated form. We will assume that activity is exactly $c_i/c^\circ$ for simplicity.
 
 <figure class="diagram-placeholder">
 {% figcaption %}
