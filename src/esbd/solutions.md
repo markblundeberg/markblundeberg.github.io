@@ -11,68 +11,72 @@ eleventyNavigation:
 
 # {{title}}
 
-In the earlier [topic about equilibrium](../equilibrium/), we talked about how solid $\mathrm{NaCl}$ in equilibrium with a solvent (such as water) would set a fixed $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} =  -3.9813~\mathrm{V}$. But that is for a *fully saturated* solution. What happens when we only have a tiny amount dissolved? How does $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ depend on the concentration of dissolved $\mathrm{NaCl}$? And what if there are many ions present besides just $\mathrm{Na}^+$ and $\mathrm{Cl}^-$, then where do all their $V_i$'s lie in relation to each other?
+In the earlier [topic about equilibrium](../equilibrium/), we talked about how solid $\mathrm{NaCl}$ in equilibrium with a solvent (such as water) would set a fixed $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} =  -3.9813~\mathrm{V}$. But that is for a *fully saturated* solution. What happens when we only have a tiny amount dissolved? How does $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ depend on the concentration of dissolved $\mathrm{NaCl}$?
+
+To start our discussion, here is what the experimental data shows for salt water:
 
 <figure class="diagram-placeholder">
 {% figcaption %}
-- One slider for concentration of $\mathrm{Na}^+$ (= concentration of $\mathrm{Cl^-}$).
-- Indicator of 'unsaturated / saturated / supersaturated'
-- A second graph has x-axis of concentratation and y axis of $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$.
-- Another slider for overall electrostatic offset.
-- Use non-ideal? Use Pitzer mean activity coef.
+- Not a band diagram. Plot of $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ vs NaCl concentration. (Pitzer model)
+- x axis should be molarity or molality?
+- Add curve for 'molar ideal form (see below)' ?
 {% endfigcaption %}
 </figure>
 
-As can be seen there is approximately a linear dependence on the logarithm of concentration.
+As can be seen there is approximately a linear dependence on the logarithm of concentration. This is actually guaranteed in the dilute limit, for a fundamental entropic reason: each solute particle's position becomes independent of other solute particles.
 
-## Standard species voltage and activity
+Although the dilute limit is only approximate, it gives us a starting point to answer more complex questions without first laboriously measuring thermodynamic data over a range of concentrations. For example, what happens when there are many species of ion present?
 
-At this point it's worth taking a page from chemistry, where the electrochemical potential of an ion is written as exactly:
+## Ideal ionic voltage in dilute solutions
 
-$$ \bar\mu_i = z_i F \phi + \mu^\circ_{\mathrm{int},i} + RT \ln(a_i), $$
+For dilute ions we have the following relationship between $V_i$ of an ion and its concentration $c_i$:
 
-for electrostatic energy $z_i F \phi$, internal standard chemical potential $\mu^\circ_{\mathrm{int},i}$, and activity $a_i$. Also $R$ is the universal gas constant and $T$ is the temperature. The same equation applies to non-ionic solutes too, just they have $z_i = 0$.
+$$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(c_i/c^\circ), $$
 
-The key quantity there is *activity* $a_i$ which connects to concentration (which we'll see below). In fact, the above equation basically is the *definition* of activity, and in fact there are multiple different activities depending on how we choose the other quantities. But first, we are going to convert the above into our species voltage language, by dividing both sides by $z_i F$.
+where
+* $V^\circ_i$ is **standard state voltage**, a new concept. These are electrochemical standard states that float analogously to the floating band edges in semiconductors.
+* $RT$ is the universal gas constant times temperature (joules per mole).
+* $q_i F$ is the molar charge (coulombs per mole).
+* $c_i$ is the {% wiki "molarity" %}, the concentration of the ion (moles per liter).
+* $c^\circ$ is a reference concentration, always $c^\circ = 1~\mathrm{mol/L}$.
 
-$$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(a_i), $$
+> Chemists prefer to use activity or molality or mole fraction as concentration measures here; they are more convenient measures for quantifying homogeneous solutions under constant pressure. For our purposes, volumetric concentration (molarity) is going to be more useful as it is what appears in diffusion laws and electrostatic problems, and it lets us draw a closer analogy to semiconductors. In any case, all of the concentration measures converge to be proportional in dilute solutions. We'll get back to what happens in non-dilute solutions later on.
 
-where we've defined the **standard species voltage**, as $V^\circ_i = \phi + \mu^\circ_{\mathrm{int},i}$.
-
-## Dilute ions
-
-As we saw above, for dilute solutes, the activity varies proportionally to concentration, by whatever measure (molarity, molality, mole fraction). This occurs for fairly fundamental entropic reasons connected to {% wiki "Entropy of mixing", "mixing" %} / accessible volume.
-
-We are going to prioritize concentration per unit volume, which is {% wiki "molarity" %} $c_i$. We'll generally be employing the following approximation:
-
-$$ a_i \approx c_i/c^\circ $$
-
-where $c^\circ \equiv 1~\mathrm{mol/L}$. We want this to work for very dilute solutes, and so we also must define $V^\circ_i$ such that $a_i$ asymptotically approaches $c_i/c^\circ$ in the limit of a pure solute.
-
-> Note that chemists prefer to use $ a_i \approx b_i/b^\circ$ based on molality (concentration per amount of solvent) when studying solutes in homogeneous solutions, for good reason.^[Molality and mole fraction are easily computed when experimentally weighing out substances, and furthermore they allow simpler formulae when studying homogeneous solutions under constant pressure.] Molarity and molality are distinct because of how adding solutes causes the solution to expand (or sometimes contract). But since we are going to be studying inhomogeneous systems with transport and electrostatic effects, and we also want to connect with semiconductor physics, then molarity is a better choice. We'll discuss molality a bit more below in the section about non-ideality.
-
-## Example: dilute salt water
-
-Let's return to our specific question of how the saltiness of saltwater affects $V_{\mathrm{Na}^+}$ and $V_{\mathrm{Cl}^-}$, in illustrated form. We will assume that activity is exactly $c_i/c^\circ$ for simplicity.
+Returning to our saltwater example, let's see what this looks like. Note that $V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-} = XXXX$ is is a constant for water in our conditions. When discussing solutions we can draw these $V^\circ_i$ as distinct lines:
 
 <figure class="diagram-placeholder">
 {% figcaption %}
 - One slider for concentration of $\mathrm{Na}^+$ (= concentration of $\mathrm{Cl^-}$).
 - Indicator of 'unsaturated / saturated / supersaturated'
 - One slider for overall electrostatic offset.
-- Checkbox for ideal/nonideal?? Use Pitzer mean activity coef.
+- Note that the high concentrations are an 'abuse' of the dilute limit.
 {% endfigcaption %}
 </figure>
 
-**Floating offset**: It's worth reiterating that all the voltage quantities, both species voltages $V_i$ and the standard states $V^\circ_i$, move together when the electrostatic offset is changed. In practice we can set this offset (relative to external voltages) with electrodes and such.
+## Ionic standard states are a floating ladder
 
-**Neutrality**: Note we have assumed that the $\mathrm{Na}^+$ and $\mathrm{Cl^-}$ concentrations are equal. This is required by charge neutrality: we could add more $\mathrm{Na}^+$ ions, but the excess charge will always move to the surface of the conductor and the homogeneous bulk remains neutral. We could of course disturb the equality of $\mathrm{Na}^+$ or $\mathrm{Cl^-}$ concentrations by adding *other* charged ions; anyway, we'll talk more about charge neutrality later.
+{#
+The standard state $V^\circ_i$ is very closely related to the idea of standard states in chemistry.
+Normally in chemistry we write for an ion that:
 
-**Saturation**: Regarding saturation, we can compute the gap $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ for any concentration, but note that once it gets too high (above $-3.9813~\mathrm{V}$) it exceeds the conditions required to precipitate out salt. The keen will notice that you need to bring the concentration up to *FIXME* $c_{\mathrm{Na}^+} c_{\mathrm{Cl}^-} = 37.8~\mathrm{mol^2/L^2}$ in order to reach saturation. But in fact *FIXME* $c_{\mathrm{Na}^+} c_{\mathrm{Cl}^-} = 29~\mathrm{mol^2/L^2}$, which bring us to the topic of non-ideality, which we'll discuss below.
+$$ \bar\mu_i = z_i F \phi + \mu^\circ_{\mathrm{int},i} + RT \ln(c_i/c^\circ), $$
 
-## The $V^\circ_i$ standard state ladder
+where $\mu^\circ_{\mathrm{int},i}$ is a fixed value independent of concentration.
 
-Since for a given solvent all the $V^\circ_i$ values remain fixed in relation to each other, we can compare the relative $V^\circ_i$ values of different ions. All differences $V^\circ_i - V^\circ_j$ are **electrically-invariant** properties of the solvent.
+> Chemists actually prefer to use activity or molality or mole fraction here, but those converge with molarity concentration in dilute solutions. We'll get back to what happens in non-dilute solutions later on.
+
+Dividing both sides by $z_i F$, this gives our species voltage as:
+
+$$ V_i = \underbrace{\phi + \tfrac{1}{z_i F}\mu^\circ_{\mathrm{int},i}}_{V^\circ_i} + \tfrac{RT}{z_i F} \ln(c_i/c^\circ), $$
+
+where I've identified $V^\circ_i$.
+
+and so we can see that if $\mu^\circ_{\mathrm{int},i}$ is fixed, then every $V^\circ_i$ must float up and down in lockstep with $\phi$. Or in other words, if we forget about $\phi$ then every $V^\circ_i$ must float up and down in lockstep with each other.
+
+All differences $V^\circ_i - V^\circ_j$ are invariant properties of the pure solvent.**
+#} 
+
+Although the $V^\circ_i$ values float, crucially all the differences $V^\circ_i - V^\circ_j$ are invariant properties of the pure solvent. These differences also vary with temperature and pressure but that won't be too important for our purposes.
 
 Here are a number of selected $V^\circ_i$ values for water at standard conditions (25&nbsp;°C, 1 bar):
 
@@ -83,68 +87,6 @@ I call this the **standard state ladder** for water. The standard state ladder i
 In effect, the standard state ladder of $V^\circ_i$ is a stand-in for the notion of electrostatic potential $\phi$, but combining it with the average differences in the local electrostatic potentials that each ion 'feels', as well the ion's chemical structure, and the way it disturbs its solvent environment with "solvation shells". We can use any rung on the ladder as a reference point - once one rung is determined, we know the position of all the other rungs. A convenient reference point is $V^\circ_{\mathrm{H}^+}$, but that's not strictly required.
 
 The standard state ladder is also analogous to the conduction and valence band edges in semiconductors. We'll talk more about this analogy to semiconductors in a later topic.
-
-### Standard state ladder data (aqueous)
-
-Here is the data table of relative $V^\circ_i$ values for water, that was plotted above. These are converted from Atkins' _Physical Chemistry_ (8th edition, Table 2.7 in the back pages). Note these are all:
-
-* for **ideally dilute** ions in **water**,
-* at 298 K and 1 bar,
-* using a reference ionic concentration of $c^\circ = 1~\mathrm{mol/L}$,
-* continuing our usual convention that chemical potentials are equal to the Gibbs formation energies.[^deltaGconversionnote]
-
-[^deltaGconversionnote]: {# this is a multiline footnote #}
-    Chemical tables like Atkins' commonly list standard Gibbs energy of formation, $\Delta_{\mathrm{f}} G^\circ_i$, for ionic solutes in water, however this can be a delicate concept. There is an electrostatic degree of freedom (which comes from charge neutrality), which lets the table makers freely choose $\Delta_{\mathrm{f}} G^\circ_{\mathrm{H}^+} = 0$. But what does this mean for us; how can we convert these into chemical potentials and $V^\circ_i$ values?
-    {# p break but keep syntax highlighting #}
-    We want to continue our usual convention that chemical potentials equal the molar Gibbs energy of formation, but to be proper we must also reintroduce the unknown electrostatic degree of freedom that is implicitly assumed in the table:
-    $$\bar\mu^\circ_i = \Delta_{\mathrm{f}} G^\circ_i + z_i F \phi^*,$$
-    where $\phi^*$ is some unknown quantity that is like an electrostatic potential, distinct from $\phi$. The job of $\phi^*$ is not fundamental (like $\phi$) but rather it simply normalizes the table such that $\Delta_{\mathrm{f}} G^\circ_{\mathrm{H}^+} = 0$. Not to worry though, because $\phi^*$ cancels out in the quantities we are interested in, which are differences of $V^\circ_i = \bar\mu^\circ_i /(z_i F)$:
-    $$V^\circ_i - V^\circ_j = \frac{\Delta_{\mathrm{f}} G^\circ_i}{z_i F} - \frac{\Delta_{\mathrm{f}} G^\circ_j}{z_j F}. $$
-    So, we can trivially re-tabulate all the $\Delta_{\mathrm{f}} G^\circ_i$ values into a $V^\circ_i - V^\circ_{\mathrm{H}^+}$ table, since $\Delta_{\mathrm{f}} G^\circ_{\mathrm{H}^+} = 0$.
-
-| Ion $i$ | $\Delta_{\mathrm{f}} G^\circ_i$ (kJ/mol) | $V^\circ_i - V^\circ_{\mathrm{H}^+}$ (V) |
-| ---: | ---: | ---: |
-| $\mathrm{HSO_4}^{-}$ | -755.91&#8199; | +7.8345&#8199; |
-| $\mathrm{Cr_2O_7}^{2-}$ | -1301.1&#8199;&#8199; | +6.742&#8199;&#8199; |
-| $\mathrm{HCO_3}^{-}$ | -586.77&#8199; | +6.0814&#8199; |
-| $\mathrm{SO_4}^{2-}$ | -744.53&#8199; | +3.8583&#8199; |
-| $\mathrm{CrO_4}^{2-}$ | -727.75&#8199; | +3.7713&#8199; |
-| $\mathrm{PO_4}^{3-}$ | -1018.7&#8199;&#8199; | +3.519&#8199;&#8199; |
-| $\mathrm{F}^{-}$ | -278.79&#8199; | +2.8895&#8199; |
-| $\mathrm{CO_3}^{2-}$ | -527.81&#8199; | +2.7352&#8199; |
-| $\mathrm{OH}^{-}$ | -157.24&#8199; | +1.6297&#8199; |
-| $\mathrm{Cl}^{-}$ | -131.23&#8199; | +1.3601&#8199; |
-| $\mathrm{NO_3}^{-}$ | -108.74&#8199; | +1.1270&#8199; |
-| $\mathrm{Br}^{-}$ | -103.96&#8199; | +1.0775&#8199; |
-| $\mathrm{Hg}^{2+}$ | +164.40&#8199; | +0.8519&#8199; |
-| $\mathrm{Ag}^{+}$ | +77.11&#8199; | +0.7992&#8199; |
-| $\mathrm{Hg_2}^{2+}$ | +153.52&#8199; | +0.7956&#8199; |
-| $\mathrm{I}^{-}$ | -51.57&#8199; | +0.5345&#8199; |
-| $\mathrm{Cu}^{+}$ | +49.98&#8199; | +0.5180&#8199; |
-| $\mathrm{Cu}^{2+}$ | +65.49&#8199; | +0.3394&#8199; |
-| $\mathrm{H}^{+}$ | 0&#8199;&#8199;&#8199;&#8199; | 0&#8199;&#8199;&#8199;&#8199;&#8199;&#8199; |
-| $\mathrm{Fe}^{3+}$ | -4.7&#8199;&#8199; | -0.016&#8199;&#8199; |
-| $\mathrm{HS}^{-}$ | +12.08&#8199; | -0.1252&#8199; |
-| $\mathrm{Pb}^{2+}$ | -24.43&#8199; | -0.1266&#8199; |
-| $\mathrm{Sn}^{2+}$ | -27.2&#8199;&#8199; | -0.141&#8199;&#8199; |
-| $\mathrm{Cd}^{2+}$ | -77.612 | -0.40220 |
-| $\mathrm{Fe}^{2+}$ | -78.90&#8199; | -0.4089&#8199; |
-| $\mathrm{S}^{2-}$ | +85.8&#8199;&#8199; | -0.445&#8199;&#8199; |
-| $\mathrm{Zn}^{2+}$ | -147.06&#8199; | -0.7621&#8199; |
-| $\mathrm{NH_4}^{+}$ | -79.31&#8199; | -0.8220&#8199; |
-| $\mathrm{Al}^{3+}$ | -485.&#8199;&#8199;&#8199; | -1.68&#8199;&#8199;&#8199; |
-| $\mathrm{CN}^{-}$ | +172.4&#8199;&#8199; | -1.787&#8199;&#8199; |
-| $\mathrm{Mg}^{2+}$ | -454.8&#8199;&#8199; | -2.357&#8199;&#8199; |
-| $\mathrm{Na}^{+}$ | -261.91&#8199; | -2.7145&#8199; |
-| $\mathrm{Ca}^{2+}$ | -553.58&#8199; | -2.8687&#8199; |
-| $\mathrm{Ba}^{2+}$ | -560.77&#8199; | -2.9060&#8199; |
-| $\mathrm{K}^{+}$ | -283.27&#8199; | -2.9359&#8199; |
-| $\mathrm{Cs}^{+}$ | -292.02&#8199; | -3.0266&#8199; |
-| $\mathrm{Li}^{+}$ | -293.31&#8199; | -3.0399&#8199; |
-
-A few of these values were omitted from the plot just because they were overlapping too tightly. Note the plot starts with the ladder offset arbitrarily to have $V^\circ_{\mathrm{H}^+} = -0.45~\mathrm{V}$, just to emphasize that there is no preferred absolute position.
-
-Some readers will notice that many of these entries coincide with {% wiki "Standard electrode potential (data page)", "standard electrode potentials" %}, and that is for good reason! As we will see in the later [topic on potentials](../potentials/), for elemental metals (with $\mu_{\mathrm{M}}=0$) in equilibrium with an ideal-dilute $c^\circ$ concentration of their ion $\mathrm{M}^{n+}$, we do expect $E = V^\circ_{\mathrm{M}^{n+}} - V^\circ_{\mathrm{H}^+}$.
 
 ## Non-ideal solutions
 
