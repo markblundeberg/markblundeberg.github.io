@@ -40,9 +40,9 @@ where
 * $c_i$ is the {% wiki "molarity" %}, the concentration of the ion (moles per liter).
 * $c^\circ$ is a reference concentration, always $c^\circ = 1~\mathrm{mol/L}$.
 
-> Chemists prefer to use activity or molality or mole fraction as concentration measures here; they are more convenient measures for quantifying homogeneous solutions under constant pressure. For our purposes, volumetric concentration (molarity) is going to be more useful as it is what appears in diffusion laws and electrostatic problems, and it lets us draw a closer analogy to semiconductors. In any case, all of the concentration measures converge to be proportional in dilute solutions. We'll get back to what happens in non-dilute solutions later on.
+> We'll prove this down below, as well as discussing how non-ideal solutes work and discussing other concentration measures (e.g. molality).
 
-Returning to our saltwater example, let's see what this looks like. Note that $V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-} = XXXX$ is is a constant for water in our conditions. When discussing solutions we can draw these $V^\circ_i$ as distinct lines:
+Returning to our saltwater example, let's see what this looks like. Note that $V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-} = -4.0746~\mathrm{V}$ is is a constant for water in our conditions. When discussing solutions we can draw these $V^\circ_i$ as distinct lines from the $V_i$.
 
 <figure class="diagram-placeholder">
 {% figcaption %}
@@ -84,26 +84,44 @@ Here are a number of selected $V^\circ_i$ values for water at standard condition
 
 I call this the **standard state ladder** for water. The standard state ladder is a rigid ladder: as we change the electrical state or solute composition of the solution, the $V^\circ_i$ values may move up and down but they have to all stay rigidly locked to one another. In contrast, $V_i$ values are not rigid and their relative positions will change with composition.
 
-In effect, the standard state ladder of $V^\circ_i$ is a stand-in for the notion of electrostatic potential $\phi$, but combining it with the average differences in the local electrostatic potentials that each ion 'feels', as well the ion's chemical structure, and the way it disturbs its solvent environment with "solvation shells". We can use any rung on the ladder as a reference point - once one rung is determined, we know the position of all the other rungs. A convenient reference point is $V^\circ_{\mathrm{H}^+}$, but that's not strictly required.
+In effect, the standard state ladder of $V^\circ_i$ is a stand-in for the notion of electrostatic potential $\phi$, but combining it with the average differences in the local electrostatic potentials that each ion 'feels', as well the ion's chemical structure, and the way it disturbs its solvent environment with "solvation shells".
 
-The standard state ladder is also analogous to the conduction and valence band edges in semiconductors. We'll talk more about this analogy to semiconductors in a later topic.
+The standard state ladder is also analogous to the conduction and valence band edges in semiconductors. We'll talk more about this analogy to semiconductors in the next topic.
 
-## Non-ideal solutions
+## More rigorously
 
-The usual practice to include solute non-idealities is to include an {%wiki "activity coefficient" %} $\gamma_i$ next to $c_i/c^\circ$.
+In chemistry, we have the following breakdown of the electrochemical potential:
 
-$$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(\gamma_i c_i/c^\circ). $$
+$$ \bar\mu_i = z_i F \phi + \mu^\circ_{\mathrm{int},i} + RT \ln(a_i), $$
 
-This $\gamma_i$ captures all the deviations from ideality, and of course we have $\gamma_i \rightarrow 1$ as all solutes' concentrations go to zero (including $c_i \rightarrow 0$). We can also write in terms of activity $a_i = \gamma_i c_i/c^\circ$, either is fine:
+where $\mu^\circ_{\mathrm{int},i}$ is a (fixed) standard internal chemical potential and $a_i$ is {% wiki "activity" %}. This equation actually serves as *the definition of activity*, i.e. activity is a measure of chemical potential deviation away from a standard state. For dilute solutes, activity is proportional to concentration (by whatever measure), but for concentrated solutes.
+
+Solute activity $a_i$ is proportional to molarity $c_i$ in dilute solutions. This means we can choose $\mu^\circ_{\mathrm{int},i}$ such that $a_i \rightarrow c_i/c^\circ$ in the dilute limit. This justifies our $V_i$ equation above in terms of $c_i/c^\circ$, and we have:
+
+$$V^\circ_i = \phi + \frac{1}{z_i F}\mu^\circ_{\mathrm{int},i}$$
+
+In this way we can see how all the standard state $V^\circ_i$ values float rigidly together (and with $\phi$), but with various fixed offsets according to $\mu^\circ_{\mathrm{int},i}$.
+
+We can also now write down the non-ideal form (for any solution) of our $V_i$ equation:
 
 $$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(a_i). $$
+{# $$ V_i = \underbrace{\phi + \tfrac{1}{z_i F}\mu^\circ_{\mathrm{int},i}}_{V^\circ_i} + \tfrac{RT}{z_i F} \ln(a_i). $$ #}
 
-For example, with our saturated salt $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = -3.9813~\mathrm{V}$, this would correspond to $c_{\mathrm{Na}^+} c_{\mathrm{Cl}^-} = 37.8~\mathrm{mol^2/L^2}$ if it were ideal-dilute (using the aqueous $V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-} = -4.0746~\mathrm{V}$). But measurements of the actual amount of $\mathrm{NaCl}$ that we can dissolve in water show instead $c_{\mathrm{Na}^+} c_{\mathrm{Cl}^-} = 29~\mathrm{mol^2/L^2}$, and so we must have $\gamma_{\mathrm{Na}^+} \gamma_{\mathrm{Cl}^-} = 0.77$.
+However, this raises a subtlety, which is that when we have a non-ideal activity, how do we assign non-ideality to different ions? If activities are arbitrary then we don't know how to position the ladder of $V^\circ_i$ values. In fact, single-ion activities are fundamentally ambiguous, which corresponds to us being free to locate the $V^\circ_i$ ladder to where we wish. Physically, this corresponds with us not only being unable to define $\phi$ in a given solution, but we can't even establish how it varies with concentration in solutions (except mostly-dilute solutions, where we have {% wiki "Debye–Hückel theory" %}). In precision electrochemistry, there are ion activity conventions that nail down this ambiguity, but they are an extrathermodynamic assumption.
 
-The above leaves open the question of how much of this non-ideality product is due to $\gamma_{\mathrm{Na}^+}$ and how much due to $\gamma_{\mathrm{Cl}^-}$, but that is actually not answerable since we only have measurement access to $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$, not $V_{\mathrm{Na}^+} - V^\circ_{\mathrm{Na}^+}$. This demonstrates the well-known issue that single-ion activity coefficients are actually ambiguous, and we can only measure charge-neutral products like $\gamma_{\mathrm{Na}^+} \gamma_{\mathrm{Cl}^-}$. Once we permit $\gamma_i \neq 1$ for the solutes, we actually have a degree of freedom in how to allocate non-ideality between different ions, and that shows up as ambiguity in the positioning of the $V^\circ_i$ ladder.
+For more about this, see my later [Topic on non-ideality](../nonideal/).
 
-> **Note on molar/molal**: I am using the _molar_ activity coefficient and _molar_ activity, defined for a *molar ideal* with *reference molarity* $c^\circ=1~\mathrm{mol/L}$. There are also molal, mole fraction, and pressure activities which are are distinct in subtle and quite confusing ways.^[See Adam Přáda's blog (2019), ["On chemical activities"](https://adamprada.net/blog/on-chemical-activities/). Not only do the standard state $\mu^\circ_i$ and $V^\circ_i$ values vary, but each of these bases has a distinct 'ideal $\mu$ curve'. So, the result of even an ideal calculation will depend on whether you use molar or molal basis. For non-ideal calculations, the activities and especially activity coefficients (deviation from ideality) will change value non-trivially even when describing the exact same substance!] As a physicist I find the molar basis easier to understand (due to the close resemblance to ideal gases), but note that much of the ionic chemistry literature prefers the molal basis. At least for dilute aqueous solutions, the molal basis does numerically agree with the molar basis.
-https://goldbook.iupac.org/terms/view/A00116.html
+## About concentration measures
+
+Chemists actually prefer not to use molarity $c_i$, rather they will use {% wiki "molality" %} (concentration per amount of solvent, usually mol/kg) or {% wiki "mole fraction" %} (moles of solute per total moles of solute and solvent). This is for good reason, relating to how solutions behave under constant pressure: generally the solution expands because of solute addition, and so determining molarity requires the extra step of measuring and compensating for that volume change. In this blog I chose to adopt molarity because it is what appears in diffusion laws and electrostatic problems, and it lets us draw a closer analogy to semiconductors.
+
+Each concentration measure is subtly different, and it can get confusing.^[See Adam Přáda's blog (2019), ["On chemical activities"](https://adamprada.net/blog/on-chemical-activities/)] This affects the standard state, and activity, and especially activity coefficient. To sum up:
+
+* Standard state: The choice of concentration measure and reference value ($c^\circ$, $b^\circ$, etc.) has an influence on the standard state $\mu^\circ_{\mathrm{int},i}$. For water (kg = L), though, the usual molality and molarity standard states do coincide.
+* Activity: Each concentration measure (and reference) will have a different activity, but by the definition of activity these will all be some constant multiple of each other. In water (kg = L), the molal and molar activities are identical.
+* Activity coefficient: An {%wiki "activity coefficient" %} describes how $a_i$ deviates away from its ideal dilute form. But, this depends what you define as the ideal form: $c_i/c^\circ$, or $b_i/b^\circ$, or $x_i$? These are all different numbers in non-ideal solutions, and therefore each gives a distinct activity coefficient in a nontrivial way, *even in water*! Since ionic chemistry seems to work exclusively with molal activity coefficients, I am not going to confuse matters by using the molar activity coefficient.
+
+Importantly, what all of these concentration measures, activities, and activity coefficients *do* agree on is $\bar\mu_i$ and $V_i$.
 
 ## Takeaways
 
