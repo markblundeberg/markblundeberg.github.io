@@ -67,7 +67,7 @@ In effect, the standard state ladder of $V^\circ_i$ is a stand-in for the notion
 
 The standard state ladder is also analogous to the conduction and valence band edges in semiconductors. We'll talk more about this analogy to semiconductors in the next topic.
 
-## More rigorously
+## More rigorously and with non-ideality
 
 In chemistry, we have the following breakdown of the electrochemical potential:
 
@@ -75,20 +75,17 @@ $$ \bar\mu_i = z_i F \phi + \mu^\circ_{\mathrm{int},i} + RT \ln(a_i), $$
 
 where $\mu^\circ_{\mathrm{int},i}$ is a (fixed) standard internal chemical potential and $a_i$ is {% wiki "activity" %}. This equation actually serves as *the definition of activity*, i.e. activity is a measure of chemical potential deviation away from a standard state. For dilute solutes, activity is proportional to concentration (by whatever measure), but for concentrated solutes it can vary, sometimes by a lot.
 
-Anyway, we can choose $\mu^\circ_{\mathrm{int},i}$ such that $a_i \rightarrow c_i/c^\circ$ in the dilute limit. This justifies our $V_i$ equation above in terms of $c_i/c^\circ$, and we have:
+This directly maps to a non-ideal form of our $V_i$ equation:
 
-$$V^\circ_i = \phi + \frac{1}{z_i F}\mu^\circ_{\mathrm{int},i}$$
+$$ V_i = \underbrace{\phi + \tfrac{1}{z_i F}\mu^\circ_{\mathrm{int},i}}_{V^\circ_i} + \tfrac{RT}{z_i F} \ln(a_i), $$
 
-In this way we can see how all the standard state $V^\circ_i$ values float rigidly together (and with $\phi$), but with various fixed offsets according to $\mu^\circ_{\mathrm{int},i}$.
+which shows that $V^\circ_i = \phi + \frac{1}{z_i F}\mu^\circ_{\mathrm{int},i}$ is the precise link to normal electrochemistry notation. In this way we can see how all the standard state $V^\circ_i$ values float rigidly together (and with $\phi$), but with various fixed offsets according to $\mu^\circ_{\mathrm{int},i}$.
 
-We can also now write down the non-ideal form (for any concentration) of our $V_i$ equation:
+Anyway, we can choose $\mu^\circ_{\mathrm{int},i}$ such that $a_i \rightarrow c_i/c^\circ$ in the limit where all solutes are dilute (pure solvent). This justifies our earlier dilute $V_i$ equation in terms of $a_i \approx c_i/c^\circ$.
 
-$$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(a_i). $$
-{# $$ V_i = \underbrace{\phi + \tfrac{1}{z_i F}\mu^\circ_{\mathrm{int},i}}_{V^\circ_i} + \tfrac{RT}{z_i F} \ln(a_i). $$ #}
-
-However, this raises a subtlety, which is that when we have a non-ideal activity, how do we assign non-ideality to different ions? If activities are arbitrary then we don't know how to position the ladder of $V^\circ_i$ values. In fact, single-ion activities are fundamentally ambiguous, which corresponds to us being free to locate the $V^\circ_i$ ladder to where we wish. Physically, this corresponds with us not only being unable to define $\phi$ in a given solution, but we can't even establish how it varies with concentration in solutions (except dilute solutions, where we have {% wiki "Debye–Hückel theory" %}). In precision electrochemistry, there are ion activity conventions that nail down this ambiguity for all concentrations, however they are ultimately an extrathermodynamic assumption.
-
-For more about this, see my later [Topic on non-ideality](../nonideal/).
+> **Single-ion activities are technically ambiguous**: There is a fundamental difficulty with non-ideal activities: we can only infer the $V^\circ_i$ ladder, i.e. we only have experimental access to quantities like $V_i - V_j$, but not $V_i - V^\circ_i$. And so, if activities are no longer anchored to observables (concentration) then we don't know how to position the ladder of $V^\circ_i$ values. In fact, single-ion activities are fundamentally ambiguous, which corresponds to us being free to locate the $V^\circ_i$ ladder to where we wish. In chemistry it is said "we can only measure {% wiki "Activity_coefficient#Ionic_solutions", "*mean* ion activities" %}"; those exactly correspond to measurable differences like $V_i - V_j$.
+>
+> For more about this, see the [appendix Topic on non-ideality](../nonideal/).
 
 ## About concentration measures
 

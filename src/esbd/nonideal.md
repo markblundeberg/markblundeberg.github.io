@@ -11,37 +11,37 @@ eleventyNavigation:
 
 # {{title}}
 
-Earlier in the [Solutions](../solutions/) topic we touched a bit on non-ideal solutions. I'd like to touch on how there is a fundamental aspect of ambiguity in the ionic activity $a_i$, activity coefficient $\gamma_i$, and the overall placement of the $V^\circ_i$ ladder. This is a well-known issue for ion chemistry and I just want to re-explain how it appears with the $V_i$'s.
+Earlier in the [Solutions](../solutions/) topic we touched a bit on non-ideal solutions. I'd like to touch on how there is a fundamental aspect of ambiguity in the ionic activity $a_i$ and the overall placement of the $V^\circ_i$ ladder. This is a well-known issue for ion chemistry and I just want to re-explain how it appears with the $V_i$'s.
 
-To be specific, we are concerned with cases where solutes deviate from an ideal-dilute logarithmic dependence on concentration. Again, this is commonly captured as an activity activity coefficient $\gamma_i$ that acts as a fudge factor on the concentration $c_i$. The species voltage then takes the form:
+To be specific, we are concerned with cases where solutes deviate from an ideal-dilute logarithmic dependence on concentration. This is commonly captured as an activity activity coefficient $\gamma_i$ that acts as a fudge factor on the concentration. The species voltage then takes the form:
 
-$$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(\gamma_i c_i/c^\circ). $$
+$$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(\gamma_i b_i/b^\circ). $$
 
-for reference concentration $c^\circ = 1~\mathrm{mol/L}$.
+for reference molality $b^\circ = 1~\mathrm{mol/kg}$. I'm going to use molality in this topic just to match the chemists convention for activity coefficient.^[[IUPAC Gold Book "Activity coefficient"](https://goldbook.iupac.org/terms/view/A00116)] In water, the molal $V^\circ_i$ and the molar $V^\circ_i$ are identical by the way.
 
-The expectation is that when *all* solutes' concentrations go 0, then $\gamma_i$ should approach 1 for all solutes. This is a definitional convention: if $\gamma_i$ converged to some different value other than 1 then its corresponding $V^\circ_i$ would have to be redefined.
+The expectation is that when *all* solutes' concentrations go 0, then $\gamma_i$ should approach 1 for all solutes. This is a physical/definitional convention: first, $\gamma_i$ is guaranteed to converge to a finite constant at low concentration provided that the species $i$ is actually present in solution as independent solute particles^[If we misidentify the solute particle, then a {% wiki "van 't Hoff factor" %} appears that multiplies the result of the logarithm.] (i.e. that it neither dissociates nor associates); then, the entire $V^\circ_i$ ladder is defined to make this convergent finite constant equal 1 in the limit where all solute concentrations go to zero.
 
-Note: if *any* solute's concentration is significantly nonzero, then *all* $\gamma_i$ may be nonzero, even for other solutes that themselves are infinitely dilute. The other dilute solutes will still behave ideally dilutely for low concentrations, however they will start out with $\gamma_i \neq 1$. This reflects that their medium is not the original pure solvent that was used to define $V^\circ_i$.
+> Note: If *any* solute's concentration is significantly nonzero, then *all* $\gamma_i$ may be nonzero, even for other solutes that themselves are infinitely dilute. The other dilute solutes will still behave ideally dilutely for low concentrations, however they will start out with $\gamma_i \neq 1$. This reflects that they are dilute in an effective "new solvent" that is not the original pure solvent that was used to define $V^\circ_i$. E.g. if we add dilute $\mathrm{KI}$ to water with a preexisting concentration of $\mathrm{NaCl}$, then $\gamma_{\mathrm{K}^+} \neq 1$.
 
-And again, a common shorthand is activity, defined as:
+{#
+> Mathematically if we want to write out the full functional dependencies, we have:
+> * $\gamma_i$ is a function of the full compositional state $(b_1,b_2,\cdots,b_n,\text{solvent},T,P)$. The only condition on $\gamma_i$ is that $\gamma_i \rightarrow 1$ as $b_j \rightarrow 0$ for all $j$ and for each $T$ and each $P$. Also, this function is only defined for a charge-neutral combination of $b_i$'s, i.e., it actually is overdetermined.
+> * $V_i - \Phi$ is a function of the full compositional state $(b_1,b_2,\cdots,b_n,\text{solvent},T,P)$.
+> * $\Phi$ is a generic electric offset, not necessarily the same as $\phi$, that represents the electrical state.
+> * $V^\circ_i - \Phi$ is then a function of solvent-only state $(\text{solvent},T,P)$ defined so that the $\gamma_i\rightarrow 1$ condition holds.
+>
+> Alternativey, we can say that $b_i$ are a function of $(V_1,V_2,\cdots,V_n,\text{solvent},T,P)$. This function is constant under electric shifts: $b_i(V_1,V_2,\cdots,V_n,\text{solvent},T,P) = b_i(V_1+\delta,V_2+\delta,\cdots,V_n+\delta,\text{solvent},T,P)$ for all $\delta$. Note there are only $n-1$ independent $b_i$ values due to charge neutrality, yet there are $n$ independent $V_i$ values; that remaining degree of freedom is what holds the electrical state. That said, this $V_i$ encoding is inconvenient in that solutes which are not present have $V_i = -\infty$.
+#}
 
-$$a_i = \gamma_i c_i/c^\circ$$
+> In chemistry there are two kinds of idealized solution. In an {% wiki "ideal mixture" %}, the solute and solvent chemical potential both vary exactly with the logarithm of mole fraction. This reflects a case where solute-solvent, solute-solute, and solvent-solvent interactions all have the same character, and it corresponds to {% wiki "Raoult's law" %} for both the solute and solvent. That is distinct from the *ideal-dilute* form, which we are interested in, which represents a case where solute particles may have very messy and irregular interactions with the solvent, yet all the dilute solute particles are independent from other dilute solute particles and thus behave (entropically) like an ideal gas. This leads to the solutes following {% wiki "Henry's law" %}, though interestingly it remains guaranteed that the *solvent* follows Raoult's law in this case too.^[Interestingly, Henry's law (for dilute solutes) automatically implies (via the {% wiki "Gibbs–Duhem relation" %}) an *effective* Raoult's law for the *solvent*'s chemical potential, and this why {% wiki "colligative properties" %} like osmotic pressure are guaranteed. In other words, {% wiki "Raoult's law" %} is guaranteed for the solvent provided the solutes are dilute, and that has nothing to do with ideal mixtures nor any of their associated concepts like "entropy of mixing" or "solvent dilution"; chemistry textbooks are often not clear on this point.]
 
-so that:
-
-$$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(a_i), $$
-
-and finally I stress again that this is a *molarity* activity in the sense that it is relative to a reference state $V^\circ_i$ that is calculated based on a reference molarity of $c^\circ$. [Not all activities are such molarity activities](https://adamprada.net/blog/on-chemical-activities/), so activities can be subtly incompatible. I will only discuss the molarity form of activity and activity coefficient here.
-
-(Note: there is another kind of ideal solution, perhaps better called an *ideal mixture* where the solute's chemical potential varies with the logarithm of mole fraction, not concentration. That corresponds to {% wiki "Raoult's law" %}, and reflects a case where solute-solvent, solute-solute, and solvent-solvent interactions all have the same character. That is distinct from the *ideal-dilute* form, which we are interested in, which represents a case where solute particles are all independent, being more like an ideal gas and instead corresponding to {% wiki "Henry's law" %}.)
-
-## Ionic non-idealities matter
+## It does matter: ionic non-idealities are strong
 
 Should we really care about non-idealities? Yes! In fact ions depart from the ideally-dilute case already at surprisingly low concentrations (e.g., $0.001~\mathrm{mol/L}$ in water), at least compared to non-ionic solutes which might only depart after $0.1~\mathrm{mol/L}$.
 
 Ions show early non-ideality due to "ionic atmosphere" effects, i.e., how ions screen their fellow ions at medium range distances. This represents a form of correlation between the positions of ions, which violates our ideal-dilute assumption that the ions are moving around independently of each other. The crucial (and robust) effect of ionic atmosphere, as encountered in {% wiki "Debye–Hückel theory" %}, is that the activity coefficients of ions deviate proportionally to the square root of concentration, $\ln\gamma_i \propto -\sqrt{I}$, where $I$ is the {% wiki "ionic strength" %}, a weighted sum of all ionic concentrations. By comparison, with non-ionic solutes the leading order deviation of activity coefficient is in the first power of concentration.
 
-There is a lot more that can be said about the microscopic details. But really, the main point is that non-idealities readily manifest with ions at the usual concentrations seen in experiments. So, we really ought to care about the non-idealities of ions!
+There is a lot more that can be said about the microscopic details.^[For example, if you have an ionic solution and add a new dilute ionic solute, then it will not significantly change $I$ and its effect will be first-order too. Logically, this must apply for pure water which has a preexisting nonzero ionic strength due to spontaneous autoionization. That means that technically all dilute ions added to water have $\gamma_i$ varying to first order in concentration! But the linearity only holds for tiny concentrations up to $\sim 10^{-7}~\mathrm{mol/L}$, after which the new ion is going to significantly add to $I$.] But really, the main point is that non-idealities readily manifest with ions at the usual concentrations seen in experiments. So, we really ought to care about the non-idealities of ions!
 
 That said, being off by a factor of 2 in the activity of an ion might only correspond to a voltage error of $RT\ln(2)/F \approx 17~\mathrm{mV}$, so for imprecise work, electrochemists can often get away with ignoring the non-ideality. And due to the ambiguities in activity (discussed next), it can be annoying to properly incorporate non-ideality.
 
@@ -77,19 +77,21 @@ for any value of $\lambda$. For example, with $\lambda=\tfrac{RT}{F}\ln(0.1) = -
 
 This is a *severe* form of arbitrariness, not merely a simple one-time offset but instead a continuum of offsets. We can choose a different value of $\lambda$ for each kind of solution in each set of conditions. If we have a curve of some ion's activity vs concentration, we can turn it into any other curve by making $\lambda$ vary with concentration (and adjusting all other ions' activities accordingly). This ambiguity seems troublesome, but on the other hand, it is purely a mathematical obstacle that we have unintentionally created, by trying to relate non-ideal solutions to ideal solutions.
 
-As we'll see below, this ambiguity gets fixed in practice by:
-* adopting an ion activity convention, or,
-* focussing on activity combinations that are unaffected by the ambiguity.
+As we'll see below, this ambiguity gets addressed in practice by:
+* focussing on activity combinations that are unaffected by the ambiguity, or,
+* adopting an ion activity convention.
 
 ### Mean activity / mean activity coefficient
 
 There are certain products of ion activities or ion activity coefficients that are overall charge-neutral, and so the $\lambda$ arbitrariness cancels out. That makes them unambiguously measurable. These are known as **mean activities** or **mean activity coefficients**. For example, products like $\gamma_{\mathrm{Na}^+}\cdot\gamma_{\mathrm{Cl}^-}$, or $\sqrt{\gamma_{\mathrm{Zn}^{2+}}} \cdot \gamma_{\mathrm{Cl}^-}$ are measurable. These relate to species voltage differences like $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ and $V_{\mathrm{Zn}^{2+}} - V_{\mathrm{Cl}^-}$, respectively.
 
-In general a measurable mean activity (or coefficient) has the form $\prod_{i} a_i ^{w_i / z_i}$ for some weights $w_i$. Let's see what form the $w_i$ need to have. We can perform the $\lambda$-transformation on $\prod_{i} a_i ^{w_i / z_i}$ and see that:
-$$\prod_{i} (a_i) ^{w_i / z_i} = \Big[\prod_{i} (a_i') ^{w_i / z_i}\Big] \cdot \exp\Big(\tfrac{RT}{F} \lambda \times \sum_i w_i \Big) . $$
-Therefore, in order to be insensitive to $\lambda$, the weights $w_i$ must be zero-sum:
+In general a measurable mean activity has the form $\prod_{i} a_i ^{w_i / z_i}$ for some weights $w_i$.
 $$\sum_i w_i = 0.$$
-Then $\prod_{i} (a_i) ^{w_i / z_i} = \prod_{i} (a_i') ^{w_i / z_i}$, and likewise $\prod_{i} (\gamma_i) ^{w_i / z_i} = \prod_{i} (\gamma_i') ^{w_i / z_i}$.
+The same condition applies for activity coefficients $\prod_{i} \gamma_i ^{w_i / z_i}$.
+
+Let's prove this. We can perform the $\lambda$-transformation on $\prod_{i} a_i ^{w_i / z_i}$ and see that:
+$$\prod_{i} (a_i) ^{w_i / z_i} = \Big[\prod_{i} (a_i') ^{w_i / z_i}\Big] \cdot \exp\Big(\tfrac{RT}{F} \lambda \times \sum_i w_i \Big) . $$
+Therefore, in order to be insensitive to $\lambda$, the weights $w_i$ must be zero-sum. $\prod_{i} (a_i) ^{w_i / z_i} = \prod_{i} (a_i') ^{w_i / z_i}$, and likewise $\prod_{i} (\gamma_i) ^{w_i / z_i} = \prod_{i} (\gamma_i') ^{w_i / z_i}$.
 
 A mean activity like this corresponds to a sum of $V_i - V_j$ differences, i.e., a linear combination of voltages $\sum_i w_i V_i$ with zero-sum weights $w_i$:
 
@@ -103,7 +105,7 @@ Here, $\sum_i w_i V^\circ_i$ is also insensitive to the overall offset (includin
 
 Now, let's touch on some various conventions that are used to set ionic activities. In general these conventions are all regarded as "extra-thermodynamic", based on some approximate microscopic argument about what the real activity ought to be, or something equivalent to that. The Debye–Hückel theory is a good start but it only gets you so far.
 
-**{% wiki "Bates–Guggenheim convention" %}**: this assigns a specific activity function for $\mathrm{Cl}^-$ ions as a function of their concentration. It is used in the analysis of a primary pH standard (the Harned cell) where fixing $\gamma_{\mathrm{Cl}^-}$ leads to fixing $a_{\mathrm{H}^+}$.
+**{% wiki "Bates–Guggenheim Convention" %}**: this assigns a specific activity function for $\mathrm{Cl}^-$ ions as a function of their concentration. It is used in the analysis of a primary pH standard (the Harned cell) where fixing $\gamma_{\mathrm{Cl}^-}$ leads to fixing $a_{\mathrm{H}^+}$.
 
 **MacInnes convention**: this assigns equal activity coefficients to the potassium and chloride ions: $\gamma_{\mathrm{K}^+} = \gamma_{\mathrm{Cl}^-}$. It appears to be popular for tabulated ion activities that are fitted to empirical {% wiki "Pitzer equations" %}.
 
@@ -111,7 +113,7 @@ Now, let's touch on some various conventions that are used to set ionic activiti
 
 **Liquid junction convention**: sometimes it is assumed that the liquid junction potential (see below) is zero between two solutions, or otherwise takes on some expected value. This assumption is valid provided we redefine activities to make it so.
 
-These generally agree (except the last one) for dilute solutions where the main form of nonideality comes from the long-range ionic atmosphere effects, which are indeed symmmetrical for ions of $\pm z$ charge. But the conventions do diverge as we move beyond dilute solutions. Quantitatively, the disagreements in $a_i$ might amount to perhaps tens of percent between different conventions, and tens of millivolts in various potentials. This might be disastrous (in precision metrology) or negligible (in battery research). Anyway, regardless of which convention is chosen, and regardless of the accuracy of their motivations, the convention choice has no impact on final observable results.
+The first three conventions generally agree for semi-dilute solutions where the main form of nonideality comes from the long-range ionic atmosphere effects, which are indeed symmmetrical for ions of $\pm z$ charge. But the conventions do diverge as we move beyond dilute solutions. Quantitatively, the disagreements in $a_i$ might amount to perhaps tens of percent between different conventions, and tens of millivolts in various potentials. This might be disastrous (in precision metrology) or negligible (in battery research). Anyway, regardless of which convention is chosen, and regardless of the accuracy of their motivations, the convention choice has no impact on final observable results.
 
 Of course, the conventions are technically all incompatible. This is the source of some difficulties with precision usage of single-ion activities, such as pH which is *notionally* defined as $\log_{10}(a_{\mathrm{H}^+})$. If I understand the current state of affairs correctly, precision pH values are actually defined *operationally* in a way that traces back to a specific activity convention (the Bates–Guggenheim convention). In other conventions, the value of $\log_{10}(a_{\mathrm{H}^+})$ will then deviate from pH (the deviation being of order 0.1 for concentrated acids around 0 pH). Unforutnately the pH activity convention is in uncommon in other contexts, so it is technically improper to make a pH measurement and then to compute $a_{\mathrm{H}^+} = 10^{-\mathrm{pH}}$ in most contexts.
 
@@ -121,9 +123,16 @@ In the standard chemistry of ions we notionally decompose the electrochemical po
 
 $$\bar\mu_i = z_i F\phi + \mu^\circ_{\mathrm{int},i} + RT \ln a_i . $$
 
-Here the electrostatic potential $\phi$ is notionally supposed to be a physical quantity, something independent of the thermodynamics. The standard state's $\mu^\circ_{\mathrm{int},i}$ is a constant for solute $i$ in given solvent. Compared to the above discussion, it seems this should leave no ambiguity at all: there is an objective physical $\phi$ so this defines a physical $\mu^\circ_{\mathrm{int},i}$ and physical ionic activity $a_i$.
+Here, we have:
+* $\bar\mu_i$, the fundamental thermodynamic chemical potential for an ion, which like $V_i$ can be accessed (aside from a single, global electrostatic offset).
+* $\mu^\circ_{\mathrm{int},i}$, a fixed value for solute $i$ in given solvent; it has nothing to do with non-ideality and is purely a function of the local influence of a single, solitary solute on an otherwise pure solute.
+* $\phi$, an inaccessible yet supposedly physical quantity, something independent of the thermodynamics.
 
-But there is a major problem: $\phi$ itself is experimentally inaccessible, and in particular *we cannot even measure the variations of $\phi$* as solute concentrations are changed. This means the true single-ion activities $a_i$ are inaccessible by experimental means. Yet, one often sees plots of single-ion activities. The answer to this paradox is that the above equation is reinterpreted into the definition of $\phi$ based on a practial convention for $a_i$'s. The true $a_i$ and true $\phi$ are in fact abandoned.
+It seems this should leave no ambiguity at all: everything besides activity $a_i$ is determined, therefore this equation uniquely must determine physical ionic activity $a_i$. And so it is often argued that we could know the "true $a_i$" if not for the "true $\phi$" being inaccessible.
+
+But this raises a contradiction if we choose an activity convention. We are then setting $a_i$, and therefore we are setting $\phi$ (up to a single, constant offset per solvent). If $a_i$ is subjective then so must $\phi$ be, which totally contradicts the idea that $\phi$ is a real quantity.
+
+The answer to this paradox is that the above equation is reinterpreted into a redefinition of $\phi$ based on a practial convention for $a_i$'s. The true $\phi$ is in fact abandoned.
 
 In other words, we should really say that $\bar\mu_i$ is decomposed as so:
 
@@ -131,7 +140,7 @@ $$\bar\mu_i = z_i F\phi' + \mu^\circ_{\mathrm{int},i} + RT \ln a_i $$
 
 which serves as a *definition* of $\phi'$, an "electrostatic potential" that no longer needs to correspond to any precise physical electrical property. The flexibility in choosing an activity convention (i.e., defining the concentration-dependence of $\phi'$ regardless of what $\phi$ is actually doing) basically takes advantage of the $\lambda$-shifting property described in the previous section.
 
-There has actually been a huge amount of debate about the problem of single-ion activities and whether they are merely operationally difficult to access, or they are fundamentally ill-defined. My viewpoint, [which I'll argue more in my later topic about $\phi$](../phi/), is that we can actually in principle establish a true electrostatic potential $\phi$, but the problem is that the calculation of $z_i F \phi$ for any ion has no physical meaning. Hence, there is no physical meaning to the decomposition of $\bar\mu_i$ into $\mu_{\mathrm{int},i} + z_i F \phi$. Even in an omniscient computer simulation with knowledge of the true $\phi$, a calculation of $z_i F \phi$ is *artificial* and merely ends generating one activity convention among many. The practical activity conventions are preferable since at least they are experimentally useful.
+There has actually been a huge amount of debate about the problem of single-ion activities and whether they are merely operationally difficult to access, or they are fundamentally ill-defined. My viewpoint, [which I'll argue more in my later topic about $\phi$](../phi/), is that yes, we can actually in principle establish a true average electrostatic potential $\phi$, but there is a deeper problem in that $\phi$ is not even meaningful in this context. I.e., the calculation of $z_i F \phi$ for any ion has no physical meaning. Hence, there is no physical meaning to the decomposition of $\bar\mu_i$ into $\mu_{\mathrm{int},i} + z_i F \phi$. Even in an omniscient computer simulation with knowledge of the true $\phi$, a calculation of $z_i F \phi$ is *artificial* and merely ends generating one activity convention among many. The practical activity conventions are preferable since at least they are experimentally useful.
 
 ### Liquid junction potentials and electrode potentials
 
@@ -145,21 +154,20 @@ Let's say we are using the same activities for our $V_i$ framework as in our tra
 $$V^{\circ}_i = \phi' + \mu^\circ_{\mathrm{int},i}/(z_i F).$$
 Since the $\mu^\circ_{\mathrm{int},i}$ are constants, then this means $\phi'$ actually sits fixed at some position on our $V^{\circ}_i$ ladder and they move rigidly together.
 
-Not everything is nailed down, however, as there remains an overall single degree of freedom per solvent: keeping everything else the same, we may freely redefine
+Interestingly, there remains an overall single degree of freedom per solvent: keeping everything else the same, we may freely redefine
 $$\phi' \rightarrow \phi' - \delta$$
 provided we also redefine all the ionic standard internal chemical potentials,
 $$\mu^\circ_{\mathrm{int},i} \rightarrow \mu^\circ_{\mathrm{int},i} + z_i F \delta. $$
-This shift leaves $\bar\mu_i$, $a_i$, and even $V^{\circ}_i$ totally unchanged. Note this $\delta$ shifting (one degree of freedom per solvent) is different from the aforementioned $\lambda$ shifting (infinite degrees of freedom per solvent).
+This shift leaves $\bar\mu_i$, $a_i$, and even $V^{\circ}_i$ totally unchanged. Effectively we can freely choose where we want $\phi'$ to sit on the $V^{\circ}_i$ ladder. If chemists wanted they could actually use this to make liquid junction potentials $\phi_1' - \phi_2'$ well defined under all circumstances.[^longnote]
 
-The $\delta$ degree of freedom means that we can freely shift $\phi'$ to any desired place on the $V^{\circ}_i$ ladder. Given all the difficulties with activities and the dubious nature of a true $\phi$, there's no reason why we shouldn't take advantage of this. Indeed by adopting an activity convention, then we have already abandoned the pretense of $\phi'$ being a true electrostatic potential. And the $\mu^\circ_{\mathrm{int},i}$ constants don't care about being shifted since they have no meaning except in combination with $\phi'$. 
-
-So, we could simply pin $\phi' = V^{\circ}_{\mathrm{H}^+}$, which puts $\mu^\circ_{\mathrm{int},\mathrm{H}^+} = 0$.
-
-More precisely, we can set $\phi' = V^{\circ}_{\mathrm{H}^+} - \mu^{\text{SHE}}_{\mathrm{H_2}}/(2F)$, i.e., $\mu^\circ_{\mathrm{int},\mathrm{H}^+} = \mu^{\text{SHE}}_{\mathrm{H_2}}/2 $. This would set $\phi'$ to the standard hydrogen electrode (SHE) in the given solvent. Here $\mu^{\text{SHE}}_{\mathrm{H_2}}$ is the chemical potential of the hydrogen gas in the SHE; see [the Potentials topic](../potentials/) for more information about the SHE. Then, all SHE-referenced electrode potentials would equal $V_{\mathrm{e}^-} - \phi'$ under all conditions.
-
-Of course the SHE is not necessarily convenient, so a similar pinning of $\phi'$ can be done using any other reference electrode (such as the ferrocenium-ferrocene electrode).
-
-Anyway, by conventionally pinning $\phi'$ in such a manner for all solvents, and adopting clear activity conventions for each solvent, then this would make liquid junction potentials $\phi_1' - \phi_2'$ well defined under all circumstances, even between non-ideal solutions with differing solvents.
+[^longnote]:
+    By adopting activity conventions, we have already abandoned the pretense of $\phi'$ being a true electrostatic potential, so we might as well put $\phi'$ somewhere convenient. Some options:
+    {# pbreak #}
+    * Pin $\phi' = V^\circ_{\mathrm{H}^+}$, which puts $\mu^\circ_{\mathrm{int},\mathrm{H}^+} = 0$.
+    * Pin $\phi' = V^\circ_{\mathrm{SHE}}$, which is $\phi' = V^{\circ}_{\mathrm{H}^+} - \mu^{\text{SHE}}_{\mathrm{H_2}}/(2F)$. This would set $\phi'$ to the standard hydrogen electrode (SHE) in the given solvent. Here $\mu^{\text{SHE}}_{\mathrm{H_2}}$ is the chemical potential of the hydrogen gas in the SHE; see [the Potentials topic](../potentials/) for more information about the SHE. Then, all SHE-referenced electrode potentials would equal $V_{\mathrm{e}^-} - \phi'$ under all conditions.
+    * Pin $\phi'$ to the ferrocenium-ferrocene electrode, which is often more appropriate in nonaqueous solvents.
+    {# pbreak #}
+    This would make liquid junction potentials $\phi_1' - \phi_2'$ well defined under all circumstances, even between non-ideal solutions with differing solvents, providing we have established a $\phi'$ convention for each solvent.
 
 ## Concentration ambiguity
 
