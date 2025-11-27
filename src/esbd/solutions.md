@@ -36,7 +36,7 @@ $$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(c_i/c^\circ), $$
 where
 * $V^\circ_i$ is **standard state voltage**, a new concept. These are electrochemical standard states that float analogously to the floating band edges in semiconductors.
 * $RT$ is the universal gas constant times temperature (joules per mole).
-* $q_i F$ is the molar charge (coulombs per mole).
+* $z_i F$ is the molar charge (coulombs per mole).
 * $c_i$ is the {% wiki "molarity" %}, the concentration of the ion (moles per liter).
 * $c^\circ$ is a reference concentration, always $c^\circ = 1~\mathrm{mol/L}$.
 
