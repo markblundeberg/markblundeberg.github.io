@@ -94,3 +94,9 @@ And finally, we can bring in $V^\circ_i$, using $\mu^\circ_{\mathrm{int},i} = z_
 $$V^\circ_i - V^\circ_j = \frac{\Delta_{\mathrm{f}} G^\circ_i}{z_i F} - \frac{\Delta_{\mathrm{f}} G^\circ_j}{z_j F}. $$
 
 So, we can trivially re-tabulate all the $\Delta_{\mathrm{f}} G^\circ_i$ values into a $V^\circ_i$-differences table.
+
+And, to clarify, this means we have the following relationship:
+
+$$ \mu^\circ_{\mathrm{int},i} = \Delta_{\mathrm{f}} G^\circ_i + \lambda, $$
+
+for some value of $\lambda$ that we simply do not know, nor do we need to know it in order to get our $V^\circ_i$'s. The value of $\lambda$ depends on solvent, temperature, and pressure, and especially it depends on how we defined $\phi$, and this broad freedom is what lets chemists keep $\Delta_{\mathrm{f}} G^\circ_{\mathrm{H}^+} = 0$ for all situations.
