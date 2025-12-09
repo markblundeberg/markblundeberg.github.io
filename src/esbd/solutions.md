@@ -13,13 +13,12 @@ eleventyNavigation:
 
 In the earlier [topic about equilibrium](../equilibrium/), we talked about how solid $\mathrm{NaCl}$ in equilibrium with a solvent (such as water) would set a fixed $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} =  -3.9813~\mathrm{V}$. But that is for a *fully saturated* solution. What happens when we only have a tiny amount dissolved? How does $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ depend on the concentration of dissolved $\mathrm{NaCl}$?
 
-To start our discussion, here is what the experimental data shows for salt water:
+To start our discussion, here is what the experimental data shows for salty water:
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 350px">
+<img src="/esbd/img/nacl_ki.png" style="max-width:100%"/>
 {% figcaption %}
-- Not a band diagram. Plot of $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ vs NaCl concentration. (Pitzer model)
-- x axis should be molarity or molality?
-- Add curve for 'molar ideal form (see below)' ?
+{% wiki "Pitzer equations", "Pitzer" %} data for salt water converted to $V_i$. <small>[[source]](https://gist.github.com/markblundeberg/c6c8b8ecdf1131d078f2b3186c7e3ac9)</small>
 {% endfigcaption %}
 </figure>
 
