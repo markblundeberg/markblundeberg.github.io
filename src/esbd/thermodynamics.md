@@ -13,6 +13,8 @@ eleventyNavigation:
 
 So far I have been referring to electrochemical potentials $\bar\mu_i$ as the more fundamental true thermodynamic variable, which justifies $V_i$ as a first-class object. In contrast I have referred to internal chemical potentials and ion activities as artificial objects from the splitting of $\bar\mu_i$. I'd like to justify this point of view.
 
+We can make a 'quick and dirty' argument that only electrochemical potentials satisfy the notion of equilibrium between bodies: only electrochemical potentials describe the tendency of ions to move. But that may be unconvincing, so a deeper dive into thermodynamics is needed.
+
 We can't address this within the standard assumptions of chemistry (homogeneity, extensivity, and charge neutrality). To see what is really going on we're going to have to relax our assumptions and go back to the fundamentals of thermodynamics that deal with real systems (inhomogeneous and charged).
 
 ## General thermodynamics with charged species
@@ -21,7 +23,9 @@ Suppose we have a thermodynamic body: floating, isolated, but at equilibrium. It
 
 $$ U(S, V, N_1, N_2, \ldots) $$
 
-depending on entropy $S$, volume $V$ and particle numbers $N_i$ for species $i$. We can define a chemical potential in the usual way:
+depending on entropy $S$, volume $V$ and particle numbers $N_i$ for species $i$. Note that while I'm using an entropy-volume basis, all of the below arguments also apply for temperature- or -pressure as bases.
+
+We can define a chemical potential in the usual way:
 
 $$ \mu_i = \bigg( \frac{\partial U}{\partial N_i} \bigg)_{S,V,N_{j\neq i}} . $$
 
@@ -39,24 +43,13 @@ What happens when we allow some of the $N_i$ to represent charged species? What 
 
 To answer this question requires care:
 
-* **Equilibrium between bodies**: When two bodies are in equilibrium with respect to exchanging particles, they must have equal chemical potentials.
 * **Charge-aneutrality**: Our partial derivative involves a change $\partial N_i$ that increases the number of that charged species, but as a consequence it must also increase the total charge on our thermodynamic body. In other words, the very definition of chemical potential $\mu_i$ of a charged species requires violating charge neutrality. 
+* **Electrostatic gauge**: The energy of a charge is dependent on the arbitrary zero of electrostatic potential, thus the total energy of a charge-aneutral thermodynamic body must also be gauge dependent.
 * **Non-extensivity**: The nature of electricity involves long-distance interactions and surface effects which scale with neither volume nor surface area.
-
-## Equilibrium between bodies
-
-The zeroth law of thermodynamics concerns the idea of transitive equilibrium, that temperature is a well defined quantity. If body A and body B are each in thermal equilibrium with 
-body C, then body A and B are also in thermal equilibrium. The equilibrium is described by a single parameter, the temperature $T$.
-
-The same logic goes for chemical potential!
-
-As we have seen, it is the electrochemical potential which equilibrates between bodies, and so the electrochemical potential does behave like a proper thermodynamic chemical potential. 
 
 ## Bodies without charge neutrality
 
-The pure thermodynamic equations above have no distinction between "ion" or "non-ion". The usual next step is to push ahead by formally imposing ideas of charge and electrostatic potential.
-
-But before that, I think a better approach is to look at phenomenology and play with some toy models. It is more important to get a feel of what kinds of things happen with ions.
+We can make a lot of headway without having to dive into detailed microscopic models, simply by recognizing some universal phenomenology of how ions behave that is extremely different from uncharged solutes. This kind of 'toy model' will give us what we need.
 
 ### Charge decouples from ion (charge moves to surfaces)
 
@@ -78,19 +71,27 @@ The first term is the generic electric potential of the body sitting in a backgr
 
 $$ U_{\mathrm{pot}} = Q \phi_\infty . $$
 
-The second term is an estimate of the energy stored in the electric field around the body:
+And in fact, this reveals that $\phi_{\infty}$ is a hidden external coordinate of our system energy, so we should actually write $U$ as:
+
+$$ U(S, V, \phi_{\infty}, N_1, N_2, \ldots). $$
+
+The second term is an estimate of the energy stored in the electric field around the body, which is part of the body's energy:
 
 $$U_{\mathrm{cap}} = \frac{Q^2}{2C},$$
 
 where $C$ is the self-capacitance, which is proportional to the radius of our body.
-
-### Impact of charging energy on $\mu_i$
 
 We can take our above estimate of the charging energy and formally split it off from our total energy:
 
 $$ U = U_{\mathrm{int}} + U_{\mathrm{pot}} + U_{\mathrm{cap}} , $$
 
 where we expect that the residual $U_{\mathrm{int}}$ is going to be roughly extensive (proportional to volume). The main point is, the energy cost of deviating from charge neutrality is not a minor correction to internal energy (like a surface effect), but is a separate significant contribution.
+
+> Note that $U_{\mathrm{int}}$ describes all residual energy, and is fully dependent on the (charge-aneutral) set $\{N_1, N_2, \ldots\}$; that means it includes the energy associated with choosing *which* ions go to the surface to make up the surface charge layer. When we say it is extensive we are saying it is:
+> $$U_{\mathrm{int}}(S,V, N_1,N_2,\ldots) \approx U_{\mathrm{bulk}}(S,V, N_1', N_2', \ldots), $$
+> where $N_i'$ are a modified set of charge numbers that *are* charge neutral (unlike the original $N_i$), and $U_{\mathrm{bulk}}$ is an extensive function. The excess numbers $N_i - N_i'$ reflect which ions have been added/removed from the surface to make up the surface charge.
+
+### Impact of charging energy on $\mu_i$
 
 Now we can use this split-apart $U$ to calculate chemical potential. Note that:
 
@@ -104,7 +105,9 @@ which is approximately the "outer potential" (the electric potential on the surf
 
 $$ \mu_i = \bigg( \frac{\partial U_{\mathrm{int}}}{\partial N_i} \bigg)_{S,V,N_{j\neq i}} + q_i \tilde\psi. $$
 
-Here we see that this $\mu_i$ resembles the standard decomposition of electrochemical potential, $ \bar\mu_i = \mu_{\mathrm{int},i} + q_i \phi $, though the two have different electric potentials. The crucial thing here is that $\mu_i$ is not only dependent on local composition, but is also strongly dependent on non-local effects via the shared total charge $Q$. This demonstrates that the true thermodynamic $\mu_i$ does not have the character of an internal chemical potential, but instead behaves as the electrochemical potential $\bar\mu_i$. So we can say simply $\mu_i = \bar\mu_i$. The two equations differ in their electric potentials ($\tilde\psi \neq \phi$) but that is merely a consequence of how we have chosen to artificially split apart the energy, i.e., it simply amounts to different $\mu_{\mathrm{int},i}$.
+Here we see that this $\mu_i$ resembles the standard decomposition of electrochemical potential, $ \bar\mu_i = \mu_{\mathrm{int},i} + q_i \phi $, though the two have different electric potentials. The crucial thing here is that $\mu_i$ is not only dependent on local composition, but is also strongly dependent on non-local effects via the shared total charge $Q$. This demonstrates that the true thermodynamic $\mu_i$ does not have the character of an internal chemical potential, but instead behaves as the electrochemical potential $\bar\mu_i$.
+
+So electrochemical potential *is* the only legitimate chemical potential: $\mu_i = \bar\mu_i$. The two equations differ in their electric potentials ($\tilde\psi \neq \phi$) but that is merely a consequence of how we have chosen to artificially split apart the energy into 'electrical' and 'non-electrical', i.e., it simply amounts to different $\mu_{\mathrm{int},i}$.
 
 ### Charging energy can dominate
 
@@ -115,7 +118,7 @@ First, imagine we have a 10cm-wide charge-neutral blob (capacitance $C \approx 1
 * if we add 1 mole of uncharged solutes the energy $U$ will grow by around 1% and it will be about the same.
 * if we add 1 mole of charged solutes (with 1 mole of elementary charges), its voltage will spike to $10^{16}~\mathrm{V}$ and its energy will rise by about $10^{21}~\mathrm{J}$. The blob will then explode with the energy of a thousand nuclear weapons.
 
-Practically of course we see that charging energy does not dominate to this degree, but that is simply because 1) bodies tend to stay very close to charge neutrality precisely because it is so costly to deviate from neutraliy, and 2) bodies practically find all sorts of ways to dissipate excess charge. That does not mean that charging energy is totally negligible however, as usually bodies equilibrate to have a slightly nonzero charge!
+Practically of course we see that charging energy does not dominate to this degree, but that is simply because 1) bodies tend to stay very close to charge neutrality precisely because it is so costly to deviate from neutraliy, and 2) bodies practically find all sorts of ways to dissipate excess charge. That does not mean that charging energy is totally negligible however, as usually bodies equilibrate to have a slightly nonzero charge (e.g. due to differences in work function with their environment).
 
 Second, if we look at second derivatives, we can see how each added ion will shift the other ions' chemical potentials:
 
@@ -151,33 +154,33 @@ Second, the chemical potential of an ion $\mu_i$ becomes immediately ill-defined
 
 That said, permitting deviations from charge neutrality can be even more problematic if the energetic cost is not correctly modelled. Given the frustratingly non-local nature of electric energy that arises from charge concentrations, simplified models benefit greatly from assuming exact local charge neutrality.
 
-{#
+## Going bulk: how to describe a homogeneous thermodynamic system with perfect charge neutrality
 
-## Why bodies tend to stay close to charge neutrality
+Obviously, there is a need to address the case of homogeneous extensive systems, like beakers of electrolyte, without all those annoying surface charging effects. But every homogeneous system has a boundary. It thus becomes necessary to mechanically 'scrape away' the surface. But again this is no ordinary surface, and we cannot just apply regular surface methods (like Gibbs isotherm).
 
-Practically, all bodies are charged to some degree but it is unusual to see them strongly charged.
+Let's describe the traditional approach, why it suffers problems, and what is the proper alternative.
 
-From the above argument we can see why this is the case. Deviations from charge neutrality are simply energetically expensive.
+* Traditionally, we go to a 'bulk energy' $U_{\mathrm{bulk}}(S, V, N_1', N_2', \ldots)$, mentioned above which very closely resembles the original system's internal energy.
+  
+  But there is a catch: we must have total charge $Q_{\mathrm{bulk}}=0$. Thus our $N_i'$ arguments are *overdetermined*, which is a serious problem. This traditional approach leads to meaningless partial derivatives that must be matched together into things like 'mean activities', as mentioned above. In fact I would go so far to say that $U_{\mathrm{bulk}}$ is not even a legitimate thermodynamic energy.
+  
+  And there is another problem: we have fully lost the electrical state of the system, and we only have its chemical state. At this point, the traditional remedy is to reintroduce an extrathermodynamic $\phi$. This can be a totally arbitrary number, or based on some ion activity convention, or we can try to borrow $\phi$ from the microscopic statistical mechanics.
 
- If an isolated body is strongly positively charged then $Q/C$ will be very large. So, its $\mu_i$ for positive ions will be very high (they want to leave), and its $\mu_i$ for negative ions will be very low (they want to come in). What's interesting here is that no matter which charged species is transferred, the effect is largely the same since they all influence each other through the total charge $Q$, and only a tiny number of charged particles (relative to the total number of particles) needs to be moved to neutralize the total charge. 
+* As an alternative, we Legendre transform our original charge-aneutral system energy into a grand-type free energy $F(S,V,\phi_{\infty},\bar\mu_1,\bar\mu_2,\ldots) = U - \sum_i \bar\mu_i N_i$, and then extract the bulk out of that:
+  $$ F_{\mathrm{bulk}}(S,V,\bar\mu_1,\bar\mu_2,\ldots) \approx ??? $$
+  
+  Note that the dependence on $\phi_{\infty}$ has disappeared: the properties of the bulk system are now entirely self-contained in terms of the $\bar\mu_i$. Also note what the gauge invariance must look like now: For any $x$ we have
+  $$F_{\mathrm{bulk}}(S,V,\bar\mu_1,\bar\mu_2,\ldots) = F_{\mathrm{bulk}}(S,V,\bar\mu_1 + q_1 x,\bar\mu_2 + q_2 x,\ldots).$$
 
-The precise mechanisms by which the dissipation varies in practice:
+  This $F_{\mathrm{bulk}}(S,V,\bar\mu_1,\bar\mu_2,\ldots)$, free from the overdeterminism, is a much better option, although it does mean there are many sets of $\bar\mu_i$ values that describe the same bulk chemical system. But in fact, *they are different systems* --- they are chemically the same but they differ in electrical state. And we don't have to introduce any extrathermodynamic $\phi$, rather the electrical state is right there, thermodynamically! (We are of course free to introduce $\phi$ such as for making approximate arguments about statistically ideal systems, but we do not rely on it.)
+  
+  And, instead of us having to carefully feed in a set of charge neutral $N_i'$, the free energy simply spits out such a set for any set of arguments $\bar\mu_i$:
+  $$ N_i' = -\frac{\partial F_{\mathrm{bulk}}}{\partial \bar\mu_i} $$
+  where we can use the above gauge invariance to confirm that the set it outputs is always charge neutral:
+  $$ 0 = \frac{\partial F_{\mathrm{bulk}}}{\partial x} = \sum_i q_i \frac{\partial F_{\mathrm{bulk}}}{\partial \bar\mu_i} = -\sum_i q_i N_i' = Q_{\mathrm{bulk}}$$
 
-* Direct conduction: in contact with anything that is even slightly electrically conducting.
-* Surface conduction: especially in humid environments, adsorbed water layers carry charge along the surfaces that are supposed to be electrically insulating.
-* Air conduction: air tends to contain some ions due to ambient radiation (cosmic rays or nuclear decays).
-* Coulomb instability: small suspended liquid droplets are only stable up to a certain charge, known as the Rayleigh limit (depending on size and surface tension). Beyond this [they tend to "spit" off excess charge](https://www.youtube.com/watch?v=F0F8P23DUo0) as microdroplets.
+  (Note that we only really have to Legendre transform *one* of the ionic numbers into an electrochemical potential to fix the overdeterminism, but transforming them all is nicely symmetric.)
 
-#}
-
-## An ambiguity in energy
-
-
-
-
-## Homogeneous and extensive systems
-
-Finally, we turn to the 
 
 
 ## Takeaways
