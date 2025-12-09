@@ -11,11 +11,11 @@ eleventyNavigation:
 
 # {{title}}
 
-So far I have been referring to electrochemical potentials $\bar\mu_i$ as the more fundamental true thermodynamic variable, which justifies $V_i$ as a first-class object. In contrast I have referred to internal chemical potentials and ion activities as artificial objects from the splitting of $\bar\mu_i$. I'd like to justify this point of view.
+So far I have been referring to electrochemical potentials $\bar\mu_i$ as the more fundamental true thermodynamic variable, which justifies $V_i$ as a first-class object. In contrast I have referred to internal chemical potentials and ion activities as artificial objects from the splitting of $\bar\mu_i$. This is not the normal view in chemistry books, where we often find that electrochemical potential $\bar\mu_i$ is a footnote.
 
-We can make a 'quick and dirty' argument that only electrochemical potentials satisfy the notion of equilibrium between bodies: only electrochemical potentials describe the tendency of ions to move. But that may be unconvincing, so a deeper dive into thermodynamics is needed.
+We can't address this within the standard assumptions of chemistry (homogeneity, extensivity, and charge neutrality). To see what is really going on we're going to have to relax our assumptions and go back to the fundamentals of thermodynamics that deal with real systems (finite, inhomogeneous, and charged).
 
-We can't address this within the standard assumptions of chemistry (homogeneity, extensivity, and charge neutrality). To see what is really going on we're going to have to relax our assumptions and go back to the fundamentals of thermodynamics that deal with real systems (inhomogeneous and charged).
+> A quick argument: It's worth noting that only electrochemical potentials can properly describe the chemical equilibrium of ions between different bodies. This principle alone (a 0th law of thermodynamics for ions) is enough justification for me, but if you're unconvinced then read on.
 
 ## General thermodynamics with charged species
 
@@ -44,12 +44,11 @@ What happens when we allow some of the $N_i$ to represent charged species? What 
 To answer this question requires care:
 
 * **Charge-aneutrality**: Our partial derivative involves a change $\partial N_i$ that increases the number of that charged species, but as a consequence it must also increase the total charge on our thermodynamic body. In other words, the very definition of chemical potential $\mu_i$ of a charged species requires violating charge neutrality. 
-* **Electrostatic gauge**: The energy of a charge is dependent on the arbitrary zero of electrostatic potential, thus the total energy of a charge-aneutral thermodynamic body must also be gauge dependent.
 * **Non-extensivity**: The nature of electricity involves long-distance interactions and surface effects which scale with neither volume nor surface area.
 
 ## Bodies without charge neutrality
 
-We can make a lot of headway without having to dive into detailed microscopic models, simply by recognizing some universal phenomenology of how ions behave that is extremely different from uncharged solutes. This kind of 'toy model' will give us what we need.
+At this point we could define some tiny chargeable statistical mechanical system and exactly solve it, but instead let's look at large bulky systems as chemistry tries to deal with. We are going to recognize some universal phenomenology of how ions behave that is extremely different from uncharged solutes. This kind of 'toy model' will give us what we need.
 
 ### Charge decouples from ion (charge moves to surfaces)
 
@@ -79,17 +78,26 @@ The second term is an estimate of the energy stored in the electric field around
 
 $$U_{\mathrm{cap}} = \frac{Q^2}{2C},$$
 
-where $C$ is the self-capacitance, which is proportional to the radius of our body.
+where $C$ is the {% wiki "self-capacitance" %}, which is proportional to the radius of our body.
+
+### The residual energy (internal)
 
 We can take our above estimate of the charging energy and formally split it off from our total energy:
 
 $$ U = U_{\mathrm{int}} + U_{\mathrm{pot}} + U_{\mathrm{cap}} , $$
 
-where we expect that the residual $U_{\mathrm{int}}$ is going to be roughly extensive (proportional to volume). The main point is, the energy cost of deviating from charge neutrality is not a minor correction to internal energy (like a surface effect), but is a separate significant contribution.
+which leaves a residual "internal" energy $U_{\mathrm{int}}$. We expect that the residual $U_{\mathrm{int}}$ is going to be roughly extensive (proportional to volume), however the $N_i$ arguments we are feeding to $U_{\mathrm{int}}$ are not charge-neutral. We can expand $U_{\mathrm{int}}$ in terms of the 'charge neutral bulk':
 
-> Note that $U_{\mathrm{int}}$ describes all residual energy, and is fully dependent on the (charge-aneutral) set $\{N_1, N_2, \ldots\}$; that means it includes the energy associated with choosing *which* ions go to the surface to make up the surface charge layer. When we say it is extensive we are saying it is:
-> $$U_{\mathrm{int}}(S,V, N_1,N_2,\ldots) \approx U_{\mathrm{bulk}}(S,V, N_1', N_2', \ldots), $$
-> where $N_i'$ are a modified set of charge numbers that *are* charge neutral (unlike the original $N_i$), and $U_{\mathrm{bulk}}$ is an extensive function. The excess numbers $N_i - N_i'$ reflect which ions have been added/removed from the surface to make up the surface charge.
+$$U_{\mathrm{int}}(\{N_i\},\ldots) \approx U_{\mathrm{bulk}}(\{N_i^{\mathrm{bulk}}\},\ldots) + \sum_i \mu_{\mathrm{int},i} \cdot (N_i - N_i^{\mathrm{bulk}})  + \mathcal{O}((N - N^{\mathrm{bulk}})^2) $$
+
+where:
+
+* $\mu_{\mathrm{int},i}$ are the number derivatives of $U_{\mathrm{int}}$ and thus the internal part of chemical potentials:
+  $$ \mu_{\mathrm{int},i} = \frac{\partial U_{\mathrm{int}}}{\partial N_i } $$
+* $N_i^{\mathrm{bulk}}$ are close to $N_i$ but they are charge-neutral: $\sum_i q_i N_i^{\mathrm{bulk}} = 0$.
+* $U_{\mathrm{bulk}}(S,V,N_1^{\mathrm{bulk}}, N_2^{\mathrm{bulk}},\ldots)$ is the extensive energy of the charge-neutral bulk.
+* The excess numbers $N_i - N_i^{\mathrm{bulk}}$ reflect which ions have been added/removed from the surface to make up the surface charge, and they are primarily a function of total charge $Q$ with some gradual dependence on $N_i^{\mathrm{bulk}}$.
+* We'll ignore the $\mathcal{O}((N - N^{\mathrm{bulk}})^2)$ term. Because approximately $N - N^{\mathrm{bulk}} \propto Q$, this would be $\mathcal{O}(Q^2)$ and thus effectively contain a modification to the total capacitance due to the Debye layer, but for simplicity we'll proceed without it.
 
 ### Impact of charging energy on $\mu_i$
 
@@ -103,7 +111,7 @@ $$ \tilde\psi = \phi_{\infty} + Q / C, $$
 
 which is approximately the "outer potential" (the electric potential on the surface), so for the chemical potential we have:
 
-$$ \mu_i = \bigg( \frac{\partial U_{\mathrm{int}}}{\partial N_i} \bigg)_{S,V,N_{j\neq i}} + q_i \tilde\psi. $$
+$$ \mu_i = \frac{\partial U}{\partial N_i} = \mu_{\mathrm{int},i} + q_i \tilde\psi. $$
 
 Here we see that this $\mu_i$ resembles the standard decomposition of electrochemical potential, $ \bar\mu_i = \mu_{\mathrm{int},i} + q_i \phi $, though the two have different electric potentials. The crucial thing here is that $\mu_i$ is not only dependent on local composition, but is also strongly dependent on non-local effects via the shared total charge $Q$. This demonstrates that the true thermodynamic $\mu_i$ does not have the character of an internal chemical potential, but instead behaves as the electrochemical potential $\bar\mu_i$.
 
@@ -154,34 +162,63 @@ Second, the chemical potential of an ion $\mu_i$ becomes immediately ill-defined
 
 That said, permitting deviations from charge neutrality can be even more problematic if the energetic cost is not correctly modelled. Given the frustratingly non-local nature of electric energy that arises from charge concentrations, simplified models benefit greatly from assuming exact local charge neutrality.
 
-## Going bulk: how to describe a homogeneous thermodynamic system with perfect charge neutrality
+## Going bulk: how to describe a homogeneous, charge-neutral *interior* of a thermodynamic system
 
 Obviously, there is a need to address the case of homogeneous extensive systems, like beakers of electrolyte, without all those annoying surface charging effects. But every homogeneous system has a boundary. It thus becomes necessary to mechanically 'scrape away' the surface. But again this is no ordinary surface, and we cannot just apply regular surface methods (like Gibbs isotherm).
 
 Let's describe the traditional approach, why it suffers problems, and what is the proper alternative.
 
-* Traditionally, we go to a 'bulk energy' $U_{\mathrm{bulk}}(S, V, N_1', N_2', \ldots)$, mentioned above which very closely resembles the original system's internal energy.
-  
-  But there is a catch: we must have total charge $Q_{\mathrm{bulk}}=0$. Thus our $N_i'$ arguments are *overdetermined*, which is a serious problem. This traditional approach leads to meaningless partial derivatives that must be matched together into things like 'mean activities', as mentioned above. In fact I would go so far to say that $U_{\mathrm{bulk}}$ is not even a legitimate thermodynamic energy.
-  
-  And there is another problem: we have fully lost the electrical state of the system, and we only have its chemical state. At this point, the traditional remedy is to reintroduce an extrathermodynamic $\phi$. This can be a totally arbitrary number, or based on some ion activity convention, or we can try to borrow $\phi$ from the microscopic statistical mechanics.
+### The traditional awkward path: raw bulk internal energy
 
-* As an alternative, we Legendre transform our original charge-aneutral system energy into a grand-type free energy $F(S,V,\phi_{\infty},\bar\mu_1,\bar\mu_2,\ldots) = U - \sum_i \bar\mu_i N_i$, and then extract the bulk out of that:
-  $$ F_{\mathrm{bulk}}(S,V,\bar\mu_1,\bar\mu_2,\ldots) \approx ??? $$
-  
-  Note that the dependence on $\phi_{\infty}$ has disappeared: the properties of the bulk system are now entirely self-contained in terms of the $\bar\mu_i$. Also note what the gauge invariance must look like now: For any $x$ we have
-  $$F_{\mathrm{bulk}}(S,V,\bar\mu_1,\bar\mu_2,\ldots) = F_{\mathrm{bulk}}(S,V,\bar\mu_1 + q_1 x,\bar\mu_2 + q_2 x,\ldots).$$
+Traditionally, we directly jump to simply extracting the 'bulk energy' $U_{\mathrm{bulk}}(S, V, N_1^{\mathrm{bulk}}, N_2^{\mathrm{bulk}}, \ldots)$, described above. But these our $N_i^{\mathrm{bulk}}$ arguments are overdetermined because they are constrained by charge neutrality. And so $U_{\mathrm{bulk}}$ partial derivatives don't even exist except in careful charge neutral combinations.
 
-  This $F_{\mathrm{bulk}}(S,V,\bar\mu_1,\bar\mu_2,\ldots)$, free from the overdeterminism, is a much better option, although it does mean there are many sets of $\bar\mu_i$ values that describe the same bulk chemical system. But in fact, *they are different systems* --- they are chemically the same but they differ in electrical state. And we don't have to introduce any extrathermodynamic $\phi$, rather the electrical state is right there, thermodynamically! (We are of course free to introduce $\phi$ such as for making approximate arguments about statistically ideal systems, but we do not rely on it.)
-  
-  And, instead of us having to carefully feed in a set of charge neutral $N_i'$, the free energy simply spits out such a set for any set of arguments $\bar\mu_i$:
-  $$ N_i' = -\frac{\partial F_{\mathrm{bulk}}}{\partial \bar\mu_i} $$
-  where we can use the above gauge invariance to confirm that the set it outputs is always charge neutral:
-  $$ 0 = \frac{\partial F_{\mathrm{bulk}}}{\partial x} = \sum_i q_i \frac{\partial F_{\mathrm{bulk}}}{\partial \bar\mu_i} = -\sum_i q_i N_i' = Q_{\mathrm{bulk}}$$
+Mathematically, $U$ in the bulk limit is a singular thermodynamic energy (it explodes if any single $N_i$ is varied), while $U_{\mathrm{bulk}}$ isn't even a proper thermodynamic energy.
 
-  (Note that we only really have to Legendre transform *one* of the ionic numbers into an electrochemical potential to fix the overdeterminism, but transforming them all is nicely symmetric.)
+And there is another problem: we have fully lost the electrical state of the system. So not only is $U_{\mathrm{bulk}}$ an overdetermined thermodynamic function but worse yet, its variable set is incomplete.
 
+### A better way: grand free energies
 
+As an alternative, let's Legendre transform our original charge-aneutral system energy into a grand-type free energy $F(S,V,\phi_{\infty},\mu_1,\mu_2,\ldots) = U - \sum_i \mu_i N_i$, and then extract the bulk out of that:
+
+$$\begin{aligned}
+F
+& = F(S,V,\phi_{\infty},\mu_1,\mu_2,\ldots) \\
+& = U - \sum_i \mu_i N_i \\
+& = U_{\mathrm{int}} + Q \phi_{\infty} + \tfrac{1}{2C} Q^2  - \sum_i (\mu_{\mathrm{int},i} + q_i \phi_{\infty} + q_i Q/C) N_i \\
+& = \big[U_{\mathrm{int}} - \sum_i \mu_{\mathrm{int},i} N_i \big] + \tfrac{1}{2C} Q^2 - \tfrac{1}{C} Q^2 \\
+& = \big[U_{\mathrm{bulk}} + \sum_i (N_i - N_i^{\mathrm{bulk}}) \mu_{\mathrm{int},i} - \sum_i \mu_{\mathrm{int},i} N_i \big] - \tfrac{1}{2C} Q^2 \\
+& = \big[U_{\mathrm{bulk}} - \sum_i \mu_{\mathrm{int},i} N_i^{\mathrm{bulk}} \big] - \tfrac{1}{2C} Q^2 \\
+& = \big[U_{\mathrm{bulk}} - \sum_i \mu_i N_i^{\mathrm{bulk}} \big] - \tfrac{1}{2C} Q^2 \\
+& \approx [F_{\mathrm{bulk}}] - \tfrac{1}{2} C (\tilde\psi - \phi_{\infty})^2
+\end{aligned}$$
+
+where we have used the charge neurality of $N_i^{\mathrm{bulk}}$, i.e., $\sum_i (\mu_i - \mu_{\mathrm{int},i}) N_i^{\mathrm{bulk}} = \tilde\phi \sum_i q_i N_i^{\mathrm{bulk}} = 0$, as well as $Q = C(\tilde\psi - \phi_{\infty})$ (and we are saying that $\tilde\psi$ can be written as a function of $\mu_i$, e.g. it is some weighted mean of $V_i=\mu_i/q_i$ values with a {% wiki "work function" %} offset). We thus arrive at a bulk free energy (which is the legendre transform of the 'defective' $U_{\mathrm{bulk}}$ above)
+
+$$F_{\mathrm{bulk}}(S,V,\mu_1,\mu_2,\ldots) = U_{\mathrm{bulk}} - \sum_i \mu_i N_i^{\mathrm{bulk}} $$
+
+This $F_{\mathrm{bulk}}$, free from the overdeterminism, is a perfectly well behaved thermodynamic function! Not only that, but in the classical limit (roughly $C\rightarrow 0$), the system free energy $F$ is also nonsingular (instead it is degenerate) and simply converges to $F_{\mathrm{bulk}}$.
+
+The properties of the bulk system are now entirely self-contained in terms of the $\mu_i$ (no $\phi_{\infty}$ dependence). Also note what the gauge invariance must look like now: For any $x$ we have
+$$F_{\mathrm{bulk}}(S,V,\mu_1,\mu_2,\ldots) = F_{\mathrm{bulk}}(S,V,\mu_1 + q_1 x,\mu_2 + q_2 x,\ldots).$$
+
+Although it does mean there are many sets of $\mu_i$ values that describe the same bulk chemical system, the fact is that *they are different systems* --- they are chemically the same but they differ in electrical state.
+
+And, instead of us having to carefully feed in a set of charge neutral $N_i'$, the free energy simply spits out such a set for any set of arguments $\mu_i$:
+$$ N_i' = -\frac{\partial F_{\mathrm{bulk}}}{\partial \mu_i} $$
+where we can use the above gauge invariance to confirm that the set it outputs is always charge neutral:
+$$ 0 = \frac{\partial F_{\mathrm{bulk}}}{\partial x} = \sum_i q_i \frac{\partial F_{\mathrm{bulk}}}{\partial \mu_i} = -\sum_i q_i N_i' = Q_{\mathrm{bulk}}$$
+
+Obviously we could have gotten to $F_{\mathrm{bulk}}$ much more quickly from a postulated traditional $U_{\mathrm{bulk}}$, but the point of this journey is to emphasize that $U_{\mathrm{bulk}}$ and $F_{\mathrm{bulk}}$ are both extensive idealizations of real thermodynamic systems, and it is the process of constructing that extensivity that causes strange things to happen in the case of electrostatics.
+
+### What about $\phi$?
+
+There is then a question about what is the in-material electrostatic potential $\phi$. Note that this is very different from both $\phi_{\infty}$ and $\tilde\psi$ above, which are both vacuum potentials.
+
+The actual thermodynamics simply does not need $\phi$, which should be no surprise since $\phi$ is unmeasurable. Instead, $\phi$ comes about from statistical mechanical models, such as the ideal-gas theory of ionic solutes (which we covered in the [Solutions](../solutions/) topic). However, it is quite arbitrary, especially in non-ideal solutions, which we will talk about in upcoming appendix topics.
 
 ## Takeaways
+
+* Charge neutrality is not in fact exactly true for real thermodynamic systems. The actual deviation may be minor in terms of particle number, but the energetic consequences are overwhelming.
+* The only natural chemical potential for a charged species is electrochemical potential, $\mu_i = \bar\mu_i$. This is true for every real thermodynamic system.
+* When we idealize a real system to be extensive, the system itself forces charge neutrality.
 
