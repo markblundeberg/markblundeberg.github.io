@@ -30,6 +30,7 @@
 
 *Nuances*:
 
+- [_Standard state data_](/esbd/data/) - Numerical data for ionic solutes' $V^\circ_i$ values in water.
 - [_Thermodynamics_](/esbd/thermodynamics) - Subtleties of the basic thermodynamics of charged systems.
 - [_Nuances_](/esbd/nuances/) - Are $V_i$ "real voltages"?
 - [_Non-ideal solutions_](/esbd/nonideal) - Focussing on technical difficulties of single-ion activities.
