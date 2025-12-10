@@ -28,12 +28,13 @@
 - Electroplating: A kinetic-driven process.
 - Corrosion: A mixed-potential, non-equilibrium system.
 
-*Nuances*:
+*Thermodynamics*:
+- [_Thermodynamics_](/esbd/thermodynamics/) - Subtleties of the thermodynamics of charges; why electrochemical potentials (and thus $V_i$) are fundamental.
+- [_Non-ideal solutions_](/esbd/nonideal/) - Focussing on technical difficulties of single-ion activities.
+- [_Capacitance_](/esbd/capacitance/) - Discussion of ambipolar capacitance (thermodynamic) vs chemical capacitance (extrathermodynamic).
 
+*Appendices*:
 - [_Standard state data_](/esbd/data/) - Numerical data for ionic solutes' $V^\circ_i$ values in water.
-- [_Thermodynamics_](/esbd/thermodynamics) - Subtleties of the basic thermodynamics of charged systems.
 - [_Nuances_](/esbd/nuances/) - Are $V_i$ "real voltages"?
-- [_Non-ideal solutions_](/esbd/nonideal) - Focussing on technical difficulties of single-ion activities.
 - [_The case against $\phi$_](/esbd/phi/) - Why we should bypass using an electrostatic potential.
-
-[_About_](/esbd/about/) - How this project came about.
+- [_About_](/esbd/about/) - How this project came about.

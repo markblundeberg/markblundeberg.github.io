@@ -2,11 +2,11 @@
 layout: layouts/esbd_topic.njk
 title: 'Thermodynamics'
 tags: [page, esbd_topic]
-orderESBD: 81
+orderESBD: 71
 eleventyNavigation:
     key: Thermodynamics
     parent: ESBD
-    order: 81
+    order: 71
 ---
 
 # {{title}}

@@ -2,11 +2,11 @@
 layout: layouts/esbd_topic.njk
 title: 'Capacitance'
 tags: [page, esbd_topic] # Assign to 'page' and 'esbd_topic' collections
-orderESBD: 23
+orderESBD: 73
 eleventyNavigation:
     key: Capacitance # Text used in navigation menus
     parent: ESBD # Optional: Assumes you have a main 'ESBD' menu item defined elsewhere
-    order: 23 # Order within the parent menu
+    order: 73 # Order within the parent menu
 ---
 
 # {{title}}
@@ -129,9 +129,3 @@ $$ \frac{\partial \mathbf{\rho}}{\partial t} = {\mathbf D}^{\mathrm{amb}} \nabla
 
 Even in the ideal case when conductivity matrix ${\mathbf \sigma}$ is diagonal and $\mathcal{C}$ is diagonal, ${\mathbf C}^{\mathrm{amb}}$ is fully dense and so ${\mathbf D}^{\mathrm{amb}}$ is fully dense. The eigvenvalues of ${\mathbf D}^{\mathrm{amb}}$ represent different rates of ambipolar diffusion, that can be observed!
 
-
-## Takeaways
-
-For the next topic, we'll talk about the close analogies in semiconductors and other solid state electronic materials.
-
-[**NEXT TOPIC: Solid state**](../solidstate/)
