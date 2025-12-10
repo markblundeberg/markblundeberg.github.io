@@ -11,7 +11,7 @@ eleventyNavigation:
 
 # {{title}}
 
-So far I have been referring to electrochemical potentials $\bar\mu_i$ as the more fundamental true thermodynamic variable, which justifies $V_i$ as a first-class object. In contrast I have referred to internal chemical potentials and ion activities as artificial objects from the splitting of $\bar\mu_i$. This is not the normal view in chemistry books, where we often find that electrochemical potential $\bar\mu_i$ is a footnote.
+So far I have been referring to electrochemical potentials $\bar\mu_i$ as the more fundamental true thermodynamic variable, which justifies $V_i$ as a first-class object. In contrast I have referred to internal chemical potentials and ion activities as artificial objects from the splitting of $\bar\mu_i$. This is not the normal view in chemistry books, where we often find that electrochemical potential $\bar\mu_i$ is a footnote or that both $\bar\mu_i$ and $\mu_{\mathrm{int},i}$ are regarded as "equally valid" and in fact chemists prefer to give the latter the symbol $\mu_i$.
 
 We can't address this within the standard assumptions of chemistry (homogeneity, extensivity, and charge neutrality). To see what is really going on we're going to have to relax our assumptions and go back to the fundamentals of thermodynamics that deal with real systems (finite, inhomogeneous, and charged).
 
@@ -48,7 +48,7 @@ To answer this question requires care:
 
 ## Bodies without charge neutrality
 
-At this point we could define some tiny chargeable statistical mechanical system and exactly solve it, but instead let's look at large bulky systems as chemistry tries to deal with. We are going to recognize some universal phenomenology of how ions behave that is extremely different from uncharged solutes. This kind of 'toy model' will give us what we need.
+At this point we could define some tiny chargeable statistical mechanical system and exactly solve it, but instead let's look at large macroscopic systems that chemistry deals with. We are going to recognize some universal phenomenology of how ions behave that is extremely different from uncharged solutes. This kind of 'toy model' will give us what we need.
 
 ### Charge decouples from ion (charge moves to surfaces)
 
@@ -56,15 +56,15 @@ Consider a blob of salty water floating in space, containing dissociated $\mathr
 
 It seems like in the above example, the charge of the ion has disappeared. But since charge is conserved, it means that its charge has been transported away elsewhere. Indeed, we will find that the surface of this saltwater blob has had its charge increase by exactly $+e$, and this tiny amount of charge is delocalized over the entire surface. The natural course of things is that when we add a charged particle, the charge basically seems to leave the particle and become imprinted on the surface.
 
-What's curious is that the amount of disturbance at the surface is highly sensitive to the total charge imbalance (i.e. the total surface charge), but it is far less sensitive to the exact kinds of ions we added to create the imbalance (whether we added $\mathrm{Na}^+$ or $\mathrm{K}^+$ or $\mathrm{Cu}^{2+}$). Clearly, the total charge is going to play a central role in any kind of toy model.
+What's curious is that the nature of the disturbance at the surface is highly sensitive to the total charge imbalance (i.e. the total surface charge), but it is far less sensitive to the exact kinds of ions we added to create the imbalance (whether we added $\mathrm{Na}^+$ or $\mathrm{K}^+$ or $\mathrm{Cu}^{2+}$). Clearly, the total charge is going to play a central role in any kind of model of a chargeable body.
 
 The total charge will be precisely
 $$ Q = \sum_i q_i N_i $$
 for species charge $q_i$, that is $q_i = z_i F$ (molar) or $q_i = z_i e$ (particular).
 
-### The charging energy
+### The charging energy (external)
 
-We can use $Q$ alone estimate the energetic costs of a body deviating from charge neutrality as $U_{\mathrm{pot}} + U_{\mathrm{cap}}$.
+We can use $Q$ alone to estimate the energetic costs of a body deviating from charge neutrality as $U_{\mathrm{pot}} + U_{\mathrm{cap}}$.
 
 The first term is the generic electric potential of the body sitting in a background electric potential $\phi_\infty$:
 
@@ -95,9 +95,10 @@ where:
 * $\mu_{\mathrm{int},i}$ are the number derivatives of $U_{\mathrm{int}}$ and thus the internal part of chemical potentials:
   $$ \mu_{\mathrm{int},i} = \frac{\partial U_{\mathrm{int}}}{\partial N_i } $$
 * $N_i^{\mathrm{bulk}}$ are close to $N_i$ but they are charge-neutral: $\sum_i q_i N_i^{\mathrm{bulk}} = 0$.
-* $U_{\mathrm{bulk}}(S,V,N_1^{\mathrm{bulk}}, N_2^{\mathrm{bulk}},\ldots)$ is the extensive energy of the charge-neutral bulk.
+* $U_{\mathrm{bulk}}(S,V,N_1^{\mathrm{bulk}}, N_2^{\mathrm{bulk}},\ldots)$ is the extensive energy of the charge-neutral bulk. Note we cannot take derivatives of this function, it is only defined for a charge-neutral set of $N_i^{\mathrm{bulk}}$.
 * The excess numbers $N_i - N_i^{\mathrm{bulk}}$ reflect which ions have been added/removed from the surface to make up the surface charge, and they are primarily a function of total charge $Q$ with some gradual dependence on $N_i^{\mathrm{bulk}}$.
-* We'll ignore the $\mathcal{O}((N - N^{\mathrm{bulk}})^2)$ term. Because approximately $N - N^{\mathrm{bulk}} \propto Q$, this would be $\mathcal{O}(Q^2)$ and thus effectively contain a modification to the total capacitance due to the Debye layer, but for simplicity we'll proceed without it.
+* The term $\sum_i \mu_{\mathrm{int},i} \cdot (N_i - N_i^{\mathrm{bulk}})$ is basically an estimate of the surface's internal energy.
+* We'll ignore the $\mathcal{O}((N - N^{\mathrm{bulk}})^2)$ term. Because approximately $N - N^{\mathrm{bulk}} \propto Q$, this would be $\mathcal{O}(Q^2)$ and thus effectively contain a modification to the total capacitance due to the Debye layer's chemical capacitance, but for simplicity we'll assume this is insignificant compared to the system's massive self-capacitance energy.
 
 ### Impact of charging energy on $\mu_i$
 
@@ -170,11 +171,11 @@ Let's describe the traditional approach, why it suffers problems, and what is th
 
 ### The traditional awkward path: raw bulk internal energy
 
-Traditionally, we directly jump to simply extracting the 'bulk energy' $U_{\mathrm{bulk}}(S, V, N_1^{\mathrm{bulk}}, N_2^{\mathrm{bulk}}, \ldots)$, described above. But these our $N_i^{\mathrm{bulk}}$ arguments are overdetermined because they are constrained by charge neutrality. And so $U_{\mathrm{bulk}}$ partial derivatives don't even exist except in careful charge neutral combinations.
-
-Mathematically, $U$ in the bulk limit is a singular thermodynamic energy (it explodes if any single $N_i$ is varied), while $U_{\mathrm{bulk}}$ isn't even a proper thermodynamic energy.
+Traditionally, we directly jump to simply extracting the 'bulk energy' $U_{\mathrm{bulk}}(S, V, N_1^{\mathrm{bulk}}, N_2^{\mathrm{bulk}}, \ldots)$, described above. But our $N_i^{\mathrm{bulk}}$ arguments are overdetermined because they are constrained by charge neutrality. And so $U_{\mathrm{bulk}}$ partial derivatives don't even exist except in careful charge neutral combinations.
 
 And there is another problem: we have fully lost the electrical state of the system. So not only is $U_{\mathrm{bulk}}$ an overdetermined thermodynamic function but worse yet, its variable set is incomplete.
+
+Mathematically, the overall $U$ in the bulk limit is a singular thermodynamic energy (it explodes if any single $N_i$ is varied), while $U_{\mathrm{bulk}}$ is simultaneously both overspecified *and* missing information. These are simply awful functions to work with.
 
 ### A better way: grand free energies
 
@@ -220,5 +221,5 @@ The actual thermodynamics simply does not need $\phi$, which should be no surpri
 
 * Charge neutrality is not in fact exactly true for real thermodynamic systems. The actual deviation may be minor in terms of particle number, but the energetic consequences are overwhelming.
 * The only natural chemical potential for a charged species is electrochemical potential, $\mu_i = \bar\mu_i$. This is true for every real thermodynamic system.
-* When we idealize a real system to be extensive, the system itself forces charge neutrality.
+* We should not assume charge neutrality. When we idealize a real system to be extensive, the system itself naturally forces charge neutrality on us.
 
