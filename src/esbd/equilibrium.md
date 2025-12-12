@@ -123,6 +123,29 @@ Much like we discussed with $ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ earlier, th
 
 Note that the $\mathrm{Fe}^{2+}$/$\mathrm{Fe}^{3+}$ combination acts as an in-solution redox couple: it can supply or remove electrons to other reactions, not just to inert metals. For this reason, I am plotting a "virtual" $V_{\mathrm{e}^-}$ in solution, which corresponds to the notion that a redox-active solution can have a meaningful Fermi level.^[Reiss, H. (1985). [The Fermi level and the redox potential.](https://doi.org/10.1021/j100264a005) The Journal of Physical Chemistry, 89(18), 3783–3791.]^[Peljo, P., Villevieille, C., & Girault, H. H. (2025). [The redox aspects of lithium-ion batteries.](https://doi.org/10.1039/d4ee04560b) Energy &amp; Environmental Science, 18(4), 1658–1672.  ]
 
+## Bulk charge storage (charge neutrality)
+
+[Keep tone consistent with above!] 
+
+Flexible relation $V_i - V_j$.
+
+General principle: when you see two or more $V_i$ lines in the same place, you can have charge storage. Note though sometimes constraints mean two $V_i$ lines are fixed, as above (e.g. H2O above, or contact with saturated salt, or H2SO4/SO4/H).
+
+We can think about this as a kind of capacitance. In the case of two charge carriers 
+Talked about in more detail in [capacitance topic](../capacitance/).
+
+<figure class="diagram-placeholder">
+{% figcaption %}
+- Electron-lithium
+- Show next to -||- capacitor equivalent
+- Depict with reaction ⇌ symbol anyway?
+{% endfigcaption %}
+</figure>
+
+Quite generic because charge neutrality is so strict. In some sense it is a 'reaction' but it is very electrostatically constrained. For example lithium above but also ion-ion.
+
+Charge neutrality does not hold at interfaces.
+
 ## Takeaways
 
 The main point is that with reactions (including electrode reactions),
