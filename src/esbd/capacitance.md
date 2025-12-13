@@ -38,7 +38,7 @@ $$ Q_i(V_1, \ldots, V_N) = -\frac{\partial F}{\partial V_j}. $$
 
 Each one of these $Q_i$ is a function of all the $V_i$ values. This has to be the case because the bulk is charge neutral: $ 0 = Q = Q_{\mathrm{fix}} + \sum Q_i $. So if $Q_1$ increases under some change of parameters then all the other $Q_i$'s have to decrease such that the net total change is 0. Note that there could be some dopants present which modify the free energy function, including by inducing a background charge $Q_{\mathrm{fix}} \neq 0$.
 
-(And again, to remind, this is usually expressed in terms of electrochemical potential $\bar\mu_i = q_i V_i$ and particle number $N_i = Q_i / q_i$ but the voltage and charge units are more practical.)
+(And again, to remind, this is usually expressed in terms of electrochemical potential $\bar\mu_i = q_i V_i$ and particle number $N_i = Q_i / q_i$ but the voltage and charge units are more familiar in our context.)
 
 ### Ambipolar capacitance defined
 
@@ -46,7 +46,7 @@ Capacitance is a change in charge due to a change in some voltage difference $\m
 
 The case of charge storage in materials we must be aware of these complications: we have 1) multiple control voltages, not just two, 2) multiple *charge types*, 3) nonlinearity, and 4) no parallel-plate geometry at all, it is simply a bulk (volumetric or gravimetric) capacitance.
 
-We can define capacitance as a matrix, which we call **ambipolar capacitance matrix**:
+We can define capacitance as a matrix, which I call the **ambipolar capacitance matrix**:
 
 $$\begin{aligned}
 \mathbf{C}^{\mathrm{amb}}_{ij}
@@ -55,7 +55,7 @@ $$\begin{aligned}
 ,
 \end{aligned}$$
 
-where we added the subscript $Q=0$ to emphasize that this is for a charge-neutral (ambipolar) bulk.
+where we added the subscript $Q=0$ to emphasize that this is for a charge-neutral (ambipolar) bulk. As we'll see below, removing that $Q=0$ makes a huge difference.
 
 This matrix $ \mathbf{C}^{\mathrm{amb}}$ is truly a {% wiki "capacitance matrix" %} in the mathematical sense: its units are farads, its rows and columns sum to zero, it is symmetric, and it is positive semi-definite. Normally we would use capacitance matrix to describe the self- and mutual capacitance of a collection of conductors, but in this case the "conductors" are actually all overlapping in space. A regular geometrical capacitance matrix is highly sensitive to arrangement, shapes, and distances, while the ambipolar capacitance is simply proportional to volume of solvent/medium (or mass, depending on what else we are holding fixed).
 
@@ -67,7 +67,7 @@ A special case of ambipolar capacitance is two-carrier case: a single capacitor.
 
 *** CAPACITANCE DIAGRAM - SINGLE-CAP (electron-ion) ***
 
-(Often this two-species coupling $C$ value is called 'chemical capacitance' but that term is ambiguous. In other context it instead refers to the *internal* chemical capacitance I define below.)
+(Often this two-species coupling $C$ value is called 'chemical capacitance' but that term is ambiguous. In other context it instead refers to the *internal* chemical capacitance defined below.)
 
 If you only cared about two carriers, then the $\mathbf{C}^{\mathrm{amb}}$ matrix looks like overkill (why not just use $C$) but it is absolutely necessary in the case of more than two carriers. Note that some other multicarrier generalizations of chemical capacitance seen in the literature are not correct.^[E.g. In JM2001 they defined 'component chemical capacitance', which only works for the two ion case and is not meaningful beyond that.]
 
@@ -83,23 +83,34 @@ Integrated ambipolar capacitance *is* the charge storage of a bulk material such
 
 #### Rigour in nonideal solutions
 
-Ambipolar capacitance is a thermodynamic observable and directly relates to mean activities. E.g. Debye-Huckel or Pitzer models predict a specific ambipolar capacitance matrix. Descriptions of these nonideal electrolytes in terms of single-ion activities corresponds to a description in terms of $\mathcal{C}$, which will be a dense matrix in nonideal solutions and generally regarded as unmeasurable. The ambipolar $\mathbf{C}^{\mathrm{amb}}$ (based on a real thermodynamic free energy as we established in the beginning) relates to measurable mean activities.
+Ambipolar capacitance is a thermodynamic observable and directly relates to mean activities. E.g. Debye-Huckel or Pitzer models predict a specific ambipolar capacitance matrix.
+
+(In contrast, descriptions of electrolytes in terms of single-ion activities corresponds to a description in terms of internal chemical capacitance $\mathcal{C}$ (see below). In nonideal solutions, $\mathcal{C}$ will be a dense matrix and also generally regarded as unmeasurable; different activity conventions will have different $\mathcal{C}$ matrices.)
 
 #### Ambipolar diffusion
 
-Ambipolar capacitance directly appears in the conduction equation in quasi-charge-neutral regime:
+The volumetric ambipolar capacitance, $\mathbf{c}^{\mathrm{amb}} = \mathbf{C}^{\mathrm{amb}}/V$ directly appears in the continuity equation in the quasi-charge-neutral regime, together with the regular conductivity equation:
 
-$$ \mathbf{C}^{\mathrm{amb}} \frac{\partial \mathbf{V}}{\partial t} = {\mathbf \sigma} \nabla^2 \mathbf{V} $$
+$$\begin{aligned}
+\mathbf{c}^{\mathrm{amb}} \frac{\partial \mathbf{V}}{\partial t} & = -\nabla \cdot \mathbf{\vec{J}}, & \quad \text{(continuity)},\\
+\mathbf{\vec{J}} & = -\boldsymbol{\sigma} \nabla \mathbf{V} & \quad \text{(conductivity)},
+\end{aligned}$$
 
-$$ \frac{\partial \mathbf{V}}{\partial t} = {\mathbf D}^{\mathrm{amb}} \nabla^2 \mathbf{V} $$
+where conductivity $\boldsymbol{\sigma}$ is also possibly a dense matrix (for simplicity we'll assume scalar matrix entries, though it could be interesting to consider tensorial e.g. for magnetic field effects); cross-terms can represent e.g. 'ion drag'. You can't simply convert this into a diffusion equation because $\mathbf{c}^{\mathrm{amb}}$ can't be inverted (because of charge neutrality), so we have to proceed with a bit of care.
 
-$$ \frac{\partial \mathbf{\rho}}{\partial t} = {\mathbf D}^{\mathrm{amb}} \nabla^2 \mathbf{\rho} $$
+First, let's look at a homogeneous material, small-signal case. In this case both $\boldsymbol{\sigma}$ and $\mathbf{c}^{\mathrm{amb}}$ are constant in space, then this simplifies to $\mathbf{c}^{\mathrm{amb}} \partial_t \mathbf{V} = \boldsymbol{\sigma} \nabla^2 \mathbf{V}$, which reveals there are two distinct classes of modes:
 
-Even in the ideal case when conductivity matrix ${\mathbf \sigma}$ is diagonal and $\mathcal{C}$ is diagonal, $\mathbf{C}^{\mathrm{amb}}$ is fully dense and so ${\mathbf D}^{\mathrm{amb}}$ is fully dense. The eigvenvalues of ${\mathbf D}^{\mathrm{amb}}$ represent different rates of ambipolar diffusion, that can be observed!
+* One charge mode of the form $\mathbf{V}(x,t) = v(x,t) \mathbf{1}_N$, which follows $0 = \nabla^2 v$. The charge mode is representative of the naive form of electricity: all $V_i$ values (and $\phi$ too) vary in unison, and so all ions conduct together as if they have a single common conductivity $\sigma_{\mathrm{tot}} = \sum_{ij} \sigma_{ij}$, i.e. a total current $\vec{J}_{\mathrm{tot}} = -\sigma_{\mathrm{tot}} \nabla v$ driven by the common gradient. And each ion has $\nabla \cdot \vec{J}_i = 0$ so there is no piling up (but see below about material boundaries).
+* $N-1$ ambipolar modes of the form $\mathbf{V}(x,t) = v(x,t) \mathbf{a}$, where $\mathbf{a}$ is a {% wiki "generalized eigenvalue problem", "generalized eigenvector" %} satisfying $\mathbf{c}^{\mathrm{amb}} \mathbf{a} = D^{-1} \boldsymbol{\sigma} \mathbf{a}$ (often easy to solve^[Often the matrix $\boldsymbol{\sigma}$ is invertible and so we can get all the modes by eigendecomposing $\boldsymbol{\sigma}^{-1} \mathbf{c}^{\mathrm{amb}}$.]) for eigenvalue $D^{-1}$. Each of these modes evolves with a diffusion equation: $\partial_t v = D \nabla^2 v$ with diffusion coefficient $D$, and there may be $N-1$ distinct ambipolar diffusion constant. These are neutral current modes: $\sum_i \vec{J}_i = 0$.
+
+For example in the binary (two-ion) case of cation $\mathrm{M}$ and anion $\mathrm{X}$, assuming a diagonal conductivity then the diffusion mode has $D^{-1} = (\sigma_{\mathrm{M}}^{-1} + \sigma_{\mathrm{X}}^{-1})c^{\mathrm{amb}}$, where $c^{\mathrm{amb}}$ is the single degree of freedom in the $\mathbf{c}^{\mathrm{amb}}$ matrix. This is the most simple kind of ambipolar diffusion as usually considered in the literature, in fact one usually sees a further ideality assumption that $(c^{\mathrm{amb}})^{-1} = ((z_{\mathrm{M}} F)^2 c_{\mathrm{M}} / (RT))^{-1} + ((z_{\mathrm{X}} F)^2 c_{\mathrm{X}} / (RT))^{-1}$ for ion molarities $c_{\mathrm{M}}$ and $c_{\mathrm{X}}$.
+
+It's worth noting however that when there are material boundaries (or any other reason for the matrices to vary, such as most nonlinearities), then there are no such simple modes overall: what is ambipolar in one region is not ambipolar in the next, and even the charge modes don't match up (the ions *do* pile up: $\nabla \cdot \vec{J}_i \neq 0$). Moreover, very close to the interfaces the charge neutrality assumption is often violated as well (within the screening length scale, see below), though often times this can be neglected.
+Besides that, even with a single material, the boundary conditions (e.g. one ion connected to electrodes but the other ion blocked) may mean that steady-state conduction need not follow the charge mode at all (however, when the bias is applied, the system will at first conduct according to the charge mode).
 
 ## Internal chemical capacitance (space charge)
 
-Near interfaces, impurities, and in/around depletion regions, there are variations in charge neutrality. We want to model these regions as having some continuum space charge $\rho$ and some continuum electrostatic potential $\phi$. To this end we make a "local density approximation", by declaring that each infinitesimal volume $\mathrm{d}V$ has a local free energy function:
+Near interfaces, impurities, and in/around depletion regions, there are variations in charge neutrality. We want to model these regions as having some continuum space charge $\rho$ and some continuum electrostatic potential $\phi$. To this end we make a "local density approximation", by declaring that each infinitesimal volume $\mathrm{d}V$ has a local free energy function where $\phi$ is now a control variable:
 
 $$ F^\phi (V_1, \ldots, V_N, \phi) \propto \mathrm{d}V $$
 
@@ -135,7 +146,7 @@ For example:
 * In a degenerate Fermi gas of electrons, $\mathcal{C}/V = e^2 g(E_F)$ for density of states $g(E_F)$ better known as {% wiki "quantum capacitance" %}. For dilute (thermal) electrons or holes in semiconductors, $\mathcal{C}/V = e^2 n / (kT)$ for carrier density $n$.
 * In ideal-dilute electrolytes, $\mathcal{C}_{ii}/V = (z_i F)^2 c_i / (RT)$ for ion molarity $c_i$, for each ion species.
 
-Going beyond the ideal case, however, correlations will cause cross terms. And in fact charged solutes are very happy to correlate with each other even when fairly dilute (this is the essence of Debye-Huckel effect), because the microscopic electrostatic interactions between ions are so long ranged.
+Going beyond the ideal case, however, correlations will cause cross terms. And in fact charged solutes are quite eager to correlate with each other even when fairly dilute, because the microscopic electrostatic interactions between ions are so long ranged (this is the essence of Debye-Huckel effect).
 
 Note the internal chemical capacitance matrix $\mathcal{C}$ is generally symmetric and positive definite, but it is *not* a proper capacitance matrix because it's not charge neutral: the rows do not add to zero.
 
@@ -175,7 +186,7 @@ Where $\mathcal{C}_{\mathrm{tot}} = \sum_i s_i = \sum_{ij} \mathcal{C}_{ij}$ is 
 
 > Screening is often derived laboriously in a particle-number basis. But in a $V_i$ basis we know simply that all $V_i$ are flat at equilibrium, and so the above equation means that at every point in space the induced free charge density from small variations $\delta \phi$ is $\delta \rho_{\mathrm{free}} = c_s \delta \phi $ where $c_s = \mathcal{C}_{\mathrm{tot}} / \mathrm{volume}$ is the volumetric screening power, and again this is a sum of all the internal chemical capacitances, per unit volume.
 >
-> The Poisson equation then leads exactly to the linear screening equation: $\varepsilon \nabla^2 \delta \phi = c_s \delta \phi + \rho_{\mathrm{imp}}$ where $\varepsilon$ is the medium's absolute permittivity and $\rho_{\mathrm{imp}}$ is the impurity charge density. This means $\sqrt{\varepsilon/c_s}$ is precisely the screening length in the general case of mixed charge carriers with any statistics (the {% wiki "Debye length" %} and {% wiki "Thomas–Fermi screening length" %} are both special cases of this).
+> The Poisson equation then leads exactly to the linear screening equation, $$\varepsilon \nabla^2 \delta \phi = c_s \delta \phi + \rho_{\mathrm{imp}},$$ where $\varepsilon$ is the medium's absolute permittivity and $\rho_{\mathrm{imp}}$ is the impurity charge density. This means $\sqrt{\varepsilon/c_s}$ is precisely the screening length in the general case of mixed charge carriers with any statistics (the {% wiki "Debye length" %} and {% wiki "Thomas–Fermi screening length" %} are both special cases of this).
 
 ### Ambipolar capacitance and internal chemical capacitance related
 
@@ -194,7 +205,7 @@ $$\begin{aligned}
 
 So, $\mathbf{C}^{\mathrm{amb}}$ has strictly less information than $\mathcal{C}$. On the other hand, $\mathbf{C}^{\mathrm{amb}}$ is a general thermodynamic property that does not make any microscopic assumptions as are usually needed for $\mathcal{C}$, but only the latter can be used to model continuum space charges.
 
-IDEA: SHOW VENN DIAGRAM OF APPLICABILITY?
+IDEA: SHOW VENN DIAGRAM OF APPLICABILITY? Ambipolar only: microscopically messy materials, $\phi$-agnostic. Both: long-range conduction, ambipolar diffusion, ideal bulk charge storage. Chem only: interfaces, screening, depletion/enhancement regions.
 
 ### Extended chemical capacitance matrix (the Jamnik-Maier trick)
 
