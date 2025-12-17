@@ -11,7 +11,7 @@ eleventyNavigation:
 
 # {{title}}
 
-So far I have been referring to electrochemical potentials $\bar\mu_i$ as the more fundamental true thermodynamic variable, which justifies $V_i$ as a first-class object. In contrast I have referred to internal chemical potentials and ion activities as artificial objects from the splitting of $\bar\mu_i$. This is not the normal view in chemistry books, where we often find that electrochemical potential $\bar\mu_i$ is a footnote or that both $\bar\mu_i$ and $\mu_{\mathrm{int},i}$ are regarded as "equally valid".
+So far I have been referring to electrochemical potentials $\bar\mu_i$ as the more fundamental true thermodynamic variable, which justifies $V_i=\bar\mu_i/q_i$ as a first-class object. In contrast I have referred to internal chemical potentials and ion activities as artificial objects from the splitting of $\bar\mu_i$. This is not the normal view in chemistry books, where we often find that electrochemical potential $\bar\mu_i$ is a footnote or that both $\bar\mu_i$ and $\mu_{\mathrm{int},i}$ are regarded as "equally valid".
 
 We can't address this within the standard assumptions of chemistry (homogeneity, extensivity, and charge neutrality). To see what is really going on we're going to have to relax our assumptions and go back to the fundamentals of thermodynamics that deal with real systems (inhomogeneous, finite, and charged).
 
@@ -63,7 +63,7 @@ $$ Q \phi_\infty + \frac{Q^2}{2C} $$
 The first contribution is the generic electric potential of any charge sitting in a background electric potential $\phi_\infty$.
 The second term is an estimate of the energy stored in the electric field around the body, which is part of the body's energy (also called self-energy), where $C$ is the {% wiki "self-capacitance" %}, generally proportional to the radius of our body.
 
-Also, this reveals that  is an external coordinate of our system energy, so we should actually write $U$ as:
+Also, this reveals that $\phi_{\infty}$ is an external coordinate of our system energy, so we should actually write $U$ as:
 
 $$ U(X, \phi_{\infty}, N_1, N_2, \ldots). $$
 
@@ -71,7 +71,7 @@ We can take our above estimate of the charging energy and formally split it off 
 
 $$ U(X, \phi_{\infty}, N_1, N_2, \ldots) = U_{\mathrm{int}}(X, N_1, N_2, \ldots) + Q \phi_\infty + \frac{Q^2}{2C} , $$
 
-for 'internal' energy $U_{\mathrm{int}}$. Note, I've added $\phi_{\infty}$ as an external coordinate that influences $U$, but it does not directly influence $U_{\mathrm{int}}$. Note $U_{\mathrm{int}}$ will also contain both bulk and some surface contributions (including some minor surface contributions due to the charge $Q$ being imprinted on the surface), but we won't get into that until the next topic.
+for 'internal' energy $U_{\mathrm{int}}$. Note, I've added $\phi_{\infty}$ as an external coordinate that influences $U$, but it does not directly influence $U_{\mathrm{int}}$. Also, $U_{\mathrm{int}}$ will also contain both bulk and surface contributions (including some minor surface contributions due to the charge $Q$ being imprinted on the surface), but we won't get into that until the next topic.
 
 ### The chemical potential $\mu_i$
 
@@ -142,9 +142,9 @@ The actual thermodynamics simply does not need $\phi$, which should be no surpri
 ## Takeaways
 
 * Charge neutrality is not in fact exactly true for real thermodynamic systems. The actual deviation may be minor in terms of particle number, but the energetic consequences are overwhelming.
-* We should not assume charge neutrality, as it makes it impossible to define ionic or electronic chemical potentials.
+* Assuming charge neutrality a priori makes it impossible to define ionic or electronic chemical potentials.
 * The only natural chemical potential for a charged species is electrochemical potential, $\mu_i = \bar\mu_i$. This is true for every real thermodynamic system.
 
-In the next topic we will see how the system itself naturally forces charge neutrality on us in certain limits, and what this actually means for the bulks of extensive systems that contain ions and electrons.
+In the next topic we will dissect how a finite system can be dissected into bulk and surface contributions, and what this actually means for the bulks of extensive systems that contain ions and electrons.
 
 [**NEXT TOPIC: Bulk thermodynamics**](../thermodynamics2/)
