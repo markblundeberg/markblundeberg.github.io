@@ -38,6 +38,11 @@ There are actually many other attempts at band diagrams for electrochemistry. To
 
 I haven't investigated them in detail but a quick glance shows they are very different. One thing I notice is a reliance on "vacuum level" as a useful concept, which [immediately makes me skeptical](../phi/).
 
+There are other works that promote the idea of $\bar\mu_i/q_i$ as an 'ionic voltage':
+
+* The works of Ilan Riess heavily promote the idea that differences in electrochemical potentials are voltages, ranging from his classic work about Fermi levels^[Riess, I. ["What does a voltmeter measure?."](https://doi.org/10.1016/S0167-2738(96)00542-5) Solid State Ionics 95.3-4 (1997): 327-328.] to later works about ionic electrochemical potentials.^[Riess, I. ["Mixed ionic–electronic conductors—material properties and applications."](https://doi.org/10.1016/S0167-2738(02)00182-0) Solid State Ionics 157.1-4 (2003): 1-17.] Riess focusses on differences and doesn't seem to promote the 'absolute voltage' view.
+* The Jamnik-Maier circuit model makes all electrochemical potentials into voltages. Somehow this picture has not escaped out of the ionics / electrochemical impedance spectroscopy communities.
+
 <a id="whyvoltage"></a>
 
 ## Why "species voltage"? Aren't voltages supposed to be differences?
