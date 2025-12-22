@@ -124,14 +124,14 @@ The elecrostatic potential of metals may seem merely tedious, but it can actuall
 
 In fact, the thermoelectric voltage has to do with gradients in the proper voltage (electrochemical potential, i.e., $V_{\mathrm{e}^-}$) that occur *only in regions of thermal gradient*, and $V_{\mathrm{e}^-}$ has no step at the junction itself. Thermodynamically, we describe thermoelectricity in terms of coupled transport of heat and electrons; it is only one of many kinds of coupled heat-particle transport phenomena.
 
-Of course, it is possible to get the right thermoelectric voltage using $\phi$ (and $\mu_{\mathrm{int},\mathrm{e}^-}$), instead of $\bar\mu_{\mathrm{e}^-}$. This does involve the difference between hot and cold junctions' Galvani potentials, but we also have to include the gradients in $\phi$ in regions of thermal gradient. The thermal gradients' $\delta \phi$ contribution would then fully cancel the Galvani potentials' $\delta \phi$ contribution, and add back in the correct thermoelectric result. We could also do the same with reference to outer potential $\psi$, or conduction band $E_{\mathrm{C}}$, with all the same considerations but different in quantity. In the end, we would have to get the same result as simply using $\bar\mu_{\mathrm{e}^-}$ but it would be highly tedious and tend to obscure the interesting physics.
+Of course, it is possible to get the right thermoelectric voltage using $\phi$ (and $\mu_{\mathrm{int},\mathrm{e}^-}$), instead of $\bar\mu_{\mathrm{e}^-}$. This does involve the difference between hot and cold junctions' Galvani potentials, but we also have to include the gradients in $\phi$ in regions of thermal gradient. The thermal gradients' $\delta \phi$ contribution would then fully cancel the Galvani potentials' $\delta \phi$ contribution, and add back in the correct thermoelectric result. We could also do the same with reference to outer potential $\psi$, or conduction band $E_{\mathrm{C}}$, with all the same considerations but different in quantity. In the end, we would have to get the same result as simply using $\bar\mu_{\mathrm{e}^-}$ but it would be highly tedious and tend to obscure the interesting physics.^[Apertet et al. (2016) ["A note on the electrochemical nature of the thermoelectric power".](https://arxiv.org/abs/1502.05697)]
 
 ## Vacuum levels (outer potentials / Volta potentials)
 
 It is unfortunately common to see discussions of material interfaces that involve the concept of 'vacuum level' / outer potential / Volta potential, denoted $\psi$. Here to be precise, I am going to draw a distinction:
 
 * Vacuum potential $\phi_{\mathrm{vac}}$: the value of the electrostatic potential anywhere in the vacuum.
-* Outer potential $\psi$: the value of the electrostatic potential just outside a surface (there, $\psi = $\phi_{\mathrm{vac}}$).
+* Outer potential $\psi$: the value of the electrostatic potential just outside a surface (there, $\psi = \phi_{\mathrm{vac}}$).
 
 In general, for any material surface, there will generally be some kind of charge double layer, so there will be some step $\psi - \phi = -\chi$, where $\chi$ is the surface potential (usually positive).
 
