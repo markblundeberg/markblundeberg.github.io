@@ -26,7 +26,7 @@ and the relation between them.
 
 ### Thermodynamic setting
 
-In our $V_i$ view, we have defined the following free energy function (for more info about this, see the [Thermodynamics topic](../thermodynamics) -- there we called this quantity $F_{\mathrm{bulk}}$):
+In our $V_i$ view, we have defined the following free energy function (for more info about this, see the [bulk thermodynamics topic](../thermodynamics2) -- there we called this quantity $F_{\mathrm{bulk}}$):
 
 $$ F(V_1, \ldots, V_N) $$
 
@@ -50,8 +50,8 @@ We can define capacitance as a matrix, which I call the **ambipolar capacitance 
 
 $$\begin{aligned}
 \mathbf{C}^{\mathrm{amb}}_{ij}
-& = \left(\frac{\partial Q_i}{\partial V_j}\right)_{V_1, \ldots V_N, Q=0} \\
-& = q_i q_j \left(\frac{\partial N_i}{\partial \bar\mu_j}\right)_{\bar\mu_1, \ldots \bar\mu_N, Q=0}
+& = \left(\frac{\partial Q_i}{\partial V_j}\right)_{V_1, \ldots V_N, Q=0} & (V_i~\text{definition}) \\
+& = q_i q_j \left(\frac{\partial N_i}{\partial \bar\mu_j}\right)_{\bar\mu_1, \ldots \bar\mu_N, Q=0} & (\text{usual definition})
 ,
 \end{aligned}$$
 
