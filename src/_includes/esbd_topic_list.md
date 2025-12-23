@@ -30,8 +30,9 @@
 
 *Thermodynamics*:
 - [_Thermodynamics_](/esbd/thermodynamics/) - Subtleties of the thermodynamics of charges; why electrochemical potentials (and thus $V_i$) are fundamental.
-- [_Non-ideal solutions_](/esbd/nonideal/) - Focussing on technical difficulties of single-ion activities.
+- [_Thermodynamics II_](/esbd/thermodynamics2/) - Thermodynamics of bulk vs charged surfaces.
 - [_Capacitance_](/esbd/capacitance/) - Discussion of ambipolar capacitance (thermodynamic) vs chemical capacitance (extrathermodynamic).
+- [_Non-ideal solutions_](/esbd/nonideal/) - Focussing on technical difficulties of single-ion activities.
 
 *Appendices*:
 - [_Standard state data_](/esbd/data/) - Numerical data for ionic solutes' $V^\circ_i$ values in water.
