@@ -114,7 +114,17 @@ What happens in the limit where $\varepsilon$ and hence debye length becomes (re
 - In the limit of $\varepsilon \rightarrow 0$ then it must be that $\rho_{\mathrm{total}} = 0$ everywhere, yet paradoxically $\nabla^2\phi \neq 0$.
 - This is not steady state! Ambipolar diffusion still occurs.
 - The answer is that necessarily 
+- $\phi$ simply floats.
+- AMBIPOLAR CAPACITANCE
 
+E.g. QCN in use
+- https://www.rsc.org/suppdata/d2/ee/d2ee01485h/d2ee01485h1.pdf  [supplement for 10.1039/D2EE01485H ]
+- "electro-neutral-nernst-planck"  10.1149/2.0261915jes https://sites.utexas.edu/maple/publications/maple/files/2019/12/72-Li_Symmetic_cell.pdf
+- 10.1103/PhysRevE.97.012411 -- electroneutral models are easier to solve and simple.
+
+- Factor of 2 in binary diffusion with one ion floating,
+    - e.g. https://pubs.acs.org/doi/suppl/10.1021/acs.jpclett.9b00500/suppl_file/jz9b00500_si_001.pdf   [supplement of 10.1021/acs.jpclett.9b00500 ]
+    - Also eqn 21 in 10.1039/D2EE01485H supplement.
 
 ## High frequency (inertia of charges)
 
@@ -172,3 +182,5 @@ G. Giuliani, G. Vignale, Quantum Theory of the Electron Liquid (Cambridge Univ. 
 - Shows that diffusive hydrodynamic works for wavelengths longer than ballistic length ($q v_F \tau \ll 1$), and frequencies slower than ballistic time ($\omega\tau \ll 1$).
 - These advanced treatments show that the electrochemical potential remains the best description of effective driving field $E_{\mathrm{eff}} = -\nabla V_i$ for this diffusion regime (4.6.2). But otherwise chemical potential gets very little mention, because the very notion of a local thermodynamic equilibrium tends to fall apart at high frequency and/or high wavevector. When describing scattering effects (momentum relaxation) on these high frequency phenomena it is necessary to invoke electrochemical potential in order to get the right result (4.6.2).
 - See section 5.3.3 Plasmons for discussion of classical hydrodynamics vs collisionless, and the q^2 factor!
+
+
