@@ -1,0 +1,169 @@
+{% set idprefix = ["esbd-nacl-dilute", idsuffix] | join %}
+<figure class="demo-container" style="max-width: 300px">
+    <div
+        id="{{idprefix}}-bd-container"
+        class="bd-container"
+        style="height: 300px; width: 100%"
+    ></div>
+
+    <div style="text-align: center">
+        <div>
+            <label for="{{idprefix}}-concSlider"
+                >Added NaCl:
+                <span id="{{idprefix}}-concValue">1e-7</span>&nbsp;mol/L</label
+            >
+            <input
+                type="range"
+                id="{{idprefix}}-concSlider"
+                min="-8"
+                max="1"
+                step="0.1"
+                value="-6"
+            />
+        </div>
+        <div>
+            <label for="{{idprefix}}-phiSlider">Float:</label>
+            <input
+                type="range"
+                id="{{idprefix}}-phiSlider"
+                min="-1"
+                max="1"
+                step="any"
+                value="0"
+            />
+        </div>
+    </div>
+</figure>
+
+<script type="module">
+    // --- DOM Elements from the above ---
+    const concSlider = document.getElementById('{{idprefix}}-concSlider');
+    const concValueSpan = document.getElementById('{{idprefix}}-concValue');
+    const phiSlider = document.getElementById('{{idprefix}}-phiSlider');
+    const plotContainerId = '{{idprefix}}-bd-container';
+
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { formatPopupBaseContent, throttle } from '{{ esbdJsPath }}utils.js';
+
+    // --- Constants ---
+    const R = 8.31446261815324; // Gas constant (J/mol·K)
+    const F = 96485.3321233100184; // Faraday constant (C/mol)
+    const c_std = 1.0; // Standard concentration (mol/L)
+
+    // --- Thermo data ---
+
+    // Assumed temperature for these values
+    const T = 298.15; // Temperature (K, 25°C)
+
+    // V_Na+ - V_Na- = mu_NaCl/F   (for saturated NaCl)
+    const V_NaCl = -3.9813;
+    const V_AgCl = -109.8e3 / F; // ~ -1.1 V
+
+    // Ion standard states 'ladder'
+    const V_std_H_H = 0; // reference point
+    const V_std_Na_H = -261.91e3 / F; // ~ -2.7 V
+    const V_std_Cl_H = -131.23e3 / -F; // ~ +1.3 V
+
+    // --- Set up diagram ---
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        plotContainerId,
+        {
+            na_ion: {
+                z: 1,
+                color: '#E4572E',
+                mathLabel: '\\mathrm{Na}^{+}',
+            },
+            cl_ion: {
+                z: 1,
+                color: '#80B030',
+                mathLabel: '\\mathrm{Cl}^{-}',
+            },
+            electron: {
+                z: -1,
+                color: '#377EB8',
+                mathLabel: '\\mathrm{e}^{-}',
+            },
+        },
+        {}
+    );
+
+    // Boundaries
+    const boundaries = [0.0, 1.0];
+    // Set layout
+    diagram.setSpatialLayout(boundaries, [
+        { name: 'Solution', color: '#E6F5FF' },
+    ]);
+    diagram.setVRange(-4.8, +2.4);
+
+    // Define species info
+
+    // --- Calculation Function ---
+    function doUpdate() {
+        const dphi = parseFloat(phiSlider.value);
+        const log_c = parseFloat(concSlider.value);
+        const c_NaCl = Math.pow(10, log_c);
+
+        // Update slider value display
+        concValueSpan.textContent = c_NaCl.toExponential(2);
+
+        // Thermal voltage ~ 0.026 V
+        const Vth = (R * T) / F;
+
+        // Dissociation of 1-1
+        const c_Na = c_NaCl;
+        const c_Cl = c_NaCl;
+
+        // Now update the diagram.
+        const V_e = 0.0 + dphi;
+        const V_Cl = V_e - V_AgCl;
+        const V_Cl_std = V_Cl + Vth * Math.log(c_Cl);
+        const V_Na_std = V_Cl_std + (V_std_Na_H - V_std_Cl_H);
+        const V_Na = V_Na_std + Vth * Math.log(c_Na);
+
+        const b = boundaries;
+        let traces = [
+            {
+                id: `Cl_trace`,
+                speciesId: 'cl_ion',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [b[0], b[1]],
+                y: [V_Cl, V_Cl],
+            },
+            {
+                id: `Cl_std_trace`,
+                speciesId: 'cl_ion',
+                curveType: 'standardState',
+                showLabel: true,
+                x: [b[0], b[1]],
+                y: [V_Cl_std, V_Cl_std],
+            },
+            {
+                id: `Na_trace`,
+                speciesId: 'na_ion',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [b[0], b[1]],
+                y: [V_Na, V_Na],
+            },
+            {
+                id: `Na_std_trace`,
+                speciesId: 'na_ion',
+                curveType: 'standardState',
+                showLabel: true,
+                x: [b[0], b[1]],
+                y: [V_Na_std, V_Na_std],
+            },
+        ];
+
+        diagram.updateTraceData(traces);
+    }
+
+    // --- Event Listener ---
+    concSlider.addEventListener('input', throttle(doUpdate, 100));
+    phiSlider.addEventListener('input', throttle(doUpdate, 100));
+
+    // --- Initial Calculation ---
+    doUpdate();
+</script>

@@ -11,7 +11,7 @@ eleventyNavigation:
 
 # {{title}}
 
-In the earlier [topic about equilibrium](../equilibrium/), we talked about how solid $\mathrm{NaCl}$ in equilibrium with a solvent (such as water) would set a fixed $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} =  -3.9813~\mathrm{V}$. But that is for a *fully saturated* solution. What happens when we only have a tiny amount dissolved? How does $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ depend on the concentration of dissolved $\mathrm{NaCl}$?
+In the earlier [topic about equilibrium](../equilibrium/), we talked about how solid $\mathrm{NaCl}$ in equilibrium with a solvent (such as water) would set a fixed $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = \tfrac{1}{F} \mu_{\mathrm{NaCl}} = -3.9813~\mathrm{V}$. But that is for a *fully saturated* solution. What happens when we only have a tiny amount dissolved? How does $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ depend on the concentration of dissolved $\mathrm{NaCl}$?
 
 To start our discussion, here are some fairly accurate modelled curves:
 
@@ -22,37 +22,44 @@ $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ value for salt dissolved at varying conc
 {% endfigcaption %}
 </figure>
 
-(When $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ in the solution rises above the value for solid $\mathrm{NaCl}$, then the solution is supersaturated, that is, it is favourable for the excess $\mathrm{NaCl}$ to precipitate. At saturation, the values of $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ will be the same in solution and solid salt.)
-
-What we're interested in though is the roughly linear dependence on the logarithm of concentration (the ideal slope). This is actually guaranteed in the dilute limit, for a fundamental entropic reason: each solute particle's position becomes independent of other solute particles.
+Note the roughly linear dependence on the logarithm of concentration (the "ideal slope" in the figure). This is actually guaranteed in the dilute limit, for a fundamental entropic reason: each solute particle's position becomes independent of other solute particles.
 
 Although the dilute limit is only approximate, it gives us a starting point to answer more complex questions without first laboriously measuring thermodynamic data over a range of concentrations. For example, what happens when there are many species of ion present?
 
+(The saturation behaviour is interesting too: When $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ in the solution rises above the value for solid $\mathrm{NaCl}$, then the solution is supersaturated, that is, it is favourable for the excess $\mathrm{NaCl}$ to precipitate. At saturation, the values of $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ will be the same in solution and solid salt.)
+
 ## Ideal ionic voltage in dilute solutions
 
-For dilute ions we have the following relationship between $V_i$ of an ion and its concentration $c_i$:
+Statistical mechanics predicts that for a given solvent and a given dilute solute $i$, then its electrochemical potential varies as
+$$\bar\mu_i = z_i F \phi + \mathrm{offset} + RT \ln (\mathrm{concentration}),$$
+where $\phi$ is a typical electrostatic potential value in the solution and the $\mathrm{offset}$ term is independent of concentration. The exact value of the offset depends on how $\phi$ is defined and how the concentration is defined (and its units). Now we're going to convert this formula to $V_i$'s by dividing by $z_i F$, and combine the $(z_i F \phi + \mathrm{offset})$ into one term: $z_i F V^\circ_i$.
+
+We thus have the following relationship between $V_i$ of an ion and its concentration $c_i$:
 
 $$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(c_i/c^\circ), $$
 
 where
-* $V^\circ_i$ is **standard state voltage**, a new concept. These are electrochemical standard states that float analogously to the floating band edges in semiconductors.
+* $V^\circ_i$ is **standard species voltage**, a new concept. These are electrochemical standard states that float analogously to the floating band edges in semiconductors.
 * $RT$ is the universal gas constant times temperature (joules per mole).
 * $z_i F$ is the molar charge (coulombs per mole).
-* $c_i$ is the {% wiki "molarity" %}, the concentration of the ion (moles per liter).
+* $c_i$ is the {% wiki "molar concentration" %}, the amount of ions per unit volume (moles per liter). Also called molarity.
 * $c^\circ$ is a reference concentration, always $c^\circ = 1~\mathrm{mol/L}$.
 
-> We'll prove this down below, as well as discussing how non-ideal solutes work and discussing other concentration measures (e.g. molality).
+> It is sometimes preferable to measure solute concentration as {% wiki "molality" %}, the amount of ions per unit of solvent (moles per kilogram). The plot shown above was in molal units. In terms of molality $b_i$ we can write a similar ideal form:
+>
+> $$ V_i = V^{\circ(b)}_i + \frac{RT}{z_i F} \ln(b_i/b^\circ), $$
+>
+> for reference molality is $b^\circ = 1~\mathrm{mol/kg}$. Note that $V^{\circ(b)}_i$ differs from $V^\circ_i$ when the solvent density is not equal to $c^\circ/b^\circ = 1~\mathrm{kg/L}$.^[Equating the two formulas for $V_i$, we get $V^{\circ(b)}_i - V^\circ_i = \tfrac{RT}{z_i F}\ln(\rho b^\circ/c^\circ)$ for solvent density $\rho$. For water at standard conditions ($\rho = 0.997~\mathrm{kg/L}$ at 25&nbsp;°C and 1 bar) this difference is tiny, only $-0.00008~\mathrm{V}/z_i$, but can be significant for other solvents.] The molality and molarity formulas also describe slightly different ideal behaviours when the solvent density varies with concentration, but that only occurs in concentrated solutions where both ideal logarithmic forms are wrong anyway, and nonideality must be considered (more about nonideality at the bottom of this page).
+> 
+> I'll generally prefer to use molar $c_i$ units but we may switch to molality when convenient.
 
-Returning to our saltwater example, let's see what this looks like. Note that $V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-} = -4.0746~\mathrm{V}$ is is a constant for water in our conditions. When discussing solutions we can draw these $V^\circ_i$ as distinct lines from the $V_i$.
+### Ideal-dilute salt water
 
-<figure class="diagram-placeholder">
-{% figcaption %}
-- One slider for concentration of $\mathrm{Na}^+$ (= concentration of $\mathrm{Cl^-}$).
-- Indicator of 'unsaturated / saturated / supersaturated'
-- One slider for overall electrostatic offset.
-- Note that the high concentrations are an 'abuse' of the dilute limit.
-{% endfigcaption %}
-</figure>
+Returning to our saltwater example, we have then:
+$$V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = (V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-}) + 2\frac{RT}{F} \ln(c/c^\circ), $$
+where $c = c_{\mathrm{Na}^+} = c_{\mathrm{Cl}^-}$ is the concentration of either ion. This gives that characteristic $2\tfrac{RT}{F}\ln(\mathrm{concentration})$ slope we saw in the plot above. Also note that $V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-} = -4.0746~\mathrm{V}$ is is a constant for water in our conditions; since $\phi$ cancels out, this difference does not depend on the ambiguous $\phi$. When discussing solutions we can draw these $V^\circ_i$ as distinct lines from the $V_i$.
+
+{% include "esbd-diagrams/esbd-nacl-dilute.html" %}
 
 ## Ionic standard states are a floating ladder
 
@@ -67,13 +74,13 @@ I call this the **standard state ladder** for water. The standard state ladder i
 
 The [Data table](../data/) topic in the appendix contains the numerical values used above, as well as the procedure used to obtain them from standard ionic Gibbs energies of formation ($\Delta_{\mathrm{f}} G^\circ_i$ values).
 
-In effect, the standard state ladder of $V^\circ_i$ is a stand-in for the notion of electrostatic potential $\phi$, but combining it with the average differences in the local electrostatic potentials that each ion 'feels', as well the ion's chemical structure, and the way it disturbs its solvent environment with "solvation shells".
+In effect, the standard state ladder of $V^\circ_i$ is a stand-in for the notion of electrostatic potential $\phi$, but combining it with the average differences in the local electrostatic potentials that each ion 'feels', as well the ion's chemical structure, and the way it disturbs its solvent environment with solvation shells.
 
 The standard state ladder is also analogous to the conduction and valence band edges in semiconductors. We'll talk more about this analogy to semiconductors in the next topic.
 
-## More rigorously and with non-ideality
+## Activities and non-ideality
 
-In chemistry, we have the following breakdown of the electrochemical potential:
+In chemistry, the standard approach is the following breakdown of the electrochemical potential:
 
 $$ \bar\mu_i = z_i F \phi + \mu^\circ_{\mathrm{int},i} + RT \ln(a_i), $$
 
@@ -83,25 +90,21 @@ This directly maps to a non-ideal form of our $V_i$ equation:
 
 $$ V_i = \underbrace{\phi + \tfrac{1}{z_i F}\mu^\circ_{\mathrm{int},i}}_{V^\circ_i} + \tfrac{RT}{z_i F} \ln(a_i), $$
 
-which shows that $V^\circ_i = \phi + \frac{1}{z_i F}\mu^\circ_{\mathrm{int},i}$ is the precise link to normal electrochemistry notation. In this way we can see how all the standard state $V^\circ_i$ values float rigidly together (and with $\phi$), but with various fixed offsets according to $\mu^\circ_{\mathrm{int},i}$.
+$$ V_i = V^\circ_i + \tfrac{RT}{z_i F} \ln(a_i), $$
 
-Anyway, we can choose $\mu^\circ_{\mathrm{int},i}$ such that $a_i \rightarrow c_i/c^\circ$ in the limit where all solutes are dilute (pure solvent). This justifies our earlier dilute $V_i$ equation in terms of $a_i \approx c_i/c^\circ$.
+which shows that $V^\circ_i = \phi + \frac{1}{z_i F}\mu^\circ_{\mathrm{int},i}$ is the precise link to normal electrochemistry notation. The standard state $V^\circ_i$ values float rigidly together (and with $\phi$), but with various fixed offsets according to $\mu^\circ_{\mathrm{int},i}$.
 
-> **Single-ion activities are technically ambiguous**: There is a fundamental difficulty with non-ideal activities: we can only infer the $V^\circ_i$ ladder, i.e. we only have experimental access to quantities like $V_i - V_j$, but not $V_i - V^\circ_i$. And so, if activities are no longer anchored to observables (concentration) then we don't know how to position the ladder of $V^\circ_i$ values. In fact, single-ion activities are fundamentally ambiguous, which corresponds to us being free to locate the $V^\circ_i$ ladder to where we wish. In chemistry it is said "we can only measure {% wiki "Activity_coefficient#Ionic_solutions", "*mean* ion activities" %}"; those exactly correspond to measurable differences like $V_i - V_j$.
->
-> For more about this, see the [appendix Topic on non-ideality](../nonideal/).
+Anyway, the idea is to choose $\mu^\circ_{\mathrm{int},i}$ (i.e. to choose $V^\circ_i$) such that $a_i \rightarrow c_i/c^\circ$ in the limit where all solutes are dilute (pure solvent). This justifies our earlier dilute $V_i$ equation in terms of $a_i \approx c_i/c^\circ$.
 
-## About concentration measures
+There are a number of big gotchas when it comes to nonideality. I talk about this a lot more in the [appendix Topic on non-ideality](../nonideal/), but the key points are:
 
-Chemists prefer not to use molarity $c_i$, but rather {% wiki "molality" %} (concentration per amount of solvent, usually mol/kg) or {% wiki "mole fraction" %} (moles of solute per total moles of solute and solvent). This is for good reason, relating to how solutions behave under constant pressure: generally the solution expands because of solute addition, and so determining molarity in non-dilute solutions requires the extra step of measuring and compensating for that volume change. In this blog I chose to adopt molarity because it is what appears in diffusion laws and electrostatic problems, and it lets us draw a closer analogy to semiconductors.
+* **Single-ion activities are ambiguous**: we can access $V_i$ but we cannot directly access $\phi$ nor $V^\circ_i$. Consequently in nonideal solutions we have no basis on how to fix the reference point for activities. In chemistry it is said "we can only measure {% wiki "Activity_coefficient#Ionic_solutions", "*mean* ion activities" %}"; those [exactly correspond](../nonideal/) to measurable differences like $(V_i - V^\circ_i) - (V_j - V^\circ_j)$, where the 'ladder offset' or $\phi$ cancels out. This ambiguity is very severe: it adds infinite degrees of freedom as every solution of every composition can settle the ambiguity independently.
+* **Activities depend on concentration reference**: depending on our choice of concentration reference (either switching from molarity $c^\circ$ to molality $b^\circ$, or changing their values), we will have different $V^\circ_i$ values. This choice doesn't change the $V_i$, rather it changes activity $a_i$. This can get confusing!^[See Adam Přáda's blog (2019), ["On chemical activities"](https://adamprada.net/blog/on-chemical-activities/)]
+* **Activity coefficients are trickier**: it is common in chemistry to introduce a dimensionless activity coefficient as a sort of fudge factor on the concentration. These become especially tricky when trying to convert between different concentration measures.
 
-Each concentration measure is subtly different, and it can get confusing.^[See Adam Přáda's blog (2019), ["On chemical activities"](https://adamprada.net/blog/on-chemical-activities/)] This affects the standard state and the activity and especially the activity coefficient. To sum up:
+Again, see the [appendix Topic on non-ideality](../nonideal/) for more information.
 
-* Standard state: The choice of concentration measure and reference value ($c^\circ$, $b^\circ$, etc.) has an influence on the standard state $\mu^\circ_{\mathrm{int},i}$. For water (kg = L), though, the usual molality and molarity standard states do coincide.
-* Activity: Each concentration measure (and reference) will have a different activity, but by the definition of activity these will all be some constant multiple of each other. In water (kg = L), the molal and molar activities are identical.
-* Activity coefficient: An {%wiki "activity coefficient" %} describes how $a_i$ deviates away from its ideal dilute form. But, this depends what you define as the ideal form: $c_i/c^\circ$, or $b_i/b^\circ$, or $x_i$? These are all different numbers in non-ideal solutions, and therefore each gives a distinct activity coefficient in a nontrivial way, *even in water*! Since ionic chemists work exclusively with molal activity coefficients, I am not going to confuse matters by using the molar activity coefficient.
-
-Importantly, what all of these concentration measures, activities, and activity coefficients *do* agree on is $\bar\mu_i$ and $V_i$.
+Importantly, what all of these different approaches using various concentration measures, electrostatic potentials, activities, and activity coefficients *must* agree on is the actual thermodynamic observable: electrochemical potential $\bar\mu_i$ (and thus $V_i$).
 
 ## Takeaways
 

@@ -19,7 +19,7 @@ const CURVE_TYPES = {
         labelGen: (species) => `V_{${species}}`,
     },
     standardState: {
-        name: 'standard state voltage',
+        name: 'standard species voltage',
         style: { lineWidth: 1, dasharray: null },
         labelGen: (species) => `V_{${species}}^\\circ`,
     },
