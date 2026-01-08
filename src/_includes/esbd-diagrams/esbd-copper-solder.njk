@@ -4,9 +4,9 @@
         id="esbd-copper-solder-container"
     ></div>
     {% figcaption %}
-        Where two metals come into contact, $V_{\mathrm{e}^-}$ equalizes as
+        Where two electronic materials (like two metals) come into contact, $V_{\mathrm{e}^-}$ equalizes as
         expected for an electronic circuit voltage, whereas $\phi$ settles on a
-        nonzero step size&mdash;a so-called "built-in voltage".
+        nonzero step size&mdash;a so-called "built-in voltage". (Note: these $\phi$ values are made up; nobody knows the real values of $\phi$ that should be drawn here, only that they must differ.)
     {% endfigcaption %}
 </figure>
 
@@ -38,7 +38,7 @@
     ]);
 
     const V_el = +0.45;
-    diagram.setVRange(V_el - 0.35, V_el + 0.55);
+    diagram.setVRange(V_el - 0.30, V_el + 0.50);
 
     const b = boundaries;
     const data = [
