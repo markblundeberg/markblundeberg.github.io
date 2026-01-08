@@ -68,6 +68,29 @@ Band diagram of PN junction in voltage mode.
    - Materials without good band structure (liquid or disordered)
    - 
 
+
+## Nonideality in semicondcutors
+
+Semiconductors also exhibit nonideality effects. This tends to occur for electron or hole concentrations above $10^{18}~\mathrm{cm}^{-3}$ (which corresponds to $10^{-3}~\mathrm{mol/L}$, surprisingly quite similar to where ionic nonidealities start in chemical solutions). Semiconductors are much more simple than chemical solutions, and so we often have a clearer quantitative picture of physical mechanisms behind the nonideality.[^seminote]
+
+[^seminote]:
+    * The band structure may 'morph' due to electron-electron effects. That is, in some sense there are still quasi-single-particle states, but they have moved. This is best known by its effect on bandgap, called "band gap renormalization".
+    * Dopants get close enough together to form their own impurity bands, which can merge with the normal band states.
+    * The dopants cause a random potential field, that smears out the the band edges.
+    * Lattice strains can significantly shift the band structure.
+
+The way that these are mathematically described is different, however! In semiconductor physics we prefer to describe the updated $E_{\mathrm{C}}$ and $E_{\mathrm{V}}$ values (which still retain some physical meaning and can be accessed e.g. via {% wiki "ARPES" %}), updated effective mass (band shape), and so on. The relationship between carrier density $ n_{\mathrm{e}^-}$ and $(\bar\mu_{\mathrm{e}^-} - E_{\mathrm{C}})$ then becomes nontrivial without needing to introduce an all-encompassing 'fudge factor'.
+
+The chemistry approach would be like defining a formal 'standard band edges' $E^\circ_{\mathrm{C}}$ and $E^\circ_{\mathrm{V}}$, with a fixed band gap $E^\circ_{\mathrm{C}} - E^\circ_{\mathrm{V}}$ and then imposing activity coefficients when relating carrier density to chemical potentials. But, just like the ionic standard states $V^\circ_i$, such formal states $E^\circ_{\mathrm{C}}$ are fundamentally ambiguous: how much of the band gap change is due to $E_{\mathrm{C}}$ moving away from $E^\circ_{\mathrm{C}}$, and how much is due to $E_{\mathrm{V}}$ moving away from $E^\circ_{\mathrm{V}}$? Electroneutrality means we have no way of directly measuring "where $E_{\mathrm{C}}$ would have been", and we can't even define what that would mean.
+
+Sadly, we can't quite import the semiconductor "moving band edge" picture into chemistry. chemical solutions seem to be so complicated that we don't have a clean physical concept like $E_{\mathrm{C}}$ that we could use instead of activity coefficients. The nonidealities reflect moving from a starting 'pure' situation of messy strong interactions to a slightly different flavouring of messy strong interactions.
+
+> Note - there is another class of semiconductor 'non-ideality' which is purely statistical in nature. Ideal electrons actually act as a quantum ideal gas ({% wiki "Fermi gas" %}), not a classical Boltzmann gas. In this case, the band structure stays intact (band gap $E_{\mathrm{C}} - E_{\mathrm{V}}$ unaltered) but the electron concentration now varies as:
+> $$ n_{\mathrm{e}^-} = N_{\mathrm{C}} f( (\bar\mu_{\mathrm{e}^-} - E_{\mathrm{C}})/kT) $$
+> where the function $f()$ is some other mathematical function (such as involving a {% wiki "complete Fermi-Dirac integral" %}) instead of $\exp()$. But this is kind of nonideality is more trivial, not really the messy kind of nonideality that gives us headaches.
+>
+>It's worth noting that statistical nonideality is not exclusive to quantum mechanics: in chemistry, the ideal lattice gas ({%wiki "Langmuir adsorption model" %}) is entirely classical, but mathematically behaves like a zero temperature Fermi gas. {%wiki "Ideal mixtures" %} similarly are statistically ideal in mole fraction, which makes them trivially non-ideal in molality (or molarity). In activity models, the single factor $\gamma_i$ is a combination of statistical nonideality, concentration-measure nonideality, and the fundamental interaction nonideality.
+
 ## Takeaways
 
 
