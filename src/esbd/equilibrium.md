@@ -107,7 +107,7 @@ By the way, don't confuse this with the electrode potential $E = V_{\mathrm{e}^-
 
 ## Three or more charged species
 
-It can happen sometimes that a reaction involves more than just two $V_i$'s. For example, the case of a solution containing both ferrous ($\mathrm{Fe}^{2+}$) and ferric ($\mathrm{Fe}^{3+}$) ions, in equilibrium with an inert platinum electrode:
+It can happen sometimes that a reaction involves more than just two $V_i$'s. For example, the case of a solution containing both ferrous ($\mathrm{Fe}^{2+}$) and ferric ($\mathrm{Fe}^{3+}$) ions, in equilibrium with an inert platinum electrode that provides electrons ($\mathrm{e}^-$):
 
 $$ \bar\mu_{\mathrm{Fe}^{2+}} \rightleftharpoons \bar\mu_{\mathrm{Fe}^{3+}} + \bar\mu_{\mathrm{e}^{-}} $$
 $$ 2 V_{\mathrm{Fe}^{2+}} = 3 V_{\mathrm{Fe}^{3+}} - V_{\mathrm{e}^-} $$
