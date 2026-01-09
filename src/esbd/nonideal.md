@@ -11,15 +11,25 @@ eleventyNavigation:
 
 # {{title}}
 
-Earlier in the [Solutions](../solutions/) topic we touched a bit on non-ideal solutions. I'd like to touch on how there is a fundamental aspect of ambiguity in the ionic activity $a_i$ and the overall placement of the $V^\circ_i$ ladder. This is a well-known issue for ion chemistry and I just want to re-explain how it appears with the $V_i$'s.
+Earlier in the [Solutions](../solutions/) topic we touched a bit on non-ideal solutions. I'd like to touch on how there is a fundamental aspect of ambiguity in the ionic activity $a_i$ and the overall placement of the $V^\circ_i$ ladder. The "single ion activity problem" is a well-known issue for ion chemistry and I just want to re-explain how it appears with the $V_i$'s (in short, it affects $V^\circ_i$ but not $V_i$).
 
-To be specific, we are concerned with cases where solutes deviate from an ideal-dilute logarithmic dependence on concentration. This is commonly captured as an activity activity coefficient $\gamma_i$ that acts as a fudge factor on the concentration. The species voltage then takes the form:
+To be specific, we are concerned with cases where solutes deviate from an ideal-dilute logarithmic dependence on concentration. This is commonly captured as an activity $a_i$, or an activity coefficient $\gamma_i$ that acts as a fudge factor on the concentration. The electrochemical potential (traditional) and equivalently species voltages are decomposed as so:
 
-$$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(\gamma_i b_i/b^\circ). $$
+$$
+\bar\mu_i = {\color{blue}z_i F \phi + \mu^\circ_{\mathrm{int},i}} + RT \ln(\gamma_i b_i/b^\circ)
+$$
+(for constants $\mu^\circ_{\mathrm{int},i}$)
 
-for reference molality $b^\circ = 1~\mathrm{mol/kg}$. I'm going to use molality in this topic just to match the chemists' preference, particularly in regards to defining activity coefficients.^[[IUPAC Gold Book "Activity coefficient"](https://goldbook.iupac.org/terms/view/A00116)]
+$$
+V_i       = {\color{blue}V^\circ_i} + \frac{RT}{z_i F} \ln(\gamma_i b_i/b^\circ)
+$$
+(for constants $V^\circ_{i} - \phi$)
 
-The expectation is that when *all* solutes' concentrations go 0, then $\gamma_i$ should approach 1 for all solutes. This is a physical/definitional convention: first, $\gamma_i$ is guaranteed to converge to a finite constant at low concentration provided that the species $i$ is actually present in solution as independent solute particles^[If we misidentify the solute particle, then a {% wiki "van 't Hoff factor" %} appears that multiplies the result of the logarithm.] (i.e. that it neither dissociates nor associates); then, the entire $V^\circ_i$ ladder is defined to make this convergent finite constant equal 1 in the limit where all solute concentrations go to zero.
+for reference molality $b^\circ = 1~\mathrm{mol/kg}$. I'm going to use molality in this topic just to match the chemists' preference,^[[IUPAC Gold Book "Activity coefficient"](https://goldbook.iupac.org/terms/view/A00116)] but the arguments here apply to other concentration measures too.
+
+The expectation is that when *all* solutes' concentrations go 0, then $\gamma_i$ should approach 1 for all solutes. This is a physical/definitional convention: first, by statistical mechanical arguments we know $\gamma_i$ is guaranteed to converge to a finite constant at low concentration provided that the species $i$ is actually present in solution as independent solute particles with concentration $b_i$ (i.e. that it neither dissociates nor associates).^[If we misidentify the solute particle, then a {% wiki "van 't Hoff factor" %} appears that multiplies the result of the logarithm.] We force that constant to be 1 by simply choosing $\mu^\circ_{\mathrm{int},i}$ values to make it so (in $V_i$ language we choose the *spacing* between $V^\circ_i$ values).
+
+I'll call out a few clarifications:
 
 > **Ideal-dilute means all ions are dilute**: If *any* solute's concentration is significantly nonzero, then *all* $\gamma_i$ may be nonzero, even for other solutes that themselves are infinitely dilute. The other dilute solutes will still behave ideally dilutely for low concentrations, however they will start out with $\gamma_i \neq 1$. This reflects that they are dilute in an effective "new solvent" that is not the original pure solvent that was used to define $V^\circ_i$. E.g. if we add dilute $\mathrm{KI}$ to water with a preexisting concentration of $\mathrm{NaCl}$, then $\gamma_{\mathrm{K}^+} \neq 1$.
 
@@ -32,6 +42,15 @@ The expectation is that when *all* solutes' concentrations go 0, then $\gamma_i$
 Should we really care about non-idealities? Yes! In fact ions depart from the ideally-dilute case already at surprisingly low concentrations (e.g., $0.001~\mathrm{mol/L}$ in water), at least compared to non-ionic solutes which might only depart after $0.1~\mathrm{mol/L}$.
 
 Ions show early non-ideality due to "ionic atmosphere" effects, i.e., how ions screen their fellow ions at medium range distances. This represents a form of correlation between the positions of ions, which violates our ideal-dilute assumption that the ions are moving around independently of each other. The crucial (and robust) effect of ionic atmosphere, as encountered in {% wiki "Debye–Hückel theory" %}, is that the activity coefficients of ions deviate proportionally to the square root of concentration, $\ln\gamma_i \propto -\sqrt{I}$, where $I$ is the {% wiki "ionic strength" %}, a weighted sum of all ionic concentrations. By comparison, with non-ionic solutes the leading order deviation of activity coefficient is in the first power of concentration.
+
+The leading $\sqrt{I}$ order of the ionic atmospheres effect is actually simply computable, and is what causes the initial gradual bending downwards in $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ that we saw in our NaCl plot. Repeating it here:
+
+<figure class="demo-container" style="max-width: 350px">
+<img src="/esbd/img/nacl_solvent_comparison.svg" style="max-width:100%"/>
+{% figcaption %}
+$V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ value for salt dissolved at varying concentrations, for two solvents: water and methanol. <small>[[source]](https://colab.research.google.com/gist/markblundeberg/7d09128737f2dd41b035e8ccb661dff3/nacl-water-methanol.ipynb)</small>
+{% endfigcaption %}
+</figure>
 
 There is a lot more that can be said about the microscopic details.^[For example, if you have an ionic solution and add a new dilute ionic solute, then it will not significantly change $I$ and its effect will be first-order too. Logically, this must apply for pure water which has a preexisting nonzero ionic strength due to spontaneous autoionization. That means that technically all dilute ions added to water have $\gamma_i$ varying to first order in concentration! But the linearity only holds for tiny concentrations up to $\sim 10^{-7}~\mathrm{mol/L}$, after which the new ion is going to significantly add to $I$.] But really, the main point is that non-idealities readily manifest with ions at the usual concentrations seen in experiments. So, we really ought to care about the non-idealities of ions!
 
@@ -65,11 +84,20 @@ As we'll see below, this ambiguity gets addressed in practice by:
 
 ### Mean activity / mean activity coefficient
 
-There are certain products of ion activities or ion activity coefficients that are overall charge-neutral, and so the $\lambda$ arbitrariness cancels out. That makes them unambiguously measurable. These are known as **mean activities** or **mean activity coefficients**. For example, products like $\gamma_{\mathrm{Na}^+}\cdot\gamma_{\mathrm{Cl}^-}$, or $\sqrt{\gamma_{\mathrm{Zn}^{2+}}} \cdot \gamma_{\mathrm{Cl}^-}$ are measurable. These relate to species voltage differences like $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ and $V_{\mathrm{Zn}^{2+}} - V_{\mathrm{Cl}^-}$, respectively.
+There are certain products of ion activities or ion activity coefficients that are overall charge-neutral, and so the $\lambda$ arbitrariness cancels out. That makes them unambiguously measurable. These are known as **mean activities** or **mean activity coefficients**. For example, products like $\gamma_{\mathrm{Na}^+}\gamma_{\mathrm{Cl}^-}$, or $a_{\mathrm{Zn}^{2+}} (a_{\mathrm{Cl}^-})^2 $ are measurable. Often we talk about the logarithms of these quantities.
 
-In general a measurable mean activity has the form $\prod_{i} a_i ^{w_i / z_i}$ for some weights $w_i$.
+<figure class="demo-container" style="max-width: 350px">
+<img src="/esbd/img/nacl_solvent_comparison_gamma.svg" style="max-width:100%"/>
+{% figcaption %}
+Log of mean activity coefficient, $\ln(\gamma_{\mathrm{Na}^+} \gamma_{\mathrm{Cl}^-})$, for salt dissolved at varying concentrations in two different solvents: water and methanol. This matches the $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ shown above (however this contains strictly less information since it does not include the standard state offsets; in chemistry these are offloaded to the {% wiki "solubility product" %} $K_{\mathrm{sp}}$). The deviation of each curve from 0 is nonideality: we can partly blame this nonideality on one ion or the other, but the attribution is thermodynamically ambiguous. <small>[[source]](https://colab.research.google.com/gist/markblundeberg/7d09128737f2dd41b035e8ccb661dff3/nacl-water-methanol.ipynb)</small>
+{% endfigcaption %}
+</figure>
+
+These relate to species voltage differences like $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ and $V_{\mathrm{Zn}^{2+}} - V_{\mathrm{Cl}^-}$, respectively. In general a measurable mean activity has the form
+$$\prod_{i} a_i ^{w_i / z_i}$$
+for some weights $w_i$, satisfying:
 $$\sum_i w_i = 0.$$
-The same condition applies for activity coefficients $\prod_{i} \gamma_i ^{w_i / z_i}$.
+The same condition applies for a mean activity coefficient $\prod_{i} \gamma_i ^{w_i / z_i}$.
 
 Let's prove this. We can perform the $\lambda$-transformation on $\prod_{i} a_i ^{w_i / z_i}$ and see that:
 $$\prod_{i} (a_i) ^{w_i / z_i} = \Big[\prod_{i} (a_i') ^{w_i / z_i}\Big] \cdot \exp\Big(\tfrac{RT}{F} \lambda \times \sum_i w_i \Big) . $$
@@ -121,6 +149,8 @@ In other words, we should really say that $\bar\mu_i$ is decomposed as so:
 $$\bar\mu_i = z_i F\phi' + \mu^\circ_{\mathrm{int},i} + RT \ln a_i $$
 
 which serves as a *definition* of $\phi'$, an "electrostatic potential" that no longer needs to correspond to any precise physical electrical property. The flexibility in choosing an activity convention (i.e., defining the concentration-dependence of $\phi'$ regardless of what $\phi$ is actually doing) basically takes advantage of the $\lambda$-shifting property described in the previous section.
+
+In summary: **When you adopt an ion activity convention, then $\phi$ no longer represents an electrostatic potential.**
 
 There has actually been a huge amount of debate about the problem of single-ion activities and whether they are merely operationally difficult to access, or they are fundamentally ill-defined. My viewpoint, [which I'll argue more in my later topic about $\phi$](../phi/), is that yes, we can actually in principle establish a true average electrostatic potential $\phi$, but there is a deeper problem in that $\phi$ is not even meaningful in this context. I.e., the calculation of $z_i F \phi$ for any ion has no physical meaning. Hence, there is no physical meaning to the decomposition of $\bar\mu_i$ into $\mu_{\mathrm{int},i} + z_i F \phi$. Even in an omniscient computer simulation with knowledge of the true $\phi$, a calculation of $z_i F \phi$ is *artificial* and merely ends generating one activity convention among many. The practical activity conventions are preferable since at least they are experimentally useful.
 
