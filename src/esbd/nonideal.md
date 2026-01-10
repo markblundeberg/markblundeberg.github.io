@@ -111,6 +111,15 @@ $$
 
 Here, $\sum_i w_i V^\circ_i$ is also insensitive to the overall offset (including $\lambda$ arbitrariness) because it has zero-sum weights, so it is a constant for given solvent and $w_i$'s.
 
+> On binary salts: usually mean activity coefficients are described only for binary salts.^[LibreTexts ["Activities of Electrolytes - The Mean Activity Coefficient".](https://chem.libretexts.org/Bookshelves/Physical_and_Theoretical_Chemistry_Textbook_Maps/Thermodynamics_and_Chemical_Equilibrium_(Ellgen)/16%3A_The_Chemical_Activity_of_the_Components_of_a_Solution/16.17%3A_Activities_of_Electrolytes_-_The_Mean_Activity_Coefficient)] Here's how that works: suppose we have a compound $M_p X_q$ and we add it to the pure solvent with formal molality $b$. It dissolves completely, and we assume that it formally dissociates into ion molalities $b_M = pb$ and $b_X = qb$ (and the combination must be charge neutral hence $p z_M + q z_X = 0$). After some math, we then have:
+> $$ V_M - V_X = \underbrace{V^\circ_{M_p X_q} + s \ln(b/b^\circ) }_{\text{ideal}} + \underbrace{\frac{p+q}{pz_M}\tfrac{RT}{F} \ln ( \gamma^\pm )}_{\text{deviation}}. $$
+> where $V^\circ_{M_p X_q} = V^\circ_{M} - V^\circ_{X} + \tfrac{RT}{F} \ln(p^{1/z_M}q^{-1/z_X})$ is the offset, $s = (\tfrac{1}{z_M} - \frac{1}{z_X}) \tfrac{RT}{F}$ is the ideal slope, and $\gamma_\pm$ is the mean activity coefficient as it is commonly defined:
+> $$\gamma_\pm = ({\gamma_M}^p{\gamma_X}^q)^{1/(p+q)}. $$
+> (In the case of $\mathrm{NaCl}$, this is $\gamma_\pm = \sqrt{\gamma_{\mathrm{Na}^+}\gamma_{\mathrm{Cl}^-}}$). Per the above discussion this is indeed a charge-neutral combination with $w_M + w_X = 0$.^[These weights are $w_M = \tfrac{p z_M}{p+q}$ and $w_X = \tfrac{q z_X}{p+q}$, and indeed $w_M + w_X = 0$ because of that neutrality $p z_M + q z_X = 0$.]
+> Anyway, this gives us the ideal curve of $ V_M - V_X $, and also shows that the deviation of $ V_M - V_X $ from ideal is exactly proportional to $\ln\gamma^\pm$. It is also possible to define a mean activity and mean molality though I find those can be more confusing to interpret.
+>
+> The preceding discussion shows however that many other activity combinations are also charge-neutral, such as $(a_{\mathrm{H}^+})^2/a_{\mathrm{Fe}^{2+}}$, and they do not have to relate to any particular salt compound nor do they refer back to any formal assumptions about dissolution.
+
 ### Activity-fixing conventions
 
 Now, let's touch on some various conventions that are used to set ionic activities. In general these conventions are all regarded as "extra-thermodynamic", based on some approximate microscopic argument about what the real activity ought to be, or something equivalent to that. The Debye–Hückel theory is a good start but it only gets you so far.
