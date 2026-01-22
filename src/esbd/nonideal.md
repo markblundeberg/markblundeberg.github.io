@@ -74,9 +74,9 @@ $$ \gamma_i ' = \gamma_i \exp([z_i F / (RT)] \cdot \lambda) , $$
 
 $$ a_i ' = a_i \exp([z_i F / (RT)] \cdot \lambda) , $$
 
-for any value of $\lambda$. For example, with $\lambda=\tfrac{RT}{F}\ln(0.1) = -59~\mathrm{mV}$ we can lower the entire $V^{\circ}_i$ ladder by 59 mV, and multiply $a_i$ and $\gamma_i$ for $\mathrm{[]^+}$ ions by ×10, multiply $a_i$ and $\gamma_i$ for $\mathrm{[]^{2-}}$ ions by ×0.01, and so on.
+for any value of $\lambda$. For example, with $\lambda=\tfrac{RT}{F}\ln(10) = 59~\mathrm{mV}$ we can lower the entire $V^{\circ}_i$ ladder by 59 mV, and multiply $a_i$ and $\gamma_i$ for $\mathrm{[]^+}$ ions by ×10, multiply $a_i$ and $\gamma_i$ for $\mathrm{[]^{2-}}$ ions by ×0.01, and so on.
 
-This is a *severe* form of arbitrariness, not merely a simple one-time offset but instead a continuum of offsets. We can choose a different value of $\lambda$ for each kind of solution in each set of conditions. If we have a curve of some ion's activity vs concentration, we can turn it into any other curve by making $\lambda$ vary with concentration (and adjusting all other ions' activities accordingly). This ambiguity seems troublesome, but on the other hand, it is purely a mathematical obstacle that we have unintentionally created, by trying to relate non-ideal solutions to ideal solutions.
+This is a *severe* form of arbitrariness, not merely a simple one-time offset but instead a continuum of offsets. We can choose a different value of $\lambda$ for each kind of solution in each set of conditions. If we have a curve of some ion's activity vs concentration, we can turn it into any other curve by making $\lambda$ vary with concentration (and adjusting all other ions' activities accordingly). This ambiguity seems troublesome, but on the other hand, it is purely a mathematical obstacle that we have created by insisting on relating non-ideal solutions to ideal solutions.
 
 As we'll see below, this ambiguity gets addressed in practice by:
 * focussing on activity combinations that are unaffected by the ambiguity, or,
