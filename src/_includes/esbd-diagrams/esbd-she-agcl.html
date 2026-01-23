@@ -48,6 +48,16 @@ electrode #}
         <datalist id="{{ idprefix }}-0-datalist">
             <option value="0" label="0">0</option>
         </datalist>
+        <div>
+            <label style="font-size: 0.85em"
+                >Cell voltage $\Delta V_{\mathrm{e}^-}$:
+                <span
+                    id="{{idprefix}}-voltage"
+                    style="display: inline-block; width: 6ch; text-align: right"
+                ></span
+                >&nbsp;V
+            </label>
+        </div>
     </div>
 </figure>
 
@@ -57,6 +67,7 @@ electrode #}
     const hConcSpan = document.getElementById('{{ idprefix }}-hcl-conc');
     const h2Slider = document.getElementById('{{ idprefix }}-h2-slider');
     const h2PressSpan = document.getElementById('{{ idprefix }}-h2-press');
+    const voltsSpan = document.getElementById('{{ idprefix }}-voltage');
     const throttleDuration = 100; // should be 1/5 or less of transitionDuration
 
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
@@ -124,6 +135,10 @@ electrode #}
         const V_Cl_std = V_H_std - dV_HCl_std;
         const V_Cl = V_Cl_std - RT_F * Math.log(a_clminus);
         const V_el_Ag = V_Cl + (mu_AgCl - mu_Ag) / F;
+
+        const V_cell = V_el_Ag - V_el;
+
+        voltsSpan.textContent = V_cell.toPrecision(3);
 
         const b = boundaries;
         diagram.updateTraceData([
