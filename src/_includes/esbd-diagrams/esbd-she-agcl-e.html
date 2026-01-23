@@ -1,0 +1,209 @@
+{% set idprefix = "esbd-she-agcl-e" %} {# standard hydrogen electrode with agcl
+electrode #}
+<figure class="demo-container" style="max-width: 300px">
+    <div class="bd-container" id="{{idprefix}}-container"></div>
+    <div style="text-align: center">
+        <div>
+            <label for="{{ idprefix }}-hcl-slider" style="font-size: 0.85em"
+                >$\mathrm{HCl}$ concentration:
+                <span
+                    id="{{idprefix}}-hcl-conc"
+                    style="display: inline-block; width: 7ch; text-align: right"
+                ></span
+                >&nbsp;mol/kg
+            </label>
+            <br />
+            <input
+                type="range"
+                id="{{ idprefix }}-hcl-slider"
+                min="-3.1"
+                max="1.1"
+                step="any"
+                value="-1.7"
+                list="{{ idprefix }}-0-datalist"
+                style="width: 100px"
+            />
+        </div>
+        <div>
+            <label for="{{ idprefix }}-h2-slider" style="font-size: 0.85em"
+                >$\mathrm{H}_2$ pressure:
+                <span
+                    id="{{idprefix}}-h2-press"
+                    style="display: inline-block; width: 6ch; text-align: right"
+                ></span
+                >&nbsp;bar
+            </label>
+            <br />
+            <input
+                type="range"
+                id="{{ idprefix }}-h2-slider"
+                min="-2"
+                max="2"
+                step="any"
+                value="-0.8"
+                list="{{ idprefix }}-0-datalist"
+                style="width: 100px"
+            />
+        </div>
+        <datalist id="{{ idprefix }}-0-datalist">
+            <option value="0" label="0">0</option>
+        </datalist>
+        <div>
+            <label style="font-size: 0.85em"
+                >Cell voltage $\Delta V_{\mathrm{e}^-}$:
+                <span
+                    id="{{idprefix}}-voltage"
+                    style="display: inline-block; width: 6ch; text-align: right"
+                ></span
+                >&nbsp;V
+            </label>
+        </div>
+    </div>
+</figure>
+
+<script type="module">
+    const plotContainerId = '{{idprefix}}-container';
+    const hSlider = document.getElementById('{{ idprefix }}-hcl-slider');
+    const hConcSpan = document.getElementById('{{ idprefix }}-hcl-conc');
+    const h2Slider = document.getElementById('{{ idprefix }}-h2-slider');
+    const h2PressSpan = document.getElementById('{{ idprefix }}-h2-press');
+    const voltsSpan = document.getElementById('{{ idprefix }}-voltage');
+    const throttleDuration = 100; // should be 1/5 or less of transitionDuration
+
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { throttle } from '{{ esbdJsPath }}utils.js';
+
+    const speciesInfo = {
+        hplus: {
+            z: 1,
+            color: '#c04040',
+            mathLabel: '\\mathrm{H}^{+}',
+        },
+        clminus: {
+            z: 1,
+            color: '#80B030',
+            mathLabel: '\\mathrm{Cl}^{-}',
+        },
+        electron: {
+            z: -1,
+            color: '#377EB8',
+            mathLabel: '\\mathrm{e}^{-}',
+        },
+    };
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        plotContainerId,
+        speciesInfo
+    );
+
+    // Set layout
+    const boundaries = [0.0, 0.25, 0.65, 0.75, 1.0];
+    diagram.setSpatialLayout(boundaries, [
+        { name: 'Pt', color: '#E0E0E0' },
+        { name: 'Solution', color: '#E6F5FF' },
+        { name: 'AgCl', color: '#ffe' },
+        { name: 'Ag', color: '#E0E0E0' },
+    ]);
+
+    const R = 8.31446261815324; // Gas constant (J/mol·K)
+    const F = 96485.3321233100184; // Faraday constant (C/mol)
+    const T = 298.15; // Temperature (K, 25°C)
+    const RT = R * T;
+    const RT_F = RT / F;
+    const dV_HCl_std = (0 + -131.23e3) / F; // V^0_H+ - V^0_Cl-
+    const mu_AgCl = -109.8e3; // chem potential of AgCl in kJ/mol
+    const mu_Ag = 0; // chem potential of Ag
+    const mu_H2_1bar = 0; // chemical potential of H2 at 1 bar fugacity
+
+    const E0_SSCE_SHE =
+        mu_H2_1bar / (2 * F) - dV_HCl_std - (mu_Ag - mu_AgCl) / F;
+
+    diagram.setVRange(-1, 1);
+
+    function updateDiagrams() {
+        const a_hcl = Math.pow(10, parseFloat(hSlider.value));
+        const a_h2 = Math.pow(10, parseFloat(h2Slider.value));
+
+        hConcSpan.textContent = a_hcl.toExponential(2);
+        h2PressSpan.textContent = a_h2.toPrecision(3);
+
+        const a_hplus = a_hcl;
+        const a_clminus = a_hcl;
+
+        const V_el = +0; // GND
+        const V0_SHE = V_el - RT_F * Math.log(a_hplus / Math.sqrt(a_h2));
+        const V0_SSCE = V0_SHE + E0_SSCE_SHE;
+        const V_el_Ag = V0_SSCE - RT_F * Math.log(a_clminus);
+
+        const V_cell = V_el_Ag - V_el;
+
+        voltsSpan.textContent = V_cell.toPrecision(3);
+
+        const b = boundaries;
+        diagram.updateTraceData([
+            {
+                id: `electron_trace`,
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [b[0], b[1]],
+                y: [V_el, V_el],
+            },
+            {
+                id: `electron_she`,
+                speciesId: 'electron',
+                curveType: 'standardState',
+                label: String.raw`V^\circ_{\mathrm{e}^-}(\mathrm{SHE})`,
+                showLabel: true,
+                x: [b[1], b[3]],
+                y: [V0_SHE, V0_SHE],
+            },
+            {
+                id: `electron_ssce`,
+                speciesId: 'electron',
+                curveType: 'standardState',
+                label: String.raw`V^\circ_{\mathrm{e}^-}(\mathrm{SSCE})`,
+                showLabel: true,
+                x: [b[1], b[3]],
+                y: [V0_SSCE, V0_SSCE],
+            },
+            {
+                id: `electron_trace2`,
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [b[3], b[4]],
+                y: [V_el_Ag, V_el_Ag],
+            },
+        ]);
+
+        // diagram.updateVerticalMarkers([
+        //     {
+        //         id: 'she',
+        //         symbol: '⇌',
+        //         x: b[1],
+        //         yDefs: [{ y: V_el }, { y: V_H }],
+        //         popupCallback: () =>
+        //             String.raw`$\mathrm{H}^+ + \mathrm{e}^- \rightleftharpoons \tfrac{1}{2}\mathrm{H}_2$`,
+        //     },
+        //     {
+        //         id: 'agcl',
+        //         symbol: '⇌',
+        //         x: b[3],
+        //         yDefs: [{ y: V_el_Ag }, { y: V_Cl }],
+        //         popupCallback: () =>
+        //             String.raw`$\mathrm{AgCl} + \mathrm{e}^- \rightleftharpoons \mathrm{Ag} + \mathrm{Cl}^-$`,
+        //     },
+        // ]);
+    }
+
+    // Slider event listeners - throttle them.
+    const updateThrottler = throttle(
+        (event) => updateDiagrams(),
+        throttleDuration
+    );
+    hSlider.addEventListener('input', updateThrottler);
+    h2Slider.addEventListener('input', updateThrottler);
+
+    updateDiagrams();
+</script>

@@ -11,7 +11,7 @@
 - [_Solutions_](/esbd/solutions/) - Concentrations, activities, standard states $V^\circ_i$.
 - [_Solid state_](/esbd/solidstate/) - The close connection between $V^\circ_i$ and band edges; holes as ions.
 
-*Single-solution chemistry*:
+*Classic electrochemistry*:
 - [_Reference electrodes_](/esbd/references/) - Reference cells and the solution reference potential $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$.
 - Electrode potentials - How does $E$ relate to $V_i$? Standard electrode potentials and the Nernst equation.
 - Redox - "Electrons in solution."
