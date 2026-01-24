@@ -14,13 +14,18 @@ const CURVE_TYPES = {
         labelGen: (species) => `V_{${species}}`,
     },
     voltageImplied: {
-        name: 'implied species voltage',
+        name: 'implied voltage',
         style: { lineWidth: 3, dasharray: '3,3' },
         labelGen: (species) => `V_{${species}}`,
     },
     standardState: {
         name: 'standard species voltage',
         style: { lineWidth: 1, dasharray: null },
+        labelGen: (species) => `V_{${species}}^\\circ`,
+    },
+    standardStateImplied: {
+        name: 'standard implied voltage',
+        style: { lineWidth: 1, dasharray: '3,3' },
         labelGen: (species) => `V_{${species}}^\\circ`,
     },
     bandEdge_C: {

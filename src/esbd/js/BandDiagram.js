@@ -9,7 +9,7 @@ const STYLE_DEFAULTS = {
     line: { lineWidth: 3, dasharray: null },
     interface: {
         lineWidth: 1,
-        dasharray: '3,3',
+        dasharray: '1,1',
         color: 'rgba(128,128,128,0.7)',
     },
     verticalMarker: {
