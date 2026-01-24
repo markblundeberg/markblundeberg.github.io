@@ -17,12 +17,6 @@ To ground what we are doing in a specific example, we're going to look at ...
 
 And we are going to show exactly what a "standard hydrogen electrode" is -- it's a virtual level $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$.
 
-This topic:
-- reference electrodes and cells
-- she and virtual she level $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$
-- SSCE (standard silver chloride electrode) $V^\circ_{\mathrm{e}^-}(\mathrm{SSCE})$ together with SHE. Cite old works like Harned and Bates
-- "absolute electrode potential"
-
 ## A classic reference cell in the $V_i$ view
 
 ### The silver/silver chloride electrode
@@ -140,68 +134,32 @@ And now we see that $V^\circ_{\mathrm{e}^-}(\mathrm{SSCE}) - V^\circ_{\mathrm{e}
 
 Let's now re-plot the exact same reference cell of a hydrogen electrode and a silver chloride electrode, except instead of showing ionic quantities, we'll just show the electronic $V_{\mathrm{e}^-}$ and $V^\circ_{\mathrm{e}^-}$ levels:
 
-
 {% include "esbd-diagrams/esbd-she-agcl-e.html" %}
 
-Standard electrodes tend to be practically realized as actual electrodes connected via junctions.
+And as you can see, I've also anchored $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ to "0 V". This is a totally arbitrary choice (and doesn't generalize -- what happens when $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ has spatial variations) because only relative differences in $V$ matter, but this shows the "reference frame" of electrochemistry.
 
 
+## Takeaways
+
+[**NEXT TOPIC: xxx**](../xxx/)
+
+
+
+## Optional discussion
 
 {#
-## Electrode potential $E$ vs $V_{\mathrm{e}^-}$
+<details>
+<summary>
+Click to open extended discussion.
+</summary>
 
-Now I think a word is in order: in classic electrochemistry, we see the symbol $E$ thrown around everywhere. What does this represent? What is an electrode potential?
-
- what the heck is an electrode potential $E$? To be honest, there are a variety of definitions of this term that differ in subtle ways! I find it quite confusing.
-
-
-To be clear, IUPAC only defines 
-https://goldbook.iupac.org/terms/view/E01956
-
-> Electromotive force of a cell in which the electrode on the left is a standard hydrogen electrode and the electrode on the right is the electrode in question.
-
-Here "Electromotive force" is officially defined to mean a difference in $\phi$, but as we established  $E = V_{\mathrm{e}^-}(\text{right}) - V_{\mathrm{e}^-}(\text{left})$, where the left electrode is an SHE. As we have identified above, the SHE is largely a virtual electrode. And so
-
-$$ E = V_{\mathrm{e}^-}(\text{electrode}) - V^\circ_{\mathrm{e}^-}(\text{SHE}) $$
-
-We see then that $E$ is just 
-
-* I've seen electrode potential defined as .
-
-I've seen various definitions.
-
-
-which in full evaluates to:
-
-$$ V_{\mathrm{e}^-}(\text{left}) + \frac{\mu_{\mathrm{H}_2}}{2F} - \frac{RT}{F}\ln(a_{\mathrm{H}^+}) + [V^\circ_{\mathrm{Cl}^-}-V^\circ_{\mathrm{H}^+}] - \frac{RT}{F}\ln(a_{\mathrm{Cl}^-}) - \frac{1}{F} ( \mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}} ) = V_{\mathrm{e}^-}(\text{right}) $$
-
-**Standard and actual cell voltage** - We can combine the constant factors and combine the activity factors to get the cell voltage:
-
-$$ E_{\mathrm{cell}} = V_{\mathrm{e}^-}(\text{right}) - V_{\mathrm{e}^-}(\text{left}) = E^\circ + \frac{RT}{F} \ln\bigg( \frac{\sqrt{a_{\mathrm{H_2}}}}{a_{\mathrm{H}^+}a_{\mathrm{Cl}^-}} \bigg)  $$
-
-where we have used $\mu_{\mathrm{H}_2} = \mu^\circ_{\mathrm{H}_2} + \frac{RT}{F}\ln(a_{\mathrm{H_2}}) $ and defined:
-
-$$ E^\circ = \frac{\mu^\circ_{\mathrm{H}_2}}{2F} + [V^\circ_{\mathrm{Cl}^-}-V^\circ_{\mathrm{H}^+}] - \frac{1}{F} ( \mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}} ) $$
-
-Which evaluates to $E^\circ = 0.222~\mathrm{V} $
-This is the well known standard voltage of the standard silver chloride electrode against a standard hydrogen electrode, and the preceding equation gives us the voltage for actual conditions (when activities are not all 1).
-
-While this process is nice, 
-
-
-## Standard electrodes as virtual levels
-
-- $V^\circ_{\mathrm{e}^-}(\mathrm{reaction})$ as a level.
-- Show plot with $V^\circ_{\mathrm{e}^-}(\mathrm{reaction})$ as a .. ??
-- Show plot with ideal salt bridge connection to actual standard electrode (as opposed to virtual electrode). Hmm though actual is slightly ambiguous
-
-
-
-
+</details>
 #}
 
 
-## Standard hydrogen electrode is a pain in the ass
+The standard hydrogen electrode is a pain in the ass
+
+TODO : Cite old works like Harned and Bates
 
 The standard hydrogen electrode (SHE) is an aqueous system defined with the activity of $\mathrm{H}^+$ ions at unity ($a_{\mathrm{H}^+} = 1$), which implies $ V_{\mathrm{H}^+}(\text{SHE}) = V^\circ_{\mathrm{H}^+} $. Furthermore, the SHE is defined with $\mathrm{H}_2$ gas at a standard fugacity (effective pressure) of 1 bar, so we will write its chemical potential as $\mu^\circ_{\mathrm{H}_2}(T)$. Combining the equilibrium condition $V_{\mathrm{H}^+} - V_{\mathrm{e}^-} = \mu_{\mathrm{H}_2}/(2F)$ with the standard condition $V_{\mathrm{H}^+}(\text{SHE}) = V^\circ_{\mathrm{H}^+}$, we find:
 

@@ -118,7 +118,7 @@ electrode #}
     const E0_SSCE_SHE =
         mu_H2_1bar / (2 * F) - dV_HCl_std - (mu_Ag - mu_AgCl) / F;
 
-    diagram.setVRange(-1, 1);
+    diagram.setVRange(-0.35, 0.55);
 
     function updateDiagrams() {
         const a_hcl = Math.pow(10, parseFloat(hSlider.value));
@@ -130,8 +130,8 @@ electrode #}
         const a_hplus = a_hcl;
         const a_clminus = a_hcl;
 
-        const V_el = +0; // GND
-        const V0_SHE = V_el - RT_F * Math.log(a_hplus / Math.sqrt(a_h2));
+        const V0_SHE = 0;
+        const V_el = V0_SHE + RT_F * Math.log(a_hplus / Math.sqrt(a_h2));
         const V0_SSCE = V0_SHE + E0_SSCE_SHE;
         const V_el_Ag = V0_SSCE - RT_F * Math.log(a_clminus);
 
@@ -177,24 +177,24 @@ electrode #}
             },
         ]);
 
-        // diagram.updateVerticalMarkers([
-        //     {
-        //         id: 'she',
-        //         symbol: '⇌',
-        //         x: b[1],
-        //         yDefs: [{ y: V_el }, { y: V_H }],
-        //         popupCallback: () =>
-        //             String.raw`$\mathrm{H}^+ + \mathrm{e}^- \rightleftharpoons \tfrac{1}{2}\mathrm{H}_2$`,
-        //     },
-        //     {
-        //         id: 'agcl',
-        //         symbol: '⇌',
-        //         x: b[3],
-        //         yDefs: [{ y: V_el_Ag }, { y: V_Cl }],
-        //         popupCallback: () =>
-        //             String.raw`$\mathrm{AgCl} + \mathrm{e}^- \rightleftharpoons \mathrm{Ag} + \mathrm{Cl}^-$`,
-        //     },
-        // ]);
+        diagram.updateVerticalMarkers([
+            {
+                id: 'she',
+                symbol: 'a',
+                x: b[1],
+                yDefs: [{ y: V_el }, { y: V0_SHE }],
+                popupCallback: () =>
+                    String.raw`$\mathrm{H}^+ + \mathrm{e}^- \rightleftharpoons \tfrac{1}{2}\mathrm{H}_2$`,
+            },
+            {
+                id: 'agcl',
+                symbol: 'a',
+                x: b[3],
+                yDefs: [{ y: V_el_Ag }, { y: V0_SSCE }],
+                popupCallback: () =>
+                    String.raw`$\mathrm{AgCl} + \mathrm{e}^- \rightleftharpoons \mathrm{Ag} + \mathrm{Cl}^-$`,
+            },
+        ]);
     }
 
     // Slider event listeners - throttle them.
