@@ -100,6 +100,22 @@ In this way, the difference $\Delta$ will perfectly cancel and so the measured v
 
 In many cases these electrodes will be particularized to both the target ion and to the environment of that ion. A key criterion is that $V_{\mathrm{e}^-}$ only couples to the target $V_{\mathrm{ion}}$ and not to any other charged species. There is also a [generic recipe (see later topic)](../nuances/) that can be used in principle to non-invasively measure any ionic voltage $V_i$, but it is based on ion-selective membranes which are only practically available for some ions in some compatible solutions.
 
+## All $V_i$ float and are unreferenced
+
+(TODO: offload to new topic about covariance advantages? and refer again during discussions of $E$, vac reference etc.)
+
+As a subtle but extremely important conceptual principle, all the $V_i$ are *covariant* values with respect to global shifts in electric potential. What this means is, if we increase all $V_i$ in all places by 1 volt, as well as increasing all other electric potentials ($V^\circ_i$, $\phi_{\mathrm{vac}}$, etc.) by 1 volt, then the system is observationally equivalent. It may seem weird that we are allowing this redundancy, but it is only 1 degree of freedom for the entire universe, and in fact it has huge conceptual benefits compared to the traditional electrochemistry approach where each quantity should be locally referenced.^[In traditional electrochemistry, the philosophy is often that quantities should have a declared reference point, such as "the SHE" or "the vacuum". The goal is that these referenced quantities are measurable, but I think it is a poor choice as it can introduce problems when the reference is ambiguous or ill specified. In detail, the real problem is that these quantities are *locally* referenced, which means that in any nontrivial device you now get a patchwork of many references. Each material/solution/cell has its own different idea of "the vacuum" or "the SHE", and in fact those references can even continuously vary across a device under bias. This is in spite of the fact that there is only *one* universal gauge shifting degree of freedom, so there should only be at most one reference point in the entire universe. But then, you get the pointless debate over what is the "true" absolute 0 reference. By working with reference-free covariant quantities and staying with them, we never have to get confused about referencing.]
+
+Note that in our $V_i$ band diagrams, we do have to make a choice of where to put the zero simply for the purposes of illustration. I tend to offset the diagram such that the negative electrode is 0, matching usual practice in electronics work. But it must be understood that the entire diagram can be shifted up and down and it does not affect what is happening; it's only the vertical differences that matter.
+
+<figure class="diagram-placeholder">
+{% figcaption %}
+- 'COM', a cell, some nontrivial nonflat Vi traces, and $\phi_{\mathrm{vac}}$.
+
+As in this toy universe containing a complex electrochemical and a nonflat vacuum potential, we can raise and lower all electrical quantities together arbitrarily. Only vertical differences matter.
+{% endfigcaption %}
+</figure>
+
 ## About differences $V_i - V_j$
 
 There is an important caveat: the hidden choice of chemical potential convention imparts a global offset on each ion's $V_i$. The impact of this hidden assumption is to apply a consistent (but somewhat arbitrary) offset to all values $V_i - V_j$ for each pair of distinct species $i\neq j$. This does not affect ionic $V_i$ differences within the same species (e.g. we can exactly define and measure the difference in $V_{\mathrm{H}^+}$ between two solutions, even if they have different solvents).
