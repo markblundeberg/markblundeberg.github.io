@@ -12,10 +12,9 @@
 - [_Solid state_](/esbd/solidstate/) - The close connection between $V^\circ_i$ and band edges; holes as ions.
 
 *Classic electrochemistry*:
+- [_Redox_](/esbd/redox/) - "Electrons in solution."
 - [_Reference electrodes_](/esbd/references/) - Reference cells and the solution reference potential $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$.
-- Electrode potentials - How does $E$ relate to $V_i$? Standard electrode potentials and the Nernst equation.
-- Redox - "Electrons in solution."
-- [_Potentials_](/esbd/potentials/) - Redox potentials in terms of $V_i$.
+- [_Electrode potentials_](/esbd/potential/) - How does $E$ relate to $V_i$? Standard electrode potentials and the Nernst equation.
 - [_pH_](/esbd/ph/) - The standard measure of acidity, in terms of $V_i$. Pourbaix diagrams
 
 *Spatial variations*:

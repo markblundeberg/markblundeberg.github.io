@@ -2,11 +2,7 @@
 layout: layouts/esbd_topic.njk
 title: 'Reference electrodes'
 tags: [page, esbd_topic]
-orderESBD: 31
-eleventyNavigation:
-    key: Reference electrodes
-    parent: ESBD
-    order: 31
+orderESBD: 32
 ---
 
 # {{title}}
