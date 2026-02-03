@@ -1,13 +1,13 @@
 ---
 layout: layouts/esbd_topic.njk
-title: 'Redox'
-tags: [page, esbd_topic] # Assign to 'page' and 'esbd_topic' collections
+title: 'Half-reactions'
+tags: [page, esbd_topic]
 orderESBD: 31
 ---
 
 # {{title}}
 
-In this topic and the next few topics we're going to explore the $V_i$ world visualization of concepts like "electrode potential", "redox potential", "standard hydrogen electrode", and so on.
+In this topic and the next few topics we're going to explore the $V_i$ world visualization of concepts like "electrode potential", "redox potential", "standard hydrogen electrode", and so on. These are all built around electron transfer, aka "redox".
 
 The general idea of redox chemistry is considering **half-reactions** of the following generic form:
 $$ \mathrm{Ox} + z\mathrm{e}^- \rightleftharpoons \mathrm{Red} $$
@@ -144,7 +144,7 @@ It is also assumed that the temperature is 25&nbsp;°C and the pressure is 1 bar
 
 The consequence of the standard-ideal-concentration (or unit activity) condition is that all $V_i$ for dissolved ions are replaced by $V^\circ_i$.
 
-As with our ionic standard states, we can tabulate all the relative positions of the $V^\circ_{\mathrm{e}^-}(\mathrm{Ox/Red})$ ladder, by defining one half-reaction (usually $\mathrm{H}^+/\mathrm{H_2}$ as a reference level).^[Note that we have used the $\mathrm{H}^+$ ion as a convenient reference 'ladder rung' for both redox potentials ($V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2})$) and the ionic standard states ($V^\circ_{\mathrm{H}^+}$). But, these two choices don't need to be related and it's not necessary to use the same ion. Even though they seem related they are in fact performing two different tasks (and they differ by $\tfrac{1}{2F} \mu^\circ_{\mathrm{H_2}}$, which we only assign to be 0 by convention).] This gives us $E^\circ$, which as we will see is also the {% wiki "standard electrode potential" %}:
+As with our ionic standard states, we can tabulate all the relative positions of the $V^\circ_{\mathrm{e}^-}(\mathrm{Ox/Red})$ ladder, by defining one half-reaction (usually $\mathrm{H}^+/\mathrm{H_2}$) as a reference level.^[Note that we have used the $\mathrm{H}^+$ ion as a convenient reference 'ladder rung' for both redox potentials ($V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2})$) and the ionic standard states ($V^\circ_{\mathrm{H}^+}$). But, these two choices don't need to be related and it's not necessary to use the same ion. Even though they seem related they are in fact performing two different tasks (and they differ by $\tfrac{1}{2F} \mu^\circ_{\mathrm{H_2}}$, which we only assign to be 0 by convention).] We'll call this $E^\circ$, because this is in fact the {% wiki "standard electrode potential" %} (we'll discuss the meaning of "electrode potential" more in the next topic):
 
 $$ E^\circ = V^\circ_{\mathrm{e}^-}(\mathrm{Ox/Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2}) $$
 
@@ -190,57 +190,13 @@ It's important to understand that these are a sort of 'electron tunneling densit
 The important of these Gaussians is that they represent the actual necessary activation window for redox processes. If two redox processes' windows don't overlap, then they might not proceed even if there is a strong thermodynamic drive.
 #}
 
-
-
-{#
-
-
-## Potentials in electrochemistry are confusing
-
-There are a number of potentials in electrochemistry which all have similar definition: redox potential, electrode potential, Nernst potential, mixed potential, and so on. These are all given the symbol $E$ and in terms of our $V_i$ they are defined as potential differences of the following form:
-
-$$ E = V_{\mathrm{e}^-}(\mathrm{something}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE},\mathrm{somewhere}). $$
-
-At equilibrium, these potentials generally agree. The confusion comes about because the "something" and "somewhere" are ill-specified.
-
-For the $V_{\mathrm{e}^-}(\mathrm{something})$, we can have:
-
-* The actual electronic voltage on a piece of metal.
-* The electronic voltage the metal would have at steady state.
-* The electronic voltage relating to a specific half-reaction based on local conditions.
-* The electronic voltage relating to a specific half-reaction based on averaged conditions.
-
-The reference also varies, which is frustrating because it gets referred to as "the SHE". We have $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ meaning:
-
-* A virtual local potential.
-* The potential on an actual reference electrode inserted in the cell.
-* A globally defined "SHE" that is at infinity or at electrical ground.
-
-### Absolute electrode potentials
-
-The confusion over references has led to an even more misleading concept called "absolute electrode potential", which instead references to "the vacuum". This solves nothing because there is no single vacuum just like there is no single SHE. "The vacuum" can mean:
-
-* The vacuum $\phi$ just above the electrolyte surface.
-* The vacuum $\phi$ that the electrolyte surface would have under clean conditions with ideal behaviour. (The commonly cited "4.44 V").
-* The vacuum $\phi$ at infinity (sometimes set to 0).
-* Some hypothetical thermodynamic state of electrons in vacuum.
-
-
-Reduction: $ E_h = V_e(rxn) - V^0_e(SHE) $
-
-Electrode: $ E_h = V_e(electrode) - V^0_e(SHE) $
-
-Both signal the readiness of the source to provide or accept electrons. And at equilibrium, both will be equal. But the reduction potential is virtual, and when out of equilibrium can differ for each reaction (Lundell 1984 on ground waters). In contrast an electrode, typically metal, has a firmly defined $V_e$.
-
-An additional concern arises in the case of inhomogeneous solutions or driven currents which is, where do we take $V^0_e(SHE)$ from? In the case of reduction potential, typically it is local to the reaction. But for an electrode potential, $V^0_e(SHE)$ may be taken from a reference electrode that is located some distance away. One of the benefits of plotting $V_i$ is that it removes ambiguity over references.
-
-#}
-
 ## Takeaways
 
-For the next topic, we'll cover the pH, a standard measure of acidity.
+And so we've arrived at a description of redox half-reactions in terms of a virtual or implied value $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$, and in relating this to reactant activities, we've identified a new ladder of "standard redox levels" $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$. 
 
-[**NEXT TOPIC: pH**](../ph/)
+In the next topic, we'll talk about how we can explain traditional elecrochemical variables in terms of these redox levels.
+
+[**NEXT TOPIC: Potentials**](../e/)
 
 {#   
 
