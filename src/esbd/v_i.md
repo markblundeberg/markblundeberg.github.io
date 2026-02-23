@@ -100,6 +100,12 @@ In this way, the difference $\Delta$ will perfectly cancel and so the measured v
 
 In many cases these electrodes will be particularized to both the target ion and to the environment of that ion. A key criterion is that $V_{\mathrm{e}^-}$ only couples to the target $V_{\mathrm{ion}}$ and not to any other charged species. There is also a [generic recipe (see later topic)](../nuances/) that can be used in principle to non-invasively measure any ionic voltage $V_i$, but it is based on ion-selective membranes which are only practically available for some ions in some compatible solutions.
 
+## $V_i$ are thermodynamic state variables
+
+Alongside temperature $T$, pressure $P$, and the chemical potentials $\mu_i$ of neutral elements, the $V_i$ (or $\bar\mu_i$) are the proper intensive state variables for charged species. Since $T$, $P$, and the solvent $\mu$ tends to be constant or implicitly clear, it means that our plots of varying $V_i$ will be a complete visualization of the spatial varations thermodynamic state in many cases.
+
+Note that in general if we have $N$ charged species then there are $N$ independent $V_i$ values, however there are only $N-1$ independent charged species concentrations, because the body has to (generally) be charge neutral. The extra degree of freedom in the set of $V_i$ values is not redundant but actually represents important state information: it is the electrical state of the body. If we uniformly increase all the $V_i \rightarrow V_i + \delta$ then the body is in a distinct thermodynamic state (electrically) even though it is equivalent in all other aspects. This bring us to our next point...
+
 ## All $V_i$ float and are unreferenced
 
 (TODO: offload to new topic about covariance advantages? and refer again during discussions of $E$, vac reference etc.)
