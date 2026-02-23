@@ -12,7 +12,9 @@ In this topic and the next few topics we're going to explore the $V_i$ world vis
 The general idea of redox chemistry is considering **half-reactions** of the following generic form:
 $$ \mathrm{Ox} + z\mathrm{e}^- \rightleftharpoons \mathrm{Red} $$
 
-I.e. we consider $z$ electrons transferred onto an oxidized species $\mathrm{Ox}$ to become a reduced species $\mathrm{Red}$ (note the charges satisfy $z_{\mathrm{Ox}} - z = z_{\mathrm{Red}}$). A half-reaction can't happen on its own since the solvent generally doesn't contain a population of free electrons: for a half-reaction to move forward, the electron has to be taken from an electrode or another half-reaction, and likewise for the reaction to move backward it needs to find somewhere to give away its electron.
+I.e. we consider $z$ electrons transferred onto an oxidized species $\mathrm{Ox}$ to become a reduced species $\mathrm{Red}$ (note the charges satisfy $z_{\mathrm{Ox}} - z = z_{\mathrm{Red}}$). 
+
+A half-reaction can't happen on its own since the solvent generally doesn't contain a population of free electrons: for a half-reaction to move forward, the electron has to be taken from an electrode or another half-reaction, and likewise for the reaction to move backward it needs to find somewhere to give away its electron.
 
 In terms of electrochemical potentials, this defines an electrochemical potential of electrons by equilibrium:
 
@@ -68,11 +70,11 @@ Note that not all reactants need to be solutes, so activity (and standard state)
 
 Substituting these in, we arrive at the following equation which I call the "**floating Nernst equation**":
 
-$$ V_{\mathrm{e}^-}(\mathrm{Ox/Red}) = V^\circ_{\mathrm{e}^-}(\mathrm{Ox/Red}) + \frac{RT}{zF} \ln\bigg(\frac{a_{\mathrm{Ox}}}{a_{\mathrm{Red}}}\bigg) , $$
+$$ V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) = V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) + \frac{RT}{zF} \ln\bigg(\frac{a_{\mathrm{Ox}}}{a_{\mathrm{Red}}}\bigg) , $$
 
-where we define the **standard redox level for the $\mathrm{Ox/Red}$ reaction**:
+where we define the **standard redox level for the $\mathrm{Ox}/\mathrm{Red}$ reaction**:
 
-$$ V^\circ_{\mathrm{e}^-}(\mathrm{Ox/Red}) = \frac{\bar\mu^\circ_{\mathrm{Ox}} - \bar\mu^\circ_{\mathrm{Red}}}{zF} .$$
+$$ V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) = \frac{\bar\mu^\circ_{\mathrm{Ox}} - \bar\mu^\circ_{\mathrm{Red}}}{zF} .$$
 
 These are floating levels that float alongside our $V^\circ_i$ ionic standard states. Note that we can substitute $\bar\mu^\circ_i$ for $z_i F V^\circ_i$ for the ion reactants, to get formulae involving $V^\circ_i$ (see below for a more general formula).
 
@@ -80,22 +82,22 @@ These are floating levels that float alongside our $V^\circ_i$ ionic standard st
 [^redformulae]:
     For the simple case of one Ox and one Red species, we have three cases:
     $$\begin{aligned}
-    V^\circ_{\mathrm{e}^-}(\mathrm{Ox/Red}) &= V^\circ_{\mathrm{Ox}} - \mu^\circ_{\mathrm{Red}}/(zF) & \text{($\mathrm{Red}$ neutral)} \\
-    V^\circ_{\mathrm{e}^-}(\mathrm{Ox/Red}) &= V^\circ_{\mathrm{Red}} + \mu^\circ_{\mathrm{Ox}}/(zF) & \text{($\mathrm{Ox}$ neutral)} \\
-    V^\circ_{\mathrm{e}^-}(\mathrm{Ox/Red}) &= \frac{z_{\mathrm{Ox}}}{z} V^\circ_{\mathrm{Ox}} - \frac{z_{\mathrm{Red}}}{z} V^\circ_{\mathrm{Red}} & \text{(neither neutral)}
+    V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) &= V^\circ_{\mathrm{Ox}} - \mu^\circ_{\mathrm{Red}}/(zF) & \text{($\mathrm{Red}$ neutral)} \\
+    V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) &= V^\circ_{\mathrm{Red}} + \mu^\circ_{\mathrm{Ox}}/(zF) & \text{($\mathrm{Ox}$ neutral)} \\
+    V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) &= \frac{z_{\mathrm{Ox}}}{z} V^\circ_{\mathrm{Ox}} - \frac{z_{\mathrm{Red}}}{z} V^\circ_{\mathrm{Red}} & \text{(neither neutral)}
     \end{aligned}$$
-    We can see here that indeed, $V^\circ_{\mathrm{e}^-}(\mathrm{Ox/Red})$ is anchored to the $V^\circ_i$ ladder.
+    We can see here that indeed, $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ is anchored to the $V^\circ_i$ ladder.
 #}
 
 The above equation for $V_{\mathrm{e}^-}$ looks extremely similar to the regular {%wiki "Nernst equation" %}, though it involves $V_{\mathrm{e}^-}$ instead of $E$. We'll get back to what this traditional electrochemical $E$ actually means in the next topic, but we don't need it for now.
 
 {#
-$$ E(\mathrm{Ox/Red}) = E^\circ(\mathrm{Ox/Red}) + \frac{RT}{zF} \ln\bigg(\frac{a_{\mathrm{Ox}}}{a_{\mathrm{Red}}}\bigg). $$
+$$ E(\mathrm{Ox}/\mathrm{Red}) = E^\circ(\mathrm{Ox}/\mathrm{Red}) + \frac{RT}{zF} \ln\bigg(\frac{a_{\mathrm{Ox}}}{a_{\mathrm{Red}}}\bigg). $$
 
 In essence, in the regular Nernst equation the $E$ and $E^\circ$ simply have had a local reference value subtracted from them, so that they are no longer floating:
 
-$$ E(\mathrm{Ox/Red}) = V_{\mathrm{e}^-}(\mathrm{Ox/Red}) - (\mathrm{ref}) $$
-$$ E^\circ(\mathrm{Ox/Red}) = V^\circ_{\mathrm{e}^-}(\mathrm{Ox/Red}) - (\mathrm{ref}) .$$
+$$ E(\mathrm{Ox}/\mathrm{Red}) = V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - (\mathrm{ref}) $$
+$$ E^\circ(\mathrm{Ox}/\mathrm{Red}) = V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - (\mathrm{ref}) .$$
 
 The reference value $(\mathrm{ref})$ usually refers to "the standard hydrogen electrode", which is vague. To be precise, the reference is the a *local* value $(\mathrm{ref}) = V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2})$. The distinction matters when you have an inhomogeneous solution, or you have more than one solution, then $V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2})$ will vary from place to place.
 #}
@@ -144,11 +146,11 @@ It is also assumed that the temperature is 25&nbsp;°C and the pressure is 1 bar
 
 The consequence of the standard-ideal-concentration (or unit activity) condition is that all $V_i$ for dissolved ions are replaced by $V^\circ_i$.
 
-As with our ionic standard states, we can tabulate all the relative positions of the $V^\circ_{\mathrm{e}^-}(\mathrm{Ox/Red})$ ladder, by defining one half-reaction (usually $\mathrm{H}^+/\mathrm{H_2}$) as a reference level.^[Note that we have used the $\mathrm{H}^+$ ion as a convenient reference 'ladder rung' for both redox potentials ($V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2})$) and the ionic standard states ($V^\circ_{\mathrm{H}^+}$). But, these two choices don't need to be related and it's not necessary to use the same ion. Even though they seem related they are in fact performing two different tasks (and they differ by $\tfrac{1}{2F} \mu^\circ_{\mathrm{H_2}}$, which we only assign to be 0 by convention).] We'll call this $E^\circ$, because this is in fact the {% wiki "standard electrode potential" %} (we'll discuss the meaning of "electrode potential" more in the next topic):
+As with our ionic standard states, we can tabulate all the relative positions of the $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ ladder, by defining one half-reaction (usually $\mathrm{H}^+/\mathrm{H_2}$) as a reference level.^[Note that we have used the $\mathrm{H}^+$ ion as a convenient reference 'ladder rung' for both redox potentials ($V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2})$) and the ionic standard states ($V^\circ_{\mathrm{H}^+}$). But, these two choices don't need to be related and it's not necessary to use the same ion. Even though they seem related they are in fact performing two different tasks (and they differ by $\tfrac{1}{2F} \mu^\circ_{\mathrm{H_2}}$, which we only assign to be 0 by convention).] We'll call this $E^\circ$, because this is in fact the {% wiki "standard electrode potential" %} (we'll discuss the meaning of "electrode potential" more in the next topic):
 
-$$ E^\circ = V^\circ_{\mathrm{e}^-}(\mathrm{Ox/Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2}) $$
+$$ E^\circ = V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2}) $$
 
-| Ox | / | Red | $V^\circ_{\mathrm{e}^-}(\mathrm{Ox/Red})$ | $E^0$ (V) |
+| Ox | / | Red | $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ | $E^0$ (V) |
 | ---: | --- | :--- | ---: | ---: |
 | $\mathrm{H}^+$ | / | $\mathrm{H_2(g)}$ | $V^\circ_{\mathrm{H}^+} - \tfrac{1}{2F} \mu^\circ_{\mathrm{H_2}}$ | 0 |
 | $\mathrm{O_2(g)},\mathrm{H_2O}$ | / | $\mathrm{OH}^-$ | $V^\circ_{\mathrm{OH}^-} + \tfrac{1}{4F} \mu^\circ_{\mathrm{O_2}} + \tfrac{1}{2F} \mu^\circ_{\mathrm{H_2O}} $ | +0.401 |
@@ -157,7 +159,7 @@ $$ E^\circ = V^\circ_{\mathrm{e}^-}(\mathrm{Ox/Red}) - V^\circ_{\mathrm{e}^-}(\m
 | $\mathrm{Fe}^{3+}$ | / | $\mathrm{Fe}^{2+}$ | $3V^\circ_{\mathrm{Fe}^{3+}} - 2V^\circ_{\mathrm{Fe}^{2+}}$ | +0.771 |
 | $\mathrm{Fe}^{2+}$ | / | $\mathrm{Fe(s)}$ | $V^\circ_{\mathrm{Fe}^{2+}} - \tfrac{1}{2F} \mu^\circ_{\mathrm{Fe}} $ | −0.44 |
 
-It's worth visualizing the $V^\circ_{\mathrm{e}^-}(\mathrm{Ox/Red})$ levels alogngside the ionic levels $V^\circ_i$. We plot the standard redox levels as dashed (representing that they are 'implied' levels), and as thin lines (representing that they are only standard states):
+It's worth visualizing the $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ levels alogngside the ionic levels $V^\circ_i$. We plot the standard redox levels as dashed (representing that they are 'implied' levels), and as thin lines (representing that they are only standard states):
 
 <figure class="diagram-placeholder">
 {% figcaption %}
