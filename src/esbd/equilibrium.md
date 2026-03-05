@@ -105,6 +105,21 @@ $$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} = +1.138~\mathrm{V}$$
 
 By the way, don't confuse this with the electrode potential $E = V_{\mathrm{e}^-} - V_{\mathrm{SHE}}$, which is approximately 0.2 V with this electrode.
 
+## Implied levels and half-reactions
+
+Electrons are not present as free constituents in a solution, however their thermodynamic availability (and $V_{\mathrm{e}^-}$) can be well defined in specific contexts, particularly with half-reactions.
+
+* Some half-reactions are actually 'redox-active' in solution, and can swap electrons directly with other half-reactions. It's useful to plot their distinct $V_{\mathrm{e}^-}$ values to show disequilibrium.
+* Some half-reactions like the AgCl reaction are only happening at electrodes. It is helpful to show the $V_{\mathrm{e}^-}$ that the solution "wants" especially when it is out of equilibrium with the electrode.
+
+<figure class="diagram-placeholder">
+{% figcaption %}
+- Repeat AgCl diagram with implied level.
+{% endfigcaption %}
+</figure>
+
+In principle other species can have implied levels. For example $\mathrm{H}^-$ (hydride) are not present in solution but half-reactions may exchange $\mathrm{H}^-$; we can draw $V_{\mathrm{H}^-}$ implied levels. Similarly, reactions may output $\mathrm{O}^{2-}$ into certain ceramic solid electrolytes (like YSZ) that can transport $\mathrm{O}^{2-}$.
+
 ## Three or more charged species
 
 It can happen sometimes that a reaction involves more than just two $V_i$'s. For example, the case of a solution containing both ferrous ($\mathrm{Fe}^{2+}$) and ferric ($\mathrm{Fe}^{3+}$) ions, in equilibrium with an inert platinum electrode that provides electrons ($\mathrm{e}^-$):

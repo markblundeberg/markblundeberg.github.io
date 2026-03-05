@@ -2,11 +2,7 @@
 layout: layouts/esbd_topic.njk
 title: 'pH'
 tags: [page, esbd_topic] # Assign to 'page' and 'esbd_topic' collections
-orderESBD: 34
-eleventyNavigation:
-    key: pH # Text used in navigation menus
-    parent: ESBD # Optional: Assumes you have a main 'ESBD' menu item defined elsewhere
-    order: 34 # Order within the parent menu
+orderESBD: 35
 ---
 
 # {{title}}

@@ -65,6 +65,8 @@ For example, to access $V_{\mathrm{Na}^+}$ we would need a membrane that only pa
 
 At least *in principle* we can have an ion-selective membrane for any ion. Thus, in principle every $V_i$ is accessible. We are only limited by technology in creating these membranes.
 
+https://en.wikipedia.org/wiki/Fluoride_selective_electrode
+
 ## Repurposing ion-selective electrodes
 
 The idea of accessing $V_i$ through an ion-selective membrane is closely related to the {%wiki "ion-selective electrode" %} (ISE), which is normally thought of as a way to measure activity of ion $i$. I'd like to reinterpret the ISE in the $V_i$ framework and show how it is useful (and maybe more appropriate) to say that an ISE actually accesses $V_i$.

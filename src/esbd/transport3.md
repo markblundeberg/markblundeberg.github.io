@@ -2,11 +2,7 @@
 layout: layouts/esbd_topic.njk
 title: 'Time dynamics'
 tags: [page, esbd_topic]
-orderESBD: 44
-eleventyNavigation:
-    key: Time dynamics
-    parent: ESBD
-    order: 44
+orderESBD: 74
 ---
 
 # {{title}}

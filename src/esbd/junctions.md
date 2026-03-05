@@ -2,11 +2,7 @@
 layout: layouts/esbd_topic.njk
 title: 'Junctions'
 tags: [page, esbd_topic]
-orderESBD: 42
-eleventyNavigation:
-    key: Junctions
-    parent: ESBD
-    order: 42
+orderESBD: 34
 ---
 
 # {{title}}
@@ -17,8 +13,6 @@ So far we've covered:
 * Solutions: how ions relate to other ions in the same solvent; concentrations and standard state $V^\circ_i$.
 
 Now we're going to talk about what happens when two solutions come into contact.
-
-Let's repeat the band diagram we showed on the intro page:
 
 {% include "esbd-diagrams/esbd-concentration-cell-agno3.html" %}
 
