@@ -2,11 +2,7 @@
 layout: layouts/esbd_topic.njk
 title: 'Standard state data'
 tags: [page, esbd_topic]
-orderESBD: 80
-eleventyNavigation:
-    key: Data
-    parent: ESBD
-    order: 80
+orderESBD: 91
 ---
 
 # {{title}}

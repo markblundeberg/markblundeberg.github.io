@@ -2,11 +2,7 @@
 layout: layouts/esbd_topic.njk
 title: 'Nuances'
 tags: [page, esbd_topic]
-orderESBD: 82
-eleventyNavigation:
-    key: 'Nuances'
-    parent: ESBD
-    order: 82
+orderESBD: 92
 ---
 
 # Nuances about $V_i$

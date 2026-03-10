@@ -3,10 +3,6 @@ layout: layouts/esbd_topic.njk
 title: 'Equilibrium'
 tags: [page, esbd_topic]
 orderESBD: 11
-eleventyNavigation:
-    key: Equilibrium
-    parent: ESBD
-    order: 11
 ---
 
 # {{title}}

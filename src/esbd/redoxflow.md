@@ -2,7 +2,7 @@
 layout: layouts/esbd_topic.njk
 title: 'Redox-flow batteries'
 tags: [page, esbd_topic]
-orderESBD: 61
+orderESBD: 41
 ---
 
 # {{title}}

@@ -3,10 +3,6 @@ layout: layouts/esbd_topic.njk
 title: 'About'
 tags: [page, esbd_topic]
 orderESBD: 99
-eleventyNavigation:
-    key: About
-    parent: ESBD
-    order: 99
 ---
 
 # {{title}}

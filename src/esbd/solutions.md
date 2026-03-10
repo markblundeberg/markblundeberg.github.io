@@ -1,12 +1,8 @@
 ---
 layout: layouts/esbd_topic.njk
 title: 'Solutions'
-tags: [page, esbd_topic] # Assign to 'page' and 'esbd_topic' collections
+tags: [page, esbd_topic]
 orderESBD: 21
-eleventyNavigation:
-    key: Solutions # Text used in navigation menus
-    parent: ESBD # Optional: Assumes you have a main 'ESBD' menu item defined elsewhere
-    order: 21 # Order within the parent menu
 ---
 
 # {{title}}

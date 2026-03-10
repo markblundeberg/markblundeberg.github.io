@@ -2,11 +2,7 @@
 layout: layouts/esbd_topic.njk
 title: 'Bulk and surface thermodynamics'
 tags: [page, esbd_topic]
-orderESBD: 72
-eleventyNavigation:
-    key: Bulk and surface thermodynamics
-    parent: ESBD
-    order: 72
+orderESBD: 82
 ---
 
 # {{title}}

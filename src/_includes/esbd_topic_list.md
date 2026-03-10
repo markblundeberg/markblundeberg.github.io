@@ -10,7 +10,8 @@
 
 - [_Solutions_](/esbd/solutions/) - Concentrations, standard states $V^\circ_i$. Ion activities.
 - [_Solid state_](/esbd/solidstate/) - The close connection between $V^\circ_i$ and band edges; holes as ions.
-- [_Spatial variations_](x) - The basics of electrostatics and interfaces.
+- [_Spatial variations_](/esbd/spatial/) - The basics of electrostatics and interfaces.
+- [_Inhomogeneities and electrostatics_](/esbd/inhomog/) - need to merge
 
 *Classic electrochemistry*:
 - [_Half-reactions_](/esbd/half/) - Electrons "in solution": redox and the Nernst equation. Standard electrode potentials.

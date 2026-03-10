@@ -1,12 +1,8 @@
 ---
 layout: layouts/esbd_topic.njk
 title: 'Capacitance'
-tags: [page, esbd_topic] # Assign to 'page' and 'esbd_topic' collections
-orderESBD: 73
-eleventyNavigation:
-    key: Capacitance # Text used in navigation menus
-    parent: ESBD # Optional: Assumes you have a main 'ESBD' menu item defined elsewhere
-    order: 73 # Order within the parent menu
+tags: [page, esbd_topic]
+orderESBD: 83
 ---
 
 # {{title}}

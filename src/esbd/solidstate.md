@@ -3,10 +3,6 @@ layout: layouts/esbd_topic.njk
 title: 'Semiconductors'
 tags: [page, esbd_topic]
 orderESBD: 22
-eleventyNavigation:
-    key: Semiconductors
-    parent: ESBD
-    order: 22
 ---
 
 # {{title}}

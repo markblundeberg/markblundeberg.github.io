@@ -3,10 +3,6 @@ layout: layouts/esbd_topic.njk
 title: Species voltage
 tags: [page, esbd_topic]
 orderESBD: 10
-eleventyNavigation:
-    key: Species voltage
-    parent: ESBD
-    order: 10
 ---
 
 # Species voltage: a real voltage for real charges

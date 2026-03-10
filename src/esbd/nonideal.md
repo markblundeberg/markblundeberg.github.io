@@ -2,11 +2,7 @@
 layout: layouts/esbd_topic.njk
 title: 'Non-ideal solutions'
 tags: [page, esbd_topic]
-orderESBD: 74
-eleventyNavigation:
-    key: Non-ideal solutions
-    parent: ESBD
-    order: 74
+orderESBD: 84
 ---
 
 # {{title}}
