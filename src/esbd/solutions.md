@@ -74,6 +74,46 @@ In effect, the standard state ladder of $V^\circ_i$ is a stand-in for the notion
 
 The standard state ladder is also analogous to the conduction and valence band edges in semiconductors. We'll talk more about this analogy to semiconductors in the next topic.
 
+## Spatial variations
+
+{# Showing this now emphasizes that $V^\circ_i$ doesn't just globablly float but varies from place to place. #}
+
+$V^\circ_i$ vary from place to place, either due to electrostatics (varying $\phi$) or change in medium (varying $\mathrm{offset}$).
+
+It's quite common to see a liquid junction potential between two solutions of the same solvent, the exact value depending on details of counter-conducting ions (which we'll get into in later topics). All of the $V^\circ_i$ jump by the same amount, which is also the step in $\phi$.
+
+<figure class="diagram-placeholder">
+{% figcaption %}
+- LJP jump -- flat to flat but show junction as a wiggle
+- leave off the V_i levels
+{% endfigcaption %}
+</figure>
+
+And crucially, it's worth noting that different solvents have different $V^\circ_i$ ladders. We can even put two solvents in contact with each other, either with a solvent barrier or relying on immiscibility, in which case we'll see. Note that in contrast to the $\phi$ step (which is ill defined) the step in each $V^\circ_i$ is actually quite well defined.
+
+<figure class="diagram-placeholder">
+{% figcaption %}
+- ITIES -- junction as a wiggle
+- add slider for phi_1 and phi_2 definition?
+{% endfigcaption %}
+</figure>
+
+Besides jumps, $V^\circ_i$ often has smooth variations in solution simply due to electric fields, which can arise in nonequilibrium situations (both driven currents and ambipolar diffusion). The LJP above can be understood as a short-ranged region of very concentrated electric field. We often don't have direct control over these electric fields since they are highly influenced by screening.
+
+<figure class="diagram-placeholder">
+{% figcaption %}
+- E-field
+{% endfigcaption %}
+</figure>
+
+In fact $V^\circ_i$ can also vary even at equilibrium, in the diffuse layer that occurs near interfaces (this is the 'tail' part of the electric double layer). This is known as 'band bending' in semiconductors.
+
+<figure class="diagram-placeholder">
+{% figcaption %}
+- bending
+{% endfigcaption %}
+</figure>
+
 ## Activities and non-ideality
 
 In chemistry, the standard approach is the following breakdown of the electrochemical potential:

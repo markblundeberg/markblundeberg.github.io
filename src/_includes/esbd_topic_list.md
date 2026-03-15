@@ -10,6 +10,7 @@
 
 - [_Solutions_](/esbd/solutions/) - Concentrations, standard states $V^\circ_i$. Ion activities.
 - [_Solid state_](/esbd/solidstate/) - The close connection between $V^\circ_i$ and band edges; holes as ions.
+- [_Neutrality_](/esbd/neutral/) - Using $V^\circ_i$ to enforce neutrality: Gibbs-Donnan equilibrium, semiconductor dopants, and common-ion effect.
 - [_Spatial variations_](/esbd/spatial/) - The basics of electrostatics and interfaces.
 - [_Inhomogeneities and electrostatics_](/esbd/inhomog/) - need to merge
 
