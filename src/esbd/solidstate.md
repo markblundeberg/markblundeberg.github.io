@@ -18,6 +18,9 @@ Themes:
 - Dopants are immobile ions that shift the balance of charge neutrality.
 - Band edges are reference states like $V^\circ_i$, though they do not correspond to the same reference carrier density.
 
+History note: The band model of semiconductors was developed in 1931 by Wilson, and very soon after, energy band diagrams (plots of electronic energies vs. position) were found to be highly beneficial in explaining metal-semiconductor junction rectification.^[See e.g., Mott's paper, Mott, N. F. (1939). [The theory of crystal rectifiers](https://doi.org/10.1098/rspa.1939.0051). Proceedings of the Royal Society of London. Series A. Mathematical and Physical Sciences, 171(944), 27–38.]
+Curiously, the voltage scaling was actually used in Shockley's founding paper on bipolar transistors, where his voltage quasi-fermi levels $\phi_p$ and $\phi_n$ are identical to $V_{\mathrm{h}^+}$ and $V_{\mathrm{e}^-}$ discussed here,^[Shockley, W. (1949). [The Theory of p-n Junctions in Semiconductors and p-n Junction Transistors](https://doi.org/10.1002/j.1538-7305.1949.tb03645.x). Bell System Technical Journal, 28(3), 435–489.], however this was not adopted by the broader community.
+
 ## Electron-holes as positive ions
 
 Electrons at top of valence band move backwards. Specifically they have negative mass. See Kittel, summarized well on {% wiki "Electron hole" %}.
