@@ -9,10 +9,9 @@
 *Materials*:
 
 - [_Solutions_](/esbd/solutions/) - Concentrations, standard states $V^\circ_i$. Ion activities.
-- [_Solid state_](/esbd/solidstate/) - The close connection between $V^\circ_i$ and band edges; holes as ions.
-- [_Neutrality_](/esbd/neutral/) - Using $V^\circ_i$ to enforce neutrality: Gibbs-Donnan equilibrium, semiconductor dopants, and common-ion effect.
-- [_Spatial variations_](/esbd/spatial/) - The basics of electrostatics and interfaces.
-- [_Inhomogeneities and electrostatics_](/esbd/inhomog/) - need to merge
+- [_Solid state_](/esbd/solidstate/) - The close connection between $V^\circ_i$ and band edges; holes as a separate species.
+- [_Basic electrostatics_](/esbd/basicelectrostatics/) - $V^\circ_i$ as the charge density controller; effect of dopants; $V^\circ_i$ as the agent of screening and quasi-neutrality; the electroneutrality approximation.
+- [_Diode_](/esbd/bipolar/) (application spotlight) - Visualizing the analogy between electrochemical bipolar membranes and semiconductor p-n junctions.
 
 *Classic electrochemistry*:
 - [_Half-reactions_](/esbd/half/) - Electrons "in solution": redox and the Nernst equation. Standard electrode potentials.

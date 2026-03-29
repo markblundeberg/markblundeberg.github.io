@@ -2,7 +2,7 @@
 layout: layouts/esbd_topic.njk
 title: 'Inhomogeneities and electrostatics'
 tags: [page, esbd_topic]
-orderESBD: 24
+orderESBD: 63
 ---
 
 # {{title}}
