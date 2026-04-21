@@ -11,28 +11,29 @@
 - [_Solutions_](/esbd/solutions/) - Concentrations, standard states $V^\circ_i$. Ion activities.
 - [_Solid state_](/esbd/solidstate/) - The close connection between $V^\circ_i$ and band edges; holes as a separate species.
 - [_Basic electrostatics_](/esbd/basicelectrostatics/) - $V^\circ_i$ as the charge density controller; effect of dopants; $V^\circ_i$ as the agent of screening and quasi-neutrality; the electroneutrality approximation.
+- [_Electroneutrality consequences_](x) - 
 - [_Diode_](/esbd/bipolar/) (application spotlight) - Visualizing the analogy between electrochemical bipolar membranes and semiconductor p-n junctions.
 
-*Classic electrochemistry*:
+*Classic electrochemistry, rebuilt*:
 - [_Half-reactions_](/esbd/half/) - Electrons "in solution": redox and the Nernst equation. Standard electrode potentials.
 - [_Standard electrode potentials_](/esbd/half/) - Half-reaction standard electronic states $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$, and the Nernst equation in $V_i$ land.
 - [_Electrode potentials_](/esbd/e/) - How does $E$ relate to $V_i$?
-- [_Cells with junctions_](/esbd/junctions/) -
+- [_Cells with junctions_](/esbd/junctions/) - Liquid junction potentials; concentration cells.
 - [_pH_](/esbd/ph/) - 
 - [_Reference electrodes_](/esbd/references/) - Reference cells and the solution reference potential $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$.
-- [_Absolute electrode potential_](/esbd/absolute/) -
+- [_Absolute electrode potential_](/esbd/absolute/) - Illustrating the work function of the standard hydrogen electrode.
 
 *Application highlights*:
 - [_Redox-flow Batteries_](/esbd/redoxflow)
 - Solid oxide fuel cells: $V_{\mathrm{O}^{2-}}$ landscape.
+- Cell biology: The proton motive force as a $V_{\mathrm{H}^+}$ drop; the electron transport chain as a $V_{\mathrm{e}^-}$ cascade.
 - Lead-Acid Batteries: A system where the electrolyte is a reactant.
-- Water Electrolysis & Fuel Cells: Highlighting the role of catalysis and pH.
 - Electroplating: A kinetic-driven process.
 - Corrosion: A mixed-potential, non-equilibrium system.
 
 ---
 
-Advanced and precision topics:
+The rabbit holes -- appendices, advanced topics, notes:
 
 *Electrostatics*:
 
