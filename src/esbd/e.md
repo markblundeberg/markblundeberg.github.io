@@ -7,109 +7,101 @@ orderESBD: 33
 
 # {{title}}
 
-In classic electrochemistry, we see the symbol $E$ thrown around everywhere. What does this represent? What is an electrode potential? What about the 'redox potential' $E_h$, etc.? In short, $E$ values are $V_{\mathrm{e}^-}$ values (i.e. electronic electrochemical potentials) measured against a reference:^[Boettcher, S. W., Oener, S. Z., Lonergan, M. C., Surendranath, Y., Ardo, S., Brozek, C., & Kempler, P. A. (2020). [Potentially Confusing: Potentials in Electrochemistry.](https://doi.org/10.1021/acsenergylett.0c02443) ACS Energy Letters, 6(1), 261–266.]
+We now have the tools needed to precisely visualize the electrode potential $E$ in our $V_i$ diagrams, as well as related concepts like 'redox potential' $E_h$, 'equilibrium potential' $E_{\mathrm{eq}}$, and so on. Mathematically, these all have the form $ E = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\text{ref}) $, and the various subtleties come about from how exactly we define these two terms.
 
-$$ E = V_{\mathrm{e}^-}(\text{something}) - V_{\mathrm{e}^-}(\text{reference, somewhere}). $$
+To start let's illustrate the basic concept of the electrode potential at equilibrium, referenced to the standard hydrogen electrode (SHE):
 
-A lot of confusion can arise over "something" and "reference" and "somewhere".
+<figure class="diagram-placeholder">
+{% figcaption %}
+- electrode and solution
+- V_e in electrode same as V_e of some reaction
+- also V^0_e of the reaction
+- also plotted standard reference electrode level
+- E plotted as a difference.
+{% endfigcaption %}
+</figure>
 
-To be clear, IUPAC only defines electrode potential as:^[Gold Book, ["electrode potential"](https://goldbook.iupac.org/terms/view/E01956)]
+The above figure represents the expression for the standard straight forward definition of electrode potential, at least as I interpret the IUPAC definition:^[IUPAC Gold Book, ["electrode potential"](https://goldbook.iupac.org/terms/view/E01956)]
 
-> Electromotive force of a cell in which the electrode on the left is a standard hydrogen electrode and the electrode on the right is the electrode in question.
+$$ E(\text{vs SHE}) = V_{\mathrm{e}^-}({\text{electrode}}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2}). $$
 
-Here "Electromotive force" is officially defined to mean a difference in $\phi$ between the ends, specifically it is the cell potential at equilibrium conditions. But as we've seen, cell potential is better expressed as a difference in $V_{\mathrm{e}^-}$, which is more explicit than a difference in $\phi$.^[The "difference in $\phi$" can be interpreted in two ways: 1) Some electrochemists define $\phi$ in metals to simply equal $V_{\mathrm{e}^-}$. 2) Otherwise, we 'bookend' the device with two metals of the same composition, e.g. copper wires, in which case $\phi_{\mathrm{Cu}}(1) - \phi_{\mathrm{Cu}}(2) = V_{\mathrm{e}^-}(1) - V_{\mathrm{e}^-}(2)$.] And so we can write:
+One of the strengths of these $V_i$ diagrams is that they let us address both of these variables separately, and really visualize what is going on. And, one way to describe the benefits of working with $V_{\mathrm{e}^-}$ directly is that it is like working with $E$ but without having to worry about references.
 
-$$ E = V_{\mathrm{e}^-}(\text{electrode}) - V_{\mathrm{e}^-}(\text{SHE}), $$
+## What is a standard reference electrode?
 
-where SHE is the **standard hydrogen electrode**. But then, what actually is a "standard hydrogen electrode"? Again there is some heavy lifting behind the scenes. The standard hydrogen electrode is an idealization that is basically supposed to access what the output of the $\mathrm{H}^+ / \mathrm{H_2}$ redox couple *would be* under unit activities, but with the same solution potential. Based on the last topic, we see this means: $V_{\mathrm{e}^-}(\text{SHE}) = V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2})$.
+A standard reference electrode is a hypothetical ideal electrode which provides access to one of the $V^\circ_{\mathrm{e}^-}$ values.
 
-And so, electrode potential can be explicitly written as:
+The goal of the reference electrode is to be a proxy for measuring the electrostatic potential $\phi$ in the bulk of a solution. As discussed previously, $\phi$ is ill-defined and unmeasurable, but whatever value it has, we know it is anchored somewhere on the $V^\circ$ scale. And, if a reference electrode can access *any* of the $V^\circ_{\mathrm{e}^-}$ levels, then this can be trivially converted to the common reference half-reaction of choice which is the standard hydrogen electrode, $V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2})$.
 
-$$ E = V_{\mathrm{e}^-}(\text{electrode}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2}), $$
+It's important to stress that $E$ is technically not accessible, because a standard reference electrode is only a virtual concept and there are serious obstacles to realizing one even at perfect equilibrium:
 
-where the electrode is equilibrated with the solution and $V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2})$ is uniform in the solution.
+* Most seriously, the standard reference levels $V^\circ_{\mathrm{e}^-}$ suffer from the ion activity ambiguity problem in concentrated solutions, which means only differences in $E$ values are well defined, and only if they have the same reference position (which cancels out the reference $V^\circ_{\mathrm{e}^-}$, and therefore cancels out ion activity convention). {# We have $E(2) - E(1) = V_{\mathrm{e}^-}(2) - V_{\mathrm{e}^-}(1)$, provided the two $E$ values have the same reference. #}
+* For practical reasons of avoiding contamination, reference electrodes usually have to be connected via liquid junctions, which always have a liquid junction potential (a step in $V^\circ_{\mathrm{e}^-}$). There is no technique that can fully eliminate the liquid junction potential (and, in fact it is also affected by activity ambiguity, so a zero liquid junction potential is only valid in one activity convention).
+
+For precision electrochemistry these are major issues and (in my opinion) speaks to the notion of electrode potential being a technically awkward or flawed foundation. But for everyday approximate electrochemistry, these issues appear to not be a significant problem.
 
 ## The ordinary Nernst equation
 
-We can take the floating Nernst equation from the last topic and now transform it into the regular Nernst equation, to provide some clarity. The Nernst equation describes the electrode potential when that electrode is equilibrated against a specific half-reaction $\mathrm{Ox}/\mathrm{Red}$ with $z$ electrons. That is, $V_{\mathrm{e}^-}(\text{electrode}) = V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$:
+The Nernst equation describes the electrode potential when the electrode is equilibrated against a specific half-reaction, generically "$\mathrm{Ox}/\mathrm{Red}$", which takes $z$ electrons. That is, $V_{\mathrm{e}^-} = V_{\mathrm{e}^-}(\text{electrode}) = V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$. On the last page we derived a floating Nernst equation for $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ which upon substitution yields the usual Nernst equation:
 
+$$ E = E^\circ + \frac{RT}{zF} \ln\bigg(\frac{a_{\mathrm{Ox}}}{a_{\mathrm{Red}}}\bigg), $$
+
+and we see what exactly the $E$ and $E^\circ$ terms mean in the Nernst equation:
+
+$$ E = V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2}),$$
+
+$$ E^\circ = V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2}).$$
+
+{# 
 $$\begin{aligned}
-E
-&\equiv V_{\mathrm{e}^-}(\text{electrode}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2}) \\
+E &\equiv V_{\mathrm{e}^-}(\text{electrode}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2}) \\
 &= V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2}), \\
 &= V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) + \frac{RT}{zF} \ln\bigg(\frac{a_{\mathrm{Ox}}}{a_{\mathrm{Red}}}\bigg) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2}), \\
 &= E^\circ(\mathrm{Ox}/\mathrm{Red}) + \frac{RT}{zF} \ln\bigg(\frac{a_{\mathrm{Ox}}}{a_{\mathrm{Red}}}\bigg), \\
 \end{aligned}$$
 where we define
-$$ E^\circ(\mathrm{Ox}/\mathrm{Red}) = V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2}).$$
-The above equation is precisely the ordinary {% wiki "Nernst equation" %} for a half-reaction.
+The above equation is precisely the ordinary {% wiki "Nernst equation" %} for a half-reaction. #}
 
-## The standard picture of electrochemistry
+Note the Nernst equation only holds locally, in solution: all these $V_{\mathrm{e}^-}$ and $V^\circ_{\mathrm{e}^-}$ values are evaluated at the same position.
 
-<figure class="diagram-placeholder">
-{% figcaption %}
-- Y axis "E"
-- SHE at 0
-- Generic cell with SHE on left hand side
-- Junction with LJP.
-{% endfigcaption %}
-</figure>
+## What about out-of-equilibrium cases?
 
-Why this works: $V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2})$ is flat throughout the solution bulk.
+If electrode potential is of the form $ E = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\text{ref}) $, then what happens if the first term $V_{\mathrm{e}^-}$ is varying in space? What if the reference $V^\circ_{\mathrm{e}^-}(\text{ref})$ varies? There is an excellent article by Boettcher et al. about these distinctions,^[Boettcher, S. W., Oener, S. Z., Lonergan, M. C., Surendranath, Y., Ardo, S., Brozek, C., & Kempler, P. A. (2020). [Potentially Confusing: Potentials in Electrochemistry.](https://doi.org/10.1021/acsenergylett.0c02443) ACS Energy Letters, 6(1), 261–266.] and I'd like to give my own take (in terms of the $V_i$).
 
+Working vs equilibrium $E$: the split at the electrode. Activation overpotential.
 
 <figure class="diagram-placeholder">
 {% figcaption %}
-- Y axis "E"
-- SHE at 0
-- Generic cell 
-- No junction
+- As before but split V_e
 {% endfigcaption %}
 </figure>
 
-$$ E_{\mathrm{cell}} = E_2 - E_1 $$
-
-
-It's worth noting the exact location of $V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2})$ is somewhat ambiguous when it comes to nonideal solutions. 
-
-## Electrode potential out of equilibrium
-
-When an electrode is not simply in equilibrium, then what does "electrode potential" even mean? The answer is not always clear.
-
-$$ E = V_{\mathrm{e}^-}(\text{something}) - V_{\mathrm{e}^-}(\text{reference, somewhere}). $$
-
-### Reduction potential vs electrode potential
-
-The first thing we need to clear up is the "something": is it the $V_{\mathrm{e}^-}$ in the electrode or is it the $V_{\mathrm{e}^-}$ of a reaction?
-
-If it's a reaction, then what we're really defining is a **reduction potential**.
-
-$$ E_{\mathrm{h}} = V_{\mathrm{e}^-}(x, \mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(x, \mathrm{H}^+ / \mathrm{H_2}) $$
-
-This is a local difference, based on local reactant activities. And it's simply the output of the Nernst equation for that reaction.
-
-But for an electrode potential, clearly we want "something" to mean the electrode, so we have:
-
-$$ E = V_{\mathrm{e}^-}(\text{electrode}) - V_{\mathrm{e}^-}(\text{reference, somewhere}). $$
-
-### Where is the reference?
-
-The real ambiguity about electrode potentials has to do with the reference.
-
-* Operationally, we can define $V_{\mathrm{e}^-}(\text{reference, somewhere})$ as literally the output of a third reference electrode placed in solution.
-* In analytical electrochemistry where there is a homogeneous bulk solution, we can define $V_{\mathrm{e}^-}(\text{reference, somewhere})$ to correct for a long-range ohmic drop.^[This definition is used in Bard & Faulkner *Electrochemical Methods*. See 1.5 "Cell Resistance and the Measurement of Potential".] This is a useful operational definition for studies of 
-* In battery simulations we may not have any homogeneous bulk, and so electrode potential may be instead defined on the local mass concentrations.
-* In fundamental microscopic studies of interface kinetics, we want to use an imaginary reference right next to the electrode, at the innermost part of the electric double layer. This will give us the most 'real' representation of the interface based on the very local ion concentrations, and is the basis of the Frumkin effect.
+But also in general there will be gradients inside the solution. So beyond just the 
 
 <figure class="diagram-placeholder">
 {% figcaption %}
-- Zoom on electrode showing  electrode, DL, mass transfer (diffusion), bulk regions
-- Ve(electrode) flat
-- Ve(rxn) has exp drop through diffusion layer then slope in bulk.
-- Ve0(ref) has spike in DL, gentle exp drop through diffusion layer, then slope in bulk.
-- Also need to plot straight line for bulk extrapolation.
+- Illustration of general variations both V_i and V^0.
 {% endfigcaption %}
 </figure>
+
+These gradients are quite real: The V_e of the active reaction can actually be measured by a second micro electrode of the same type, while V^0 is supposed to be accessible (assuming junction potentials can be minimized) via Luggin capillary.
+
+Practically, variation in V^0 levels can be suppressed by having a dominant and reasonably well mixed supporting electrolyte, in which case the V_e of the active reaction will vary due to concentration gradients, which is supposed to be simpler to analyze.
+
+
+
+Another thing that happens at equilibrium is multiple electrode reactions occuring at the same time. Each half-reaction has a distinct $E_{eq}$ that is distinct from the electrode $E$. (And of course half-reactions can directly equilibrate with each other, no electrode needed.) Mixed potentials.
+
+<figure class="diagram-placeholder">
+{% figcaption %}
+- multiple reactions equilibrated
+{% endfigcaption %}
+</figure>
+
+
+
+
+
 
 ### Overpotential
 
@@ -132,99 +124,9 @@ I believe that diagrams of $V_{\mathrm{e}^-}$ like the above can help clear up t
 
 {# 
 
-
-
-
-The second thing we need to clear up is the "reference, somewhere", and this is more serious.
-
-* What if the electrode does *not* couple to a specific half-reaction?
-* What if the electrode is driven out of equilibrium?
-* What if the reference $V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2})$ is not flat?
-
-Now, to define an "$E$" we have to be very particular about what we are measuring, and against exactly what. A fantastic paper by Boettcher et al., ["Potentially Confusing: Potentials in Electrochemistry"](https://doi.org/10.1021/acsenergylett.0c02443) notes that there are many confusing aspects of what these "$E$" values might be.
-
-
-
-
-
-To illustrate, consider the following cell:
-
-<figure class="diagram-placeholder">
-{% figcaption %}
-- A driven cell
-- Overpotentials at ends
-- Gradient in SHE
-- LJP
-{% endfigcaption %}
-</figure>
-
-First of all it is helpful to carry over the result of the Nernst equation. The **reduction potential**, $E_{\mathrm{h}} = V_{\mathrm{e}^-}(x, \mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(x, \mathrm{H}^+ / \mathrm{H_2})$, is a locally-referenced $E$ defined for all $x$ in solution. This is simply the output of the Nernst equation based on the local activities of reactants. If the solution has a nice homogeneous, well defined bulk, the value of $E_{\mathrm{h}}$ in the bulk is called $E_{\mathrm{eq}}$.
-
-## Where is the reference
-
-
-   This is 
-* **Working potential**, $ E = V_{\mathrm{e}^-}(\mathrm{electrode}) - V^\circ_{\mathrm{e}^-}(\mathrm{bulk}, \mathrm{H}^+ / \mathrm{H_2}) $
-
-    While $E$ $V^\circ_{\mathrm{e}^-}(\mathrm{bulk}, \mathrm{H}^+ / \mathrm{H_2})$... a few options
-    * The SHE as obtained from a third electrode. This is fairly concrete, 
-    * The local SHE just 
-
-| Symbol | Name | Referent | Reference place |
-| --- | --- | --- | --- |
-| $E$ | Working | $V_{\mathrm{e}^-}$ of electrode | Bulk solution next to electrode |
-| $E$ | Working | $V_{\mathrm{e}^-}$ of electrode | Reference electrode |
-| $E$ | Working | $V_{\mathrm{e}^-}$ of electrode | Reference electrode |
-| $E_h$ | Reduction potential | $V_{\mathrm{e}^-}$ of solution | local |
-| $E_h$ | Reduction potential | $V_{\mathrm{e}^-}$ of specific half-reaction | local |
-
-What happens when the cell is *not* equilibrated?
-
-
-'Non-ohmic' SHE reference (electrode kinetics)
-
-When studying the kinetics of electrodes, it is desirable to separate out the 'overpotential' into several terms.
-In Bard & Faulkner, 
-
-
 The bulk non-flatness of the potential $\phi$ in solution, as evident by the variations in $V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2})$, seems to be treated as a nuisance that can be experimentally eliminated by subtracting off a background ohmic resistance; in the Bard & Faulkner book, they distinguish the overall cell voltage $E_{\mathrm{appl}}$ from an 'ideal $E$'.^[Bard & Faulkner *Electrochemical Methods*. See 1.5 "Cell Resistance and the Measurement of Potential" and 4.3 "Mixed Migration and Diffusion Near an Active Electrode"] Alternatively, experiments can be modified by adding a supporting electrolyte which suppresses the variations in $V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2})$.
 
 In effect the approach of Bard & Faulkner is to extrapolate $V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2})$
 
-## Overpotential
-
-Allocation of non-ohmic part can be ambiguous
-https://iopscience.iop.org/article/10.1149/1945-7111/adc76c
-
-
-## Where is the reference?
-
-
-
-
-But 
-
-But how does that generalize?
-
-We see then that $E$ is just 
-
-* I've seen electrode potential defined as .
-
-Alternative seen sometimes:
-
-$$ E = V_{\mathrm{e}^-}(\text{electrode}) - \phi(\text{solution}) $$
-
-
-
-
-## What is a reference
-
-- junction
-
-- usually: an actual electrode with $V_{\mathrm{e}^-}$ that has algorithm to estimate $V^\circ_{\mathrm{e}^-}(\text{SHE})$
-    - LJP estimate
-    - 
-
-## Electrode potential out of equilibrium
-
 #}
+

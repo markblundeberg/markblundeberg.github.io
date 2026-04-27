@@ -15,9 +15,8 @@
 - [_Diode_](/esbd/bipolar/) (application spotlight) - Visualizing the analogy between electrochemical bipolar membranes and semiconductor p-n junctions.
 
 *Classic electrochemistry, rebuilt*:
-- [_Half-reactions_](/esbd/half/) - Electrons "in solution": redox and the Nernst equation. Standard electrode potentials.
-- [_Standard electrode potentials_](/esbd/half/) - Half-reaction standard electronic states $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$, and the Nernst equation in $V_i$ land.
-- [_Electrode potentials_](/esbd/e/) - How does $E$ relate to $V_i$?
+- [_Half-reactions_](/esbd/half/) - Electrons "in solution": redox and the Nernst equation in $V_i$ land. Standard electrode potentials as floating levels $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$.
+- [_Electrode potentials_](/esbd/e/) - Visualizing electrode potential $E$, reduction potential $E_h$, overpotentials, and related concepts.
 - [_Cells with junctions_](/esbd/junctions/) - Liquid junction potentials; concentration cells.
 - [_pH_](/esbd/ph/) - 
 - [_Reference electrodes_](/esbd/references/) - Reference cells and the solution reference potential $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$.

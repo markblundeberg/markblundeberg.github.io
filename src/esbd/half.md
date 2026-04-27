@@ -179,11 +179,11 @@ Caption: "water ..."
 
 As can be seen, when we change the electrical offset, both 'ladders' move in lockstep. However, the ionic standard states are sensitive to our choice of zero of neutral elements' chemical potentials, whereas the standard redox levels are totally immune to that (since they really are electronic in nature).
 
+{#
 ## Redox kinetics
 
 When it comes to understanding redox processes, one very helpful idea is the Marcus-Gerischer theory, where one plots two Gaussian bumps representing "redox density of states".  These naturally fit onto energy band diagrams (as pioneered by Gerischer), and could also be plotted (though perhaps awkwardly as they would be upside down) on $V_{\mathrm{e}^-}$ diagrams. However, it's a bit beyond the scope of this project so we won't be getting into this.
 
-{#
 It's important to understand that these are a sort of 'electron tunneling density of states' and they largely represent irreversible processes. As Marcus theory indicates, these Gaussians have a significant spread due to random thermal variations in molecular configurations.
 
 * The unfilled bump (at higher energy / lower voltage) represents low energy unoccupied states of the $\mathrm{Ox}$ species. If an electron does jump in, it forms a temporary excited $\mathrm{Red}$ molecule, which then relaxes.
