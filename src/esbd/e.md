@@ -29,14 +29,14 @@ One of the strengths of these $V_i$ diagrams is that they let us address both of
 
 ## What is a standard reference electrode?
 
-A standard reference electrode is a hypothetical ideal electrode which provides access to one of the $V^\circ_{\mathrm{e}^-}$ values.
+A standard reference electrode is a hypothetical ideal electrode which provides access to one of the $V^\circ_{\mathrm{e}^-}(\mathrm{rxn})$ values.
 
-The goal of the reference electrode is to be a proxy for measuring the electrostatic potential $\phi$ in the bulk of a solution. As discussed previously, $\phi$ is ill-defined and unmeasurable, but whatever value it has, we know it is anchored somewhere on the $V^\circ$ scale. And, if a reference electrode can access *any* of the $V^\circ_{\mathrm{e}^-}$ levels, then this can be trivially converted to the common reference half-reaction of choice which is the standard hydrogen electrode, $V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2})$.
+Really, the goal of the reference electrode is an attempt to measure 'the potential' i.e. the electrostatic potential $\phi$, in the bulk of a solution. As discussed previously, $\phi$ is ill-defined and unmeasurable, but whatever value it has, we know it is anchored somewhere on the $V^\circ$ scale. And, if a reference electrode can access *any* of the $V^\circ_{\mathrm{e}^-}(\mathrm{rxn})$ levels, then this can be trivially converted to the common reference half-reaction of choice which is the standard hydrogen electrode, $V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2})$.
 
-It's important to stress that $E$ is technically not accessible, because a standard reference electrode is only a virtual concept and there are serious obstacles to realizing one even at perfect equilibrium:
+Technically, these standard electrodes are only hypothetical, and consequently $E$ is not really measurable even at perfect equilibrium:
 
-* Most seriously, the standard reference levels $V^\circ_{\mathrm{e}^-}$ suffer from the ion activity ambiguity problem in concentrated solutions, which means only differences in $E$ values are well defined, and only if they have the same reference position (which cancels out the reference $V^\circ_{\mathrm{e}^-}$, and therefore cancels out ion activity convention). {# We have $E(2) - E(1) = V_{\mathrm{e}^-}(2) - V_{\mathrm{e}^-}(1)$, provided the two $E$ values have the same reference. #}
-* For practical reasons of avoiding contamination, reference electrodes usually have to be connected via liquid junctions, which always have a liquid junction potential (a step in $V^\circ_{\mathrm{e}^-}$). There is no technique that can fully eliminate the liquid junction potential (and, in fact it is also affected by activity ambiguity, so a zero liquid junction potential is only valid in one activity convention).
+* Most seriously, the overall offset of the standard reference levels $V^\circ_{\mathrm{e}^-}$ suffers from the ion activity ambiguity problem in concentrated solutions (see [nonideality](../nonideal/) topic for details). So this limits the well-definedness of $E$ to solutions having infinitely dilute ions.
+* For practical reasons of avoiding contamination, reference electrodes usually have to be connected via liquid junctions, which always have a liquid junction potential (a step in $V^\circ_{\mathrm{e}^-}$), which we'll talk more about below. There is no technique that can fully eliminate the liquid junction potential (and, this compounds with the previous issue: a zero liquid junction potential is only well defined for infinitely dilute solutions).
 
 For precision electrochemistry these are major issues and (in my opinion) speaks to the notion of electrode potential being a technically awkward or flawed foundation. But for everyday approximate electrochemistry, these issues appear to not be a significant problem.
 
@@ -52,17 +52,58 @@ $$ E = V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\math
 
 $$ E^\circ = V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2}).$$
 
-{# 
-$$\begin{aligned}
-E &\equiv V_{\mathrm{e}^-}(\text{electrode}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2}) \\
-&= V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2}), \\
-&= V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) + \frac{RT}{zF} \ln\bigg(\frac{a_{\mathrm{Ox}}}{a_{\mathrm{Red}}}\bigg) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2}), \\
-&= E^\circ(\mathrm{Ox}/\mathrm{Red}) + \frac{RT}{zF} \ln\bigg(\frac{a_{\mathrm{Ox}}}{a_{\mathrm{Red}}}\bigg), \\
-\end{aligned}$$
-where we define
-The above equation is precisely the ordinary {% wiki "Nernst equation" %} for a half-reaction. #}
+<figure class="diagram-placeholder">
+{% figcaption %}
+- Vertical energies diagram of Nernst equation?
+{% endfigcaption %}
+</figure>
 
 Note the Nernst equation only holds locally, in solution: all these $V_{\mathrm{e}^-}$ and $V^\circ_{\mathrm{e}^-}$ values are evaluated at the same position.
+
+## Cells and the liquid junction potential
+
+Since an electrode potentials represents a specific half-reaction, they are always meant to be used in pairs to get a full reaction.
+
+Let's consider the case of a standard aqueous electrochemical cell that contains a junction (not all cells contain junctions but they are normal), that is 'at equilibrium' where the left electrode is equilibrated with half-reaction $\mathrm{Ox1}/\mathrm{Red1}$ and the right electrode is equilibrated with half-reaction $\mathrm{Ox2}/\mathrm{Red2}$. The two compartments may differ in ion concentrations but they have the same solvent.
+
+<figure class="diagram-placeholder">
+{% figcaption %}
+- Cell 'at equilibrium' with LJP.
+- Ox1/Red1 and Ox2/Red2, both std and actual levels.
+- SHE.
+{% endfigcaption %}
+</figure>
+
+Here the overall voltage $\Delta V$ across the cell, also called "cell potential", is clearly:
+
+$$ \Delta V = V_{\mathrm{e}^-}(\text{right}) - V_{\mathrm{e}^-}(\text{left})$$
+
+First, let's convert that into half-reaction electrode potentials, where each electrode potential is defined according to its own compartment's SHE reference level:
+
+$$
+\begin{aligned}
+\Delta V
+& = \big(E(\text{right}) + V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2}, \text{right})\big)  - \big(E(\text{left}) + V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2}, \text{left}) \big) \\
+& = E(\text{right}) - E(\text{left}) + \underbrace{\big( V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2}, \text{right})  - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+ / \mathrm{H_2}, \text{left}) \big)}_{\text{liquid junction potential (LJP)}} \\
+& = E(\text{right}) - E(\text{left}) + \mathrm{LJP}.
+\end{aligned}
+$$
+
+And I just want to stop here to emphasize something, which is that in any case where $V^\circ_{\mathrm{e}^-}$ levels are varying with space (such as due to LJP, or Donnan equilibrium, or the non-equilibrium reasons as discussed below), then "the SHE" is also varying with space.
+
+One may also expand out $E(\text{right})$ and $E(\text{left})$ using the Nernst equations to get the full reaction form of the Nernst equation (including LJP).[^longnernstnote]
+There are two ways to interpret this cell $\Delta V$: a physicist or electrical engineer sees the electrodes' $V_{\mathrm{e}^-}$ as reservoirs and the chemical reaction acts like a generic 'pump' or net {% wiki "electromotive force" %}, which can be coupled to an arbitrary external circuit; a chemist however focusses on the chemical change of state with Gibbs free energy change of $\Delta V$ for each unit of charge that is reversibly transferred through the device, i.e., $\Delta G = -z F \Delta V$ for $z$ moles of electrons transferred. These two views agree and both are valid.
+
+[^longnernstnote]:
+    Expanding our cell potential using the Nernst equation we have:
+    $$ \Delta V = \mathrm{LJP} + E^\circ_{\mathrm{Ox2}/\mathrm{Red2}} - E^\circ_{\mathrm{Ox1}/\mathrm{Red1}} + \frac{RT}{F} \ln\bigg(\frac{(a_{\mathrm{Ox2}}(\text{right}))^{1/z_2}(a_{\mathrm{Red1}}(\text{left}))^{1/z_1}}{(a_{\mathrm{Red2}}(\text{right}))^{1/z_2}(a_{\mathrm{Ox1}}(\text{left}))^{1/z_1}}\bigg). $$
+{#    which corresponds to the following full reaction that (reacting forward) transfers an electron from the left to the right electrode.
+    $$ \tfrac{1}{z_1}\mathrm{Ox1}(\text{left}) + \tfrac{1}{z_2}\mathrm{Red2}(\text{right}) + \mathrm{e}^-(\mathrm{left~electrode}) \rightleftharpoons \tfrac{1}{z_1}\mathrm{Red1}(\text{left}) + \tfrac{1}{z_2}\mathrm{Ox2}(\text{right}) + \mathrm{e}^-(\mathrm{right~electrode}) .$$ #}
+    This expression is often presented in a far simpler form without a liquid junction and without all the left/right labelling, however I thought it was worthwhile to show the general case.
+    {# pbreak #}
+    In regards to the ion activity ambiguity in concentrated solutions, note that only $\Delta V$ is unambiguous, while both $\mathrm{LJP}$ and the activity term are ambiguous, because the left and right half-cells have different concentrations and thus distinct activity ambiguities. Note that the ratio of activities is charge-neutral yet it is ambiguous; this demonstrates why a charge-neutral activity ratio is only unambigous if all sampled in the same solution!
+
+
 
 ## What about out-of-equilibrium cases?
 
