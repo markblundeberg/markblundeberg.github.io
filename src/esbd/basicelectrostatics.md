@@ -7,7 +7,10 @@ orderESBD: 23
 
 # {{title}}
 
-Let's talk about how we determine the 'structure' of relative $V_i$ and $V^\circ_i$ values. Of course, if we know the concentrations (and activities) of reactants, then we can just plug those into our equation to determine each $V_i$ relative to its $V^\circ_i$. But what happens if we don't know the concentrations ahead of time?
+While the $V_i$ values want to flatten out for thermodynamic reasons, the same is not necessarily true of the $V^\circ_i$. To explain why $V^\circ_i$ might be flat (or not!) at equilibrium we have to finally dip into the actual mechanics of electricity. Somewhat surprisingly we have managed to dance around the actual electrostatic nature of electricity until now!
+
+{#
+If we know the concentrations (and activities) of reactants, then we can just plug those into our equation to determine each $V_i$ relative to its $V^\circ_i$. But what happens if we don't know the concentrations ahead of time?
 
 The inverse problem is where we know all the $V_i$ values, and our task is to determine the concentrations. This situation arises for various reasons:
 
@@ -17,10 +20,13 @@ The inverse problem is where we know all the $V_i$ values, and our task is to de
 * We may simply want to use the set of $\{V_i\}$ values as a description of the thermodynamic state (together with temperature, pressure, etc., and either $\{\mu_i\}$ or concentrations of neutral species).
 
 The problem is that a set $\{V_i\}$ containing $N$ independent values only contains $N-1$ independent pieces of information about the compositional state, since the collective electrical offset is not related to concentrations. The last missing parameter is the position of the $V^\circ_i$ ladder, but that also controls the total charge density, and that brings us to the topic of electrostatics and neutrality.
+#}
 
 ## $V^\circ_i$ as a charge control
 
-Depending on where we position $V^\circ_i$, we will get more or less space charge. For example as we move $V^\circ_i$ up, we reduce $V_i - V^\circ_i$ for all ions, which means we get a lower concentration positive ions, and a higher concentration of negative ions:
+It often happens that the $V_i$ are fixed for some reason (connection to a reservoir), but this leaves the question of where $V^\circ_i$ sits. Note that a full set of $\{V_i\}$ values only contains $N-1$ independent pieces of information about the compositional state, since the collective electrical offset (the 'float') is not directly related to concentrations. The remaining piece of information is associated with the charge density and hence to the relative position of $V^\circ_i$.
+
+So, let's consider what happens when $V^\circ_i$ varies with fixed $V_i$. Depending on where we position $V^\circ_i$, we will get more or less space charge. For example as we move $V^\circ_i$ up, we reduce $V_i - V^\circ_i$ for all ions, which means we get a lower concentration positive ions, and a higher concentration of negative ions:
 
 <figure class="diagram-placeholder">
 {% figcaption %}
@@ -41,7 +47,7 @@ We can now briefly step into electrostatics to explain *why* $V^\circ_i$ wants t
 
 We discussed that $\phi$ is generally ambiguous, but in the special case where we are inside of an ideal material it does at least perfectly follow along with $V^\circ_i$. So we can confidently discuss electrostatics in this special case at least. Specifically, within each material, $V^\circ_i$ variations are also variations in $\phi$, so their gradients are equal (and equal the negative of electric field):
 
-$$ E = -\nabla\phi = -\nabla V^\circ_i. $$
+$$ \vec E = -\nabla\phi = -\nabla V^\circ_i. $$
 
 Accordingly, inside of each material, the $V^\circ_i$ ladder follows a {% wiki "Poisson equation" %}, which is a consequence of a constitutive relation of the background dielectric medium:^[This form of the Poisson equation only applies inside of a reasonably well behaved medium. As we'll see later on, it necessarily breaks in non-ideal solutions, at interfaces, in graded media, and in strong electric fields.]
 
