@@ -9,11 +9,13 @@ orderESBD: 22
 
 **WORK IN PROGRESS**
 
+(Lots subject to change / removal depending on the surrounding topic structure. What is our goal here? We want to show that 1) we can draw semiconductors as V_i (which are simply flipped, but that takes getting used to) and 2) start to talk about the close analogies between semiconductors and solutions, which will be an ongoing theme moving forward in subsequent topics.)
+
 Now that we've investigated our generalized electron/ion band diagrams in full, it's worth looking at how the good old semiconductors would look if treated the same way.
 
 Themes:
 
-- The $V_i$ diagrams are just flipped upside down compared to the usual electron energy band diagram.
+- The $V_i$ diagrams are just flipped upside down compared to the usual electron energy band diagram. Note: this flipping is very unnatural feeling at first for anyone who works with band diagrams, so it's worth putting a bit of time into 'reassuring' that it will feel natural and that it's worth it?
 - Electrons and holes act like anions and cations, respectively.
 - Dopants are immobile ions that shift the balance of charge neutrality.
 - Band edges are reference states like $V^\circ_i$, though they do not correspond to the same reference carrier density.
