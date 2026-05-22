@@ -4,7 +4,6 @@
 - [_Species voltage_](/esbd/v_i/) - the fundamentals of species voltage $V_i$.
 - [_Equilibrium_](/esbd/equilibrium/) - electrodes and reactions.
 - [_Lithium ion batteries_](/esbd/lib/) - An application spotlight.
-- [_Thinking in $V_i$_](/esbd/devices/) - Understanding active devices in terms of $V_i$.
 
 *Materials*:
 

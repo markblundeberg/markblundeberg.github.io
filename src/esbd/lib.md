@@ -75,9 +75,10 @@ As we saw, the ESBD diagram is quite simple in a lithium-ion battery at equilibr
 
 During charge and discharge, the $V_i$ voltages form a direct visualization of how various electronic and ionic resistances are responsible for the total "internal resistance".
 
-For the next topic, we'll talk more generally about how gradients in $V_i$ (such as the above gradients in $V_{\mathrm{Li}^+}$) drive the flow of charge.
+In the next topic, we will look at how concentrations, activities, and standard states ($V^\circ_i$) define the voltage landscape in solutions.
 
-[**NEXT TOPIC: Driving forces**](../drive/)
+[**NEXT TOPIC: Solutions**](../solutions/)
+
 
 ## Optional discussion
 
