@@ -5,13 +5,14 @@
 - [_Equilibrium_](/esbd/equilibrium/) - electrodes and reactions.
 - [_Lithium ion batteries_](/esbd/lib/) - An application spotlight.
 
-*Materials*:
+*Materials & Transport*:
 
 - [_Solutions_](/esbd/solutions/) - Concentrations, standard states $V^\circ_i$. Ion activities.
-- [_Solid state_](/esbd/solidstate/) - The close connection between $V^\circ_i$ and band edges; holes as a separate species.
-- [_Basic electrostatics_](/esbd/basicelectrostatics/) - $V^\circ_i$ as the charge density controller; effect of dopants; $V^\circ_i$ as the agent of screening and quasi-neutrality; the electroneutrality approximation.
-- [_Electroneutrality consequences_](x) - 
-- [_Diode_](/esbd/bipolar/) (application spotlight) - Visualizing the analogy between electrochemical bipolar membranes and semiconductor p-n junctions.
+- [_Semiconductors_](/esbd/solidstate/) - Conduction/valence bands as $V^\circ_i$ levels, electrons/holes as carrier analogs.
+- [_Basic electrostatics_](/esbd/basicelectrostatics/) - Debye screening and the local charge neutrality approximation.
+- [_Basic transport_](/esbd/transport_basic/) - Ohm's law, concentration polarization, and diffusion potentials.
+- [_Metals and insulators_](/esbd/metals_insulators/) - Simple materials as asymptotic limits of the carrier model.
+- [_Bipolar membranes and pn junctions_](/esbd/bipolar/) (application spotlight) - The visual twin of water-splitting and electron-hole pair generation.
 
 *Classic electrochemistry, rebuilt*:
 - [_Half-reactions_](/esbd/half/) - Electrons "in solution": redox and the Nernst equation in $V_i$ land. Standard electrode potentials as floating levels $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$.

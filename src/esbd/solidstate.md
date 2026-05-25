@@ -94,8 +94,9 @@ Sadly, we can't quite import the semiconductor "moving band edge" picture into c
 
 ## Takeaways
 
+In the next topic, we will look at how electrostatics constraints (screening, Debye lengths, and charge neutrality) enforce relationships between carrier concentrations and standard states.
 
-[**NEXT TOPIC: XXX**](../xxx/)
+[**NEXT TOPIC: Basic electrostatics**](../basicelectrostatics/)
 
 {#   
 
