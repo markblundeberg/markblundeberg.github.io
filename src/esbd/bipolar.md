@@ -19,7 +19,7 @@ By visualizing both side-by-side using $V_i$ band diagrams, we see that they are
 * **The Semiconductor p-n Junction**:
   * Joined materials: a p-type semiconductor (rich in mobile positive holes $\mathrm{h}^+$) and an n-type semiconductor (rich in mobile negative electrons $\mathrm{e}^-$).
 * **The Electrochemical Bipolar Membrane**:
-  * Joined materials: a cation-exchange membrane (CEM, rich in mobile positive protons $\mathrm{H}^+$) and an anion-exchange membrane (AEM, rich in mobile negative hydroxide ions $\mathrm{OH}^-$).
+  * Joined materials: a cation-exchange membrane (CEM, rich in mobile positive protons $\mathrm{H}^+$) and an anion-exchange membrane (AEM, rich in mobile negative hydroxide ions $\mathrm{OH}^-$). Membrane media act as a static background charge (effectively dopants).
 
 ---
 
