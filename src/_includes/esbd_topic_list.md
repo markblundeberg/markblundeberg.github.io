@@ -11,7 +11,7 @@
 - [_Semiconductors_](/esbd/solidstate/) - Conduction/valence bands as $V^\circ_i$ levels, electrons/holes as ion analogs.
 - [_Basic electrostatics_](/esbd/basicelectrostatics/) - Debye screening and the local charge neutrality approximation.
 - [_Basic transport_](/esbd/transport_basic/) - Ohm's law, concentration polarization, and diffusion potentials.
-- [_Metals and insulators_](/esbd/metals_insulators/) - Simple materials as asymptotic limits of the carrier model.
+- [_Other materials_](/esbd/other_materials/) - Metals, insulators, and mixed conductors.
 - [_Bipolar membranes and pn junctions_](/esbd/bipolar/) (application spotlight) - The visual twin of water-splitting and electron-hole pair generation.
 
 *Redox and electrode potentials*:

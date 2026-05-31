@@ -1,6 +1,6 @@
 ---
 layout: layouts/esbd_topic.njk
-title: 'Metals and insulators'
+title: 'Other materials'
 tags: [page, esbd_topic]
 orderESBD: 25
 ---

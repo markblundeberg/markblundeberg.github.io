@@ -89,4 +89,4 @@ Diffusion potential
 
 By treating transport per-species, we bypass the need to separate drift and diffusion, visualizing all transport resistance directly as slopes in the $V_i$ landscape.
 
-[**NEXT TOPIC: Metals and insulators**](../metals_insulators/)
+[**NEXT TOPIC: Other materials**](../other_materials/)
