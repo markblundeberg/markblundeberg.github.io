@@ -39,6 +39,8 @@ The ionic analog of a metal is a material that only conducts one species of ion,
 
 Just like a metal these are often microscopically nontrivial, in that it is not accurate at all to think about the ions as being a dilute. E.g. sometimes the ions are so dense that it might be better to think of the microscopic transport as being due to vacancy hopping. Regardless, we can choose $V_{\mathrm{ion}}$ to represent the internal electrical state and we have $J = J_{\mathrm{ion}} = -\sigma_{\mathrm{ion}} \nabla V_{\mathrm{ion}}$. (Note that anyway $V_{\mathrm{ion}} = V_{\mathrm{ionvacancy}}$.)
 
+{# Note probably focus on YSZ as a practical example material here #}
+
 <figure class="diagram-placeholder">
 {% figcaption %}
 - diagram that mirrors one of the above metal diagrams.
