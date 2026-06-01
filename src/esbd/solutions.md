@@ -84,17 +84,15 @@ It's quite common to see a liquid junction potential between two solutions of th
 
 <figure class="diagram-placeholder">
 {% figcaption %}
-- LJP jump -- flat to flat but show junction as a wiggle
-- leave off the V_i levels
+Liquid junction potential (LJP) between two concentrations of the same electrolyte. The standard states ($V^\circ_i$ ladder) jump by the same amount across the junction region (shown as a spatial transition), reflecting the localized electrostatic potential step $\Delta\phi$.
 {% endfigcaption %}
 </figure>
 
-And crucially, it's worth noting that different solvents have different $V^\circ_i$ ladders. We can even put two solvents in contact with each other, either with a solvent barrier or relying on immiscibility, in which case we'll see. Note that in contrast to the $\phi$ step (which is ill defined) the step in each $V^\circ_i$ is actually quite well defined.
+And crucially, it's worth noting that different solvents have different $V^\circ_i$ ladders. We can even put two solvents in contact with each other (either via a porous barrier or as two immiscible phases), in which case we will see the standard state ladders shift relative to one another. At this liquid-liquid interface (ITIES), the step in each $V^\circ_i$ represents the difference in solvation energy (standard Gibbs free energy of transfer) of that specific ion between the two solvents. Note that in contrast to the electrostatic potential step $\Delta\phi$ (which is chemically ill-defined across different phases), the step in each individual $V^\circ_i$ is thermodynamic and experimentally accessible. {# Note I worry there might be some technical gotchas here in realistic cases? The idea: sometimes the exchanged ions are not 'raw' but instead stay hydrated in the nonaqueous solvent; in cases with a porous barrier between pure solvents, the natural exchange of ions may can drag along solvent, and so it's not a real exchange equilibrium situation since the solvents are slowly mixing. #}
 
 <figure class="diagram-placeholder">
 {% figcaption %}
-- ITIES -- junction as a wiggle
-- add slider for phi_1 and phi_2 definition?
+Interface between Two Immiscible Electrolyte Solutions (ITIES). Because the solvents differ (e.g., water vs. nitrobenzene), the standard state ladder shifts: $V^\circ_i$ steps are different for each ion, determined by their solvation energies, even though the $V_i$ themselves run flat across. An interactive slider can let the user tune the interfacial potential drop $\Delta\phi$ to see how the relative ladders shift.
 {% endfigcaption %}
 </figure>
 
@@ -102,7 +100,7 @@ Besides jumps, $V^\circ_i$ often has smooth variations in solution simply due to
 
 <figure class="diagram-placeholder">
 {% figcaption %}
-- E-field
+Nonequilibrium electrolyte under current load. The electric field causes the standard states ($V^\circ_i$ ladder) and the electrostatic potential ($\phi$) to slope linearly across the bulk solution, showing that standard states vary dynamically in space under current flow.
 {% endfigcaption %}
 </figure>
 
@@ -110,7 +108,7 @@ In fact $V^\circ_i$ can also vary even at equilibrium, in the diffuse layer that
 
 <figure class="diagram-placeholder">
 {% figcaption %}
-- bending
+Equilibrium band bending in the diffuse layer near a charged interface. The electrostatic potential $\phi$ curves sharply near the wall to screen the surface charge, dragging the $V^\circ_i$ standard states along with it while the thermodynamic species voltages $V_i$ remain perfectly flat.
 {% endfigcaption %}
 </figure>
 
