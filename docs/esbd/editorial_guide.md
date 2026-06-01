@@ -8,7 +8,7 @@ Refer to this guide when writing, editing, or restructuring pages to ensure the 
 
 ## 1. Project Vision & Pedagogy
 
-The ESBD web book aims to rebuild electrochemistry from the ground up using the **Species Voltage ($V_i$)** framework. Traditional electrochemistry teaching is often bogged down by confusing sign conventions, historical artifacts, and unmeasurable quantities. By treating electrochemistry through the lens of semiconductor physics and fundamental thermodynamics, we demystify these topics.
+The ESBD web book aims to rebuild electrochemistry from the ground up using the **Species Voltage ($V_i$)** framework. Traditional electrochemistry teaching is often bogged down by confusing sign conventions, historical artifacts, and unmeasurable quantities. By treating electrochemistry through the lens of semiconductor physics and fundamental thermodynamics, and introducing a new visualization tool, we demystify these topics.
 
 ### Core Conceptual Pillars
 1. **The $V_i$ Framework**: The fundamental thermodynamic variable for any charged species $i$ (electrons, protons, metal ions, anions) is its species voltage:
@@ -16,11 +16,13 @@ The ESBD web book aims to rebuild electrochemistry from the ground up using the 
    where $\bar\mu_i$ is the electrochemical potential, and $q_i = z_i F$ (or $z_i e$ on a per-particle basis) is the charge of the species.
 2. **Symmetric Treatment of Carriers**: We treat electrons and ions symmetrically as charge carriers. Both have their own energy levels, bands, and voltages that drive their currents.
 3. **Bypassing the Electrostatic Potential ($\phi$)**:
-   - In traditional textbooks, the Galvani potential $\phi$ is introduced early as the "real" electrostatic potential. However, $\phi$ inside a material is **experimentally inaccessible and thermodynamically arbitrary**.
+   - In traditional textbooks, the Galvani potential $\phi$ is introduced early as the "real" electrostatic potential. However, $\phi$ inside a material is **experimentally inaccessible and thermodynamically arbitrary**. 
    - Instead of splitting the driving force into drift ($-\nabla \phi$) and diffusion ($-\nabla c_i$), we stick with the unified thermodynamic force:
      $$ J_i = -\sigma_i \nabla V_i $$
-   - We avoid invoking $\phi$ inside materials. When an electrostatic reference is needed (e.g., at vacuum interfaces or for screening), we use the external vacuum level $\phi_{\mathrm{vac}}$ or standard species states $V^\circ_i$.
+   - We avoid invoking $\phi$ inside conductors as much as possible. When an electrostatic reference is needed we use the standard species states $V^\circ_i$ or semiconductor band edges.
+   - Inside of insulators or vacuum we might refer to $\phi$. But note that this is restricted to the interior of these non-conductors: we do not import $\phi_{vac}$ as a reference level inside of conductors, and in fact we actively caution against the trap or relying on vacuum level alignment heuristics which often fail in practice (e.g. Anderson's rule).
 4. **Top-Down Pedagogy**: We start with pure thermodynamics (species voltages, equilibrium, battery cells) before diving into microscopic details (solutions, solid-state, junctions, electrostatics, kinetics). This ensures readers grasp the macroscopic, coordinate-free thermodynamic constraints before getting lost in microscopic models.
+5. **Visualization**: The electrochemical band diagrams themselves are the key novel concept enabled by the trick of normalizing all the charge carriers' energies by the species charge. The $V_i$ math alone would just be a reframing of existing arguments in favour of working with electrochemical potentials (e.g. Newman's electrochemistry book). A primary goal of this web book is to promote these diagrams by using them in all sorts of situations. One way to see it is that we are trying to make the electrochemical potential viewpoint more intuitive.
 
 ---
 
@@ -130,9 +132,20 @@ A core feature of the ESBD book is the use of clear, clean diagrams (both static
 * **Reaction Markers (⇌)**: Use the ⇌ symbol at interfaces or inside bulk domains to highlight active chemical equilibrium coupling different species' voltages.
 
 ### Interactive Components (D3)
-* Interactive figures are coded using D3.js and are located in `src/esbd/js/`.
+* Many examples of these figures can be found in `src/_includes/esbd-diagrams`.
+* The common class files (ElectrochemicalSpeciesBandDiagram.js etc.) are located in `src/esbd/js/`.
 * They should bind dynamically to inputs (such as HTML5 range sliders) to let the reader tune concentrations, currents, or applied voltages, demonstrating how the $V_i$ curves shift.
 * Keep visualizations responsive, lightweight, and cleanly styled using standard CSS.
+
+### Making calculations and getting numbers for realistic devices
+
+* **Chemical offset**: One intrinsic and unavoidable aspect of the $V_i$ diagrams involving multiple species is that there are per-species chemical offsets that globally affect the traces. In general we assign $\mu_i=0$ for the IUPAC reference used for standard Gibbs energies of formation, a common and convenient choice. This has cascading effects via thermodynamic consistency which ultimately fix the energy offsets of the ions' $\bar\mu_i$ and thus $V_i$.
+* **Thermodynamic consistency**: Try to keep a single ground source of truth. E.g. the ionic standard states and electrode potentials are closely related so we should choose one or the other, and avoid mixing together the two tables.
+* **Electrical offset**: Regardless of chemistry there is always an arbitrary global electrical offset. For devices with electrodes generally we will adopt $V_{\mathrm{e}^-}=0$ for a chosen electrical ground which is connected to some terminal of the device. For more abstract and disconnected diagrams we might not zero out any trace, to emphasize the point that references are optional. We actively *avoid* zeroing based on: 'the standard hydrogen electrode', 'the vacuum', 'the potential at infinity', etc. as these are not robust global references in general.
+* **Aqueous ion standard states**: These data can be found in e.g. `src/esbd/iondata.txt`.
+* **Missing data**: If we can't find some specific thermodynamic information, then it's usually fine to substitute in a reasonable educated guess to generate a meaningful visual, provided it is well-flagged in the code, and may need to be mentioned in caption.
+* **Interface electrostatics**: Most of our diagrams won't involve this, but we will sometimes illustrate band bending, electrostatic double layers, and the like. Between disparate materials this raises the question of alignment. We actively *avoid* the use of vacuum level alignment assumptions (work function matching / electron affinity rule), as one of the ongoing undercurrents is that interfaces are messy and we want to caution against relying on such assumptions. Even when no specific alignment data are available, we prefer to make up an alignment value that intentionally differs from the naive heuristic, or even add a slider to control this.
+* **Vacuum boundaries and Work Functions**: Since the vacuum potential $\phi_{\mathrm{vac}}$ is screened out inside conductors, we do not draw $\phi_{\mathrm{vac}}$ lines running through the bulk of a conductor. Instead, $\phi_{\mathrm{vac}}$ should only exist in the vacuum or insulator phase. It starts at the boundary at a height of $V_{\mathrm{e}^-} - \Phi/e$ (where $\Phi$ is the work function), visually reinforcing that the work function is an interfacial step rather than a bulk level.
 
 ---
 
