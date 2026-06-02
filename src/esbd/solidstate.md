@@ -7,163 +7,107 @@ orderESBD: 22
 
 # {{title}}
 
-**WORK IN PROGRESS**
+**WORK IN PROGRESS (OUTLINE)**
 
-(Lots subject to change / removal depending on the surrounding topic structure. What is our goal here? We want to show that 1) we can draw semiconductors as V_i (which are simply flipped, but that takes getting used to) and 2) start to talk about the close analogies between semiconductors and solutions, which will be an ongoing theme moving forward in subsequent topics.)
+GOAL: Besides remarking on how ESBDs are just upside down energy band diagrams, we want to emphasize the similarities of semiconductors with electrolytes, but also remark on the differences (which sometimes are intrinsic and sometimes due to style)
 
-Now that we've investigated our generalized electron/ion band diagrams in full, it's worth looking at how the good old semiconductors would look if treated the same way.
+Now that we have explored dilute ions in liquid solutions, we look at how the same electrochemical species voltage ($V_i$) framework applies to electronic carriers in solid-state semiconductors. 
 
-Themes:
+By treating conduction band electrons and valence band holes as solid-state analogs to chemical anions and cations, we can unify semiconductor band diagrams and electrochemistry under a single set of rules.
 
-- The $V_i$ diagrams are just flipped upside down compared to the usual electron energy band diagram. Note: this flipping is very unnatural feeling at first for anyone who works with band diagrams, so it's worth putting a bit of time into 'reassuring' that it will feel natural and that it's worth it?
-- Electrons and holes act like anions and cations, respectively.
-- Dopants are immobile ions that shift the balance of charge neutrality.
-- Band edges are reference states like $V^\circ_i$, though they do not correspond to the same reference carrier density.
+## Flipping energy band diagrams upside-down
 
-History note: The band model of semiconductors was developed in 1931 by Wilson, and very soon after, energy band diagrams (plots of electronic energies vs. position) were found to be highly beneficial in explaining metal-semiconductor junction rectification.^[See e.g., Mott's paper, Mott, N. F. (1939). [The theory of crystal rectifiers](https://doi.org/10.1098/rspa.1939.0051). Proceedings of the Royal Society of London. Series A. Mathematical and Physical Sciences, 171(944), 27–38.]
+* **The Physicist's Dissonance**: Standard semiconductor band diagrams plot **electron energy** pointing **upwards**. Because electrons have a negative charge ($q = -e$), higher energy corresponds to a lower electrostatic voltage. Thus, in standard diagrams, the conduction band is at the top and the valence band is at the bottom.
+* **The Voltage Representation**: Because this book uses a **voltage-mode vertical axis** (Volts pointing upwards) to align with electronic circuit schematics and chemical scales:
+  * The conduction band edge ($V^\circ_{\mathrm{e}^-}$) sits at the **bottom**.
+  * The valence band edge ($V^\circ_{\mathrm{h}^+}$) sits at the **top**.
+* **Apology and reassurance**: Why did we do this? Really for the sake of ions, a normalization had to be done, and not flipping the diagrams would have been more awkward and less intuitive. So a mild sacrifice had to be made even if uncomfortable for electronic physics but you'll get used to it.
+
+<figure class="diagram-placeholder">
+{% figcaption %}
+Comparison of a standard semiconductor energy band diagram (energy pointing up, conduction band on top) and the ESBD voltage band diagram (voltage pointing up, conduction band on the bottom). A simple flip vertical.
+{% endfigcaption %}
+</figure>
+
+{#
+History note:
 Curiously, the voltage scaling was actually used in Shockley's founding paper on bipolar transistors, where his voltage quasi-fermi levels $\phi_p$ and $\phi_n$ are identical to $V_{\mathrm{h}^+}$ and $V_{\mathrm{e}^-}$ discussed here,^[Shockley, W. (1949). [The Theory of p-n Junctions in Semiconductors and p-n Junction Transistors](https://doi.org/10.1002/j.1538-7305.1949.tb03645.x). Bell System Technical Journal, 28(3), 435–489.], however this was not adopted by the broader community.
+The band model of semiconductors was developed in 1931 by Wilson, and very soon after, energy band diagrams (plots of electronic energies vs. position) were found to be highly beneficial in explaining metal-semiconductor junction rectification.^[See e.g., Mott's paper, Mott, N. F. (1939). [The theory of crystal rectifiers](https://doi.org/10.1098/rspa.1939.0051). Proceedings of the Royal Society of London. Series A. Mathematical and Physical Sciences, 171(944), 27–38.]
+#}
 
-## Electron-holes as positive ions
+## Carriers as Solid-State Ions
 
-Electrons at top of valence band move backwards. Specifically they have negative mass. See Kittel, summarized well on {% wiki "Electron hole" %}.
+* **Conduction Electrons ($\mathrm{e}^-$)**: Negatively charged mobile carriers, behaving as solid-state **anions**.
+* **Valence Holes ($\mathrm{h}^+$)**: Positively charged mobile vacancies in the valence band, behaving as solid-state **cations**.^[Note holes aren't just absences of electrons, rather the key point is that in the valence band the electrons move 'backwards' (negative mass) so a missing valence band electron acts just like a positively charged, positive-mass particle. See Kittel, summarized well on {% wiki "Electron hole" %}.]
+* **Symmetric Conduction**: Both carriers are driven by their own species-specific voltage gradients ($-\nabla V_{\mathrm{e}^-}$ and $-\nabla V_{\mathrm{h}^+}$), flowing to release free energy.
 
-Formally treating VB holes as cations and CB electrons as anions.
+### Quasi-fermi levels: multiple $V_i$ in semiconductors.
 
-Carrier density exponential in Ve only if we separate Vh as distinct species.
+The idea of having multiple distinct $V_i$ is not exclusive to solutions but also appears in semiconductors, albeit only when driven out of equilibrium.
 
-Ve = Vh. Except out of equilibrium.
+It is common to see $ V_{\mathrm{e}^-} \neq V_{\mathrm{h}^+} $ in active devices especially the pn junctions in diodes, solar cells, and bipolar transistors.
 
-## Dopants: stationary ions
+## Band Edges as Standard States ($V^\circ_i$)
+* **Conduction Band Edge ($E_{\mathrm{C}}$)**: Acts as the standard state species voltage for electrons: $V^\circ_{\mathrm{e}^-} = -E_{\mathrm{C}}/e$.
+* **Valence Band Edge ($E_{\mathrm{V}}$)**: Acts as the standard state species voltage for holes: $V^\circ_{\mathrm{h}^+} = -E_{\mathrm{V}}/e$.
+* **Boltzmann Concentration Deviations**: Just like dilute ions in solution, the actual species voltages deviate from these standard states based on carrier concentrations:
+  $$ V_{\mathrm{e}^-} = V^\circ_{\mathrm{e}^-} - \frac{k_{\mathrm{B}}T}{e} \ln\left(\frac{n}{N_{\mathrm{C}}}\right) $$
+  $$ V_{\mathrm{h}^+} = V^\circ_{\mathrm{h}^+} + \frac{k_{\mathrm{B}}T}{e} \ln\left(\frac{p}{N_{\mathrm{V}}}\right) $$
+  where $n$ and $p$ are carrier concentrations, and $N_{\mathrm{C}}$ and $N_{\mathrm{V}}$ are effective densities of states (acting as the standard concentration reference $c^\circ$).
 
-- influence on charge neutrality
+<figure class="diagram-placeholder">
+{% figcaption %}
+-Side by side comparison of V^0_i standard ion ladder in solution and V^0 band edge ladder in semiconductor.
+{% endfigcaption %}
+</figure>
 
-analogy - solid state electrolyte.  / fast ion conductors / YSZ
+### The Law of Mass Action
 
-## Band edges vs standard states
+{# Why talk about this: gives a nice parallel principle #}
 
-MOVED FROM SOLUTIONS.MD - NEED REWORK
+(follows naturally from standard states)
 
-Conceptually, these standard state lines function much like conduction and valence band edges ($E_\mathrm{C}$, $E_\mathrm{V}$) do in semiconductor physics – they act as reference energy/potential levels. The actual potential ($V_i$) deviates from the reference $V^\circ_i$ based on the concentration, just as the Fermi level ($E_\mathrm{F}$) deviates from the band edges based on carrier concentration.
+* **Carrier Product**: In an ideal semiconductor, the product of mobile carrier densities is a constant:
+  $$ n \cdot p = n_{\mathrm{i}}^2 $$
+  where $n_{\mathrm{i}}$ is the intrinsic carrier concentration.
+* **The Solubility Analog**: This is the exact equivalent of the ionic solubility product (e.g., $c_{\mathrm{Na}^+} c_{\mathrm{Cl}^-} = K_{\mathrm{sp}}$) or the water self-ionization constant ($K_{\mathrm{w}}$).
+* Recombination-generation is just like autodissociation; will address this more in bipolar topic.
+* Discuss the detailed balance / kinetic viewpoint too.
 
-Actually, as we have alluded to before, and we will talk about in much more depth in the Semiconductors topic, we can cram semiconductors into our electrochemical $V_i$ framework too! For silicon we find that $V^\circ_\mathrm{h^+} - V^\circ_\mathrm{e^-} = 1.27~\mathrm{V}$ (for a 1 mol/L reference concentration). I.e. the 'standard state ladder' for a semiconductor really only has two entries, one for conduction band electrons ($\mathrm{e^-}$), and the other for valence band holes ($\mathrm{h^+}$). The reason this 1.27 V value differs from the bandgap of silicon ($E_\mathrm{C} - E_\mathrm{V} = 1.1~\mathrm{eV}$) is simply that the band edges each correspond to less than a 1 mol/L concentration, so, $V^\circ_\mathrm{h^+}$ sits slightly higher than $-E_\mathrm{V}/e$ and $V^\circ_\mathrm{e^-}$ sits slightly lower than $-E_\mathrm{C}/e$.
+<figure class="diagram-placeholder">
+{% figcaption %}
+Parallel semiconductor/electrolyte diagrams with fixed V_i and movable slider for V^0 offset?
+{% endfigcaption %}
+</figure>
 
-## Mass action law
+## Further comparing semiconductors and solutions
 
-MOVED FROM SOLUTIONS.MD - NEED REWORK
+As described above, semiconductors and solutions are closely analogous. Practically however, there are quantitative differences in their behaviour which cause different phenomena to be emphasized differently. Also, some differences in the way we treat these materials are just due to the two fields growing independently and coming up with different viewpoints on the same phenomena.
 
-The above example of salt solubility is also similar to the semiconductor {% wiki "Mass_action_law_(electronics)", "law of mass action" %}; in a semiconductor, $c_{\mathrm{e^-}} c_{\mathrm{h^+}} = (c_\mathrm{i})^2$ for some value $c_\mathrm{i}$, and donor dopants (such as phosphorus $\mathrm{P^+}$) and acceptor dopants (such as boron $\mathrm{B^-}$) play the same role as above in terms of shifting the balance of concentration. The big difference is that $V_\mathrm{h^+} - V_\mathrm{e^-} = 0$ in the semiconductor, instead of maintaining a fixed separation like we saw with a saturated salt..
+* Electrostatics
+  * Dopants: Semiconductor devices rely on carefully imprinted spatial patterns of static charges. Solutions tend to be self-balancing, though extra supporting electrolytes can act as mobile 'dopants' and there are solid ionic media (like ion exchange membranes) with fixed background charges that act just like dopants (which we will talk more about later)
+  * Band bending in semiconductors is the same phenomenon as the electric double layer, both relating to the Debye screening length. Practically, semiconductor band bending tends to be more spatially relevant due to longer Debye length and smaller devices, but electrochemical double layers are still important in terms of capacitance.
+* Transport: The many-carrier nature of solutions means their transport can show more complexity. Solutions also have advection and neutral solute flows to think about. We'll talk more about transport in upcoming transport topic.
+* Non-ideality: As semiconductor bands tend to be reasonably well defined and electrons are reasonably well behaved, physicists try to dig into precise mechanisms that attribute deviations to band structure morphing, quantum statistics, interactions, and the like. In contrast with ion chemistry it's far harder to nail these things down (and harder to measure mechanisms too) so everything gets lumped into a thermodynamic non-ideality factor.
 
-- $N_A$ and $N_D$.
+{# As a juicy preview, put some figures here that are imported from later topic, e.g. the pn junction / bipolar membrane comparison. #}
 
-## The PN junction
+<figure class="diagram-placeholder">
+{% figcaption %}
+- band bending / EDL
+{% endfigcaption %}
+</figure>
 
-Band diagram of PN junction in voltage mode.
-
-## Electrons and ions compared
-
-- Fermi-Dirac distribution vs simple ideal-dilute distribution. FD as simply another form of nonideality. Also see {%wiki "Langmuir adsorption model" %} ~ FD. Also mention actual electron/hole nonideality (strongly doped).
-
-- Zero of energy for ions (conventionally varies) vs electrons (defined specifically)
-
-- What semiconductorists can learn from chemists
-   - Materials without good band structure (liquid or disordered)
-   - 
-
-
-## Nonideality in semicondcutors
-
-Semiconductors also exhibit nonideality effects. This tends to occur for electron or hole concentrations above $10^{18}~\mathrm{cm}^{-3}$ (which corresponds to $10^{-3}~\mathrm{mol/L}$, surprisingly quite similar to where ionic nonidealities start in chemical solutions). Semiconductors are much more simple than chemical solutions, and so we often have a clearer quantitative picture of physical mechanisms behind the nonideality.[^seminote]
-
-[^seminote]:
-    * The band structure may 'morph' due to electron-electron effects. That is, in some sense there are still quasi-single-particle states, but they have moved. This is best known by its effect on bandgap, called "band gap renormalization".
-    * Dopants get close enough together to form their own impurity bands, which can merge with the normal band states.
-    * The dopants cause a random potential field, that smears out the the band edges.
-    * Lattice strains can significantly shift the band structure.
-
-The way that these are mathematically described is different, however! In semiconductor physics we prefer to describe the updated $E_{\mathrm{C}}$ and $E_{\mathrm{V}}$ values (which still retain some physical meaning and can be accessed e.g. via {% wiki "ARPES" %}), updated effective mass (band shape), and so on. The relationship between carrier density $ n_{\mathrm{e}^-}$ and $(\bar\mu_{\mathrm{e}^-} - E_{\mathrm{C}})$ then becomes nontrivial without needing to introduce an all-encompassing 'fudge factor'.
-
-The chemistry approach would be like defining a formal 'standard band edges' $E^\circ_{\mathrm{C}}$ and $E^\circ_{\mathrm{V}}$, with a fixed band gap $E^\circ_{\mathrm{C}} - E^\circ_{\mathrm{V}}$ and then imposing activity coefficients when relating carrier density to chemical potentials. But, just like the ionic standard states $V^\circ_i$, such formal states $E^\circ_{\mathrm{C}}$ are fundamentally ambiguous: how much of the band gap change is due to $E_{\mathrm{C}}$ moving away from $E^\circ_{\mathrm{C}}$, and how much is due to $E_{\mathrm{V}}$ moving away from $E^\circ_{\mathrm{V}}$? Electroneutrality means we have no way of directly measuring "where $E_{\mathrm{C}}$ would have been", and we can't even define what that would mean.
-
-Sadly, we can't quite import the semiconductor "moving band edge" picture into chemistry. chemical solutions seem to be so complicated that we don't have a clean physical concept like $E_{\mathrm{C}}$ that we could use instead of activity coefficients. The nonidealities reflect moving from a starting 'pure' situation of messy strong interactions to a slightly different flavouring of messy strong interactions.
-
-> Note - there is another class of semiconductor 'non-ideality' which is purely statistical in nature. Ideal electrons actually act as a quantum ideal gas ({% wiki "Fermi gas" %}), not a classical Boltzmann gas. In this case, the band structure stays intact (band gap $E_{\mathrm{C}} - E_{\mathrm{V}}$ unaltered) but the electron concentration now varies as:
-> $$ n_{\mathrm{e}^-} = N_{\mathrm{C}} f( (\bar\mu_{\mathrm{e}^-} - E_{\mathrm{C}})/kT) $$
-> where the function $f()$ is some other mathematical function (such as involving a {% wiki "complete Fermi-Dirac integral" %}) instead of $\exp()$. But this is kind of nonideality is more trivial, not really the messy kind of nonideality that gives us headaches.
->
->It's worth noting that statistical nonideality is not exclusive to quantum mechanics: in chemistry, the ideal lattice gas ({%wiki "Langmuir adsorption model" %}) is entirely classical, but mathematically behaves like a zero temperature Fermi gas. {%wiki "Ideal mixtures" %} similarly are statistically ideal in mole fraction, which makes them trivially non-ideal in molality (or molarity). In activity models, the single factor $\gamma_i$ is a combination of statistical nonideality, concentration-measure nonideality, and the fundamental interaction nonideality.
+<figure class="diagram-placeholder">
+{% figcaption %}
+- pn junction / bipolar membrane
+{% endfigcaption %}
+</figure>
 
 ## Takeaways
 
-In the next topic, we will look at how electrostatics constraints (screening, Debye lengths, and charge neutrality) enforce relationships between carrier concentrations and standard states.
+By translating semiconductor band edges and Fermi levels into standard states ($V^\circ_i$) and species voltages ($V_i$), we show that solid-state electronics obeys the exact same thermodynamic rules as ionic solutions. Our $V_i$ diagrams nicely unify the two, and really this is the goal of the project: to export the "band diagram way of thinking" from semiconductors to electrochemistry.
+
+For the remainder of the topics we will generally focus on electrochemical devices but we keep in mind at every step that there is often a close semiconductor parallel analog. From time to time we'll dive deeper into how solutions and semiconductors have their own special considerations.
 
 [**NEXT TOPIC: Basic electrostatics**](../basicelectrostatics/)
-
-{#   
-
-## Optional discussion
-
-<details>
-<summary>
-Click to open extended discussion.
-</summary>
-
-
-Gemini July 4
-
-Proposed Outline for "Semiconductors" Topic
-Introduction: Bridging Electrochemistry and Solid-State Physics
-
-Concept: State the goal of the topic: to show that the Vᵢ framework and the "species potential level" concept can be applied directly to semiconductors, providing a unified view with electrochemistry.
-
-The Mobile Carriers: Introduce the mobile charge carriers in a semiconductor: electrons (e⁻) in the conduction band and holes (h⁺) in the valence band. Frame them as the "ions" of the solid state.
-
-Species Potentials in Semiconductors
-
-Definitions: Define the species potential levels for electrons and holes based on their electrochemical potentials (μ̃):
-
-V_e⁻ = μ̃_e⁻ / (-F)
-
-V_h⁺ = μ̃_h⁺ / (+F)
-
-The Fermi Level: Explicitly state that the electron's electrochemical potential μ̃_e⁻ is what solid-state physicists call the Fermi Level (E_F). Therefore, V_e⁻ is the scaled and inverted Fermi level.
-
-Equilibrium: Explain that in any single piece of semiconductor at equilibrium, the electron and hole potentials must be equal: V_e⁻ = V_h⁺. This single level is the "Fermi level" of the system on your diagram.
-
-Microscopic Energy Levels: The Band Edges
-
-Concept: Introduce the idea of microscopic energy levels, analogous to the "ion site energy" we discussed for YSZ.
-
-Conduction Band Edge (E_C): The minimum energy required to add an electron to the crystal as a mobile carrier. This is the "site energy" for an electron.
-
-Valence Band Edge (E_V): The maximum energy of electrons in the valence band. Removing an electron from here creates a mobile hole. This is effectively the "site energy" for a hole.
-
-The Band Gap (E_g): Define the band gap as the energy difference E_g = E_C - E_V. This is the energy required to create an electron-hole pair (null ⇌ e⁻ + h⁺).
-
-ESBD Visualization: Explain how these band edges (E_C and E_V) can be plotted on the Vᵢ diagram as V_e⁻(site) and V_h⁺(site), creating the familiar band structure.
-
-Doping: The Analogy to Solid Electrolytes
-
-Concept: Describe n-type doping (e.g., adding Phosphorus to Silicon) and p-type doping (e.g., adding Boron).
-
-The Key Analogy: Frame the dopant atoms as fixed, immobile background charges within the crystal lattice (P⁺ for donors, B⁻ for acceptors). This is directly analogous to the Y³⁺ dopants in YSZ creating a fixed background charge.
-
-Controlling Carrier Concentration: Explain that to maintain charge neutrality, the concentration of mobile carriers (n for electrons or p for holes) is determined by the concentration of these fixed dopant ions.
-
-ESBD View: Show on a diagram how n-type doping raises the equilibrium V_e⁻/V_h⁺ level closer to the conduction band edge, while p-type doping lowers it closer to the valence band edge.
-
-The P-N Junction: The Power of the Band Diagram
-
-Concept: This is the crucial application that demonstrates the power of the diagram. Describe joining a p-type and an n-type semiconductor.
-
-Equilibrium Condition: Explain that when they are joined, the system must reach a new equilibrium where the thermodynamic potential (the Fermi level, or the V_e⁻/V_h⁺ level) is flat and continuous across the entire device.
-
-Band Bending: Show that the only way for the V_e⁻/V_h⁺ level to be flat is for the microscopic site energy levels (the band edges) to bend in the region of the junction.
-
-Consequences: Explain that this "band bending" creates the depletion region and the built-in potential, which are responsible for the diode's rectifying behavior. This cannot be understood by only looking at the thermodynamic potential (V_e⁻) without also plotting the microscopic levels (the band edges).
-
-Conclusion
-
-Summarize that the Vᵢ framework provides a common language for both electrolytes and semiconductors.
-
-Reiterate that the utility of the "band diagram" approach lies in its ability to visualize both the macroscopic thermodynamic driving forces (Vᵢ levels) and the underlying microscopic energy landscape (band edges/site energies) that dictates the system's properties and device function.
-#}
