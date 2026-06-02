@@ -2,44 +2,17 @@
 layout: layouts/esbd_topic.njk
 title: 'Basic electrostatics'
 tags: [page, esbd_topic]
-orderESBD: 23
+orderESBD: 24
 ---
 
 # {{title}}
 
-While the $V_i$ values want to flatten out for thermodynamic reasons, the same is not necessarily true of the $V^\circ_i$. To explain why $V^\circ_i$ might be flat (or not!) at equilibrium we have to finally dip into the actual mechanics of electricity. Somewhat surprisingly we have managed to dance around the actual electrostatic nature of electricity until now!
+While the $V_i$ values want to flatten out for thermodynamic reasons, the same is not necessarily true of the $V^\circ_i$. To explain why $V^\circ_i$ might be flat (or not!) at equilibrium, we have to finally dip into the actual mechanics of electricity. Somewhat surprisingly, we have managed to dance around the actual electrostatic nature of electricity until now!
 
-{#
-If we know the concentrations (and activities) of reactants, then we can just plug those into our equation to determine each $V_i$ relative to its $V^\circ_i$. But what happens if we don't know the concentrations ahead of time?
+In the previous topic, we saw that when charge neutrality is violated at a boundary, $V^\circ_i(x)$ must bend to accommodate the space charge. But this left us with a mystery: *how far does this bending extend? What is the spatial profile of this transition?*
 
-The inverse problem is where we know all the $V_i$ values, and our task is to determine the concentrations. This situation arises for various reasons:
+To resolve this, we must now introduce permittivity ($\epsilon$) and Poisson's equation to model the spatial physics of electrostatic screening.
 
-* Our solution may be equilibrated with large reservoirs that set the $V_i$ values (e.g. Gibbs-Donnan equilibrium, see below).
-* Our solution may be in a solubility equilibrium, dissociation equilibrium, or recombination-generation equilibrium, that sets $V_i - V_j$.
-* We may be examining a small region (such as an electrostatic diffuse layer) within a much larger conductor that acts as a reservoir for our $V_i$ values.
-* We may simply want to use the set of $\{V_i\}$ values as a description of the thermodynamic state (together with temperature, pressure, etc., and either $\{\mu_i\}$ or concentrations of neutral species).
-
-The problem is that a set $\{V_i\}$ containing $N$ independent values only contains $N-1$ independent pieces of information about the compositional state, since the collective electrical offset is not related to concentrations. The last missing parameter is the position of the $V^\circ_i$ ladder, but that also controls the total charge density, and that brings us to the topic of electrostatics and neutrality.
-#}
-
-## $V^\circ_i$ as a charge control
-
-It often happens that the $V_i$ are fixed for some reason (connection to a reservoir), but this leaves the question of where $V^\circ_i$ sits. Note that a full set of $\{V_i\}$ values only contains $N-1$ independent pieces of information about the compositional state, since the collective electrical offset (the 'float') is not directly related to concentrations. The remaining piece of information is associated with the charge density and hence to the relative position of $V^\circ_i$.
-
-So, let's consider what happens when $V^\circ_i$ varies with fixed $V_i$. Depending on where we position $V^\circ_i$, we will get more or less space charge. For example as we move $V^\circ_i$ up, we reduce $V_i - V^\circ_i$ for all ions, which means we get a lower concentration positive ions, and a higher concentration of negative ions:
-
-<figure class="diagram-placeholder">
-{% figcaption %}
-- demo showing how $V^\circ_i$ influences the space charge
-- background charge slider
-- 'fix neutrality' checkbox
-- subplot with delta phi on x axis and space charge on y axis (x center on intrinsic point? but I don't want to talk about intrinsic point so much..)
-{% endfigcaption %}
-</figure>
-
-Note the above demo allows you to add a background charge. Such a background charge occurs in fixed-charge media of various kinds: doped semiconductors, ionomers, and polyelectrolyte networks. The background charge can also be used to describe spectator ions whose concentration is already known (even though they are mobile and thus have a $V_i$, they are operationally static at equilibrium).
-
-But of course we know that conductining body doesn't want to be internally charged, i.e. we know that $V^\circ_i$ should seek point of zero space charge. But why is that?
 
 ## $V^\circ_i$ as an agent of electrostatic screening
 
@@ -143,40 +116,6 @@ In a realistic picture of a bulk solution, we should draw very sharp deviations 
 So, our $V^\circ_i$ ladder floats to whatever value it needs to be to be neutral. In a homogeneous medium wher $V_i$ are flat (as they must be at equilibrium) then that means $V^\circ_i$ must be flat too, except at its surfaces (within a few Debye lengths).
 
 > **Algorithm note**: Mathematically, finding neutrality means solving a equation like $\rho_{\mathrm{free}} = z_1 F c_1 + z_2 F c_2 + \ldots + \rho_{\mathrm{bg}} = 0 $, where each of the $c_i$ terms are trancendental functions, exponentially sensitive to the $V^\circ_i$ ladder offset. Some special cases have algebraic solutions,^[In general with ideal-dilute ions the equation can be converted to a polynomial. If all positive species have equal charge $+z$ and all negative species have equal charge $-z$, then the neutrality condition can be converted to a quadratic equation.] but the general case has no analytic solution. There are also some gotchas with finding neutrality by numerical methods.^[Applying Newton iterations to the equation can be tricky as these exponentials quickly blow up, so some tricks are needed to help stabilize the convergence of root-finding algorithms. As an initial guess you can find out (for large postive $c_{\mathrm{bg}}$) the **dominant cation** has the biggest $V_i - V^\circ_i$ and then pin its $V^\circ_i$ to $V_i$, or (for large negative $c_{\mathrm{bg}}$) which **dominant anion** and analogously pin $V^\circ_i$ to it, or (for small $c_{\mathrm{bg}}$) pin $V^\circ_i$ somewhere halfway between the two extremes. This lets you find a rough but safe initial offset of the $V^\circ_i$ ladder that doesn't blow up from the start. After that, Newton-Raphson iterations are be carried out to zero the space charge, however it is likely necessary to clamp the steps in $\phi$ to only a few times $V_{\mathrm{th}}$, to avoid blowups that can occur when the intrinsic ion densities would be very low but the $c_{\mathrm{bg}}$ is large.]
-
-### Neutrality examples
-
-To a very good approximation, we can apply neutrality locally to every point in space, which means that $V^\circ_i$ at each place must float up and down to achieve this.
-
-
-Gibbs-Donnan equilibrium, common-ion effect, dopants.
-
-
-<figure class="diagram-placeholder">
-{% figcaption %}
-- pn junction
-{% endfigcaption %}
-</figure>
-
-The ionic equivalent of the pn junction's built-in voltage is the Donnan potential. Here we consider a case where some background charges have been held in place either due to a semipermeable membrane that excludes ions (such as large charged proteins), or due to a solid structure that holds them in place (as in ionomers and polyelectrolyte networks). This is often described in terms of a detailed balance that is being imposed by the membrane, but with our $V_i$ diagrams we can easily visualize this Gibbs–Donnan equilibrium:
-
-<figure class="diagram-placeholder">
-{% figcaption %}
-- Gibbs-Donnan equilibrium: jump across membrane.
-{% endfigcaption %}
-</figure>
-
-<figure class="diagram-placeholder">
-{% figcaption %}
-- Common-ion effect: salt region sets $V_i - V_j = \mathrm{sat} $. 
-{% endfigcaption %}
-</figure>
-
-<figure class="diagram-placeholder">
-{% figcaption %}
-- ITIES
-{% endfigcaption %}
-</figure>
 
 ## Beyond the simple case
 

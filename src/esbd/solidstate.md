@@ -61,24 +61,7 @@ It is common to see $ V_{\mathrm{e}^-} \neq V_{\mathrm{h}^+} $ in active devices
 {% endfigcaption %}
 </figure>
 
-### The Law of Mass Action
 
-{# Why talk about this: gives a nice parallel principle #}
-
-(follows naturally from standard states)
-
-* **Carrier Product**: In an ideal semiconductor, the product of mobile carrier densities is a constant:
-  $$ n \cdot p = n_{\mathrm{i}}^2 $$
-  where $n_{\mathrm{i}}$ is the intrinsic carrier concentration.
-* **The Solubility Analog**: This is the exact equivalent of the ionic solubility product (e.g., $c_{\mathrm{Na}^+} c_{\mathrm{Cl}^-} = K_{\mathrm{sp}}$) or the water self-ionization constant ($K_{\mathrm{w}}$).
-* Recombination-generation is just like autodissociation; will address this more in bipolar topic.
-* Discuss the detailed balance / kinetic viewpoint too.
-
-<figure class="diagram-placeholder">
-{% figcaption %}
-Parallel semiconductor/electrolyte diagrams with fixed V_i and movable slider for V^0 offset?
-{% endfigcaption %}
-</figure>
 
 ## Further comparing semiconductors and solutions
 
@@ -110,4 +93,4 @@ By translating semiconductor band edges and Fermi levels into standard states ($
 
 For the remainder of the topics we will generally focus on electrochemical devices but we keep in mind at every step that there is often a close semiconductor parallel analog. From time to time we'll dive deeper into how solutions and semiconductors have their own special considerations.
 
-[**NEXT TOPIC: Basic electrostatics**](../basicelectrostatics/)
+[**NEXT TOPIC: Mass action and charge control**](../charge_control/)

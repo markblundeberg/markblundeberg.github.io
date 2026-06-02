@@ -9,6 +9,7 @@
 
 - [_Solutions_](/esbd/solutions/) - Concentrations, standard states $V^\circ_i$. Ion activities.
 - [_Semiconductors_](/esbd/solidstate/) - Conduction/valence bands as $V^\circ_i$ levels, electrons/holes as ion analogs.
+- [_Mass action and charge control_](/esbd/charge_control/) - Doping, Donnan potential, and the common-ion effect.
 - [_Basic electrostatics_](/esbd/basicelectrostatics/) - Debye screening and the local charge neutrality approximation.
 - [_Basic transport_](/esbd/transport_basic/) - Ohm's law, concentration polarization, and diffusion potentials.
 - [_Other materials_](/esbd/other_materials/) - Metals, insulators, and mixed conductors.
