@@ -2,7 +2,7 @@
 layout: layouts/esbd_topic.njk
 title: 'Basic transport'
 tags: [page, esbd_topic]
-orderESBD: 25
+orderESBD: 26
 ---
 
 # {{title}}
@@ -89,4 +89,4 @@ Diffusion potential
 
 By treating transport per-species, we bypass the need to separate drift and diffusion, visualizing all transport resistance directly as slopes in the $V_i$ landscape.
 
-[**NEXT TOPIC: Other materials**](../other_materials/)
+[**NEXT TOPIC: Other conductors**](../other_conductors/)

@@ -2,7 +2,7 @@
 layout: layouts/esbd_topic.njk
 title: 'Bipolar membranes and pn junctions'
 tags: [page, esbd_topic]
-orderESBD: 27
+orderESBD: 24
 ---
 
 # {{title}}

@@ -16,8 +16,9 @@
 
 - [_Basic electrostatics_](/esbd/basicelectrostatics/) - Debye screening and the local charge neutrality approximation.
 - [_Basic transport_](/esbd/transport_basic/) - Ohm's law, concentration polarization, and diffusion potentials.
-- [_Other materials_](/esbd/other_materials/) - Metals, insulators, and mixed conductors.
-- [_Capacitors_](/esbd/capacitors/) (application spotlight) - Visualizing electrostatic dielectric capacitors and electric double layer (EDL) capacitors.
+- [_Other conductors_](/esbd/other_conductors/) - Metals, fast ionic conductors, and mixed conductors.
+- [_Insulators and capacitors_](/esbd/capacitors/) - Visualizing dielectric, electrolytic, and EDL capacitors.
+- [_Saturation_](/esbd/saturation/) (application spotlight) - Why current saturates in FETs and electroplating.
 
 *Redox and electrode potentials*:
 - [_Half-reactions_](/esbd/half/) - Electrons "in solution": redox and the Nernst equation in $V_i$ land. Standard electrode potentials as floating levels $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$.
