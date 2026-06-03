@@ -92,4 +92,4 @@ A brief discussion about vacuum, its inhomogeneity, and brief remarks about 'vac
 
 When discussing solutions and semiconductors, we found it helpful to introduce the dilute standard state $V^\circ_i$ and band edges, however these reference states are not always relevant. When we look at other conductors, we see that a focus on the thermodynamically fundamental $V_i$ is still crucial and $V_i$ are the core quantities we want to see plotted. 
 
-[**NEXT TOPIC: Bipolar membranes and pn junctions**](../bipolar/)
+[**NEXT TOPIC: Capacitors**](../capacitors/)

@@ -62,4 +62,4 @@ By visualizing both side-by-side using $V_i$ band diagrams, we see that they are
 
 Whether in a silicon chip or a water-purification membrane, the physics of depletion, carrier injection, and generation-recombination are identical when viewed through the unifying lens of species voltages.
 
-[**NEXT TOPIC: Half-reactions**](../half/)
+[**NEXT TOPIC: Basic electrostatics**](../basicelectrostatics/)

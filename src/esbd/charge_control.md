@@ -84,4 +84,4 @@ At boundaries, membranes, and junctions, local charge neutrality is violated, cr
 
 To answer this, we must finally introduce permittivity ($\epsilon$) and Poisson's equation to model the spatial physics of electrostatic screening.
 
-[**NEXT TOPIC: Basic electrostatics**](../basicelectrostatics/)
+[**NEXT TOPIC: Bipolar membranes and pn junctions**](../bipolar/)

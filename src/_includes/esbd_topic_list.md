@@ -5,15 +5,19 @@
 - [_Equilibrium_](/esbd/equilibrium/) - electrodes and reactions.
 - [_Lithium ion batteries_](/esbd/lib/) - An application spotlight.
 
-*Materials and transport*:
+*Materials I - Dilute Charge Carriers*:
 
 - [_Solutions_](/esbd/solutions/) - Concentrations, standard states $V^\circ_i$. Ion activities.
 - [_Semiconductors_](/esbd/solidstate/) - Conduction/valence bands as $V^\circ_i$ levels, electrons/holes as ion analogs.
 - [_Mass action and charge control_](/esbd/charge_control/) - Doping, Donnan potential, and the common-ion effect.
+- [_Bipolar membranes and pn junctions_](/esbd/bipolar/) (application spotlight) - The visual twin of water-splitting and electron-hole pair generation.
+
+*Materials II - Electrostatics, Transport, and Complex Materials*:
+
 - [_Basic electrostatics_](/esbd/basicelectrostatics/) - Debye screening and the local charge neutrality approximation.
 - [_Basic transport_](/esbd/transport_basic/) - Ohm's law, concentration polarization, and diffusion potentials.
 - [_Other materials_](/esbd/other_materials/) - Metals, insulators, and mixed conductors.
-- [_Bipolar membranes and pn junctions_](/esbd/bipolar/) (application spotlight) - The visual twin of water-splitting and electron-hole pair generation.
+- [_Capacitors_](/esbd/capacitors/) (application spotlight) - Visualizing electrostatic dielectric capacitors and electric double layer (EDL) capacitors.
 
 *Redox and electrode potentials*:
 - [_Half-reactions_](/esbd/half/) - Electrons "in solution": redox and the Nernst equation in $V_i$ land. Standard electrode potentials as floating levels $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$.
