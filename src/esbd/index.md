@@ -9,7 +9,7 @@ eleventyNavigation:
 
 # Band Diagrams for Batteries: An Electrochemical Visualization
 
-<p align='right'><small><em>Mark Lundeberg // August 2025</em></small></p>
+<p align='right'><small><em>Mark Lundeberg // June 2026</em></small></p>
 
 What is the electrical state deep inside of a battery?
 
