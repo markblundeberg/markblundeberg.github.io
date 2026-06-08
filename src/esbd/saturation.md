@@ -9,57 +9,73 @@ orderESBD: 29
 
 **WORK IN PROGRESS (OUTLINE)**
 
-When we drive current through a device, the species voltages ($V_i$) slope to overcome resistance. Typically, increasing the voltage difference across the device drives more current. However, under certain conditions, the current hits a strict maximum and refuses to increase further—it **saturates**.
+When we drive current through a material, we expect that increasing the voltage difference across its terminals will drive more current. This does happen in a simple resistive material, but it is only really guaranteed when there is a uniform block of material with a single conducting carrier type. In real devices what tends to happen instead is that the current instead hits a strict maximum and refuses to increase further—it **saturates**.
 
-Here, we explore the deep physics of current saturation, showing that the pinch-off in a semiconductor **field-effect transistor (FET)** and the **limiting current** in electroplating are manifestations of the exact same physical phenomenon: carrier depletion driven by coupling to a flat-voltage rail.
+Interestingly, current limits in both classic transistors and in electrochemistry are closely related, having to do with spatial depletion of the active charge carrier due to the screening presence of mobile 'spectator' species. So, there is a close analogy between limiting current in electroplating, "pinch-off" in a field-effect transistor, minority carrier diffusion in a bipolar junction transistor, and "salt depletion" in a battery electrolyte, and we will discuss this below.
 
----
+## The core mechanism: Spectator screening causes depletion
 
-## 1. The Core Mechanism: Carrier Depletion
-* **The Resistance Divergence**: Current is the product of conductivity and driving force ($J_i = -\sigma_i \nabla V_i$). If the carrier concentration at a boundary drops to zero, the conductivity $\sigma_i$ at that point plunges to zero, meaning the local resistance diverges to infinity.
-* **Why Saturation Happens**: No matter how much harder you push (sloping $V_i$ steeper elsewhere), you cannot force more carriers through a region that has been completely emptied of carriers. The current saturates at a maximum rate dictated by how fast carriers can be resupplied to the depletion boundary.
+{# Note need to sync this with preceding discussion of concentration polarization; how much is redundant remains to be seen #}
 
----
+Initially when voltage is applied, and before any carrier has had a chance to move, then an electric field appears and all carriers move in unison. But, soon it happens that one species of carrier takes over the current and other species (spectators) are blocked. Let's look at the steady state.
 
-## 2. The Role of the "Flat Rail"
-If we apply a voltage to a simple block of silicon or a pure metal wire, the carriers do not deplete to zero and the current does not saturate. 
-For saturation to occur, the carrier's standard state/band edge ($V^\circ_{\mathrm{carrier}}$) must be **capacitively coupled to a second, flat-voltage rail** that spans the device:
-* **The coupling** holds the carrier's $V^\circ$ in place, preventing it from shifting freely with the carrier's species voltage $V$.
-* When a bias pulls the carrier species voltage $V$ down relative to the locked $V^\circ$, the carrier concentration drops exponentially:
+Traditionally this is discussed in terms of drift/diffusion but the $V_i$ approach gives us an alternative view.
+
+Key pieces ($V_i$ view):
+
+* **Spectators 'flat rail'**: Because spectator charges are mobile and would move according to their own $V_j$ gradients. Since they have zero current (after reaching steady state), then they have flat $V_j$. 
+* **Resistance**: Since species $i$ is carrying the current, $V_i$ must slope.
+* **Screening**: Quantitative question: At equilibrium if we move $V_i$ (due to slope) while $V_j$ (flat rails) stay in place, how far does $V^\circ_i$ move? This is a capacitive divider.
+  The capacitance (chemical capacitance or gate capacitance) beween spectators' $V_j$ and the $V^\circ_i$ of the conducting species means $V^\circ_i$ is 'pinned' somewhat. 
+* **Depletion**: The slope of $V_i$ is steeper than $V^\circ_i$ which means the distance between them is growing i.e. $c_i$ is decreasing.
   $$ c \propto \exp\left(\frac{q(V - V^\circ)}{RT}\right) \rightarrow 0 $$
+* **The Resistance and slope Divergence**: If the carrier concentration at a boundary drops to near zero, the conductivity $\sigma_i$ at that point plunges to near zero, meaning the local resistance diverges to infinity. Since $J_i$ current is constant across the channel then the slope of $V_i$ must also diverge.
+* **Saturation**: The channel's $V_i$ slopes down until it reaches the value set by the draining boundary condition. Once the slope has gotten steep enough, changing that boundary condition has very little effect anymore on the profile the channel $V_i$, and hence saturation!
 
----
+That said, there are indirect effects of drain voltage like channel length modulation or side reactions that can change the picture and de-saturate the overall IV curve. Also, we haven't talked about other mechanisms that can cause saturation: electrode reaction bottlenecks or thermionic emission (which are also analogous), or carrier velocity saturation (short FETs). We'll just focus on the basic screening mechanism here.
 
-## 3. MOSFET Pinch-Off (Electronic Saturation)
-* **The Carrier**: Electrons in the channel ($V_{\mathrm{e}^-}$).
-* **The Flat Rail**: The gate electrode, which is a metal contact held at a constant species voltage ($V_{\mathrm{e}^-, \text{gate}}$).
-* **The Coupling**: The gate dielectric capacitance ($C_{\mathrm{ox}}$). This capacitance holds the channel conduction band edge ($V^\circ_{\mathrm{e}^-}$) relatively close to the gate voltage.
-* **Pinch-Off**: When we apply a high drain bias, the channel species voltage $V_{\mathrm{e}^-}$ slopes downward toward the drain. Because the gate rail holds $V^\circ_{\mathrm{e}^-}$ in place, $V_{\mathrm{e}^-}$ drops far below $V^\circ_{\mathrm{e}^-}$ near the drain contact. Electron density pinches off ($n \to 0$), and current saturates.
+## 'Hard pinning' means pure diffusion: BJTs and electroplating
 
-<figure class="diagram-placeholder">
-{% figcaption %}
-ESBD of a MOSFET in saturation. The gate electrode acts as a flat rail that holds the conduction band edge $V^\circ_{\mathrm{e}^-}$ in place. Near the drain end, the electron voltage $V_{\mathrm{e}^-}$ drops below the band edge, depleting the carrier concentration to zero.
-{% endfigcaption %}
-</figure>
-
----
-
-## 4. Concentration Polarization & Limiting Current (Ionic Saturation)
-* **The Carrier**: The active cation (e.g. $\mathrm{M}^+$ being reduced during electroplating), whose species voltage $V_{\mathrm{cation}}$ slopes under current.
-* **The Flat Rail**: The counter-anion ($\mathrm{A}^-$), which is blocked at the electrode surface ($J_{\mathrm{anion}} = 0$). Because it carries no current, its species voltage $V_{\mathrm{anion}}$ remains perfectly flat across the diffusion layer.
-* **The Coupling**: Local bulk charge neutrality ($c_+ \approx c_-$). 
-* **The Limiting Current**: Because charge neutrality couples the cation concentration to the flat-rail anion concentration, the local potential and standard states $V^\circ$ are held in place. Driving a high current pulls $V_{\mathrm{cation}}$ down at the electrode surface. It drops below the locked $V^\circ_{\mathrm{cation}}$, depleting cations to zero ($c_{\mathrm{cation}} \to 0$) and saturating the current at the **limiting current density** $I_{\mathrm{lim}}$.
+* **The Physics**: A massive concentration of background charge carriers screens out any internal electric field, forcing the active carrier to move purely by random walk (Fickian diffusion).
+* **The Semiconductor Analog: The BJT Base**:
+  * In a bipolar junction transistor (BJT) neutral base, majority carriers (holes in a p-type base) are highly concentrated. They screen out the electric field, pinning $\nabla \phi \approx 0$.
+  * Injected minority carriers (electrons) are blind to electrostatic forces and must navigate the base by **pure diffusion**. 
+  * The collector current saturates once the collector voltage is biased high enough to pull the electron concentration to zero at the collector junction interface.
+* **The Electrochemical Analog: Supporting Electrolyte**:
+  * In a plating bath with a high concentration of inert supporting electrolyte (e.g. $\mathrm{KNO}_3$) and a dilute active species (e.g. $\mathrm{Cu}^{2+}$), the background ions screen the electric field.
+  * The active $\mathrm{Cu}^{2+}$ ions move through the diffusion layer by **pure diffusion**.
+  * The current saturates (the **limiting current density**) when the active ion concentration is pulled to zero at the electrode surface.
+  * Note on realism: for electroplating, we can plot a hard diffusion region separating from a bulk fully-mixed region (ideal Nernst Diffusion Layer) and regardless we should remark on the way that the source BC is getting set.
 
 <figure class="diagram-placeholder">
 {% figcaption %}
-ESBD of a diffusion layer at the limiting current. The blocked counter-ion acts as a flat rail ($V_{\mathrm{anion}}$ is flat), which locks the potential. At the electrode interface ($x=0$), the active cation species voltage $V_{\mathrm{cation}}$ drops, depleting the cations to zero.
+Comparison of Hard Pinning saturation. Left: BJT neutral base, where majority holes screen the field, forcing injected electrons to diffuse to a zero-concentration collector boundary. Right: Supporting electrolyte, where inert ions screen the field, forcing electroactive ions to diffuse to a zero-concentration electrode boundary.
 {% endfigcaption %}
 </figure>
 
----
+## 'Soft pinning' gives mixed drift-diffusion: FETs and binary electrolytes
+* **The Physics**: Screening is partial or geometric. A longitudinal electric field exists, driving transport via a shifting balance of drift and diffusion.
+* **The Electrochemical Analog: Binary Electrolyte**:
+  * In a binary electrolyte (only active cations and counter-anions), there is no background salt. An electric field (diffusion potential) must exist to maintain charge neutrality between the two moving species.
+  * Example: salt gradients in battery electrolytes (though these are not usually driven to the limit)
+  * Cations move by a combination of both drift and diffusion (ambipolar transport).
+  * Current saturates when the cation concentration is depleted to zero at the electrode.
+* **The Semiconductor Analog: The FET Channel**:
+  * In a field-effect transistor (FET) channel, there is no bulk majority-carrier sea to screen fields longitudinally. 
+  * The gate electrode provides "soft pinning" transversely (coupling to $V^\circ_{\mathrm{e}^-}$ via gate capacitance), but a longitudinal electric field must exist to drive the drift current from source to drain.
+  * Note unlike the 1:1 binary electrolyte (where chemical capacitances are 1:1 at any concentration), here the ratio between gate dielectric capacitance and channel-carrier's chemical capacitance is varying with concentration. So the pinning is has a spatially distinct profile (getting harder towards the depletion point) but it's still 'soft'. (Technically there is also channel-substrate capacitance but I think that is negligible compared to gate?)
+  * Near the drain, the channel **pinches off** (electron concentration $n \to 0$), and current saturates.
+
+<figure class="diagram-placeholder">
+{% figcaption %}
+Comparison of Soft Pinning saturation. Left: FET channel, where the gate transversely couples to $V^\circ_{\mathrm{e}^-}$, but a longitudinal field exists until pinch-off at the drain. Right: Binary electrolyte, where charge neutrality couples cations to the flat-rail $V_{\mathrm{anion}}$, but a diffusion potential field exists until depletion at the electrode.
+{% endfigcaption %}
+</figure>
 
 ## Takeaways
 
 Whether in a silicon transistor channel or a metal-plating bath, current saturation is governed by the same rules. In both systems, a flat-voltage rail (the gate metal or the blocked counter-ion) acts through a capacitive coupling to lock the carrier's standard energy level in place. When driven, the carrier's voltage drops below this level, depleting the carriers to zero at the boundary and choking the flow.
+
+This concludes our discussion how electrons in semiconductors and ions in solution have very close analogies. Over the next several topics we're going to switch gears to talking about "electrons in solution": redox reactions and the visual meaning of electrode potential in our $V_i$ diagrams.
 
 [**NEXT TOPIC: Half-reactions**](../half/)
