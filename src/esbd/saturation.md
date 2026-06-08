@@ -9,30 +9,31 @@ orderESBD: 29
 
 **WORK IN PROGRESS (OUTLINE)**
 
-When we drive current through a material, we expect that increasing the voltage difference across its terminals will drive more current. This does happen in a simple resistive material, but it is only really guaranteed when there is a uniform block of material with a single conducting carrier type. In real devices what tends to happen instead is that the current instead hits a strict maximum and refuses to increase further—it **saturates**.
+When we drive current through a material, we expect that increasing the voltage difference across its terminals will drive more current. But, this is only really guaranteed when there is a uniform block of material with a single conducting carrier type. In real devices what tends to happen instead is that the current hits a strict maximum and refuses to increase further—it **saturates**.
 
-Interestingly, current limits in both classic transistors and in electrochemistry are closely related, having to do with spatial depletion of the active charge carrier due to the screening presence of mobile 'spectator' species. So, there is a close analogy between limiting current in electroplating, "pinch-off" in a field-effect transistor, minority carrier diffusion in a bipolar junction transistor, and "salt depletion" in a battery electrolyte, and we will discuss this below.
+Interestingly, current limits in both classic transistors and in electrochemical cells are closely related, having to do with the spatial formation of a depleted choke point, arising from the screening presence of mobile spectator species. With our $V_i$ diagrams, there is a close visual analogy between "mass transfer limits" in electroplating, "pinch-off" in a field-effect transistor, "minority carrier diffusion and sweep-out" in a bipolar junction transistor, and "salt depletion" in a battery electrolyte.
 
 ## The core mechanism: Spectator screening causes depletion
 
 {# Note need to sync this with preceding discussion of concentration polarization; how much is redundant remains to be seen #}
 
-Initially when voltage is applied, and before any carrier has had a chance to move, then an electric field appears and all carriers move in unison. But, soon it happens that one species of carrier takes over the current and other species (spectators) are blocked. Let's look at the steady state.
+Initially when voltage is applied, and before any carrier has had a chance to move, then an electric field appears and all carriers move in unison. But, soon it happens that one species of carrier takes over the current and other species (spectators) are blocked. In transistors a steady state may be reached in less than a nanosecond; in electrochemical cells it may take minutes or hours to form. In any case, let's look at the ultimate steady state where only the active carrier is carrying any current.
 
 Traditionally this is discussed in terms of drift/diffusion but the $V_i$ approach gives us an alternative view.
 
 Key pieces ($V_i$ view):
 
-* **Spectators 'flat rail'**: Because spectator charges are mobile and would move according to their own $V_j$ gradients. Since they have zero current (after reaching steady state), then they have flat $V_j$. 
-* **Resistance**: Since species $i$ is carrying the current, $V_i$ must slope.
-* **Screening**: Quantitative question: At equilibrium if we move $V_i$ (due to slope) while $V_j$ (flat rails) stay in place, how far does $V^\circ_i$ move? This is a capacitive divider.
+* **Spectators 'flat rail'**: Because spectator charges are mobile and would move according to their own $V_j$ gradients. Since they have zero current (after reaching steady state), then they have flat $V_j$. There may be multiple spectators.
+* **Resistance makes slope**: Since species $i$ is carrying the current, $V_i$ must slope: $ \nabla V_i = -J_i / \sigma_i$. The current is constant in time (steady state) and in position (also since steady state: no bunching-up is occurring). In this case $\sigma_i$ is going to hugely vary with position.
+* **Screening**: Now we face a quantitative question: $V_i$ is moving but $V_j$ are not. If we move $V_i$ (due to slope) while $V_j$ (flat rails) stay in place, how far does $V^\circ_i$ move? This is a capacitive divider $V_i : V^\circ_i : \{V_j\}$.
   The capacitance (chemical capacitance or gate capacitance) beween spectators' $V_j$ and the $V^\circ_i$ of the conducting species means $V^\circ_i$ is 'pinned' somewhat. 
-* **Depletion**: The slope of $V_i$ is steeper than $V^\circ_i$ which means the distance between them is growing i.e. $c_i$ is decreasing.
+* **Depletion**: The slope of $V^\circ_i$ is shallower than $V_i$ which means the distance between them is growing i.e. $c_i$ is decreasing.
   $$ c \propto \exp\left(\frac{q(V - V^\circ)}{RT}\right) \rightarrow 0 $$
-* **The Resistance and slope Divergence**: If the carrier concentration at a boundary drops to near zero, the conductivity $\sigma_i$ at that point plunges to near zero, meaning the local resistance diverges to infinity. Since $J_i$ current is constant across the channel then the slope of $V_i$ must also diverge.
-* **Saturation**: The channel's $V_i$ slopes down until it reaches the value set by the draining boundary condition. Once the slope has gotten steep enough, changing that boundary condition has very little effect anymore on the profile the channel $V_i$, and hence saturation!
+  consquently $\sigma$ is decreasing.
+* **The Resistance and slope Divergence**: If the carrier concentration at a boundary drops to near zero, the conductivity $\sigma_i$ at that point plunges to near zero, meaning the local resistance diverges to near infinity. Since $J_i$ current is constant across the channel then the slope of $V_i$ must also diverge.
+* **Saturation**: The channel's $V_i$ slopes down sharply but only until it reaches the finite value set by the draining boundary condition. Once the slope has gotten steep enough, changing that boundary condition has very little effect anymore on the profile the channel $V_i$, and hence saturation!
 
-That said, there are indirect effects of drain voltage like channel length modulation or side reactions that can change the picture and de-saturate the overall IV curve. Also, we haven't talked about other mechanisms that can cause saturation: electrode reaction bottlenecks or thermionic emission (which are also analogous), or carrier velocity saturation (short FETs). We'll just focus on the basic screening mechanism here.
+That said, there are other, unrelated effects of drain voltage like channel length modulation or side reactions that can change the picture and de-saturate the overall IV curve. Also, we haven't talked about other mechanisms that can cause saturation: electrode reaction bottlenecks or thermionic emission (which are also analogous), or carrier velocity saturation (short FETs). We'll just focus on the basic screening mechanism here.
 
 ## 'Hard pinning' means pure diffusion: BJTs and electroplating
 
