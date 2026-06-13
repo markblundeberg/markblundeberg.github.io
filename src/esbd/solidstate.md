@@ -33,7 +33,7 @@ Side by side: a standard semiconductor energy band diagram (energy up, conductio
 
 I won't pretend this is comfortable — it cost me some discomfort too. But the flip isn't a quirk of taste; it's forced. The moment we want electrons and ions on *one* axis, that axis has to be charge-normalized (volts), and a charge-normalized axis turns electron energies upside down. The reward is that the diagram now reads in the same direction as a voltmeter and a circuit schematic, and lines up rung-for-rung with the ionic ladders of the previous topic.
 
-> **This isn't even new to semiconductors.** Voltage-scaled Fermi levels appear right at the origin of the field: in his founding p–n junction paper, Shockley wrote the quasi-Fermi levels as voltages — his $\phi_n$ and $\phi_p$ are exactly our $V_{\mathrm{e}^-}$ and $V_{\mathrm{h}^+}$.^[Shockley, W. (1949). [The Theory of p-n Junctions in Semiconductors and p-n Junction Transistors](https://doi.org/10.1002/j.1538-7305.1949.tb03645.x). Bell System Technical Journal, 28(3), 435–489. The energy-based convention won out in the community, and of course no one carried the voltage scaling over to ions.] As is a recurring theme in this project: the quantities are old; what's new is putting them on a shared picture.
+> **This isn't even new to semiconductors.** Voltage-scaled Fermi levels appear right at the origin of the field: in his founding p–n junction paper, Shockley wrote the quasi-Fermi levels as voltages — his $\phi_n$ and $\phi_p$ are exactly our $V_{\mathrm{e}^-}$ and $V_{\mathrm{h}^+}$.^[Shockley, W. (1949). [The Theory of p-n Junctions in Semiconductors and p-n Junction Transistors](https://doi.org/10.1002/j.1538-7305.1949.tb03645.x). Bell System Technical Journal, 28(3), 435–489. The energy-based convention won out in the community, and of course no one carried the voltage scaling over to ions.]
 
 ## Carriers driven by their own voltage
 
@@ -47,7 +47,15 @@ A slope in $V_{\mathrm{e}^-}$ or $V_{\mathrm{h}^+}$ means current and dissipatio
 
 We already insisted, back in the [species voltage topic](../v_i/), that there can be several distinct $V_i$ in the same place. Semiconductor physicists have long been comfortable with exactly this, under the name {% wiki "quasi Fermi level", "quasi-Fermi levels" %}: when a device is driven out of equilibrium, the electron and hole populations stop sharing a single Fermi level and we write $V_{\mathrm{e}^-} \neq V_{\mathrm{h}^+}$. This is the everyday state of affairs in the depletion region of a diode, a solar cell, or a bipolar transistor.
 
-At equilibrium the two collapse onto each other, $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$ — the single Fermi level — which is just our familiar statement that the electron/hole recombination reaction $\mathrm{e}^- + \mathrm{h}^+ \rightleftharpoons \varnothing$ has equilibrated, pinning the two species' voltages together. This kind of constraint, of the form $V_i = V_j$, has important consequences and also has direct parallels in electrochemistry that we will be exploring in the next topic.
+At equilibrium the two collapse onto each other, $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$ — the single Fermi level — which is just our familiar statement that the electron/hole recombination reaction $\mathrm{e}^- + \mathrm{h}^+ \rightleftharpoons \varnothing$ has equilibrated, pinning the two species' voltages together.
+
+<figure class="diagram-placeholder">
+{% figcaption %}
+Out of equilibrium, the electron rail $V_{\mathrm{e}^-}$ and hole rail $V_{\mathrm{h}^+}$ pull apart and can slope independently. Recombination ($\mathrm{e}^- + \mathrm{h}^+ \rightarrow \varnothing$) then shows up as 'leakage' bridging the two rails wherever they are driven together. At equilibrium the rails merge into a single flat Fermi level.
+{% endfigcaption %}
+</figure>
+
+This kind of pinning between two carriers, $V_i = V_j$, has direct parallels throughout electrochemistry; we pick up its consequences in the next topic.
 
 ## Band edges are standard states ($V^\circ_i$)
 
@@ -87,7 +95,7 @@ The two systems obey one set of rules, but quantitatively they emphasize differe
 
 ## Takeaways
 
-By reading the band edges as standard states $V^\circ_i$ and the Fermi/quasi-Fermi levels as species voltages $V_i$, a semiconductor obeys the identical thermodynamic rules as an ionic solution — electrons are anions, holes are cations, and a chip is a two-carrier "solution" in a crystal solvent. This is the central bridge of the whole project: to **export the band-diagram way of thinking from semiconductors into electrochemistry**, so that — to finally honor Kroemer's law — we can actually *draw* what is going on inside an electrochemical system.
+By reading the band edges as standard states $V^\circ_i$ and the Fermi/quasi-Fermi levels as species voltages $V_i$, a semiconductor obeys the identical thermodynamic rules as an ionic solution — electrons are anions, holes are cations, and a chip is a two-carrier "solution" in a crystal solvent. This is the central bridge of the whole project: to **export the band-diagram way of thinking from semiconductors into electrochemistry**, so that we can actually *draw* what is going on inside an electrochemical system.
 
 From here on we'll mostly work with electrochemical devices, but a semiconductor analog is almost always lurking one step away, and we'll reach for it whenever it sharpens the picture. Next, we put the standard-state ladder to work: how doping, neutrality, and the common-ion effect all amount to pushing the $V^\circ_i$ ladder around.
 
