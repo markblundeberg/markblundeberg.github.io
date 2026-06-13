@@ -47,7 +47,7 @@ A slope in $V_{\mathrm{e}^-}$ or $V_{\mathrm{h}^+}$ means current and dissipatio
 
 We already insisted, back in the [species voltage topic](../v_i/), that there can be several distinct $V_i$ in the same place. Semiconductor physicists have long been comfortable with exactly this, under the name {% wiki "quasi Fermi level", "quasi-Fermi levels" %}: when a device is driven out of equilibrium, the electron and hole populations stop sharing a single Fermi level and we write $V_{\mathrm{e}^-} \neq V_{\mathrm{h}^+}$. This is the everyday state of affairs in the depletion region of a diode, a solar cell, or a bipolar transistor.
 
-At equilibrium the two collapse onto each other, $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$ — the single Fermi level — which is just our familiar statement that the electron/hole recombination reaction $\mathrm{e}^- + \mathrm{h}^+ \rightleftharpoons \varnothing$ has equilibrated, pinning the two species' voltages together.
+At equilibrium the two collapse onto each other, $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$ — the single Fermi level — which is just our familiar statement that the electron/hole recombination reaction $\mathrm{e}^- + \mathrm{h}^+ \rightleftharpoons \varnothing$ has equilibrated, pinning the two species' voltages together. This kind of constraint, of the form $V_i = V_j$, has important consequences and also has direct parallels in electrochemistry that we will be exploring in the next topic.
 
 ## Band edges are standard states ($V^\circ_i$)
 
