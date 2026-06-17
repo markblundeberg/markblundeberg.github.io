@@ -9,14 +9,9 @@ orderESBD: 25
 
 While the $V_i$ values want to flatten out for thermodynamic reasons, the same is not necessarily true of the $V^\circ_i$. To explain why $V^\circ_i$ might be flat (or not!) at equilibrium, we have to finally dip into the actual mechanics of electricity. Somewhat surprisingly, we have managed to dance around the actual electrostatic nature of electricity until now!
 
-In the previous topic, we saw that when charge neutrality is violated at a boundary, $V^\circ_i(x)$ must bend to accommodate the space charge. But this left us with a mystery: *how far does this bending extend? What is the spatial profile of this transition?*
-
-To resolve this, we must now introduce permittivity ($\epsilon$) and Poisson's equation to model the spatial physics of electrostatic screening.
-
+We can now briefly step into electrostatics to explain *why* $V^\circ_i$ wants to move to neutrality. The crucial point is that the $V^\circ_i$ ladder's spatial variations are (usually) equal to variations in the electrostatic potential $\phi$, and from electrostatics we know that variations in $\phi$ come from variations in charge. So, variations in $V^\circ_i$ must be related to variations in charge.
 
 ## $V^\circ_i$ as an agent of electrostatic screening
-
-We can now briefly step into electrostatics to explain *why* $V^\circ_i$ wants to move to neutrality. To this end we should remember that the $V^\circ_i$ ladder's variations relate to variations in the electrostatic potential $\phi$, and so the variations of $V^\circ_i$ must obey electrostatic laws.
 
 We discussed that $\phi$ is generally ambiguous, but in the special case where we are inside of an ideal material it does at least perfectly follow along with $V^\circ_i$. So we can confidently discuss electrostatics in this special case at least. Specifically, within each material, $V^\circ_i$ variations are also variations in $\phi$, so their gradients are equal (and equal the negative of electric field):
 
@@ -24,9 +19,9 @@ $$ \vec E = -\nabla\phi = -\nabla V^\circ_i. $$
 
 Accordingly, inside of each material, the $V^\circ_i$ ladder follows a {% wiki "Poisson equation" %}, which is a consequence of a constitutive relation of the background dielectric medium:^[This form of the Poisson equation only applies inside of a reasonably well behaved medium. As we'll see later on, it necessarily breaks in non-ideal solutions, at interfaces, in graded media, and in strong electric fields.]
 
-$$ \varepsilon \nabla^2 V^\circ_i = \varepsilon \nabla^2 \phi = \rho_{\mathrm{free}}, $$
+$$ - \varepsilon \nabla^2 V^\circ_i = - \varepsilon \nabla^2 \phi = \rho_{\mathrm{free}}, $$
 
-where $\varepsilon$ is the material's background permittivity and $\rho_{\mathrm{free}}$ is the space charge density described above. But as we saw above, $\rho_{\mathrm{free}}$ is itself a function of the $V^\circ_i$ offset! This creates a natural feedback loop: the result of this equation is that any deviation of $\phi$ from neutral is going to be naturally suppressed, which is {% wiki "electrostatic screening" %}.
+where $\varepsilon$ is the material's background permittivity and $\rho_{\mathrm{free}}$ is the space charge density described above. But as we saw in the [charge control topic](../charge_control/), $\rho_{\mathrm{free}}$ is itself a function of the $V^\circ_i$ offset! This creates a natural feedback loop: the result of this equation is that any deviation of $\phi$ from its neutral point is going to be naturally suppressed, which is {% wiki "electrostatic screening" %}.
 
 One of the beautiful things about band diagrams is the perspective they give on screening: the $V_i$ are flat, and the accumulation of charges is purely due to the variation in $\phi$ or $V^\circ_i$, known as **band bending** in semiconductors:
 
@@ -113,9 +108,7 @@ In a realistic picture of a bulk solution, we should draw very sharp deviations 
 {% endfigcaption %}
 </figure>
 
-So, our $V^\circ_i$ ladder floats to whatever value it needs to be to be neutral. In a homogeneous medium wher $V_i$ are flat (as they must be at equilibrium) then that means $V^\circ_i$ must be flat too, except at its surfaces (within a few Debye lengths).
-
-> **Algorithm note**: Mathematically, finding neutrality means solving a equation like $\rho_{\mathrm{free}} = z_1 F c_1 + z_2 F c_2 + \ldots + \rho_{\mathrm{bg}} = 0 $, where each of the $c_i$ terms are trancendental functions, exponentially sensitive to the $V^\circ_i$ ladder offset. Some special cases have algebraic solutions,^[In general with ideal-dilute ions the equation can be converted to a polynomial. If all positive species have equal charge $+z$ and all negative species have equal charge $-z$, then the neutrality condition can be converted to a quadratic equation.] but the general case has no analytic solution. There are also some gotchas with finding neutrality by numerical methods.^[Applying Newton iterations to the equation can be tricky as these exponentials quickly blow up, so some tricks are needed to help stabilize the convergence of root-finding algorithms. As an initial guess you can find out (for large postive $c_{\mathrm{bg}}$) the **dominant cation** has the biggest $V_i - V^\circ_i$ and then pin its $V^\circ_i$ to $V_i$, or (for large negative $c_{\mathrm{bg}}$) which **dominant anion** and analogously pin $V^\circ_i$ to it, or (for small $c_{\mathrm{bg}}$) pin $V^\circ_i$ somewhere halfway between the two extremes. This lets you find a rough but safe initial offset of the $V^\circ_i$ ladder that doesn't blow up from the start. After that, Newton-Raphson iterations are be carried out to zero the space charge, however it is likely necessary to clamp the steps in $\phi$ to only a few times $V_{\mathrm{th}}$, to avoid blowups that can occur when the intrinsic ion densities would be very low but the $c_{\mathrm{bg}}$ is large.]
+So, our $V^\circ_i$ ladder floats to whatever value it needs to be to be neutral. In a homogeneous medium wher $V_i$ are flat (as they must be at equilibrium) then that means $V^\circ_i$ must be flat too, except at its surfaces (within a few Debye lengths). This is the basis of the neutrality as we assume in e.g. the [charge control topic](../charge_control/).
 
 ## Beyond the simple case
 
