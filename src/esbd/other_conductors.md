@@ -7,49 +7,38 @@ orderESBD: 27
 
 # {{title}}
 
-**WORK IN PROGRESS (OUTLINE)**
-
-Besides the dilute solutions and semiconductors we have looked at, there are other classes of electronic and ionic conductors. In these materials, the standard states ($V^\circ_i$) or band structures are often complex or irrelevant. Instead, their behavior is dominated by their high carrier density (perfect screening) or multi-carrier transport.
+In the dilute solutions and semiconductors of the previous topics, the standard-state ladder did real work: $V^\circ_i$ set the concentration scale and bent to enforce neutrality. Many conductors are not like that. In a metal, a fast ionic conductor, or a concentrated electrolyte, the carriers are so dense that the standard states and band structure either grow hopelessly complicated or stop mattering at all, and the diagram simplifies to the $V_i$ themselves.
 
 ## Metals: the transport-only limit
 
-* **Asymptotic Condition**: Mobile electron density is extremely high ($c_{\mathrm{e}^-} \rightarrow \infty$, typically $\sim 10^{22}~\mathrm{cm}^{-3}$).
-* **Perfect Screening**: The screening length approaches zero ($\lambda \rightarrow 0$, sub-angstrom in practice).
-* **Trivializing the Complexity**: 
-  * Trying to define the internal electrostatic potential $\phi$ and the activity coefficient of electrons in a metal is a theoretical nightmare due to strong electron-electron repulsion and quantum lattice interactions. Nontrivial band structures too.
-  * In the $V_i$ framework, we bypass this complexity: the only variable we care about is $V_{\mathrm{e}^-}$. Inside the bulk metal, $V_{\mathrm{e}^-}$ is perfectly flat (at equilibrium) or slopes linearly under current according to simple Ohm's law ($J_{\mathrm{e}^-} = -\sigma_{\mathrm{e}^-} \nabla V_{\mathrm{e}^-}$).
+A metal is the extreme of carrier density, something like $10^{22}$ mobile electrons per cubic centimetre, enough to screen any disturbance within a fraction of an ångström. Pinning down the internal $\phi$, the electrons' activity, or the detailed band structure is a genuine theoretical ordeal, and the response of the $V_i$ picture is simply not to bother. The only quantity that matters for the bulk is $V_{\mathrm{e}^-}$: flat at equilibrium, sloping by plain Ohm's law $J_{\mathrm{e}^-} = -\sigma_{\mathrm{e}^-}\nabla V_{\mathrm{e}^-}$ under load. A metal wire is a single $V_{\mathrm{e}^-}$ trace, and that is all we ever need from it.
 
 <figure class="diagram-placeholder">
 {% figcaption %}
-ESBD of a metal phase. Because screening is perfect, the internal electrical state is represented solely by the flat or sloped $V_{\mathrm{e}^-}$ trace, with no need to draw or reference $\phi$ or $V^\circ_{\mathrm{e}^-}$.
+A metal phase as an ESBD. Screening is perfect, so the electrical state is just the flat (or, under current, linearly sloping) $V_{\mathrm{e}^-}$ trace, with no need to draw $\phi$ or $V^\circ_{\mathrm{e}^-}$.
 {% endfigcaption %}
 </figure>
 
 ## Fast ionic conductors: metals for ions
 
-* **The Ionic Metal**: These solid materials conduct a single ion species (e.g., oxygen ions $\mathrm{O}^{2-}$ in Yttria-Stabilized Zirconia (YSZ)) with a very high carrier concentration.
-* **Microscopic Mechanics**: Conduction often occurs via vacancy hopping in a crowded lattice. It is highly non-dilute, but thermodynamically it is perfectly represented by the single species voltage $V_{\mathrm{ion}}$ driving the current:
-  $$ J_{\mathrm{ion}} = -\sigma_{\mathrm{ion}} \nabla V_{\mathrm{ion}} $$
+Some solids play the same trick with an ion. A fast, or "superionic," conductor such as {% wiki "Yttria-stabilized zirconia", "yttria-stabilized zirconia" %} carries a high concentration of mobile oxide ions, $\mathrm{O}^{2-}$, hopping through vacancies in the lattice. The microscopics are crowded and thoroughly non-dilute, yet thermodynamically the bulk is once again a single sloping species voltage, $J_{\mathrm{O}^{2-}} = -\sigma_{\mathrm{O}^{2-}}\nabla V_{\mathrm{O}^{2-}}$. These single-ion conductors are the ionic counterpart of the metal wire, and because they pass only one species, they are also the only kind of junction that can settle into true equilibrium without a standing current.
 
 <figure class="diagram-placeholder">
 {% figcaption %}
-ESBD of YSZ. The active species voltage $V_{\mathrm{O}^{2-}}$ represents the driving force for oxygen transport across the solid electrolyte.
+A fast ionic conductor (YSZ). The single active trace $V_{\mathrm{O}^{2-}}$ carries the whole story of oxygen transport across the solid electrolyte.
 {% endfigcaption %}
 </figure>
 
-## Mixed Ionic-Electronic Conductors (MIECs)
-* **Dual Carriers**: Materials (such as $\mathrm{Li}_x\mathrm{CoO}_2$ or mixed-conducting polymers) where both electrons and ions can move.
-* **Cross-Coupled Transport**: These materials exhibit rich concentration polarization and local charge separation, acting as the ultimate physical bridge between electronic circuit components and electrochemical solutions.
+## Mixed ionic-electronic conductors
 
-## Further materials
+Between the purely electronic metal and the purely ionic conductor sit materials that move both at once: a battery cathode like $\mathrm{Li}_x\mathrm{CoO}_2$, or a mixed-conducting polymer. With an electronic and an ionic carrier sharing one medium, these {% wiki "Mixed ionic-electronic conductor", "mixed conductors" %} are where the electronic circuit and the ionic circuit physically meet, and they show the full richness of coupled transport, internal concentration polarization, and local charge storage. They are, in a real sense, the material embodiment of this project's premise that electrons and ions belong on the same diagram.
 
-* **Concentrated electrolytes**: When ions are concentrated enough, the strong screening washes out the important of the potential, and nonidealities make the potential ambiguous too. Like a metal we want to focus on plotting $V_i$ of the present charge carriers, but now we get all the complications of coupled multi-ion transport plus coupling to neutral species (and solvent!). 
-* **Ionic liquids**: Much like concentrated electrolytes?
-* **Plasma**: Include this?
-* **Superconductors**: These might seem exotic but for our purposes they can be treated as metals with infinite conductivity. Superconductors do have a well defined $V_{\mathrm{e}^-}$ which is important for their connection to other electronic conductors.
+## Further along the spectrum
+
+The same "just plot the $V_i$" attitude carries the messier cases. In a **concentrated electrolyte** or an **ionic liquid**, the carriers are dense enough that screening is severe and $\phi$ turns both unimportant and ambiguous; we keep the present carriers' $V_i$ and accept the complications of strongly coupled, multi-ion transport that now drags on the neutral solvent as well. A **superconductor**, at the far end, is simply a metal with infinite conductivity: its $V_{\mathrm{e}^-}$ stays flat even while it carries current, and that well-defined $V_{\mathrm{e}^-}$ is what lets it connect sensibly to ordinary conductors.
 
 ## Takeaways
 
-When discussing solutions and semiconductors, standard states ($V^\circ_i$) and band edges are useful coordinates. However, in metals and other dense conductors, these reference states become irrelevant. By focusing on the species voltages ($V_i$), we can model transport across electronic, ionic, and mixed conductors under a single unified equation.
+For dilute solutions and semiconductors, the standard states and band edges are indispensable coordinates. For metals, fast ionic conductors, and the other dense conductors here, those references fade and only the species voltages remain. Either way the transport law is unchanged, $J_i = -\sigma_i\nabla V_i$, which is what lets one diagram span electronic, ionic, and mixed conductors without altering its rules.
 
 [**NEXT TOPIC: Insulators and capacitors**](../capacitors/)

@@ -7,86 +7,66 @@ orderESBD: 26
 
 # {{title}}
 
-**WORK IN PROGRESS (OUTLINE)**
+Until now we have stayed at equilibrium, where every species voltage runs flat and reactions only fix offsets between them. A working device is never quite there. The moment current flows the $V_i$ lines tilt, and the appeal of the picture is that those tilts are precisely the dissipation. This topic works out how carriers move once the lines are free to slope.
 
-So far, we have focused on systems at equilibrium, where species voltages ($V_i$) are flat, and chemical reactions set fixed offsets. But devices in operation are inherently non-equilibrium systems. When current flows, the $V_i$ lines must slope.
+## One driving force per species
 
-This topic explores how carriers move under load, introducing the fundamental transport equations and physical phenomena of species-specific conduction.
+The thermodynamic force on a carrier is the gradient of its electrochemical potential, $-\nabla\bar\mu_i$. Dividing by charge, as we always do, the force per unit charge is just
 
----
+$$ -\nabla V_i. $$
 
-## 1. Species-Specific Driving Forces
-* **Thermodynamic Force**: The fundamental driving force on any carrier $i$ is the gradient in its electrochemical potential, $-\nabla \bar\mu_i$. 
-* **Voltage Representation**: Normalizing for charge, the driving force is exactly the gradient in the species voltage:
-  $$ \text{Driving Force} = -\nabla V_i $$
-* **Visualizing Dissipation**: In our band diagrams, any slope in a $V_i$ line indicates a driving force and active dissipation (thermodynamic resistance). Flat lines mean no net transport or infinite conductivity.
+That is the whole of what drives a current: each species is pushed down its own $V_i$ slope. On the band diagram the reading could not be more direct. A flat $V_i$ carries no net current, the species being either at equilibrium or perfectly conducting; a sloping $V_i$ marks a driving force, and the steeper the slope, the harder the dissipation. Resistance is visible as gradient.
 
----
+## Drift and diffusion are one law
 
-## 2. Ohm's Law and Nernst-Planck
-* **The Unified $V_i$ Ohm's Law**: Start with the picture we have discussed. Because drift and diffusion are both expressions of the same electrochemical potential gradient, they collapse into a single species-specific Ohm's law:
-  $$ J_i = -\sigma_i \nabla V_i $$
-  where $J_i$ is the species charge current density and $\sigma_i$ is the species conductivity.
-* **The Traditional Split**: Expand out the V_i gradient as gradient in V^0 and gradient in concentration (ideal-dilute). Classic electrochemistry and semiconductor physics split carrier motion into two distinct physical mechanisms:
-  * **Drift** (driven by the electric field $-\nabla\phi$).
-  * **Diffusion** (driven by concentration gradients $-\nabla c_i$).
-  * Also remark during the expansion that V^0 gradient is not always phi gradient, and there is a third term (a second drift term?) from the chemical standard state gradient. This is often overlooked as it's gradient-of-constant in homogeneous materials. But it really does matters e.g. at interfaces and in inhomogeneous materials (and e.g. in graded semiconductor heterojunctions. Can be from varying binding energy or steric/entropy type gradient.) Thus the classic classic drift-diffusion picture breaks at interfaces though often a special interfacial kinetic law is desireable anyway (to handle nonlinearities).
+Because the force is $-\nabla V_i$, the current of species $i$ obeys a per-species Ohm's law,
 
-<figure class="diagram-placeholder">
-{% figcaption %}
-- diagram breaking down current into drift and diffusion pieces.
-{% endfigcaption %}
-</figure>
+$$ J_i = -\sigma_i \nabla V_i, $$
 
-{# Note -- there are so many subtleties to advanced transport. Need to balance brevity and emphasis on visuals and basic principles, with completeness which can be brief mentions that are expanded in footnotes/appendices! #}
+with $J_i$ the charge current density and $\sigma_i$ the species conductivity. This one equation already holds the drift-diffusion machinery that electrochemistry and semiconductor physics usually present as two separate mechanisms. To see it, expand $V_i$ into its standard state and its concentration term, in an ideal homogeneous medium where $\nabla V^\circ_i = \nabla\phi$:
 
-Remarks on drift-diffusion 
+$$ \nabla V_i = \underbrace{\nabla\phi}_{\text{drift}} + \underbrace{\frac{RT}{z_i F}\frac{\nabla c_i}{c_i}}_{\text{diffusion}}. $$
 
-* **Einstein relation**: The $V_i$-driven form automatically handles the Einstein relation ($D_i = u_i k_{\mathrm{B}}T$) without needing separate coefficients, showing that Nernst-Planck transport is just Ohm's law applied per-species. The derivation from $\nabla V_i$ also yields the proper generalized Einstein relation for species that deviate from classical ideality (especially the electronic Fermi gas that occur with dense electrons in semiconductors and semimetals) in terms of the connection to chemical capacitance. (Note though that in general non-ideal concentrated solutions, transport becomes coupled, as seen e.g. in Maxwell–Stefan diffusion equations or Onsager matrices.)
-* Extra driving terms: direct conduction due to $V_i$ gradients (or drift/diffusion) is just one of many driving forces. Notably advection and thermoelectrics also drive ionic/electronic currents. In addition one can consider electromagnetic induction ($\partial A / \partial t$) and cross-coupling.
+The first term is drift in the electric field, the second is diffusion down a concentration gradient, and multiplying by $-\sigma_i$ recovers the {% wiki "Nernst–Planck equation" %} exactly. Because both terms descend from the same $\sigma_i$, the drift mobility and the diffusion coefficient are forced to share a single constant. That forced relationship is the {% wiki "Einstein relation" %}; in this framework it falls out for free rather than standing as a separate assumption.^[Written out, the diffusion term is $-\sigma_i \frac{RT}{z_iF}\frac{\nabla c_i}{c_i} = -z_i F D_i \nabla c_i$ once $\sigma_i = z_i^2 F^2 c_i D_i/RT$, the Nernst–Einstein relation. The same derivation gives the generalized Einstein relation for carriers that stray from ideal-dilute behaviour, such as the degenerate electron gas, by replacing $c_i/RT$ with the chemical capacitance. In strongly non-ideal, concentrated solutions the species also stop moving independently, and the transport coefficients become a coupled matrix, the territory of the Maxwell–Stefan or Onsager equations.]
 
-## Classic "Ohmic Current" vs. Species Conduction
-* **The $\phi$-Drive Convention**: In standard engineering, electrolyte conduction is treated as a single "common-mode" current driven by a single electrostatic potential:
-  $$ I = -\sigma \nabla\phi $$
-  where $\sigma = \sum \sigma_i$.
-* **The Drift Summation**: Explain how this "ohmic current" is a helpful mathematical construct obtained by summing up all individual drift currents under the assumption of uniform concentration.
-* **The Limitation**: Show why this construct breaks down in the presence of concentration gradients (where diffusion currents contribute to the charge flow) and why tracking individual $V_i$ gradients is more physically robust.
-
-## Two important effects in multi-ion transport
-
-Concentration Polarization
-
-* **Blocking Interfaces**: In many devices, an interface is selective—allowing only one type of carrier to pass while blocking others (e.g., lithium ions intercalating into an electrode while salt anions are blocked).
-* **The Build-Up**: Because blocked ions cannot cross, they pile up or deplete near the interface. This sets up sharp concentration gradients.
-* **Visualizing Polarization**: In the $V_i$ diagram, this manifests as a bending of the standard states ($V^\circ_i$) and concentration-driven slopes in $V_i$, representing local resistance and mass-transport limitations.
-* Remark on current saturation.
-* Remark on effect of supporting electrolyte.
-* Boundary condition may be homogeneous solution (mixed by advection) or device end or just diffusion transient; Warburg impedance.
+There is a subtlety hiding in the drift term. We assumed $\nabla V^\circ_i = \nabla\phi$, but that holds only inside a uniform medium. Where the medium itself changes, at an interface or through a graded material, the standard state carries its own gradient, $\nabla V^\circ_i = \nabla\phi + \tfrac{1}{z_i F}\nabla\mu^\circ_{\mathrm{int},i}$, and that extra piece is a real driving force with no electrostatic origin, arising from changing binding energy, solvation, or steric packing. Carriers feel it as a "quasi-electric field," and it is why the textbook drift-diffusion split quietly fails across interfaces, where a dedicated interfacial law is usually wanted anyway.^[This is the transport face of the band-offset story from the [semiconductors](../solidstate/) and [bipolar](../bipolar/) topics: a step or grade in $V^\circ_i$ pushes carriers even where $\phi$ is flat. Kroemer's "quasi-electric fields" in graded heterojunctions are exactly this.] Beyond conduction, currents can also be driven by advection, thermoelectric gradients, and magnetic induction, but plain $-\nabla V_i$ conduction is our concern here.
 
 <figure class="diagram-placeholder">
 {% figcaption %}
-- diagram with conc polarization. Top: band diagram. Bottom: concentrations.
-- add switch for supporting electrolyte?
+A single sloping $V_i$ split into its drift part (the slope of $\phi$, i.e. of $V^\circ_i$) and its diffusion part (the concentration term). The two add up to the one thermodynamic slope that actually drives the current.
 {% endfigcaption %}
 </figure>
 
-Diffusion potential
+## The "ohmic current" shortcut
 
-* **Different Mobilities**: When a salt (like $\mathrm{HCl}$) diffuses through a concentration gradient, the hydrogen ions ($\mathrm{H}^+$) and chloride ions ($\mathrm{Cl}^-$) attempt to move at different speeds due to their different mobilities.
-* **The Charge Separation Limit**: Any actual separation of charge is strictly limited by electrostatics (charge neutrality). The faster ion drags the slower one along, setting up a localized electric field.
-* **The Voltage Signature**: In the $V_i$ diagram, this results in a transient slope (a "diffusion potential" or "liquid junction potential") that equalizes their velocities to preserve electroneutrality.
-* Remark on binary case (mathematically easy) vs multi-ion case (complex).
+Engineering practice often collapses all of this into a single bulk current driven by one electrostatic potential,
+
+$$ I = -\sigma\,\nabla\phi, \qquad \sigma = \sum_i \sigma_i. $$
+
+It is a handy shortcut, and its origin is easy to see: sum the per-species drift currents and assume uniform concentrations, so that every $\nabla V_i$ reduces to the shared $\nabla\phi$. The weakness is that very assumption. As soon as concentration gradients appear, the species' $V_i$ slopes part ways, the diffusion currents start contributing to the charge flow, and $I = -\sigma\nabla\phi$ no longer holds. Tracking the individual $V_i$ keeps us honest in exactly the situations where the lumped law breaks down, and those situations are the next two effects.
+
+## Concentration polarization
+
+Many interfaces are selective, letting one carrier through and blocking the rest: a lithium electrode passes $\mathrm{Li}^+$ while the salt anion is turned away, or an electrode reaction consumes one ion and ignores the others. The blocked species cannot leave, so it banks up on one side and is drawn down on the other, building a concentration gradient in front of the interface. On the diagram the standard-state ladder bends to track the changing concentration while the conducting species takes on a concentration-driven slope, both registering as added resistance, the "mass-transport" or polarization resistance. Pushed hard enough, the supply of the active ion at the interface runs dry and the current can climb no further, a limit we give its own topic [shortly](../saturation/). The usual remedy is a swamping excess of inert supporting electrolyte, which carries the drift and leaves the active ion to move by diffusion alone.^[What sits at the far boundary matters: a well-stirred bulk fixes the concentration a set distance away, a sealed cell end forbids flux, and an unbounded transient gives the spreading diffusion layer behind {% wiki "Warburg element", "Warburg" %} impedance.]
 
 <figure class="diagram-placeholder">
 {% figcaption %}
-- diagram with diffusion potentials, binary case.
+Concentration polarization at a blocking interface. Top: the $V_i$ band diagram, with $V^\circ_i$ bending and the conducting species sloping. Bottom: the concentration profiles. A toggle adds a supporting electrolyte.
 {% endfigcaption %}
 </figure>
 
----
+## Diffusion potentials
+
+The second effect shows up whenever a salt diffuses with ions of unequal mobility. Let $\mathrm{HCl}$ spread down a concentration gradient: the nimble $\mathrm{H}^+$ runs ahead of the sluggish $\mathrm{Cl}^-$. They cannot truly separate, since charge neutrality forbids it, so the leading protons raise a small internal electric field that hauls the chloride forward and holds the protons back until the two move together. That self-generated field is a slope shared by the ions' $V_i$, the **diffusion potential**, and at a contact between two solutions it is the liquid junction potential we take up [later](../junctions/). For a single binary salt the bookkeeping is clean, the slope dividing between the ions according to their {% wiki "Transport number", "transference numbers" %}; with several ions at once it becomes a genuinely coupled problem.
+
+<figure class="diagram-placeholder">
+{% figcaption %}
+A diffusion potential in a binary salt. The faster ion would outrun the slower, but the field this raises tilts both $V_i$ traces so the two travel in step, preserving neutrality.
+{% endfigcaption %}
+</figure>
 
 ## Takeaways
 
-By treating transport per-species, we bypass the need to separate drift and diffusion, visualizing all transport resistance directly as slopes in the $V_i$ landscape.
+Giving each species its own Ohm's law, $J_i = -\sigma_i\nabla V_i$, folds drift and diffusion back into the single quantity that actually drives them, and turns every transport resistance into a visible slope. The lumped "ohmic" law is just the special case of uniform concentration, while concentration polarization and diffusion potentials are what the per-species picture captures and the lumped one misses.
 
 [**NEXT TOPIC: Other conductors**](../other_conductors/)
