@@ -50,6 +50,6 @@ Under bias (a slider sweeps from reverse to forward). Reverse bias widens the de
 
 A silicon diode and a water-splitting membrane are functional twins, one junction built from two different sets of carriers. Both join a region of one fixed-charge sign to a region of the other; both hold their mobile carriers a fixed distance apart at equilibrium; both bend the standard-state ladder through a depleted junction; and both answer a reverse bias by creating carrier pairs and a forward bias by destroying them.
 
-We have leaned all along on that depleted junction, the place where neutrality finally breaks and the ladder is free to bend. What sets its width, and the shape of the bend? That is the electrostatics we have managed to defer until now.
+We have leaned all along on that depleted junction, the place where neutrality finally breaks and the ladder is free to bend. What sets its width, and the shape of the bend? Those are questions of electrostatics, which is the piece we put in place next.
 
 [**NEXT TOPIC: Basic electrostatics**](../basicelectrostatics/)

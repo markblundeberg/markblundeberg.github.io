@@ -7,6 +7,8 @@ orderESBD: 25
 
 # {{title}}
 
+The [previous topic](../bipolar/) left a question hanging: what sets the width and shape of the depletion zone at a pn junction or bipolar membrane, that sliver where the $V^\circ_i$ ladder bends and neutrality briefly breaks?
+
 While the $V_i$ values want to flatten out for thermodynamic reasons, the same is not necessarily true of the $V^\circ_i$. To explain why $V^\circ_i$ might be flat (or not!) at equilibrium, we have to finally dip into the actual mechanics of electricity. Somewhat surprisingly, we have managed to dance around the actual electrostatic nature of electricity until now!
 
 We can now briefly step into electrostatics to explain *why* $V^\circ_i$ wants to move to neutrality. The crucial point is that the $V^\circ_i$ ladder's spatial variations are (usually) equal to variations in the electrostatic potential $\phi$, and from electrostatics we know that variations in $\phi$ come from variations in charge. So, variations in $V^\circ_i$ must be related to variations in charge.
@@ -50,13 +52,13 @@ The **screening length** $\lambda$ describes the length scale of the 'tail' of e
 
 $$\lambda = \sqrt{\varepsilon/\chi},$$
 
-where $\chi = \mathrm{d}\rho_{\mathrm{free}}/\mathrm{d}\phi$ is a "total chemical capacitance", describing the sensitivity of the space charge to deviations in $\phi$ away from the neutral point. For ideal-dilute ions, electrons, or holes, $\chi$ is a sum of contributions from each species: $\chi = \sum_i {q_i}^2 c_i/(RT) $, which is exactly proportional to the {% wiki "ionic strength" %} and the resulting $\lambda$ is known as the {% wiki "Debye length" %}.
+where $\chi = -\mathrm{d}\rho_{\mathrm{free}}/\mathrm{d}\phi$ is a "total chemical capacitance" measuring how strongly the space charge pushes back as $\phi$ deviates from the neutral point. For ideal-dilute ions, electrons, or holes, $\chi$ is a sum of contributions from each species: $\chi = \sum_i {q_i}^2 c_i/(RT) $, which is exactly proportional to the {% wiki "ionic strength" %} and the resulting $\lambda$ is known as the {% wiki "Debye length" %}.
 
-(Mathematically, this screening with flat $V_i$ and ideal-dilute ions or electrons is described known as the {% wiki "Poisson–Boltzmann equation" %}. The approach here of flat $V_i$ (flat-$\bar\mu_i$) is a very intuitive and direct yet underappreciated way of deriving said equation. In ideal Fermi gases this is known as {% wiki "Thomas–Fermi screening" %} and the exact expressions differ slightly but the concepts are largely the same.^[For a Fermi gas, the $\rho_{\mathrm{free}}(\phi)$ curve is no longer a sum of exponentials. The screening length is still $\lambda = \sqrt{\varepsilon/\chi}$ but $\chi = \mathrm{d}\rho_{\mathrm{free}}/\mathrm{d}\phi$ now relates to density of states and is called {% wiki "quantum capacitance" %}. In the case of a zero temperature Fermi gas, $\lambda$ is called the {% wiki "Thomas–Fermi screening", "Thomas–Fermi length" %}.])
+(Mathematically, this screening with flat $V_i$ and ideal-dilute ions or electrons is known as the {% wiki "Poisson–Boltzmann equation" %}. The approach here of flat $V_i$ (flat-$\bar\mu_i$) is a very intuitive and direct yet underappreciated way of deriving said equation. In ideal Fermi gases this is known as {% wiki "Thomas–Fermi screening" %} and the exact expressions differ slightly but the concepts are largely the same.^[For a Fermi gas, the $\rho_{\mathrm{free}}(\phi)$ curve is no longer a sum of exponentials. The screening length is still $\lambda = \sqrt{\varepsilon/\chi}$ but $\chi = -\mathrm{d}\rho_{\mathrm{free}}/\mathrm{d}\phi$ now relates to density of states and is called {% wiki "quantum capacitance" %}. In the case of a zero temperature Fermi gas, $\lambda$ is called the {% wiki "Thomas–Fermi screening", "Thomas–Fermi length" %}.])
 
 ## Quasi-neutrality: a simplification of electrostatics
 
-The above concludes our discussion of electrostatics for now, because we usually won't need it! This is due to the practical principle of **qausi-neutrality**:
+The above concludes our discussion of electrostatics for now, because we usually won't need it! This is due to the practical principle of **quasi-neutrality**:
 
 > <p align="center"><b>Quasi-neutrality principle</b><br/>"screening is very very strong"</p> 
 >
@@ -88,7 +90,7 @@ The quasi-neutrality idea also gets applied out of equilibrium, in dynamic situa
 
 ## $V^\circ_i$ as a perfect neutralizer
 
-As a convenient approximation we can 'assert' local neutrality almost everywhere as a convenience. Mathematically, we do this indirectly by we sending $\varepsilon \rightarrow 0$, which converts the Poisson equation into the **local electroneutrality approximation**:^[Newman & Balsara (2005), *Electrochemical Systems*.]
+As a convenient approximation we can 'assert' local neutrality almost everywhere as a convenience. Mathematically, we do this indirectly by sending $\varepsilon \rightarrow 0$, which converts the Poisson equation into the **local electroneutrality approximation**:^[Newman & Balsara (2005), *Electrochemical Systems*.]
 
 $$
 \begin{aligned}
@@ -108,7 +110,7 @@ In a realistic picture of a bulk solution, we should draw very sharp deviations 
 {% endfigcaption %}
 </figure>
 
-So, our $V^\circ_i$ ladder floats to whatever value it needs to be to be neutral. In a homogeneous medium wher $V_i$ are flat (as they must be at equilibrium) then that means $V^\circ_i$ must be flat too, except at its surfaces (within a few Debye lengths). This is the basis of the neutrality as we assume in e.g. the [charge control topic](../charge_control/).
+So, our $V^\circ_i$ ladder floats to whatever value it needs to be to be neutral. In a homogeneous medium where $V_i$ are flat (as they must be at equilibrium) then that means $V^\circ_i$ must be flat too, except at its surfaces (within a few Debye lengths). This is the basis of the neutrality as we assume in e.g. the [charge control topic](../charge_control/).
 
 ## Beyond the simple case
 
@@ -128,11 +130,11 @@ Above we described an incredibly elementary form of screening: an ideal homogene
   * Chemical gradient dipoles: Where there is a strong gradient in chemical concentration, it is perfectly possible for there to be induced dipoles.
   * Ambiguous $E$ field: The Gibbs–Guggenheim principle that the value of $\phi$ is ambiguous means that in many complex cases, even $\mathbf{E} = -\nabla\phi$ is ambiguous. This is permitted in Maxwell's equations, but crucially the $\mathbf{D}$ field is not affected by this thermodynamic-type ambiguity. Thus $\mathbf{D}$ becomes partially independent of $\mathbf{E}$.
 * Local linear continuum breakdown:
-  * Very short ranges: even in linear response both charge density and $\varepsilon$ can get nonlocal. (Fermi gas gets Friedel oscillations; ions get pair correlations etc.; solvent exhibits a correlation length, 'overscreening', and )
+  * Very short ranges: even in linear response both charge density and $\varepsilon$ can get nonlocal. (Fermi gas gets Friedel oscillations; ions get pair correlations etc.; solvent exhibits a correlation length and 'overscreening')
   * High electric fields: In general, the dielectric response of a solvent is nonlinear ({% wiki "dielectric saturation" %}). Note though that dielectric saturation in an electric double layer tends to occur in the same conditions that the aforementioned non-local effects also appear, so it becomes a real mess!
   * Local thermodynamic equilibrium breakdown: $V_i$ itself can become ill-defined or requires further refinement in meaning when there is a combination of both small scales and strong driving conditions.
 
-All of these concerns are very much valid and important when describing interfaces, especially 1) interface kinetics and 2) interface capacitance. And there is a huge engineering importance: as Herbert Kroemer said, "the interface is the device". But interfaces are always connected to bulky reservoirs, which themselves are internally quasi-electrostatic.The vast majority of bulky regions in our devices and circuits are quasi-neutral which means electrostatics can be largely ignored inside them, and we only need to worry about the $V_i$ values (with $V^\circ_i$ acting as a mere neutralizer, as described above).
+All of these concerns are very much valid and important when describing interfaces, especially 1) interface kinetics and 2) interface capacitance. And there is a huge engineering importance: as Herbert Kroemer said, "the interface is the device". But interfaces are always connected to bulky reservoirs, which themselves are internally quasi-electrostatic. The vast majority of bulky regions in our devices and circuits are quasi-neutral which means electrostatics can be largely ignored inside them, and we only need to worry about the $V_i$ values (with $V^\circ_i$ acting as a mere neutralizer, as described above).
 
 {#
 
