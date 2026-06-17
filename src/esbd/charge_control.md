@@ -1,85 +1,88 @@
 ---
 layout: layouts/esbd_topic.njk
-title: 'Constraints and charge neutrality'
+title: 'Mass action and charge control'
 tags: [page, esbd_topic]
 orderESBD: 23
 ---
 
 # {{title}}
 
-**WORK IN PROGRESS (OUTLINE)**
+So far we have played the game in one direction: given the concentrations, we read off the species voltages. Real problems usually run the other way around. Some of the voltages are pinned for us, whether by a contact, a reservoir, or a reaction with a solid phase, and what we are left to determine is where the standard-state ladder $V^\circ_i$ sits. Pinning the $V_i$ does not pin the ladder, and pinning the ladder does not pin the $V_i$; the two are tied together only through a constraint that we have so far set aside: **bulk charge neutrality.**
 
-How do we actually wrangle with thermodynamic constraints in practical situations? We've seen the easy part: how to find relative $V_i$ values if we know the concentrations. But often, we face the inverse problem: one or more $V_i$ are fixed (e.g. by external reservoirs or contacts), leaving open the question of where to put the standard states $V^\circ_i$.
+Handled algebraically this quickly becomes tedious, since every concentration depends exponentially on the gap between a carrier's voltage and its standard state. On a $V_i$ diagram, though, the whole business reduces to a single motion: sliding the rigid $V^\circ_i$ ladder up or down until the net charge balances.
 
-Dealing with these mixed constraints algebraically can be a mathematical chore. However, using our $V_i$ diagrams, we can visualize exactly what is going on. 
+The ideal-dilute relation from the [solutions topic](../solutions/) can be rearranged to express a concentration in terms of that gap:
 
-## 1. The electrostatic mass-action law
+$$ c_i = c^\circ \exp\!\left(\frac{z_i F\,(V_i - V^\circ_i)}{RT}\right). $$
 
-What happens when we fix some species voltages but allow the standard state ladder $V^\circ_i$ to shift? 
+A carrier's concentration is fixed entirely by how far its $V_i$ floats away from its own rung on the ladder.
 
-* **One $V_i$ fixed (A single charge carrier)**: If we fix $V_{\mathrm{pos}}$ and shift the $V^\circ_i$ ladder down, the concentration of the positive carrier is enhanced. Shifting the ladder up causes depletion. If we isolate $c_i$ from our formula and focus on what changes in $V^\circ_i$ do, we get:
-  $$ c_i \propto \exp(\delta V^\circ / ...) $$
-* **But why does $V^\circ_i$ shift?**: What actually determines its position? The full answer is has to do with electrostatics (which we will discuss), but almost always we can invoke **bulk charge neutrality** as a constraint. Various factors like spectator ions or dopants can force neutrality to shift, dragging the $V^\circ_i$ ladder with it. We will explore these specific cases below.
-* **Two $V_i$ fixed (The mass-action law)**: What if we fix both $V_{\mathrm{pos}}$ and $V_{\mathrm{neg}}$? If we shift the $V^\circ_i$ ladder, the individual concentrations of the positive and negative carriers will change. However, because the shift applies to both standard states equally, the *product* of their activities (or the mean activity product) remains perfectly constant! The $V^\circ_i$ shift completely cancels out of the product. Quantitatively, if we evaluate $V_A - V_B$ we can isolate:
-  $$ c_A^{1/z_A} c_B^{-1/z_B} = K $$
-  where $ K = {const} \times \exp(V_A - V_B / ...) $.
-  This is known as a {% wiki "mass action law" %}; in this case the mass-action law describes not a chemical reaction but instead an comparison of electrostatic states. E.g. we have  $c_A c_B = K$ in the case of +1 and -1 ions, which means we can increase the concentration of A (cation) at the expense of B (anion), or vice versa. 
-* Activity note; mean activity products link to (Nonideality)[../nonideal] topic; and, if there are >2 V_i fixed we can construct one of these 
+## Pinning one carrier
+
+Suppose we fix a single carrier's voltage and then slide the ladder. Because only the gap $V_i - V^\circ_i$ enters the formula, moving the ladder down toward a pinned cation ($z = +1$) widens that gap and enriches the carrier, while moving the ladder up narrows the gap and depletes it. A single pinned carrier, together with a definite ladder position, is therefore enough to fix that carrier's concentration. What remains is to find out what sets the ladder, and we return to that question shortly.
+
+## Pinning two carriers: an electrostatic mass-action law
+
+Now pin two carriers, a species $A$ and a species $B$, and again slide the ladder. Both concentrations shift, yet a particular combination of them does not budge. If we take the gap for each carrier, divide through by its charge, and subtract, the term $V^\circ_A - V^\circ_B$ appears; because the ladder is rigid, this difference is a fixed property of the medium, and it cancels:
+
+$$ \left(\frac{c_A}{c^\circ}\right)^{1/z_A}\!\left(\frac{c_B}{c^\circ}\right)^{-1/z_B} = K, \qquad K = \exp\!\left(\frac{F\big[(V_A - V_B) - (V^\circ_A - V^\circ_B)\big]}{RT}\right). $$
+
+The ladder offset has dropped out completely, leaving $K$ a function only of the pinned difference $V_A - V_B$ and a material constant. It therefore holds fixed no matter where the ladder happens to float.^[In a nonideal solution, replace each $c_i/c^\circ$ with the activity $a_i$. The left-hand combination is then a {% wiki "Activity coefficient#Ionic_solutions", "mean-activity" %}-type product, which is exactly the charge-balanced, ladder-independent quantity that remains measurable even when single-ion activities do not. See the [nonideality topic](../nonideal/).]
+
+This is a {% wiki "mass action law" %}, though with one important difference from its chemical namesake: nothing here is actually reacting. The relation simply compares two electrostatic states. For a $+1$ cation paired with a $-1$ anion both exponents reduce to $+1$, and the law takes the familiar product form,
+
+$$ c_A\, c_B = \text{const}, $$
+
+so the cation can be enriched only at the anion's expense, and the reverse.
+
+The same combination holds just as well for two carriers of the *same* sign, which is easy to overlook. Pairing $\mathrm{Na}^+$ with $\mathrm{Al}^{3+}$, for instance, gives $c_{\mathrm{Na}^+}\big/c_{\mathrm{Al}^{3+}}^{1/3} = \text{const}$.^[A chemist would more often clear the fractional exponents by raising the relation to the power $z_A z_B$, giving the tidy integer form $c_{\mathrm{Na}^+}^{3}\big/c_{\mathrm{Al}^{3+}} = \text{const}$. It is the same law; the fractional version is just the one written per unit of charge, which is the normalization the $V_i$ picture invites.] The fractional power earns its keep here: as the ladder slides, the trivalent $\mathrm{Al}^{3+}$ swings three times as hard in its log-concentration as the $\mathrm{Na}^+$, so it can be amplified into dominance or suppressed into irrelevance while its monovalent partner barely stirs.
 
 <figure class="diagram-placeholder">
 {% figcaption %}
-Diagram: fixed V_A and V_B, with slider for V^0.
-"other ions not shown" -- don't talk about total charge right now, just c_A and c_B and the product c_A c_B.
+Two carriers pinned ($V_A$, $V_B$ fixed), with a slider for the $V^\circ_i$ ladder offset. As the ladder slides, $c_A$ and $c_B$ trade off against each other, but their mass-action product holds constant. Other ions are not shown.
 {% endfigcaption %}
 </figure>
 
-## 2. Disturbances that affect neutrality
+## What fixes the ladder? Neutrality
 
-Let's look at practical examples of "disturbances" that force the $V^\circ_i$ ladder to shift in order to maintain bulk charge neutrality.
+The mass-action law tells us what remains invariant as the ladder slides, but it does not tell us where the ladder finally comes to rest. That position is set by **bulk charge neutrality**. Away from interfaces, a conductor carries essentially no net charge, so
 
-### Dopants
-* Static background charges (like $N_{\mathrm{D}}^+$ or $N_{\mathrm{A}}^-$ in semiconductors) don't have a meaningful $V_i$ since they are immobile.
-* They act as a pure neutrality disturbance. The $V^\circ_i$ ladder must shift up or down until the mobile carriers (electrons and holes) exactly balance the static dopant charge.
+$$ \sum_i z_i F c_i + \rho_{\mathrm{bg}} = 0, $$
 
-### Common-ion effect
-* Usually, the common-ion effect is taught purely chemically. Here, we reframe it by treating the new, uncommon ions essentially as dopants!
-* Example: Adding $\mathrm{KCl}$ to a saturated $\mathrm{AgCl}$ solution. We treat the added $\mathrm{K}^+$ as a neutrality disturbance.
-* Because the solution is saturated, the gap between $V_{\mathrm{Ag}^+}$ and $V_{\mathrm{Cl}^-}$ is fixed (mass action). To restore neutrality against the $\mathrm{K}^+$ disturbance, the $V^\circ_i$ ladder shifts. This simultaneously depletes $\mathrm{Ag}^+$ (precipitation) and enhances $\mathrm{Cl}^-$, satisfying both mass action and charge neutrality.
-* We pretend that the precipitating ions automatically exchange with imaginary reservoirs to keep the $V_i$ gap rigid.
+where $\rho_{\mathrm{bg}}$ is any fixed, immobile background charge. Each mobile $c_i$ in this sum is an exponential function of the ladder offset, so as the ladder slides the net charge passes monotonically through zero at exactly one position. Once the $V_i$ are given, the ladder floats to precisely the offset that neutrality requires, and to no other.
 
-{# old common-ion demo that had been unused, may need tweaking #}
+<figure class="diagram-placeholder">
+{% figcaption %}
+Top: a multi-ion solution with all $V_i$ fixed. Bottom: the total free charge density as a function of the $V^\circ_i$ ladder offset, crossing zero at the single neutral position. Sliding the ladder is how the system "finds" neutrality.
+{% endfigcaption %}
+</figure>
+
+This one principle accounts for a whole family of effects that, in their conventional presentations, appear quite unrelated. Each is simply a disturbance to the neutrality balance, met by a shift of the ladder.
+
+## Dopants
+
+The simplest disturbance is a fixed charge that has no $V_i$ of its own, because it cannot move: the ionized donors ($N_{\mathrm{D}}^+$) and acceptors ($N_{\mathrm{A}}^-$) of a semiconductor, or the fixed charged groups built into an ion-exchange membrane. Such charges enter the balance only through $\rho_{\mathrm{bg}}$, and the ladder shifts until the mobile carriers compensate them: downward toward the conduction edge for $n$-type material, upward toward the valence edge for $p$-type. This is exactly the doping story from the [previous topic](../solidstate/), now read directly as a question of where the ladder sits.
+
+## The common-ion effect
+
+The same reasoning recovers a classic result of solution chemistry. Consider a solution saturated with $\mathrm{AgCl}$, so that the solid pins the difference $V_{\mathrm{Ag}^+} - V_{\mathrm{Cl}^-}$ at its saturation value: a two-carrier mass-action constraint, with the product $c_{\mathrm{Ag}^+} c_{\mathrm{Cl}^-}$ locked at the solubility product. Now dissolve a little $\mathrm{KCl}$. The $\mathrm{K}^+$ has no salt of its own to pin it, and so it behaves as a pure positive disturbance to neutrality, a mobile dopant. The ladder shifts to restore the balance, and because the product is locked, that shift enriches $\mathrm{Cl}^-$ while depleting $\mathrm{Ag}^+$, which precipitates back onto the solid. (The solid serves as the reservoir that holds the $V_{\mathrm{Ag}^+} - V_{\mathrm{Cl}^-}$ gap rigid throughout.) The result is the textbook common-ion effect, in which added chloride suppresses the solubility of silver, and in the $V_i$ picture it appears directly as a shift of the ladder.
+
 {% include "esbd-diagrams/esbd-agcl-kcl-common-ion.html" %}
 
-### Spectator ions (Gibbs-Donnan Equilibrium)
-* A semipermeable membrane separates two electrolyte chambers. Mobile ions ($\mathrm{Na}^+$, $\mathrm{Cl}^-$) can cross, but a large spectator ion (like a protein $\mathrm{Pr}^-$) is blocked on one side.
-* The blocked protein acts as a localized dopant—a neutrality disturbance that exists only on one side of the membrane.
-* Because the mobile ions can equilibrate, their $V_i$ levels are perfectly flat across the membrane.
-* To satisfy local charge neutrality on *both* sides, the $V^\circ_i$ ladder on the protein side must shift relative to the empty side. This step in the $V^\circ_i$ ladder across the boundary is the **Donnan potential**.
+## Spectator ions and the Donnan potential
+
+If the disturbance is confined to one side of a membrane, the effect becomes spatial. Let a membrane pass the small mobile ions ($\mathrm{Na}^+$ and $\mathrm{Cl}^-$) while blocking a large polyion, say a protein $\mathrm{Pr}^-$, on the right. The mobile ions equilibrate across the membrane, so $V_{\mathrm{Na}^+}$ and $V_{\mathrm{Cl}^-}$ run perfectly flat through it. The trapped $\mathrm{Pr}^-$, however, is a background charge present on the right alone, and so the ladder must sit at a different offset on each side in order to keep both sides neutral. That step in the $V^\circ_i$ ladder across the membrane is the {% wiki "Gibbs–Donnan effect", "Donnan potential" %}. With the mobile $V_i$ flat and the ladder stepped, the concentrations step as well: the protein side is left richer in $\mathrm{Na}^+$ and poorer in $\mathrm{Cl}^-$, which is precisely Donnan exclusion.
 
 <figure class="diagram-placeholder">
 {% figcaption %}
-[PLACEHOLDER: D3 diagram of Gibbs-Donnan equilibrium. Mobile ion $V_i$ traces are flat. Slider controls blocked protein concentration on the right side, driving the Donnan potential step in $V^\circ_i$.]
+Gibbs–Donnan equilibrium. The mobile-ion traces $V_{\mathrm{Na}^+}$ and $V_{\mathrm{Cl}^-}$ run flat across the membrane; the $V^\circ_i$ ladder steps between the two sides to neutralize the trapped protein, and that step is the Donnan potential. A slider sets the blocked-protein concentration on the right.
 {% endfigcaption %}
 </figure>
 
-## 3. All $V_i$ fixed
+## Takeaways
 
-We already saw the case of "all $V_i$ fixed" when discussing the mass-action law with exactly two charge carriers (like in a pure semiconductor). But what happens in a multi-ion case when every $V_i$ is rigidly fixed by external constraints?
+Everything in this topic comes down to a single motion: sliding the rigid $V^\circ_i$ ladder to the one offset at which the bulk is neutral. The pinned $V_i$ values and any fixed background charge together decide where that offset falls. Mass-action products emerge independent of the ladder, since the offset cancels, and dopants, the common-ion effect, and the Donnan potential turn out to be the same neutrality-restoring shift in three different guises.
 
-* If all $V_i$ are locked, the only degree of freedom left is the single global offset of the $V^\circ_i$ ladder.
-* We can visualize how shifting this single $V^\circ_i$ ladder affects the *total* free charge density of the system.
-* There is only one exact position for the ladder where the total charge is perfectly neutral. 
-
-<figure class="diagram-placeholder">
-{% figcaption %}
-[PLACEHOLDER: D3 diagram. Top panel: Multi-ion case with all $V_i$ fixed. Bottom panel: Plot of total free charge vs $V^\circ_i$ offset.]
-{% endfigcaption %}
-</figure>
-
-**The Cliffhanger:** We've seen that to maintain bulk neutrality, the $V^\circ_i$ ladder must sometimes jump or step (like in the Donnan membrane). But physical solvents don't change their properties instantaneously across an imaginary line. If the $V^\circ_i$ ladder has to bend smoothly to transition between two neutral bulk states, what happens to the charge neutrality in that bending region? 
-
-This localized break-down of neutrality leads us directly into spatial electrostatics.
-
-But first, let's examine a concrete analogy between electrochemistry and semiconductors...
+The Donnan case, in which a fixed background charge on one side of a boundary forces a step in the ladder, has an exact counterpart in the solid state. The next topic sets the two side by side: the electrochemical bipolar membrane and its semiconductor twin, the pn junction.
 
 [**NEXT TOPIC: Bipolar membranes and pn junctions**](../bipolar/)
