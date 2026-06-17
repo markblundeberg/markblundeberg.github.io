@@ -20,6 +20,7 @@ By visualizing both side-by-side using $V_i$ band diagrams, we see that they are
   * Joined materials: a p-type semiconductor (rich in mobile positive holes $\mathrm{h}^+$) and an n-type semiconductor (rich in mobile negative electrons $\mathrm{e}^-$).
 * **The Electrochemical Bipolar Membrane**:
   * Joined materials: a cation-exchange membrane (CEM, rich in mobile positive protons $\mathrm{H}^+$) and an anion-exchange membrane (AEM, rich in mobile negative hydroxide ions $\mathrm{OH}^-$). Membrane media act as a static background charge (effectively dopants).
+  * (It's a crude approximation in some sense though: the ions may actually bind / adsorb quite locally to the dopants, and moreover there is a steric aspect which should shift the V^0 levels. Technically an ion exchange membrane should have a new V^0 ladder.)
 
 ---
 
@@ -29,6 +30,7 @@ By visualizing both side-by-side using $V_i$ band diagrams, we see that they are
   * In the bipolar membrane: $V_{\mathrm{H}^+} - V_{\mathrm{OH}^-} = 2.457~\mathrm{V}$ (fixed offset).
 * **Built-in Potentials**: Because the carrier concentrations change drastically across the junction, the standard states ($V^\circ_i$ band edges) must bend.
 * **The Depletion Zone**: A localized electric field forms at the interface, creating a region depleted of mobile carriers (electrons/holes or protons/hydroxides).
+  * We haven't covered electrostatics yet so if we discuss this it will have to forward-reference. Not opposed to having a diagram here though especially since every pn junction discussion includes it. Of course the bipolar membrane has a super duper tight depletion zone (is it even meaningufl to plot it?)
 
 ---
 
@@ -55,6 +57,7 @@ By visualizing both side-by-side using $V_i$ band diagrams, we see that they are
   * Injected protons and hydroxide ions meet at the junction and neutralize to form water:
     $$ \mathrm{H}^+ + \mathrm{OH}^- \rightarrow \mathrm{H_2O} $$
   * This chemical recombination (neutralization) releases the heat of neutralization.
+    * Hmmmmm is this right? 'heat of neutralization' conjures up endothermic/exothermic concepts, not sure what is guaranteed there.
 
 ---
 
