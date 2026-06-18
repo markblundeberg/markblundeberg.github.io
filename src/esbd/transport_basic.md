@@ -25,7 +25,12 @@ $$ J_i = -\sigma_i \nabla V_i, $$
 
 with $J_i$ the charge current density and $\sigma_i$ the species conductivity.^[Driving transport one species at a time by its own electrochemical potential is the core of the Jamnik–Maier equivalent-circuit treatment of mixed conductors, in which each carrier rides a "rail" at $\bar\mu_i/(z_i e)$, exactly our $V_i$. J. Jamnik and J. Maier, [Generalised equivalent circuits for mass and charge transport](https://doi.org/10.1039/b100180i), *Phys. Chem. Chem. Phys.* **3**, 1668 (2001).] This one equation already holds the drift-diffusion machinery that electrochemistry and semiconductor physics usually present as two separate mechanisms. Dividing through by the molar charge $z_i F$ recasts it as the {% wiki "Nernst–Planck equation" %} in its familiar form, a number-current density carrying a drift term and a diffusion term:
 
-$$ N_i = \frac{J_i}{z_i F} = -\frac{\sigma_i}{z_i F}\,\nabla V_i = \underbrace{-\,u_i\, c_i\, \nabla\phi}_{\text{drift}}\;\underbrace{-\;D_i\, \nabla c_i}_{\text{diffusion}}, $$
+$$
+\begin{aligned}
+N_i &= \frac{J_i}{z_i F} = -\frac{\sigma_i}{z_i F}\,\nabla V_i \\
+&= \underbrace{-\,u_i\, c_i\, \nabla\phi}_{\text{drift}} \;\underbrace{-\;D_i\, \nabla c_i}_{\text{diffusion}},
+\end{aligned}
+$$
 
 where the split uses $\nabla V_i = \nabla\phi + \tfrac{RT}{z_i F}\tfrac{\nabla c_i}{c_i}$ in an ideal homogeneous medium. The two coefficients are the ion's diffusion coefficient $D_i$ and its (signed) electrical mobility $u_i$, and because both descend from the single conductivity they are not independent:
 
@@ -45,7 +50,12 @@ A single sloping $V_i$ split into its drift part (the slope of $\phi$, i.e. of $
 
 Engineering practice often collapses all of this into a single bulk current driven by one electrostatic potential,
 
-$$ I = -\sigma\,\nabla\phi, \qquad \sigma = \sum_i \sigma_i. $$
+$$
+\begin{aligned}
+I &= -\sigma\,\nabla\phi, \\
+\sigma &= \sum_i \sigma_i.
+\end{aligned}
+$$
 
 It is a handy shortcut, and its origin is easy to see: sum the per-species drift currents and assume uniform concentrations, so that every $\nabla V_i$ reduces to the shared $\nabla\phi$. The weakness is that very assumption. As soon as concentration gradients appear, the species' $V_i$ slopes part ways, the diffusion currents start contributing to the charge flow, and $I = -\sigma\nabla\phi$ no longer holds. Tracking the individual $V_i$ keeps us honest in exactly the situations where the lumped law breaks down, and those situations are the next two effects.
 

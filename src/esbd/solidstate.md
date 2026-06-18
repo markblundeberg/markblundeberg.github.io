@@ -39,7 +39,12 @@ I won't pretend this is comfortable — it cost me some discomfort too. But the 
 
 Because electrons and holes are just charged species, each is driven by the gradient of its own species voltage, exactly as ions are:
 
-$$ J_{\mathrm{e}^-} = -\sigma_{\mathrm{e}^-} \nabla V_{\mathrm{e}^-}, \qquad J_{\mathrm{h}^+} = -\sigma_{\mathrm{h}^+} \nabla V_{\mathrm{h}^+}. $$
+$$
+\begin{aligned}
+J_{\mathrm{e}^-} &= -\sigma_{\mathrm{e}^-} \nabla V_{\mathrm{e}^-}, \\
+J_{\mathrm{h}^+} &= -\sigma_{\mathrm{h}^+} \nabla V_{\mathrm{h}^+}.
+\end{aligned}
+$$
 
 A slope in $V_{\mathrm{e}^-}$ or $V_{\mathrm{h}^+}$ means current and dissipation; a flat line means equilibrium for that carrier. Same rule, same reading, whether the carrier is a lithium ion in an electrolyte or an electron in silicon.
 
@@ -66,7 +71,12 @@ Here is the heart of the analogy. The band edges play exactly the role that the 
 
 And just as a dilute ion's voltage deviates logarithmically from its standard state according to concentration, the carriers' voltages deviate from the band edges according to how full the bands are:
 
-$$ V_{\mathrm{e}^-} = V^\circ_{\mathrm{e}^-} - \frac{k_{\mathrm{B}}T}{e} \ln\!\left(\frac{n}{N_{\mathrm{C}}}\right), \qquad V_{\mathrm{h}^+} = V^\circ_{\mathrm{h}^+} + \frac{k_{\mathrm{B}}T}{e} \ln\!\left(\frac{p}{N_{\mathrm{V}}}\right), $$
+$$
+\begin{aligned}
+V_{\mathrm{e}^-} &= V^\circ_{\mathrm{e}^-} - \frac{k_{\mathrm{B}}T}{e} \ln\!\left(\frac{n}{N_{\mathrm{C}}}\right), \\
+V_{\mathrm{h}^+} &= V^\circ_{\mathrm{h}^+} + \frac{k_{\mathrm{B}}T}{e} \ln\!\left(\frac{p}{N_{\mathrm{V}}}\right),
+\end{aligned}
+$$
 
 where $n$, $p$ are the electron and hole concentrations and $N_{\mathrm{C}}$, $N_{\mathrm{V}}$ are the effective {% wiki "Density of states", "densities of states" %} — playing precisely the part of the reference concentration $c^\circ$.
 

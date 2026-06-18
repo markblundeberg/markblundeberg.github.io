@@ -25,7 +25,12 @@ Suppose we fix a single carrier's voltage and then slide the ladder. Because onl
 
 Now pin two carriers, a species $A$ and a species $B$, and again slide the ladder. Both concentrations shift, yet a particular combination of them does not budge. If we take the gap for each carrier, divide through by its charge, and subtract, the term $V^\circ_A - V^\circ_B$ appears; because the ladder is rigid, this difference is a fixed property of the medium, and it cancels:
 
-$$ \left(\frac{c_A}{c^\circ}\right)^{1/z_A}\!\left(\frac{c_B}{c^\circ}\right)^{-1/z_B} = K, \qquad K = \exp\!\left(\frac{F\big[(V_A - V_B) - (V^\circ_A - V^\circ_B)\big]}{RT}\right). $$
+$$
+\begin{aligned}
+\left(\frac{c_A}{c^\circ}\right)^{1/z_A}\!\left(\frac{c_B}{c^\circ}\right)^{-1/z_B} &= K, \\
+K &= \exp\!\left(\frac{F\big[(V_A - V_B) - (V^\circ_A - V^\circ_B)\big]}{RT}\right).
+\end{aligned}
+$$
 
 The ladder offset has dropped out completely, leaving $K$ a function only of the pinned difference $V_A - V_B$ and a material constant. It therefore holds fixed no matter where the ladder happens to float. (More rigorously, activities can be used^[In a nonideal solution, replace each $c_i/c^\circ$ with the activity $a_i$. The left-hand combination $(a_A)^{1/z_A}(a_B)^{-1/z_B}$ is then a {% wiki "Activity coefficient#Ionic_solutions", "mean-activity" %}-type product, which is exactly the charge-balanced, ladder-independent quantity that remains measurable even when single-ion activities are not. In fact this ladder-shifting is exactly the source of the ion-activity ambiguity; see the [nonideality topic](../nonideal/).].)
 
