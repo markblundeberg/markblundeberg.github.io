@@ -23,7 +23,7 @@ Because the force is $-\nabla V_i$, the current of species $i$ obeys a per-speci
 
 $$ J_i = -\sigma_i \nabla V_i, $$
 
-with $J_i$ the charge current density and $\sigma_i$ the species conductivity. This one equation already holds the drift-diffusion machinery that electrochemistry and semiconductor physics usually present as two separate mechanisms. To see it, expand $V_i$ into its standard state and its concentration term, in an ideal homogeneous medium where $\nabla V^\circ_i = \nabla\phi$:
+with $J_i$ the charge current density and $\sigma_i$ the species conductivity.^[Driving transport one species at a time by its own electrochemical potential is the core of the Jamnik–Maier equivalent-circuit treatment of mixed conductors, in which each carrier rides a "rail" at $\bar\mu_i/(z_i e)$, exactly our $V_i$. J. Jamnik and J. Maier, [Generalised equivalent circuits for mass and charge transport](https://doi.org/10.1039/b100180i), *Phys. Chem. Chem. Phys.* **3**, 1668 (2001).] This one equation already holds the drift-diffusion machinery that electrochemistry and semiconductor physics usually present as two separate mechanisms. To see it, expand $V_i$ into its standard state and its concentration term, in an ideal homogeneous medium where $\nabla V^\circ_i = \nabla\phi$:
 
 $$ \nabla V_i = \underbrace{\nabla\phi}_{\text{drift}} + \underbrace{\frac{RT}{z_i F}\frac{\nabla c_i}{c_i}}_{\text{diffusion}}. $$
 
@@ -62,6 +62,22 @@ The second effect shows up whenever a salt diffuses with ions of unequal mobilit
 <figure class="diagram-placeholder">
 {% figcaption %}
 A diffusion potential in a binary salt. The faster ion would outrun the slower, but the field this raises tilts both $V_i$ traces so the two travel in step, preserving neutrality.
+{% endfigcaption %}
+</figure>
+
+## Two cases of one channel
+
+Both effects are the same calculation seen from two sides. Take a channel with a fixed set of $V_i$ at one end and, in steady state, a spatially constant current $J_i$ for each species; march across, re-imposing local neutrality at every step so that $V^\circ_i$ stays pinned, and the $V_i$ at the far end follow. Concentration polarization is the case where every current vanishes but one; a diffusion potential is the open-circuit case, total current zero, with the individual currents set by the fixed end concentrations. A binary salt falls to the transference numbers, while the general case needs the Planck–Henderson root-find we meet under [junctions](../junctions/). In practice, though, we usually fix the voltage instead and let the device settle on the currents, and if we push past the point where the active carrier runs dry, no steady profile can span the channel at all. That breakdown is the current limit, and chasing it down is the climax this chapter builds toward in [saturation](../saturation/).
+
+## Beyond steady state
+
+Steady state is not the only place these ideas live. Picture a blob of salt left to spread on its own, its profile relaxing into a widening Gaussian. The two ions would each diffuse at their own rate, but the faster one cannot simply leave the slower behind without breaking neutrality, so the very diffusion-potential field we just met in steady state reappears here, transient though the situation is, holding the quick ion back and urging the slow one along. The salt therefore spreads as a single entity, with an effective diffusion coefficient that is neither $D_+$ nor $D_-$ but a blend of the two.^[For a 1:1 salt the ambipolar (Nernst–Hartley) coefficient is the harmonic-type mean $D = 2 D_+ D_-/(D_+ + D_-)$, pulled toward the slower ion.]
+
+The coupling reaches past the spreading salt itself. A third, dilute species drifts in that same diffusion-potential field, so a tracer ion or a charged colloid can be carried along by another salt's gradient, even drawn *up* it, an effect known as {% wiki "diffusiophoresis" %}. The same mechanism runs inside a lithium-ion electrode: there the electrons are so much faster than the $\mathrm{Li}^+$ that it is the electrons who are held back, and the pair migrates as though neutral lithium were diffusing through the material, with no need to name a $\phi$ anywhere inside it.
+
+<figure class="diagram-placeholder">
+{% figcaption %}
+A blob of salt spreading by diffusion (an animation of widening Gaussians). The faster ion is held back by the slower through the diffusion-potential field, so the salt moves as one; a dilute tracer is swept along by the same field.
 {% endfigcaption %}
 </figure>
 
