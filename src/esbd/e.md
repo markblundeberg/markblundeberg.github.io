@@ -7,62 +7,70 @@ orderESBD: 32
 
 # {{title}}
 
-We can now visualize the electrode potential $E$ on a $V_i$ diagram, along with its relatives — the 'redox potential' $E_h$, the 'equilibrium potential' $E_{\mathrm{eq}}$, and so on. They all share the form $E = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\text{ref})$, and every subtlety comes down to *which* $V_{\mathrm{e}^-}$ and *which* reference we have in mind.
+We can now visualize the electrode potential $E$ on a $V_i$ diagram, along with its relatives — the 'redox potential' $E_h$, the 'equilibrium potential' $E_{\mathrm{eq}}$, and so on. They all share the form $E = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\text{ref})$, and every subtlety comes down to *which* $V_{\mathrm{e}^-}$ and *which* reference we have in mind. We take the simple case first and add the complications afterward.
 
-## Two levels at one electrode
+## Electrode potential at equilibrium
 
-Dip a single electrode into a solution and there are already two electronic levels in play, and the whole art of reading electrode potentials is keeping them apart:
+At equilibrium, with no current flowing, an electrode and its solution settle into a tidy stack of levels. The electrode reaction equalizes the metal's electrons with the solution's redox couple, so the metal level and the reaction's implied level coincide,
 
-* the metal's own $V_{\mathrm{e}^-}(\text{electrode})$, the Fermi level of the wire, the level a voltmeter actually reaches;
-* the solution's implied redox level $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ from the [last topic](../half/), where the solution "wants" its electrons to sit.
+$$ V_{\mathrm{e}^-}(\text{electrode}) = V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}), $$
 
-At equilibrium, with no current flowing, the electrode reaction equalizes the two. Pass a current and they pull apart. "Electrode potential" is then just the metal's level read against some agreed reference level. The reason potentials in electrochemistry are notoriously confusing^[This topic is largely a $V_i$ retelling of the fine survey by Boettcher, S. W., Oener, S. Z., Lonergan, M. C., Surendranath, Y., Ardo, S., Brozek, C., & Kempler, P. A. (2021). [Potentially Confusing: Potentials in Electrochemistry.](https://doi.org/10.1021/acsenergylett.0c02443) ACS Energy Letters, 6(1), 261–266.] is that the single word "potential" gets stretched across all three things at once: the metal's level, the solution's level, and the reference. On a $V_i$ diagram we simply draw them as separate lines, and the confusion lifts.
+and the electrode potential is just the gap from that level down to the hydrogen reference level $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$:
+
+$$ E = V_{\mathrm{e}^-}(\text{electrode}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE}). $$
+
+On the diagram this is a story of four levels — the metal's $V_{\mathrm{e}^-}$ and the reaction's $V_{\mathrm{e}^-}$ (sitting one on top of the other), the reaction's standard level $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$, and the reference $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ — and $E$ is just one marked vertical distance among them.
 
 <figure class="diagram-placeholder">
 {% figcaption %}
-One electrode in a solution. The metal's $V_{\mathrm{e}^-}(\text{electrode})$ (solid) and the solution's implied $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ (dashed) are distinct levels; the electrode potential $E$ is the metal's level measured down to a reference level. At equilibrium the two solution/metal levels coincide.
+Electrode potential at equilibrium, as four levels. The metal's $V_{\mathrm{e}^-}$ and the reaction's $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ coincide; below sit the reaction's standard level $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ and the reference $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$. The electrode potential $E$ is the gap from the (coincident) electron level down to the SHE level.
 {% endfigcaption %}
 </figure>
 
-## Electrode potential, referenced
+What that reference level actually is, and how a real reference electrode pins it, we leave to the [next topic](../references/); here we just take $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ as a level on the page.^[The IUPAC definition is in this equilibrium spirit: electrode potential is the electromotive force of a cell with the standard hydrogen electrode on the left and the electrode in question on the right, the EMF being the cell voltage at zero current. That zero-current proviso is exactly what keeps the definition tidy; everything below is what happens when we let go of it.]
 
-The standard definition, as I read the IUPAC one,^[IUPAC Gold Book, ["electrode potential"](https://goldbook.iupac.org/terms/view/E01956).] references the metal's level to the standard hydrogen electrode:
+## The Nernst equation
 
-$$ E(\text{vs SHE}) = V_{\mathrm{e}^-}(\text{electrode}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2}). $$
-
-A reference, in this conceptual sense, is just a device that pins a known $V^\circ_{\mathrm{e}^-}(\mathrm{rxn})$ level so the metal's $V_{\mathrm{e}^-}$ can be read against it. The actual hardware — silver chloride, the hydrogen electrode — and the realities of wiring it into a full cell are the [next topic](../references/); here we treat the reference as an agreed zero-level. Working with $V_{\mathrm{e}^-}$ directly is like working with $E$, but without having to carry a reference around.
-
-Two things keep $E$ from being as clean as it looks, even at equilibrium. The standard reference levels inherit the single-ion-activity ambiguity of concentrated solutions, so $E$ is only sharply defined in the dilute limit (see the [nonideality topic](../nonideal/)); and any real reference must be wired in through a junction, which adds a liquid-junction potential we take up [next topic](../references/). For precision work these are real problems; for everyday electrochemistry they are usually small.
-
-## The (half-cell) Nernst equation
-
-When the electrode equilibrates against a single half-reaction $\mathrm{Ox}/\mathrm{Red}$, its $V_{\mathrm{e}^-}$ sits at that reaction's implied level, and the floating Nernst equation from the [last topic](../half/) turns into the familiar one:
+Set the redundant metal level aside and three remain: the reaction's actual level $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$, its standard level $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$, and the reference $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$. The Nernst equation is just the statement that the first sits above the second by a concentration term,
 
 $$ E = E^\circ + \frac{RT}{zF}\ln\!\frac{a_{\mathrm{Ox}}}{a_{\mathrm{Red}}}, $$
 
-where, read in $V_i$ terms,
+and the three quantities in it are the three gaps among those levels:
 
 $$
 \begin{aligned}
-E &= V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2}), \\
-E^\circ &= V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2}).
+E &= V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE}), \\
+E^\circ &= V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE}), \\
+\tfrac{RT}{zF}\ln\tfrac{a_{\mathrm{Ox}}}{a_{\mathrm{Red}}} &= V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}).
 \end{aligned}
 $$
 
-So $E$ and $E^\circ$ are just the reaction's level — actual and standard — measured down to the hydrogen reference. The equation holds locally: every term is evaluated at the same spot in the solution.
+The equation holds locally: every level is read off at the same spot in the solution.
 
-## Out of equilibrium: working potential and overpotential
+<figure class="diagram-placeholder">
+{% figcaption %}
+The Nernst equation as a three-level partition. $E$ is the gap from the reaction level to the reference; $E^\circ$ is the gap from the reaction's standard level to the reference; and the activity term is the gap between the reaction level and its own standard level. A slider on the $\mathrm{Ox}/\mathrm{Red}$ activities slides the top level.
+{% endfigcaption %}
+</figure>
 
-Drive a current and the equilibrium picture breaks in a specific, visible way: the metal's $V_{\mathrm{e}^-}(\text{electrode})$ separates from the level $V_{\mathrm{e}^-}(\mathrm{eq})$ that the local reactants would equilibrate to. That gap is the **overpotential**, and in $V_i$ terms it is simply a drop in $V_{\mathrm{e}^-}$ across the interface:
+## Cracking open the subtleties
+
+Everything so far assumed equilibrium and a single clean reference. Lift those and the complications appear, and each one is a question of *which* $V_{\mathrm{e}^-}$, or *where* the reference is.
+
+**Surface overpotential.** Drive a current and the metal level peels away from the reaction level it was pinned to. That gap is the overpotential, in $V_i$ terms just a drop in $V_{\mathrm{e}^-}$ across the interface,
 
 $$ \eta = E - E_{\mathrm{eq}} = V_{\mathrm{e}^-}(\text{electrode}) - V_{\mathrm{e}^-}(\mathrm{eq}). $$
 
-The partitioning of that drop is famously slippery, and the diagram helps by making it concrete rather than verbal.^[Seidenberg, J. R., Mitsos, A., & Bongartz, D. (2025). [Interpreting Concentration and Activation Overpotentials in Electrochemical Systems: A Critical Discussion.](https://doi.org/10.1149/1945-7111/adc76c) Journal of The Electrochemical Society, 172(4), 043506.] The "surface overpotential" is the sudden step right at the interface (from $V_{\mathrm{e}^-}(\text{electrode})$ to the reaction's $V_{\mathrm{e}^-}(\mathrm{eq})$),^[Newman & Balsara (2005), *Electrochemical Systems*, ch. 8 "Electrode Kinetics".] but even $V_{\mathrm{e}^-}(\mathrm{eq})$ is open to interpretation: which half-reaction we say is running (for copper deposition, the one-electron $\mathrm{Cu}^+$ step or the overall two-electron one?), and which activities we assign it (a gas-evolving reaction may be wildly supersaturated). Rather than argue over which $E$ and which reference, we point at the levels and read the gaps.
+Even this has slippery edges, and the diagram helps by making them concrete: $V_{\mathrm{e}^-}(\mathrm{eq})$ depends on which half-reaction we say is running (for copper deposition, the one-electron $\mathrm{Cu}^+$ step or the overall two-electron one?) and which activities we assign it (a gas-evolving reaction may be wildly supersaturated).^[Seidenberg, J. R., Mitsos, A., & Bongartz, D. (2025). [Interpreting Concentration and Activation Overpotentials in Electrochemical Systems: A Critical Discussion.](https://doi.org/10.1149/1945-7111/adc76c) J. Electrochem. Soc. 172(4), 043506.]
 
-A real electrode often couples to several half-reactions at once, each with its own $E_{\mathrm{eq}}$. The electrode then settles at a compromise **mixed potential** that matches none of them — straightforward to draw as one $V_{\mathrm{e}^-}$ line sitting among several dashed reaction levels.
+**A spatially varying $E_{\mathrm{eq}}$.** The Nernst equation still gives the reaction's equilibrium level, but under load that level is no longer a single number: it varies through the solution, both because concentrations vary (concentration polarization) and because $V^\circ$ itself slopes (the ohmic drop). $E_{\mathrm{eq}}$ has become a field.
+
+**Where is the reference?** The deeper gotcha is then not *what* the reference is but *where*. An actual reference electrode reports whatever $V^\circ$ sits between it and the working electrode, ohmic drop and all, so the reading depends on its position. The usual escape is to flatten the bulk — subtract the $iR$ drop, reach in with a Luggin capillary, or swamp the cell with supporting electrolyte — so the reference samples a position-independent bulk. That works in a roomy, stirred analytical cell; it fails in a battery polarized wall to wall, where there is no flat bulk at all and "the electrode potential" quietly loses its referent. This is exactly where reading $V_{\mathrm{e}^-}(x)$ and $V^\circ(x)$ off the diagram beats clinging to a single number $E$.^[This whole knot is the subject of Boettcher, S. W., et al. (2021). [Potentially Confusing: Potentials in Electrochemistry.](https://doi.org/10.1021/acsenergylett.0c02443) ACS Energy Letters, 6(1), 261–266. The $V_i$ diagram is, in effect, their clarification drawn out.]
+
+**Mixed potentials.** Finally, a real electrode may couple to several half-reactions at once, each with its own $E_{\mathrm{eq}}$; the electrode settles at a compromise mixed potential that matches none of them — one $V_{\mathrm{e}^-}$ line sitting among several dashed reaction levels.
 
 ## Takeaways
 
-At one electrode the whole story is two levels and a reference: the metal's $V_{\mathrm{e}^-}$, the solution's redox level $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$, and whatever zero we measure against. "Electrode potential," "equilibrium potential," and "overpotential" are all gaps among these, which the diagram shows directly instead of hiding them inside one overloaded symbol. Next we wire two electrodes into a full cell, where the reference electrode and the liquid junction finally enter the picture.
+At equilibrium the electrode potential is a clean four-level picture, and $E$, $E^\circ$, and the Nernst activity term are simply the vertical gaps among those levels. The famous confusions all arrive together once we leave equilibrium: the metal level splits from the reaction level (overpotential), the reaction level spreads out in space, and the reference stops having a single home. The $V_i$ diagram keeps every one of these as a line you can point at — and the realities of the reference electrode and the full cell come next.
 
 [**NEXT TOPIC: Reference electrodes & cells**](../references/)
