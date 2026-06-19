@@ -19,7 +19,7 @@ If we try to visualize this by plotting voltage versus position, we immediately 
 
 What are we supposed to draw in place of the '???'? A straight line? A sudden jump? The mystery deepens when we try to understand more complex situations; how can we visualize the voltage drops from internal resistance during battery discharge?
 
-While the equations of electrochemistry are precise, the visual tools for building intuition are often lacking. There is a head-smackingly simple solution to this, which generalizes to visualize all of electrochemistry, but until now it has been unused.
+While the equations of electrochemistry are precise, the visual tools for building intuition are often lacking. There is a head-smackingly simple solution to this, which generalizes to visualize all of electrochemistry, but until now it has been unused. None of it is new physics, to be clear: the thermodynamics of electrochemical potentials is textbook material, and what has been missing is only a good way to *picture* it.
 
 ## Electrons: An Incomplete Picture
 

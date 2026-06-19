@@ -39,6 +39,14 @@ There are other works that promote the idea of $\bar\mu_i/q_i$ as an 'ionic volt
 * The works of Ilan Riess heavily promote the idea that differences in electrochemical potentials are voltages, ranging from his classic work about Fermi levels^[Riess, I. ["What does a voltmeter measure?."](https://doi.org/10.1016/S0167-2738(96)00542-5) Solid State Ionics 95.3-4 (1997): 327-328.] to later works about ionic electrochemical potentials.^[Riess, I. ["Mixed ionic–electronic conductors—material properties and applications."](https://doi.org/10.1016/S0167-2738(02)00182-0) Solid State Ionics 157.1-4 (2003): 1-17.] Riess focusses on differences and doesn't seem to promote the 'absolute voltage' view.
 * The Jamnik-Maier circuit model makes all electrochemical potentials into voltages. Somehow this picture has not escaped out of the ionics / electrochemical impedance spectroscopy communities.
 
+## What's new, and what isn't
+
+I should be upfront about what I am and am not claiming, because the central quantity is so simple that a careful reader's first reaction is bound to be: "that's just $\bar\mu_i$ over its charge — you have rescaled an axis and given it a new name." That is a fair reaction, and as the works above show, most of the ingredients really are old. Treating $\bar\mu_i/q_i$ as a genuine per-carrier voltage is essentially the Jamnik–Maier move, where every carrier already rides its own "rail" at this potential; the companion ideas of chemical capacitance and per-species transport along $\nabla\bar\mu_i$ come with it, on older roots in network thermodynamics. The physics, in other words, is not the novelty.
+
+What I think is new is the *picture*. Jamnik and Maier drew lumped equivalent circuits in an abstract space, built for impedance spectroscopy; here the same quantities are plotted as $V_i(x)$, a landscape in real space, exactly as a semiconductor physicist plots energy bands. That one move is what lets you actually *see* the inside of a battery, a membrane, or a junction. Along with it come the standard-state levels $V^\circ_i$, the band edges of electrochemistry, which have no place in the circuit picture yet are what make the diagram quantitative and carry the analogy to semiconductors. And because the axis is a real, in-principle-measurable voltage rather than a bookkeeping potential, electrons in silicon and ions in solution end up on one diagram under one set of rules — a unification neither field tends to draw on its own.
+
+So: the quantities are old, and drawing them, on a shared axis, in real space, is the contribution. As far as I have been able to find, for electrochemistry as a whole, nobody had drawn this particular picture — though given how simple it is, I still half expect to learn otherwise.
+
 <a id="whyvoltage"></a>
 
 ## Why "species voltage"? Aren't voltages supposed to be differences?
