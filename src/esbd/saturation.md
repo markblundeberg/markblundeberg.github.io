@@ -21,7 +21,7 @@ $$ \nabla V_i = -\frac{J_i}{\sigma_i}, $$
 
 with $J_i$ fixed (steady state, nothing piling up) while $\sigma_i$ is free to vary wildly from place to place. The question that decides everything is what the standard state $V^\circ_i$ does as $V_i$ tilts away beneath the flat spectator rails.
 
-Recall that $V^\circ_i$ is not free: it floats to wherever local neutrality demands. With the active $V_i$ sliding and the spectator rails held flat, neutrality drags $V^\circ_i$ to somewhere in between, and *how far* it follows the active carrier is decided by a competition of {% wiki "chemical capacitance", "chemical capacitances" %}, a capacitive divider between the active rail and the spectator rails. When the spectators are abundant they dominate that divider and clamp $V^\circ_i$ close to their flat rails. The active carrier is then left sliding away from a nearly pinned standard state, and since
+Recall that $V^\circ_i$ is not free: it floats to wherever local neutrality demands. With the active $V_i$ sliding and the spectator rails held flat, neutrality drags $V^\circ_i$ to somewhere in between, and *how far* it follows the active carrier is decided by a competition of chemical capacitances, the capacitive divider from the [capacitance topic](../capacitors/), set between the active rail and the spectator rails. When the spectators are abundant they dominate that divider and clamp $V^\circ_i$ close to their flat rails. The active carrier is then left sliding away from a nearly pinned standard state, and since
 
 $$ c_i \propto \exp\!\left(\frac{z_i F\,(V_i - V^\circ_i)}{RT}\right), $$
 

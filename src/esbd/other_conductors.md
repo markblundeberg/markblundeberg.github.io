@@ -2,7 +2,7 @@
 layout: layouts/esbd_topic.njk
 title: 'Other conductors'
 tags: [page, esbd_topic]
-orderESBD: 27
+orderESBD: 28
 ---
 
 # {{title}}
@@ -37,7 +37,7 @@ This is also where the per-species Ohm's law has to generalize. Once more than o
 
 $$ J_i = -\sum_j \sigma_{ij}\,\nabla V_j, $$
 
-with a symmetric conductivity matrix $\sigma_{ij}$ in place of a single $\sigma_i$. The off-diagonal terms are the cross-coupling that a dense, interacting medium inevitably brings, the same physics carried by the {% wiki "Maxwell–Stefan diffusion", "Maxwell–Stefan" %} and Onsager equations, and the storage side generalizes in step, the chemical capacitance becoming the ambipolar capacitance matrix of the [capacitance appendix](../capacitance/). The metals and single-ion conductors above are just the $1\times1$ corner of this, where the matrix holds one entry and the coupling vanishes. Throughout, the saving grace is that these media are dense and well screened: we never need to pin down $V^\circ_i$, but in exchange the whole account now rests on the $V_i$ alone.
+with a symmetric conductivity matrix $\sigma_{ij}$ in place of a single $\sigma_i$. The off-diagonal terms are the cross-coupling that a dense, interacting medium inevitably brings, the same physics carried by the {% wiki "Maxwell–Stefan diffusion", "Maxwell–Stefan" %} and Onsager equations, and the storage side generalizes in step, the chemical capacitance becoming an ambipolar capacitance matrix (see [capacitance](../capacitors/), with the matrix in the [appendix](../capacitance/)). The metals and single-ion conductors above are just the $1\times1$ corner of this, where the matrix holds one entry and the coupling vanishes. Throughout, the saving grace is that these media are dense and well screened: we never need to pin down $V^\circ_i$, but in exchange the whole account now rests on the $V_i$ alone.
 
 ## Further along the spectrum
 
@@ -47,4 +47,4 @@ The same "just plot the $V_i$" attitude carries the messier cases. In a **concen
 
 For dilute solutions and semiconductors, the standard states and band edges are indispensable coordinates. For metals, fast ionic conductors, and the other dense conductors here, those references fade and only the species voltages remain. One transport law spans the whole range, $J_i = -\sum_j \sigma_{ij}\nabla V_j$, from the $1\times1$ metal to the fully cross-coupled mixed conductor, and in every case it is the $V_i$, never a $V^\circ_i$, that the diagram needs.
 
-[**NEXT TOPIC: Insulators and capacitors**](../capacitors/)
+[**NEXT TOPIC: Saturation**](../saturation/)

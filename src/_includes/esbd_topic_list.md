@@ -15,9 +15,9 @@
 *Materials II - Electrostatics, Transport, and Complex Materials*:
 
 - [_Basic electrostatics_](/esbd/basicelectrostatics/) - Debye screening and the local charge neutrality approximation.
-- [_Basic transport_](/esbd/transport_basic/) - Ohm's law, concentration polarization, and diffusion potentials.
+- [_Capacitance_](/esbd/capacitors/) - Dielectric and chemical capacitance; the capacitive divider.
+- [_Basic transport_](/esbd/transport_basic/) - Ohm's law, concentration polarization, and liquid junction potentials.
 - [_Other conductors_](/esbd/other_conductors/) - Metals, fast ionic conductors, and mixed conductors.
-- [_Insulators and capacitors_](/esbd/capacitors/) - Visualizing dielectric, electrolytic, and EDL capacitors.
 - [_Saturation_](/esbd/saturation/) (application spotlight) - The common reason why current saturates in transistors and electrochemical processes.
 
 *Redox and electrode potentials*:

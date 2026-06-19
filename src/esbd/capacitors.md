@@ -1,64 +1,52 @@
 ---
 layout: layouts/esbd_topic.njk
-title: 'Insulators and capacitors'
+title: 'Capacitance'
 tags: [page, esbd_topic]
-orderESBD: 28
+orderESBD: 26
 ---
 
 # {{title}}
 
-A capacitor stores charge by holding two reservoirs at different voltages and letting a little charge pile up across the gap between them. What changes from one kind to the next is *where* that charge sits and what holds it apart, and the quantity that organizes the whole family is the screening length $\lambda$ we met in the [electrostatics topic](../basicelectrostatics/). At one extreme an insulator cannot screen at all and the charge spreads across the entire gap, while at the other a concentrated electrolyte screens within nanometres and the charge crowds into a thin skin at the surface. A third kind sets the electrostatic gap aside altogether and stores charge by changing a material's chemical state. In each case the $V_i$ picture shows exactly where the charge is being kept.
+In the [last topic](../basicelectrostatics/) the screening length arrived with a companion quantity, $\chi$, the "total chemical capacitance," measuring how much charge a conductor banks when its potential is nudged. That was our first taste of capacitance, the storage-side response of a conductor: charge held in proportion to a voltage *difference*, as against conductance, the flow-side response (current in proportion to a voltage *gradient*) we take up [next](../transport_basic/). What makes capacitance richer in the $V_i$ picture than in an ordinary circuit is that "two voltages held apart" can mean three quite different things: two electronic plates across a gap, a single carrier held away from its own standard state, or two different carriers sharing one place. The first is the familiar dielectric capacitance; the other two are flavours of chemical capacitance, and here they matter just as much.
 
-## Insulators and vacuum: the zero-carrier limit
+## Dielectric capacitance
 
-An insulator, or vacuum, is the mirror image of a metal: its mobile-carrier concentration falls to zero, so it can neither conduct ($\sigma_i = 0$) nor screen, which sends the screening length off to infinity. With no carriers to anchor one, a species voltage $V_i$ has no meaning inside the bulk, and the region is governed purely by electrostatics, with $\phi$ obeying Laplace's equation and fields passing straight through.
+The textbook capacitor stores charge in an electrostatic field strung across an insulating gap. An insulator is the opposite of a conductor: with its mobile-carrier concentration near zero it can neither conduct nor screen, so a species voltage has no meaning inside it and the region is left to electrostatics alone, with $\phi$ sloping freely across the gap.^[At a metal surface the one level that survives is the vacuum potential just outside, set by the electron's {% wiki "work function" %} $\Phi$: $\phi_{\mathrm{vac}} = V_{\mathrm{e}^-} - \Phi/e$. It is worth drawing only out in the vacuum, stepping down from $V_{\mathrm{e}^-}$ at the surface and never threading it back through the bulk metal, which keeps the work function clearly an interface property rather than a level living inside.] Two metal plates straddling such a gap sit at different $V_{\mathrm{e}^-}$, and the whole offset falls across the dielectric, giving the familiar $C = \varepsilon A/d$.
 
-The one place a level does reappear is at the surface, where a metal meets the vacuum and an electron must climb its {% wiki "work function" %} $\Phi$ to escape. That climb fixes the vacuum potential just outside the metal at
-
-$$ \phi_{\mathrm{vac}} = V_{\mathrm{e}^-} - \Phi/e. $$
-
-It pays to draw $\phi_{\mathrm{vac}}$ only out in the vacuum, stepping down from $V_{\mathrm{e}^-}$ by the work function right at the surface and never carrying it back through the bulk metal. Confining it to the vacuum side makes clear that the work function is a property of the interface rather than a level living inside the metal, and it avoids the old habit of threading one continuous "vacuum level" through every phase as though it meant the same thing in each.
+How far the charge spreads is set, once again, by the screening length. In a plain metal-dielectric-metal capacitor the insulator cannot screen at all ($\lambda \to \infty$) and the charge bridges the entire gap. In an aluminium {% wiki "electrolytic capacitor" %} the gap is a very thin oxide film between a metal and an electrolyte, so the capacitance per area is much larger. And in a {% wiki "supercapacitor" %} the dielectric is dropped altogether: a metal meets a concentrated electrolyte whose screening length is mere nanometres, so the whole potential drop is squeezed into a {% wiki "Double layer (surface science)", "double layer" %} that thin, and with an effective plate separation of only $\lambda$ the capacitance becomes enormous. It is one kind of storage drawn three ways, sorted by how far neutrality is allowed to break.^[The charging speeds differ accordingly: a dielectric capacitor charges as fast as its wires allow, while a double-layer or electrolytic one charges only as fast as its ions can reach the interface, which shows on the diagram as transient slopes in the electrolyte's $V_i$.]
 
 <figure class="diagram-placeholder">
 {% figcaption %}
-Metal | insulator | metal. Inside each metal $V_{\mathrm{e}^-}$ runs flat; across the insulating gap the electrostatic potential $\phi$ slopes linearly, meeting each metal at its work-function step.
+Dielectric capacitance, sorted by screening length: a metal-dielectric-metal capacitor (charge across the full gap), an electrolytic capacitor (charge across a thin oxide between $V_{\mathrm{e}^-}$ and $V_{\mathrm{ion}}$), and an EDL supercapacitor (the drop confined to a Debye-length skin).
 {% endfigcaption %}
 </figure>
 
-## The dielectric capacitor
+## Chemical capacitance
 
-The textbook capacitor is two metal plates separated by a dielectric, metal | insulator | metal. Here $V_{\mathrm{e}^-}$ is flat inside each plate but offset between them by the applied voltage, and that entire offset falls across the dielectric, where $\phi$ ramps linearly from one plate to the other. Since the gap cannot screen, the stored charge is whatever it takes to bridge the full plate separation $d$, which gives the familiar $C = \varepsilon A/d$. The device charges through the displacement current $\partial \mathbf{D}/\partial t$ flowing across the dielectric, matched by ordinary electronic current in the wires.
+A carrier can also store charge with no dielectric gap at all, simply by growing more or less concentrated. Differentiating the ideal-dilute relation $c_i \propto \exp\!\big(z_i F (V_i - V^\circ_i)/RT\big)$, the charge a species banks per volt of its own $V_i$ is
 
-## The electrolytic capacitor
+$$ c^{\mathrm{chem}}_i = \frac{\mathrm{d}Q_i}{\mathrm{d}V_i} = \frac{z_i^2 F^2 c_i}{RT}, $$
 
-Once one side's pathway is carried by ions, the picture gains a step. An aluminium {% wiki "electrolytic capacitor" %} stacks an anode metal, a very thin oxide insulator, a liquid electrolyte, and a cathode metal. The charge is now stored across the thin oxide, between $V_{\mathrm{e}^-}$ in the anode metal on one side and the ionic voltages of the electrolyte on the other, and the electrolyte then ferries that charge onward as ionic current before handing it back to electronic current at the cathode. Because the oxide film is so thin, the capacitance per unit area is large, which is what lets these devices pack so much into a small volume.
+the **chemical capacitance**. It is exactly the per-species piece of the screening $\chi$ from the last topic, and it measures how readily a carrier soaks up charge by crowding in more of itself. Because it grows with concentration, it can dwarf any dielectric capacitance.
+
+The devices that lean on it store charge in a material's chemical state rather than in a field. {% wiki "Pseudocapacitance" %} comes from fast, reversible surface reactions that take up charge smoothly as the voltage changes; chemical capacitance proper stores charge through the bulk, as when lithiating an intercalation electrode raises its lithium content and shifts the species voltages, so the material absorbs charge as $V_i$ moves.
 
 <figure class="diagram-placeholder">
 {% figcaption %}
-An electrolytic capacitor. The potential steps across the thin oxide, separating $V_{\mathrm{e}^-}$ in the anode metal from the ionic $V_{\mathrm{ion}}$ in the electrolyte; the counter electrode (not to scale) couples the ions back to electrons.
+Chemical capacitance in an intercalation host: adding charge raises the carrier concentration and slides $V_i$ away from its standard state, with no electrostatic gap involved.
 {% endfigcaption %}
 </figure>
 
-## The double-layer supercapacitor
+## Ambipolar capacitance
 
-If the dielectric is removed entirely and a metal is brought into direct contact with a concentrated electrolyte, the screening length itself takes over the insulator's role. Because $\lambda$ in a concentrated electrolyte is only nanometres, neutrality breaks down solely within that nanometre-thin skin at the metal surface, the {% wiki "Double layer (surface science)", "double layer" %}, and the whole potential drop is compressed into it while the bulk solution stays flat and neutral. The effective plate separation is no longer a manufactured gap but the Debye length, so the capacitance per unit area runs around $C \sim \varepsilon/\lambda$, and because $\lambda$ is so small that figure is enormous, which is exactly what earns a {% wiki "supercapacitor" %} its name.
+The third coupling is between two carriers sharing one place. When two species coexist, charge can shift from one to the other while the total stays neutral, an **ambipolar capacitance** relating $V_i$ to $V_j$ rather than either to its standard state. It is the storage seen, for instance, between electrons and lithium ions inside an intercalation host. The full multi-carrier version is a capacitance matrix, which we take up in the [capacitance appendix](../capacitance/).
 
-<figure class="diagram-placeholder">
-{% figcaption %}
-An electric double-layer capacitor. The metal-electrolyte potential drop $\Delta\phi$ is confined to a Debye-length skin at the surface, while the bulk electrolyte stays neutral with flat species voltages.
-{% endfigcaption %}
-</figure>
+## The capacitive divider
 
-## Capacitance without a dielectric
-
-The cases so far all store charge in an electrostatic field across a gap, yet charge can also be stored with no dielectric field at all, simply by changing a material's chemical makeup. Two mechanisms manage this without a dielectric. **Pseudocapacitance** arises from fast, reversible faradaic reactions at a surface, which take up charge smoothly as the voltage changes and so behave like a capacitor. **Chemical (or ambipolar) capacitance** stores charge in the bulk of a material by shifting its composition: lithiating an intercalation electrode, for example, raises the local lithium content and with it the species voltages, so the material soaks up charge as $V_i$ moves. This is the storage counterpart of the coupled transport from [other conductors](../other_conductors/), and like it the description never refers to a $V^\circ_i$ or an electrostatic gap; we take it up more fully in the [capacitance appendix](../capacitance/).
-
-## Charging dynamics
-
-How fast each kind charges comes down to what has to move. A dielectric capacitor charges almost instantly, held back only by the resistance of the wires that feed it, whereas a double-layer or electrolytic capacitor charges only as quickly as its ions can work their way through the electrolyte to the interface. That slower process appears on the diagram as transient slopes in the electrolyte's $V_i$, which flatten out as the device fills.
+These capacitances seldom act alone. When one carrier's $V_i$ is driven while its neighbours are held, the standard state $V^\circ_i$ follows neither cleanly but settles at a point fixed by the *ratio* of the capacitances on each side: a capacitive divider. This is the quiet machinery behind two effects we lean on elsewhere. It is why an abundant background charge pins $V^\circ_i$ and screens so stiffly back [in electrostatics](../basicelectrostatics/), and it is what will pin $V^\circ_i$ in [saturation](../saturation/), where a plentiful spectator clamps the standard state and forces the active carrier to deplete.
 
 ## Takeaways
 
-The capacitor family is really a tour along the screening length. Where $\lambda \to \infty$, in an insulator, the charge spreads across the whole gap of a dielectric capacitor; where $\lambda \to 0$, in a concentrated electrolyte, it collapses into the nanometre double layer of a supercapacitor; and where charge is stored chemically rather than electrostatically, it lives in the bulk composition itself, with no field across a gap at all. In every case the $V_i$ and $V^\circ_i$ traces show at a glance where the charge is kept and what holds it there.
+Capacitance is the storage twin of conductance, and the $V_i$ picture shows it wearing three forms: a dielectric field across a gap, a single carrier crowding against its own standard state, and charge traded between two carriers. The dielectric kind sorts its devices by screening length, from the full-gap capacitor to the nanometre double layer of a supercapacitor; the chemical kind, $z_i^2 F^2 c_i/RT$, grows with concentration and underlies intercalation and pseudocapacitance; and acting together as a capacitive divider, they set where the standard state sits whenever charge is stored or screened. With both responses now in hand, storage and flow, we turn to transport.
 
-[**NEXT TOPIC: Saturation**](../saturation/)
+[**NEXT TOPIC: Basic transport**](../transport_basic/)
