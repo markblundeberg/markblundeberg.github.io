@@ -23,13 +23,13 @@ Dielectric capacitance, sorted by screening length: a metal-dielectric-metal cap
 
 ## Chemical capacitance
 
-A carrier can also store charge with no dielectric gap at all, simply by growing more or less concentrated. Differentiating the ideal-dilute relation $c_i \propto \exp\!\big(z_i F (V_i - V^\circ_i)/RT\big)$, the charge a species banks per volt of its own $V_i$ is
+A carrier can also store charge with no dielectric gap at all, simply by growing more or less concentrated. Because its stored charge $Q_i = z_i F c_i$ rides the concentration, and that concentration depends *exponentially* on $V_i - V^\circ_i$, this is a thoroughly **nonlinear** capacitor: it is the very exponential response to a shifting ladder that we charted in [mass action and charge control](../charge_control/), now read as charge stored against voltage. Its small-signal value is the slope of that exponential,
 
 $$ c^{\mathrm{chem}}_i = \frac{\mathrm{d}Q_i}{\mathrm{d}V_i} = \frac{z_i^2 F^2 c_i}{RT}, $$
 
-the **chemical capacitance**. It is exactly the per-species piece of the screening $\chi$ from the last topic, and it measures how readily a carrier soaks up charge by crowding in more of itself. Because it grows with concentration, it can dwarf any dielectric capacitance.
+the **chemical capacitance**, exactly the per-species piece of the screening $\chi$ from the last topic.^[The same derivative defines the {% wiki "quantum capacitance" %} of an electronic conductor; for a degenerate Fermi gas it is set by the density of states rather than by $c/RT$, but the idea is identical, charge banked per unit shift of the carrier's voltage.] Being proportional to concentration, it grows as the material fills and can dwarf any dielectric capacitance.
 
-The devices that lean on it store charge in a material's chemical state rather than in a field. {% wiki "Pseudocapacitance" %} comes from fast, reversible surface reactions that take up charge smoothly as the voltage changes; chemical capacitance proper stores charge through the bulk, as when lithiating an intercalation electrode raises its lithium content and shifts the species voltages, so the material absorbs charge as $V_i$ moves.
+The devices that lean on it store charge in a material's chemical state rather than in a field. Chemical capacitance proper stores charge through the bulk, as when lithiating an intercalation electrode raises its lithium content and shifts the species voltages, so the material soaks up charge as $V_i$ moves. {% wiki "Pseudocapacitance" %} is the interfacial cousin: fast, reversible surface reactions that take up charge smoothly with voltage, behaving like a chemical capacitance pressed into a vanishingly thin surface layer.^[The line between pseudocapacitance and a plain double layer is somewhat fuzzy, and whether it is best read as a chemical or an inter-carrier capacitance is not always clear; on a $V_i$ diagram it would sit as a near-zero-thickness storage layer right at the surface.]
 
 <figure class="diagram-placeholder">
 {% figcaption %}
@@ -37,9 +37,9 @@ Chemical capacitance in an intercalation host: adding charge raises the carrier 
 {% endfigcaption %}
 </figure>
 
-## Ambipolar capacitance
+## Ambipolar chemical capacitance
 
-The third coupling is between two carriers sharing one place. When two species coexist, charge can shift from one to the other while the total stays neutral, an **ambipolar capacitance** relating $V_i$ to $V_j$ rather than either to its standard state. It is the storage seen, for instance, between electrons and lithium ions inside an intercalation host. The full multi-carrier version is a capacitance matrix, which we take up in the [capacitance appendix](../capacitance/).
+The third coupling is between two carriers sharing one place. When two species coexist, charge can shift from one to the other while the total stays neutral, an **ambipolar chemical capacitance** relating $V_i$ to $V_j$ rather than either to its standard state.^[Our term, and not yet standard: beware that "ambipolar capacitance" already means something else in the literature, a capacitance measured at both bias polarities across a voltage sweep. We mean here the chemical-capacitance coupling between two carriers.] It is the storage seen, for instance, between electrons and lithium ions inside an intercalation host. The full multi-carrier version is a capacitance matrix, which we take up in the [capacitance appendix](../capacitance/).
 
 ## The capacitive divider
 
