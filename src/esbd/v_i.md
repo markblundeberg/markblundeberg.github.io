@@ -135,6 +135,6 @@ So, we've seen that this electrochemical species voltage $V_i$ is no stranger to
 
 As we go along through the next topics, we're going to follow a 'top-down' approach, starting with pure thermodynamics ($V_i$ only), and keeping $V_i$ as our reliable lifeline as we later dive down into microscopic concepts. This is the opposite of usual 'bottom-up' solid-state and electrochemistry teaching, which starts with idealized microscopic concepts like independent electrons and infinite crystalline solids, or ideal solutes and homogeneous solutions, and gradually adds on complications like nonideality, inhomogeneity, and junctions. In the bottom-up pedagogy, when we finally arrive at the full thermodynamic picture, we are often left clinging to strained and bandaged microscopic concepts, and the unifying power of $\bar\mu_i$ is left unappreciated.
 
-Now that we've established $V_i$ as our core quantity, we're going to want to see what $V_i$ looks like in equilibrium. This includes the important topic of electrochemical reactions, which are what link different charged species (i.e. connecting our electronic circuit and ionic circuits) and thereby set $V_i - V_j$.
+Now that we've established $V_i$ as our core quantity, we're ready to put it to work. First, though, the next page is a short field guide to the diagrams themselves — every line and symbol you'll meet — worth keeping bookmarked. After that we turn to equilibrium and the electrochemical reactions that link different charged species (connecting our electronic and ionic circuits) and thereby set $V_i - V_j$.
 
-[**NEXT TOPIC: Equilibrium**](../equilibrium/)
+[**NEXT TOPIC: How to read an ESBD**](../reading/)

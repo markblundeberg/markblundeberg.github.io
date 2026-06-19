@@ -2,6 +2,7 @@
 *The $V_i$ landscape*:
 
 - [_Species voltage_](/esbd/v_i/) - the fundamentals of species voltage $V_i$.
+- [_How to read an ESBD_](/esbd/reading/) - a field guide to every line and symbol on the diagrams.
 - [_Equilibrium_](/esbd/equilibrium/) - electrodes and reactions.
 - [_Lithium ion batteries_](/esbd/lib/) - An application spotlight.
 
