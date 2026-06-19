@@ -7,10 +7,7 @@ orderESBD: 37
 
 # {{title}}
 
-(subtitle: work functions and vacuum referencing)
-
-Using our diagrams we can shed some light on the so-called "absolute" electrode potential. This is supposed to be something like a 
-
+Using our diagrams we can shed some light on the so-called "absolute" electrode potential. This is supposed to be something like an absolute reference level, which I disagree with (IMO there is no such thing). Nevertheless this quantity is well defined, and we can visualize exactly what it means.
 
 ## Vacuum reference - "4.44 V"
 
@@ -32,7 +29,7 @@ $$ W_{\mathrm{HE}} = 4.44~\mathrm{V} + kT \ln(m_{\mathrm{H}^+}/m_0) . $$
 
 ### A lesson from semiconductors: Fermi level pinning
 
-In semiconductors, we expect that 
+In semiconductors, 
 
 
 ### Infinity reference
