@@ -9,11 +9,7 @@ orderESBD: 10.5
 
 An electrochemical species band diagram packs several different kinds of line and marker onto a single voltage axis. This page is the field guide to all of them — every creature you will meet as we go. There is no need to memorize it: every figure in the book carries a small link back here, so whenever a diagram starts to look like a thicket, one click returns you to the key.
 
-<figure class="diagram-placeholder">
-{% figcaption %}
-A representative ESBD with every element called out: the voltage axis, solid species voltages $V_i$, thin standard states $V^\circ_i$, a dashed implied redox level, an electrode step, the ⇌ reaction marker, and a $\phi_{\mathrm{vac}}$ line in the vacuum. (The master legend figure.)
-{% endfigcaption %}
-</figure>
+{% include "esbd-diagrams/esbd-reading-legend.html" %}
 
 ## The axis
 

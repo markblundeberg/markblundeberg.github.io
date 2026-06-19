@@ -1,0 +1,107 @@
+{% set idprefix = "esbd-reading-legend" %}
+<figure class="demo-container" style="max-width: 380px">
+    <div class="bd-container" id="{{idprefix}}-container"></div>
+</figure>
+
+<script type="module">
+    const plotContainerId = '{{idprefix}}-container';
+
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+
+    const speciesInfo = {
+        electron: {
+            z: -1,
+            color: '#377EB8',
+            mathLabel: '\\mathrm{e}^{-}',
+        },
+        ion: {
+            z: 1,
+            color: '#E41A1C',
+            mathLabel: 'i',
+        },
+        vac: {
+            color: '#888888',
+            mathLabel: '\\phi',
+        },
+    };
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        plotContainerId,
+        speciesInfo,
+        { margins: { top: 5, right: 100, bottom: 20, left: 45 } }
+    );
+
+    const boundaries = [0.0, 0.22, 0.5, 1.0];
+    diagram.setSpatialLayout(boundaries, [
+        { name: 'Vacuum', color: '#f8f8f8' },
+        { name: 'Metal', color: '#d0d0d0' },
+        { name: 'Solution', color: '#E6F5FF' },
+    ]);
+
+    diagram.setVRange(-0.8, 0.62);
+
+    const b = boundaries;
+    diagram.updateTraceData([
+        {
+            id: 'phi_vac',
+            speciesId: 'vac',
+            curveType: 'phi',
+            showLabel: true,
+            label: '\\phi_{\\mathrm{vac}}',
+            x: [b[0], b[1]],
+            y: [-0.6, -0.6],
+        },
+        {
+            id: 'metal_electron',
+            speciesId: 'electron',
+            curveType: 'voltage',
+            showLabel: true,
+            x: [b[1], b[2]],
+            y: [0.0, 0.0],
+        },
+        {
+            id: 'redox_implied',
+            speciesId: 'electron',
+            curveType: 'voltageImplied',
+            showLabel: true,
+            label: 'V_{\\mathrm{e}^-}(\\mathrm{Ox}/\\mathrm{Red})',
+            x: [b[2], b[3]],
+            y: [0.15, 0.15],
+        },
+        {
+            id: 'redox_standard',
+            speciesId: 'electron',
+            curveType: 'standardStateImplied',
+            showLabel: true,
+            label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{Ox}/\\mathrm{Red})',
+            x: [b[2], b[3]],
+            y: [0.42, 0.42],
+        },
+        {
+            id: 'ion_voltage',
+            speciesId: 'ion',
+            curveType: 'voltage',
+            showLabel: true,
+            x: [b[2], b[3]],
+            y: [-0.35, -0.35],
+        },
+        {
+            id: 'ion_standard',
+            speciesId: 'ion',
+            curveType: 'standardState',
+            showLabel: true,
+            x: [b[2], b[3]],
+            y: [-0.1, -0.1],
+        },
+    ]);
+
+    diagram.updateVerticalMarkers([
+        {
+            id: 'electrode_step',
+            symbol: '⇌',
+            x: b[2],
+            yDefs: [{ y: 0.0 }, { y: 0.15 }],
+            popupCallback: () => 'Electrode reaction / step',
+        },
+    ]);
+</script>
