@@ -49,7 +49,13 @@ class ResponsivePlot {
             resizeDebounceDelay: 200,
             onBeforeRedraw: null,
         };
-        this.config = { ...defaults, ...config };
+        this.config = {
+            ...defaults,
+            ...config,
+            // merge margins partially so callers can pass e.g. { right: 90 }
+            // and have the other sides fall back to the defaults.
+            margins: { ...defaults.margins, ...config?.margins },
+        };
         if (!this.config.containerId) {
             throw new Error(
                 "Configuration Error: 'containerId' is a required property."
