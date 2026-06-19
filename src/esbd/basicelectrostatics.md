@@ -112,6 +112,16 @@ In a realistic picture of a bulk solution, we should draw very sharp deviations 
 
 So, our $V^\circ_i$ ladder floats to whatever value it needs to be to be neutral. In a homogeneous medium where $V_i$ are flat (as they must be at equilibrium) then that means $V^\circ_i$ must be flat too, except at its surfaces (within a few Debye lengths). This is the basis of the neutrality as we assume in e.g. the [charge control topic](../charge_control/).
 
+## Interfaces: aligning two materials
+
+Everything so far has concerned a single medium. The moment two different materials touch, a question appears that the rest of the book has quietly been assuming an answer to: how do their $V^\circ_i$ ladders line up? This is the essential interfacial question, and at the basic level the answer is electrostatic.
+
+At equilibrium, charge rearranges into thin double layers on either side of the contact until any carrier that can cross has equalized its $V_i$. What is left is an offset between the two ladders — a built-in step in $\phi$, fixed by the interface. The bulk-to-bulk alignment is tied to the alignment right at the contact through the screening on each side: the double layers absorb the transition within a Debye length or so, and however much each side bends, the deep bulks settle at a fixed relative offset.
+
+The useful part is what happens when the two sides screen very differently. A strongly screening material (a metal, $\lambda \to 0$) barely bends at all, so its level is effectively rigid right up to the interface and the weakly screening side does all the accommodating. The alignment then anchors to the strong screener's $V_i$. This is exactly why everything at a metal is referenced to its $V_{\mathrm{e}^-}$: the {% wiki "Schottky barrier" %} height and the work function are both just "where the other phase's level sits relative to the metal's $V_{\mathrm{e}^-}$." The same rule, with gentler asymmetry, is behind the Donnan step of [charge control](../charge_control/) and the band offsets of [semiconductors](../solidstate/).
+
+Predicting the *size* of that offset from scratch is a separate and much harder problem, which we will not attempt; the popular shortcut of lining materials up by a shared vacuum level is a rule of thumb that is notoriously unreliable, since every interface carries its own dipole. But the size is just one number. The *structure* of the alignment — electrostatic, screening-mediated, anchored to the stronger screener — is the essential part, and it is what lets the rest of this book draw interfaces at all.
+
 ## Beyond the simple case
 
 It's worth noting what a blessing it is to have the quasi-neutrality principle, and how complicated things can get when we can't rely on it.
@@ -119,7 +129,7 @@ It's worth noting what a blessing it is to have the quasi-neutrality principle, 
 Above we described an incredibly elementary form of screening: an ideal homogeneous linear dielectric medium with a nice ideal dependence of charge carrier accumulation on $\phi$, which led to relatively trivial results like the Poisson Boltzmann screening equation. In general, electrostatics is a far harder problem and requires much more information:
 
 * Almost anything can get very messy:
-  * Simple interfaces (e.g. electrodes, or heterojunctions): not only is there a jump in $\phi$ but the $V^\circ_i$ ladder rearranges. Often a "vacuum contact" (contact potential difference) picture is used to try to predict the jump in $V^\circ_i$ but this is only a rule of thumb, and is notoriously unreliable in semiconductors.
+  * Simple interfaces (e.g. electrodes, or heterojunctions): beyond the basic alignment above, pinning down the *value* of the offset from first principles is hard — the "vacuum contact" / contact-potential-difference rule of thumb is notoriously unreliable in semiconductors.
   * Patchy and non-planar interfaces: Electrostatics is fundamentally a three dimensional problem, and even 'planar' interfaces tend to be microsopically irregular. Both microscopic irregularities in the geometry and irregularity in $\phi$ alignment of the interface will produce a complex three dimensional electrostatic situation.
   * Interface-specific charges: While the intrinsic interfacial dipoles get a lot of attention, it's worth noting that built-in monopolar charges are also possible. These can be static and dopant-like (e.g. fixed oxide charges at the Si/SiO2 interface) or they can be specific interface (e.g. metal-induced gap states, electronic {% wiki "surface states" %}, specific ion adsorption)
 * Graded media (as used in the {% wiki "heterojunction bipolar transistor" %}): These are effectively slow distributed interfaces, which means all the problems of the interface exist through a whole continuum region. $\phi$ and $V^\circ_i$ now all vary differently. Charge carriers only see "quasi-electric fields" $-\nabla V^\circ_i$ which differ from each other and from the "real" electric field $-\nabla\phi$.
