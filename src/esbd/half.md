@@ -198,7 +198,7 @@ And so we've arrived at a description of redox half-reactions in terms of a virt
 
 In the next topic, we'll talk about how we can explain traditional elecrochemical variables in terms of these redox levels.
 
-[**NEXT TOPIC: Potentials**](../e/)
+[**NEXT TOPIC: Electrode potential**](../e/)
 
 {#   
 

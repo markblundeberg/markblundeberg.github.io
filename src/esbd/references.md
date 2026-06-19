@@ -1,180 +1,91 @@
 ---
 layout: layouts/esbd_topic.njk
-title: 'Reference electrodes'
+title: 'Reference electrodes & cells'
 tags: [page, esbd_topic]
-orderESBD: 36
+orderESBD: 33
 ---
 
 # {{title}}
 
-Now we're going to get into some more classic electrochemistry situations. Electrochemistry traditionally is built around cells, electrode potentials, salt bridges. Using the $V_i$ picture we can visualize a lot of what has been going on in those classic electrochemical equations.
+A single electrode's potential can never be measured on its own; you always need a second electrode to close the circuit. That second electrode is the **reference**, and the pair of them is a **cell**. This topic is about the reference electrode, the full cell, the junction that usually sits between the two half-cells, and finally the tempting idea of referencing everything to the vacuum.
 
-To ground what we are doing in a specific example, we're going to look at ...
+## Reference electrodes
 
-And we are going to show exactly what a "standard hydrogen electrode" is -- it's a virtual level $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$.
+Two electrodes do most of the reference work in practice.
 
-## A classic reference cell in the $V_i$ view
-
-### The silver/silver chloride electrode
-
-Earlier, we saw the silver chloride electrode, which couples $\mathrm{Cl}^-$ to $\mathrm{e}^-$:
-
-$$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} =  \frac{1}{F} ( \mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}} ). $$
-
+The **silver/silver chloride electrode** couples chloride to electrons, as we saw back in the [equilibrium topic](../equilibrium/):
+$$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} = \frac{1}{F}(\mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}}). $$
 {% include "esbd-diagrams/esbd-ag-agcl-electrode.html" %}
 
-But what if another electrode comes in that couples to another ion besides cl-?
-
-### The hydrogen electrode
-
-One of the key reference points in electrochemistry is the standard hydrogen electrode (SHE).
-
-A generic hydrogen electrode interconverts hydrogen ions with hydrogen gas ($\mathrm{H_2}$),
-$$ \mathrm{H}^+ + \mathrm{e}^- \rightleftharpoons \tfrac{1}{2}\mathrm{H_2} , $$
-
-which in terms of $V_i$ gives the equilibrium condition:
-
-$$ V_{\mathrm{H}^+} - V_{\mathrm{e}^-} = \frac{\mu_{\mathrm{H}_2}}{2F}. $$
-
-or
-
-$$ V_{\mathrm{e}^-} = V_{\mathrm{H}^+} - \frac{\mu_{\mathrm{H}_2}}{2F}. $$
-
-Let's draw this electrode:
-
+The **hydrogen electrode** interconverts hydrogen ions and hydrogen gas, $\mathrm{H}^+ + \mathrm{e}^- \rightleftharpoons \tfrac{1}{2}\mathrm{H_2}$, giving
+$$ V_{\mathrm{e}^-} = V_{\mathrm{H}^+} - \frac{\mu_{\mathrm{H_2}}}{2F}, $$
+with $\mu_{\mathrm{H_2}} = \mu^\circ_{\mathrm{H_2}} + \tfrac{RT}{F}\ln a_{\mathrm{H_2}}$ depending on the gas pressure. Its standard form is the reference the whole $E$ scale is built on.
 {% include "esbd-diagrams/esbd-she.html" %}
 
-You can see that the concentration of $\mathrm{H}^+$ ions doesn't change the coupling between and, but the $\mathrm{H_2}$ concentration does. Note we can write the hydrogen gas chemical potential as a function of pressure (as an activity):
-$\mu_{\mathrm{H}_2} = \mu^\circ_{\mathrm{H}_2} + \frac{RT}{F}\ln(a_{\mathrm{H_2}}) $
-where $a_{\mathrm{H_2}} = f/p_0$ in terms of fugacity $f$ and standard pressure $p_0$.
+## A reference cell
 
-### The cell
-
-Now, what happens when we stick together the two. While we can say the hydrogen electrode couples $V_{\mathrm{e}^-}(\text{left})$ to $V_{\mathrm{H}^+}$ and the silver chloride electrode couples $V_{\mathrm{Cl}^-}$ to $V_{\mathrm{e}^-}(\text{right})$, this leaves the question of the middle: how does $V_{\mathrm{H}^+}$ connect to $V_{\mathrm{Cl}^-}$? Well, we answered this in our [Solutions topic](../solutions/): it depends on the concentration of $\mathrm{H}^+$ ions and $\mathrm{Cl}^-$ ions, and it depends on $V^\circ_{\mathrm{Cl}^-} - V^\circ_{\mathrm{H}^+} = 1.3601~\mathrm{V}$ which is a constant from our rigid ladder of standard states.
-
-Let's consider the case where the $\mathrm{H}^+$ ions and $\mathrm{Cl}^-$ ions are present due to dissolved $\mathrm{HCl}$:
-
+Now stick the two together: a hydrogen electrode on the left, a silver chloride electrode on the right, both dipping into the same dissolved $\mathrm{HCl}$. The left electrode couples $V_{\mathrm{e}^-}(\text{left})$ to $V_{\mathrm{H}^+}$, the right couples $V_{\mathrm{Cl}^-}$ to $V_{\mathrm{e}^-}(\text{right})$, and the middle is bridged by the solution's fixed ladder gap $V^\circ_{\mathrm{Cl}^-} - V^\circ_{\mathrm{H}^+} = 1.3601~\mathrm{V}$ (from the [solutions topic](../solutions/)).
 {% include "esbd-diagrams/esbd-she-agcl.html" %}
 
-After doing all the math, we get the following:
+Walking $V_{\mathrm{e}^-}$ across, the measured cell voltage comes out as
+$$ V_{\mathrm{e}^-}(\text{right}) - V_{\mathrm{e}^-}(\text{left}) = E^\circ_{\mathrm{cell}} + \frac{RT}{F}\ln\!\bigg(\frac{\sqrt{a_{\mathrm{H_2}}}}{a_{\mathrm{H}^+}a_{\mathrm{Cl}^-}}\bigg), $$
+with
+$$ E^\circ_{\mathrm{cell}} = \frac{\mu^\circ_{\mathrm{H_2}}}{2F} + (V^\circ_{\mathrm{Cl}^-} - V^\circ_{\mathrm{H}^+}) - \frac{1}{F}(\mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}}) = 0.222~\mathrm{V}, $$
+the familiar standard potential of the silver chloride electrode against the SHE.
 
-$$ V_{\mathrm{e}^-}(\text{right}) - V_{\mathrm{e}^-}(\text{left}) = E^\circ + \frac{RT}{F} \ln\bigg( \frac{\sqrt{a_{\mathrm{H_2}}}}{a_{\mathrm{H}^+}a_{\mathrm{Cl}^-}} \bigg)  $$
+> The single-ion activities $a_{\mathrm{H}^+}$ and $a_{\mathrm{Cl}^-}$ are individually ambiguous (just like the placement of the $V^\circ_i$ ladder), but the ambiguity cancels in the charge-neutral product $a_{\mathrm{H}^+}a_{\mathrm{Cl}^-}$, so the measured voltage is unambiguous, as it must be.
 
-where we have used $\mu_{\mathrm{H}_2} = \mu^\circ_{\mathrm{H}_2} + \frac{RT}{F}\ln(a_{\mathrm{H_2}}) $ and defined:
+## Two ways to read a cell
 
-$$ E^\circ_{\mathrm{cell}} = \frac{\mu^\circ_{\mathrm{H}_2}}{2F} + [V^\circ_{\mathrm{Cl}^-}-V^\circ_{\mathrm{H}^+}] - \frac{1}{F} ( \mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}} ), $$
+That derivation took a peculiar route, and it is worth seeing why. We walked the chain
+$$ V_{\mathrm{e}^-}(\text{left}) \to V_{\mathrm{H}^+} \to V^\circ_{\mathrm{H}^+} \to V^\circ_{\mathrm{Cl}^-} \to V_{\mathrm{Cl}^-} \to V_{\mathrm{e}^-}(\text{right}), $$
+stepping from one real species voltage to the next. Call this the **circuit-centered** reading: track the actual $V_i$ straight across, dipping into single-ion activities only for the middle ladder step (which is ultimately thermodynamic anyway).
 
-which evaluates to $E^\circ_{\mathrm{cell}} = 0.222~\mathrm{V} $.
-This is the well known standard voltage of the standard silver chloride electrode against a standard hydrogen electrode, and the preceding equation gives us the voltage for actual conditions (when activities are not all 1).
+Traditional electrochemistry takes the other route, which is **solution-centered** (really *potential*-centered). It starts in the middle, at the solution's $\phi$ — a stand-in for the $V^\circ_i$ ladder — and works outward to each electrode:
+$$
+\begin{aligned}
+\phi(\text{soln}) &\to V^\circ_{\mathrm{H}^+} \to V_{\mathrm{H}^+} \to V_{\mathrm{e}^-}(\text{left}), \\
+\phi(\text{soln}) &\to V^\circ_{\mathrm{Cl}^-} \to V_{\mathrm{Cl}^-} \to V_{\mathrm{e}^-}(\text{right}).
+\end{aligned}
+$$
+The cell voltage is the difference of the two, and $\phi$ cancels. Its appeal is that each electrode is described against a common reference; its cost is that each half now leans on a single-ion activity, and on the unmeasurable $\phi$. The $V_i$ picture keeps the same split into two electrodes but anchors it to the real, ladder-based $V^\circ_i$ rather than to $\phi$.
 
-> Note about nonideal solutions: as we mentioned earlier, the individual activities $a_{\mathrm{H}^+}$ and $a_{\mathrm{Cl}^-}$ are ambiguous, matching the ambiguity in placing the ladder of $V^\circ_i$ values. However, these ambiguities cancel out in the charge-neutral combination $a_{\mathrm{H}^+}a_{\mathrm{Cl}^-}$, and so (as must be the case) the final result $V_{\mathrm{e}^-}(\text{right}) - V_{\mathrm{e}^-}(\text{left})$ is unambiguous. The above plots were done assuming ideal behaviour, for simplicity.
+This is the distinction Boettcher et al. draw between the **electrode potential** (the electrode's own electronic level, our $V_{\mathrm{e}^-}(\text{electrode})$) and the **solution potential** (the solution's level, our $V^\circ_{\mathrm{e}^-}$): two different "potentials" that the bare word runs together.
 
-## A change of perspective
+## The liquid junction potential
 
-Any electrochemist will immediately recognize the above result as the full-cell {% wiki "Nernst equation" %} for $E_{\mathrm{cell}}$, but we have gotten there by a very strange route. And they are going to immediately wonder: what about the ordinary (half-cell) Nernst equation?
+Real reference electrodes are usually kept in their own clean compartment and wired to the test solution through a porous frit or salt bridge — which means a junction, and a junction means a step. For a cell whose two half-cells are different solutions, the measured voltage splits as
+$$
+\begin{aligned}
+\Delta V &= V_{\mathrm{e}^-}(\text{right}) - V_{\mathrm{e}^-}(\text{left}) \\
+&= E(\text{right}) - E(\text{left}) + \mathrm{LJP},
+\end{aligned}
+$$
+where the **liquid junction potential** is the step in the reference level across the junction, $\mathrm{LJP} = V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2}, \text{right}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2}, \text{left})$.^[Expanding both $E$'s with the Nernst equation gives the full-cell form with the LJP carried along explicitly; the textbook version usually drops the LJP and the left/right labelling. In a concentrated cell only $\Delta V$ is unambiguous: the LJP and the activity terms are each individually ambiguous, because the two half-cells carry distinct activity ambiguities.] The point worth dwelling on is that whenever the $V^\circ_{\mathrm{e}^-}$ levels vary in space — across a junction, a Donnan membrane, or under load — "the SHE" itself varies from place to place. There is a reason a perfectly defined reference is a fiction.
 
-Logically, what I have been doing so far could be called "circuit-centered": we are interested primarily in the real thermodynamic species voltages $V_i$, and we step between them using rigorous thermodynamics.
+Two readings of this $\Delta V$ coexist happily: an engineer sees the electrodes' $V_{\mathrm{e}^-}$ as reservoirs and the reaction as a generic {% wiki "electromotive force" %} pump; a chemist sees a reversible free-energy change, $\Delta G = -zF\,\Delta V$, per electron passed.
 
-And so, this is the chain of steps that logically connect the two sides (and in fact this is the internal logic I programmed to calculate this diagram):
+## What a "standard electrode" really is
 
-$$ V_{\mathrm{e}^-}(\text{left}) \rightarrow V_{\mathrm{H}^+} \rightarrow V^\circ_{\mathrm{H}^+} \rightarrow V^\circ_{\mathrm{Cl}^-} \rightarrow V_{\mathrm{Cl}^-} \rightarrow V_{\mathrm{e}^-}(\text{right}) . $$
-
-We accomplish the step $V_{\mathrm{H}^+} \rightarrow V_{\mathrm{Cl}^-}$ by briefly stepping into extrathermodynamics (we invoke single-ion activities temporarily), yet the overall step $V_{\mathrm{H}^+} \rightarrow V_{\mathrm{Cl}^-}$ is ultimately thermodynamic.
-
-But, that is not the usual practice in electrochemistry, which is logically framed as *solution-centered* and more exactly *potential-centered*. We start "in the middle" with the $\phi$ value, which is really a proxy for the $V^\circ_i$ values. In terms of $V_i$, the process looks like this:
-
-$$ \phi(\text{solution}) \rightarrow V^\circ_{\mathrm{H}^+} \rightarrow V_{\mathrm{H}^+} \rightarrow V_{\mathrm{e}^-}(\text{left}) $$
-
-$$ \phi(\text{solution}) \rightarrow V^\circ_{\mathrm{Cl}^-} \rightarrow V_{\mathrm{Cl}^-} \rightarrow V_{\mathrm{e}^-}(\text{right}) $$
-
-then $V_{\mathrm{e}^-}(\text{right}) - V_{\mathrm{e}^-}(\text{left})$ can be calculated as a difference between these two processes (and $\phi$ cancels out). This approach has the benefit of isolating each electrode with respect to a common reference ($\phi$). The downside is that each electrode is now described by a process that depends on single-ion activities, which are not uniquely defined. Although we can't remove this aspect, we can at least remove the dependence on the (very much arbitrary / unmeasurable) $\phi$ and instead reframe the traditional electrochemistry in terms of $V^\circ_i$ values.
-
-## Standard electrodes as virtual electronic standard states
-
-Now we're equipped to understand what "standard electrode" actually means, especially in the context of an arbitrary target solution which is not at all in standard conditions. The idea is to imagine that there exists an electrode which does not couple to $V_i$ levels but instead somehow couples to the $V^\circ_i$. Practically this is realized by preparing an actual electrode (such as a hydrogen electrode) in a known solution, and then connecting that known solution to our target solution via a porous frit or salt bridge that nominally is supposed to have a zero or controlled liquid junction potential (which means a difference in $V^\circ_i$). The net effect is that the electrode's $V_{\mathrm{e}^-}$ couples roughly to some controlled $V^\circ_i$ point on the *target* solution.
-
-<figure class="diagram-placeholder">
-{% figcaption %}
-- Schematic showing reference electrode connected via ideal junction to 
-{% endfigcaption %}
-</figure>
-
-This is equivalent to the following question. Hypothetically, where would $V_{\mathrm{e}^-}$ be for the reference electrode, if
-
-* all bulk $V^\circ_i$ stayed at the same place, but
-* all reactant bulk activities (ions and neutral reactants, but not the electron) are set to 1 for that electrode reaction?
-
-The resulting hypothetical $V_{\mathrm{e}^-}$ we will call $V^\circ_{\mathrm{e}^-}(\mathrm{rxn})$, which is is the "standard" for that electrode reaction.
-
-**Standard hydrogen electrode (SHE)**: The actual hydrogen electrode had $ V_{\mathrm{e}^-} = V_{\mathrm{H}^+} - \frac{\mu_{\mathrm{H}_2}}{2F}$. Setting both the $\mathrm{H}^+$ and $\mathrm{H}_2$ activities to 1, we get:
-
-$$ V^\circ_{\mathrm{e}^-}(\mathrm{SHE}) = V^\circ_{\mathrm{H}^+} - \frac{\mu^\circ_{\mathrm{H}_2}}{2F} . $$
-
-In terms of this standard level, our actual electrode level becomes:
-
-$$ V_{\mathrm{e}^-}(\text{left}) = V^\circ_{\mathrm{e}^-}(\mathrm{SHE}) + \frac{RT}{F} \ln (a_{\mathrm{H}^+}/\sqrt{a_{\mathrm{H_2}}} ), $$
-
-and we can see that the activity term is identical to the activity term in the half-cell {% wiki "Nernst equation" %} for the {% wiki "standard hydrogen electrode" %}.
-
-Note that this floats just like our $V^\circ_i$ ion levels, and it truly is an electronic standard state of the solution, however very importantly it is not standard with respect to any particular standard electron concentration (and in fact most solvents do not support free electrons). It is only standard with respect to a specific standard reaction.
-
-**Standard silver chloride electrode (SSCE)**: Similarly, for our silver chloride electrode we can define:
-
-$$ V^\circ_{\mathrm{e}^-}(\mathrm{SSCE}) = V^\circ_{\mathrm{Cl}^-} + \frac{1}{F} ( \mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}} ) . $$
-
-and we have:
-
-$$ V_{\mathrm{e}^-}(\text{right}) = V^\circ_{\mathrm{e}^-}(\mathrm{SSCE}) - \frac{RT}{F} \ln (a_{\mathrm{Cl}^-}) $$
-
-And now we see that $V^\circ_{\mathrm{e}^-}(\mathrm{SSCE}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ is equal to $E^\circ_{\mathrm{cell}}$ we saw above, which was 0.222 V.
-
-Let's now re-plot the exact same reference cell of a hydrogen electrode and a silver chloride electrode, except instead of showing ionic quantities, we'll just show the electronic $V_{\mathrm{e}^-}$ and $V^\circ_{\mathrm{e}^-}$ levels:
-
+The chains above show what the standard reference levels are: a "standard electrode" is the hypothetical electrode that would sit at a given reaction's standard level $V^\circ_{\mathrm{e}^-}(\mathrm{rxn})$ — the floating standard-redox levels we tabulated in the [half-reactions topic](../half/). Setting the reactant activities to one in our two electrodes gives
+$$
+\begin{aligned}
+V^\circ_{\mathrm{e}^-}(\mathrm{SHE}) &= V^\circ_{\mathrm{H}^+} - \frac{\mu^\circ_{\mathrm{H_2}}}{2F}, \\
+V^\circ_{\mathrm{e}^-}(\mathrm{SSCE}) &= V^\circ_{\mathrm{Cl}^-} + \frac{1}{F}(\mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}}),
+\end{aligned}
+$$
+and their difference is again the $0.222~\mathrm{V}$ from above. Re-drawn with only the electronic levels, the cell is just two $V_{\mathrm{e}^-}$ values sitting against two standard levels:
 {% include "esbd-diagrams/esbd-she-agcl-e.html" %}
+Anchoring $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ to "0 V" recovers the usual reference frame of electrochemistry — an arbitrary choice that stops making sense the moment $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ varies in space.
 
-And as you can see, I've also anchored $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ to "0 V". This is a totally arbitrary choice (and doesn't generalize -- what happens when $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ has spatial variations) because only relative differences in $V$ matter, but this shows the "reference frame" of electrochemistry.
+In practice the SHE is finicky to pin down: its nominal $a_{\mathrm{H}^+}=1$ implies an awkward pH of 0, its "1 bar" of $\mathrm{H_2}$ competes with water vapour, and like every standard level it must be reached by extrapolation from dilute cells (the junction-free Harned cell being the classic).^[TODO: Harned & Bates citations.] Any "$V_{\mathrm{e}^-}(\mathrm{SHE})$" is, in the end, a theoretical extrapolated level tied to the standard state of the aqueous proton, $V^\circ_{\mathrm{H}^+}$.
 
+## The "absolute" electrode potential
+
+Could we sidestep all this by referencing to the vacuum instead — an "absolute" electrode potential? On a $V_i$ diagram the vacuum is just one more level, $\phi_{\mathrm{vac}} = V_{\mathrm{e}^-} - \Phi/e$, sitting a work function $\Phi$ above the metal's electrons (the step we drew for [capacitors](../capacitors/)). The widely-quoted "absolute" value of about $4.44~\mathrm{V}$ for the SHE^[From Farrell & McTigue's measurements as interpreted by Trasatti; the procedure quietly splits a mean activity coefficient evenly between the ions to locate "the SHE." See also Hees & Zhang, [doi:10.1021/acs.jpclett.4c02923](https://doi.org/10.1021/acs.jpclett.4c02923), on the link to an "ionic work function."] is really a *surface* property of this kind, not a cleaner fundamental reference: like any work function it drifts with surface preparation and contamination, and the deeper trouble is that the in-material $\phi$ it leans on is not well defined to begin with (the subject of the [appendix on $\phi$](../phi/)). The vacuum offers no escape — it is one more floating level, handy for lining up work functions, not a universal zero.
 
 ## Takeaways
 
-[**NEXT TOPIC: xxx**](../xxx/)
+A reference electrode is a device for pinning one $V^\circ_{\mathrm{e}^-}(\mathrm{rxn})$ level so a working electrode's $V_{\mathrm{e}^-}$ can be read against it; a cell is two such electrodes; and a junction between them adds a liquid-junction step. The whole zoo of "potentials" — electrode potential, solution potential, cell voltage, liquid junction potential, the absolute reference — are particular gaps among the $V_{\mathrm{e}^-}$ and $V^\circ_{\mathrm{e}^-}$ levels, and the $V_i$ diagram simply shows them as the separate lines they always were.
 
-
-
-## Optional discussion
-
-{#
-<details>
-<summary>
-Click to open extended discussion.
-</summary>
-
-</details>
-#}
-
-
-The standard hydrogen electrode is a pain in the ass
-
-TODO : Cite old works like Harned and Bates
-
-The standard hydrogen electrode (SHE) is an aqueous system defined with the activity of $\mathrm{H}^+$ ions at unity ($a_{\mathrm{H}^+} = 1$), which implies $ V_{\mathrm{H}^+}(\text{SHE}) = V^\circ_{\mathrm{H}^+} $. Furthermore, the SHE is defined with $\mathrm{H}_2$ gas at a standard fugacity (effective pressure) of 1 bar, so we will write its chemical potential as $\mu^\circ_{\mathrm{H}_2}(T)$. Combining the equilibrium condition $V_{\mathrm{H}^+} - V_{\mathrm{e}^-} = \mu_{\mathrm{H}_2}/(2F)$ with the standard condition $V_{\mathrm{H}^+}(\text{SHE}) = V^\circ_{\mathrm{H}^+}$, we find:
-
-$$ V_{\mathrm{e}^-}(\text{SHE}) = V^\circ_{\mathrm{H}^+} - \frac{\mu^\circ_{\mathrm{H}_2}(T)}{2F}. $$
-
-A further simplification occurs if we are at the standard reference temperature (usually 25&nbsp;°C): $\mu^\circ_{\mathrm{H}_2}(T) = 0$. Therefore we can say for short that $ V_{\mathrm{e}^-}(\text{SHE}) = V^\circ_{\mathrm{H}^+} $ if we're operating at standard temperature.
-
-Practically, the SHE is slightly annoying:
-- 1 bar H2 fugacity contradicts 1 bar absolute pressure (because total pressure includes water vapor too), so need to correct slightly.
-- As with other standard potentials relies on extrapolating from ideal dilute
-- On the other hand, the effect of dissolved H2 (at 1 bar fugacity) on the solvent is minor and negligible.
-
-SHE reference defined in another solution as
-- The value of $V_{\mathrm{e}^-}$ that would be obtained by
-- Connecting the solution under test
-- Via an ideal salt bridge (all $V^\circ_{\mathrm{H}^+}$ flat)
-- To an solution made up of the same solvent at same temperature and same pressure
-- But with an ideal-dilute concentration of $\mathrm{H}^+$ ions of $1~\mathrm{mol/kg}$.
-
-$$ V^\circ_{\mathrm{SHE}} = V^\circ_{\mathrm{H}^+} - \frac{\mu^\circ_{\mathrm{H}_2}(T)}{2F}. $$
-
-Practically, it's not actually necessary to achieve these ideal conditions (such as the extreme pH of 0 implied by $a_{\mathrm{H}^+} = 1$), nor is it even desirable to do so, given the uncertainties about when unit activity is exactly reached. Instead, the most precise determinations of potentials relative to the SHE reference point are made using cells without liquid junctions (like the Harned cell) where measurements are performed in well-defined dilute solutions. The results are then extrapolated back to the idealized standard state conditions. In this sense, any reference to $V_{\mathrm{e}^-}(\text{SHE})$ represents this theoretical, extrapolated potential defined relative to the standard state of the aqueous proton, $V^\circ_{\mathrm{H}^+}$.
+[**NEXT TOPIC: Redox-flow batteries**](../redoxflow/)

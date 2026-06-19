@@ -22,11 +22,10 @@
 
 *Redox and electrode potentials*:
 - [_Half-reactions_](/esbd/half/) - Electrons "in solution": redox and the Nernst equation in $V_i$ land. Standard electrode potentials as floating levels $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$.
-- [_Electrode potentials_](/esbd/e/) - Visualizing electrode potential $E$, reduction potential $E_h$, overpotentials, and related concepts.
-- [_Cells with junctions_](/esbd/junctions/) - Liquid junction potentials; concentration cells.
-- [_pH_](/esbd/ph/) - 
-- [_Reference electrodes_](/esbd/references/) - Reference cells and the solution reference potential $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$.
-- [_Absolute electrode potential_](/esbd/absolute/) - Illustrating the work function of the standard hydrogen electrode.
+- [_Electrode potential_](/esbd/e/) - One electrode: visualizing $E$, overpotential, and mixed potentials.
+- [_Reference electrodes & cells_](/esbd/references/) - Reference electrodes, full cells, liquid junction potentials, and the "absolute" vacuum reference.
+- [_Cells with junctions_](/esbd/junctions/) - Liquid junction potentials; concentration cells. *(pending redistribution / chop)*
+- [_pH_](/esbd/ph/) - *(pending redistribution / chop)*
 
 *Application highlights*:
 - [_Redox-flow Batteries_](/esbd/redoxflow)
