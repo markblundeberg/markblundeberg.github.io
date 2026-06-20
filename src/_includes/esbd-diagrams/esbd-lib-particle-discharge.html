@@ -3,46 +3,29 @@
 </figure>
 
 <script type="module">
-    const plotContainerId = 'esbd-lib-particle-discharge';
-
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
-    import { throttle, linspace } from '{{ esbdJsPath }}utils.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { linspace } from '{{ esbdJsPath }}utils.js';
 
-    const diagram = new ElectrochemicalSpeciesBandDiagram(
-        plotContainerId,
-        {
-            li_ion: {
-                z: 1,
-                color: '#E41A1C',
-                mathLabel: '\\mathrm{Li}^{+}',
-            },
-            electron: {
-                z: -1,
-                color: '#377EB8',
-                mathLabel: '\\mathrm{e}^{-}',
-            },
-        },
-        {}
-    );
+    const diagram = new ElectrochemicalSpeciesBandDiagram('esbd-lib-particle-discharge', {
+        li_ion: SPECIES.lithium,
+        electron: SPECIES.electron,
+    });
 
-    // Boundaries
     const boundaries = [0.0, 0.7, 0.8, 1.0];
-    // Set layout
     diagram.setSpatialLayout(boundaries, [
         { name: 'Graphite', color: '#DDDDDD' },
         { name: 'SEI', color: '#E0E0F0' },
-        { name: 'Electrolyte', color: '#E6F5FF' },
+        { ...REGION.solution, name: 'Electrolyte' },
     ]);
 
     const V_el = -0.02;
-
     const V_lion_core = V_el - 0.1;
     const V_lion_surface = V_el - 0.15;
     const V_lion_electrolyte = V_el - 0.2;
 
     const x_lion = linspace(0.0, 1.0, 101);
     const V_lion = [];
-
     for (const x of x_lion) {
         let v;
         if (x <= boundaries[1]) {
