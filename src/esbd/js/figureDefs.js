@@ -23,6 +23,7 @@ export const SPECIES = {
     proton: { z: 1, color: '#c04040', mathLabel: '\\mathrm{H}^{+}' },
     hydroxide: { z: -1, color: '#40a0a0', mathLabel: '\\mathrm{OH}^{-}' },
     chloride: { z: -1, color: '#80B030', mathLabel: '\\mathrm{Cl}^{-}' },
+    nitrate: { z: -1, color: '#30B090', mathLabel: '\\mathrm{NO_3}^{-}' },
     silver: { z: 1, color: '#E6AB02', mathLabel: '\\mathrm{Ag}^{+}' },
     zinc: { z: 2, color: '#c04060', mathLabel: '\\mathrm{Zn}^{2+}' },
     ferrous: { z: 2, color: '#bba442', mathLabel: '\\mathrm{Fe}^{2+}' },

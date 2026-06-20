@@ -21,3 +21,10 @@
     {% if opts.snap is defined %}<datalist id="{{ id }}-datalist"><option value="{{ opts.snap }}" label="{{ opts.snap }}"></option></datalist>{% endif %}
 </div>
 {% endmacro %}
+
+{% macro checkbox(id, label, opts = {}) %}
+<span class="bd-control" style="font-size: 0.85em; margin: 0 0.6em; white-space: nowrap">
+    <input type="checkbox" id="{{ id }}"{% if opts.checked %} checked{% endif %} style="vertical-align: middle" />
+    <label for="{{ id }}">{{ label | safe }}</label>
+</span>
+{% endmacro %}

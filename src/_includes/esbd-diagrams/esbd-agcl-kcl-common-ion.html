@@ -1,4 +1,5 @@
 {% set idprefix = ["esbd-agcl-kcl-common-ion", idsuffix] | join %}
+{% import "macros/controls.njk" as controls %}
 <figure class="demo-container" style="max-width: 300px">
     <div
         id="{{idprefix}}-bd-container"
@@ -6,103 +7,60 @@
         style="height: 300px; width: 100%"
     ></div>
 
-    <span>
-        <label for="{{idprefix}}-kclSlider"
-            >Added KCl:
-            <span id="{{idprefix}}-kclValue">1e-7</span>&nbsp;mol/L</label
-        >
-        <input
-            type="range"
-            id="{{idprefix}}-kclSlider"
-            min="-8"
-            max="0"
-            step="0.1"
-            value="-8"
-        />
-    </span>
+    {{ controls.slider(idprefix + "-kclSlider", "Added KCl", { min: -8, max: 0, step: 0.1, value: -8, readout: true, unit: "mol/L" }) }}
 
-    <span id="{{idprefix}}-agno3SliderHider" style="display: none">
-        <label for="{{idprefix}}-agno3Slider"
-            >Added AgNO<sub>3</sub>:
-            <span id="{{idprefix}}-agno3Value">1e-7</span>&nbsp;mol/L</label
-        >
-        <input
-            type="range"
-            id="{{idprefix}}-agno3Slider"
-            min="-8"
-            max="0"
-            step="0.1"
-            value="-8"
-        />
-    </span>
+    <div id="{{idprefix}}-agno3SliderHider" style="display: none">
+        {{ controls.slider(idprefix + "-agno3Slider", "Added AgNO<sub>3</sub>", { min: -8, max: 0, step: 0.1, value: -8, readout: true, unit: "mol/L" }) }}
+    </div>
 
-    <span>
-        <input
-            type="checkbox"
-            id="{{idprefix}}-zoomCheck"
-            name="zoom"
-            value="yes"
-        />
-        <label for="{{idprefix}}-zoomCheck">Zoom?</label>
-    </span>
-    <span>
-        <input
-            type="checkbox"
-            id="{{idprefix}}-agno3Check"
-            name="zoom"
-            value="yes"
-        />
-        <label for="{{idprefix}}-agno3Check">AgNO<sub>3</sub>?</label>
-    </span>
+    <div style="text-align: center; margin-top: 0.4em">
+        {{ controls.checkbox(idprefix + "-zoomCheck", "Zoom?") }}
+        {{ controls.checkbox(idprefix + "-agno3Check", "AgNO<sub>3</sub>?") }}
+    </div>
 
-    <div class="output">
-        <p>Calculated Concentrations:</p>
-        <p><strong>[K⁺]:</strong> <span id="{{idprefix}}-kConc"></span> M</p>
-        <p><strong>[Ag⁺]:</strong> <span id="{{idprefix}}-agConc"></span> M</p>
-        <p><strong>[Cl⁻]:</strong> <span id="{{idprefix}}-clConc"></span> M</p>
-        <p id="{{idprefix}}-no3ConcHider" style="display: none">
-            <strong>[NO<sub>3</sub>⁻]:</strong>
-            <span id="{{idprefix}}-no3Conc"></span> M
-        </p>
+    <div
+        class="bd-readout"
+        style="text-align: center; font-size: 0.8em; color: #444; margin-top: 0.5em; line-height: 1.5"
+    >
+        Concentrations (mol/L):<br />
+        [K⁺] <span id="{{idprefix}}-kConc"></span>&emsp;[Cl⁻]
+        <span id="{{idprefix}}-clConc"></span><br />
+        [Ag⁺] <span id="{{idprefix}}-agConc"></span
+        ><span id="{{idprefix}}-no3ConcHider" style="display: none"
+            >&emsp;[NO₃⁻] <span id="{{idprefix}}-no3Conc"></span
+        ></span>
     </div>
 </figure>
 
 <script type="module">
-    // --- DOM Elements from the above ---
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
+
+    // --- DOM Elements ---
     const kclSlider = document.getElementById('{{idprefix}}-kclSlider');
     const agno3Slider = document.getElementById('{{idprefix}}-agno3Slider');
     const zoomCheck = document.getElementById('{{idprefix}}-zoomCheck');
     const agno3Check = document.getElementById('{{idprefix}}-agno3Check');
-    const kclValueSpan = document.getElementById('{{idprefix}}-kclValue');
-    const agno3ValueSpan = document.getElementById('{{idprefix}}-agno3Value');
+    const kclValueSpan = document.getElementById('{{idprefix}}-kclSlider-readout');
+    const agno3ValueSpan = document.getElementById('{{idprefix}}-agno3Slider-readout');
     const kConcSpan = document.getElementById('{{idprefix}}-kConc');
     const agConcSpan = document.getElementById('{{idprefix}}-agConc');
     const clConcSpan = document.getElementById('{{idprefix}}-clConc');
     const no3ConcSpan = document.getElementById('{{idprefix}}-no3Conc');
-    const agno3SliderHider = document.getElementById(
-        '{{idprefix}}-agno3SliderHider'
-    );
+    const agno3SliderHider = document.getElementById('{{idprefix}}-agno3SliderHider');
     const no3ConcHider = document.getElementById('{{idprefix}}-no3ConcHider');
     const plotContainerId = '{{idprefix}}-bd-container';
-
-    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
-    import { formatPopupBaseContent, throttle } from '{{ esbdJsPath }}utils.js';
 
     // --- Constants ---
     const R = 8.31446261815324; // Gas constant (J/mol·K)
     const F = 96485.3321233100184; // Faraday constant (C/mol)
     const c_std = 1.0; // Standard concentration (mol/L)
-
-    // --- Thermo data ---
-
-    // Assumed temperature for these values
     const T = 298.15; // Temperature (K, 25°C)
 
-    // V_Ag+ - V_e- = mu_Ag / F   (which is 0)
-    const V_Ag_e = 0;
-
-    // V_Ag+ - V_Cl- = mu_AgCl/F   (for saturated AgCl)
-    const V_AgCl = -109.79e3 / F; // ~ -1.1 V
+    // --- Thermo data ---
+    const V_Ag_e = 0; // V_Ag+ - V_e- = mu_Ag / F   (which is 0)
+    const V_AgCl = -109.79e3 / F; // V_Ag+ - V_Cl- = mu_AgCl/F (saturated AgCl) ~ -1.1 V
 
     // Ion standard states 'ladder'
     const V_std_H_H = 0; // reference point
@@ -112,54 +70,21 @@
     const V_std_NO3_H = -108.74e3 / -F; // ~ +1.1 V
 
     // --- Set up diagram ---
+    const diagram = new ElectrochemicalSpeciesBandDiagram(plotContainerId, {
+        ag_ion: SPECIES.silver,
+        k_ion: SPECIES.potassium,
+        cl_ion: SPECIES.chloride,
+        no3_ion: SPECIES.nitrate,
+        electron: SPECIES.electron,
+        h_ion: SPECIES.proton,
+    });
 
-    const diagram = new ElectrochemicalSpeciesBandDiagram(
-        plotContainerId,
-        {
-            ag_ion: {
-                z: 1,
-                color: '#E4572E',
-                mathLabel: '\\mathrm{Ag}^{+}',
-            },
-            k_ion: {
-                z: 1,
-                color: '#B84E63',
-                mathLabel: '\\mathrm{K}^{+}',
-            },
-            cl_ion: {
-                z: 1,
-                color: '#80B030',
-                mathLabel: '\\mathrm{Cl}^{-}',
-            },
-            no3_ion: {
-                z: -1,
-                color: '#30B090',
-                mathLabel: '\\mathrm{NO_3}^{-}',
-            },
-            electron: {
-                z: -1,
-                color: '#377EB8',
-                mathLabel: '\\mathrm{e}^{-}',
-            },
-            h_ion: {
-                z: 1,
-                color: '#606060',
-                mathLabel: '\\mathrm{H}^{+}',
-            },
-        },
-        {}
-    );
-
-    // Boundaries
     const boundaries = [0.0, 0.3, 0.7, 1.0];
-    // Set layout
     diagram.setSpatialLayout(boundaries, [
-        { name: 'Silver wire', color: '#E0E0E0' },
-        { name: 'AgCl coating', color: '#ccc' },
-        { name: 'Solution', color: '#E6F5FF' },
+        { ...REGION.metal, name: 'Silver wire' },
+        { name: 'AgCl coating', color: '#cccccc' },
+        REGION.solution,
     ]);
-
-    // Define species info
 
     // --- Calculation Function ---
     function doUpdate() {
@@ -206,7 +131,6 @@
             c_Ag_plus = (-c_background + Math.sqrt(discriminant)) / 2;
         } else {
             console.error('Negative discriminant - calculation error');
-            // Should not happen if K_sp is positive
         }
         const c_Cl_minus = c_background + c_Ag_plus; // Cl- from KCl + Cl- from dissolved AgCl
 
@@ -328,9 +252,9 @@
         }
     }
 
-    // --- Event Listener ---
-    kclSlider.addEventListener('input', throttle(doUpdate, 100));
-    agno3Slider.addEventListener('input', throttle(doUpdate, 100));
+    // --- Wire up controls (static markup; no layout shift) ---
+    makeSlider('{{idprefix}}-kclSlider', () => doUpdate(), { fire: false });
+    makeSlider('{{idprefix}}-agno3Slider', () => doUpdate(), { fire: false });
     zoomCheck.addEventListener('input', doUpdate);
     agno3Check.addEventListener('input', doUpdate);
 
