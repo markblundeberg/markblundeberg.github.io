@@ -1,72 +1,29 @@
 {% set idprefix = ["bd-basicbattery-energy-ion-too-", idsuffix] | join %}
+{% import "macros/controls.njk" as controls %}
 <figure class="demo-container" style="max-width: 300px">
     <div class="bd-container" id="{{ idprefix }}"></div>
-    <div style="text-align: center">
-        <div>
-            <label for="{{ idprefix }}-current-slider" style="font-size: 0.85em"
-                >Current (<b
-                    ><span id="{{ idprefix }}-current-text"
-                        >equilibrium</span
-                    ></b
-                >):</label
-            >
-            <br />
-            <input
-                type="range"
-                id="{{ idprefix }}-current-slider"
-                list="{{ idprefix }}-current-slider-datalist"
-                min="-1"
-                max="1"
-                step="any"
-                value="0.0"
-                style="width: 100px"
-            />
-            <datalist id="{{ idprefix }}-current-slider-datalist">
-                <option value="0" label="0">0</option>
-            </datalist>
-        </div>
-        <div>
-            <label for="{{ idprefix }}-dphi-slider" style="font-size: 0.85em"
-                >Electrostatic offset $\Delta\phi$:</label
-            >
-            <br />
-            <input
-                type="range"
-                id="{{ idprefix }}-dphi-slider"
-                min="-0.5"
-                max="0.5"
-                step="any"
-                value="0.0"
-                style="width: 100px"
-            />
-        </div>
-    </div>
+    {{ controls.slider(idprefix + "-current-slider", "Current", { min: -1, max: 1, step: "any", value: 0, readout: true, readoutInit: "equilibrium", snap: 0 }) }}
+    {{ controls.slider(idprefix + "-dphi-slider", "Electrostatic offset $\\Delta\\phi$", { min: -0.5, max: 0.5, step: "any", value: 0 }) }}
 </figure>
 
 <script type="module">
-    const plotContainerId = '{{ idprefix }}';
-    const dPhiSliderId = '{{ idprefix }}-dphi-slider';
-    const currentSliderId = '{{ idprefix }}-current-slider';
-    const currentTextId = '{{ idprefix }}-current-text';
-
     import BandDiagram from '{{ esbdJsPath }}BandDiagram.js';
-    import { throttle } from '{{ esbdJsPath }}utils.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
 
-    const throttleDuration = 100; // should be 1/5 or less of transitionDuration
+    const dPhiSlider = document.getElementById('{{ idprefix }}-dphi-slider');
+    const currentSlider = document.getElementById('{{ idprefix }}-current-slider');
+    const currentText = document.getElementById('{{ idprefix }}-current-slider-readout');
 
-    const diagram = new BandDiagram(plotContainerId);
-    const dPhiSlider = document.getElementById(dPhiSliderId);
-    const currentSlider = document.getElementById(currentSliderId);
-    const currentText = document.getElementById(currentTextId);
+    const diagram = new BandDiagram('{{ idprefix }}');
 
-    // Set layout
     const boundaries = [0.0, 0.15, 0.3, 0.7, 0.85, 1.0];
     diagram.setSpatialLayout(
         boundaries,
         [
             { name: 'Anode', color: '#AAAAAA' },
             { name: 'Anode-active', color: '#bbb' },
-            { name: 'Electrolyte', color: '#E6F5FF' },
+            { ...REGION.solution, name: 'Electrolyte' },
             { name: 'Cathode-active', color: '#bbb' },
             { name: 'Cathode', color: '#AAAAAA' },
         ],
@@ -86,20 +43,15 @@
     const OCV_anode = 0.1;
     const OCV_cathode = 3.4;
 
-    const li_color = '#E41A1C';
-    const electron_color = '#377EB8';
+    const li_color = SPECIES.lithium.color;
+    const electron_color = SPECIES.electron.color;
 
     function updateDiagrams() {
         const dphi = parseFloat(dPhiSlider.value);
         const current = parseFloat(currentSlider.value);
 
-        if (current > 0) {
-            currentText.textContent = 'discharging⇨';
-        } else if (current < 0) {
-            currentText.textContent = '⇦charging';
-        } else {
-            currentText.textContent = 'equilibrium';
-        }
+        currentText.textContent =
+            current > 0 ? 'discharging⇨' : current < 0 ? '⇦charging' : 'equilibrium';
 
         const V_left = 0.0 + dphi;
         const V_Li_left = V_left - OCV_anode;
@@ -137,13 +89,7 @@
         ]);
     }
 
-    // Slider event listeners - throttle them.
-    const updateThrottler = throttle(
-        (event) => updateDiagrams(),
-        throttleDuration
-    );
-    dPhiSlider.addEventListener('input', updateThrottler);
-    currentSlider.addEventListener('input', updateThrottler);
-
+    makeSlider('{{ idprefix }}-current-slider', () => updateDiagrams(), { fire: false });
+    makeSlider('{{ idprefix }}-dphi-slider', () => updateDiagrams(), { fire: false });
     updateDiagrams();
 </script>

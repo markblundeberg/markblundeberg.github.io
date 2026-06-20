@@ -3,17 +3,15 @@
 </figure>
 
 <script type="module">
-    const plotContainerId = 'bd-basicbattery-energy-missing';
-
     import BandDiagram from '{{ esbdJsPath }}BandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
 
-    const diagram = new BandDiagram(plotContainerId);
+    const diagram = new BandDiagram('bd-basicbattery-energy-missing');
 
-    // Set layout
     const boundaries = [0.0, 0.3, 0.7, 1.0];
     diagram.setSpatialLayout(boundaries, [
         { name: 'Anode', color: '#AAAAAA' },
-        { name: 'Electrolyte', color: '#E6F5FF' },
+        { ...REGION.solution, name: 'Electrolyte' },
         { name: 'Cathode', color: '#AAAAAA' },
     ]);
 
@@ -29,20 +27,15 @@
             id: 'anode_trace',
             label: '\\bar\\mu_{\\mathrm{e}^-}',
             showLabel: true,
+            color: SPECIES.electron.color,
             x: [b[0], b[1]],
             y: [-V_anode, -V_anode],
         },
-        // {
-        //     id: 'unk_trace',
-        //     label: '???',
-        //     showLabel: true,
-        //     x: [b[1], b[2]],
-        //     y: [1.5, 3.5],
-        // },
         {
             id: 'cathode_trace',
             label: '\\bar\\mu_{\\mathrm{e}^-}',
             showLabel: true,
+            color: SPECIES.electron.color,
             x: [b[2], b[3]],
             y: [-V_cathode, -V_cathode],
         },
