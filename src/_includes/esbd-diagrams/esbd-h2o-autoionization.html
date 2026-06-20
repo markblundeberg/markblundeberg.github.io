@@ -3,36 +3,18 @@
 </figure>
 
 <script type="module">
-    const plotContainerId = 'h2o-autoionization-container';
-
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
-    import { formatPopupBaseContent, throttle } from '{{ esbdJsPath }}utils.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
 
-    const speciesInfo = {
-        cation: {
-            z: 1,
-            color: '#c04040',
-            // color: '#E4572E',
-            mathLabel: '\\mathrm{H}^{+}',
-        },
-        anion: {
-            z: -1,
-            color: '#40a0a0',
-            mathLabel: '\\mathrm{OH}^{-}',
-        },
-    };
+    const diagram = new ElectrochemicalSpeciesBandDiagram('h2o-autoionization-container', {
+        cation: SPECIES.proton,
+        anion: SPECIES.hydroxide,
+    });
 
-    const diagram = new ElectrochemicalSpeciesBandDiagram(
-        plotContainerId,
-        speciesInfo
-    );
-
-    // Set layout
     const boundaries = [0, 1];
-    diagram.setSpatialLayout(boundaries, [{ name: 'Water', color: '#E6F5FF' }]);
+    diagram.setSpatialLayout(boundaries, [{ ...REGION.solution, name: 'Water' }]);
 
     const Delta = -2.457; // V
-
     const V_cat = -0.4567; //random
     const V_an = V_cat - Delta;
     diagram.setVRange(Math.min(V_cat, V_an) - 0.2, Math.max(V_cat, V_an) + 0.2);

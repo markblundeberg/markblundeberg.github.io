@@ -3,34 +3,18 @@
 </figure>
 
 <script type="module">
-    const plotContainerId = 'zn-electrode-container';
-
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
-    import { formatPopupBaseContent, throttle } from '{{ esbdJsPath }}utils.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
 
-    const speciesInfo = {
-        cation: {
-            z: 1,
-            color: '#c04060',
-            mathLabel: '\\mathrm{Zn}^{2+}',
-        },
-        electron: {
-            z: -1,
-            color: '#377EB8',
-            mathLabel: '\\mathrm{e}^{-}',
-        },
-    };
+    const diagram = new ElectrochemicalSpeciesBandDiagram('zn-electrode-container', {
+        cation: SPECIES.zinc,
+        electron: SPECIES.electron,
+    });
 
-    const diagram = new ElectrochemicalSpeciesBandDiagram(
-        plotContainerId,
-        speciesInfo
-    );
-
-    // Set layout
     const boundaries = [0.0, 0.5, 1.0];
     diagram.setSpatialLayout(boundaries, [
-        { name: 'Zinc metal', color: '#E0E0E0' },
-        { name: 'Solution', color: '#E6F5FF' },
+        { ...REGION.metal, name: 'Zinc metal' },
+        REGION.solution,
     ]);
 
     const V_el = +0;

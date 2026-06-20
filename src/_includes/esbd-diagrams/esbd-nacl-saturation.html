@@ -3,38 +3,21 @@
 </figure>
 
 <script type="module">
-    const plotContainerId = 'nacl-saturation-container';
-
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
-    import { formatPopupBaseContent, throttle } from '{{ esbdJsPath }}utils.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
 
-    const speciesInfo = {
-        cation: {
-            z: 1,
-            color: '#d87E37',
-            mathLabel: '\\mathrm{Na}^{+}',
-        },
-        anion: {
-            z: -1,
-            color: '#80B030',
-            mathLabel: '\\mathrm{Cl}^{-}',
-        },
-    };
+    const diagram = new ElectrochemicalSpeciesBandDiagram('nacl-saturation-container', {
+        cation: SPECIES.sodium,
+        anion: SPECIES.chloride,
+    });
 
-    const diagram = new ElectrochemicalSpeciesBandDiagram(
-        plotContainerId,
-        speciesInfo
-    );
-
-    // Set layout
     const boundaries = [0, 0.5, 1];
     diagram.setSpatialLayout(boundaries, [
-        { name: 'NaCl solid', color: '#eee' },
-        { name: 'Brine', color: '#E6F5FF' },
+        { ...REGION.solid, name: 'NaCl solid' },
+        { ...REGION.solution, name: 'Brine' },
     ]);
 
     const Delta = -3.9813; // V
-
     const V_cat = -0.789; //random
     const V_an = V_cat - Delta;
     diagram.setVRange(Math.min(V_cat, V_an) - 0.2, Math.max(V_cat, V_an) + 0.2);

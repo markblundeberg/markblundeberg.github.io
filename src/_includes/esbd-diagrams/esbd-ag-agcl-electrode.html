@@ -3,40 +3,20 @@
 </figure>
 
 <script type="module">
-    const plotContainerId = 'ag-agcl-electrode-container';
-
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
-    import { formatPopupBaseContent, throttle } from '{{ esbdJsPath }}utils.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
 
-    const speciesInfo = {
-        cation: {
-            z: 1,
-            color: '#E6AB02',
-            mathLabel: '\\mathrm{Ag}^{+}',
-        },
-        anion: {
-            z: 1,
-            color: '#80B030',
-            mathLabel: '\\mathrm{Cl}^{-}',
-        },
-        electron: {
-            z: -1,
-            color: '#377EB8',
-            mathLabel: '\\mathrm{e}^{-}',
-        },
-    };
+    const diagram = new ElectrochemicalSpeciesBandDiagram('ag-agcl-electrode-container', {
+        cation: SPECIES.silver,
+        anion: SPECIES.chloride,
+        electron: SPECIES.electron,
+    });
 
-    const diagram = new ElectrochemicalSpeciesBandDiagram(
-        plotContainerId,
-        speciesInfo
-    );
-
-    // Set layout
     const boundaries = [0.0, 0.3, 0.7, 1.0];
     diagram.setSpatialLayout(boundaries, [
-        { name: 'Silver wire', color: '#E0E0E0' },
-        { name: 'AgCl coating', color: '#ccc' },
-        { name: 'Solution', color: '#E6F5FF' },
+        { ...REGION.metal, name: 'Silver wire' },
+        { name: 'AgCl coating', color: '#cccccc' },
+        REGION.solution,
     ]);
 
     const V_el = +0;
@@ -62,9 +42,6 @@
             y: [V_Cl, V_Cl],
         },
     ]);
-
-    // No popup callback
-    //    this.diagram.setTracePopupCallback(...);
 
     diagram.updateVerticalMarkers([
         {
