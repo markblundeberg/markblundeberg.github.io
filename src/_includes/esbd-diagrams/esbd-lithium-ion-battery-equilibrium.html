@@ -1,118 +1,122 @@
-<figure
-    class="demo-container"
-    id="LIB-cell-eq-container"
-    style="max-width: 600px; min-height: 325px"
-></figure>
+{% set idprefix = "esbd-lib-eq" %}
+{% import "macros/controls.njk" as controls %}
+<figure class="demo-container" style="max-width: 600px">
+    <div class="bd-container" id="{{idprefix}}-container"></div>
+    {{ controls.slider(idprefix + "-soc", "State of charge", { min: 0, max: 100, step: 1, value: 50, readout: true, unit: "%" }) }}
+    <div
+        class="bd-readout"
+        style="text-align: center; font-size: 0.85em; color: #444; margin-top: 0.3em"
+    >
+        Cell voltage (OCV): <span id="{{idprefix}}-ocv"></span> V
+    </div>
+</figure>
 
 <script type="module">
-    const liIonContainerId = '#LIB-cell-eq-container';
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
 
-    import LiIonBatteryComponent from '{{ esbdJsPath }}LiIonBatteryComponent.js';
-    import { throttle } from '{{ esbdJsPath }}utils.js';
+    const socReadout = document.getElementById('{{idprefix}}-soc-readout');
+    const ocvOut = document.getElementById('{{idprefix}}-ocv');
 
-    // Configuration for the Li-ion Battery
-    const liIonConfig = {
-        // Define species relevant to Li-ion (can reuse some keys if careful)
-        // Note: Using generic 'anion' key for PF6- or similar
-        li_ion: { z: 1, color: '#E41A1C', mathLabel: '\\mathrm{Li}^{+}' }, // Red for Li+
-        electron: {
-            z: -1,
-            color: '#377EB8',
-            mathLabel: '\\mathrm{e}^{-}',
-        }, // Blue for electron
-
-        // Electrode definitions with Langmuir E0 vs Li/Li+
-        anode: {
-            // Graphite (simplified)
-            E0_vs_Li: 0.15, // Approx. standard potential vs Li/Li+ for Langmuir model
-            mathLabel: 'Graphite',
-            color: '#666666', // Dark Grey
-        },
-        cathode: {
-            // Generic Oxide (simplified)
-            E0_vs_Li: 3.8, // Approx. standard potential vs Li/Li+ for Langmuir model
-            mathLabel: 'Oxide',
-            color: '#E41A1C', // Red (same as Li+ maybe?) or different
-        },
-
-        // Electrolyte properties (assuming 1M LiPF6, ideal activity)
-        electrolyte: {
-            Li_activity: 1.0,
-            anion_activity: 1.0,
-            // Standard potentials for solution ions (optional, needed for V_std lines)
-            // If these are omitted, V_span_placeholder will be used.
-            // li_ion_mu_standard_J_mol: ??? , // Difficult to define for non-aqueous
-            // anion_mu_standard_J_mol: ??? ,
-        },
-
-        // Define electrode
-        charge_units: 'mAh/cm$^{-2}$',
-        default_Li_inventory: 5.0,
-        cathode_ocv: {
-            // NMC cathode OCV curve
-            // From Chang-Hui Chen, Ferran Brosa Planella, Kieran O’Regan, Dominika Gastol, W.
-            // Dhammika Widanage, and Emma Kendrick. "Development of Experimental Techniques for
-            // Parameterization of Multi-scale Lithium-ion Battery Models." Journal of the
-            // Electrochemical Society 167 (2020): 080534.
-            span_charge: 5.0,
-            func: (x) => {
-                // x from 0 to 1
-                const sto = 0.25 + x * 0.75; // map x=0 to 0.25 and x=1 to 1.0
-                return (
-                    -0.809 * sto +
-                    4.4875 -
-                    0.0428 * Math.tanh(18.5138 * (sto - 0.5542)) -
-                    17.7326 * Math.tanh(15.789 * (sto - 0.3117)) +
-                    17.5842 * Math.tanh(15.9308 * (sto - 0.312))
-                );
-            },
-        },
-        anode_ocv: {
-            // Graphite anode OCV curve
-            // From Chang-Hui Chen, Ferran Brosa Planella, Kieran O’Regan, Dominika Gastol, W.
-            // Dhammika Widanage, and Emma Kendrick. "Development of Experimental Techniques for
-            // Parameterization of Multi-scale Lithium-ion Battery Models." Journal of the
-            // Electrochemical Society 167 (2020): 080534.
-            span_charge: 5.0,
-            func: (x) => {
-                // x from 0 to 1
-                const sto = x;
-                return (
-                    1.9793 * Math.exp(-39.3631 * sto) +
-                    0.2482 -
-                    0.0909 * Math.tanh(29.8538 * (sto - 0.1234)) -
-                    0.04478 * Math.tanh(14.9159 * (sto - 0.2769)) -
-                    0.0205 * Math.tanh(30.4444 * (sto - 0.6103))
-                );
-            },
-        },
-
-        // Balancing and SoC
-        Li_total_norm: 0.95, // Total Li relative to one electrode's site capacity (assumed equal)
-        initialSoCPercent: 50, // Start at 50% SoC (relative to anode x)
-
-        // Placeholder for relative standard state potential difference if mu_std not provided
-        V_span_placeholder: 1.0, // Placeholder V_std(Li+) - V_std(Anion) in Volts
-
-        // Spatial Layout (7 regions, 8 boundaries based on previous discussion)
-        // Widths: 0.1 | 0.25 | 0.13 | 0.04 | 0.13 | 0.25 | 0.1
-        boundaries: [0, 0.1, 0.35, 0.48, 0.52, 0.65, 0.9, 1.0],
-        regionProps: [
-            { name: 'Collector 1', color: '#AAAAAA' },
-            { name: 'Anode (Graphite)', color: '#DDDDDD' },
-            { name: 'Electrolyte 1', color: '#E6F5FF' },
-            { name: 'Separator', color: '#FFFFE0' }, // Light yellow for separator
-            { name: 'Electrolyte 2', color: '#E6F5FF' }, // Same electrolyte color
-            { name: 'Cathode (Oxide)', color: '#FFDDDD' }, // Light red for cathode
-            { name: 'Collector 2', color: '#AAAAAA' },
-        ],
-
-        // Plot height
-        plotHeight: 300, // Slightly taller for battery?
+    // Open-circuit-voltage curves vs Li/Li+, from Chen et al. (2020),
+    // J. Electrochem. Soc. 167: 080534.
+    const anodeOCV = (x) =>
+        1.9793 * Math.exp(-39.3631 * x) +
+        0.2482 -
+        0.0909 * Math.tanh(29.8538 * (x - 0.1234)) -
+        0.04478 * Math.tanh(14.9159 * (x - 0.2769)) -
+        0.0205 * Math.tanh(30.4444 * (x - 0.6103));
+    const cathodeOCV = (y) => {
+        const sto = 0.25 + y * 0.75;
+        return (
+            -0.809 * sto +
+            4.4875 -
+            0.0428 * Math.tanh(18.5138 * (sto - 0.5542)) -
+            17.7326 * Math.tanh(15.789 * (sto - 0.3117)) +
+            17.5842 * Math.tanh(15.9308 * (sto - 0.312))
+        );
     };
 
-    // Pass the specific config for the Li-ion battery
-    const comp = new LiIonBatteryComponent(liIonContainerId, liIonConfig); // Instantiate the new component
-    comp.diagram.setVRange(-1.2, 4.7);
-    document.querySelector(liIonContainerId).style.removeProperty('min-height'); // remove initial render size hint
+    const diagram = new ElectrochemicalSpeciesBandDiagram('{{idprefix}}-container', {
+        li_ion: SPECIES.lithium,
+        electron: SPECIES.electron,
+    });
+
+    // 7 regions: collector | anode | electrolyte | separator | electrolyte | cathode | collector
+    const boundaries = [0, 0.1, 0.35, 0.48, 0.52, 0.65, 0.9, 1.0];
+    diagram.setSpatialLayout(boundaries, [
+        { name: 'Collector', color: '#AAAAAA' },
+        { name: 'Anode (graphite)', color: '#DDDDDD' },
+        { ...REGION.solution, name: 'Electrolyte' },
+        { name: 'Separator', color: '#FFFFE0' },
+        { ...REGION.solution, name: 'Electrolyte' },
+        { name: 'Cathode (oxide)', color: '#FFDDDD' },
+        { name: 'Collector', color: '#AAAAAA' },
+    ]);
+    diagram.setVRange(-1.2, 4.7);
+
+    const b = boundaries;
+    function doUpdate(soc) {
+        const x_anode = (soc + 5) / 105.0; // anode lithiation
+        const y_cathode = 1.0 - x_anode; // cathode lithiation
+        const ocvA = anodeOCV(x_anode);
+        const ocvC = cathodeOCV(y_cathode);
+        const cellV = ocvC - ocvA;
+
+        const V_e_anode = 0;
+        const V_Li = -ocvA;
+        const V_e_cathode = cellV;
+
+        socReadout.textContent = soc.toFixed(0);
+        ocvOut.textContent = cellV.toFixed(3);
+
+        diagram.updateTraceData([
+            {
+                id: 'e_anode',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [b[0], b[2]],
+                y: [V_e_anode, V_e_anode],
+            },
+            {
+                id: 'e_cathode',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [b[5], b[7]],
+                y: [V_e_cathode, V_e_cathode],
+            },
+            {
+                id: 'li_elyte',
+                speciesId: 'li_ion',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [b[1], b[6]],
+                y: [V_Li, V_Li],
+            },
+        ]);
+
+        diagram.updateVerticalMarkers([
+            {
+                id: 'anode_eq',
+                symbol: '⇌',
+                x: 0.5 * (b[1] + b[2]),
+                yDefs: [{ y: V_e_anode }, { y: V_Li }],
+                popupCallback: () =>
+                    '$\\mathrm{Li(graphite)} \\rightleftharpoons \\mathrm{Li}^+ + \\mathrm{e}^-$',
+            },
+            {
+                id: 'cathode_eq',
+                symbol: '⇌',
+                x: 0.5 * (b[5] + b[6]),
+                yDefs: [{ y: V_e_cathode }, { y: V_Li }],
+                popupCallback: () =>
+                    '$\\mathrm{Li(oxide)} \\rightleftharpoons \\mathrm{Li}^+ + \\mathrm{e}^-$',
+            },
+        ]);
+    }
+
+    makeSlider('{{idprefix}}-soc', (v) => doUpdate(v));
 </script>
