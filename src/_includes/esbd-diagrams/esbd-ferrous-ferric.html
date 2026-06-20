@@ -1,72 +1,33 @@
 {% set idprefix = "esbd-ferrous-ferric" %}
+{% import "macros/controls.njk" as controls %}
 <figure class="demo-container" style="max-width: 230px">
     <div class="bd-container" id="{{idprefix}}-container"></div>
-    <div style="text-align: center">
-        <div>
-            <label for="{{ idprefix }}-current-slider" style="font-size: 0.85em"
-                >Separation:</label
-            >
-            <br />
-            <input
-                type="range"
-                id="{{ idprefix }}-current-slider"
-                list="{{ idprefix }}-current-slider-datalist"
-                min="0"
-                max="0.5"
-                step="any"
-                value="0.25"
-                style="width: 100px"
-            />
-            <datalist id="{{ idprefix }}-current-slider-datalist">
-                <option value="0" label="0">0</option>
-            </datalist>
-        </div>
-    </div>
+    {{ controls.slider(idprefix + "-current-slider", "Separation", { min: 0, max: 0.5, value: 0.25, snap: 0 }) }}
 </figure>
 
 <script type="module">
-    const plotContainerId = '{{idprefix}}-container';
-    const sliderId = '{{ idprefix }}-current-slider';
-    const throttleDuration = 100; // should be 1/5 or less of transitionDuration
-
-    const slider = document.getElementById(sliderId);
-
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
-    import { throttle } from '{{ esbdJsPath }}utils.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
 
     const speciesInfo = {
-        ferrous: {
-            z: 2,
-            color: '#bba442',
-            mathLabel: '\\mathrm{Fe}^{2+}',
-        },
-        ferric: {
-            z: 3,
-            color: '#a01808',
-            mathLabel: '\\mathrm{Fe}^{3+}',
-        },
-        electron: {
-            z: -1,
-            color: '#377EB8',
-            mathLabel: '\\mathrm{e}^{-}',
-        },
+        ferrous: SPECIES.ferrous,
+        ferric: SPECIES.ferric,
+        electron: SPECIES.electron,
     };
 
     const diagram = new ElectrochemicalSpeciesBandDiagram(
-        plotContainerId,
+        '{{idprefix}}-container',
         speciesInfo
     );
 
-    // Set layout
     const boundaries = [0.0, 0.5, 1.0];
     diagram.setSpatialLayout(boundaries, [
-        { name: 'Inert metal', color: '#E0E0E0' },
-        { name: 'Solution', color: '#E6F5FF' },
+        { ...REGION.metal, name: 'Inert metal' },
+        REGION.solution,
     ]);
 
-    function updateDiagrams() {
-        const separation = parseFloat(slider.value);
-
+    function update(separation) {
         const V_el = +0;
         const V_Fe2 = V_el - separation;
         const V_Fe3 = (V_el + 2 * V_Fe2) / 3;
@@ -76,7 +37,7 @@
         const b = boundaries;
         diagram.updateTraceData([
             {
-                id: `electron_trace`,
+                id: 'electron_trace',
                 speciesId: 'electron',
                 curveType: 'voltage',
                 showLabel: true,
@@ -84,7 +45,7 @@
                 y: [V_el, V_el],
             },
             {
-                id: `electron_implied_trace`,
+                id: 'electron_implied_trace',
                 speciesId: 'electron',
                 curveType: 'voltageImplied',
                 showLabel: false,
@@ -92,7 +53,7 @@
                 y: [V_el, V_el],
             },
             {
-                id: `ferrous_trace`,
+                id: 'ferrous_trace',
                 speciesId: 'ferrous',
                 curveType: 'voltage',
                 showLabel: true,
@@ -100,7 +61,7 @@
                 y: [V_Fe2, V_Fe2],
             },
             {
-                id: `ferric_trace`,
+                id: 'ferric_trace',
                 speciesId: 'ferric',
                 curveType: 'voltage',
                 showLabel: true,
@@ -116,17 +77,10 @@
                 x: b[1],
                 yDefs: [{ y: V_el }, { y: V_Fe2 }, { y: V_Fe3 }],
                 popupCallback: () =>
-                    '$\\mathrm{Zn} \\rightleftharpoons \\mathrm{Zn}^{2+} + 2\\mathrm{e}^-$',
+                    '$\\mathrm{Fe}^{3+} + \\mathrm{e}^- \\rightleftharpoons \\mathrm{Fe}^{2+}$',
             },
         ]);
     }
 
-    // Slider event listeners - throttle them.
-    const updateThrottler = throttle(
-        (event) => updateDiagrams(),
-        throttleDuration
-    );
-    slider.addEventListener('input', updateThrottler);
-
-    updateDiagrams();
+    makeSlider('{{idprefix}}-current-slider', update);
 </script>

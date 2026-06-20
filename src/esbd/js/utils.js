@@ -228,3 +228,29 @@ export function linspace(start, end, numPoints) {
     }
     return arr;
 }
+
+// ========================================================================
+// Controls
+// ========================================================================
+
+/**
+ * Wires an already-present (static-HTML) <input type="range"> to a throttled
+ * callback. The markup must exist in the page at load time — we never inject it
+ * from JS, to avoid layout shift. Pair with the `slider` njk macro in
+ * `_includes/macros/controls.njk`.
+ *
+ * @param {string} id - id of the range input element.
+ * @param {(value:number, event:Event|null)=>void} onInput - called with the parsed numeric value.
+ * @param {object} [opts]
+ * @param {number} [opts.throttleMs=100] - throttle interval in ms; 0 disables throttling.
+ * @param {boolean} [opts.fire=true] - also invoke onInput once immediately with the initial value.
+ * @returns {HTMLInputElement} the slider element.
+ */
+export function makeSlider(id, onInput, { throttleMs = 100, fire = true } = {}) {
+    const el = document.getElementById(id);
+    if (!el) throw new Error(`makeSlider: no element #${id}`);
+    const call = (event) => onInput(parseFloat(el.value), event);
+    el.addEventListener('input', throttleMs ? throttle(call, throttleMs) : call);
+    if (fire) onInput(parseFloat(el.value), null);
+    return el;
+}

@@ -1,0 +1,23 @@
+{#
+  controls.njk — static markup for diagram controls.
+
+  Emitted into the page HTML at build time (NOT injected by JS) so there is no
+  layout shift when the deferred diagram script runs. Wire the element up with
+  `makeSlider(id, onInput)` from utils.js.
+
+  Usage:
+    {% import "macros/controls.njk" as controls %}
+    {{ controls.slider(idprefix + "-sep", "Separation", { min: 0, max: 0.5, value: 0.25, snap: 0 }) }}
+    {{ controls.slider(idprefix + "-c", "$[\\mathrm{KCl}]$", { min: -7, max: 0, readout: true, unit: "mol/L" }) }}
+
+  opts: min, max, value, step ('any'), width (px), snap (a value to mark on a
+  datalist), readout (bool → adds <span id="{id}-readout">), readoutInit, unit.
+#}
+{% macro slider(id, label, opts = {}) %}
+<div class="bd-control" style="text-align: center; margin-top: 0.4em">
+    <label for="{{ id }}" style="font-size: 0.85em">{{ label | safe }}{% if opts.readout %}: <span id="{{ id }}-readout">{{ opts.readoutInit | default("") | safe }}</span>{% if opts.unit %}&nbsp;{{ opts.unit | safe }}{% endif %}{% endif %}</label>
+    <br />
+    <input type="range" id="{{ id }}"{% if opts.snap is defined %} list="{{ id }}-datalist"{% endif %} min="{{ opts.min | default(0) }}" max="{{ opts.max | default(1) }}" step="{{ opts.step | default('any') }}" value="{{ opts.value if opts.value is defined else (opts.min | default(0)) }}" style="width: {{ opts.width | default(150) }}px; vertical-align: middle" />
+    {% if opts.snap is defined %}<datalist id="{{ id }}-datalist"><option value="{{ opts.snap }}" label="{{ opts.snap }}"></option></datalist>{% endif %}
+</div>
+{% endmacro %}
