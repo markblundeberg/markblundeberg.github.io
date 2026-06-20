@@ -70,18 +70,14 @@
     const V_std_NO3_H = -108.74e3 / -F; // ~ +1.1 V
 
     // --- Set up diagram ---
-    const diagram = new ElectrochemicalSpeciesBandDiagram(
-        plotContainerId,
-        {
-            ag_ion: SPECIES.silver,
-            k_ion: SPECIES.potassium,
-            cl_ion: SPECIES.chloride,
-            no3_ion: SPECIES.nitrate,
-            electron: SPECIES.electron,
-            h_ion: SPECIES.proton,
-        },
-        { margins: { right: 60 } }
-    );
+    const diagram = new ElectrochemicalSpeciesBandDiagram(plotContainerId, {
+        ag_ion: SPECIES.silver,
+        k_ion: SPECIES.potassium,
+        cl_ion: SPECIES.chloride,
+        no3_ion: SPECIES.nitrate,
+        electron: SPECIES.electron,
+        h_ion: SPECIES.proton,
+    });
 
     const boundaries = [0.0, 0.3, 0.7, 1.0];
     diagram.setSpatialLayout(boundaries, [
