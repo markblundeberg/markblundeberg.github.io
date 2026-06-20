@@ -3,43 +3,27 @@
 </figure>
 
 <script type="module">
-    const plotContainerId = 'electrode-generic-container';
-
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
-    import { formatPopupBaseContent, throttle } from '{{ esbdJsPath }}utils.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
 
+    // ion/other/other' are abstract placeholders specific to this schematic.
     const speciesInfo = {
-        ion: {
-            z: 1,
-            color: '#E41A1C',
-            mathLabel: '\\mathrm{ion}',
-        },
-        other: {
-            color: '#b080a0',
-            mathLabel: '\\mathrm{other}',
-        },
-        other2: {
-            color: '#80b0a0',
-            mathLabel: "\\mathrm{other'}",
-        },
-        electron: {
-            z: -1,
-            color: '#377EB8',
-            mathLabel: '\\mathrm{e}^{-}',
-        },
+        ion: { z: 1, color: '#E41A1C', mathLabel: '\\mathrm{ion}' },
+        other: { color: '#b080a0', mathLabel: '\\mathrm{other}' },
+        other2: { color: '#80b0a0', mathLabel: "\\mathrm{other'}" },
+        electron: SPECIES.electron,
     };
 
     const diagram = new ElectrochemicalSpeciesBandDiagram(
-        plotContainerId,
+        'electrode-generic-container',
         speciesInfo
     );
 
-    // Set layout
     const boundaries = [0.0, 0.25, 0.55, 0.75, 1.0];
     const x_deltaV = 0.875;
     diagram.setSpatialLayout(boundaries, [
-        { name: 'Solution', color: '#E6F5FF' },
-        { name: 'Electrode', color: '#d0d0d0' },
+        REGION.solution,
+        { ...REGION.metal, name: 'Electrode' },
         { name: 'Wire', color: '#F0B090' },
         { name: 'Voltmeter', color: '#f8f8f8' },
     ]);
