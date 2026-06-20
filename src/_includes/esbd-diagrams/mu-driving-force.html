@@ -1,3 +1,4 @@
+{% import "macros/controls.njk" as controls %}
 <figure class="demo-container" style="max-width: 200px">
     <div style="display: flex; gap: 8px">
         <div
@@ -10,32 +11,12 @@
             "
         ></div>
     </div>
-    <div style="text-align: center">
-        <div>
-            <label for="mu-driving-force-slider" style="font-size: 0.85em"
-                >$\mu$ difference:</label
-            >
-            <br />
-            <input
-                type="range"
-                id="mu-driving-force-slider"
-                list="mu-driving-force-slider-datalist"
-                min="-2.0"
-                max="2.0"
-                step="any"
-                value="1.0"
-                style="width: 100px"
-            />
-            <datalist id="mu-driving-force-slider-datalist">
-                <option value="0" label="0">0</option>
-            </datalist>
-        </div>
-    </div>
+    {{ controls.slider("mu-driving-force-slider", "$\\mu$ difference", { min: -2, max: 2, step: "any", value: 1, snap: 0 }) }}
 </figure>
 
 <script type="module">
     import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
-    import { throttle } from '{{ esbdJsPath }}utils.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
 
     const slider = document.getElementById('mu-driving-force-slider');
     const containerId = 'mu-driving-force-container';
@@ -116,17 +97,7 @@
             diagram.setArrows(arrowData);
         }
 
-        // --- Event Listener ---
-        slider.addEventListener(
-            'input',
-            throttle((event) => {
-                const deltaMu = parseFloat(event.target.value);
-                updateDemo(deltaMu);
-            }, throttleDuration)
-        );
-
-        // --- Initial Draw ---
-        updateDemo(parseFloat(slider.value));
+        makeSlider('mu-driving-force-slider', (v) => updateDemo(v));
     } else {
         console.warn(
             'Could not find all elements for chemical potential driving force demo.'
