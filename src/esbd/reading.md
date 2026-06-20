@@ -2,7 +2,7 @@
 layout: layouts/esbd_topic.njk
 title: 'How to read an ESBD'
 tags: [page, esbd_topic]
-orderESBD: 10.5
+orderESBD: 12.5
 ---
 
 # {{title}}
@@ -39,4 +39,4 @@ The whole diagram can be slid up or down freely: only vertical *differences* car
 
 That is the whole menagerie. If a later figure ever shows a line or symbol you don't recognise, the link in its corner brings you straight back to this page.
 
-[**NEXT TOPIC: Equilibrium**](../equilibrium/)
+[**NEXT TOPIC: Solutions**](../solutions/)

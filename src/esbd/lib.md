@@ -75,9 +75,9 @@ As we saw, the ESBD diagram is quite simple in a lithium-ion battery at equilibr
 
 During charge and discharge, the $V_i$ voltages form a direct visualization of how various electronic and ionic resistances are responsible for the total "internal resistance".
 
-In the next topic, we will look at how concentrations, activities, and standard states ($V^\circ_i$) define the voltage landscape in solutions.
+Before we dive into specific materials, the next page is a quick field guide to the diagrams themselves — every line and symbol, collected in one place now that you've met them in context. After that, we look at how concentrations, activities, and standard states ($V^\circ_i$) define the voltage landscape in solutions.
 
-[**NEXT TOPIC: Solutions**](../solutions/)
+[**NEXT TOPIC: How to read an ESBD**](../reading/)
 
 
 ## Optional discussion
