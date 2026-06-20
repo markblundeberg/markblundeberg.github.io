@@ -1,74 +1,222 @@
-<figure
-    class="demo-container"
-    id="ag-conc-cell-container"
-    style="max-width: 600px"
-></figure>
+{% set idprefix = "esbd-conc-cell" %}
+{% import "macros/controls.njk" as controls %}
+<figure class="demo-container" style="max-width: 600px">
+    <div class="bd-container" id="{{idprefix}}-container" style="height: 250px; width: 100%"></div>
+    {{ controls.slider(idprefix + "-c1", "Concentration $C_1$ (left)", { min: 0.001, max: 2.0, step: 0.001, value: 0.1, readout: true, unit: "M" }) }}
+    {{ controls.slider(idprefix + "-c2", "Concentration $C_2$ (right)", { min: 0.001, max: 2.0, step: 0.001, value: 1.5, readout: true, unit: "M" }) }}
+    <div class="bd-control" style="text-align: center; font-size: 0.85em; margin-top: 0.4em">
+        Junction (ideal):
+        <label style="margin: 0 0.4em"><input type="radio" name="{{idprefix}}-junction" value="anion" /> anion membrane</label>
+        <label style="margin: 0 0.4em"><input type="radio" name="{{idprefix}}-junction" value="saltbridge" checked /> salt bridge</label>
+        <label style="margin: 0 0.4em"><input type="radio" name="{{idprefix}}-junction" value="cation" /> cation membrane</label>
+    </div>
+    <div
+        class="bd-readout"
+        style="text-align: center; font-size: 0.85em; color: #444; margin-top: 0.3em"
+    >
+        Cell voltage: <span id="{{idprefix}}-voltage"></span> V
+    </div>
+</figure>
 
 <script type="module">
-    import ConcentrationCellComponent from '{{ esbdJsPath }}ConcentrationCellComponent.js';
-    import { throttle } from '{{ esbdJsPath }}utils.js';
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
 
-    // Configuration for the AgNO3 Concentration Cell
-    const agNO3Config = {
-        // Species Definitions
-        cation: {
-            z: 1,
-            mu_standard_J_mol: 77000.0,
-            color: '#E6AB02',
-            mathLabel: '\\mathrm{Ag}^{+}',
-        },
-        anion: {
-            z: -1,
-            mu_standard_J_mol: -111000.0,
-            color: '#66A61E',
-            mathLabel: '\\mathrm{NO}_3^{-}',
-        },
-        electron: {
-            z: -1,
-            mu_standard_J_mol: 0,
-            color: '#377EB8',
-            mathLabel: '\\mathrm{e}^{-}',
-        },
-        // Other chemical info
-        electrode_neutral: { mu_J_mol: 0.0 }, // Ag(s)
-        compound_stoichiometry: { cation: 1, anion: 1 },
-        c_std_M: 1.0,
-        // Spatial Layout
-        boundaries: [0.0, 0.2, 0.48, 0.52, 0.8, 1.0],
-        regionProps: [
-            { name: 'Electrode 1 (Ag)', color: '#E0E0E0' },
-            { name: 'Electrolyte 1', color: '#E6F5FF' },
-            { name: 'Junction', color: 'rgba(255,255,255,0)' },
-            { name: 'Electrolyte 2', color: '#D6EFFF' },
-            { name: 'Electrode 2 (Ag)', color: '#D0D0D0' },
-        ],
-        // Initial slider values and ranges
-        initialC1: 0.1,
-        initialC2: 1.5,
-        cMin: 0.001,
-        cMax: 2.0,
-        plotHeight: 250,
-        initialJunction: 'saltbridge',
-        VRange: [-0.5, 0.8],
-    };
+    const R = 8.31446; // J / (mol K)
+    const F = 96485.3; // C / mol
+    const T = 298.15; // K
+    const RT_F = (R * T) / F;
 
-    // Initialize Concentration Cell Component
-    const concCellContainerId = '#ag-conc-cell-container';
-    const concCellContainer = document.querySelector(concCellContainerId);
-    if (concCellContainer) {
-        try {
-            // Pass the specific config for the concentration cell
-            new ConcentrationCellComponent(concCellContainerId, agNO3Config);
-        } catch (error) {
-            console.error(
-                `Failed to initialize ConcentrationCellComponent in ${concCellContainerId}:`,
-                error
-            );
-            concCellContainer.innerHTML = `<p style="color: red;">Error loading concentration cell diagram.</p>`;
+    const c1Slider = document.getElementById('{{idprefix}}-c1');
+    const c1Readout = document.getElementById('{{idprefix}}-c1-readout');
+    const c2Slider = document.getElementById('{{idprefix}}-c2');
+    const c2Readout = document.getElementById('{{idprefix}}-c2-readout');
+    const voltsSpan = document.getElementById('{{idprefix}}-voltage');
+    const junctionRadios = document.querySelectorAll('input[name="{{idprefix}}-junction"]');
+
+    // AgNO3 concentration cell: Ag+ / NO3- (1:1), Ag electrodes.
+    const diagram = new ElectrochemicalSpeciesBandDiagram('{{idprefix}}-container', {
+        cation: SPECIES.silver,
+        anion: SPECIES.nitrate,
+        electron: SPECIES.electron,
+    });
+
+    // standard chemical potentials (J/mol) for the V_std ladder
+    const zc = SPECIES.silver.z; // +1
+    const za = SPECIES.nitrate.z; // -1
+    const mu_std_cation = 77000.0;
+    const mu_std_anion = -111000.0;
+    const mu_electrode = 0.0; // Ag(s)
+    const C_STD = 1.0;
+
+    const boundaries = [0.0, 0.2, 0.48, 0.52, 0.8, 1.0];
+    diagram.setSpatialLayout(boundaries, [
+        { ...REGION.metal, name: 'Electrode 1 (Ag)' },
+        { ...REGION.solution, name: 'Electrolyte 1' },
+        { name: 'Junction', color: 'rgba(255,255,255,0)' },
+        { name: 'Electrolyte 2', color: '#D6EFFF' },
+        { ...REGION.metal, name: 'Electrode 2 (Ag)' },
+    ]);
+    diagram.setVRange(-0.5, 0.8);
+
+    function update() {
+        const c1 = Math.max(parseFloat(c1Slider.value), 1e-9);
+        const c2 = Math.max(parseFloat(c2Slider.value), 1e-9);
+        c1Readout.textContent = c1.toFixed(3);
+        c2Readout.textContent = c2.toFixed(3);
+
+        let junctionType = 'saltbridge';
+        junctionRadios.forEach((r) => {
+            if (r.checked) junctionType = r.value;
+        });
+
+        // ideal molar activities (1:1 compound)
+        const a_c1 = c1 / C_STD;
+        const a_a1 = c1 / C_STD;
+        const a_c2 = c2 / C_STD;
+        const a_a2 = c2 / C_STD;
+
+        const nernst_cation1 = (RT_F / zc) * Math.log(a_c1);
+        const nernst_cation2 = (RT_F / zc) * Math.log(a_c2);
+        const nernst_anion1 = (RT_F / za) * Math.log(a_a1);
+        const nernst_anion2 = (RT_F / za) * Math.log(a_a2);
+
+        const V_reaction = mu_electrode / (zc * F); // V_cation - V_e- at electrode
+        const V_STD_span = mu_std_cation / (zc * F) - mu_std_anion / (za * F);
+
+        // left electrode is ground; work left to right
+        const V_e_1 = 0;
+        const V_cation_1 = V_e_1 + V_reaction;
+        const V_STD_cation_1 = V_cation_1 - nernst_cation1;
+        const V_STD_anion_1 = V_STD_cation_1 - V_STD_span;
+        const V_anion_1 = V_STD_anion_1 + nernst_anion1;
+
+        // junction sets the cell voltage = V_cation_2 - V_cation_1
+        let cell_voltage = 0;
+        if (junctionType === 'cation') {
+            cell_voltage = 0;
+        } else if (junctionType === 'saltbridge') {
+            cell_voltage = nernst_cation2 - nernst_cation1;
+        } else if (junctionType === 'anion') {
+            cell_voltage =
+                nernst_cation2 - nernst_cation1 + nernst_anion1 - nernst_anion2;
         }
-    } else {
-        console.warn(
-            `Container ${concCellContainerId} not found for ConcentrationCellComponent.`
-        );
+
+        const V_cation_2 = V_cation_1 + cell_voltage;
+        const V_STD_cation_2 = V_cation_2 - nernst_cation2;
+        const V_STD_anion_2 = V_STD_cation_2 - V_STD_span;
+        const V_anion_2 = V_STD_anion_2 + nernst_anion2;
+        const V_e_2 = V_cation_2 - V_reaction;
+
+        voltsSpan.textContent = cell_voltage.toFixed(3);
+
+        const b = boundaries;
+        const mid = 0.5 * (b[2] + b[3]);
+        diagram.updateTraceData([
+            {
+                id: 'cation_1',
+                speciesId: 'cation',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [b[1], junctionType == 'cation' ? mid : b[2]],
+                y: [V_cation_1, V_cation_1],
+            },
+            {
+                id: 'cation_2',
+                speciesId: 'cation',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [junctionType == 'cation' ? mid : b[3], b[4]],
+                y: [V_cation_2, V_cation_2],
+            },
+            {
+                id: 'cation_std_1',
+                speciesId: 'cation',
+                curveType: 'standardState',
+                showLabel: false,
+                x: [b[1], b[2]],
+                y: [V_STD_cation_1, V_STD_cation_1],
+            },
+            {
+                id: 'cation_std_2',
+                speciesId: 'cation',
+                curveType: 'standardState',
+                showLabel: false,
+                x: [b[3], b[4]],
+                y: [V_STD_cation_2, V_STD_cation_2],
+            },
+            {
+                id: 'anion_1',
+                speciesId: 'anion',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [b[1], junctionType == 'anion' ? mid : b[2]],
+                y: [V_anion_1, V_anion_1],
+            },
+            {
+                id: 'anion_2',
+                speciesId: 'anion',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [junctionType == 'anion' ? mid : b[3], b[4]],
+                y: [V_anion_2, V_anion_2],
+            },
+            {
+                id: 'anion_std_1',
+                speciesId: 'anion',
+                curveType: 'standardState',
+                showLabel: false,
+                x: [b[1], b[2]],
+                y: [V_STD_anion_1, V_STD_anion_1],
+            },
+            {
+                id: 'anion_std_2',
+                speciesId: 'anion',
+                curveType: 'standardState',
+                showLabel: false,
+                x: [b[3], b[4]],
+                y: [V_STD_anion_2, V_STD_anion_2],
+            },
+            {
+                id: 'e_electrode1',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [b[0], b[1]],
+                y: [V_e_1, V_e_1],
+            },
+            {
+                id: 'e_electrode2',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [b[4], b[5]],
+                y: [V_e_2, V_e_2],
+            },
+        ]);
+
+        const agReaction = '$\\mathrm{Ag}^+ + \\mathrm{e}^- \\rightleftharpoons \\mathrm{Ag(s)}$';
+        diagram.updateVerticalMarkers([
+            {
+                id: 'left_interface_eq',
+                symbol: '⇌',
+                x: b[1],
+                yDefs: [{ y: V_e_1 }, { y: V_cation_1 }],
+                popupCallback: () => agReaction,
+            },
+            {
+                id: 'right_interface_eq',
+                symbol: '⇌',
+                x: b[4],
+                yDefs: [{ y: V_e_2 }, { y: V_cation_2 }],
+                popupCallback: () => agReaction,
+            },
+        ]);
     }
+
+    makeSlider('{{idprefix}}-c1', () => update(), { fire: false });
+    makeSlider('{{idprefix}}-c2', () => update(), { fire: false });
+    junctionRadios.forEach((r) => r.addEventListener('change', () => update()));
+    update();
 </script>
