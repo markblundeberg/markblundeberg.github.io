@@ -77,6 +77,16 @@
 
     const val = (name) => parseFloat(document.getElementById('{{idprefix}}-' + name).value);
 
+    // Staggered label placement: [fraction along the trace, horizontal alignment].
+    // Keeps the many labels from piling up at the region boundaries.
+    const labelPlacement = (t) => {
+        if (t.kind === 'Vi') return [0.125, 'left'];
+        if (t.kind === 'V0') return t.species === 'electron' ? [0.75, 'right'] : [0.25, 'left'];
+        if (t.kind === 'phi') return [0.5, 'center'];
+        if (t.kind === 'Ve') return t.curveType === 'voltageImplied' ? [0.875, 'right'] : [0.5, 'center'];
+        return [1, 'left'];
+    };
+
     function update() {
         const f = val('float');
         const mu = { H: val('muH'), Li: val('muLi') };
@@ -96,6 +106,7 @@
             if (t.kind === 'phi') y += A[t.region] + (P[solventOf[t.region]] || 0); // φ rides activity (per solution) + the per-solvent φ convention
             // kind 'Ve': float only — electrons carry no element, redox levels conserve them
 
+            const [labelFrac, labelHAlign] = labelPlacement(t);
             return {
                 id: t.id,
                 speciesId: t.species ?? null,
@@ -104,6 +115,8 @@
                 label: t.label ?? null,
                 x: t.x,
                 y: [y, y],
+                labelFrac,
+                labelHAlign,
             };
         });
         esbd.updateTraceData(traces);

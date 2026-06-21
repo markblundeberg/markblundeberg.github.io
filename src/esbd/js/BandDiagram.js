@@ -119,6 +119,8 @@ class BandDiagram extends ResponsivePlot {
                     showLabel = true,
                     toolTip,
                     extraData = null,
+                    labelFrac = 1,
+                    labelHAlign = 'left',
                     ...extraFields
                 } = traceDef;
                 if (Object.keys(extraFields).length > 0) {
@@ -153,8 +155,24 @@ class BandDiagram extends ResponsivePlot {
                 style = style ?? STYLE_DEFAULTS.line;
 
                 label = String(label ?? '');
-                // place label at right end of trace
-                const labelPos = showLabel && label ? points[len - 1] : null;
+                // place the label at a fraction along the trace's x-extent (default: the
+                // right end), interpolating y; labelHAlign decides which side it sits on.
+                let labelPos = null;
+                if (showLabel && label) {
+                    const tx =
+                        points[0].x + labelFrac * (points[len - 1].x - points[0].x);
+                    let ty = points[len - 1].y;
+                    for (let k = 1; k < len; k++) {
+                        if (tx <= points[k].x) {
+                            const a = points[k - 1];
+                            const b = points[k];
+                            const t = b.x === a.x ? 0 : (tx - a.x) / (b.x - a.x);
+                            ty = a.y + t * (b.y - a.y);
+                            break;
+                        }
+                    }
+                    labelPos = { x: tx, y: ty };
+                }
 
                 toolTip = String(toolTip ?? '') || `$${label}$`;
 
@@ -165,6 +183,7 @@ class BandDiagram extends ResponsivePlot {
                     style,
                     label,
                     labelPos,
+                    labelHAlign,
                     toolTip,
                     extraData,
                 };
@@ -704,7 +723,7 @@ class BandDiagram extends ResponsivePlot {
             .map((d) => ({
                 ...d, // Pass original data through
                 mathMode: true, // Trace labels are KaTeX math
-                hAlign: 'left',
+                hAlign: d.labelHAlign || 'left',
                 vAlign: 'center',
             }));
 
@@ -717,11 +736,16 @@ class BandDiagram extends ResponsivePlot {
             dataKey: (d) => d.id,
             onUpdateTransition: (s) =>
                 s
-                    .attr(
-                        'transform',
-                        (d) =>
-                            `translate(${this.xScale(d.labelPos.x) + 5}, ${this.yScale(d.labelPos.y)})`
-                    )
+                    .attr('transform', (d) => {
+                        // nudge the label off the trace, away from its anchored side
+                        const dx =
+                            d.labelHAlign === 'right'
+                                ? -5
+                                : d.labelHAlign === 'center'
+                                  ? 0
+                                  : 5;
+                        return `translate(${this.xScale(d.labelPos.x) + dx}, ${this.yScale(d.labelPos.y)})`;
+                    })
                     .select('span.rp-label-span')
                     .style('color', (d) => d.color),
         });
