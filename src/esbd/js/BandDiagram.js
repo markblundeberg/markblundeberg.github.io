@@ -43,11 +43,12 @@ class BandDiagram extends ResponsivePlot {
      * @param {string} containerId - ID of the HTML element (div) to contain the plot.
      * @param {object} [config={}] - Initial configuration options. See ResponsivePlot for more options
      * @param {Boolean} [config.xMode='abstract'] - Should x have numbered ticks or is it more 'abstract'.
+     * @param {Boolean} [config.yMode='numeric'] - 'numeric' for numbered y ticks, or 'abstract' to hide them (schematic / "not to scale").
      * @param {number} [config.hoverThrottleDelay=50] - Mouseover throttling.
      */
     constructor(containerId, config = {}) {
         // Configuration with defaults
-        const defaults = { xMode: 'abstract', hoverThrottleDelay: 50 };
+        const defaults = { xMode: 'abstract', yMode: 'numeric', hoverThrottleDelay: 50 };
         super({ containerId: containerId, ...defaults, ...config });
         // ^ sets this.config, with extra defaults
 
@@ -441,6 +442,9 @@ class BandDiagram extends ResponsivePlot {
         this.yAxisGen = d3.axisLeft(this.yScale).tickSizeOuter(0);
         if (this.config.xMode == 'abstract') {
             this.xAxisGen.tickValues([]);
+        }
+        if (this.config.yMode == 'abstract') {
+            this.yAxisGen.tickValues([]);
         }
 
         // --- Interaction Rect Listeners ---
