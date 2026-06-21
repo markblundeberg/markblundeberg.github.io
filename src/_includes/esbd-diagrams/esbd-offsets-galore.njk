@@ -80,10 +80,12 @@
         { id: 'li5',    species: 'lithium',   curveType: 'voltage',        kind: 'Vi',  region: 5, nLi: 1, v: -0.18, x: x5 },
         { id: 'li5_0',  species: 'lithium',   curveType: 'standardState',  kind: 'V0',  region: 5, nLi: 1, v:  0.12, x: x5 },
         { id: 'phi5',                         curveType: 'phi',            kind: 'phi', region: 5,         v: -0.30, x: x5 },
-        // the Li⁺/Li⁰ plating level — a redox electron level, so float-only (conserves Li)
-        // note its activity gap == a(Li+) so it has to match the V_Li+ - V_Li0 .
-        { id: 'plate',  species: 'electron',  curveType: 'voltageImplied', kind: 'Ve',  region: 5,         v: -0.58, x: x5, label: 'V_{\\mathrm{e}^-}(\\small{\\mathrm{Li}^+/\\mathrm{Li}})' },
-        { id: 'plate0', species: 'electron',  curveType: 'standardStateImplied', kind: 'Ve0',  region: 5,         v: -0.88, x: x5, label: 'V^\\circ_{\\mathrm{e}^-}(\\small{\\mathrm{Li}^+/\\mathrm{Li}})' },
+        // the Li⁺/Li⁰ plating level. Like the HER above, under the usual convention
+        // (Li metal as the Li standard state, μ*_Li(metal)=0) it overlaps V_Li+, and its
+        // V° overlaps V°_Li+; sliding μ*_Li separates them. Its activity gap matches the
+        // ion's: Ve = float-only (conserves Li); Ve0 = float + activity (tracks V°_Li+).
+        { id: 'plate',  species: 'electron',  curveType: 'voltageImplied', kind: 'Ve',  region: 5,         v: -0.18, x: x5, label: 'V_{\\mathrm{e}^-}(\\small{\\mathrm{Li}^+/\\mathrm{Li}})' },
+        { id: 'plate0', species: 'electron',  curveType: 'standardStateImplied', kind: 'Ve0',  region: 5,         v:  0.12, x: x5, label: 'V^\\circ_{\\mathrm{e}^-}(\\small{\\mathrm{Li}^+/\\mathrm{Li}})' },
     ];
 
     const esbd = new ElectrochemicalSpeciesBandDiagram('{{idprefix}}-plot', {
