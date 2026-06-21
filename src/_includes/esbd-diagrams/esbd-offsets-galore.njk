@@ -25,7 +25,7 @@
     const regions = [
         { ...REGION.solution, name: 'Aqueous acid' },
         { ...REGION.metal, name:"Metals" },
-        { ...REGION.solution2, name: 'Li⁺ electrolyte' },
+        { ...REGION.solution2, name: 'Aqueous Li⁺ salt' },
     ];
 
     // kind: Vi = species voltage rail | V0 = standard-state line | phi = inner potential
@@ -36,18 +36,22 @@
     const x_soln_2 = [boundaries[2],boundaries[3]];
     const base = [
         // Solution 1 — aqueous acid
-        { id: 'h_v',   species: 'proton',    curveType: 'voltage',       kind: 'Vi',  region: 1, nH: 1,        v:  0.40, x: x_soln_1 },
-        { id: 'h_v0',  species: 'proton',    curveType: 'standardState', kind: 'V0',  region: 1, nH: 1,        v:  0.68, x: x_soln_1 },
-        { id: 'oh_v',  species: 'hydroxide', curveType: 'voltage',       kind: 'Vi',  region: 1, nH: 1, nO: 1, v: -0.45, x: x_soln_1 },
-        { id: 'oh_v0', species: 'hydroxide', curveType: 'standardState', kind: 'V0',  region: 1, nH: 1, nO: 1, v: -1.05, x: x_soln_1 },
-        { id: 'phi1',                        curveType: 'phi',           kind: 'phi', region: 1,               v:  0.08, x: x_soln_1 },
-        // Metal
-        { id: 'e1',    species: 'electron',  curveType: 'voltage',       kind: 'Ve',  region: 2,               v:  0.20, x: x_metal },
-        // Solution 2 — Li⁺ electrolyte
-        { id: 'li_v',  species: 'lithium',   curveType: 'voltage',       kind: 'Vi',  region: 3, nLi: 1,       v:  0.15, x: x_soln_2 },
-        { id: 'li_v0', species: 'lithium',   curveType: 'standardState', kind: 'V0',  region: 3, nLi: 1,       v:  0.45, x: x_soln_2 },
-        { id: 'x_v',   species: 'chloride',  curveType: 'voltage',       kind: 'Vi',  region: 3,               v: -0.65, x: x_soln_2 },
-        { id: 'phi2',                        curveType: 'phi',           kind: 'phi', region: 3,               v: -0.08, x: x_soln_2 },
+        { id: 'h1_v',  species: 'proton',    curveType: 'voltage',        kind: 'Vi',  region: 1, nH: 1,        v:  0.40, x: x_soln_1 },
+        { id: 'h1_v0', species: 'proton',    curveType: 'standardState',  kind: 'V0',  region: 1, nH: 1,        v:  0.68, x: x_soln_1 },
+        { id: 'oh1_v', species: 'hydroxide', curveType: 'voltage',        kind: 'Vi',  region: 1, nH: 1, nO: 1, v: -0.55, x: x_soln_1 },
+        // A redox couple: the implied electron level of H⁺/H₂. It involves H, yet
+        // (being a balanced half-reaction) it is immune to the H reference slider.
+        { id: 'redox', species: 'electron',  curveType: 'voltageImplied', kind: 'Ve',  region: 1,               v:  0.05, x: x_soln_1, label: 'V_{\\mathrm{e}^-}(\\mathrm{H}^+\\!/\\mathrm{H}_2)' },
+        { id: 'phi1',                        curveType: 'phi',            kind: 'phi', region: 1,               v:  0.15, x: x_soln_1 },
+        // Metal electrode — a real electron level
+        { id: 'e_m',   species: 'electron',  curveType: 'voltage',        kind: 'Ve',  region: 2,               v:  0.22, x: x_metal },
+        // Solution 2 — also aqueous, so it ALSO carries H⁺ and OH⁻. That is what makes
+        // the H and O references visibly *global*: dragging them moves BOTH solutions.
+        { id: 'li_v',  species: 'lithium',   curveType: 'voltage',        kind: 'Vi',  region: 3, nLi: 1,       v: -0.10, x: x_soln_2 },
+        { id: 'li_v0', species: 'lithium',   curveType: 'standardState',  kind: 'V0',  region: 3, nLi: 1,       v:  0.22, x: x_soln_2 },
+        { id: 'h2_v',  species: 'proton',    curveType: 'voltage',        kind: 'Vi',  region: 3, nH: 1,        v:  0.30, x: x_soln_2 },
+        { id: 'oh2_v', species: 'hydroxide', curveType: 'voltage',        kind: 'Vi',  region: 3, nH: 1, nO: 1, v: -0.70, x: x_soln_2 },
+        { id: 'phi2',                        curveType: 'phi',            kind: 'phi', region: 3,               v: -0.05, x: x_soln_2 },
     ];
 
     const esbd = new ElectrochemicalSpeciesBandDiagram('{{idprefix}}-plot', {
