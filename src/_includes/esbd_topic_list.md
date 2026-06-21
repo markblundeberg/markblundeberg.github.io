@@ -57,6 +57,7 @@ The rabbit holes -- appendices, advanced topics, notes:
 
 *Thermodynamics*:
 - [_Understanding electrochemical potential_](/esbd/muintro/) - Why $\bar\mu_i$ is the real, indivisible chemical potential — and why that makes $V_i$ (and band diagrams) work.
+- [_Offsets galore_](/esbd/offsetsgalore/) - An interactive tour of every arbitrary convention in the framework — and which ones actually move anything.
 - [_Non-ideal solutions_](/esbd/nonideal/) - Focussing on technical difficulties of single-ion activities.
 - [_Capacitance_](/esbd/capacitance/) - Discussion of ambipolar capacitance (thermodynamic) vs chemical capacitance (extrathermodynamic).
 

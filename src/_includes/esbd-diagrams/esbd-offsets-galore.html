@@ -1,0 +1,93 @@
+{% set idprefix = "esbd-offsets-galore" %}
+{% import "macros/controls.njk" as controls %}
+<figure class="demo-container" style="max-width: 440px">
+    <div class="bd-container" id="{{idprefix}}-plot" style="height: 320px; width: 100%"></div>
+    {{ controls.slider(idprefix + "-float", "Global float", { min: -0.4, max: 0.4, step: "any", value: 0, snap: 0 }) }}
+    {{ controls.slider(idprefix + "-muH", "Element reference: H", { min: -0.4, max: 0.4, step: "any", value: 0, snap: 0 }) }}
+    {{ controls.slider(idprefix + "-muO", "Element reference: O", { min: -0.4, max: 0.4, step: "any", value: 0, snap: 0 }) }}
+    {{ controls.slider(idprefix + "-muLi", "Element reference: Li", { min: -0.4, max: 0.4, step: "any", value: 0, snap: 0 }) }}
+    {{ controls.slider(idprefix + "-act1", "Soln 1 — activity convention", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0 }) }}
+    {{ controls.slider(idprefix + "-phi1", "Soln 1 — φ choice", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0 }) }}
+    {{ controls.slider(idprefix + "-act2", "Soln 2 — activity convention", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0 }) }}
+    {{ controls.slider(idprefix + "-phi2", "Soln 2 — φ choice", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0 }) }}
+</figure>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
+
+    // Two solutions side by side. Every line is computed from the base state plus
+    // whatever the convention/gauge sliders do to it. (F = 1, arbitrary units.)
+    const boundaries = [0.0, 0.5, 1.0];
+    const regions = [
+        { ...REGION.solution, name: 'Aqueous acid' },
+        { ...REGION.solution2, name: 'Li⁺ electrolyte' },
+    ];
+
+    // kind: Vi = species voltage rail | V0 = standard-state line | phi = inner potential
+    //       | Ve = electron level (electrode / redox half-reaction)
+    // nH/nO/nLi = atom counts of the slider elements; region = 1 or 2.
+    const base = [
+        // Solution 1 — aqueous acid
+        { id: 'h_v',   species: 'proton',    curveType: 'voltage',       kind: 'Vi', region: 1, nH: 1,        v:  0.40, x: [0.0, 0.5] },
+        { id: 'h_v0',  species: 'proton',    curveType: 'standardState', kind: 'V0', region: 1, nH: 1,        v:  0.68, x: [0.0, 0.5] },
+        { id: 'oh_v',  species: 'hydroxide', curveType: 'voltage',       kind: 'Vi', region: 1, nH: 1, nO: 1, v: -0.45, x: [0.0, 0.5] },
+        { id: 'phi1',  curveType: 'phi',     kind: 'phi', region: 1,                                          v:  0.08, x: [0.0, 0.5], label: '\\phi_{1}' },
+        { id: 'e1',    species: 'electron',  curveType: 'voltage',       kind: 'Ve', region: 1,               v:  0.20, x: [0.0, 0.5], label: 'V_{\\mathrm{e}^-}^{(1)}' },
+        // Solution 2 — Li⁺ electrolyte
+        { id: 'li_v',  species: 'lithium',   curveType: 'voltage',       kind: 'Vi', region: 2, nLi: 1,       v:  0.15, x: [0.5, 1.0] },
+        { id: 'li_v0', species: 'lithium',   curveType: 'standardState', kind: 'V0', region: 2, nLi: 1,       v:  0.45, x: [0.5, 1.0] },
+        { id: 'x_v',   species: 'chloride',  curveType: 'voltage',       kind: 'Vi', region: 2,               v: -0.65, x: [0.5, 1.0] },
+        { id: 'phi2',  curveType: 'phi',     kind: 'phi', region: 2,                                          v: -0.08, x: [0.5, 1.0], label: '\\phi_{2}' },
+        { id: 'e2',    species: 'electron',  curveType: 'voltage',       kind: 'Ve', region: 2,               v: -0.30, x: [0.5, 1.0], label: 'V_{\\mathrm{e}^-}^{(2)}' },
+    ];
+
+    const esbd = new ElectrochemicalSpeciesBandDiagram('{{idprefix}}-plot', {
+        proton: SPECIES.proton,
+        hydroxide: SPECIES.hydroxide,
+        lithium: SPECIES.lithium,
+        chloride: SPECIES.chloride,
+        electron: SPECIES.electron,
+    });
+    esbd.setSpatialLayout(boundaries, regions);
+    esbd.setVRange(-1.7, 1.7);
+
+    const val = (name) => parseFloat(document.getElementById('{{idprefix}}-' + name).value);
+
+    function update() {
+        const f = val('float');
+        const mu = { H: val('muH'), O: val('muO'), Li: val('muLi') };
+        const A = { 1: val('act1'), 2: val('act2') };
+        const P = { 1: val('phi1'), 2: val('phi2') };
+
+        const traces = base.map((t) => {
+            let y = t.v + f; // the global float moves everything
+
+            if (t.kind === 'Vi' || t.kind === 'V0') {
+                // element references move μ̄_i (and V°) by atom-count / charge
+                const z = SPECIES[t.species].z;
+                y += ((t.nH || 0) * mu.H + (t.nO || 0) * mu.O + (t.nLi || 0) * mu.Li) / z;
+            }
+            if (t.kind === 'V0') y += A[t.region]; // activity convention reallocates V° ↔ activity
+            if (t.kind === 'phi') y += A[t.region] + P[t.region]; // φ rides activity, plus its own choice
+            // kind 'Ve': float only — electrons carry no element, redox levels conserve them
+
+            return {
+                id: t.id,
+                speciesId: t.species ?? null,
+                curveType: t.curveType,
+                showLabel: true,
+                label: t.label ?? null,
+                x: t.x,
+                y: [y, y],
+            };
+        });
+        esbd.updateTraceData(traces);
+    }
+
+    ['float', 'muH', 'muO', 'muLi', 'act1', 'phi1', 'act2', 'phi2'].forEach((n) =>
+        makeSlider('{{idprefix}}-' + n, () => update(), { fire: false })
+    );
+    update();
+</script>
