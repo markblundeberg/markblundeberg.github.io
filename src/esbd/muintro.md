@@ -66,41 +66,33 @@ The deep reason is that the tidy split was an illusion to begin with. We *assume
 
 That is the claim in one line: **$\bar\mu_i$ is the real $\mu_i$.** The next section is why it holds up even when we are careful.
 
-## What binds it all together
+## Charge conservation and the float
 
-We have been cavalier about a charged body's free energy, so let us be careful, because the care is where the insight is.
+We hit a wall back when ions got weird: we cannot take $\partial G / \partial N_i$ for a single ion, because we cannot conjure charge out of nothing — adding one ion changes the total charge. So restrict to operations that *conserve* charge, and ask which derivatives of $G$ are actually allowed.
 
-Here is the awkward fact: the energy of a charged body is not really a well-defined, local quantity. Electrostatic energy is long-ranged; a region carrying net charge stores field energy that reaches out into its surroundings and depends on the shape and the boundary, not just on what is inside. This is not hand-waving — it is the content of a hard theorem. Charged matter only has a clean, extensive (size-independent) free energy when it is charge neutral; with a net charge the free-energy density becomes shape-dependent, and the system relieves the strain by pushing the excess charge out to its boundary.^[E. H. Lieb and J. L. Lebowitz, "The Constitution of Matter: Existence of Thermodynamics for Systems Composed of Electrons and Nuclei," *Adv. Math.* **9**, 316 (1972). They prove the thermodynamic limit exists for Coulomb matter only in the neutral case, with excess charge expelled to the surface — which is exactly the toy picture of dropping one ion into a blob of saltwater and finding its charge reappear, delocalized, on the skin.] So one might conclude that we are required to work with neutral systems.
+The elementary charge-conserving move is a transfer: take a little charge from species $j$ over *there* and redeposit it as species $i$ over *here*, holding the total $z_i F N_i(\text{here}) + z_j F N_j(\text{there})$ fixed. Per unit of charge moved, the energy cost is
 
-That is *almost* the right lesson, and it is worth getting exactly right, because the usual mistake is to apply it too locally. If you insist on charge neutrality *locally* — every little region its own balanced world — then the regions decouple from one another. Each acquires its own free electrostatic offset, which is precisely the "$\mu_{\mathrm{int}}$ is just as good" illusion of the previous section, and worse, you have thrown away any ability to compare or equilibrate one region against another.
+$$\begin{aligned}
+\frac{\partial G}{\partial(\text{charge transferred})}
+&= \frac{\bar\mu_i(\text{here})}{z_i F} - \frac{\bar\mu_j(\text{there})}{z_j F} \\[2pt]
+&= V_i(\text{here}) - V_j(\text{there}).
+\end{aligned}$$
 
-The fix is to notice what the self-consistency actually requires. It is not neutrality. It is **closure**: that we are considering charge moving *within* a domain, conserved inside it. A domain can carry a net charge and the relative picture is unchanged — the net charge simply sits on the boundary and feeds into the one *absolute* offset, which we were never going to pin down anyway (and which, for a net charge, is the genuinely shape-dependent quantity from the theorem above). The relative landscape of $\bar\mu_i$ across the domain needs only that charge be free to shuttle around inside.
+There it is. The naive $\partial G / \partial N_i$ was ill-posed because it violated charge conservation, but these *combinations* are perfectly well defined — and the combination is exactly a difference of species voltages. So $V_i$ differences are not a visualization gimmick: they are the legitimate, charge-conserving derivatives of the energy. They knit all the $\bar\mu_i$ into one self-consistent web of relationships, with exactly **one** offset left undetermined — because no charge-conserving operation can ever pin the overall level. That single leftover freedom is **the float**.^[To fix the absolute level you would have to add *net* charge to the whole system — the very operation we disallowed, and for good reason: a charged region's energy is long-ranged and shape-dependent, not a clean extensive quantity. (E. H. Lieb and J. L. Lebowitz, *Adv. Math.* **9**, 316 (1972): Coulomb matter has a proper thermodynamic limit only when neutral, with excess charge driven to the surface.) So the absolute offset isn't merely unmeasurable; for a charged system it isn't a well-defined number at all.]
 
-So the recipe is: grow the domain until whatever transfer you care about is internal to it. To equilibrate body $A$ with body $B$, you must consider them inside one domain where charge can pass between them — which is the same as saying **$A$ and $B$ live on one band diagram.** Grow it as the question demands: from species against species, to a material, to a device, to a whole circuit, and in principle to the universe. Within whatever domain you have drawn, the $\bar\mu_i$ form a single self-consistent system with one overall float, and no external reference is needed at all.
+There is a tempting mistake here. If you only ever look at $N_i$ and $N_j$ at the *same place* — a local cluster of ions — then internal chemical potentials seem just as good as the floaty electrochemical ones: locally, both are self-consistent. But nothing stops us from transferring charge *at a distance*, between *here* and *there*. The moment we do, every chemical potential across the whole domain is chained to every other by differences like the one above — and there is *still* only one undetermined offset. Widening our view from one spot to many does not grant each spot its own private float; it locks them together, leaving a single common-mode float for the entire domain. That is the precise difference between $\bar\mu_i$ and $\mu_{\mathrm{int},i}$: $\bar\mu_i$ differences are consistent *across the whole domain*, while $\mu_{\mathrm{int},i}$ only pretends to a per-spot freedom that long-range charge transfer forbids.
 
-> A caution on what "joining" does and does not buy you. Setting two unconnected, floating devices side by side on a table does *not* align their diagrams. Their relative offset is whatever stray charge their histories happened to leave — genuinely undetermined by anything you cared to measure. You fix the offset only by *providing a path*, so that some species can equilibrate across the junction. And even then, working out the offset where two materials meet is the hard interface problem; it is emphatically not the trick of lining up vacuum levels, which is a notorious misconception. Snapping two diagrams together means solving the junction — when there is a junction.
-
-It is worth naming the two ways people go wrong, because they are opposite errors about the same single degree of freedom. The chemist's error is to fix neutrality too locally, which *multiplies* the one global offset into a private offset per region ("$\mu_{\mathrm{int}}$ is fine"). The physicist's error is to *crown* the offset — to insist on an absolute zero, a vacuum level at infinity — which is unmeasurable and, for a net-charged system, not even shape-independent. Both miscount the freedom. The truth is that there is exactly one, global, and best left uncrowned: **differences in $\bar\mu_i$ are consistent across the whole domain, while differences in $\mu_{\mathrm{int},i}$ are consistent only locally.**
-
-<figure class="diagram-placeholder">
-{% figcaption %}
-A growing neutral-aware domain: a small region expands to enclose two separate bodies $A$ and $B$; once charge can shuttle between them, they snap onto one shared band diagram with a single overall float. (Planned figure.)
-{% endfigcaption %}
-</figure>
-
-There is one more layer of subtlety, which I will leave as a footnote so as not to derail the main point.^[Even "the electron at rest has energy $-e\phi$" is a convention. Thermodynamics hands us only the $\bar\mu_i$ and never needs $\phi$ at all; the electrostatic potential is a separate object with its own additive freedom. The statement that a free charge in vacuum has energy $-e\phi$ is the bridge we *impose* between the two, and a priori the thermodynamic level and the electrostatic gauge could differ by a global offset. So there are arguably two gauge freedoms we habitually weld into one.]
+(One practical corollary: "here" and "there" share a diagram only once charge can actually pass between them. Two disconnected, floating bodies have no defined relative level until you open a path — and working out the offset across a real junction is its own problem, not a matter of lining up vacuum levels.)
 
 ## Why a band diagram works
 
-Now the payoff, and it is the reason all of this was worth the trouble.
+The real content, we just found, is the web of $V_i$ *differences*, with a single common float left free. Now put space back in: let the voltages vary with position across a real device. The float becomes one slider, and watching it is the whole payoff.
 
-If $\bar\mu_i$ is one indivisible quantity carrying a single global float, then defining a per-species voltage by dividing out the charge,
-
-$$ V_i = \frac{\bar\mu_i}{z_i F}, $$
-
-inherits that structure exactly: every $V_i$, for every species, shares the one float and so they all slide *together*.
-
-{% include "esbd-diagrams/mu-V-unison-shift.html" %}
+<figure class="diagram-placeholder">
+{% figcaption %}
+Two panels sharing a position ($x$) axis and a single **float** slider. *Top* — an energy band diagram, $\bar\mu_i(x)$ for several species (an electron, a singly-charged ion, a doubly-charged ion…), with real spatial structure and gaps. *Bottom* — the ESBD: the same physics as $V_i(x) = \bar\mu_i/(z_i F)$. Drag the one float slider and, up top, each $\bar\mu_i$ shifts by $z_i F$ times the float (so they scatter by charge); down below, every $V_i$ glides by the *same* amount, in unison. The relative shapes and gaps stay rigid in both. (Generalizes the front-page e⁻/Li⁺ figure to higher-valence ions; planned build.)
+{% endfigcaption %}
+</figure>
 
 That property — one global vertical freedom, with every relative level fixed and comparable across the whole domain — is not an analogy to a band diagram. It *is* what a band diagram is. A semiconductor band diagram works for exactly this reason: the whole thing can float, but inside it the Fermi levels and band edges keep rigid relationships you can read off and trust. So the question "is $\bar\mu_i$ a real, single thing?" turns out to be the same question as "do band diagrams mean anything?" — and the answer, in both cases, is yes.
 
