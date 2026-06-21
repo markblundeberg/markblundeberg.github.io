@@ -11,7 +11,7 @@ Every time you draw an ESBD you are forced, somewhere, to fix a zero. The [previ
 
 So here is a sandbox. Two solutions sit side by side — an aqueous acid and a lithium electrolyte, each with an electrode — and every arbitrary choice in the picture is wired to its own slider. Drag them and watch what moves.
 
-{% include "esbd-diagrams/esbd-offsets-galore.html" %}
+{% include "esbd-diagrams/esbd-offsets-galore.njk" %}
 
 Give yourself a minute with it before reading on. The sliders fall into two completely different kinds, and telling them apart is the whole point.
 
