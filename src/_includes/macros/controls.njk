@@ -11,15 +11,25 @@
     {{ controls.slider(idprefix + "-c", "$[\\mathrm{KCl}]$", { min: -7, max: 0, readout: true, unit: "mol/L" }) }}
 
   opts: min, max, value, step ('any'), width (px), snap (a value to mark on a
-  datalist), readout (bool → adds <span id="{id}-readout">), readoutInit, unit.
+  datalist), readout (bool → adds <span id="{id}-readout">), readoutInit, unit,
+  inline (bool → label sits beside the slider and the slider fills the available
+  width; for packing many sliders into a compact / multi-column grid).
 #}
 {% macro slider(id, label, opts = {}) %}
+{% if opts.inline %}
+<div class="bd-control" style="display: flex; align-items: center; gap: 0.45em; margin-top: 0.15em">
+    <label for="{{ id }}" style="font-size: 0.8em; flex: 0 0 auto; white-space: nowrap">{{ label | safe }}{% if opts.readout %}: <span id="{{ id }}-readout">{{ opts.readoutInit | default("") | safe }}</span>{% if opts.unit %}&nbsp;{{ opts.unit | safe }}{% endif %}{% endif %}</label>
+    <input type="range" id="{{ id }}"{% if opts.snap is defined %} list="{{ id }}-datalist"{% endif %} min="{{ opts.min | default(0) }}" max="{{ opts.max | default(1) }}" step="{{ opts.step | default('any') }}" value="{{ opts.value if opts.value is defined else (opts.min | default(0)) }}" style="flex: 1 1 auto; min-width: 0; vertical-align: middle" />
+    {% if opts.snap is defined %}<datalist id="{{ id }}-datalist"><option value="{{ opts.snap }}" label="{{ opts.snap }}"></option></datalist>{% endif %}
+</div>
+{% else %}
 <div class="bd-control" style="text-align: center; margin-top: 0.4em">
     <label for="{{ id }}" style="font-size: 0.85em">{{ label | safe }}{% if opts.readout %}: <span id="{{ id }}-readout">{{ opts.readoutInit | default("") | safe }}</span>{% if opts.unit %}&nbsp;{{ opts.unit | safe }}{% endif %}{% endif %}</label>
     <br />
     <input type="range" id="{{ id }}"{% if opts.snap is defined %} list="{{ id }}-datalist"{% endif %} min="{{ opts.min | default(0) }}" max="{{ opts.max | default(1) }}" step="{{ opts.step | default('any') }}" value="{{ opts.value if opts.value is defined else (opts.min | default(0)) }}" style="width: {{ opts.width | default(150) }}px; vertical-align: middle" />
     {% if opts.snap is defined %}<datalist id="{{ id }}-datalist"><option value="{{ opts.snap }}" label="{{ opts.snap }}"></option></datalist>{% endif %}
 </div>
+{% endif %}
 {% endmacro %}
 
 {% macro checkbox(id, label, opts = {}) %}

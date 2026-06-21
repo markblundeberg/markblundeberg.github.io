@@ -1,15 +1,21 @@
 {% set idprefix = "esbd-offsets-galore" %}
 {% import "macros/controls.njk" as controls %}
-<figure class="demo-container" style="max-width: 440px">
+<style>
+    #{{idprefix}}-sliders { display: grid; grid-template-columns: 1fr; column-gap: 1.4em; row-gap: 0; margin-top: 0.6em; }
+    @media (min-width: 560px) { #{{idprefix}}-sliders { grid-template-columns: 1fr 1fr; } }
+</style>
+<figure class="demo-container" style="max-width: 470px">
     <div class="bd-container" id="{{idprefix}}-plot" style="height: 320px; width: 100%"></div>
-    {{ controls.slider(idprefix + "-float", "Global float", { min: -0.4, max: 0.4, step: "any", value: 0, snap: 0 }) }}
-    {{ controls.slider(idprefix + "-muH", "Element reference: H", { min: -0.4, max: 0.4, step: "any", value: 0, snap: 0 }) }}
-    {{ controls.slider(idprefix + "-muO", "Element reference: O", { min: -0.4, max: 0.4, step: "any", value: 0, snap: 0 }) }}
-    {{ controls.slider(idprefix + "-muLi", "Element reference: Li", { min: -0.4, max: 0.4, step: "any", value: 0, snap: 0 }) }}
-    {{ controls.slider(idprefix + "-act1", "Soln 1 — activity convention", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0 }) }}
-    {{ controls.slider(idprefix + "-phi1", "Soln 1 — φ choice", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0 }) }}
-    {{ controls.slider(idprefix + "-act2", "Soln 2 — activity convention", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0 }) }}
-    {{ controls.slider(idprefix + "-phi2", "Soln 2 — φ choice", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0 }) }}
+    <div id="{{idprefix}}-sliders">
+        {{ controls.slider(idprefix + "-float", "Global float", { min: -0.4, max: 0.4, step: "any", value: 0, snap: 0, inline: true }) }}
+        {{ controls.slider(idprefix + "-muH", "Ref: H", { min: -0.4, max: 0.4, step: "any", value: 0, snap: 0, inline: true }) }}
+        {{ controls.slider(idprefix + "-muO", "Ref: O", { min: -0.4, max: 0.4, step: "any", value: 0, snap: 0, inline: true }) }}
+        {{ controls.slider(idprefix + "-muLi", "Ref: Li", { min: -0.4, max: 0.4, step: "any", value: 0, snap: 0, inline: true }) }}
+        {{ controls.slider(idprefix + "-act1", "Soln 1: act.", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
+        {{ controls.slider(idprefix + "-phi1", "Soln 1: φ", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
+        {{ controls.slider(idprefix + "-act2", "Soln 2: act.", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
+        {{ controls.slider(idprefix + "-phi2", "Soln 2: φ", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
+    </div>
 </figure>
 
 <script type="module">
