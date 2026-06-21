@@ -9,7 +9,7 @@ orderESBD: 80.5
 
 Every time you draw an ESBD you are forced, somewhere, to fix a zero. The [previous topic](../muintro/) established the one that genuinely matters — the global float, the single overall level the whole diagram is free to slide. But that is not the only arbitrary choice lurking in the framework. There are standard-state conventions, single-ion activity conventions, and the unmeasurable inner potential $\phi$ of every phase. It is easy to lose track of which of these actually move something and which are pure bookkeeping.
 
-So here is a sandbox. Two solutions sit side by side — an aqueous acid and a lithium electrolyte, each with an electrode — and every arbitrary choice in the picture is wired to its own slider. Drag them and watch what moves.
+So here is a sandbox. Five regions sit side by side: two aqueous solutions (an acid and a base) flanking a metal electrode, then — across a vacuum gap, so no junction is implied — a third solution in a different solvent, a lithium salt in an organic electrolyte. Every arbitrary choice in the picture is wired to its own slider. Drag them and watch what moves.
 
 {% include "esbd-diagrams/esbd-offsets-galore.njk" %}
 
@@ -19,19 +19,19 @@ Give yourself a minute with it before reading on. The sliders fall into two comp
 
 Two of the sliders shift the physical $\bar\mu_i$, so the rails — the $V_i$ lines — genuinely move.
 
-The **global float** is the one from the [last topic](../muintro/): it shifts every $\bar\mu_i$ by $z_i F$ times the same amount, so every line in both solutions, electrons included, slides together. It is the real gauge freedom of the diagram.
+The **global float** is the one from the [last topic](../muintro/): it shifts every $\bar\mu_i$ by $z_i F$ times the same amount, so every line, electrons included, slides together. It is the real gauge freedom of the diagram.
 
-The **element references** — one slider each for the arbitrary zero of hydrogen, oxygen, and lithium — shift a species by its atom count. Drag the hydrogen slider and $V_{\mathrm{H}^+}$ rises while $V_{\mathrm{OH}^-}$ falls (opposite charges), and any oxygen- or lithium-bearing rail answers to its own slider. Because both solutions here are aqueous, the hydrogen and oxygen sliders move rails in *both* of them at once — an element's reference is global, not a property of a single phase (lithium moves only solution 2 because that is the only place lithium lives). These are the answer to the question the last topic set aside, *what sets each species' standard offset*: each conserved element carries one arbitrary constant.
+The **element references** — one slider each for the arbitrary zero of hydrogen and lithium — shift a species by its atom count. Drag the hydrogen slider and $V_{\mathrm{H}^+}$ rises while $V_{\mathrm{OH}^-}$ falls, oppositely, since the two carry hydrogen with opposite charge. And watch how far each reference reaches: hydrogen moves rails in *both* aqueous solutions at once, and lithium reaches across solvents entirely — it moves $V_{\mathrm{Li}^+}$ in the aqueous base *and* in the organic electrolyte. An element's reference is global; it follows the element wherever it lives, not the phase. These are the answer to the question the last topic set aside, *what sets each species' standard offset*: each conserved element carries one arbitrary constant.
 
 Notice what the element sliders leave alone — the electron levels $V_{\mathrm{e}^-}$. An electron carries no hydrogen, oxygen, or lithium, so its rail does not move, and neither does a redox level $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$, because a half-reaction conserves its elements (the references cancel between the two sides of $\mathrm{H}^+ + \mathrm{e}^- \rightleftharpoons \tfrac{1}{2}\mathrm{H}_2$). So of all the sliders, only the global float moves an electron level. That is exactly why a cell voltage — a difference of two $V_{\mathrm{e}^-}$ — is so robust.
 
 ## Knobs that move only labels
 
-The other four sliders — an activity convention and a $\phi$ choice for each solution — never move a single $V_i$ rail. They cannot, because all they do is re-apportion a fixed $\bar\mu_i$ among its conventional parts:
+The remaining sliders — an activity convention for each solution, and a $\phi$ convention for each *solvent* — never move a single $V_i$ rail. They cannot, because all they do is re-apportion a fixed $\bar\mu_i$ among its conventional parts:
 
 $$ \bar\mu_i = \underbrace{\left[\, z_i F \phi + \mu^\circ_{\mathrm{int},i} \,\right]}_{=\; z_i F V^\circ_i} + \big[\, RT \ln a_i \,\big]. $$
 
-The **activity convention** trades the standard-state term against the activity term. It moves the $V^\circ_i$ lines, and because it holds $\mu^\circ_{\mathrm{int},i}$ fixed it drags $\phi$ along with them — but $V_i$ itself does not budge. The **$\phi$ choice** moves $\phi$ alone, dumping the change into $\mu^\circ_{\mathrm{int},i}$ and leaving $V^\circ_i$ where it was.
+The **activity convention**, one per solution, trades the standard-state term against the activity term. It moves that solution's $V^\circ_i$ lines, and because it holds $\mu^\circ_{\mathrm{int},i}$ fixed it drags $\phi$ along with them — but $V_i$ itself does not budge. The **$\phi$ convention** moves $\phi$ alone, dumping the change into $\mu^\circ_{\mathrm{int},i}$ and leaving $V^\circ_i$ where it was — and it belongs to the *solvent*, not the solution. The split of $V^\circ_i$ into $\mu^\circ_{\mathrm{int},i}$ and $\phi$ is a property of the solvent, so the single "water $\phi$" slider shifts $\phi$ in *both* aqueous solutions together, while the organic electrolyte carries its own.
 
 So the two stack rather than coincide, and the drawn quantities end up in a small hierarchy of how convention-laden they are:
 
@@ -43,7 +43,7 @@ The inner potential is the most arbitrary thing on the diagram; the rail is the 
 
 ## What survives all of it
 
-You have six live sliders, and only two of them — the float and the element references — move a $V_i$ rail at all, and only one, the float, moves an electron level. But here is the part worth sitting with: every quantity you could actually *measure* is untouched by all six. A cell voltage is a difference of electron levels, so the element sliders cancel and the float cancels. Any real equilibrium, or the difference of one species' $V_i$ between the two solutions, conserves charge and elements, so every gauge cancels there too. Six arbitrary knobs, two of which visibly move the rails, and not one of them changes a number you could read off an instrument.
+You have eight live sliders, and only three of them — the float and the two element references — move a $V_i$ rail at all, and only one, the float, moves an electron level. But here is the part worth sitting with: every quantity you could actually *measure* is untouched by all eight. A cell voltage is a difference of electron levels, so the element sliders cancel and the float cancels. Any real equilibrium, or the difference of one species' $V_i$ between two solutions, conserves charge and elements, so every gauge cancels there too. Eight arbitrary knobs, three of which visibly move the rails, and not one of them changes a number you could read off an instrument.
 
 That is the honest status of an ESBD. The diagram is not convention-free; you did have to fix some zeros to draw it. But the *content* — the gaps, the differences, the things a voltmeter or an equilibrium responds to — is.
 

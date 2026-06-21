@@ -1,16 +1,16 @@
 {% set idprefix = "esbd-offsets-galore" %}
 {% import "macros/controls.njk" as controls %}
-<figure class="demo-container" style="max-width: 470px">
-    <div class="bd-container" id="{{idprefix}}-plot" style="height: 320px; width: 100%"></div>
+<figure class="demo-container" style="max-width: 500px">
+    <div class="bd-container" id="{{idprefix}}-plot" style="height: 330px; width: 100%"></div>
     <div id="{{idprefix}}-sliders" style="display: grid; grid-template-columns: max-content minmax(0, 200px); gap: 0.35em 0.7em; align-items: center; justify-content: center; margin-top: 0.7em">
         {{ controls.slider(idprefix + "-float", "Global float", { min: -0.4, max: 0.4, step: "any", value: 0, snap: 0, inline: true }) }}
         {{ controls.slider(idprefix + "-muH", "Ref: H", { min: -0.4, max: 0.4, step: "any", value: 0, snap: 0, inline: true }) }}
-        {{ controls.slider(idprefix + "-muO", "Ref: O", { min: -0.4, max: 0.4, step: "any", value: 0, snap: 0, inline: true }) }}
         {{ controls.slider(idprefix + "-muLi", "Ref: Li", { min: -0.4, max: 0.4, step: "any", value: 0, snap: 0, inline: true }) }}
-        {{ controls.slider(idprefix + "-act1", "Soln 1: act.", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
-        {{ controls.slider(idprefix + "-phi1", "Soln 1: φ", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
-        {{ controls.slider(idprefix + "-act2", "Soln 2: act.", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
-        {{ controls.slider(idprefix + "-phi2", "Soln 2: φ", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
+        {{ controls.slider(idprefix + "-phiW", "Water φ", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
+        {{ controls.slider(idprefix + "-phiO", "EC φ", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
+        {{ controls.slider(idprefix + "-actHCl", "HCl act.", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
+        {{ controls.slider(idprefix + "-actLiOH", "LiOH act.", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
+        {{ controls.slider(idprefix + "-actLi", "LiPF₆ act.", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
     </div>
 </figure>
 
@@ -19,58 +19,70 @@
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
     import { makeSlider } from '{{ esbdJsPath }}utils.js';
 
-    // Two solutions side by side. Every line is computed from the base state plus
-    // whatever the convention/gauge sliders do to it. (F = 1, arbitrary units.)
-    const boundaries = [0.0, 0.4, 0.6, 1.0];
+    // Five regions. Two aqueous solutions (same solvent → same background colour) flank a
+    // metal electrode; a vacuum gap separates them from a third solution in another solvent
+    // (so there is no implied junction to it). Every line is the base state plus whatever
+    // the gauge / convention sliders do to it. (F = 1, arbitrary units.)
+    const boundaries = [0.0, 0.22, 0.30, 0.52, 0.62, 1.0];
     const regions = [
-        { ...REGION.solution, name: 'Aqueous acid' },
-        { ...REGION.metal, name:"Metals" },
-        { ...REGION.solution2, name: 'Aqueous Li⁺ salt' },
+        { ...REGION.solution,  name: 'Aq. HCl' },
+        { ...REGION.metal,     name: 'Metal' },
+        { ...REGION.solution,  name: 'Aq. LiOH' },
+        { ...REGION.vacuum,    name: 'Vacuum' },
+        { ...REGION.solution2, name: 'LiPF₆ / EC' },
     ];
+    // Which solvent each region belongs to (drives the per-solvent φ convention).
+    const solventOf = { 1: 'water', 2: 'metal', 3: 'water', 4: 'vacuum', 5: 'other' };
+
+    const x1 = [boundaries[0], boundaries[1]];
+    const xMetal = [boundaries[1], boundaries[2]];
+    const x3 = [boundaries[2], boundaries[3]];
+    const xVac = [boundaries[3], boundaries[4]];
+    const x5 = [boundaries[4], boundaries[5]];
 
     // kind: Vi = species voltage rail | V0 = standard-state line | phi = inner potential
     //       | Ve = electron level (electrode / redox half-reaction)
-    // nH/nO/nLi = atom counts of the slider elements; region = 1 or 2.
-    const x_soln_1 = [boundaries[0],boundaries[1]];
-    const x_metal = [boundaries[1],boundaries[2]];
-    const x_soln_2 = [boundaries[2],boundaries[3]];
+    // nH/nLi = atom counts of the two slider elements; region = 1..5.
     const base = [
-        // Solution 1 — aqueous acid
-        { id: 'h1_v',  species: 'proton',    curveType: 'voltage',        kind: 'Vi',  region: 1, nH: 1,        v:  0.40, x: x_soln_1 },
-        { id: 'h1_v0', species: 'proton',    curveType: 'standardState',  kind: 'V0',  region: 1, nH: 1,        v:  0.68, x: x_soln_1 },
-        { id: 'oh1_v', species: 'hydroxide', curveType: 'voltage',        kind: 'Vi',  region: 1, nH: 1, nO: 1, v: -0.55, x: x_soln_1 },
-        // A redox couple: the implied electron level of H⁺/H₂. It involves H, yet
-        // (being a balanced half-reaction) it is immune to the H reference slider.
-        { id: 'redox', species: 'electron',  curveType: 'voltageImplied', kind: 'Ve',  region: 1,               v:  0.05, x: x_soln_1, label: 'V_{\\mathrm{e}^-}(\\mathrm{H}^+\\!/\\mathrm{H}_2)' },
-        { id: 'phi1',                        curveType: 'phi',            kind: 'phi', region: 1,               v:  0.15, x: x_soln_1 },
-        // Metal electrode — a real electron level
-        { id: 'e_m',   species: 'electron',  curveType: 'voltage',        kind: 'Ve',  region: 2,               v:  0.22, x: x_metal },
-        // Solution 2 — also aqueous, so it ALSO carries H⁺ and OH⁻. That is what makes
-        // the H and O references visibly *global*: dragging them moves BOTH solutions.
-        { id: 'li_v',  species: 'lithium',   curveType: 'voltage',        kind: 'Vi',  region: 3, nLi: 1,       v: -0.10, x: x_soln_2 },
-        { id: 'li_v0', species: 'lithium',   curveType: 'standardState',  kind: 'V0',  region: 3, nLi: 1,       v:  0.22, x: x_soln_2 },
-        { id: 'h2_v',  species: 'proton',    curveType: 'voltage',        kind: 'Vi',  region: 3, nH: 1,        v:  0.30, x: x_soln_2 },
-        { id: 'oh2_v', species: 'hydroxide', curveType: 'voltage',        kind: 'Vi',  region: 3, nH: 1, nO: 1, v: -0.70, x: x_soln_2 },
-        { id: 'phi2',                        curveType: 'phi',            kind: 'phi', region: 3,               v: -0.05, x: x_soln_2 },
+        // Region 1 — aqueous HCl
+        { id: 'h1',     species: 'proton',    curveType: 'voltage',        kind: 'Vi',  region: 1, nH: 1,  v:  0.45, x: x1 },
+        { id: 'h1_0',   species: 'proton',    curveType: 'standardState',  kind: 'V0',  region: 1, nH: 1,  v:  0.72, x: x1 },
+        { id: 'oh1',    species: 'hydroxide', curveType: 'voltage',        kind: 'Vi',  region: 1, nH: 1,  v: -0.50, x: x1 },
+        { id: 'phi1',                         curveType: 'phi',            kind: 'phi', region: 1,         v:  0.10, x: x1 },
+        // Region 2 — metal electrode
+        { id: 'em',     species: 'electron',  curveType: 'voltage',        kind: 'Ve',  region: 2,         v:  0.25, x: xMetal },
+        // Region 3 — aqueous LiOH (same solvent as region 1 → same background)
+        { id: 'li3',    species: 'lithium',   curveType: 'voltage',        kind: 'Vi',  region: 3, nLi: 1, v:  0.05, x: x3 },
+        { id: 'oh3',    species: 'hydroxide', curveType: 'voltage',        kind: 'Vi',  region: 3, nH: 1,  v: -0.42, x: x3 },
+        { id: 'li3_0',  species: 'lithium',   curveType: 'standardState',  kind: 'V0',  region: 3, nLi: 1, v:  0.32, x: x3 },
+        { id: 'phi3',                         curveType: 'phi',            kind: 'phi', region: 3,         v: -0.05, x: x3 },
+        // Region 4 — vacuum (no solvent slider; φ_vac just floats)
+        { id: 'phivac',                       curveType: 'phi',            kind: 'phi', region: 4,         v: -1.20, x: xVac, label: '\\phi_{\\mathrm{vac}}' },
+        // Region 5 — LiPF₆ in EC (a different solvent)
+        { id: 'li5',    species: 'lithium',   curveType: 'voltage',        kind: 'Vi',  region: 5, nLi: 1, v: -0.18, x: x5 },
+        { id: 'li5_0',  species: 'lithium',   curveType: 'standardState',  kind: 'V0',  region: 5, nLi: 1, v:  0.12, x: x5 },
+        { id: 'phi5',                         curveType: 'phi',            kind: 'phi', region: 5,         v: -0.30, x: x5 },
+        // the Li⁺/Li⁰ plating level — a redox electron level, so float-only (conserves Li)
+        { id: 'plate',  species: 'electron',  curveType: 'voltageImplied', kind: 'Ve',  region: 5,         v: -0.58, x: x5, label: 'V_{\\mathrm{e}^-}(\\mathrm{Li}^+\\!/\\mathrm{Li})' },
     ];
 
     const esbd = new ElectrochemicalSpeciesBandDiagram('{{idprefix}}-plot', {
         proton: SPECIES.proton,
         hydroxide: SPECIES.hydroxide,
         lithium: SPECIES.lithium,
-        chloride: SPECIES.chloride,
         electron: SPECIES.electron,
     }, { yMode: 'abstract' });
     esbd.setSpatialLayout(boundaries, regions);
-    esbd.setVRange(-1.7, 1.7);
+    esbd.setVRange(-1.8, 1.7);
 
     const val = (name) => parseFloat(document.getElementById('{{idprefix}}-' + name).value);
 
     function update() {
         const f = val('float');
-        const mu = { H: val('muH'), O: val('muO'), Li: val('muLi') };
-        const A = { 1: val('act1'), 2:0, 3: val('act2') };
-        const P = { 1: val('phi1'), 2:0, 3: val('phi2') };
+        const mu = { H: val('muH'), Li: val('muLi') };
+        // A: activity convention, per solution (region). P: φ convention, per solvent.
+        const A = { 1: val('actHCl'), 2: 0, 3: val('actLiOH'), 4: 0, 5: val('actLi') };
+        const P = { water: val('phiW'), other: val('phiO'), vacuum: 0, metal: 0 };
 
         const traces = base.map((t) => {
             let y = t.v + f; // the global float moves everything
@@ -78,10 +90,10 @@
             if (t.kind === 'Vi' || t.kind === 'V0') {
                 // element references move μ̄_i (and V°) by atom-count / charge
                 const z = SPECIES[t.species].z;
-                y += ((t.nH || 0) * mu.H + (t.nO || 0) * mu.O + (t.nLi || 0) * mu.Li) / z;
+                y += ((t.nH || 0) * mu.H + (t.nLi || 0) * mu.Li) / z;
             }
             if (t.kind === 'V0') y += A[t.region]; // activity convention reallocates V° ↔ activity
-            if (t.kind === 'phi') y += A[t.region] + P[t.region]; // φ rides activity, plus its own choice
+            if (t.kind === 'phi') y += A[t.region] + (P[solventOf[t.region]] || 0); // φ rides activity (per solution) + the per-solvent φ convention
             // kind 'Ve': float only — electrons carry no element, redox levels conserve them
 
             return {
@@ -97,7 +109,7 @@
         esbd.updateTraceData(traces);
     }
 
-    ['float', 'muH', 'muO', 'muLi', 'act1', 'phi1', 'act2', 'phi2'].forEach((n) =>
+    ['float', 'muH', 'muLi', 'phiW', 'phiO', 'actHCl', 'actLiOH', 'actLi'].forEach((n) =>
         makeSlider('{{idprefix}}-' + n, () => update(), { fire: false })
     );
     update();
