@@ -41,7 +41,7 @@ export const REGION = {
     vacuum: { name: 'Vacuum', color: '#f8f8f8' },
     metal: { name: 'Metal', color: '#E0E0E0' },
     solution: { name: 'Solution', color: '#E6F5FF' },
-    solution2: { name: 'Solution', color: '#eaf6ff' },
+    solution2: { name: 'Solution', color: '#FFF5E6' },
     semiconductor: { name: 'Semiconductor', color: '#d2d8e0' },
     semi2: { name: 'Semiconductor', color: '#dcd6c8' },
     solid: { name: 'Solid', color: '#eeeeee' },
