@@ -56,10 +56,9 @@ The rabbit holes -- appendices, advanced topics, notes:
 - [_Transport dynamics_](/esbd/transport3/) - Time evolution of ion concentrations. Poisson-Nernst-Planck equation.
 
 *Thermodynamics*:
-- [_Thermodynamics_](/esbd/thermodynamics/) - Subtleties of the thermodynamics of charges; why electrochemical potentials (and thus $V_i$) are fundamental.
-- [_Thermodynamics II_](/esbd/thermodynamics2/) - Thermodynamics of bulk vs charged surfaces.
-- [_Capacitance_](/esbd/capacitance/) - Discussion of ambipolar capacitance (thermodynamic) vs chemical capacitance (extrathermodynamic).
+- [_Understanding electrochemical potential_](/esbd/muintro/) - Why $\bar\mu_i$ is the real, indivisible chemical potential — and why that makes $V_i$ (and band diagrams) work.
 - [_Non-ideal solutions_](/esbd/nonideal/) - Focussing on technical difficulties of single-ion activities.
+- [_Capacitance_](/esbd/capacitance/) - Discussion of ambipolar capacitance (thermodynamic) vs chemical capacitance (extrathermodynamic).
 
 *Appendices*:
 - [_Standard state data_](/esbd/data/) - Numerical data for ionic solutes' $V^\circ_i$ values in water.

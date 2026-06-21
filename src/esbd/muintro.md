@@ -100,4 +100,4 @@ A closing attitude, rather than a result: by now you can see that the urge to na
 
 *(Out of scope here: what sets each species' individual offset — its standard state $V^\circ_i$. That is a separate question, and an open one even for neutral species; this page is only about whether $\bar\mu_i$ is one thing, not about where each species' zero sits.)*
 
-[**NEXT TOPIC: Thermodynamics**](../thermodynamics/)
+[**NEXT TOPIC: Non-ideal solutions**](../nonideal/)

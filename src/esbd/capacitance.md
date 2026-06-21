@@ -2,7 +2,7 @@
 layout: layouts/esbd_topic.njk
 title: 'Capacitance'
 tags: [page, esbd_topic]
-orderESBD: 83
+orderESBD: 82
 ---
 
 # {{title}}
@@ -22,7 +22,7 @@ and the relation between them.
 
 ### Thermodynamic setting
 
-In our $V_i$ view, we have defined the following free energy function (for more info about this, see the [bulk thermodynamics topic](../thermodynamics2) -- there we called this quantity $F_{\mathrm{bulk}}$):
+In our $V_i$ view, we work with a free energy function of the species voltages — a grand free energy we'll call $F_{\mathrm{bulk}}$:
 
 $$ F(V_1, \ldots, V_N) $$
 
