@@ -9,9 +9,11 @@ orderESBD: 80.5
 
 Every time you draw an ESBD you are forced, somewhere, to fix a zero. The [previous topic](../muintro/) established the one that genuinely matters — the global float, the single overall level the whole diagram is free to slide. But that is not the only arbitrary choice lurking in the framework. There are standard-state conventions, single-ion activity conventions, and the unmeasurable inner potential $\phi$ of every phase. It is easy to lose track of which of these actually move something and which are pure bookkeeping.
 
-So here is a sandbox. Five regions sit side by side: two aqueous solutions (an acid and a base) flanking a metal electrode, then — across a vacuum gap, so no junction is implied — a third solution in a different solvent, a lithium salt in an organic electrolyte. Every arbitrary choice in the picture is wired to its own slider. Drag them and watch what moves.
+So here is a sandbox. The following band diagram shows a **fixed physical situation**, together with sliders that control our various *arbitrary conventions / interpretations* of the situation.
 
 {% include "esbd-diagrams/esbd-offsets-galore.njk" %}
+
+In detail, five regions sit side by side: two aqueous solutions (an acid and a base) flanking a metal electrode, then — across a vacuum gap, so no junction is implied — a third solution in a different solvent, a lithium salt in an organic electrolyte. Every arbitrary choice in the picture is wired to its own slider. Drag them and watch what moves. Again: *none of these sliders is changing anything of physical meaning*.
 
 Give yourself a minute with it before reading on. The sliders fall into two completely different kinds, and telling them apart is the whole point.
 
