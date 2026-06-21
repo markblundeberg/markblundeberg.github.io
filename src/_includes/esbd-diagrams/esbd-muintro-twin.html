@@ -1,0 +1,92 @@
+{% set idprefix = "esbd-muintro-twin" %}
+{% import "macros/controls.njk" as controls %}
+<figure class="demo-container" style="max-width: 360px">
+    <div class="bd-container" id="{{idprefix}}-energy" style="height: 210px; width: 100%"></div>
+    <div class="bd-container" id="{{idprefix}}-esbd" style="height: 210px; width: 100%"></div>
+    {{ controls.slider(idprefix + "-float", "Float", { min: -0.5, max: 0.5, step: "any", value: 0, snap: 0 }) }}
+</figure>
+
+<script type="module">
+    import BandDiagram from '{{ esbdJsPath }}BandDiagram.js';
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
+
+    // A generic device: metal | solution | metal, with a few species at different
+    // levels (incl. a +2 cation, to make the energy-view scatter obvious).
+    // Base V_i(x) profiles are arbitrary placeholders -- tune freely.
+    const boundaries = [0.0, 0.2, 0.8, 1.0];
+    const regions = [
+        { ...REGION.metal, name: 'Metal' },
+        { ...REGION.solution, name: 'Solution' },
+        { ...REGION.metal, name: 'Metal' },
+    ];
+
+    // id, species key, kind ('v' = species voltage, 'std' = standard state),
+    // x sample points, and base V values at those points (F = 1, arbitrary units).
+    const base = [
+        { id: 'e_left', key: 'electron', kind: 'v', x: [0.0, 0.2], v: [0.0, 0.0] },
+        { id: 'e_right', key: 'electron', kind: 'v', x: [0.8, 1.0], v: [0.4, 0.4] },
+        { id: 'li', key: 'lithium', kind: 'v', x: [0.2, 0.8], v: [-0.25, -0.15] },
+        { id: 'li_std', key: 'lithium', kind: 'std', x: [0.2, 0.8], v: [-0.05, 0.0] },
+        { id: 'zn', key: 'zinc', kind: 'v', x: [0.2, 0.8], v: [0.25, 0.3] },
+        { id: 'zn_std', key: 'zinc', kind: 'std', x: [0.2, 0.8], v: [0.45, 0.48] },
+        { id: 'cl', key: 'chloride', kind: 'v', x: [0.2, 0.8], v: [0.6, 0.55] },
+        { id: 'cl_std', key: 'chloride', kind: 'std', x: [0.2, 0.8], v: [0.78, 0.74] },
+    ];
+
+    // Bottom: the ESBD (V_i view).
+    const esbd = new ElectrochemicalSpeciesBandDiagram('{{idprefix}}-esbd', {
+        electron: SPECIES.electron,
+        lithium: SPECIES.lithium,
+        zinc: SPECIES.zinc,
+        chloride: SPECIES.chloride,
+    });
+    esbd.setSpatialLayout(boundaries, regions);
+    esbd.setVRange(-0.9, 1.45);
+
+    // Top: the energy band diagram (mu-bar view), built on the lower-level BandDiagram.
+    const energy = new BandDiagram('{{idprefix}}-energy');
+    energy.setSpatialLayout(boundaries, regions);
+    energy.setYLabel('Electron / ion energy (a.u.)');
+    energy.setYRange(-1.5, 2.3);
+
+    function update(float) {
+        const esbdTraces = [];
+        const energyTraces = [];
+        for (const t of base) {
+            const sp = SPECIES[t.key];
+            // V_i = base + float  (every species shifts by the same float: unison)
+            const Vy = t.v.map((val) => val + float);
+            esbdTraces.push({
+                id: t.id,
+                speciesId: t.key,
+                curveType: t.kind === 'std' ? 'standardState' : 'voltage',
+                showLabel: t.kind !== 'std',
+                x: t.x,
+                y: Vy,
+            });
+            // mu-bar_i = z_i * V_i  (each shifts by z_i * float: scatter by charge)
+            const Ey = t.v.map((val) => sp.z * (val + float));
+            energyTraces.push({
+                id: t.id,
+                label:
+                    t.kind === 'std'
+                        ? `\\bar\\mu^{\\circ}_{${sp.mathLabel}}`
+                        : `\\bar\\mu_{${sp.mathLabel}}`,
+                showLabel: t.kind !== 'std',
+                color: sp.color,
+                style:
+                    t.kind === 'std'
+                        ? { lineWidth: 1, dasharray: '4,2' }
+                        : { lineWidth: 3 },
+                x: t.x,
+                y: Ey,
+            });
+        }
+        esbd.updateTraceData(esbdTraces);
+        energy.updateTraceData(energyTraces);
+    }
+
+    makeSlider('{{idprefix}}-float', (v) => update(v));
+</script>

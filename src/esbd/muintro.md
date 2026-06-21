@@ -88,11 +88,9 @@ There is a tempting mistake here. If you only ever look at $N_i$ and $N_j$ at th
 
 The real content, we just found, is the web of $V_i$ *differences*, with a single common float left free. Now put space back in: let the voltages vary with position across a real device. The float becomes one slider, and watching it is the whole payoff.
 
-<figure class="diagram-placeholder">
-{% figcaption %}
-Two panels sharing a position ($x$) axis and a single **float** slider. *Top* — an energy band diagram, $\bar\mu_i(x)$ for several species (an electron, a singly-charged ion, a doubly-charged ion…), with real spatial structure and gaps. *Bottom* — the ESBD: the same physics as $V_i(x) = \bar\mu_i/(z_i F)$. Drag the one float slider and, up top, each $\bar\mu_i$ shifts by $z_i F$ times the float (so they scatter by charge); down below, every $V_i$ glides by the *same* amount, in unison. The relative shapes and gaps stay rigid in both. (Generalizes the front-page e⁻/Li⁺ figure to higher-valence ions; planned build.)
-{% endfigcaption %}
-</figure>
+{% include "esbd-diagrams/esbd-muintro-twin.html" %}
+
+The two panels share a position axis and a single **float** slider. The top is an ordinary energy band diagram of the $\bar\mu_i$; the bottom is the ESBD of the same physics, $V_i = \bar\mu_i / (z_i F)$. Drag the float: up top each $\bar\mu_i$ moves by $z_i F$ times the float, so the levels scatter apart by charge; down below every $V_i$ glides by the *same* amount, in unison. The relative shapes and gaps stay rigid in both.
 
 That property — one global vertical freedom, with every relative level fixed and comparable across the whole domain — is not an analogy to a band diagram. It *is* what a band diagram is. A semiconductor band diagram works for exactly this reason: the whole thing can float, but inside it the Fermi levels and band edges keep rigid relationships you can read off and trust. So the question "is $\bar\mu_i$ a real, single thing?" turns out to be the same question as "do band diagrams mean anything?" — and the answer, in both cases, is yes.
 
