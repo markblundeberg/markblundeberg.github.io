@@ -11,7 +11,7 @@ Our key player is the **species voltage** $V_i$, a potential defined for every t
 
 $$ V_i = \frac{\bar\mu_i}{q_i}. $$
 
-This may look intimidating for those not versed in the fundamentals of thermodynamics and the meaning of chemical potential. But you do not have to deeply understand electrochemical potential to understand $V_i$, because you likely already know how $V_i$ works:
+This may look intimidating for those not versed in the fundamentals of thermodynamics and the meaning of chemical potential. But you do not have to deeply understand electrochemical potential^[If you want to, an optional later topic — [Understanding electrochemical potential](../muintro/) — makes the case that $\bar\mu_i$ is the *real*, indivisible chemical potential, which is exactly what makes $V_i$ so natural. But that depth is genuinely not needed here.] to understand $V_i$, because you likely already know how $V_i$ works:
 
 **The electronic quantity $V_{\mathrm{e}^-}$ is precisely the voltage seen in basic electronic circuits.**
 
@@ -42,17 +42,13 @@ Below I'll highlight the key principles of what makes $V_i$ a voltage.
 
 ## What about electrostatic potential $\phi$?
 
-It is commonly taught that the electrostatic potential $\phi$ (ostensibly from Maxwell's equations) is what defines voltage. Myself I had to unlearn this idea long ago when doing nanoelectronic research.^[Datta, S. (2005), *Quantum Transport*. See also Datta's excellent [Lessons from Nanoelectronics](https://engineering.purdue.edu/Intranet/Groups/Schools/ECE/Admin/GradOffice/StudentResources/Datta/Datta_PartA.pdf) (also available as [video lecture](https://www.youtube.com/watch?v=0IJYCyZ98Tw)). "*It is only under special conditions that $\tilde\mu$ and $\phi$ track each other and one can be used in place of the other*".] The problem can be seen already in the commonplace connection between a copper wire and a blob of solder where electrostatic potential stops behaving like a familiar circuit voltage:
+It is commonly taught that the electrostatic potential $\phi$ (ostensibly from Maxwell's equations) is what defines voltage. I had to unlearn that when doing nanoelectronics,^[Datta, S. (2005), *Quantum Transport*; see also his [Lessons from Nanoelectronics](https://engineering.purdue.edu/Intranet/Groups/Schools/ECE/Admin/GradOffice/StudentResources/Datta/Datta_PartA.pdf). "*It is only under special conditions that $\tilde\mu$ and $\phi$ track each other and one can be used in place of the other*".] and you can watch it break in something as ordinary as a copper wire joined to a blob of solder, where $\phi$ takes a step that the circuit voltage does not:
 
 {% include "esbd-diagrams/esbd-copper-solder.njk" %}
 
-Actually it's even worse than this. I will [elaborate on this in an appendix](../phi/), but in short:
+Worse, the in-material $\phi$ simply is not accessible — and not just its global offset; even *differences* in $\phi$ (the {% wiki "Galvani potential", "Galvani potentials" %}) are generally unmeasurable. So $\phi$ ends up *assigned by convention*, material by material — at which point it is no longer an electrostatic potential at all, and $-\nabla\phi$ need not be any real electric field. The $\phi$ picture *can* be made to work — once every convention is reconciled and every ambiguity hedged, $\phi$ cancels out of all observables — but that fragile apparatus is exactly what has bred so many errors and misconceptions.
 
-The "real electrostatic potential" in a material is not experimentally accessible nor is it thermodynamically meaningful. And I don't mean the global offset, I mean that even differences in $\phi$ ("{% wiki "Galvani potential", "Galvani potentials" %}") are generally unmeasurable. Consequently, it usually happens that $\phi$ gets *assigned arbitrarily* for each material based on ad-hoc special rules.^[Newman & Balsara (2005), *Electrochemical Systems*.] These rules are sometimes deceptive,^[Frequently, we see $\phi$ in metals is assigned to equal $V_{\mathrm{e}^-}$, which conveniently erases the built-in $\phi$ step shown in the figure. Technically this is fine (if $\phi$ is arbitrary, why not), but it can be highly misleading. The problem is that usually this is snuck in implicitly as a pedagogical 'lie to children' to avoid technicalities, but unfortunately this has become a permanent misconception for many. How many people are actually using $V_{\mathrm{e}^-}$ under the alias '$\phi$', thinking it is an electrostatic quantity when it was actually a thermodynamic electrochemical potential all along?] and to be clear when these arbitrary assignments are done, then it means $\phi$ is no longer even an electrostatic potential and its gradient need not be any meaningful electric field. (Some practitioners do strive to keep the "real $\phi$",^[See Bard & Faulkner's *Electrochemical Methods*, where in chapter 2 they define $\phi$ by strict electrostatics.] but as I note in [the appendix](../phi/) this is even *theoretically* tricky and wins you no general physical insights.)
-
-The problems with $\phi$ make it a shaky foundation for any rigorous theory, yet it is the basis for traditional electrochemistry and some semiconductor engineering. To be clear, the $\phi$ view does work after all necessary corrections are applied, inconsistent conventions are reconciled, and ambiguities are hedged: $\phi$ cancels out of *every* observable. Unfortunately this complicated apparatus has led to errors, misconceptions, and misguided research.
-
-In this project, a major theme is that I actively *avoid* using the concept of an in-material $\phi$, and try to construct a picture without it. The general approach is going to be "stick with thermodynamical $V_i$-only as much as possible; even when it looks like $\phi$ is needed, prefer to use quantities like $V^\circ_i$ (introduced later) that do the same job with less ambiguity"; this is the generalization of the elegant $\phi$-less "Fermi levels and band edges only" philosophy^[The abandonment of $\phi$ in preference for unambiguous and relevant band edges is crucial for understanding semiconductor heterostructures. It also lets us understand concepts like "quasi-electric fields" which are far more relevant than any single-valued "real electric field" $-\nabla \phi$. See [H. Kroemer's Nobel Lecture](https://www.nobelprize.org/uploads/2018/06/kroemer-lecture.pdf) for some great illustrations of this.] in semiconductor device physics.
+So we will simply not use an in-material $\phi$. We stick to $V_i$ — and later to $V^\circ_i$, which does $\phi$'s job with far less ambiguity — and you will see as we go that we never actually need it.^[This generalizes the elegant $\phi$-less "Fermi levels and band edges only" philosophy of semiconductor device physics; see [H. Kroemer's Nobel Lecture](https://www.nobelprize.org/uploads/2018/06/kroemer-lecture.pdf). It is also what lets us speak of "quasi-electric fields," far more useful than any single $-\nabla\phi$.] The full case against $\phi$ has [its own appendix](../phi/), and the [Offsets galore](../offsetsgalore/) topic lets you watch first-hand just how arbitrary it is.
 
 ## Differences in $V_i$ are available work
 
@@ -72,61 +68,37 @@ Note this is simpler than the common split seen in electrochemistry and solid st
 
 Not all currents are so simple as Ohm's law, of course. Interfaces often have a nonlinear current-voltage relationship; there may be cross coupling where electrochemical potential gradients in one species drives another species (including neutral species); there may be other driving forces like magnetic induction or thermoelectricity; there may be convection/advection.
 
-## Differences in $V_i$ are measurable with voltmeters
+## Differences in $V_i$ are measurable
 
-The fact that $\Delta V_i$ represents available work means it is in principle measurable, for any species $i$. Practically, however, we do live in a world where one species (electrons) is much easier to probe than the others.
+Because $\Delta V_i$ is available work, it is in principle measurable for any species — though in practice one species, electrons, is far easier to probe than the rest.
 
-The common voltmeter has metal probes. It measures differences in $V_{\mathrm{e}^-}$ by permitting a small, ideally negligible, number of electrons to flow in via metal probes. In fact, the reason electronic voltmeters work so directly and conveniently is that so many of our conductors are purely electronic: we can attach wires of many different materials together, and since electrons are the only mobile carriers, then they transmit $V_{\mathrm{e}^-}$ perfectly without any of the complications we see in multi-ion solutions.
+A common voltmeter has metal probes and reads differences in $V_{\mathrm{e}^-}$, letting a tiny, ideally negligible electron current flow in. It works so cleanly because so many of our conductors are purely electronic: join wires of any assortment of metals and, since electrons are the only mobile carrier, $V_{\mathrm{e}^-}$ carries across all of them perfectly.
 
 {% include "esbd-diagrams/esbd-multi-metal-voltmeter.njk" %}
 
-With ions, it is much harder to probe $V_i$ due to practical complications: we generally don't have single-ion conductors (e.g. electrolytes contain at least one positive and one negative ionic species) that we could use to make "ion wires". Even when we do have single-ion wires, we would also need ionic voltmeters to make a full ionic circuit. Due to both of these factors, we will only probe ionic $V_{\mathrm{ion}}$ in-situ, and indirectly via coupling to $V_{\mathrm{e}^-}$ regular (electronic) voltmeters. My argument is that $V_{\mathrm{ion}}$ is no less real, it is just trickier to access.
-
-A regular voltmeter with its metallic probes tends to have a poorly controlled connection between $V_{\mathrm{ion}}$ and $V_{\mathrm{e}^-}$. But with careful preparation of the probe surface, we get an **ion-reversible electrode**: an interface that chemically couples $V_{\mathrm{e}^-}$ to the $V_i$ of exactly one ionic species, while ignoring all others. This manifests as a step $V_{\mathrm{e}^-} - V_{\mathrm{ion}} = \Delta$ for some value $\Delta$ that is determined by chemical equilibration; provided the $\Delta$ is well controlled, we therefore have indirect access to $V_{\mathrm{ion}}$ by probing the $V_{\mathrm{e}^-}$ with a regular voltmeter and subtracting $\Delta$.
-
-> Note that $\Delta$ is related to, but very much distinct from, the electrode potential.
+Ions are harder. We have no good "ion wires" (an electrolyte carries at least one cation *and* one anion), and no ionic voltmeters, so we can only probe $V_{\mathrm{ion}}$ indirectly, by coupling it to $V_{\mathrm{e}^-}$. A carefully prepared **ion-reversible electrode** chemically locks $V_{\mathrm{e}^-}$ to the $V_i$ of exactly one ion, producing a fixed step $V_{\mathrm{e}^-} - V_{\mathrm{ion}} = \Delta$.
 
 {% include "esbd-diagrams/esbd-electrode-generic.html" %}
 
-And of course, if we use two such electrodes (with the same $\Delta$) then we can perform a differential measurement between two arbitrary solutions:
+Here is the honest catch: $\Delta$ is a gap between *different* species (an electron and an ion), so — just like any $V_i - V_j$ that we discuss below — it carries a chemical convention, and a single electrode does **not** hand you an absolute $V_{\mathrm{ion}}$. What it gives cleanly is a *same-ion difference*: put a matched electrode in each of two solutions and $\Delta$ cancels, leaving exactly $V_{\mathrm{ion}}(\text{B}) - V_{\mathrm{ion}}(\text{A})$ — a fully physical voltage, obtained without ever knowing $\Delta$.^[Riess, I. ["Mixed ionic–electronic conductors—material properties and applications."](https://doi.org/10.1016/S0167-2738(02)00182-0) Solid State Ionics 157.1-4 (2003): 1-17.]
 
 {% include "esbd-diagrams/esbd-electrode-generic-differential.html" %}
 
-In this way, the difference $\Delta$ will perfectly cancel and so the measured voltage will be equal to $V_{\mathrm{ion}}(\text{solution B}) - V_{\mathrm{ion}}(\text{solution A})$. This shows that variations in $V_{\mathrm{ion}}$ can be measured even when we don't know the value of $\Delta$.^[Riess, I. ["Mixed ionic–electronic conductors—material properties and applications."](https://doi.org/10.1016/S0167-2738(02)00182-0) Solid State Ionics 157.1-4 (2003): 1-17.]
-
-In many cases these electrodes will be particularized to both the target ion and to the environment of that ion. A key criterion is that $V_{\mathrm{e}^-}$ only couples to the target $V_{\mathrm{ion}}$ and not to any other charged species. There is also a [generic recipe (see later topic)](../nuances/) that can be used in principle to non-invasively measure any ionic voltage $V_i$, but it is based on ion-selective membranes which are only practically available for some ions in some compatible solutions.
+So ionic $V_i$ is no less real than electronic $V_{\mathrm{e}^-}$; it is just that only its differences, for a given ion, are directly accessible. (A more general but less practical recipe, using ion-selective membranes, comes [later](../nuances/).)
 
 ## $V_i$ are thermodynamic state variables
 
 Alongside temperature $T$, pressure $P$, and the chemical potentials $\mu_i$ of neutral elements, the $V_i$ (or $\bar\mu_i$) are the proper intensive state variables for charged species. Since $T$, $P$, and the solvent $\mu$ tends to be constant or implicitly clear, it means that our plots of varying $V_i$ will be a complete visualization of the spatial varations thermodynamic state in many cases.
 
-Note that in general if we have $N$ charged species then there are $N$ independent $V_i$ values, however there are only $N-1$ independent charged species concentrations, because the body has to (generally) be charge neutral. The extra degree of freedom in the set of $V_i$ values is not redundant but actually represents important state information: it is the electrical state of the body. If we uniformly increase all the $V_i \rightarrow V_i + \delta$ then the body is in a distinct thermodynamic state (electrically) even though it is equivalent in all other aspects. This bring us to our next point...
+Note that in general if we have $N$ charged species then there are $N$ independent $V_i$ values, however there are only $N-1$ independent charged species concentrations, because the body has to (generally) be charge neutral. The extra degree of freedom in the set of $V_i$ values is not redundant but actually represents important state information: it is the electrical state of the body. If we uniformly increase all the $V_i \rightarrow V_i + \delta$ then the body is in a distinct thermodynamic state (electrically) even though it is equivalent in all other aspects. This brings us to our next point...
 
-## All $V_i$ float and are unreferenced
+## $V_i$ floats, and $V_i - V_j$ carries a convention
 
-(TODO: offload to new topic about covariance advantages? and refer again during discussions of $E$, vac reference etc.)
+Two last subtleties round out the picture. Both are better *seen* than told, so the [Offsets galore](../offsetsgalore/) topic puts them under interactive sliders; here is the short version.
 
-As a subtle but extremely important conceptual principle, all the $V_i$ are *covariant* values with respect to global shifts in electric potential. What this means is, if we increase all $V_i$ in all places by 1 volt, as well as increasing all other electric potentials ($V^\circ_i$, $\phi_{\mathrm{vac}}$, etc.) by 1 volt, then the system is observationally equivalent. It may seem weird that we are allowing this redundancy, but it is only 1 degree of freedom for the entire universe, and in fact it has huge conceptual benefits compared to the traditional electrochemistry approach where each quantity should be locally referenced.^[In traditional electrochemistry, the philosophy is often that quantities should have a declared reference point, such as "the SHE" or "the vacuum". The goal is that these referenced quantities are measurable, but I think it is a poor choice as it can introduce problems when the reference is ambiguous or ill specified. In detail, the real problem is that these quantities are *locally* referenced, which means that in any nontrivial device you now get a patchwork of many references. Each material/solution/cell has its own different idea of "the vacuum" or "the SHE", and in fact those references can even continuously vary across a device under bias. This is in spite of the fact that there is only *one* universal gauge shifting degree of freedom, so there should only be at most one reference point in the entire universe. But then, you get the pointless debate over what is the "true" absolute 0 reference. By working with reference-free covariant quantities and staying with them, we never have to get confused about referencing.]
+The whole set of $V_i$ shares one **global float**: raise every $V_i$ — along with $V^\circ_i$, $\phi_{\mathrm{vac}}$, and the rest — by the same amount, and nothing observable changes. It is a single gauge degree of freedom for the entire universe, so there is no meaningful *absolute* voltage; only differences carry meaning.^[This covariance is a feature, not a redundancy to apologize for. Traditional electrochemistry instead leans on a patchwork of *local* references (the SHE, the vacuum, …), one per phase — references that can even drift across a device under bias — when there is really only ever *one* global freedom to fix. Staying reference-free sidesteps the perennial "but what is the *true* zero?" debates. The thermodynamic origin of this float is derived in [Understanding electrochemical potential](../muintro/).] To actually draw a diagram we of course pin the zero somewhere; I put the negative electrode at $0$, as is usual in electronics.
 
-Note that in our $V_i$ band diagrams, we do have to make a choice of where to put the zero simply for the purposes of illustration. I tend to offset the diagram such that the negative electrode is 0, matching usual practice in electronics work. But it must be understood that the entire diagram can be shifted up and down and it does not affect what is happening; it's only the vertical differences that matter.
-
-<figure class="diagram-placeholder">
-{% figcaption %}
-- 'COM', a cell, some nontrivial nonflat Vi traces, and $\phi_{\mathrm{vac}}$.
-
-As in this toy universe containing a complex electrochemical and a nonflat vacuum potential, we can raise and lower all electrical quantities together arbitrarily. Only vertical differences matter.
-{% endfigcaption %}
-</figure>
-
-## About differences $V_i - V_j$
-
-There is an important caveat: the hidden choice of chemical potential convention imparts a global offset on each ion's $V_i$. The impact of this hidden assumption is to apply a consistent (but somewhat arbitrary) offset to all values $V_i - V_j$ for each pair of distinct species $i\neq j$. This does not affect ionic $V_i$ differences within the same species (e.g. we can exactly define and measure the difference in $V_{\mathrm{H}^+}$ between two solutions, even if they have different solvents).
-
-We will discuss this more quantitatively in the next topic.
-
-{#
-In fact we could have defined $V_i$ differently by adding various per-species offsets (globally constant but different for each $i$), which would also definitionally impact $V_i - V_j$, and I'll explore these alternative additives in a later topic. Of particular interest is the redox band diagram picture which removes the arbitrariness of the chemical potential (but introduces its own nuances). But after much thought, I have found the un-offsetted $ V_i = \bar\mu_i / q_i $ is the most concise and elegant choice, so we'll proceed with this definition.
-#}
+Comparing *different* species, $V_i - V_j$, inherits a chemical-potential convention: a globally-consistent but somewhat arbitrary offset, set by how we reference each element. Comparing the *same* species across places, $V_i(x) - V_i(y)$, has no such ambiguity — it is always physical, even between different solvents. (That is the very same fact behind the measurement story above: same-ion differences are what a matched pair of electrodes cleanly reads.)
 
 
 ## Takeaways

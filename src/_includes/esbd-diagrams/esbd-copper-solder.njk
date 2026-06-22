@@ -1,23 +1,24 @@
-<figure class="demo-container" style="max-width: 300px">
-    <div
-        style="height: 150px; max-width:200px"
-        id="esbd-copper-solder-container"
-    ></div>
+{% set idprefix = "esbd-copper-solder" %}
+{% import "macros/controls.njk" as controls %}
+<figure class="demo-container" style="max-width: 320px">
+    <div style="height: 170px; width: 100%" id="{{idprefix}}-container"></div>
+    <div id="{{idprefix}}-sliders" style="display: grid; grid-template-columns: max-content minmax(0, 150px); gap: 0.3em 0.6em; align-items: center; justify-content: center; margin-top: 0.5em">
+        {{ controls.slider(idprefix + "-phiCu", "φ in copper", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
+        {{ controls.slider(idprefix + "-phiSn", "φ in solder", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
+    </div>
     {% figcaption %}
-        Where two electronic materials (like two metals) come into contact, $V_{\mathrm{e}^-}$ equalizes as
-        expected for an electronic circuit voltage, whereas $\phi$ settles on a
-        nonzero step size&mdash;a so-called "built-in voltage". (Note: these $\phi$ values are made up; nobody knows the real values of $\phi$ that should be drawn here, only that they must differ.)
+        Where two electronic materials meet, $V_{\mathrm{e}^-}$&mdash;the real circuit voltage, what a voltmeter reads&mdash;simply equalizes. The electrostatic potential $\phi$, by contrast, takes a step (a "built-in voltage"). But nobody can actually measure $\phi$ here: drag the sliders and you'll see that its absolute level <em>and</em> its step are pure guesses, while $V_{\mathrm{e}^-}$ never budges. (A popular shortcut is to just <em>define</em> $\phi = V_{\mathrm{e}^-}$ inside metals, which quietly erases the step&mdash;convenient, but it has left a great many people using $V_{\mathrm{e}^-}$ under the alias "$\phi$", thinking it electrostatic when it was thermodynamic all along.)
     {% endfigcaption %}
 </figure>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
 
-    const diagram = new ElectrochemicalSpeciesBandDiagram(
-        'esbd-copper-solder-container',
-        { electron: SPECIES.electron }
-    );
+    const diagram = new ElectrochemicalSpeciesBandDiagram('{{idprefix}}-container', {
+        electron: SPECIES.electron,
+    });
 
     const boundaries = [0.0, 0.5, 1.0];
     diagram.setSpatialLayout(boundaries, [
@@ -26,32 +27,44 @@
     ]);
 
     const V_el = +0.45;
-    diagram.setVRange(V_el - 0.3, V_el + 0.5);
+    diagram.setVRange(V_el - 0.7, V_el + 0.8);
 
-    const b = boundaries;
-    const data = [
-        {
-            id: `electron_trace`,
-            speciesId: 'electron',
-            curveType: 'voltage',
-            showLabel: true,
-            x: [0, 1],
-            y: [V_el, V_el],
-        },
-    ];
+    // φ is made up: a built-in step, plus whatever the sliders add. V_e- never moves.
+    const phiBase = [V_el + 0.4, V_el - 0.2];
 
-    // phi steps by a (made-up) built-in voltage at the junction.
-    const phis = [+0.4, -0.2];
-    for (let i = 0; i < phis.length; i++) {
-        const phi = V_el + phis[i];
-        data.push({
-            id: `phi_${i}`,
-            curveType: 'phi',
-            showLabel: true,
-            x: [b[i], b[i + 1]],
-            y: [phi, phi],
-        });
+    const val = (n) => parseFloat(document.getElementById('{{idprefix}}-' + n).value);
+
+    function update() {
+        const dphi = [val('phiCu'), val('phiSn')];
+        const data = [
+            {
+                id: 'electron_trace',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [0, 1],
+                y: [V_el, V_el],
+                labelFrac: 0.5,
+                labelHAlign: 'center',
+            },
+        ];
+        for (let i = 0; i < 2; i++) {
+            const phi = phiBase[i] + dphi[i];
+            data.push({
+                id: 'phi_' + i,
+                curveType: 'phi',
+                showLabel: true,
+                x: [boundaries[i], boundaries[i + 1]],
+                y: [phi, phi],
+                labelFrac: 0.5,
+                labelHAlign: 'center',
+            });
+        }
+        diagram.updateTraceData(data);
     }
 
-    diagram.updateTraceData(data);
+    ['phiCu', 'phiSn'].forEach((n) =>
+        makeSlider('{{idprefix}}-' + n, () => update(), { fire: false })
+    );
+    update();
 </script>
