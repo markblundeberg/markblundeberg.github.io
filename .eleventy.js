@@ -3,6 +3,7 @@ import markdownIt from 'markdown-it';
 import eleventyNavigationPlugin from '@11ty/eleventy-navigation';
 import markdownItKatex from '@vscode/markdown-it-katex';
 import markdownItFootnote from 'markdown-it-footnote';
+import fs from 'node:fs';
 
 // `export default` is used for ESM
 export default async function myConfig(eleventyConfig) {
@@ -35,6 +36,28 @@ export default async function myConfig(eleventyConfig) {
     // The markdown-it-footnote package is a CJS module without a default export.
     // The actual plugin function is on the .default property of the imported object.
     md.use(markdownItFootnote);
+
+    // --- Debug: dump the post-Nunjucks, pre-markdown-it intermediate ---
+    // Markdown pages are run through Nunjucks first (includes/macros expanded),
+    // then the resulting string is handed to markdown-it. That intermediate is
+    // what markdown-it actually parses, and it's where whitespace gremlins hide
+    // (a stray blank line can drop a <figure> out of raw-HTML mode). Run the
+    // build with DUMP_MD=1 to append every render's input to a file, e.g.
+    //   DUMP_MD=1 npx @11ty/eleventy --output=/tmp/x
+    // then inspect /tmp/eleventy-md-intermediate.txt.
+    if (process.env.DUMP_MD) {
+        const dumpPath = '/tmp/eleventy-md-intermediate.txt';
+        fs.writeFileSync(dumpPath, ''); // fresh each build
+        const origRender = md.render.bind(md);
+        md.render = (src, env) => {
+            const where = env?.page?.inputPath || '(no page env, e.g. a figcaption)';
+            fs.appendFileSync(
+                dumpPath,
+                `\n===== ${where} (${src.length} chars) =====\n${src}\n`
+            );
+            return origRender(src, env);
+        };
+    }
 
     // --- Collections ---
     // Optional: Define collections later for things like blog posts
