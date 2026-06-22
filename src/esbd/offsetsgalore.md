@@ -7,50 +7,47 @@ orderESBD: 80.5
 
 # {{title}}
 
-Every time you draw an ESBD you are forced, somewhere, to fix a zero. The [previous topic](../muintro/) established the one that genuinely matters — the global float, the single overall level the whole diagram is free to slide. But that is not the only arbitrary choice lurking in the framework. There are standard-state conventions, single-ion activity conventions, and the unmeasurable inner potential $\phi$ of every phase. It is easy to lose track of which of these actually move something and which are pure bookkeeping.
+Every time you draw an ESBD you are forced, somewhere, to fix a zero. The big easy one is the global float, the single overall level the whole diagram is free to slide.
+In the [previous topic](../muintro/) we derived this one thermodynamically. But that is not the only arbitrary choice lurking in the framework. There are chemical conventions, single-ion activity conventions, and the unmeasurable inner potential $\phi$ of every phase. It is easy to lose track of which of these actually move something and which are pure bookkeeping.
 
-So here is a sandbox. The following band diagram shows a **fixed physical situation**, together with sliders that control our various *arbitrary conventions / interpretations* of the situation.
+So here is a sandbox, and I'm going to throw all of them in at once. The following band diagram shows a **fixed physical situation**, together with sliders that control our various *arbitrary conventions / interpretations* of the situation. It looks like a lot, but just play with it.
 
 {% include "esbd-diagrams/esbd-offsets-galore.njk" %}
 
-In detail, five regions sit side by side: two aqueous solutions (an acid and a base) flanking a metal electrode, then — across a vacuum gap, so no junction is implied — a third solution in a different solvent, a lithium salt in an organic electrolyte. Every arbitrary choice in the picture is wired to its own slider. Drag them and watch what moves. Again: *none of these sliders is changing anything of physical meaning*.
+The detail of this situation is, five regions sit side by side: two aqueous solutions (an acid and a base) flanking a metal electrode, then — across a vacuum gap, so no junction is implied — a third solution in a different solvent, a lithium salt in an organic electrolyte. Every arbitrary choice in the picture is wired to its own slider. Drag them and watch what moves. Again: *none of these sliders is changing anything of physical meaning: the ion concentrations are fixed; all charges and measurable potential differences are fixed*.
+
+Note: the actual potentials shown in this figure are not to scale or are all the sliders of reasonable magnitudes. The point here is just to show the effects.
 
 Give yourself a minute with it before reading on. The sliders fall into two completely different kinds, and telling them apart is the whole point.
 
-## Knobs that move the levels
+## Kinds of knobs
 
-Two of the sliders shift the physical $\bar\mu_i$, so the rails — the $V_i$ lines — genuinely move.
+The **global float** is the one from the [last topic](../muintro/): it shifts everything by the same amount, not just $V_i$ but also $\phi$. It is the real global gauge freedom of the diagram.
 
-The **global float** is the one from the [last topic](../muintro/): it shifts every $\bar\mu_i$ by $z_i F$ times the same amount, so every line, electrons included, slides together. It is the real gauge freedom of the diagram.
+The **elemental references** such as $\mu^*_{\mathrm{H}}$ and $\mu^*_{\mathrm{Li}}$ are the chemical potential of pure elements in their reference states (298 K, 1 bar, etc.). As can be seen, these affect all ionic $V_i$ and $V^\circ_i$ for ions that include the element in question. Note that changes in these sliders also affect neutral matter (not shown), for example the chemical potential of pure water in our conditions would be $\mu_{\mathrm{H_2 O}} = 2\mu^*_{\mathrm{H}} + \mu^*_{\mathrm{O}} - 237.14~\mathrm{kJ/mol}$. As I mentioned early on, the usual choice (and my preference) is simply $\mu^*_i = 0$ for all elements in their pure reference states, because that makes the chemical potentials for all neutral species coincide with their Gibbs formation energies, e.g. simply $\mu_{\mathrm{H_2 O}} = \Delta G_{f,\mathrm{H_2 O}} = - 237.14~\mathrm{kJ/mol}$.
 
-The **element references** — one slider each for the arbitrary zero of hydrogen and lithium — shift a species by its atom count. Drag the hydrogen slider and $V_{\mathrm{H}^+}$ rises while $V_{\mathrm{OH}^-}$ falls, oppositely, since the two carry hydrogen with opposite charge. And watch how far each reference reaches: hydrogen moves rails in *both* aqueous solutions at once, and lithium reaches across solvents entirely — it moves $V_{\mathrm{Li}^+}$ in the aqueous base *and* in the organic electrolyte. An element's reference is global; it follows the element wherever it lives, not the phase. These are the answer to the question the last topic set aside, *what sets each species' standard offset*: each conserved element carries one arbitrary constant.
-
-Notice what the element sliders leave alone — the electron levels $V_{\mathrm{e}^-}$. An electron carries no hydrogen, oxygen, or lithium, so its rail does not move, and neither does a redox level $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$, because a half-reaction conserves its elements (the references cancel between the two sides of $\mathrm{H}^+ + \mathrm{e}^- \rightleftharpoons \tfrac{1}{2}\mathrm{H}_2$). So of all the sliders, only the global float moves an electron level. That is exactly why a cell voltage — a difference of two $V_{\mathrm{e}^-}$ — is so robust.
-
-## Knobs that move only labels
-
-The remaining sliders — an activity convention for each solution, and a $\phi$ convention for each *solvent* — never move a single $V_i$ rail. They cannot, because all they do is re-apportion a fixed $\bar\mu_i$ among its conventional parts:
-
+The **$\phi$ convention** determines where $\phi$ sits relative to the $V^\circ_i$ ladder. This is a choice you can make per solvent. Recall we have
 $$ \bar\mu_i = \underbrace{\left[\, z_i F \phi + \mu^\circ_{\mathrm{int},i} \,\right]}_{=\; z_i F V^\circ_i} + \big[\, RT \ln a_i \,\big]. $$
+and so this convention amounts to a redistribution of 'extrinsic' electrostatic energy ($z_i F \phi$) back and forth with the 'intrinsic' ionic standard states $\mu^\circ_{\mathrm{int},i}$ (but leaving $V^\circ_i$ unchanged). Each solvent has its own fixed $\mu^\circ_{\mathrm{int},i}$ system, which is why you can independently choose $\phi$ for water and for the other solvent (EC - ethylene carbonate in this case).
 
-The **activity convention**, one per solution, trades the standard-state term against the activity term. It moves that solution's $V^\circ_i$ lines, and because it holds $\mu^\circ_{\mathrm{int},i}$ fixed it drags $\phi$ along with them — but $V_i$ itself does not budge. The **$\phi$ convention** moves $\phi$ alone, dumping the change into $\mu^\circ_{\mathrm{int},i}$ and leaving $V^\circ_i$ where it was — and it belongs to the *solvent*, not the solution. The split of $V^\circ_i$ into $\mu^\circ_{\mathrm{int},i}$ and $\phi$ is a property of the solvent, so the single "water $\phi$" slider shifts $\phi$ in *both* aqueous solutions together, while the organic electrolyte carries its own.
+The **activity conventions** are the most fine-grained, very much local in effect. These apply to any solution which is away from ideal-dilute behaviour, and in terms of the above equation now amount to a *redistribution of activity-energy between different ions in the same place*. We will discuss this more in [next topic, on nonideality](../nonideal/), but as you can see with the slider, it affects all $V^\circ$ levels and $\phi$ as well. This is not just per-solvent but **per-solution** (i.e. if you change the solute concentrations, you get to choose a whole new activity coefficient).
 
-So the two stack rather than coincide, and the drawn quantities end up in a small hierarchy of how convention-laden they are:
+## Consequences
 
-- $V_i$, the rail, is moved by neither convention. Bedrock.
-- $V^\circ_i$, the standard-state line, moves with the activity convention but not the $\phi$ choice.
-- $\phi$, the inner-potential line, moves with both.
+First, the global float means that there is no meaningful absolute voltage. Only voltage differences matter, but as can be seen, some voltage differences also suffer from a loss of physical meaning. I'm going to highlight some of the crucial ones.
 
-The inner potential is the most arbitrary thing on the diagram; the rail is the least.
+$V_i - V_j$: we have been prizing the physical meaning of $V_i$ differences, but I hope the above figure makes abundantly clear the one gotcha: these depend on the elemental chemical potential conventions, which are not necessarily universal. Nonetheless these conventions are applied in a globally consistent way over the whole band diagram, across all materials. This means same-ion differences are always well defined: e.g., $V_{\mathrm{Li}^+}(x) - V_{\mathrm{Li}^+}(y)$ is well defined if you are comparing very distant locations, different solvents, or whatever. This is the real beauty of $V_i$: **each species' global $V_i(x)$ trace has an unambiguous physical shape, no matter how complicated the situation**.^[Electromagnetic induction gauge choicees and mishandled thermoelectric gradients can alter the shape.]
 
-## What survives all of it
+$V^\circ_i(x) - V^\circ_j(y)$: these differences suffer the same (mild) global chemical convention. But now also it is sensitive to the activity conventions used at locations $x$ and $y$. This means even a same-ion $V^\circ_i(x) - V^\circ_i(y)$ is only unambiguous when the two solutions are either ideal-dilute or compositionally identical. Besides the chemical potential convention though, the structure of the $V^\circ_i$ ladder at one place is a well defined physical property of the solvent.
 
-You have eight live sliders, and only three of them — the float and the two element references — move a $V_i$ rail at all, and only one, the float, moves an electron level. But here is the part worth sitting with: every quantity you could actually *measure* is untouched by all eight. A cell voltage is a difference of electron levels, so the element sliders cancel and the float cancels. Any real equilibrium, or the difference of one species' $V_i$ between two solutions, conserves charge and elements, so every gauge cancels there too. Eight arbitrary knobs, three of which visibly move the rails, and not one of them changes a number you could read off an instrument.
+$\phi(x) - \phi(y)$: this is the famous **{% wiki "Galvani_potential", "Galvani potential difference" %}** or **liquid junction potential**. This difference is independent of our chemical potential conventions but it depends on everything else: most importantly each material can have its own $\phi$ choice, which immediately rules out any meaningful liquid junction potential ($\phi$ difference) between different solvents. But, even between two solutions of the same solvent (where $\phi(x) - \phi(y) = V^\circ_i(x) - V^\circ_i(y)$ for all $i$), this difference is still not always physically meaningful because of the activity convention appears as well.
 
-That is the honest status of an ESBD. The diagram is not convention-free; you did have to fix some zeros to draw it. But the *content* — the gaps, the differences, the things a voltmeter or an equilibrium responds to — is.
+$V_{\mathrm{e}^-}$ and $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ and $\phi_{\mathrm{vac}}$: curiously, these are unaffected by anything but the global offset. But why are electrons and the vacuum special? Why no electron chemical offset or 'vacuum solvent' offset? In fact, there is a convention here too, but it is an extremely universal and innocent one: declaring the energy of an electron at rest in vacuum to be $E_{\mathrm{e^-}}(x) = -e\phi_{\mathrm{vac}}(x)$.^[Deviating from this electron energy convention would alter the value of all {% wiki "work function", "work functions" %}, and alter the law of thermal electron emission, and probably many other things too. But it would be self-consistent. Interestingly in the field of gas-phase ionization, some folk do effectively adopt an alternative convention here (see [NIST Chemistry WebBook "Gas-Phase Ion Thermochemistry", § Thermochemical Conventions for the Electron](https://webbook.nist.gov/chemistry/ion/#TC)), which I suspect amounts to defining a $V^\circ_{\mathrm{e}^-}$ in vacuum! Also note: we can't similarly demand that $E_{\mathrm{ion}} = z_{\mathrm{ion}} e\phi_{\mathrm{vac}}$ because it would conflict with our elemental chemical potential conventions, and anyway you couldn't really make this true for all ions because of molecular ion binding energies.] So, no slider for this convention.
 
-## The seventh knob, bolted shut
+## Takeaways
 
-There is one more convention, so well established it never gets a slider. The electron could carry its own arbitrary reference, just like the elements do, but for conductors that choice merges into the global float, so it never appears as an independent freedom. The one place it *would* show its face is as a redefinition of every work function — it tunes the vacuum level $\phi_{\mathrm{vac}}$ against the electron level $V_{\mathrm{e}^-}$. We weld it shut with the universal convention that an electron at rest in vacuum has energy $-e\phi_{\mathrm{vac}}$. The sole experiment that would notice if we ever changed it is thermionic emission — Richardson's law is quietly built on exactly that convention. It is real, it touches precisely one phenomenon, and nobody ever varies it, so it does not get a knob.
+Choices, choices! It's complicated, but that is just how electrochemical thermodynamics is. In the pure mathematical thermodynamics, we don't have to make these choices, and we can keep everything expressed in covariant/convention-free terms. But when we do visualizations, we do have to decide.
+
+In the next topic we'll discuss the activity convention aspect in much more detail: the slider aspect, and things like mean activities.
 
 [**NEXT TOPIC: Non-ideal solutions**](../nonideal/)
