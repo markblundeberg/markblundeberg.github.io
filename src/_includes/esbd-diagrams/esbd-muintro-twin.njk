@@ -1,10 +1,8 @@
 {% set idprefix = "esbd-muintro-twin" %}
 {% import "macros/controls.njk" as controls %}
-<figure class="demo-container" style="max-width: 360px">
     <div class="bd-container" id="{{idprefix}}-energy" style="height: 210px; width: 100%"></div>
     <div class="bd-container" id="{{idprefix}}-esbd" style="height: 210px; width: 100%"></div>
     {{ controls.slider(idprefix + "-float", "Float", { min: -0.5, max: 0.5, step: "any", value: 0, snap: 0 }) }}
-</figure>
 
 <script type="module">
     import BandDiagram from '{{ esbdJsPath }}BandDiagram.js';

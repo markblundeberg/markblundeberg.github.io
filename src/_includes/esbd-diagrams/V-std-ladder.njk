@@ -1,6 +1,5 @@
 {# Hacked down version of mu-V-unison-shift #} {% set idprefix =
 ["V-sd-ladder-", idsuffix] | join %}
-<figure class="demo-container" style="max-width: 200px">
     <div style="display: flex; gap: 8px">
         <div
             id="{{ idprefix }}-diagram-container"
@@ -29,7 +28,6 @@
             />
         </div>
     </div>
-</figure>
 
 <script type="module">
     import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';

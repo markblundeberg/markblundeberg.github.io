@@ -1,6 +1,5 @@
 {% set idprefix = ["esbd-agcl-kcl-common-ion", idsuffix] | join %}
 {% import "macros/controls.njk" as controls %}
-<figure class="demo-container" style="max-width: 300px">
     <div
         id="{{idprefix}}-bd-container"
         class="bd-container"
@@ -30,7 +29,6 @@
             >&emsp;[NO₃⁻] <span id="{{idprefix}}-no3Conc"></span
         ></span>
     </div>
-</figure>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';

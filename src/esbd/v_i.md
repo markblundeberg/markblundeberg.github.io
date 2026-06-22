@@ -44,7 +44,12 @@ Below I'll highlight the key principles of what makes $V_i$ a voltage.
 
 It is commonly taught that the electrostatic potential $\phi$ (ostensibly from Maxwell's equations) is what defines voltage. I had to unlearn that when doing nanoelectronics,^[Datta, S. (2005), *Quantum Transport*; see also his [Lessons from Nanoelectronics](https://engineering.purdue.edu/Intranet/Groups/Schools/ECE/Admin/GradOffice/StudentResources/Datta/Datta_PartA.pdf). "*It is only under special conditions that $\tilde\mu$ and $\phi$ track each other and one can be used in place of the other*".] and it already goes wrong in something as ordinary as a copper wire joined to a blob of solder, where $\phi$ takes a step that the circuit voltage does not:
 
+<figure class="demo-container" style="max-width: 320px">
 {% include "esbd-diagrams/esbd-copper-solder.njk" %}
+{% figcaption %}
+        Where two electronic materials meet, $V_{\mathrm{e}^-}$ (the real circuit voltage, what a voltmeter reads) simply equalizes. The electrostatic potential $\phi$, by contrast, takes a step (a "built-in voltage"). But nobody can actually measure $\phi$ here: drag the sliders and you'll see that its absolute level <em>and</em> its step are pure guesses, while $V_{\mathrm{e}^-}$ stays fixed. (A popular shortcut is to just <em>define</em> $\phi = V_{\mathrm{e}^-}$ inside metals, which quietly erases the step. It is convenient, but it has left a great many people using $V_{\mathrm{e}^-}$ under the alias "$\phi$", thinking it electrostatic when it was thermodynamic all along.)
+{% endfigcaption %}
+</figure>
 
 Worse, the in-material $\phi$ is not experimentally accessible. Its overall offset is free, of course, but the deeper trouble is that even *differences* in $\phi$ (the {% wiki "Galvani potential", "Galvani potentials" %}) are generally unmeasurable. So $\phi$ ends up *assigned by convention*, material by material, at which point it is no longer an electrostatic potential at all, and $-\nabla\phi$ need not be any real electric field. The $\phi$ picture can be made to work once every convention is reconciled and every ambiguity hedged (in the end it cancels out of all observables), but that fragile apparatus is exactly what has bred so many errors and misconceptions.
 
@@ -56,7 +61,9 @@ The fundamental rule of thermodynamics is that particles flow from high to low c
 
 The available work $\Delta\bar\mu_i$ is free energy per unit of particle count (e.g. kJ/mol or eV/particle). By normalizing $V_i = \bar\mu_i / q_i$, the corresponding $\Delta V_i$ is **available work per unit charge** (volts). But, it's not just the work for *any* charge, rather it is specific to charge transferred via that specific species.
 
+<figure class="demo-container" style="max-width: 400px">
 {% include "esbd-diagrams/levels-mu-V-work.njk" %}
+</figure>
 
 ## Differences in $V_i$ drive currents
 
@@ -74,15 +81,26 @@ Because $\Delta V_i$ is available work, it is in principle measurable for any sp
 
 A common voltmeter has metal probes and reads differences in $V_{\mathrm{e}^-}$, letting a tiny, ideally negligible electron current flow in. It works so cleanly because so many of our conductors are purely electronic: join wires of any assortment of metals and, since electrons are the only mobile carrier, $V_{\mathrm{e}^-}$ carries across all of them perfectly.
 
+<figure class="demo-container" style="min-width: 280px; max-width: 350px">
 {% include "esbd-diagrams/esbd-multi-metal-voltmeter.njk" %}
+{% figcaption %}
+        When attaching a voltmeter probe to an electronic device, we don't care
+        which metal the probe is made of because electrons are the only mobile
+        charged species.
+{% endfigcaption %}
+</figure>
 
 Ions are harder. We have no good "ion wires" (an electrolyte carries at least one cation *and* one anion), and no ionic voltmeters, so we can only probe $V_{\mathrm{ion}}$ indirectly, by coupling it to $V_{\mathrm{e}^-}$. A carefully prepared **ion-reversible electrode** chemically locks $V_{\mathrm{e}^-}$ to the $V_i$ of exactly one ion, producing a fixed step $V_{\mathrm{e}^-} - V_{\mathrm{ion}} = \Delta$.
 
+<figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/esbd-electrode-generic.njk" %}
+</figure>
 
 But $\Delta$ is a gap between *different* species (an electron and an ion), so, like any $V_i - V_j$ below, it carries a chemical convention, and a single electrode does **not** hand you an absolute $V_{\mathrm{ion}}$. What it gives cleanly is a *same-ion difference*: put a matched electrode in each of two solutions and $\Delta$ cancels, leaving exactly $V_{\mathrm{ion}}(\text{B}) - V_{\mathrm{ion}}(\text{A})$, a fully physical voltage obtained without ever knowing $\Delta$.^[Riess, I. ["Mixed ionic–electronic conductors—material properties and applications."](https://doi.org/10.1016/S0167-2738(02)00182-0) Solid State Ionics 157.1-4 (2003): 1-17.]
 
+<figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/esbd-electrode-generic-differential.njk" %}
+</figure>
 
 So ionic $V_i$ is no less real than electronic $V_{\mathrm{e}^-}$; it is just that only its differences, for a given ion, are directly accessible. (A more general but less practical recipe, using ion-selective membranes, comes [later](../nuances/).)
 

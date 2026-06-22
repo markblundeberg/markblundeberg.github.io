@@ -60,7 +60,9 @@ Some readers will notice that many of these entries coincide with {% wiki "Stand
 
 Here is the plot again; note that a few of these values were omitted from the plot due to overlapping too tightly or being too extreme.
 
+<figure class="demo-container" style="max-width: 200px">
 {% include "esbd-diagrams/V-std-ladder.njk" %}
+</figure>
 
 ## A subtle technicality with a happy ending
 

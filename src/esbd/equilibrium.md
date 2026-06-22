@@ -13,7 +13,9 @@ $$ V_i - V_j = \Delta, $$
 
 where $\Delta$ is some nonzero offset (usually depending on neutral reactants or products). In the diagrams, we will show a symbol with the marker ⇌ to indicate an equlibrium reaction.
 
+<figure class="demo-container" style="max-width: 230px">
 {% include "esbd-diagrams/esbd-reaction-generic.njk" %}
+</figure>
 
 And of course, at equilibrium every species equilibrates with itself (which can be understood as a trivial reaction $ V_i - V_i = 0 $), and so we see $V_i$ being perfectly flat throughout each domain where the species $i$ can move freely.
 
@@ -37,7 +39,9 @@ $$ V_{\mathrm{H}^+} - V_{\mathrm{OH}^-} = \frac{\mu_{\mathrm{H_2O}}}{F}. $$
 
 Thus, auto-ionization in water directly sets up an offset between $V_{\mathrm{H}^+}$ and $V_{\mathrm{OH}^-}$.
 
+<figure class="demo-container" style="max-width: 190px">
 {% include "esbd-diagrams/esbd-h2o-autoionization.njk" %}
+</figure>
 
 How large is this offset? The chemical potential $\mu_{\mathrm{H_2O}}$ is the partial molar Gibbs energy for $\mathrm{H_2O}$. We can look up Gibbs *formation* energy energies for neutral chemicals like $\mathrm{H_2O}$ in chemical data tables, and for convenience, we adopt the chemical potential system that makes chemical potentials equal to Gibbs formation energies.
 
@@ -51,7 +55,9 @@ Similarly, we might consider a reaction for the dissociation of sodium chloride 
 $$ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = \frac{\mu_{\mathrm{NaCl}}}{F} . $$
 If the solution is fully saturated with salt (meaning it is in equilibrium with solid salt), then we get $\mu_{\mathrm{NaCl}}/ F = -3.9813~\mathrm{V}$, so:
 
+<figure class="demo-container" style="max-width: 230px">
 {% include "esbd-diagrams/esbd-nacl-saturation.njk" %}
+</figure>
 
 This is an example of heterogeneous equilibrium (the salt is a separate solid phase), whereas the previous autoionization example is a form of homogeneous equilibrium. Note that this $3.9813~\mathrm{V}$ spacing from $\mathrm{NaCl}$ applies to any solvent, not just water; the only assumption we made was that of saturation.
 
@@ -73,7 +79,9 @@ Note there is a factor of $1/2$, a consequence of the double charged nature of t
 
 Plotting the ESBD now,
 
+<figure class="demo-container" style="max-width: 230px">
 {% include "esbd-diagrams/esbd-zn-electrode.njk" %}
+</figure>
 
 It's a flat line with $V_{\mathrm{Zn}^{2+}} = V_{\mathrm{e}^-}$.
 
@@ -93,7 +101,9 @@ $$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} =  \frac{1}{F} ( \mu_{\mathrm{Ag}} - \mu
 
 Let's plot this on a band diagram once again:
 
+<figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/esbd-ag-agcl-electrode.njk" %}
+</figure>
 
 Since we have $\mu_{\mathrm{Ag}} = 0~\mathrm{kJ/mol}$ and $\mu_{\mathrm{AgCl}} = -109.8~\mathrm{kJ/mol}$ we get:
 
@@ -128,7 +138,9 @@ $$2 (V_{\mathrm{Fe}^{2+}} - V_{\mathrm{Fe}^{3+}}) = V_{\mathrm{Fe}^{3+}} - V_{\m
 
 Such a reaction no longer sets a rigid gap, and now a degree of freedom remains:
 
+<figure class="demo-container" style="max-width: 230px">
 {% include "esbd-diagrams/esbd-ferrous-ferric.njk" %}
+</figure>
 
 Much like we discussed with $ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ earlier, the difference like $V_{\mathrm{Fe}^{2+}} - V_{\mathrm{Fe}^{3+}}$ relates to ion concentrations, but we will elaborate this later in a few topics.
 

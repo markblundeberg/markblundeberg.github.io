@@ -1,10 +1,8 @@
 {% set idprefix = ["bd-basicbattery-energy-ion-too-", idsuffix] | join %}
 {% import "macros/controls.njk" as controls %}
-<figure class="demo-container" style="max-width: 300px">
     <div class="bd-container" id="{{ idprefix }}"></div>
     {{ controls.slider(idprefix + "-current-slider", "Current", { min: -1, max: 1, step: "any", value: 0, readout: true, readoutInit: "equilibrium", snap: 0 }) }}
     {{ controls.slider(idprefix + "-dphi-slider", "Electrostatic offset $\\Delta\\phi$", { min: -0.5, max: 0.5, step: "any", value: 0 }) }}
-</figure>
 
 <script type="module">
     import BandDiagram from '{{ esbdJsPath }}BandDiagram.js';

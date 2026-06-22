@@ -15,7 +15,9 @@ What is the electrical state deep inside of a battery?
 
 If we try to visualize this by plotting voltage versus position, we immediately run into a mystery. We know the voltage at the anode (negative terminal) and the cathode (positive terminal), but what about the electrolyte in between?
 
+<figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/bd-basicbattery-voltage-missing.njk" %}
+</figure>
 
 What are we supposed to draw in place of the '???'? A straight line? A sudden jump? The mystery deepens when we try to understand more complex situations; how can we visualize the voltage drops from internal resistance during battery discharge?
 
@@ -25,7 +27,9 @@ While the equations of electrochemistry are precise, the visual tools for buildi
 
 Semiconductor physicists are used to understanding everything in terms of electronic energies, and we use the term "{%wiki "energy band diagram", "Band diagram" %}" to refer to a plot of electronic energies vs. position. These band diagrams are the primary visual and pedagogical tool for showing what is happening, thermodynamically, inside semiconductor devices. So, what happens when we try to represent a battery with a regular band diagram?
 
+<figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/bd-basicbattery-energy-missing.njk" %}
+</figure>
 
 We still have a missing middle! We can be more precise and say _the middle is undefined_: there simply are no free electrons inside the electrolyte to define an energy level for.
 
@@ -41,7 +45,9 @@ To make headway, let's recognize something crucial: in batteries, electrons are 
 
 Let's try generalizing our plot to include ionic energies:
 
+<figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/bd-basicbattery-energy-ion-too.njk" %}
+</figure>
 
 Fantastic, we have filled the gap and closed the circuit! And, we can visualize how during charging or discharge, there is a gradient in $\bar\mu_{\mathrm{Li}^+}$ showing internal resistance. Note the value of $\bar\mu_{\mathrm{Li}^+}$ does penetrate into the anode/cathode, representing the mingling of electrons and lithum ions inside the active materials.
 
@@ -59,7 +65,9 @@ where $q_i$ is the charge of the species: $-e$ for electrons, $+e$ for lithium i
 
 Let's re-plot our battery with this new representation. I call these diagrams **electrochemical species band diagrams (ESBDs)**.
 
+<figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/bd-basicbattery-voltage-esbd.njk" %}
+</figure>
 
 (You can try moving the offset slider again to see vertical invariance is fixed: everything shifts together nicely now.)
 
@@ -67,7 +75,9 @@ Here we can finally see how the battery works, and we have a satisfying answer t
 
 If we look at a multi-cell battery, the electron and lithium-ion voltages climb together nicely (while they would have moved oppositely in the raw energy picture):
 
+<figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/bd-basicbattery-multicell.njk" %}
+</figure>
 
 In fact, what started out as a niche picture about batteries has turned into a refreshing alternative mental framework for all electrochemical phenomena. With the $V_i$ picture and ESBDs,
 

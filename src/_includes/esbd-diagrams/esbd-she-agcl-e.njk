@@ -1,6 +1,5 @@
 {% set idprefix = "esbd-she-agcl-e" %} {# standard hydrogen electrode with agcl electrode #}
 {% import "macros/controls.njk" as controls %}
-<figure class="demo-container" style="max-width: 300px">
     <div class="bd-container" id="{{idprefix}}-container"></div>
     {{ controls.slider(idprefix + "-hcl-slider", "$\\mathrm{HCl}$ concentration", { min: -3.1, max: 1.1, step: "any", value: -1.7, readout: true, unit: "mol/kg", snap: 0 }) }}
     {{ controls.slider(idprefix + "-h2-slider", "$\\mathrm{H}_2$ pressure", { min: -2, max: 2, step: "any", value: -0.8, readout: true, unit: "bar", snap: 0 }) }}
@@ -10,7 +9,6 @@
     >
         Cell voltage $\Delta V_{\mathrm{e}^-}$: <span id="{{idprefix}}-voltage"></span> V
     </div>
-</figure>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';

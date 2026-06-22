@@ -1,9 +1,7 @@
 {% set idprefix = "esbd-ferrous-ferric" %}
 {% import "macros/controls.njk" as controls %}
-<figure class="demo-container" style="max-width: 230px">
     <div class="bd-container" id="{{idprefix}}-container"></div>
     {{ controls.slider(idprefix + "-current-slider", "Separation", { min: 0, max: 0.5, value: 0.25, snap: 0 }) }}
-</figure>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';

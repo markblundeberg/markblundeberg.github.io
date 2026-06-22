@@ -1,6 +1,5 @@
 {% set idprefix = "esbd-offsets-galore" %}
 {% import "macros/controls.njk" as controls %}
-<figure class="demo-container" style="max-width: 500px">
     <div class="bd-container" id="{{idprefix}}-plot" style="height: 330px; width: 100%"></div>
     <div id="{{idprefix}}-sliders" style="display: grid; grid-template-columns: max-content minmax(0, 200px); gap: 0.35em 0.7em; align-items: center; justify-content: center; margin-top: 0.7em">
         {{ controls.slider(idprefix + "-float", "Global float", { min: -0.4, max: 0.4, step: "any", value: 0, snap: 0, inline: true }) }}
@@ -12,7 +11,6 @@
         {{ controls.slider(idprefix + "-actLiOH", "Act. conv. (S2)", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
         {{ controls.slider(idprefix + "-actLi", "Act. conv. (S3)", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
     </div>
-</figure>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';

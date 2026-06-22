@@ -12,7 +12,9 @@ In the [previous topic](../muintro/) we derived this one thermodynamically. But 
 
 So here is a sandbox, and I'm going to throw all of them in at once. The following band diagram shows a **fixed physical situation**, together with sliders that control our various *arbitrary conventions / interpretations* of the situation. It looks like a lot, but just play with it.
 
+<figure class="demo-container" style="max-width: 500px">
 {% include "esbd-diagrams/esbd-offsets-galore.njk" %}
+</figure>
 
 In detail: five regions sit side by side: two aqueous solutions (an acid and a base) flanking a metal electrode, then — across a vacuum gap, so no junction is implied — a third solution in a different solvent, a lithium salt in an organic electrolyte. Every arbitrary choice in the picture is wired to its own slider. Drag them and watch what moves. Again: *none of these sliders is changing anything of physical meaning: the ion concentrations are fixed; all charges and measurable potential differences are fixed*.
 

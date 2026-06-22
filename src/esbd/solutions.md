@@ -55,7 +55,9 @@ Returning to our saltwater example, we have then:
 $$V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = (V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-}) + 2\frac{RT}{F} \ln(c/c^\circ), $$
 where $c = c_{\mathrm{Na}^+} = c_{\mathrm{Cl}^-}$ is the concentration of either ion. This gives that characteristic $2\tfrac{RT}{F}\ln(\mathrm{concentration})$ slope we saw in the plot above. Also note that $V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-} = -4.0746~\mathrm{V}$ is is a constant for water in our conditions; since $\phi$ cancels out, this difference does not depend on the ambiguous $\phi$. When discussing solutions we can draw these $V^\circ_i$ as distinct lines from the $V_i$.
 
+<figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/esbd-nacl-dilute.njk" %}
+</figure>
 
 ## Ionic standard states are a floating ladder
 
@@ -64,7 +66,9 @@ Although the $V^\circ_i$ values float, crucially all the differences $V^\circ_i 
 Here are a number of selected $V^\circ_i$ values for water at standard conditions (25&nbsp;°C, 1 bar):
 [[Data table here](../data/)]
 
+<figure class="demo-container" style="max-width: 200px">
 {% include "esbd-diagrams/V-std-ladder.njk" %}
+</figure>
 
 I call this the **standard state ladder** for water. The standard state ladder is a rigid ladder: as we change the electrical state or solute composition of the solution, the $V^\circ_i$ values may move up and down but they have to all stay rigidly locked to one another. In contrast, $V_i$ values are not rigid and their relative positions will change with composition.
 

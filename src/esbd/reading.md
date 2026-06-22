@@ -9,7 +9,9 @@ orderESBD: 12.5
 
 An electrochemical species band diagram packs several different kinds of line and marker onto a single voltage axis. This page is the field guide to all of them — every creature you will meet as we go. There is no need to memorize it: every figure in the book carries a small link back here, so whenever a diagram starts to look like a thicket, one click returns you to the key.
 
+<figure class="demo-container" style="max-width: 380px">
 {% include "esbd-diagrams/esbd-reading-legend.njk" %}
+</figure>
 
 ## The axis
 
