@@ -1,0 +1,20 @@
+---
+layout: layouts/esbd_topic.njk
+pagination:
+    data: figtest
+    size: 1
+    alias: figname
+permalink: "/figtest/{{ figname }}/"
+eleventyExcludeFromCollections: true
+title: 'figtest'
+tags: []
+---
+
+# Figure preview: `{{ figname }}`
+
+[← all figures](/figtest/) · append `?static` to the URL for a deterministic (no-fade) render.
+
+<figure class="demo-container" style="max-width: 560px">
+{% set _figpath = "esbd-diagrams/" + figname + ".njk" %}
+{% include _figpath %}
+</figure>

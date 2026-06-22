@@ -1,0 +1,20 @@
+---
+layout: layouts/esbd_topic.njk
+pagination:
+    data: figtest
+    size: 200
+    alias: figs
+permalink: '/figtest/'
+eleventyExcludeFromCollections: true
+title: 'Figure gallery'
+tags: []
+---
+
+# Figure preview gallery
+
+Dev-only previews of every diagram include (generated with `FIGTEST=1`). Append
+`?static` to a figure URL for a deterministic, no-fade render (good for screenshots).
+
+{% for fig in figs %}
+- [`{{ fig }}`](/figtest/{{ fig }}/)
+{% endfor %}
