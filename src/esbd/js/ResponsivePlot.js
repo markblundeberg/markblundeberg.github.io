@@ -56,6 +56,16 @@ class ResponsivePlot {
             // and have the other sides fall back to the defaults.
             margins: { ...defaults.margins, ...config?.margins },
         };
+        // Deterministic render for screenshots/tests: append ?static to the page
+        // URL to drop all fade/transition timing, so figures paint fully on the
+        // first frame instead of racing a headless capture.
+        if (
+            typeof location !== 'undefined' &&
+            new URLSearchParams(location.search).has('static')
+        ) {
+            this.config.transitionDuration = 0;
+            this.config.fadeDuration = 0;
+        }
         if (!this.config.containerId) {
             throw new Error(
                 "Configuration Error: 'containerId' is a required property."
