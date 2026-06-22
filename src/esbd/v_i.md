@@ -11,7 +11,7 @@ Our key player is the **species voltage** $V_i$, a potential defined for every t
 
 $$ V_i = \frac{\bar\mu_i}{q_i}. $$
 
-This may look intimidating for those not versed in the fundamentals of thermodynamics and the meaning of chemical potential. But you do not have to deeply understand electrochemical potential^[If you want to, an optional later topic — [Understanding electrochemical potential](../muintro/) — makes the case that $\bar\mu_i$ is the *real*, indivisible chemical potential, which is exactly what makes $V_i$ so natural. But that depth is genuinely not needed here.] to understand $V_i$, because you likely already know how $V_i$ works:
+This may look intimidating for those not versed in the fundamentals of thermodynamics and the meaning of chemical potential. But you do not have to deeply understand electrochemical potential^[If you want to, an optional later topic, [Understanding electrochemical potential](../muintro/), makes the case that $\bar\mu_i$ is the *real*, indivisible chemical potential, which is exactly what makes $V_i$ so natural. That depth is genuinely not needed here, though.] to understand $V_i$, because you likely already know how $V_i$ works:
 
 **The electronic quantity $V_{\mathrm{e}^-}$ is precisely the voltage seen in basic electronic circuits.**
 
@@ -42,13 +42,13 @@ Below I'll highlight the key principles of what makes $V_i$ a voltage.
 
 ## What about electrostatic potential $\phi$?
 
-It is commonly taught that the electrostatic potential $\phi$ (ostensibly from Maxwell's equations) is what defines voltage. I had to unlearn that when doing nanoelectronics,^[Datta, S. (2005), *Quantum Transport*; see also his [Lessons from Nanoelectronics](https://engineering.purdue.edu/Intranet/Groups/Schools/ECE/Admin/GradOffice/StudentResources/Datta/Datta_PartA.pdf). "*It is only under special conditions that $\tilde\mu$ and $\phi$ track each other and one can be used in place of the other*".] and you can watch it break in something as ordinary as a copper wire joined to a blob of solder, where $\phi$ takes a step that the circuit voltage does not:
+It is commonly taught that the electrostatic potential $\phi$ (ostensibly from Maxwell's equations) is what defines voltage. I had to unlearn that when doing nanoelectronics,^[Datta, S. (2005), *Quantum Transport*; see also his [Lessons from Nanoelectronics](https://engineering.purdue.edu/Intranet/Groups/Schools/ECE/Admin/GradOffice/StudentResources/Datta/Datta_PartA.pdf). "*It is only under special conditions that $\tilde\mu$ and $\phi$ track each other and one can be used in place of the other*".] and it already goes wrong in something as ordinary as a copper wire joined to a blob of solder, where $\phi$ takes a step that the circuit voltage does not:
 
 {% include "esbd-diagrams/esbd-copper-solder.njk" %}
 
-Worse, the in-material $\phi$ simply is not accessible — and not just its global offset; even *differences* in $\phi$ (the {% wiki "Galvani potential", "Galvani potentials" %}) are generally unmeasurable. So $\phi$ ends up *assigned by convention*, material by material — at which point it is no longer an electrostatic potential at all, and $-\nabla\phi$ need not be any real electric field. The $\phi$ picture *can* be made to work — once every convention is reconciled and every ambiguity hedged, $\phi$ cancels out of all observables — but that fragile apparatus is exactly what has bred so many errors and misconceptions.
+Worse, the in-material $\phi$ is not experimentally accessible. Its overall offset is free, of course, but the deeper trouble is that even *differences* in $\phi$ (the {% wiki "Galvani potential", "Galvani potentials" %}) are generally unmeasurable. So $\phi$ ends up *assigned by convention*, material by material, at which point it is no longer an electrostatic potential at all, and $-\nabla\phi$ need not be any real electric field. The $\phi$ picture can be made to work once every convention is reconciled and every ambiguity hedged (in the end it cancels out of all observables), but that fragile apparatus is exactly what has bred so many errors and misconceptions.
 
-So we will simply not use an in-material $\phi$. We stick to $V_i$ — and later to $V^\circ_i$, which does $\phi$'s job with far less ambiguity — and you will see as we go that we never actually need it.^[This generalizes the elegant $\phi$-less "Fermi levels and band edges only" philosophy of semiconductor device physics; see [H. Kroemer's Nobel Lecture](https://www.nobelprize.org/uploads/2018/06/kroemer-lecture.pdf). It is also what lets us speak of "quasi-electric fields," far more useful than any single $-\nabla\phi$.] The full case against $\phi$ has [its own appendix](../phi/), and the [Offsets galore](../offsetsgalore/) topic lets you watch first-hand just how arbitrary it is.
+So we will simply not use an in-material $\phi$. We stick to $V_i$, and later to $V^\circ_i$, which does $\phi$'s job with far less ambiguity; you will see as we go that we never actually need it.^[This generalizes the elegant $\phi$-less "Fermi levels and band edges only" philosophy of semiconductor device physics; see [H. Kroemer's Nobel Lecture](https://www.nobelprize.org/uploads/2018/06/kroemer-lecture.pdf). It is also what lets us speak of "quasi-electric fields," far more useful than any single $-\nabla\phi$.] The full case against $\phi$ has [its own appendix](../phi/), and the [Offsets galore](../offsetsgalore/) topic lets you see for yourself just how arbitrary it is.
 
 ## Differences in $V_i$ are available work
 
@@ -70,7 +70,7 @@ Not all currents are so simple as Ohm's law, of course. Interfaces often have a 
 
 ## Differences in $V_i$ are measurable
 
-Because $\Delta V_i$ is available work, it is in principle measurable for any species — though in practice one species, electrons, is far easier to probe than the rest.
+Because $\Delta V_i$ is available work, it is in principle measurable for any species, though in practice one species, electrons, is far easier to probe than the rest.
 
 A common voltmeter has metal probes and reads differences in $V_{\mathrm{e}^-}$, letting a tiny, ideally negligible electron current flow in. It works so cleanly because so many of our conductors are purely electronic: join wires of any assortment of metals and, since electrons are the only mobile carrier, $V_{\mathrm{e}^-}$ carries across all of them perfectly.
 
@@ -80,7 +80,7 @@ Ions are harder. We have no good "ion wires" (an electrolyte carries at least on
 
 {% include "esbd-diagrams/esbd-electrode-generic.html" %}
 
-Here is the honest catch: $\Delta$ is a gap between *different* species (an electron and an ion), so — just like any $V_i - V_j$ that we discuss below — it carries a chemical convention, and a single electrode does **not** hand you an absolute $V_{\mathrm{ion}}$. What it gives cleanly is a *same-ion difference*: put a matched electrode in each of two solutions and $\Delta$ cancels, leaving exactly $V_{\mathrm{ion}}(\text{B}) - V_{\mathrm{ion}}(\text{A})$ — a fully physical voltage, obtained without ever knowing $\Delta$.^[Riess, I. ["Mixed ionic–electronic conductors—material properties and applications."](https://doi.org/10.1016/S0167-2738(02)00182-0) Solid State Ionics 157.1-4 (2003): 1-17.]
+But $\Delta$ is a gap between *different* species (an electron and an ion), so, like any $V_i - V_j$ below, it carries a chemical convention, and a single electrode does **not** hand you an absolute $V_{\mathrm{ion}}$. What it gives cleanly is a *same-ion difference*: put a matched electrode in each of two solutions and $\Delta$ cancels, leaving exactly $V_{\mathrm{ion}}(\text{B}) - V_{\mathrm{ion}}(\text{A})$, a fully physical voltage obtained without ever knowing $\Delta$.^[Riess, I. ["Mixed ionic–electronic conductors—material properties and applications."](https://doi.org/10.1016/S0167-2738(02)00182-0) Solid State Ionics 157.1-4 (2003): 1-17.]
 
 {% include "esbd-diagrams/esbd-electrode-generic-differential.html" %}
 
@@ -96,9 +96,9 @@ Note that in general if we have $N$ charged species then there are $N$ independe
 
 Two last subtleties round out the picture. Both are better *seen* than told, so the [Offsets galore](../offsetsgalore/) topic puts them under interactive sliders; here is the short version.
 
-The whole set of $V_i$ shares one **global float**: raise every $V_i$ — along with $V^\circ_i$, $\phi_{\mathrm{vac}}$, and the rest — by the same amount, and nothing observable changes. It is a single gauge degree of freedom for the entire universe, so there is no meaningful *absolute* voltage; only differences carry meaning.^[This covariance is a feature, not a redundancy to apologize for. Traditional electrochemistry instead leans on a patchwork of *local* references (the SHE, the vacuum, …), one per phase — references that can even drift across a device under bias — when there is really only ever *one* global freedom to fix. Staying reference-free sidesteps the perennial "but what is the *true* zero?" debates. The thermodynamic origin of this float is derived in [Understanding electrochemical potential](../muintro/).] To actually draw a diagram we of course pin the zero somewhere; I put the negative electrode at $0$, as is usual in electronics.
+The whole set of $V_i$ shares one **global float**: raise every $V_i$ (along with $V^\circ_i$, $\phi_{\mathrm{vac}}$, and the rest) by the same amount, and nothing observable changes. It is a single gauge degree of freedom for the entire universe, so there is no meaningful *absolute* voltage; only differences carry meaning.^[This covariance is a feature, not a redundancy to apologize for. Traditional electrochemistry instead leans on a patchwork of *local* references (the SHE, the vacuum, …), one per phase, and these can even drift across a device under bias, when there is really only ever *one* global freedom to fix. Staying reference-free sidesteps the perennial "but what is the *true* zero?" debates. The thermodynamic origin of this float is derived in [Understanding electrochemical potential](../muintro/).] To actually draw a diagram we of course pin the zero somewhere; I put the negative electrode at $0$, as is usual in electronics.
 
-Comparing *different* species, $V_i - V_j$, inherits a chemical-potential convention: a globally-consistent but somewhat arbitrary offset, set by how we reference each element. Comparing the *same* species across places, $V_i(x) - V_i(y)$, has no such ambiguity — it is always physical, even between different solvents. (That is the very same fact behind the measurement story above: same-ion differences are what a matched pair of electrodes cleanly reads.)
+Comparing *different* species, $V_i - V_j$, inherits a chemical-potential convention: a globally-consistent but somewhat arbitrary offset, set by how we reference each element. Comparing the *same* species across places, $V_i(x) - V_i(y)$, has no such ambiguity; it is always physical, even between different solvents. (This is the same fact we just met when measuring ions: a matched pair of electrodes cleanly reads exactly these same-ion differences.)
 
 
 ## Takeaways
