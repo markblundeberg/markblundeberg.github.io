@@ -15,17 +15,17 @@ Two electrodes do most of the reference work in practice.
 
 The **silver/silver chloride electrode** couples chloride to electrons, as we saw back in the [equilibrium topic](../equilibrium/):
 $$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} = \frac{1}{F}(\mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}}). $$
-{% include "esbd-diagrams/esbd-ag-agcl-electrode.html" %}
+{% include "esbd-diagrams/esbd-ag-agcl-electrode.njk" %}
 
 The **hydrogen electrode** interconverts hydrogen ions and hydrogen gas, $\mathrm{H}^+ + \mathrm{e}^- \rightleftharpoons \tfrac{1}{2}\mathrm{H_2}$, giving
 $$ V_{\mathrm{e}^-} = V_{\mathrm{H}^+} - \frac{\mu_{\mathrm{H_2}}}{2F}, $$
 with $\mu_{\mathrm{H_2}} = \mu^\circ_{\mathrm{H_2}} + \tfrac{RT}{F}\ln a_{\mathrm{H_2}}$ depending on the gas pressure. Its standard form is the reference the whole $E$ scale is built on.
-{% include "esbd-diagrams/esbd-she.html" %}
+{% include "esbd-diagrams/esbd-she.njk" %}
 
 ## A reference cell
 
 Now stick the two together: a hydrogen electrode on the left, a silver chloride electrode on the right, both dipping into the same dissolved $\mathrm{HCl}$. The left electrode couples $V_{\mathrm{e}^-}(\text{left})$ to $V_{\mathrm{H}^+}$, the right couples $V_{\mathrm{Cl}^-}$ to $V_{\mathrm{e}^-}(\text{right})$, and the middle is bridged by the solution's fixed ladder gap $V^\circ_{\mathrm{Cl}^-} - V^\circ_{\mathrm{H}^+} = 1.3601~\mathrm{V}$ (from the [solutions topic](../solutions/)).
-{% include "esbd-diagrams/esbd-she-agcl.html" %}
+{% include "esbd-diagrams/esbd-she-agcl.njk" %}
 
 Walking $V_{\mathrm{e}^-}$ across, the measured cell voltage comes out as
 $$ V_{\mathrm{e}^-}(\text{right}) - V_{\mathrm{e}^-}(\text{left}) = E^\circ_{\mathrm{cell}} + \frac{RT}{F}\ln\!\bigg(\frac{\sqrt{a_{\mathrm{H_2}}}}{a_{\mathrm{H}^+}a_{\mathrm{Cl}^-}}\bigg), $$
@@ -75,7 +75,7 @@ V^\circ_{\mathrm{e}^-}(\mathrm{SSCE}) &= V^\circ_{\mathrm{Cl}^-} + \frac{1}{F}(\
 \end{aligned}
 $$
 and their difference is again the $0.222~\mathrm{V}$ from above. Re-drawn with only the electronic levels, the cell is just two $V_{\mathrm{e}^-}$ values sitting against two standard levels:
-{% include "esbd-diagrams/esbd-she-agcl-e.html" %}
+{% include "esbd-diagrams/esbd-she-agcl-e.njk" %}
 Anchoring $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ to "0 V" recovers the usual reference frame of electrochemistry — an arbitrary choice that stops making sense the moment $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ varies in space.
 
 In practice the SHE is finicky to pin down: its nominal $a_{\mathrm{H}^+}=1$ implies an awkward pH of 0, its "1 bar" of $\mathrm{H_2}$ competes with water vapour, and like every standard level it must be reached by extrapolation from dilute cells (the junction-free Harned cell being the classic).^[TODO: Harned & Bates citations.] Any "$V_{\mathrm{e}^-}(\mathrm{SHE})$" is, in the end, a theoretical extrapolated level tied to the standard state of the aqueous proton, $V^\circ_{\mathrm{H}^+}$.

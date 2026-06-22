@@ -24,7 +24,7 @@ How does a mobile particle know where to go? For any single particle that is a h
 
 That last sentence is the whole reason chemical potential is worth defining. The equality of $\mu_i$ at equilibrium is a kind of zeroth law for particles, and everything downstream — reactions, phase changes, diffusion, the readings on a voltmeter — is a statement about $\mu_i$ trying to level out.
 
-{% include "esbd-diagrams/mu-driving-force.html" %}
+{% include "esbd-diagrams/mu-driving-force.njk" %}
 
 Thermodynamically, $\mu_i$ is just a derivative of a free energy: take a body with free energy $G$, add one particle of species $i$ while holding the rest fixed, and the cost is
 
@@ -36,7 +36,7 @@ Simple enough for uncharged particles. The trouble begins when species $i$ carri
 
 Charged species behave differently in one specific way: their chemical potential is sensitive to the electrostatic state. If we hold the material composition fixed and merely shift the surrounding electrostatic potential by $\Delta\phi$, the chemical potential of each charged species moves by $z_i F \Delta\phi$ — a different amount for each, depending on its charge.
 
-{% include "esbd-diagrams/mu-shift-only.html" %}
+{% include "esbd-diagrams/mu-shift-only.njk" %}
 
 Watch what that does. Here are some hypothetical charged species together in one body, and a slider that only changes the electrostatic offset $\Delta\phi$. The levels scatter every which way — positive species rise, negative species fall, doubly charged ones move twice as fast. It looks like chaos, and it makes comparing $\bar\mu_i$ values across different materials or conditions genuinely awkward.
 
@@ -54,7 +54,7 @@ $$ \mu_{\mathrm{int},i} = \bar\mu_i - z_i F \phi. $$
 
 Now repeat the experiment. The full $\bar\mu_i$ still scatter under $\Delta\phi$, but the $\mu_{\mathrm{int},i}$ sit perfectly still:
 
-{% include "esbd-diagrams/mu-shift-mu-internal.html" %}
+{% include "esbd-diagrams/mu-shift-mu-internal.njk" %}
 
 This looks like a triumph. The $\mu_{\mathrm{int},i}$ contain ordinary, well-behaved chemistry, and all the annoying electrical motion has been quarantined into one tidy $z_i F \phi$ term. From here it is a short step to the usual textbook stance: that $\bar\mu_i$ and $\mu_{\mathrm{int},i}$ are *equally valid* descriptions, two sides of one coin, take your pick.
 
@@ -88,7 +88,7 @@ There is a tempting mistake here. If you only ever look at $N_i$ and $N_j$ at th
 
 The real content, we just found, is the web of $V_i$ *differences*, with a single common float left free. Now put space back in: let the voltages vary with position across a real device. The float becomes one slider, and watching it is the whole payoff.
 
-{% include "esbd-diagrams/esbd-muintro-twin.html" %}
+{% include "esbd-diagrams/esbd-muintro-twin.njk" %}
 
 The two panels share a position axis and a single **float** slider. The top is an ordinary energy band diagram of the $\bar\mu_i$; the bottom is the ESBD of the same physics, $V_i = \bar\mu_i / (z_i F)$. Drag the float: up top each $\bar\mu_i$ moves by $z_i F$ times the float, so the levels scatter apart by charge; down below every $V_i$ glides by the *same* amount, in unison. The relative shapes and gaps stay rigid in both.
 

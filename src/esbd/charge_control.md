@@ -72,7 +72,7 @@ The simplest disturbance is a fixed charge that has no $V_i$ of its own, because
 
 The same reasoning recovers a classic result of solution chemistry. Consider a solution saturated with $\mathrm{AgCl}$, so that the solid pins the difference $V_{\mathrm{Ag}^+} - V_{\mathrm{Cl}^-}$ at its saturation value: a two-carrier mass-action constraint, with the product $c_{\mathrm{Ag}^+} c_{\mathrm{Cl}^-}$ locked at the solubility product. Now dissolve a little $\mathrm{KCl}$. The $\mathrm{K}^+$ has no salt of its own to pin it, and so it behaves as a pure positive disturbance to neutrality, a mobile dopant. The ladder shifts to restore the balance, and because the product is locked, that shift enriches $\mathrm{Cl}^-$ while depleting $\mathrm{Ag}^+$, which precipitates back onto the solid. (The solid serves as the reservoir that holds the $V_{\mathrm{Ag}^+} - V_{\mathrm{Cl}^-}$ gap rigid throughout.) The result is the textbook common-ion effect, in which added chloride suppresses the solubility of silver, and in the $V_i$ picture it appears directly as a shift of the ladder.
 
-{% include "esbd-diagrams/esbd-agcl-kcl-common-ion.html" %}
+{% include "esbd-diagrams/esbd-agcl-kcl-common-ion.njk" %}
 
 ## Spectator ions and the Donnan potential
 

@@ -14,7 +14,7 @@ So far we've covered:
 
 Now we're going to talk about what happens when two solutions come into contact.
 
-{% include "esbd-diagrams/esbd-concentration-cell-agno3.html" %}
+{% include "esbd-diagrams/esbd-concentration-cell-agno3.njk" %}
 
 Here we have two solutions of silver nitrate in water, but they can have different concentrations. In the middle, a white vertical stripe represents the junction, of which we can consider different types. 
 

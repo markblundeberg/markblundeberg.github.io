@@ -21,7 +21,7 @@ Unlike the previous electrodes however, $\mu_{\mathrm{Li}}$ is not a material co
 
 With that, let's show the electrochemical species band diagram for a lithium ion battery cell:
 
-{% include "esbd-diagrams/esbd-lithium-ion-battery-equilibrium.html" %}
+{% include "esbd-diagrams/esbd-lithium-ion-battery-equilibrium.njk" %}
 
 On the left, we have the negative terminal, where the intercalation host material is graphite. On the right, positive, electrode the intercalation host material is {%wiki "Lithium nickel manganese cobalt oxides", "nickel manganese cobalt oxides" %} (NMC for short). There are many other choices for lithium ion electrode materials, however we'll just focus on the graphite-NMC cell as an example.
 
@@ -48,7 +48,7 @@ This porous structure is quite beneficial for the battery functioning: it is far
 
 Still, the particle sizes are not so small that we can neglect the lithium diffision. We can illustrate this using our $V_i$ band diagrams. For example, in an anode particle during discharge ($\mathrm{Li}^+$ being sucked out of it) we might see something like this where the $x$-axis represents a *radial* coordinate:
 
-{% include "esbd-diagrams/esbd-lib-particle-discharge.html" %}
+{% include "esbd-diagrams/esbd-lib-particle-discharge.njk" %}
 
 This shows the $V_{\mathrm{Li}^+}$ voltage drops due to:
 

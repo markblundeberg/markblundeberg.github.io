@@ -56,7 +56,7 @@ The fundamental rule of thermodynamics is that particles flow from high to low c
 
 The available work $\Delta\bar\mu_i$ is free energy per unit of particle count (e.g. kJ/mol or eV/particle). By normalizing $V_i = \bar\mu_i / q_i$, the corresponding $\Delta V_i$ is **available work per unit charge** (volts). But, it's not just the work for *any* charge, rather it is specific to charge transferred via that specific species.
 
-{% include "esbd-diagrams/levels-mu-V-work.html" %}
+{% include "esbd-diagrams/levels-mu-V-work.njk" %}
 
 ## Differences in $V_i$ drive currents
 
@@ -78,11 +78,11 @@ A common voltmeter has metal probes and reads differences in $V_{\mathrm{e}^-}$,
 
 Ions are harder. We have no good "ion wires" (an electrolyte carries at least one cation *and* one anion), and no ionic voltmeters, so we can only probe $V_{\mathrm{ion}}$ indirectly, by coupling it to $V_{\mathrm{e}^-}$. A carefully prepared **ion-reversible electrode** chemically locks $V_{\mathrm{e}^-}$ to the $V_i$ of exactly one ion, producing a fixed step $V_{\mathrm{e}^-} - V_{\mathrm{ion}} = \Delta$.
 
-{% include "esbd-diagrams/esbd-electrode-generic.html" %}
+{% include "esbd-diagrams/esbd-electrode-generic.njk" %}
 
 But $\Delta$ is a gap between *different* species (an electron and an ion), so, like any $V_i - V_j$ below, it carries a chemical convention, and a single electrode does **not** hand you an absolute $V_{\mathrm{ion}}$. What it gives cleanly is a *same-ion difference*: put a matched electrode in each of two solutions and $\Delta$ cancels, leaving exactly $V_{\mathrm{ion}}(\text{B}) - V_{\mathrm{ion}}(\text{A})$, a fully physical voltage obtained without ever knowing $\Delta$.^[Riess, I. ["Mixed ionic–electronic conductors—material properties and applications."](https://doi.org/10.1016/S0167-2738(02)00182-0) Solid State Ionics 157.1-4 (2003): 1-17.]
 
-{% include "esbd-diagrams/esbd-electrode-generic-differential.html" %}
+{% include "esbd-diagrams/esbd-electrode-generic-differential.njk" %}
 
 So ionic $V_i$ is no less real than electronic $V_{\mathrm{e}^-}$; it is just that only its differences, for a given ion, are directly accessible. (A more general but less practical recipe, using ion-selective membranes, comes [later](../nuances/).)
 
