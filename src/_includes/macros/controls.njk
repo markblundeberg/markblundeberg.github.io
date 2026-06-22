@@ -17,26 +17,21 @@
   `grid-template-columns: max-content minmax(0, 200px)` to get a uniform
   right-aligned label column and a uniform slider column).
 #}
-{% macro slider(id, label, opts = {}) %}
-{% if opts.inline %}
-<div class="bd-control" style="display: contents">
-    <label for="{{ id }}" style="font-size: 0.8em; text-align: right; white-space: nowrap">{{ label | safe }}{% if opts.readout %}: <span id="{{ id }}-readout">{{ opts.readoutInit | default("") | safe }}</span>{% if opts.unit %}&nbsp;{{ opts.unit | safe }}{% endif %}{% endif %}</label>
-    <input type="range" id="{{ id }}"{% if opts.snap is defined %} list="{{ id }}-datalist"{% endif %} min="{{ opts.min | default(0) }}" max="{{ opts.max | default(1) }}" step="{{ opts.step | default('any') }}" value="{{ opts.value if opts.value is defined else (opts.min | default(0)) }}" style="width: 100%; min-width: 0; vertical-align: middle" />
-    {% if opts.snap is defined %}<datalist id="{{ id }}-datalist"><option value="{{ opts.snap }}" label="{{ opts.snap }}"></option></datalist>{% endif %}
-</div>
-{% else %}
-<div class="bd-control" style="text-align: center; margin-top: 0.4em">
-    <label for="{{ id }}" style="font-size: 0.85em">{{ label | safe }}{% if opts.readout %}: <span id="{{ id }}-readout">{{ opts.readoutInit | default("") | safe }}</span>{% if opts.unit %}&nbsp;{{ opts.unit | safe }}{% endif %}{% endif %}</label>
-    <br />
-    <input type="range" id="{{ id }}"{% if opts.snap is defined %} list="{{ id }}-datalist"{% endif %} min="{{ opts.min | default(0) }}" max="{{ opts.max | default(1) }}" step="{{ opts.step | default('any') }}" value="{{ opts.value if opts.value is defined else (opts.min | default(0)) }}" style="width: {{ opts.width | default(150) }}px; vertical-align: middle" />
-    {% if opts.snap is defined %}<datalist id="{{ id }}-datalist"><option value="{{ opts.snap }}" label="{{ opts.snap }}"></option></datalist>{% endif %}
-</div>
-{% endif %}
-{% endmacro %}
+{#
+  Whitespace control ({%- … -%}) and single-line branches are deliberate: this
+  macro is dropped into HTML that markdown-it then processes, and any blank line
+  it emitted would break the surrounding <figure> out of "raw HTML block" mode
+  (markdown-it would inject stray <p> tags that wreck the slider grid). Keep the
+  body of each branch on one line with no leading/trailing newlines.
+#}
+{% macro slider(id, label, opts = {}) -%}
+{%- if opts.inline -%}
+<div class="bd-control" style="display: contents"><label for="{{ id }}" style="font-size: 0.8em; text-align: right; white-space: nowrap">{{ label | safe }}{% if opts.readout %}: <span id="{{ id }}-readout">{{ opts.readoutInit | default("") | safe }}</span>{% if opts.unit %}&nbsp;{{ opts.unit | safe }}{% endif %}{% endif %}</label><input type="range" id="{{ id }}"{% if opts.snap is defined %} list="{{ id }}-datalist"{% endif %} min="{{ opts.min | default(0) }}" max="{{ opts.max | default(1) }}" step="{{ opts.step | default('any') }}" value="{{ opts.value if opts.value is defined else (opts.min | default(0)) }}" style="width: 100%; min-width: 0; vertical-align: middle" />{% if opts.snap is defined %}<datalist id="{{ id }}-datalist"><option value="{{ opts.snap }}" label="{{ opts.snap }}"></option></datalist>{% endif %}</div>
+{%- else -%}
+<div class="bd-control" style="text-align: center; margin-top: 0.4em"><label for="{{ id }}" style="font-size: 0.85em">{{ label | safe }}{% if opts.readout %}: <span id="{{ id }}-readout">{{ opts.readoutInit | default("") | safe }}</span>{% if opts.unit %}&nbsp;{{ opts.unit | safe }}{% endif %}{% endif %}</label><br /><input type="range" id="{{ id }}"{% if opts.snap is defined %} list="{{ id }}-datalist"{% endif %} min="{{ opts.min | default(0) }}" max="{{ opts.max | default(1) }}" step="{{ opts.step | default('any') }}" value="{{ opts.value if opts.value is defined else (opts.min | default(0)) }}" style="width: {{ opts.width | default(150) }}px; vertical-align: middle" />{% if opts.snap is defined %}<datalist id="{{ id }}-datalist"><option value="{{ opts.snap }}" label="{{ opts.snap }}"></option></datalist>{% endif %}</div>
+{%- endif -%}
+{%- endmacro %}
 
-{% macro checkbox(id, label, opts = {}) %}
-<span class="bd-control" style="font-size: 0.85em; margin: 0 0.6em; white-space: nowrap">
-    <input type="checkbox" id="{{ id }}"{% if opts.checked %} checked{% endif %} style="vertical-align: middle" />
-    <label for="{{ id }}">{{ label | safe }}</label>
-</span>
-{% endmacro %}
+{% macro checkbox(id, label, opts = {}) -%}
+<span class="bd-control" style="font-size: 0.85em; margin: 0 0.6em; white-space: nowrap"><input type="checkbox" id="{{ id }}"{% if opts.checked %} checked{% endif %} style="vertical-align: middle" /><label for="{{ id }}">{{ label | safe }}</label></span>
+{%- endmacro %}
