@@ -1,13 +1,13 @@
 {% set idprefix = ["esbd-nacl-dilute", idsuffix] | join %}
 {% import "macros/controls.njk" as controls %}
-    <div
-        id="{{idprefix}}-bd-container"
-        class="bd-container"
-        style="height: 300px; width: 100%"
-    ></div>
+<div
+    id="{{idprefix}}-bd-container"
+    class="bd-container"
+    style="height: 300px; width: 100%"
+></div>
 
-    {{ controls.slider(idprefix + "-concSlider", "Added NaCl", { min: -8, max: 1, step: 0.1, value: -6, readout: true, unit: "mol/L" }) }}
-    {{ controls.slider(idprefix + "-phiSlider", "Float", { min: -1, max: 1, step: "any", value: 0 }) }}
+{{ controls.slider(idprefix + "-concSlider", "Added NaCl", { min: -8, max: 1, step: 0.1, value: -6, readout: true, unit: "mol/L" }) }}
+{{ controls.slider(idprefix + "-phiSlider", "Float", { min: -1, max: 1, step: "any", value: 0 }) }}
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';

@@ -1,35 +1,35 @@
 {% set idprefix = ["mu-V-work-", idsuffix] | join %}
 {% import "macros/controls.njk" as controls %}
+<div
+    style="
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        gap: 8px;
+    "
+>
     <div
+        id="{{ idprefix }}-mu-container"
         style="
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-evenly;
-            gap: 8px;
+            flex: 1;
+            height: 200px;
+            min-width: 150px;
+            max-width: 200px;
+            border: 1px solid #eee;
         "
-    >
-        <div
-            id="{{ idprefix }}-mu-container"
-            style="
-                flex: 1;
-                height: 200px;
-                min-width: 150px;
-                max-width: 200px;
-                border: 1px solid #eee;
-            "
-        ></div>
-        <div
-            id="{{ idprefix }}-v-container"
-            style="
-                flex: 1;
-                height: 200px;
-                min-width: 150px;
-                max-width: 200px;
-                border: 1px solid #eee;
-            "
-        ></div>
-    </div>
-    {{ controls.slider(idprefix + "-dphi-slider", "Offset", { min: -1.5, max: 1.5, step: "any", value: -1, snap: 0 }) }}
+    ></div>
+    <div
+        id="{{ idprefix }}-v-container"
+        style="
+            flex: 1;
+            height: 200px;
+            min-width: 150px;
+            max-width: 200px;
+            border: 1px solid #eee;
+        "
+    ></div>
+</div>
+{{ controls.slider(idprefix + "-dphi-slider", "Offset", { min: -1.5, max: 1.5, step: "any", value: -1, snap: 0 }) }}
 
 <script type="module">
     import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';

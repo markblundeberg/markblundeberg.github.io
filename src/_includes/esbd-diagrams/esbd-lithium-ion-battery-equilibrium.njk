@@ -1,13 +1,13 @@
 {% set idprefix = "esbd-lib-eq" %}
 {% import "macros/controls.njk" as controls %}
-    <div class="bd-container" id="{{idprefix}}-container"></div>
-    {{ controls.slider(idprefix + "-soc", "State of charge", { min: 0, max: 100, step: 1, value: 50, readout: true, unit: "%" }) }}
-    <div
-        class="bd-readout"
-        style="text-align: center; font-size: 0.85em; color: #444; margin-top: 0.3em"
-    >
-        Cell voltage (OCV): <span id="{{idprefix}}-ocv"></span> V
-    </div>
+<div class="bd-container" id="{{idprefix}}-container"></div>
+{{ controls.slider(idprefix + "-soc", "State of charge", { min: 0, max: 100, step: 1, value: 50, readout: true, unit: "%" }) }}
+<div
+    class="bd-readout"
+    style="text-align: center; font-size: 0.85em; color: #444; margin-top: 0.3em"
+>
+    Cell voltage (OCV): <span id="{{idprefix}}-ocv"></span> V
+</div>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';

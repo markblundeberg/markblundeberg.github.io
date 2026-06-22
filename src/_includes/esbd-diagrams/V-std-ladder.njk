@@ -1,33 +1,33 @@
 {# Hacked down version of mu-V-unison-shift #} {% set idprefix =
 ["V-sd-ladder-", idsuffix] | join %}
-    <div style="display: flex; gap: 8px">
-        <div
-            id="{{ idprefix }}-diagram-container"
-            style="
-                flex: 1;
-                height: 800px;
-                min-width: 150px;
-                border: 1px solid #eee;
-            "
-        ></div>
+<div style="display: flex; gap: 8px">
+    <div
+        id="{{ idprefix }}-diagram-container"
+        style="
+            flex: 1;
+            height: 800px;
+            min-width: 150px;
+            border: 1px solid #eee;
+        "
+    ></div>
+</div>
+<div style="text-align: center">
+    <div>
+        <label for="{{ idprefix }}-dphi-slider" style="font-size: 0.85em"
+            >Electric / composition change:</label
+        >
+        <br />
+        <input
+            type="range"
+            id="{{ idprefix }}-dphi-slider"
+            min="-1.5"
+            max="1.5"
+            step="any"
+            value="0.0"
+            style="width: 100px"
+        />
     </div>
-    <div style="text-align: center">
-        <div>
-            <label for="{{ idprefix }}-dphi-slider" style="font-size: 0.85em"
-                >Electric / composition change:</label
-            >
-            <br />
-            <input
-                type="range"
-                id="{{ idprefix }}-dphi-slider"
-                min="-1.5"
-                max="1.5"
-                step="any"
-                value="0.0"
-                style="width: 100px"
-            />
-        </div>
-    </div>
+</div>
 
 <script type="module">
     import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';

@@ -1,34 +1,34 @@
 {% set idprefix = ["esbd-agcl-kcl-common-ion", idsuffix] | join %}
 {% import "macros/controls.njk" as controls %}
-    <div
-        id="{{idprefix}}-bd-container"
-        class="bd-container"
-        style="height: 300px; width: 100%"
-    ></div>
+<div
+    id="{{idprefix}}-bd-container"
+    class="bd-container"
+    style="height: 300px; width: 100%"
+></div>
 
-    {{ controls.slider(idprefix + "-kclSlider", "Added KCl", { min: -8, max: 0, step: 0.1, value: -8, readout: true, unit: "mol/L" }) }}
+{{ controls.slider(idprefix + "-kclSlider", "Added KCl", { min: -8, max: 0, step: 0.1, value: -8, readout: true, unit: "mol/L" }) }}
 
-    <div id="{{idprefix}}-agno3SliderHider" style="display: none">
-        {{ controls.slider(idprefix + "-agno3Slider", "Added AgNO<sub>3</sub>", { min: -8, max: 0, step: 0.1, value: -8, readout: true, unit: "mol/L" }) }}
-    </div>
+<div id="{{idprefix}}-agno3SliderHider" style="display: none">
+    {{ controls.slider(idprefix + "-agno3Slider", "Added AgNO<sub>3</sub>", { min: -8, max: 0, step: 0.1, value: -8, readout: true, unit: "mol/L" }) }}
+</div>
 
-    <div style="text-align: center; margin-top: 0.4em">
-        {{ controls.checkbox(idprefix + "-zoomCheck", "Zoom?") }}
-        {{ controls.checkbox(idprefix + "-agno3Check", "AgNO<sub>3</sub>?") }}
-    </div>
+<div style="text-align: center; margin-top: 0.4em">
+    {{ controls.checkbox(idprefix + "-zoomCheck", "Zoom?") }}
+    {{ controls.checkbox(idprefix + "-agno3Check", "AgNO<sub>3</sub>?") }}
+</div>
 
-    <div
-        class="bd-readout"
-        style="text-align: center; font-size: 0.8em; color: #444; margin-top: 0.5em; line-height: 1.5"
-    >
-        Concentrations (mol/L):<br />
-        [K⁺] <span id="{{idprefix}}-kConc"></span>&emsp;[Cl⁻]
-        <span id="{{idprefix}}-clConc"></span><br />
-        [Ag⁺] <span id="{{idprefix}}-agConc"></span
-        ><span id="{{idprefix}}-no3ConcHider" style="display: none"
-            >&emsp;[NO₃⁻] <span id="{{idprefix}}-no3Conc"></span
-        ></span>
-    </div>
+<div
+    class="bd-readout"
+    style="text-align: center; font-size: 0.8em; color: #444; margin-top: 0.5em; line-height: 1.5"
+>
+    Concentrations (mol/L):<br />
+    [K⁺] <span id="{{idprefix}}-kConc"></span>&emsp;[Cl⁻]
+    <span id="{{idprefix}}-clConc"></span><br />
+    [Ag⁺] <span id="{{idprefix}}-agConc"></span
+    ><span id="{{idprefix}}-no3ConcHider" style="display: none"
+        >&emsp;[NO₃⁻] <span id="{{idprefix}}-no3Conc"></span
+    ></span>
+</div>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';

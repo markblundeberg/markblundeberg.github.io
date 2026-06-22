@@ -1,26 +1,26 @@
 {% set idprefix = ["mu-shift-internal", idsuffix] | join %}
 {% import "macros/controls.njk" as controls %}
-    <div style="display: flex; gap: 8px">
-        <div
-            id="{{ idprefix }}-mu-bar-diagram-container"
-            style="
-                flex: 1;
-                height: 200px;
-                min-width: 70px;
-                border: 1px solid #eee;
-            "
-        ></div>
-        <div
-            id="{{ idprefix }}-muint-diagram-container"
-            style="
-                flex: 1.8;
-                height: 200px;
-                min-width: 160px;
-                border: 1px solid #eee;
-            "
-        ></div>
-    </div>
-    {{ controls.slider(idprefix + "-dphi-slider", "Electrostatic change $\\Delta\\phi$", { min: -1.5, max: 1.5, step: "any", value: 0 }) }}
+<div style="display: flex; gap: 8px">
+    <div
+        id="{{ idprefix }}-mu-bar-diagram-container"
+        style="
+            flex: 1;
+            height: 200px;
+            min-width: 70px;
+            border: 1px solid #eee;
+        "
+    ></div>
+    <div
+        id="{{ idprefix }}-muint-diagram-container"
+        style="
+            flex: 1.8;
+            height: 200px;
+            min-width: 160px;
+            border: 1px solid #eee;
+        "
+    ></div>
+</div>
+{{ controls.slider(idprefix + "-dphi-slider", "Electrostatic change $\\Delta\\phi$", { min: -1.5, max: 1.5, step: "any", value: 0 }) }}
 
 <script type="module">
     import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
