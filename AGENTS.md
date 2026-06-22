@@ -43,7 +43,6 @@ a single figure in isolation, use the `/figtest/<name>/?static` gallery page.
   blank-line-free. Inspect the post-Nunjucks intermediate with
   `DUMP_MD=1 npx @11ty/eleventy --output=/tmp/x` → `/tmp/eleventy-md-intermediate.txt`.
 
-## House rules
+## Markdown writing notes
 - KaTeX inline `$…$` / display `$$…$$`; prefer narrow/stacked equations for mobile viewing.
 - Topics order by the `orderESBD` front-matter field; prev/next nav is automatic.
-- Project-wide / cross-repo rules are in the root `AGENTS.md`. (`docs/esbd/editorial_guide.md` is an early Gemini-authored draft, now obsolete — ignore.)
