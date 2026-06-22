@@ -1,10 +1,10 @@
 {% set idprefix = "esbd-copper-solder" %}
 {% import "macros/controls.njk" as controls %}
-    <div style="height: 170px; width: 100%" id="{{idprefix}}-container"></div>
-    <div id="{{idprefix}}-sliders" style="display: grid; grid-template-columns: max-content minmax(0, 150px); gap: 0.3em 0.6em; align-items: center; justify-content: center; margin-top: 0.5em">
-        {{ controls.slider(idprefix + "-phiCu", "φ in copper", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
-        {{ controls.slider(idprefix + "-phiSn", "φ in solder", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
-    </div>
+<div style="height: 170px; width: 100%" id="{{idprefix}}-container"></div>
+<div id="{{idprefix}}-sliders" style="display: grid; grid-template-columns: max-content minmax(0, 150px); gap: 0.3em 0.6em; align-items: center; justify-content: center; margin-top: 0.5em">
+    {{ controls.slider(idprefix + "-phiCu", "φ in copper", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
+    {{ controls.slider(idprefix + "-phiSn", "φ in solder", { min: -0.3, max: 0.3, step: "any", value: 0, snap: 0, inline: true }) }}
+</div>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
