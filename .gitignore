@@ -3,6 +3,10 @@
 # SSG output directory
 /_site
 
+# Local Claude Code config + the commit-msg hook (wired via core.hooksPath).
+# Local tooling, not for publishing.
+/.claude/
+
 # OS generated files
 .DS_Store
 Thumbs.db
