@@ -26,34 +26,27 @@ Although the dilute limit is only approximate, it gives us a starting point to a
 
 ## Ideal ionic voltage in dilute solutions
 
-Statistical mechanics predicts that for a given solvent and a given dilute solute $i$, then its electrochemical potential varies as
-$$\bar\mu_i = z_i F \phi + \mathrm{offset} + RT \ln (\mathrm{concentration}),$$
-where $\phi$ is a typical electrostatic potential value in the solution and the $\mathrm{offset}$ term is independent of concentration. The exact value of the offset depends on how $\phi$ is defined and how the concentration is defined (and its units). Now we're going to convert this formula to $V_i$'s by dividing by $z_i F$, and combine the $(z_i F \phi + \mathrm{offset})$ into one term: $z_i F V^\circ_i$.
+Statistical mechanics tells us that a dilute solute's electrochemical potential breaks into three parts:
 
-We thus have the following relationship between $V_i$ of an ion and its concentration $c_i$:
+$$ \bar\mu_i = \underbrace{z_i F \phi}_{\text{electrostatic}} + \underbrace{\mu^\circ_{\mathrm{int},i}}_{\text{offset}} + \underbrace{RT \ln(c_i/c^\circ)}_{\text{entropic}}. $$
 
-$$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(c_i/c^\circ), $$
+The first term is the electrostatic energy of the ion's charge at a local potential $\phi$. The second, the **standard internal chemical potential** $\mu^\circ_{\mathrm{int},i}$, is fixed by the ion's chemical identity and the way it disturbs its solvent (its solvation shell); it does not depend on concentration.^[I label this term the *offset* rather than "chemical," because neither word quite fits. It is not purely chemical: $\mu^\circ_{\mathrm{int},i}$ quietly absorbs the ion's solvation electrostatics (the Born energy and more) and local entropy alongside any chemical binding. Nor is it the full "chemical part," which a chemist would take to include the activity term as well. It is really just the fixed, ion-specific piece left once the bath potential and the dilution entropy are set aside, and even its boundary with $z_i F \phi$ is a convention rather than a physical fact. I make this case in [the case against $\phi$](../phi/).] Only the third, entropic term does, growing logarithmically as the solute is diluted. Here $c_i$ is the {% wiki "molar concentration" %} (moles per litre, also called molarity) and $c^\circ = 1~\mathrm{mol/L}$ is a fixed reference.
 
-where
-* $V^\circ_i$ is **standard species voltage**, a new concept. These are electrochemical standard states that float analogously to the floating band edges in semiconductors.
-* $RT$ is the universal gas constant times temperature (joules per mole).
-* $z_i F$ is the molar charge (coulombs per mole).
-* $c_i$ is the {% wiki "molar concentration" %}, the amount of ions per unit volume (moles per liter). Also called molarity.
-* $c^\circ$ is a reference concentration, always $c^\circ = 1~\mathrm{mol/L}$.
+The split between the first two terms is partly conventional, since it turns on how one defines the ambiguous $\phi$, so rather than carry them separately we fold them together. Dividing through by the molar charge $z_i F$ to cast everything in volts, and gathering the two concentration-independent terms into one, gives
 
-> It is sometimes preferable to measure solute concentration as {% wiki "molality" %}, the amount of ions per unit of solvent (moles per kilogram). The plot shown above was in molal units. In terms of molality $b_i$ we can write a similar ideal form:
->
-> $$ V_i = V^{\circ(b)}_i + \frac{RT}{z_i F} \ln(b_i/b^\circ), $$
->
-> for reference molality is $b^\circ = 1~\mathrm{mol/kg}$. Note that $V^{\circ(b)}_i$ differs from $V^\circ_i$ when the solvent density is not equal to $c^\circ/b^\circ = 1~\mathrm{kg/L}$.^[Equating the two formulas for $V_i$, we get $V^{\circ(b)}_i - V^\circ_i = \tfrac{RT}{z_i F}\ln(\rho b^\circ/c^\circ)$ for solvent density $\rho$. For water at standard conditions ($\rho = 0.997~\mathrm{kg/L}$ at 25&nbsp;°C and 1 bar) this difference is tiny, only $-0.00008~\mathrm{V}/z_i$, but can be significant for other solvents.] The molality and molarity formulas also describe slightly different ideal behaviours when the solvent density varies with concentration, but that only occurs in concentrated solutions where both ideal logarithmic forms are wrong anyway, and nonideality must be considered (more about nonideality at the bottom of this page).
-> 
-> I'll generally prefer to use molar $c_i$ units but we may switch to molality when convenient.
+$$ V_i = \underbrace{\Big(\phi + \tfrac{1}{z_i F}\mu^\circ_{\mathrm{int},i}\Big)}_{V^\circ_i} + \frac{RT}{z_i F} \ln(c_i/c^\circ), $$
+
+$$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(c_i/c^\circ). $$
+
+The new quantity $V^\circ_i$ is the **standard species voltage**, the voltage an ion would carry at the reference concentration $c^\circ$. Like $\phi$ it is not pinned to an absolute value, floating with the electrical state of the solution, but as we will see its differences from ion to ion are rigid, and it behaves much like the floating band edges of a semiconductor. The two remaining symbols are the gas constant times temperature $RT$ (joules per mole) and the molar charge $z_i F$ (coulombs per mole).
+
+> Concentration can equally be measured as {% wiki "molality" %} $b_i$ (moles per kilogram of solvent), giving the same ideal form $V_i = V^{\circ(b)}_i + \tfrac{RT}{z_i F}\ln(b_i/b^\circ)$ with $b^\circ = 1~\mathrm{mol/kg}$. The molal and molar standard states differ only through the solvent density,^[Equating the two forms gives $V^{\circ(b)}_i - V^\circ_i = \tfrac{RT}{z_i F}\ln(\rho\, b^\circ/c^\circ)$ for solvent density $\rho$. For water ($\rho = 0.997~\mathrm{kg/L}$ at 25&nbsp;°C, 1 bar) this is a negligible $-0.00008~\mathrm{V}/z_i$, though it can matter in other solvents. The two measures also describe slightly different ideal behaviour once the density varies with concentration, but that happens only in the concentrated regime where both logarithmic forms already fail.] which for water is negligible. The plot above used molal units; I will mostly prefer molar $c_i$ and switch when convenient.
 
 ### Ideal-dilute salt water
 
 Returning to our saltwater example, we have then:
 $$V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = (V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-}) + 2\frac{RT}{F} \ln(c/c^\circ), $$
-where $c = c_{\mathrm{Na}^+} = c_{\mathrm{Cl}^-}$ is the concentration of either ion. This gives that characteristic $2\tfrac{RT}{F}\ln(\mathrm{concentration})$ slope we saw in the plot above. Also note that $V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-} = -4.0746~\mathrm{V}$ is is a constant for water in our conditions; since $\phi$ cancels out, this difference does not depend on the ambiguous $\phi$. When discussing solutions we can draw these $V^\circ_i$ as distinct lines from the $V_i$.
+where $c = c_{\mathrm{Na}^+} = c_{\mathrm{Cl}^-}$ is the concentration of either ion. This gives that characteristic $2\tfrac{RT}{F}\ln(\mathrm{concentration})$ slope we saw in the plot above. Also note that $V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-} = -4.0746~\mathrm{V}$ is a constant for water in our conditions; since $\phi$ cancels out, this difference does not depend on the ambiguous $\phi$. When discussing solutions we can draw these $V^\circ_i$ as distinct lines from the $V_i$.
 
 <figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/esbd-nacl-dilute.njk" %}
@@ -80,59 +73,27 @@ The standard state ladder is also analogous to the conduction and valence band e
 
 ## Spatial variations
 
-{# Showing this now emphasizes that $V^\circ_i$ doesn't just globablly float but varies from place to place. #}
-
-$V^\circ_i$ vary from place to place, either due to electrostatics (varying $\phi$) or change in medium (varying $\mathrm{offset}$).
-
-It's quite common to see a liquid junction potential between two solutions of the same solvent, the exact value depending on details of counter-conducting ions (which we'll get into in later topics). All of the $V^\circ_i$ jump by the same amount, which is also the step in $\phi$.
+We have drawn the ladder as a static object, but in a working device it rarely sits still. A brief look ahead is worth it here, even though every mechanism shown belongs to a later topic. The contrast to hold onto is this: while $V_i$ tends to ramp smoothly and monotonically across space, tied down as it is by the pull toward thermodynamic equilibrium, the $V^\circ_i$ levels are free to vary far more wildly. They slope gently under an ohmic or diffusion field, swing sharply over a few nanometres in the diffuse layer beside an interface, and jump outright wherever the medium itself changes, since a different solvent or phase carries its own ladder.
 
 <figure class="diagram-placeholder">
 {% figcaption %}
-Liquid junction potential (LJP) between two concentrations of the same electrolyte. The standard states ($V^\circ_i$ ladder) jump by the same amount across the junction region (shown as a spatial transition), reflecting the localized electrostatic potential step $\Delta\phi$.
+Schematic, not to scale: a single ion, $\mathrm{Na}^+$, plated into a mercury amalgam from aqueous solution, as happens at a dropping-mercury electrode or a chlor-alkali mercury cell. Don't worry about the mechanisms yet, since each gets its own topic later; the point is only this. The species voltage $V_{\mathrm{Na}^+}$ glides smoothly across the whole system, while its standard state $V^\circ_{\mathrm{Na}^+}$ roams over three length scales at once: a gentle slope through the micron-thick diffusion layer, a sharp excursion in the nanometre diffuse layer at the surface, and an outright jump at the mercury–water boundary. The gap between the two lines, drawn in the lower panel, is exactly the concentration $c_{\mathrm{Na}^+}$.
 {% endfigcaption %}
 </figure>
 
-And crucially, it's worth noting that different solvents have different $V^\circ_i$ ladders. We can even put two solvents in contact with each other (either via a porous barrier or as two immiscible phases), in which case we will see the standard state ladders shift relative to one another. At this liquid-liquid interface (ITIES), the step in each $V^\circ_i$ represents the difference in solvation energy (standard Gibbs free energy of transfer) of that specific ion between the two solvents. Note that in contrast to the electrostatic potential step $\Delta\phi$ (which is chemically ill-defined across different phases), the step in each individual $V^\circ_i$ is thermodynamic and experimentally accessible. {# Note I worry there might be some technical gotchas here in realistic cases? The idea: sometimes the exchanged ions are not 'raw' but instead stay hydrated in the nonaqueous solvent; in cases with a porous barrier between pure solvents, the natural exchange of ions may can drag along solvent, and so it's not a real exchange equilibrium situation since the solvents are slowly mixing. #}
-
-<figure class="diagram-placeholder">
-{% figcaption %}
-Interface between Two Immiscible Electrolyte Solutions (ITIES). Because the solvents differ (e.g., water vs. nitrobenzene), the standard state ladder shifts: $V^\circ_i$ steps are different for each ion, determined by their solvation energies, even though the $V_i$ themselves run flat across. An interactive slider can let the user tune the interfacial potential drop $\Delta\phi$ to see how the relative ladders shift.
-{% endfigcaption %}
-</figure>
-
-Besides jumps, $V^\circ_i$ often has smooth variations in solution simply due to electric fields, which can arise in nonequilibrium situations (both driven currents and ambipolar diffusion). The LJP above can be understood as a short-ranged region of very concentrated electric field. We often don't have direct control over these electric fields since they are highly influenced by screening.
-
-<figure class="diagram-placeholder">
-{% figcaption %}
-Nonequilibrium electrolyte under current load. The electric field causes the standard states ($V^\circ_i$ ladder) and the electrostatic potential ($\phi$) to slope linearly across the bulk solution, showing that standard states vary dynamically in space under current flow.
-{% endfigcaption %}
-</figure>
-
-In fact $V^\circ_i$ can also vary even at equilibrium, in the diffuse layer that occurs near interfaces (this is the 'tail' part of the electric double layer). This is known as 'band bending' in semiconductors.
-
-<figure class="diagram-placeholder">
-{% figcaption %}
-Equilibrium band bending in the diffuse layer near a charged interface. The electrostatic potential $\phi$ curves sharply near the wall to screen the surface charge, dragging the $V^\circ_i$ standard states along with it while the thermodynamic species voltages $V_i$ remain perfectly flat.
-{% endfigcaption %}
-</figure>
+Each of these features has a home further on: the diffusion-layer slope in [basic transport](../transport_basic/), the diffuse-layer excursion in [basic electrostatics](../basicelectrostatics/), and the jump between two different media in [mass action and charge control](../charge_control/). For now it is enough to see that the ladder is a living thing rather than a fixed backdrop.
 
 ## Activities and non-ideality
 
-In chemistry, the standard approach is the following breakdown of the electrochemical potential:
+The dilute law leaned on that logarithmic term being exact, which holds only when the solute is dilute enough that each ion ignores the others. Beyond that, chemistry keeps the form but folds every deviation into an effective concentration, the {% wiki "activity" %} $a_i$, defined precisely so that
 
-$$ \bar\mu_i = z_i F \phi + \mu^\circ_{\mathrm{int},i} + RT \ln(a_i), $$
+$$ \bar\mu_i = z_i F \phi + \mu^\circ_{\mathrm{int},i} + RT \ln(a_i) $$
 
-where $\mu^\circ_{\mathrm{int},i}$ is a (fixed) standard internal chemical potential and $a_i$ is {% wiki "activity" %}. This equation actually serves as *the definition of activity*, i.e. activity is a measure of chemical potential deviation away from a standard state. For dilute solutes, activity is proportional to concentration (by whatever measure), but for concentrated solutes it can vary, sometimes by a lot.
+holds exactly, with the very same standard $\mu^\circ_{\mathrm{int},i}$ we met above. In $V_i$ terms this is just our earlier equation with $c_i/c^\circ$ replaced by the activity:
 
-This directly maps to a non-ideal form of our $V_i$ equation:
+$$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(a_i). $$
 
-$$ V_i = \underbrace{\phi + \tfrac{1}{z_i F}\mu^\circ_{\mathrm{int},i}}_{V^\circ_i} + \tfrac{RT}{z_i F} \ln(a_i), $$
-
-$$ V_i = V^\circ_i + \tfrac{RT}{z_i F} \ln(a_i), $$
-
-which shows that $V^\circ_i = \phi + \frac{1}{z_i F}\mu^\circ_{\mathrm{int},i}$ is the precise link to normal electrochemistry notation. The standard state $V^\circ_i$ values float rigidly together (and with $\phi$), but with various fixed offsets according to $\mu^\circ_{\mathrm{int},i}$.
-
-Anyway, the idea is to choose $\mu^\circ_{\mathrm{int},i}$ (i.e. to choose $V^\circ_i$) such that $a_i \rightarrow c_i/c^\circ$ in the limit where all solutes are dilute (pure solvent). This justifies our earlier dilute $V_i$ equation in terms of $a_i \approx c_i/c^\circ$.
+The standard state is fixed by the convention that $a_i \to c_i/c^\circ$ in the dilute limit, which is exactly what made the ideal form exact there. The activity is then the single bookkeeping device carrying every departure from ideal-dilute behaviour.
 
 There are a number of big gotchas when it comes to nonideality. I talk about this a lot more in the [appendix Topic on non-ideality](../nonideal/), but the key points are:
 
@@ -146,34 +107,6 @@ Importantly, what all of these different approaches using various concentration 
 
 ## Takeaways
 
-For the next topic, we'll talk about the close analogies in semiconductors and other solid state electronic materials.
+A dilute ion's species voltage sits a logarithmic distance from its standard species voltage $V^\circ_i$, the distance set by concentration through $V_i = V^\circ_i + \tfrac{RT}{z_i F}\ln(c_i/c^\circ)$. The $V^\circ_i$ float with the electrical state of the solution, yet their differences form a rigid ladder fixed by the solvent, and once the solution is no longer dilute the concentration term generalizes to an activity. This same structure, a carrier floating logarithmically above a standard-state level, turns out to describe the electronic carriers in a semiconductor every bit as well, and that is where we go next.
 
-[**NEXT TOPIC: Solid state**](../solidstate/)
-
-{#
-## Optional discussion
-
-<details>
-<summary>
-Click to open extended discussion.
-</summary>
-
-</details>
-#}
-
-{#
-Neutral, or internal chem pot
-$$\mu_i = \underbrace{\mu^\circ_i}_{\text{standard}} + \underbrace{RT \ln a_i}_{\text{active}}$$
-
-Grouping typical:
-$$\bar\mu_i = \underbrace{z_i F\phi}_{\text{electric}} + \underbrace{\mu^\circ_i + RT \ln a_i}_{\text{chemical}}$$
-
-Alternate grouping:
-$$\bar\mu_i = \underbrace{z_i F\phi + \mu^\circ_i}_{\text{``electro-standard''}} + \underbrace{RT \ln a_i}_{\text{active}}$$
-
-$$V_i = \big[\phi + \tfrac{1}{z_i F} \mu^\circ_i \big] + \tfrac{RT}{z_i F} \ln a_i$$
-
-$$V_i = V^\circ_i + \tfrac{RT}{z_i F} \ln a_i$$
-
-$$V^\circ_i = \phi + \tfrac{1}{z_i F} \mu^\circ_i$$
-#}
+[**NEXT TOPIC: Semiconductors**](../solidstate/)

@@ -86,6 +86,18 @@ Gibbs–Donnan equilibrium. The mobile-ion traces $V_{\mathrm{Na}^+}$ and $V_{\m
 {% endfigcaption %}
 </figure>
 
+## A different solvent on each side
+
+The Donnan step assumed one solvent throughout, so the ladder shifted as a rigid unit: every $V^\circ_i$ jumped by the single electrostatic step $\Delta\phi$. Let the two sides instead be genuinely different solvents, water against an immiscible organic phase such as nitrobenzene, and the construction barely changes, except that the ladder no longer steps rigidly. Each rung now jumps by its own amount: the shared electrostatic step plus an ion-specific solvation term, the standard Gibbs energy of transfer between the solvents. Where the Donnan ladder shifted rigidly, this one deforms.
+
+Any ion free to cross still equilibrates to a flat $V_i$, just as the mobile ions did across the Donnan membrane, and pinning two such ions again leaves a charge-balanced combination independent of $\Delta\phi$, the same mass-action cancellation we saw above. Here that ladder-independent quantity is what an electrochemist calls the standard partition coefficient of the salt. The individual single-ion transfer energies, by contrast, are no more measurable than single-ion activities were, and for the same reason: they depend on the unknowable offset between the two ladders. This liquid–liquid interface is known as {% wiki "Interface between two immiscible electrolyte solutions", "ITIES" %}.
+
+<figure class="diagram-placeholder">
+{% figcaption %}
+A liquid–liquid interface (ITIES): water against an immiscible organic solvent. A shared ion runs flat across the boundary ($V_i$ continuous), but the two solvents' $V^\circ_i$ ladders step by a different amount for each ion, set by how each prefers one solvent over the other. The salt's overall partition across the interface is fixed; how that partition splits between the individual ions is not.
+{% endfigcaption %}
+</figure>
+
 ## Takeaways
 
 Everything in this topic comes down to a single motion: sliding the rigid $V^\circ_i$ ladder to the one offset at which the bulk is neutral. The pinned $V_i$ values and any fixed background charge together decide where that offset falls. Mass-action products emerge independent of the ladder, since the offset cancels, and dopants, the common-ion effect, and the Donnan potential turn out to be the same neutrality-restoring shift in three different guises.
