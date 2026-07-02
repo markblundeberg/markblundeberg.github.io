@@ -34,7 +34,6 @@
     diagram.setVRange(-0.78, 1.18);
 
     const xs = linspace(XI_IF, 1, 81);
-    const sm = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
 
     function update(b) {
         document.getElementById('{{idprefix}}-bias-readout').textContent =
@@ -67,9 +66,13 @@
                 curveType: 'bandEdge_C',
                 label: 'V^\\circ_{\\mathrm{e}^-}',
                 x: xs,
-                // pinned at -PHI_B at the contact; bends to the bulk value
+                // pinned at -PHI_B at the contact; exponential relaxation
+                // to the bulk value (steepest right at the interface)
                 y: xs.map(
-                    (x) => -PHI_B + (vSemi - XI + PHI_B) * sm((x - XI_IF) / W)
+                    (x) =>
+                        vSemi -
+                        XI +
+                        (-PHI_B - (vSemi - XI)) * Math.exp(-(x - XI_IF) / W)
                 ),
             },
         ]);
