@@ -53,6 +53,25 @@
                 y: y.map((v) => v + PHI_OFF),
             },
         ]);
+
+        // the interface charge implied by the field kink: sigma ∝ j(R2−R1),
+        // shown as +/− on the phi kink (±± when driven harder)
+        const sign = j > 0 ? '+' : '−';
+        const sym = Math.abs(j) < 0.15 ? null : Math.abs(j) < 0.6 ? sign : sign + sign;
+        diagram.updateVerticalMarkers(
+            sym
+                ? [
+                      {
+                          id: 'ifq',
+                          x: 0.5,
+                          yDefs: [{ y: V_MID + PHI_OFF }],
+                          symbol: sym,
+                          popupCallback: () =>
+                              'static charge at the interface, implied by the kink in the field',
+                      },
+                  ]
+                : []
+        );
     }
 
     makeSlider('{{idprefix}}-j', update);
