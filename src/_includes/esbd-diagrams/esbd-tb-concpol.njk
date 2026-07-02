@@ -1,0 +1,132 @@
+{% set idprefix = "esbd-tb-concpol" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-band" style="height: 240px"></div>
+<div class="bd-container" id="{{idprefix}}-conc" style="height: 130px"></div>
+{{ controls.slider(idprefix + "-j", "Current $j/j_{\\mathrm{lim}}$", { min: -0.95, max: 0.95, step: "any", value: 0.7, snap: 0, readout: true }) }}
+<div style="text-align: center">{{ controls.checkbox(idprefix + "-sup", "add supporting electrolyte") }}</div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+
+    // A Li electrode passing Li+ while the anion is blocked. Steady state,
+    // stirred bulk on the right: c(x) is linear, drawn down to c_s/c_b =
+    // 1 − j/j_lim at the interface. Binary electrolyte: the blocked anion is
+    // exactly flat, the whole V° ladder bends as DEC·log c, and V_Li+ picks
+    // up TWICE that bend (the classic factor 2). With supporting electrolyte
+    // the drift is screened: V° goes flat and V_Li+ bends by log c once —
+    // half the polarization at the same current. Rung spacing compressed.
+    const DEC = 0.05916;
+    const XIF = 0.25;
+    const V_X = 0.34; // blocked anion, exactly flat
+    const V0X_B = 0.46,
+        V0LI_B = 0.72; // bulk rung positions (fake 0.26 V spacing)
+    const GAP_LI = 0.06; // bulk V°_Li − V_Li (0.1 M-ish)
+
+    const band = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-band',
+        { cation: SPECIES.lithium, anion: SPECIES.chloride },
+        { margins: { right: 56 } }
+    );
+    band.setSpatialLayout([0, XIF, 1], [
+        { ...REGION.metal, name: 'Li electrode' },
+        REGION.solution,
+    ]);
+    band.setVRange(0.1, 0.95);
+
+    const conc = new XYPlot('{{idprefix}}-conc', {
+        xLabel: '',
+        yLabel: 'Concentration',
+        xRange: [0, 1],
+        yRange: [0, 2.1],
+        xMode: 'abstract',
+        yMode: 'abstract',
+        margins: { top: 4, bottom: 12, left: 26, right: 56 },
+    });
+
+    const xs = linspace(XIF, 1, 81);
+
+    function update() {
+        const j = parseFloat(jEl.value);
+        const sup = supEl.checked;
+        document.getElementById('{{idprefix}}-j-readout').textContent =
+            j.toFixed(2);
+
+        const c = (x) => 1 - j * (1 - (x - XIF) / (1 - XIF)); // c/c_bulk
+        const bend = (x) => DEC * Math.log10(c(x));
+
+        band.updateTraceData([
+            {
+                id: 'v0li',
+                speciesId: 'cation',
+                curveType: 'standardState',
+                x: xs,
+                y: xs.map((x) => V0LI_B + (sup ? 0 : bend(x))),
+            },
+            {
+                id: 'vli',
+                speciesId: 'cation',
+                curveType: 'voltage',
+                x: xs,
+                y: xs.map(
+                    (x) => V0LI_B - GAP_LI + (sup ? 1 : 2) * bend(x)
+                ),
+            },
+            {
+                id: 'v0x',
+                speciesId: 'anion',
+                curveType: 'standardState',
+                x: xs,
+                y: xs.map((x) => V0X_B + (sup ? 0 : bend(x))),
+            },
+            {
+                id: 'vx',
+                speciesId: 'anion',
+                curveType: 'voltage',
+                x: [XIF, 1],
+                y: [V_X, V_X],
+            },
+        ]);
+
+        const concTraces = [
+            {
+                id: 'cli',
+                x: [...xs],
+                y: xs.map(c),
+                color: SPECIES.lithium.color,
+                style: { lineWidth: 2 },
+                label: 'c_{\\mathrm{Li}^+}',
+                labelFrac: 0.35,
+            },
+        ];
+        if (sup) {
+            concTraces.push({
+                id: 'csup',
+                x: [XIF, 1],
+                y: [1.8, 1.8],
+                color: '#999',
+                style: { lineWidth: 2 },
+                label: '\\text{supporting}',
+                labelFrac: 0.5,
+            });
+        } else {
+            concTraces.push({
+                id: 'cx',
+                x: [...xs],
+                y: xs.map((x) => c(x) + 0.04), // = c_Li (neutrality); offset to stay visible
+                color: SPECIES.chloride.color,
+                style: { lineWidth: 2, dasharray: '4,3' },
+                label: 'c_{\\mathrm{X}^-}',
+                labelFrac: 0.7,
+            });
+        }
+        conc.updateTraceData(concTraces);
+    }
+
+    const jEl = makeSlider('{{idprefix}}-j', update, { fire: false });
+    const supEl = document.getElementById('{{idprefix}}-sup');
+    supEl.addEventListener('change', update);
+    update();
+</script>

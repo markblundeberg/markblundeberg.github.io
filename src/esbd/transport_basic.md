@@ -64,9 +64,10 @@ It is a handy shortcut, and its origin is easy to see: sum the per-species drift
 
 Many interfaces are selective, letting one carrier through and blocking the rest: a lithium electrode passes $\mathrm{Li}^+$ while the salt anion is turned away, or an electrode reaction consumes one ion and ignores the others. The blocked species cannot leave, so it banks up on one side and is drawn down on the other, building a concentration gradient in front of the interface. On the diagram the standard-state ladder bends to track the changing concentration while the conducting species takes on a concentration-driven slope, both registering as added resistance, the "mass-transport" or polarization resistance. Pushed hard enough, the supply of the active ion at the interface runs dry and the current can climb no further, a limit we give its own topic [shortly](../saturation/). The usual remedy is a swamping excess of inert supporting electrolyte, which carries the drift and leaves the active ion to move by diffusion alone.^[What sits at the far boundary matters: a well-stirred bulk fixes the concentration a set distance away, a sealed cell end forbids flux, and an unbounded transient gives the spreading diffusion layer behind {% wiki "Warburg element", "Warburg" %} impedance.]
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 480px">
+{% include "esbd-diagrams/esbd-tb-concpol.njk" %}
 {% figcaption %}
-Concentration polarization at a blocking interface. Top: the $V_i$ band diagram, with $V^\circ_i$ bending and the conducting species sloping. Bottom: the concentration profiles. A toggle adds a supporting electrolyte.
+Concentration polarization at a blocking interface: a Li electrode passes $\mathrm{Li}^+$ while the anion banks up, flat. Top: the $V^\circ_i$ ladder bends with the depleted concentration and the conducting ion's drop is *twice* the bend (the binary-electrolyte factor of two). Bottom: the concentration profiles. Toggle the supporting electrolyte: $V^\circ_i$ flattens and the polarization halves at the same current. Rung spacing compressed.
 {% endfigcaption %}
 </figure>
 
