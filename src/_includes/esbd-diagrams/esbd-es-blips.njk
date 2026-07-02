@@ -1,0 +1,80 @@
+{% set idprefix = "esbd-es-blips" %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 260px"></div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { linspace } from '{{ esbdJsPath }}utils.js';
+
+    // Static: the honest picture of a bulk solution between a metal and
+    // vacuum. Everything is flat except tiny double-layer blips of V°_i
+    // within a few Debye lengths of each surface — which we normally don't
+    // bother to draw. V_i ride flat over the blips. phi_vac drawn only in
+    // the vacuum (it's screened away inside conductors).
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        {
+            electron: SPECIES.electron,
+            cation: SPECIES.sodium,
+            anion: SPECIES.chloride,
+        },
+        { margins: { right: 56 } }
+    );
+    diagram.setSpatialLayout([0, 0.22, 0.78, 1], [
+        REGION.metal,
+        REGION.solution,
+        REGION.vacuum,
+    ]);
+    diagram.setVRange(-0.05, 1.3);
+
+    const xs = linspace(0.22, 0.78, 121);
+    const LAM = 0.012; // Debye length, tiny vs the vessel
+    const blip = (x, aL, aR) =>
+        aL * Math.exp(-(x - 0.22) / LAM) + aR * Math.exp(-(0.78 - x) / LAM);
+
+    diagram.updateTraceData([
+        {
+            id: 've',
+            speciesId: 'electron',
+            curveType: 'voltage',
+            x: [0, 0.22],
+            y: [0.55, 0.55],
+        },
+        {
+            id: 'vna',
+            speciesId: 'cation',
+            curveType: 'voltage',
+            x: [0.22, 0.78],
+            y: [0.62, 0.62],
+        },
+        {
+            id: 'vcl',
+            speciesId: 'anion',
+            curveType: 'voltage',
+            x: [0.22, 0.78],
+            y: [0.38, 0.38],
+        },
+        {
+            id: 'vna0',
+            speciesId: 'cation',
+            curveType: 'standardState',
+            x: xs,
+            y: xs.map((x) => 0.78 + blip(x, -0.13, 0.09)),
+        },
+        {
+            id: 'vcl0',
+            speciesId: 'anion',
+            curveType: 'standardState',
+            x: xs,
+            y: xs.map((x) => 0.22 + blip(x, -0.13, 0.09)),
+        },
+        {
+            id: 'phivac',
+            speciesId: 'electron',
+            curveType: 'phi',
+            label: '\\phi_{\\mathrm{vac}}',
+            x: [0.78, 1],
+            y: [1.15, 1.15],
+        },
+    ]);
+</script>

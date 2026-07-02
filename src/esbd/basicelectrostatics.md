@@ -63,12 +63,10 @@ There are exceptions to this: capacitors, field-effect transistors, and nano-dev
 
 Many interfaces in our devices are explicitly *not* of interest, yet each interface has one of these electrostatic screening regions (known as the "diffuse" part of the {% wiki "electric double layer" %}). One of the advantages of using electrochemical potentials like $V_i$ is that they 'ride flat' over this local craziness in $V^\circ_i$, so we can skip right over interfaces that are equilibrated.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 460px">
+{% include "esbd-diagrams/esbd-es-blips.njk" %}
 {% figcaption %}
-- metal electrode | solution | vacuum
-- flat region with tiny blips at the end
-
-In a realistic picture of a bulk solution, we should draw very sharp deviations of $V^\circ_i$ nearby the surfaces. But we won't even bother to draw these for the most part.
+The honest picture of a bulk solution between a metal electrode and vacuum: everything is flat except tiny double-layer blips of $V^\circ_i$ within a few Debye lengths of each surface. The $V_i$ ride flat straight over them — which is why, for the most part, we won't bother drawing the blips at all.
 {% endfigcaption %}
 </figure>
 
