@@ -18,15 +18,19 @@
     // ---- Numbers (provenance) ----
     // Diode (Si-flavoured schematic): gap 1.12 V; majority edge-to-Fermi gap
     // 0.15 V on each side (n or p ~1e17 cm^-3) => built-in 1.12-0.30 = 0.82 V.
-    // Membrane ("lightly doped water", unit activities for the majority ion):
+    // Membrane ("lightly doped water"): majority ion at pH 2 (CEM) / pH 12
+    // (AEM), i.e. activity 1e-2, so V_i sits 2 decades (0.118 V) from V°_i on
+    // the majority side too -- echoing the diode's 0.15 V edge gap instead of
+    // visually merging with the edge. Offsets:
     // V_H+ - V_OH- = mu_H2O/F = -237.14e3/96485 = -2.4578 V (page: -2.457 V);
     // ladder spacing V°_OH- - V°_H+ = 157.24e3/96485 = +1.6297 V (iondata.txt);
-    // Donnan/built-in = 2.4578 - 1.6297 = 0.8281 V = (RT/F)ln(1e14). pKw = 14.00.
+    // full minority span 2.4578 - 1.6297 = 0.8281 V = (RT/F)ln(1e14), pKw 14.00;
+    // Donnan step here = (RT/F)ln(1e10) = 0.5915 V.
     const EG = 1.12,
         ETA = 0.15;
     const MU_W = -2.4578,
         DG_OH = 1.6297,
-        DONNAN = MU_W + DG_OH; // -0.8281: ladder shift CEM relative to AEM
+        GAP_M = 2 * 0.05916; // 2 decades: majority activity 1e-2
 
     // Geometry: p/CEM on [0, 0.5], n/AEM on [0.5, 1]. Junction widths schematic;
     // the membrane's is drawn sharper (real BPM depletion zone ~nm).
@@ -78,15 +82,13 @@
             y: interp(sD, ETA - EG, -ETA), // conduction edge: p -0.97 -> n -0.15
         },
     ]);
+    // One marker in each bulk: the pairing reaction equilibrates everywhere,
+    // not just at the interface.
+    const diodePopup = () =>
+        '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightleftharpoons \\varnothing$';
     diode.updateVerticalMarkers([
-        {
-            id: 'rxn',
-            symbol: '⇌',
-            x: 0.5,
-            yDefs: [{ y: 0 }],
-            popupCallback: () =>
-                '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightleftharpoons \\varnothing$',
-        },
+        { id: 'rxn_p', symbol: '⇌', x: 0.25, yDefs: [{ y: 0 }], popupCallback: diodePopup },
+        { id: 'rxn_n', symbol: '⇌', x: 0.75, yDefs: [{ y: 0 }], popupCallback: diodePopup },
     ]);
 
     const bpm = new ElectrochemicalSpeciesBandDiagram(
@@ -113,14 +115,14 @@
             curveType: 'standardState',
             labelFrac: 0.1,
             x: x,
-            y: interp(sM, DONNAN, 0), // -0.828 (CEM) -> 0 (AEM)
+            y: interp(sM, MU_W + DG_OH + GAP_M, -GAP_M), // -0.710 (CEM) -> -0.118 (AEM)
         },
         {
             id: 'vh_std',
             speciesId: 'proton',
             curveType: 'standardState',
             x: x,
-            y: interp(sM, MU_W, -DG_OH), // -2.458 (CEM) -> -1.630 (AEM)
+            y: interp(sM, MU_W + GAP_M, -DG_OH - GAP_M), // -2.340 (CEM) -> -1.748 (AEM)
         },
         {
             id: 'vh',
@@ -130,14 +132,10 @@
             y: [MU_W, MU_W],
         },
     ]);
+    const bpmPopup = () =>
+        '$\\mathrm{H}^+ + \\mathrm{OH}^- \\rightleftharpoons \\mathrm{H_2O}$';
     bpm.updateVerticalMarkers([
-        {
-            id: 'rxn',
-            symbol: '⇌',
-            x: 0.5,
-            yDefs: [{ y: 0 }, { y: MU_W }],
-            popupCallback: () =>
-                '$\\mathrm{H}^+ + \\mathrm{OH}^- \\rightleftharpoons \\mathrm{H_2O}$',
-        },
+        { id: 'rxn_cem', symbol: '⇌', x: 0.25, yDefs: [{ y: 0 }, { y: MU_W }], popupCallback: bpmPopup },
+        { id: 'rxn_aem', symbol: '⇌', x: 0.75, yDefs: [{ y: 0 }, { y: MU_W }], popupCallback: bpmPopup },
     ]);
 </script>

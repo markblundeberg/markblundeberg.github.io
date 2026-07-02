@@ -19,7 +19,9 @@
 
     // Same numbers as the equilibrium twin figure (see esbd-bipolar-twin.njk):
     // Si-flavoured diode (gap 1.12 V, majority edge gap 0.15 V, built-in 0.82 V);
-    // membrane offsets from mu_H2O and V°_OH- (iondata): -2.4578 V / +1.6297 V.
+    // membrane offsets from mu_H2O and V°_OH- (iondata): -2.4578 V / +1.6297 V,
+    // majority ions at pH 2 (CEM) / pH 12 (AEM) => 0.118 V majority gaps and a
+    // 0.5915 V Donnan step.
     // Bias model (qualitative, matching the prose): carrier levels split by the
     // full bias b at the junction; minority levels relax back to the majority
     // level over a diffusion length; depletion widens as sqrt(1 - b/phi_bi).
@@ -28,9 +30,17 @@
         PHI_D = 0.82;
     const MU_W = -2.4578,
         DG_OH = 1.6297,
-        DONNAN = MU_W + DG_OH,
-        PHI_M = -DONNAN;
-    const LDIFF = 0.18; // minority relaxation length (schematic)
+        GAP_M = 2 * 0.05916,
+        PHI_M = -(MU_W + DG_OH) - 2 * GAP_M; // 0.5915 V Donnan step
+    // Minority relaxation lengths (schematic, per-twin). The real physics
+    // differs hugely: in Si, sqrt(D*tau) is tens of um to ~mm (>= device
+    // scale), so the diode's long tail is honest. H+ + OH- recombination is
+    // diffusion-limited (k ~ 1.4e11 /M/s => tau ~ 0.7 ns at pH 12), giving
+    // L ~ 2-3 nm -- as thin as the junction itself. The membrane's tail is
+    // exaggerated for legibility but kept visibly tighter than the diode's,
+    // like the junction widths.
+    const LD_D = 0.18,
+        LD_M = 0.07;
 
     const x = linspace(0, 1, 81);
     const stepFn = (w) =>
@@ -42,10 +52,10 @@
     // Carrier profiles: the "left" carrier sits at level b on the left and decays
     // to 0 rightward from the junction; the "right" carrier is 0 on the right and
     // rises to b leftward. (Levels here are offsets added to the equilibrium level.)
-    const leftCarrier = (b) =>
-        x.map((xi) => (xi <= 0.5 ? b : b * Math.exp(-(xi - 0.5) / LDIFF)));
-    const rightCarrier = (b) =>
-        x.map((xi) => (xi >= 0.5 ? 0 : b * (1 - Math.exp(-(0.5 - xi) / LDIFF))));
+    const leftCarrier = (b, L) =>
+        x.map((xi) => (xi <= 0.5 ? b : b * Math.exp(-(xi - 0.5) / L)));
+    const rightCarrier = (b, L) =>
+        x.map((xi) => (xi >= 0.5 ? 0 : b * (1 - Math.exp(-(0.5 - xi) / L))));
 
     const diode = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-diode',
@@ -78,8 +88,8 @@
         const sD = stepFn(0.11 * Math.sqrt(Math.max(0.06, 1 - b / PHI_D)));
         const sM = stepFn(0.045 * Math.sqrt(Math.max(0.06, 1 - b / PHI_M)));
 
-        const vh = leftCarrier(b); // hole level: b on the p side
-        const ve = rightCarrier(b); // electron level: 0 on the n side
+        const vh = leftCarrier(b, LD_D); // hole level: b on the p side
+        const ve = rightCarrier(b, LD_D); // electron level: 0 on the n side
         // Edges follow the electrostatics: pinned to the majority carrier on
         // each side (p side rides at +b with the p bulk), stepping through the
         // (bias-dependent) depletion zone.
@@ -120,8 +130,8 @@
             },
         ]);
 
-        const vhp = leftCarrier(b).map((v) => v + MU_W); // H+ level: MU_W + b on CEM side
-        const voh = rightCarrier(b); // OH- level: 0 on AEM side
+        const vhp = leftCarrier(b, LD_M).map((v) => v + MU_W); // H+ level: MU_W + b on CEM side
+        const voh = rightCarrier(b, LD_M); // OH- level: 0 on AEM side
         bpm.updateTraceData([
             {
                 id: 'voh',
@@ -136,14 +146,14 @@
                 curveType: 'standardState',
                 labelFrac: 0.1,
                 x: x,
-                y: interp(sM, DONNAN + b, 0),
+                y: interp(sM, MU_W + DG_OH + GAP_M + b, -GAP_M),
             },
             {
                 id: 'vh_std',
                 speciesId: 'proton',
                 curveType: 'standardState',
                 x: x,
-                y: interp(sM, MU_W + b, -DG_OH),
+                y: interp(sM, MU_W + GAP_M + b, -DG_OH - GAP_M),
             },
             {
                 id: 'vh',
