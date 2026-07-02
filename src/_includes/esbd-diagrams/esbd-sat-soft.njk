@@ -1,0 +1,150 @@
+{% set idprefix = "esbd-sat-soft" %}
+{% import "macros/controls.njk" as controls %}
+<div style="display: flex; flex-wrap: wrap; justify-content: space-evenly; gap: 8px">
+<div style="flex: 1; min-width: 250px; max-width: 330px">
+<div style="text-align: center; font-size: 0.85em">FET channel</div>
+<div class="bd-container" id="{{idprefix}}-fet" style="height: 250px; border: 1px solid #eee"></div>
+</div>
+<div style="flex: 1; min-width: 250px; max-width: 330px">
+<div style="text-align: center; font-size: 0.85em">binary electrolyte</div>
+<div class="bd-container" id="{{idprefix}}-bin" style="height: 250px; border: 1px solid #eee"></div>
+</div>
+</div>
+{{ controls.slider(idprefix + "-a", "Drive $j/j_{\\mathrm{lim}}$", { min: 0, max: 1, step: "any", value: 0.5, snap: 1, readout: true }) }}
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+
+    // Soft pinning, side by side, one shared drive slider. No spectator sea:
+    // the pinning rail (gate / counter-anion) holds the ladder only softly,
+    // so V°_i slopes along with the active V_i. Same linear c(x) as the
+    // hard-pinned case, but now the ladder bends by 1× the log term and the
+    // active carrier by 2× (ambipolar factor for the 1:1 binary; the FET
+    // drawn as its mirror twin — the footnote's stiffening subtleties are
+    // deliberately not modeled). At a = 1 both dive at the boundary.
+    const DEC = 0.05916;
+    const XL = 0.12,
+        XR = 0.88;
+    const VLO = 0.05,
+        VHI = 0.95;
+
+    const fet = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-fet',
+        { electron: SPECIES.electron },
+        { margins: { right: 60 } }
+    );
+    fet.setSpatialLayout([0, XL, XR, 1], [
+        { ...REGION.semi2, name: 'Drain' },
+        { ...REGION.semiconductor, name: 'channel' },
+        { ...REGION.semi2, name: 'Source' },
+    ]);
+    fet.setVRange(VLO, VHI);
+
+    const bin = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-bin',
+        {
+            electron: SPECIES.electron,
+            silver: SPECIES.silver,
+            nitrate: SPECIES.nitrate,
+        },
+        { margins: { right: 60 } }
+    );
+    bin.setSpatialLayout([0, XL, XR, 1], [
+        { ...REGION.metal, name: 'Cathode' },
+        { ...REGION.solution, name: 'binary AgNO₃' },
+        { ...REGION.solution2, name: 'stirred bulk' },
+    ]);
+    bin.setVRange(VLO, VHI);
+
+    const xs = linspace(XL, 1, 121);
+    const conc = (a) => (x) =>
+        x >= XR ? 1 : Math.max(1e-12, 1 - a * (1 - (x - XL) / (XR - XL)));
+    const trim = (fn) => {
+        const x = [],
+            y = [];
+        for (const xi of xs) {
+            const v = fn(xi);
+            if (v >= VLO && v <= VHI) {
+                x.push(xi);
+                y.push(v);
+            }
+        }
+        return { x, y };
+    };
+
+    function update(a) {
+        document.getElementById('{{idprefix}}-a-readout').textContent =
+            a.toFixed(2);
+        const c = conc(a);
+        const lg = (x) => Math.log10(c(x));
+
+        // FET: the gate rail is flat; the channel edge (V°_e-) bends 1×, the
+        // electrons 2×, diverging UP at the drain (z = −1). Pinch-off = the
+        // dive at a = 1.
+        fet.updateTraceData([
+            {
+                id: 'gate',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                label: 'V_{\\mathrm{e}^-}\\,(\\text{gate})',
+                style: { lineWidth: 1.5 },
+                x: [XL, XR],
+                y: [0.85, 0.85],
+            },
+            {
+                id: 'v0e',
+                speciesId: 'electron',
+                curveType: 'bandEdge_C',
+                labelFrac: 0.3,
+                ...trim((x) => 0.38 - DEC * lg(x)),
+            },
+            {
+                id: 've',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                ...trim((x) => 0.5 - 2 * DEC * lg(x)),
+            },
+        ]);
+
+        // binary electrolyte: flat blocked anion, ladder bends 1×, Ag+ 2×,
+        // diving DOWN at the cathode; the cathode's electrons ride the
+        // interface Ag+ level (reversible electrode).
+        const vag = (x) => 0.62 + 2 * DEC * lg(x);
+        const vagIf = Math.max(VLO, vag(XL));
+        bin.updateTraceData([
+            {
+                id: 'v0ag',
+                speciesId: 'silver',
+                curveType: 'standardState',
+                labelFrac: 0.3,
+                ...trim((x) => 0.7 + DEC * lg(x)),
+            },
+            {
+                id: 'vag',
+                speciesId: 'silver',
+                curveType: 'voltage',
+                ...trim(vag),
+            },
+            {
+                id: 'vno3',
+                speciesId: 'nitrate',
+                curveType: 'voltage',
+                x: [XL, 1],
+                y: [0.3, 0.3],
+            },
+            {
+                id: 've_m',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: a < 0.99,
+                labelFrac: 0.4,
+                x: [0, XL],
+                y: [vagIf, vagIf],
+            },
+        ]);
+    }
+
+    makeSlider('{{idprefix}}-a', update);
+</script>
