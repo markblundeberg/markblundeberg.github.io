@@ -34,13 +34,10 @@ A sharp charged defect introduced inside a conductor (here a salt solution), and
 {% endfigcaption %}
 </figure>
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 440px">
+{% include "esbd-diagrams/esbd-es-interface.njk" %}
 {% figcaption %}
-- screening at an interface.
-- slider controls $\phi$ at interface
-- "band bending"
-
-At interfaces it is common for the electrostatic potential to be nudged away from its bulk neutral value.
+Band bending: something at an interface nudges $\phi$ away from its bulk neutral value, and the deviation is screened away into the bulk. Drawn for an n-type semiconductor, where the effect got its name — the band edges bend together while $V_{\mathrm{e}^-}$ stays perfectly flat, this being still an equilibrium.
 {% endfigcaption %}
 </figure>
 

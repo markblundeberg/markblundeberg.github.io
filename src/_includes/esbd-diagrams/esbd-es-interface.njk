@@ -1,0 +1,65 @@
+{% set idprefix = "esbd-es-interface" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 260px"></div>
+{{ controls.slider(idprefix + "-dphi", "$\\phi$ nudge at the interface", { min: -0.4, max: 0.4, step: "any", value: 0.25, snap: 0, readout: true, unit: "V" }) }}
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+
+    // Band bending at a surface, at equilibrium: something at the interface
+    // (adsorbed charge, a contact, ...) nudges phi at the surface by dphi;
+    // the deviation decays into the neutral bulk over the screening length
+    // while V_e- stays perfectly flat. Drawn for an n-type semiconductor
+    // (where "band bending" got its name) — both edges bend in parallel.
+    const LAM = 0.14;
+    const V_F = 0.5; // flat Fermi level
+    const XI = 0.12; // n-type: conduction edge XI below V_F in the bulk
+    const EG = 0.75; // gap drawn compressed for space
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        { electron: SPECIES.electron, hole: SPECIES.hole },
+        { margins: { right: 56 } }
+    );
+    diagram.setSpatialLayout([0, 0.12, 1], [
+        { ...REGION.solid, name: 'Surface' },
+        { ...REGION.semiconductor, name: 'n-type semiconductor' },
+    ]);
+    diagram.setVRange(-0.55, 1.45);
+
+    const xs = linspace(0.12, 1, 101);
+
+    function update(dphi) {
+        document.getElementById('{{idprefix}}-dphi-readout').textContent =
+            dphi.toFixed(2);
+        const bend = (x) => dphi * Math.exp(-(x - 0.12) / LAM);
+
+        diagram.updateTraceData([
+            {
+                id: 've',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                x: [0.12, 1],
+                y: [V_F, V_F],
+            },
+            {
+                id: 've0',
+                speciesId: 'electron',
+                curveType: 'bandEdge_C',
+                x: xs,
+                y: xs.map((x) => V_F - XI + bend(x)),
+            },
+            {
+                id: 'vh0',
+                speciesId: 'hole',
+                curveType: 'bandEdge_V',
+                x: xs,
+                y: xs.map((x) => V_F - XI + EG + bend(x)),
+            },
+        ]);
+    }
+
+    makeSlider('{{idprefix}}-dphi', update);
+</script>
