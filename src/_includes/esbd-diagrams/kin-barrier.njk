@@ -38,12 +38,14 @@
         const VL = V0 + eta; // metal side
         const VTS = V0 - B + alpha * eta; // transition state
 
+        // two smoothstep half-curves meeting at exactly (0.5, VTS): the
+        // drawn minimum IS the transition state, at any eta and alpha
         const xs = linspace(0.25, 0.75, 101);
-        const pass = xs.map((x) => {
-            const base = VL + (V0 - VL) * sm((x - 0.25) / 0.5);
-            const mid = (VL + V0) / 2;
-            return base - (mid - VTS) * Math.exp(-(((x - 0.5) / 0.14) ** 2));
-        });
+        const pass = xs.map((x) =>
+            x <= 0.5
+                ? VTS + (VL - VTS) * sm((0.5 - x) / 0.25)
+                : VTS + (V0 - VTS) * sm((x - 0.5) / 0.25)
+        );
 
         plot.updateTraceData([
             {
@@ -78,6 +80,16 @@
                 style: { lineWidth: 1.5, dasharray: '2,2' },
                 showLabel: false,
             },
+            {
+                id: 'lbl_e',
+                x: [0.5, 0.51],
+                y: [VTS - 0.075, VTS - 0.075],
+                color: BLUE,
+                style: { lineWidth: 0, opacity: 0 },
+                label: '\\mathrm{e}^-',
+                labelFrac: 0,
+                labelHAlign: 'center',
+            },
             // invisible stubs that float the level labels above the plateaus
             {
                 id: 'lbl_left',
@@ -98,7 +110,11 @@
                 labelFrac: 1,
             },
         ]);
-        plot.updateMarkers([{ id: 'ts', x: 0.5, y: VTS, color: '#667', r: 3 }]);
+        // the jumper itself, mid-pass: an electron sneaking UNDER the
+        // barrier (high energy = low voltage) - unremarked visual hint
+        plot.updateMarkers([
+            { id: 'ts', x: 0.5, y: VTS, color: BLUE, r: 4.5 },
+        ]);
 
         document.getElementById('{{idprefix}}-eta-readout').textContent =
             eta.toFixed(2);
