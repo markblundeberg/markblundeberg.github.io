@@ -46,7 +46,7 @@
         yRange: [-5, 8],
         xMode: 'abstract',
         yMode: 'abstract',
-        margins: { bottom: 30, left: 35, right:20 },
+        margins: { bottom: 30, left: 35, right:28 },
     });
     const sGrid = linspace(S_MIN, S_MAX, 121);
     // Faint component traces (per-ion exponentials in the ions' colors, flat
@@ -71,8 +71,7 @@
         })),
         {
             id: 'q_bg',
-            label: '\\scriptstyle \\rho_{\\mathrm{bg}}',
-            labelFrac: 0.75,
+            label: '\\rho_{\\mathrm{bg}}',
             color: '#777',
             style: FAINT,
             x: [S_MIN, S_MAX],
