@@ -72,10 +72,10 @@ The honest picture of a bulk solution between a metal electrode and vacuum: ever
 
 The quasi-neutrality idea also gets applied out of equilibrium, in dynamic situations. For example, if you drive a current from a low-resistance region to a high-resistance region, you create a step in the electric field, but a step in electric field means some local charge accumulated at the interface. But we almost never talk about this charge, because (except at high frequencies or low conductivities, which show {% wiki "Maxwell–Wagner–Sillars polarization", "Maxwell relaxation" %}) it is often negligible. Note however that the dynamic quasi-neutrality is distinct from the spatial quasi-neutrality described above.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 440px">
+{% include "esbd-diagrams/esbd-es-kink.njk" %}
 {% figcaption %}
-- simulation of resistance change with drive?
-- $\phi$ and $V_e$ with kink.
+Current driven from a low-resistivity region into a high-resistivity one: $V_{\mathrm{e}^-}$ kinks at the interface, and $\phi$ kinks right along with it. The kink in the field implies a little static charge parked at the interface — real, but negligible, which is why nobody talks about it.
 {% endfigcaption %}
 </figure>
 

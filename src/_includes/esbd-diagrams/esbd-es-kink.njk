@@ -1,0 +1,59 @@
+{% set idprefix = "esbd-es-kink" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 250px"></div>
+{{ controls.slider(idprefix + "-j", "Current", { min: -1, max: 1, step: "any", value: 0.8, snap: 0, readout: true }) }}
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
+
+    // Current driven from a low-resistivity into a high-resistivity region:
+    // V_e- kinks at the interface (slope ∝ j·ρ on each side), and phi kinks
+    // right along with it (dynamic quasi-neutrality). The kink in the field
+    // implies a little static charge parked at the interface — real but
+    // negligible, which is why nobody talks about it.
+    const R1 = 0.12,
+        R2 = 0.48; // resistivities (per unit length, in volts per unit j)
+    const V_MID = 0.5; // level at the interface, held fixed
+    const PHI_OFF = -0.22; // phi drawn parallel below (arbitrary offset)
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        { electron: SPECIES.electron },
+        { margins: { right: 56 } }
+    );
+    diagram.setSpatialLayout([0, 0.5, 1], [
+        { ...REGION.metal, name: 'low resistivity' },
+        { ...REGION.solid, name: 'high resistivity' },
+    ]);
+    diagram.setVRange(0.0, 1.0);
+
+    function update(j) {
+        document.getElementById('{{idprefix}}-j-readout').textContent =
+            j.toFixed(1);
+        // charge flows from high V to low V: slope = −j·rho
+        const y = [V_MID + 0.5 * j * R1, V_MID, V_MID - 0.5 * j * R2];
+        const x = [0, 0.5, 1];
+
+        diagram.updateTraceData([
+            {
+                id: 've',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                x: x,
+                y: y,
+            },
+            {
+                id: 'phi',
+                speciesId: 'electron',
+                curveType: 'phi',
+                label: '\\phi',
+                x: x,
+                y: y.map((v) => v + PHI_OFF),
+            },
+        ]);
+    }
+
+    makeSlider('{{idprefix}}-j', update);
+</script>
