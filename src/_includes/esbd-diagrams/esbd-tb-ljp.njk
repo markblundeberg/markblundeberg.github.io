@@ -1,0 +1,81 @@
+{% set idprefix = "esbd-tb-ljp" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 260px"></div>
+{{ controls.slider(idprefix + "-mob", "$\\log_{10}(D_+/D_-)$", { min: -1.5, max: 1.5, step: "any", value: 0.9, snap: 0, readout: true }) }}
+<div style="text-align: center; font-size: 0.85em; margin-top: 0.2em"><span id="{{idprefix}}-ljp"></span></div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, renderSpanMath, linspace } from '{{ esbdJsPath }}utils.js';
+
+    // Steady liquid junction between concentrated (left, 0.1 M) and dilute
+    // (right, 1 mM) solutions of one 1:1 salt; the transition zone is the
+    // middle. Henderson for a binary salt: the whole V° ladder steps by
+    //   LJP = −(t+ − t−)(RT/F) ln(c_R/c_L),  t+ = D+/(D+ + D−);
+    // the ion splitting (V+ − V−) also narrows on the dilute side by
+    // 2·DEC·Δlog c (drawn about a compressed rung spacing). The slider is
+    // the mobility ratio: at D+ = D− the LJP vanishes; the default +0.9 is
+    // HCl-like (t+ ≈ 0.89).
+    const DEC = 0.05916;
+    const DLOGC = -2; // log10(c_R/c_L)
+    const MID = 0.5;
+    const GAP_R = 0.15; // splitting at the dilute end (compressed)
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        { cation: SPECIES.sodium, anion: SPECIES.chloride },
+        { margins: { right: 56 } }
+    );
+    diagram.setSpatialLayout([0, 0.35, 0.65, 1], [
+        { ...REGION.solution2, name: 'concentrated' },
+        { name: 'junction', color: '#f0f5ec' },
+        { ...REGION.solution, name: 'dilute' },
+    ]);
+    diagram.setVRange(0.1, 0.95);
+
+    const xs = linspace(0, 1, 121);
+    const sm = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
+    const prog = (x) => sm((x - 0.35) / 0.3); // 0 in left bulk → 1 in right
+
+    function update(r) {
+        const tp = Math.pow(10, r) / (Math.pow(10, r) + 1);
+        const ljp = -(2 * tp - 1) * DEC * DLOGC; // volts
+        const gap = (x) => GAP_R - 2 * DEC * DLOGC * (1 - prog(x)); // splitting
+        const phi = (x) => ljp * prog(x); // ladder offset, 0 on the left
+
+        diagram.updateTraceData([
+            {
+                id: 'vp',
+                speciesId: 'cation',
+                curveType: 'voltage',
+                x: [...xs],
+                y: xs.map((x) => MID + phi(x) + gap(x) / 2),
+            },
+            {
+                id: 'v0',
+                speciesId: 'cation',
+                curveType: 'standardState',
+                label: 'V^\\circ_i',
+                x: [...xs],
+                y: xs.map((x) => MID + phi(x) - 0.02),
+            },
+            {
+                id: 'vm',
+                speciesId: 'anion',
+                curveType: 'voltage',
+                x: [...xs],
+                y: xs.map((x) => MID + phi(x) - gap(x) / 2),
+            },
+        ]);
+
+        renderSpanMath(
+            document.getElementById('{{idprefix}}-ljp'),
+            `\\text{LJP} = ${(1000 * ljp).toFixed(0)}\\,\\mathrm{mV}`
+        );
+        document.getElementById('{{idprefix}}-mob-readout').textContent =
+            r.toFixed(1);
+    }
+
+    makeSlider('{{idprefix}}-mob', update);
+</script>

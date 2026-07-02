@@ -75,9 +75,10 @@ Concentration polarization at a blocking interface: a Li electrode passes $\math
 
 Hold two different solutions in lasting contact, through a porous frit or a constricted opening, and a steady transition zone forms between them where the ions interdiffuse. Wherever those ions have unequal mobilities a new tension appears: the nimbler one tries to pull ahead, neutrality forbids any real charge separation, and a steady field builds across the zone that hurries the slow ion and reins in the fast one until their currents come into balance. That field is a diffusion potential, and summed across the junction it is the net **liquid junction potential** between the two solutions, a small but stubborn voltage that dogs careful electrochemical measurement. For a single binary salt the step divides between the ions by their {% wiki "Transport number", "transference numbers" %}.^[The transference number is the conductivity fraction $t_i = \sigma_i/\sum_j \sigma_j$; for a binary salt this gives $t_+/t_- = z_+ D_+/(|z_-|\,D_-)$, which equals $D_+/D_-$ only when $z_+ = |z_-|$.] With several ions present the profile must be found from the Planck–Henderson equation. Either way it is the open-circuit, steady-state corner of the channel picture we turn to next.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 460px">
+{% include "esbd-diagrams/esbd-tb-ljp.njk" %}
 {% figcaption %}
-A liquid junction between two solutions of a single binary salt. Unequal ion mobilities would separate charge, but the diffusion-potential field tilts both $V_i$ traces so the two species cross in step; the net offset between the solutions is the liquid junction potential.
+A liquid junction between concentrated and dilute solutions of one binary salt. Unequal ion mobilities would separate charge, but the diffusion-potential field tilts both $V_i$ traces so the two species cross in step; the net offset of the $V^\circ_i$ ladder is the liquid junction potential. The slider is the mobility ratio (the default is HCl-like); at $D_+ = D_-$ the LJP vanishes. Rung spacing compressed.
 {% endfigcaption %}
 </figure>
 
