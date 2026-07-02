@@ -1,0 +1,98 @@
+{% set idprefix = "esbd-kin-driven" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 280px"></div>
+{{ controls.slider(idprefix + "-j", "Current (anodic +)", { min: -3, max: 3, step: "any", value: 1.8, snap: 0, readout: true }) }}
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+
+    // One driven electrode, schematically (current j in units of ~J0):
+    // - charge-transfer step at the interface: eta = 0.08·asinh(j) (BV-ish)
+    // - concentration polarization: the activity gap V_rxn − V°_rxn changes
+    //   near the electrode over a diffusion layer (exp tail, DL = 0.18)
+    // - ohmic drop: everything in solution tilts by R_OHM·j toward the bulk.
+    // At j = 0 all of it flattens back to equilibrium. Magnitudes are
+    // cartoon-sized for legibility, not computed from a real cell.
+    const XIF = 0.3; // electrode | solution interface
+    const V_BULK = 0.5; // bulk reaction level (right edge)
+    const ACT = 0.18; // bulk activity gap V_rxn − V°_rxn
+    const R_OHM = 0.035,
+        CP = 0.045,
+        DL = 0.18,
+        ETA0 = 0.08;
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        { electron: SPECIES.electron },
+        { margins: { right: 78 } }
+    );
+    diagram.setSpatialLayout([0, XIF, 1], [
+        { ...REGION.metal, name: 'Electrode' },
+        REGION.solution,
+    ]);
+    diagram.setVRange(0.0, 1.05);
+
+    const xs = linspace(XIF, 1, 81);
+
+    function update(j) {
+        document.getElementById('{{idprefix}}-j-readout').textContent =
+            j.toFixed(1);
+        const merged = Math.abs(j) < 0.1;
+
+        const ohm = (x) => R_OHM * j * (1 - x);
+        const cp = (x) => CP * j * Math.exp(-(x - XIF) / DL);
+        const vRxn = (x) => V_BULK + ohm(x) + cp(x);
+        const vStd = (x) => V_BULK - ACT + ohm(x);
+        const eta = ETA0 * Math.asinh(j);
+        const vMetal = vRxn(XIF) + eta;
+
+        diagram.updateTraceData([
+            {
+                id: 'metal',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: !merged,
+                labelFrac: 0.35,
+                x: [0, XIF],
+                y: [vMetal, vMetal],
+            },
+            {
+                id: 'rxn',
+                speciesId: 'electron',
+                curveType: 'voltageImplied',
+                label: merged
+                    ? 'V_{\\mathrm{e}^-}(\\mathrm{rxn})'
+                    : 'V_{\\mathrm{e}^-}(\\mathrm{rxn})',
+                x: xs,
+                y: xs.map(vRxn),
+            },
+            {
+                id: 'rxn_std',
+                speciesId: 'electron',
+                curveType: 'standardStateImplied',
+                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{rxn})',
+                x: xs,
+                y: xs.map(vStd),
+            },
+        ]);
+
+        diagram.updateVerticalMarkers(
+            merged
+                ? [
+                      {
+                          id: 'ct',
+                          x: XIF,
+                          yDefs: [{ y: vMetal }, { y: vRxn(XIF) }],
+                          symbol: '⇌',
+                          popupCallback: () =>
+                              '$\\mathrm{Ox} + \\mathrm{e}^- \\rightleftharpoons \\mathrm{Red}$',
+                      },
+                  ]
+                : []
+        );
+    }
+
+    makeSlider('{{idprefix}}-j', update);
+</script>

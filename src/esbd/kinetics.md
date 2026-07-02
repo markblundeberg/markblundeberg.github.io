@@ -63,9 +63,10 @@ $$ J_i \propto e^{z_i F \Delta V_i \cdot \alpha / RT} - e^{-z_i F \Delta V_i (1-
 
 This evenhandedness is a quiet advantage of the $V_i$ picture: electron transfer and ion transfer are drawn with the same element, and a battery's interfaces can carry an overpotential on the $V_{\mathrm{Li}^+}$ rail just as legitimately as on the $V_{\mathrm{e}^-}$ rail.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 460px">
+{% include "esbd-diagrams/esbd-kin-driven.njk" %}
 {% figcaption %}
-PROPOSED FIGURE (driven electrode in space): a spatial ESBD of one electrode under load — the $V_{\mathrm{e}^-}$ step at the interface (surface overpotential), plus the reaction level $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ bending away from the electrode as concentrations polarize ($E_{\mathrm{eq}}$ becoming a field, as promised in the Electrode potential topic). Slider: current. Could also serve as the optional "driven case" figure for e.md.
+One electrode under load, in space. The step at the interface is the surface overpotential; near the electrode the reaction's implied level bends as concentrations polarize across the diffusion layer, and everything in solution tilts ohmically — $E_{\mathrm{eq}}$ has become a field, as promised in [Electrode potential](../e/). Magnitudes are cartoon-sized.
 {% endfigcaption %}
 </figure>
 
