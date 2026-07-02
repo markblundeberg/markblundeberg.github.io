@@ -24,7 +24,7 @@ On the diagram this is a story of four levels — the metal's $V_{\mathrm{e}^-}$
 <figure class="demo-container" style="max-width: 420px">
 {% include "esbd-diagrams/levels-e-fourlevel.njk" %}
 {% figcaption %}
-Electrode potential at equilibrium, as four levels. The metal's $V_{\mathrm{e}^-}$ and the reaction's $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ coincide; below sit the reaction's standard level $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ and the reference $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$. The electrode potential $E$ is the gap from the (coincident) electron level down to the SHE level. (Drawn for a generic one-electron couple with $E^\circ = 0.77$ V and $a_{\mathrm{Ox}}/a_{\mathrm{Red}} = 10^3$; the diagram's zero is placed at the SHE level.)
+Electrode potential at equilibrium, as four levels. The metal's $V_{\mathrm{e}^-}$ and the reaction's $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ coincide; below sit the reaction's standard level $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ and the reference $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$. The electrode potential $E$ is the gap from the (coincident) electron level down to the SHE level.
 {% endfigcaption %}
 </figure>
 

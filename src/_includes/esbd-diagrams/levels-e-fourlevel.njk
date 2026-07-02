@@ -20,7 +20,9 @@
             { id: 'elec', label: 'Electrode' },
             { id: 'soln', label: 'Solution' },
         ],
-        bandMinPaddingOuter: { left: 8, right: 108 }, // V°(Ox/Red)-length labels
+        showYTicks: false,
+        bandPaddingOuter: 0.5,
+        bandMinPaddingOuter: { left: 15, right: 80 }, // V°(Ox/Red)-length labels
         bandMinPaddingInner: 34, // metal V_e- label hangs in the inter-band gap
     });
 
@@ -62,7 +64,14 @@
     ]);
     diagram.setArrows([
         {
-            arrowId: 'E',
+            arrowId: 'Emet',
+            fromLevelId: 'metal',
+            toLevelId: 'she',
+            label: 'E',
+            arrowStyle: '<->',
+        },
+        {
+            arrowId: 'Esoln',
             fromLevelId: 'rxn',
             toLevelId: 'she',
             label: 'E',
