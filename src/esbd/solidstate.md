@@ -25,9 +25,10 @@ A standard semiconductor {% wiki "energy band diagram", "band diagram" %} plots 
 * the conduction band edge ($V^\circ_{\mathrm{e}^-}$) sits at the **bottom**,
 * the valence band edge ($V^\circ_{\mathrm{h}^+}$) sits at the **top**.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 700px">
+{% include "esbd-diagrams/esbd-solidstate-flip.njk" %}
 {% figcaption %}
-Side by side: a standard semiconductor energy band diagram (energy up, conduction band on top) and the same situation as an ESBD (voltage up, conduction band on the bottom). It is a simple vertical flip.
+Side by side: a standard semiconductor energy band diagram (energy up, conduction band on top) and the same situation as an ESBD (voltage up, conduction band on the bottom). It is a simple vertical flip. (The situation: an n-type semiconductor with graded doping, at equilibrium — the Fermi level $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$ is flat while the band edges bend.)
 {% endfigcaption %}
 </figure>
 

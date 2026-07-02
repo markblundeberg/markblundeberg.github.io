@@ -21,9 +21,10 @@ $$ E = V_{\mathrm{e}^-}(\text{electrode}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})
 
 On the diagram this is a story of four levels — the metal's $V_{\mathrm{e}^-}$ and the reaction's $V_{\mathrm{e}^-}$ (sitting one on top of the other), the reaction's standard level $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$, and the reference $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ — and $E$ is just one marked vertical distance among them.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 420px">
+{% include "esbd-diagrams/levels-e-fourlevel.njk" %}
 {% figcaption %}
-Electrode potential at equilibrium, as four levels. The metal's $V_{\mathrm{e}^-}$ and the reaction's $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ coincide; below sit the reaction's standard level $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ and the reference $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$. The electrode potential $E$ is the gap from the (coincident) electron level down to the SHE level.
+Electrode potential at equilibrium, as four levels. The metal's $V_{\mathrm{e}^-}$ and the reaction's $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ coincide; below sit the reaction's standard level $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ and the reference $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$. The electrode potential $E$ is the gap from the (coincident) electron level down to the SHE level. (Drawn for a generic one-electron couple with $E^\circ = 0.77$ V and $a_{\mathrm{Ox}}/a_{\mathrm{Red}} = 10^3$; the diagram's zero is placed at the SHE level.)
 {% endfigcaption %}
 </figure>
 
@@ -47,7 +48,8 @@ $$
 
 The equation holds locally: every level is read off at the same spot in the solution.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 420px">
+{% include "esbd-diagrams/levels-e-nernst.njk" %}
 {% figcaption %}
 The Nernst equation as a three-level partition. $E$ is the gap from the reaction level to the reference; $E^\circ$ is the gap from the reaction's standard level to the reference; and the activity term is the gap between the reaction level and its own standard level. A slider on the $\mathrm{Ox}/\mathrm{Red}$ activities slides the top level.
 {% endfigcaption %}

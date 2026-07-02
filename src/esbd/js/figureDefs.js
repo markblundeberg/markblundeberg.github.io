@@ -17,6 +17,7 @@
 /** Charge carriers: { z, color, mathLabel }. */
 export const SPECIES = {
     electron: { z: -1, color: '#377EB8', mathLabel: '\\mathrm{e}^{-}' },
+    hole: { z: 1, color: '#E4571A', mathLabel: '\\mathrm{h}^{+}' },
     lithium: { z: 1, color: '#E41A1C', mathLabel: '\\mathrm{Li}^{+}' },
     sodium: { z: 1, color: '#d87E37', mathLabel: '\\mathrm{Na}^{+}' },
     potassium: { z: 1, color: '#B84E63', mathLabel: '\\mathrm{K}^{+}' },

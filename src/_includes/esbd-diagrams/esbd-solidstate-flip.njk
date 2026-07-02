@@ -1,0 +1,100 @@
+{% set idprefix = "esbd-solidstate-flip" %}
+<div style="display: flex; flex-wrap: wrap; justify-content: space-evenly; gap: 8px">
+<div style="flex: 1; min-width: 240px; max-width: 320px">
+<div style="text-align: center; font-size: 0.85em">Standard band diagram</div>
+<div class="bd-container" id="{{idprefix}}-energy" style="height: 230px; border: 1px solid #eee"></div>
+</div>
+<div style="flex: 1; min-width: 240px; max-width: 320px">
+<div style="text-align: center; font-size: 0.85em">ESBD</div>
+<div class="bd-container" id="{{idprefix}}-esbd" style="height: 230px; border: 1px solid #eee"></div>
+</div>
+</div>
+
+<script type="module">
+    import BandDiagram from '{{ esbdJsPath }}BandDiagram.js';
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { linspace } from '{{ esbdJsPath }}utils.js';
+
+    // One equilibrium situation, two views. An n-type semiconductor with graded
+    // doping (donor density rising to the right): the Fermi level is flat at
+    // equilibrium while the band edges bend. All energies/voltages schematic (a.u.).
+    const boundaries = [0, 1];
+    const regions = [{ ...REGION.semiconductor, name: 'Semiconductor' }];
+
+    const x = linspace(0, 1, 41);
+    const smooth = x.map((t) => t * t * (3 - 2 * t));
+    const E_C = smooth.map((s) => 0.95 - 0.4 * s); // conduction edge (electron energy)
+    const E_V = E_C.map((e) => e - 1.3); // valence edge, gap 1.3
+    const flat = [0, 0]; // Fermi level E_F = 0
+    const xFlat = [0, 1];
+
+    // Left: electron energy increases upward.
+    const energy = new BandDiagram('{{idprefix}}-energy', {
+        yMode: 'abstract',
+        margins: { right: 70 },
+    });
+    energy.setSpatialLayout(boundaries, regions);
+    energy.setYLabel('Electron energy');
+    energy.setYRange(-0.85, 1.1);
+    energy.updateTraceData([
+        {
+            id: 'ec',
+            label: 'E_\\mathrm{C}',
+            color: '#333',
+            style: { lineWidth: 2 },
+            x: x,
+            y: E_C,
+        },
+        {
+            id: 'ef',
+            label: 'E_\\mathrm{F}',
+            color: '#333',
+            style: { lineWidth: 2, dasharray: '4,3' },
+            x: xFlat,
+            y: flat,
+        },
+        {
+            id: 'ev',
+            label: 'E_\\mathrm{V}',
+            color: '#333',
+            style: { lineWidth: 2 },
+            x: x,
+            y: E_V,
+        },
+    ]);
+
+    // Right: the same lines as voltages, V = -E in these units — a vertical flip.
+    const esbd = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-esbd',
+        { electron: SPECIES.electron, hole: SPECIES.hole },
+        { yMode: 'abstract', margins: { right: 70 } }
+    );
+    esbd.setSpatialLayout(boundaries, regions);
+    esbd.diagram.setYLabel('Species voltage');
+    esbd.setVRange(-1.1, 0.85);
+    esbd.updateTraceData([
+        {
+            id: 'vh_std',
+            speciesId: 'hole',
+            curveType: 'standardState',
+            x: x,
+            y: E_V.map((e) => -e), // valence edge: now the TOP rung
+        },
+        {
+            id: 've',
+            speciesId: 'electron',
+            curveType: 'voltage',
+            label: 'V_{\\mathrm{e}^-}{=}V_{\\mathrm{h}^+}',
+            x: xFlat,
+            y: flat,
+        },
+        {
+            id: 've_std',
+            speciesId: 'electron',
+            curveType: 'standardState',
+            x: x,
+            y: E_C.map((e) => -e), // conduction edge: now the BOTTOM rung
+        },
+    ]);
+</script>

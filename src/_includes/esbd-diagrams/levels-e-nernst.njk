@@ -1,0 +1,98 @@
+{% set idprefix = "levels-e-nernst" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 250px"></div>
+{{ controls.slider(idprefix + "-ratio-slider", "Activity ratio $a_{\\mathrm{Ox}}/a_{\\mathrm{Red}}$", { min: -5, max: 5, step: 1, value: 3, snap: 0, readout: true }) }}
+
+<script type="module">
+    import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
+    import { SPECIES } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, renderSpanMath } from '{{ esbdJsPath }}utils.js';
+
+    const BLUE = SPECIES.electron.color;
+    // Same generic one-electron couple as the four-level figure above:
+    // E° = 0.77 V vs SHE; slider sets a_Ox/a_Red = 10^n, activity term
+    // = n × RT/F·ln10 = n × 0.05916 V (25 °C).
+    const RT_F_LN10 = 0.05916;
+    const E_std = 0.77;
+
+    const readout = document.getElementById(
+        '{{idprefix}}-ratio-slider-readout'
+    );
+
+    const diagram = new EnergyLevelsDiagram('{{idprefix}}-container', {
+        yAxisLabel: 'Voltage $V_{\\mathrm{e}^-}$ (V)',
+        yRange: [-0.12, 1.12],
+        categories: [{ id: 'soln', label: 'Solution' }],
+        margins: { top: 8, right: 118, bottom: 24, left: 50 },
+    });
+
+    function update(logRatio) {
+        renderSpanMath(readout, `10^{${logRatio}}`);
+        const act = RT_F_LN10 * logRatio;
+        const V_rxn = E_std + act;
+
+        diagram.setLevels([
+            {
+                categoryId: 'soln',
+                levelId: 'rxn',
+                yValue: V_rxn,
+                label: 'V_{\\mathrm{e}^-}(\\mathrm{Ox}/\\mathrm{Red})',
+                color: BLUE,
+                style: { lineWidth: 3, dasharray: '3,3' },
+                labelVAlign: 'bottom',
+            },
+            {
+                categoryId: 'soln',
+                levelId: 'std',
+                yValue: E_std,
+                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{Ox}/\\mathrm{Red})',
+                color: BLUE,
+                style: { lineWidth: 1, dasharray: '3,3' },
+                labelVAlign: 'top',
+            },
+            {
+                categoryId: 'soln',
+                levelId: 'she',
+                yValue: 0,
+                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{SHE})',
+                color: BLUE,
+                style: { lineWidth: 1, dasharray: '3,3' },
+            },
+        ]);
+
+        // E on the left; its partition E° + activity term on the right.
+        const arrows = [
+            {
+                arrowId: 'E',
+                fromLevelId: 'rxn',
+                toLevelId: 'she',
+                label: 'E',
+                arrowStyle: '<->',
+                dxFrac: -0.22,
+                labelHAlign: 'right',
+            },
+            {
+                arrowId: 'E0',
+                fromLevelId: 'std',
+                toLevelId: 'she',
+                label: 'E^\\circ',
+                arrowStyle: '<->',
+                dxFrac: 0.22,
+            },
+        ];
+        if (Math.abs(logRatio) >= 0.5) {
+            arrows.push({
+                arrowId: 'act',
+                fromLevelId: 'std',
+                toLevelId: 'rxn',
+                label: '\\tfrac{RT}{zF}\\ln\\tfrac{a_{\\mathrm{Ox}}}{a_{\\mathrm{Red}}}',
+                arrowStyle: '<->',
+                dxFrac: 0.22,
+                labelHAlign: 'right',
+            });
+        }
+        diagram.setArrows(arrows);
+    }
+
+    makeSlider('{{idprefix}}-ratio-slider', update);
+</script>

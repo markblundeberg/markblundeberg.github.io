@@ -27,6 +27,10 @@ Do NOT screenshot against `eleventy --serve` (hot-reload mangles D3). Do:
 `?static` zeroes the fade/transition durations so the figure paints fully on the
 first frame — no more re-shoot loops. Keep images < 2000px (the Read limit). For
 a single figure in isolation, use the `/figtest/<name>/?static` gallery page.
+**Gotcha:** at `--force-device-scale-factor=2`, headless chromium flakily
+rasterizes the KaTeX `foreignObject` labels (any diagram type) as blank white
+boxes. If labels shoot blank, use `1.5` — it's a headless rendering quirk, not
+a figure bug (verified 2026-07-01).
 
 ## Figure conventions
 - **An include emits ONLY the figure mechanism** (the `bd-container` div, any

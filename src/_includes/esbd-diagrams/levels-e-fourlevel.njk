@@ -1,0 +1,71 @@
+{% set idprefix = "levels-e-fourlevel" %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 250px"></div>
+
+<script type="module">
+    import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
+    import { SPECIES } from '{{ esbdJsPath }}figureDefs.js';
+
+    const BLUE = SPECIES.electron.color;
+    // Generic one-electron couple. E° = 0.77 V vs SHE; a_Ox/a_Red = 10^3, so the
+    // activity term is 3 decades × RT/F·ln10 = 3 × 0.05916 V (25 °C). Same
+    // numbers as the Nernst-partition figure below, whose slider defaults to 10^3.
+    const RT_F_LN10 = 0.05916;
+    const E_std = 0.77;
+    const V_rxn = E_std + 3 * RT_F_LN10;
+
+    const diagram = new EnergyLevelsDiagram('{{idprefix}}-container', {
+        yAxisLabel: 'Voltage $V_{\\mathrm{e}^-}$ (V)',
+        yRange: [-0.12, 1.12],
+        categories: [
+            { id: 'elec', label: 'Electrode' },
+            { id: 'soln', label: 'Solution' },
+        ],
+        margins: { top: 8, right: 118, bottom: 24, left: 50 },
+    });
+
+    // Line styles mirror the ESBD conventions: thick solid = actual V_e-,
+    // thick dashed = implied (reaction) level, thin dashed = implied standard level.
+    diagram.setLevels([
+        {
+            categoryId: 'elec',
+            levelId: 'metal',
+            yValue: V_rxn,
+            label: 'V_{\\mathrm{e}^-}',
+            color: BLUE,
+            style: { lineWidth: 3 },
+        },
+        {
+            categoryId: 'soln',
+            levelId: 'rxn',
+            yValue: V_rxn,
+            label: 'V_{\\mathrm{e}^-}(\\mathrm{Ox}/\\mathrm{Red})',
+            color: BLUE,
+            style: { lineWidth: 3, dasharray: '3,3' },
+        },
+        {
+            categoryId: 'soln',
+            levelId: 'std',
+            yValue: E_std,
+            label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{Ox}/\\mathrm{Red})',
+            color: BLUE,
+            style: { lineWidth: 1, dasharray: '3,3' },
+        },
+        {
+            categoryId: 'soln',
+            levelId: 'she',
+            yValue: 0,
+            label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{SHE})',
+            color: BLUE,
+            style: { lineWidth: 1, dasharray: '3,3' },
+        },
+    ]);
+    diagram.setArrows([
+        {
+            arrowId: 'E',
+            fromLevelId: 'rxn',
+            toLevelId: 'she',
+            label: 'E',
+            arrowStyle: '<->',
+        },
+    ]);
+</script>

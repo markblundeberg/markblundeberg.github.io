@@ -278,7 +278,7 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             label: d.level.label,
             mathMode: true,
             hAlign: 'left',
-            vAlign: 'center',
+            vAlign: d.level.labelVAlign || 'center',
         }));
 
         this.drawLabelsFancy({
@@ -302,18 +302,23 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             levelPositionsMap.set(level.id, level);
 
         // 1. Filtermap: Prepare data for drawing (only valid arrows with coordinates)
+        const bandwidth = this.xScale.bandwidth();
         const drawableArrowData = [];
         for (const arrowDef of arrowData) {
             const pos1 = levelPositionsMap.get(arrowDef.fromLevelId);
             const pos2 = levelPositionsMap.get(arrowDef.toLevelId);
             if (!(pos1 && pos2)) continue;
+            // dxFrac: horizontal offset as a fraction of the category bandwidth,
+            // so several arrows within one category don't overlap.
+            const dx = (arrowDef.dxFrac || 0) * bandwidth;
             drawableArrowData.push({
                 arrowId: arrowDef.arrowId,
-                x1: pos1.xCenter,
+                x1: pos1.xCenter + dx,
                 y1: pos1.y,
-                x2: pos2.xCenter,
+                x2: pos2.xCenter + dx,
                 y2: pos2.y,
                 label: arrowDef.label, // Raw LaTeX
+                labelHAlign: arrowDef.labelHAlign || 'left',
                 arrowStyle: arrowDef.arrowStyle || '->', // Default to forward arrow
                 color: arrowDef.color || '#555', // Default arrow color
             });
@@ -349,7 +354,7 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             .map((d) => ({
                 ...d,
                 mathMode: true,
-                hAlign: 'left',
+                hAlign: d.labelHAlign,
                 vAlign: 'center',
             }));
 
@@ -363,7 +368,7 @@ class EnergyLevelsDiagram extends ResponsivePlot {
                     .attr(
                         'transform',
                         (d) =>
-                            `translate(${(d.x1 + d.x2) / 2 + 5}, ${(d.y1 + d.y2) / 2})`
+                            `translate(${(d.x1 + d.x2) / 2 + (d.labelHAlign === 'right' ? -6 : 5)}, ${(d.y1 + d.y2) / 2})`
                     )
                     .select('span.rp-label-span')
                     .style('color', (d) => d.color),
