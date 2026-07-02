@@ -1,0 +1,129 @@
+{% set idprefix = "kin-bv-explainer" %}
+{% import "macros/controls.njk" as controls %}
+<div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center">
+    <div class="bd-container" id="{{idprefix}}-levels" style="flex: 1 1 210px; height: 250px; max-width: 300px"></div>
+    <div class="bd-container" id="{{idprefix}}-iv" style="flex: 1 1 240px; height: 250px; max-width: 340px"></div>
+</div>
+{{ controls.slider(idprefix + "-eta", "Overpotential $\\eta$", { min: -0.12, max: 0.12, step: "any", value: 0.05, snap: 0, readout: true, unit: "V" }) }}
+{{ controls.slider(idprefix + "-alpha", "Symmetry $\\alpha$", { min: 0, max: 1, step: "any", value: 0.5, snap: 0.5, readout: true }) }}
+
+<script type="module">
+    import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
+    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
+    import { SPECIES } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+
+    const BLUE = SPECIES.electron.color;
+    // Butler-Volmer, one-electron: J/J0 = exp(α f η) − exp(−(1−α) f η),
+    // f = F/RT = 38.92 V⁻¹ at 25 °C. α = 1 gives the Shockley diode law.
+    const f = 38.92;
+    const V_RXN = 0.5; // arbitrary; the levels panel has an abstract axis
+    const JMAX = 15; // I–V panel y-limit; traces are trimmed where they exit
+
+    const levels = new EnergyLevelsDiagram('{{idprefix}}-levels', {
+        yAxisLabel: 'Voltage $V_{\\mathrm{e}^-}$',
+        yRange: [0.33, 0.69],
+        categories: [
+            { id: 'elec', label: 'Electrode' },
+            { id: 'soln', label: 'Solution' },
+        ],
+        showYTicks: false,
+        bandPaddingOuter: 0.5,
+        bandMinPaddingOuter: { left: 15, right: 100 },
+        bandMinPaddingInner: 30,
+    });
+
+    const iv = new XYPlot('{{idprefix}}-iv', {
+        xLabel: 'Overpotential $\\eta$ (V)',
+        yLabel: 'Current $J/J_0$',
+        xRange: [-0.12, 0.12],
+        yRange: [-JMAX, JMAX],
+        margins: { bottom: 34, left: 42, right: 10 },
+    });
+
+    const FAINT = { lineWidth: 1.25, opacity: 0.55 };
+
+    function update() {
+        const eta = parseFloat(etaEl.value);
+        const alpha = parseFloat(alphaEl.value);
+        const J = (e) => Math.exp(alpha * f * e) - Math.exp(-(1 - alpha) * f * e);
+
+        levels.setLevels([
+            {
+                categoryId: 'elec',
+                levelId: 'metal',
+                yValue: V_RXN + eta,
+                label: 'V_{\\mathrm{e}^-}',
+                color: BLUE,
+                style: { lineWidth: 3 },
+            },
+            {
+                categoryId: 'soln',
+                levelId: 'rxn',
+                yValue: V_RXN,
+                label: 'V_{\\mathrm{e}^-}(\\mathrm{Ox}/\\mathrm{Red})',
+                color: BLUE,
+                style: { lineWidth: 3, dasharray: '3,3' },
+            },
+        ]);
+        levels.setArrows([
+            {
+                arrowId: 'eta',
+                fromLevelId: 'rxn',
+                toLevelId: 'metal',
+                label: '\\eta',
+                arrowStyle: '->',
+            },
+        ]);
+
+        // trim each trace where it leaves the y-range (the exponential
+        // genuinely blows through the roof; let it exit mid-plot)
+        const xs = linspace(-0.12, 0.12, 241);
+        const trim = (fn) => {
+            const x = [], y = [];
+            for (const e of xs) {
+                const v = fn(e);
+                if (Math.abs(v) <= JMAX) { x.push(e); y.push(v); }
+            }
+            return { x, y };
+        };
+        const tJ = trim(J);
+        const tA = trim((e) => Math.exp(alpha * f * e));
+        const tC = trim((e) => -Math.exp(-(1 - alpha) * f * e));
+        iv.updateTraceData([
+            {
+                id: 'anodic',
+                ...tA,
+                color: BLUE,
+                style: FAINT,
+                label: 'J_{\\mathrm{a}}',
+                labelFrac: 0.93,
+                labelHAlign: 'right',
+            },
+            {
+                id: 'cathodic',
+                ...tC,
+                color: '#E4571A',
+                style: FAINT,
+                label: '-J_{\\mathrm{c}}',
+                labelFrac: 0.07,
+            },
+            { id: 'J', ...tJ, color: '#333', style: { lineWidth: 2.5 }, label: '' },
+        ]);
+        const Jnow = J(eta);
+        iv.updateMarkers(
+            Math.abs(Jnow) <= JMAX
+                ? [{ id: 'op', x: eta, y: Jnow, color: '#333' }]
+                : []
+        );
+
+        document.getElementById('{{idprefix}}-eta-readout').textContent =
+            eta.toFixed(2);
+        document.getElementById('{{idprefix}}-alpha-readout').textContent =
+            alpha.toFixed(2);
+    }
+
+    const etaEl = makeSlider('{{idprefix}}-eta', update, { fire: false });
+    const alphaEl = makeSlider('{{idprefix}}-alpha', update, { fire: false });
+    update();
+</script>

@@ -96,4 +96,4 @@ Could we sidestep all this by referencing to the vacuum instead — an "absolute
 
 A reference electrode is a device for pinning one $V^\circ_{\mathrm{e}^-}(\mathrm{rxn})$ level so a working electrode's $V_{\mathrm{e}^-}$ can be read against it; a cell is two such electrodes; and a junction between them adds a liquid-junction step. The whole zoo of "potentials" — electrode potential, solution potential, cell voltage, liquid junction potential, the absolute reference — are particular gaps among the $V_{\mathrm{e}^-}$ and $V^\circ_{\mathrm{e}^-}$ levels, and the $V_i$ diagram simply shows them as the separate lines they always were.
 
-[**NEXT TOPIC: Redox-flow batteries**](../redoxflow/)
+[**NEXT TOPIC: Interface kinetics**](../kinetics/)
