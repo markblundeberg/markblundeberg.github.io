@@ -41,10 +41,8 @@ The rabbit holes -- appendices, advanced topics, notes:
 
 *Electrostatics*:
 
-- [_Electrostatics_](x) - How $V^\circ_i$ and $\phi$ vary with position. Poisson's equation, screening, band bending.
 - [_Quasi-charge-neutrality_](/esbd/qcn/) - The flexible tyranny of long-range electrostatics.
-- [_Interfaces_](x) - Interfaces between materials. Electric double layers. Insulators and capacitance.
-- [_Electrostatic subtleties_](x) - Graded interfaces: quasi-electric fields vs "real" electric field. Does $\phi$ represent real electrostatics?
+- [_Inhomogeneities and electrostatics_](/esbd/inhomog/) - Graded interfaces and quasi-electric fields; does $\phi$ represent real electrostatics? Plus the full beyond-the-simple-case catalog.
 
 *Thermodynamics*:
 - [_Understanding electrochemical potential_](/esbd/muintro/) - Why $\bar\mu_i$ is the real, indivisible chemical potential — and why that makes $V_i$ (and band diagrams) work.

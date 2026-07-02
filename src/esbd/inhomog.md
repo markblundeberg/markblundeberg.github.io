@@ -74,4 +74,25 @@ Although the $\phi$ ambiguity means $-\nabla \phi$ is a subjective electric fiel
 ## 
 
 
+## Beyond the simple case: the catalog
+
+Above we described an incredibly elementary form of screening: an ideal homogeneous linear dielectric medium with a nice ideal dependence of charge carrier accumulation on $\phi$, which led to relatively trivial results like the Poisson Boltzmann screening equation. In general, electrostatics is a far harder problem and requires much more information:
+
+* Almost anything can get very messy:
+  * Simple interfaces (e.g. electrodes, or heterojunctions): beyond the basic alignment above, pinning down the *value* of the offset from first principles is hard — the "vacuum contact" / contact-potential-difference rule of thumb is notoriously unreliable in semiconductors.
+  * Patchy and non-planar interfaces: Electrostatics is fundamentally a three dimensional problem, and even 'planar' interfaces tend to be microsopically irregular. Both microscopic irregularities in the geometry and irregularity in $\phi$ alignment of the interface will produce a complex three dimensional electrostatic situation.
+  * Interface-specific charges: While the intrinsic interfacial dipoles get a lot of attention, it's worth noting that built-in monopolar charges are also possible. These can be static and dopant-like (e.g. fixed oxide charges at the Si/SiO2 interface) or they can be specific interface (e.g. metal-induced gap states, electronic {% wiki "surface states" %}, specific ion adsorption)
+* Graded media (as used in the {% wiki "heterojunction bipolar transistor" %}): These are effectively slow distributed interfaces, which means all the problems of the interface exist through a whole continuum region. $\phi$ and $V^\circ_i$ now all vary differently. Charge carriers only see "quasi-electric fields" $-\nabla V^\circ_i$ which differ from each other and from the "real" electric field $-\nabla\phi$.
+* Nano geometry: For example in conductors which are very thin (such as a graphene {% wiki "2D electron gas" %}), the active material can only screen and conduct in two dimensions but electrostatics remains three dimensional. Such conductors have no quasi-neutral bulk, they are 'all interface'.
+* Non-ideal conductors (concentrated electrolytes): in order to establish an $E$ field it becomes necessary to nail down single-ion activity coefficients, which are completely unavailable from measurements of bulk charge-neutral solutions. (though ultimately, the $D$ field is the goal)
+* Complex constitutive relations ($\mathbf{D} \neq \varepsilon \mathbf{E}$ for many reasons, that cannot be described by any linear 'effective $\varepsilon$'):
+  * Static dipoles: Especially at interfaces but also inside of graded media.
+  * Chemical gradient dipoles: Where there is a strong gradient in chemical concentration, it is perfectly possible for there to be induced dipoles.
+  * Ambiguous $E$ field: The Gibbs–Guggenheim principle that the value of $\phi$ is ambiguous means that in many complex cases, even $\mathbf{E} = -\nabla\phi$ is ambiguous. This is permitted in Maxwell's equations, but crucially the $\mathbf{D}$ field is not affected by this thermodynamic-type ambiguity. Thus $\mathbf{D}$ becomes partially independent of $\mathbf{E}$.
+* Local linear continuum breakdown:
+  * Very short ranges: even in linear response both charge density and $\varepsilon$ can get nonlocal. (Fermi gas gets Friedel oscillations; ions get pair correlations etc.; solvent exhibits a correlation length and 'overscreening')
+  * High electric fields: In general, the dielectric response of a solvent is nonlinear ({% wiki "dielectric saturation" %}). Note though that dielectric saturation in an electric double layer tends to occur in the same conditions that the aforementioned non-local effects also appear, so it becomes a real mess!
+  * Local thermodynamic equilibrium breakdown: $V_i$ itself can become ill-defined or requires further refinement in meaning when there is a combination of both small scales and strong driving conditions.
+
+
 ## Takeaways
