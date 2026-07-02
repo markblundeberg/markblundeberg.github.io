@@ -1,0 +1,113 @@
+{% set idprefix = "esbd-es-defect" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-band" style="height: 230px"></div>
+<div class="bd-container" id="{{idprefix}}-rho" style="height: 130px"></div>
+{{ controls.slider(idprefix + "-q", "Defect charge", { min: -1, max: 1, step: "any", value: 0.7, snap: 0, readout: true }) }}
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+
+    // A charged sheet defect at x = 0.5 in a NaCl solution, screened by the
+    // mobile ions (linearized): phi(x) = A·q·exp(−|x−0.5|/λ). The V_i ride
+    // flat; the whole V°_i ladder bends with phi. Lower panel: the defect's
+    // own charge (narrow spike) and the equal-and-opposite screening cloud
+    // ρ = −χφ spread over the screening length λ.
+    const LAM = 0.07;
+    const AMP = 0.22; // volts of phi per unit defect charge
+    const V_NA = 0.62,
+        V_CL = 0.38; // flat carrier levels (rung spacing compressed)
+
+    const band = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-band',
+        { cation: SPECIES.sodium, anion: SPECIES.chloride },
+        { margins: { right: 56 } }
+    );
+    band.setSpatialLayout([0, 1], [REGION.solution]);
+    band.setVRange(0.05, 0.95);
+
+    const rho = new XYPlot('{{idprefix}}-rho', {
+        xLabel: '',
+        yLabel: 'Charge density',
+        xRange: [0, 1],
+        yRange: [-1.15, 1.15],
+        xMode: 'abstract',
+        yMode: 'abstract',
+        margins: { top: 4, bottom: 12, left: 26, right: 56 },
+    });
+
+    const xs = linspace(0, 1, 161);
+
+    function update(q) {
+        document.getElementById('{{idprefix}}-q-readout').textContent =
+            q.toFixed(1);
+        const phi = (x) => AMP * q * Math.exp(-Math.abs(x - 0.5) / LAM);
+
+        band.updateTraceData([
+            {
+                id: 'vna',
+                speciesId: 'cation',
+                curveType: 'voltage',
+                x: [0, 1],
+                y: [V_NA, V_NA],
+            },
+            {
+                id: 'vna0',
+                speciesId: 'cation',
+                curveType: 'standardState',
+                x: xs,
+                y: xs.map((x) => V_NA + 0.12 + phi(x)),
+            },
+            {
+                id: 'vcl0',
+                speciesId: 'anion',
+                curveType: 'standardState',
+                x: xs,
+                y: xs.map((x) => V_CL - 0.12 + phi(x)),
+            },
+            {
+                id: 'vcl',
+                speciesId: 'anion',
+                curveType: 'voltage',
+                x: [0, 1],
+                y: [V_CL, V_CL],
+            },
+        ]);
+
+        // defect spike (fixed narrow gaussian) + screening cloud (−χφ shape)
+        rho.updateTraceData([
+            {
+                id: 'zero',
+                x: [0, 1],
+                y: [0, 0],
+                color: '#bbb',
+                style: { lineWidth: 1 },
+                showLabel: false,
+            },
+            {
+                id: 'defect',
+                x: [...xs],
+                y: xs.map(
+                    (x) => q * Math.exp(-(((x - 0.5) / 0.012) ** 2))
+                ),
+                color: '#555',
+                style: { lineWidth: 1.5 },
+                label: '\\text{defect}',
+                labelFrac: 0.5,
+            },
+            {
+                id: 'cloud',
+                x: [...xs],
+                y: xs.map((x) => (-0.55 * q * Math.exp(-Math.abs(x - 0.5) / LAM))),
+                color: '#7a5fb5',
+                style: { lineWidth: 2 },
+                label: '\\text{screening cloud}',
+                labelFrac: 0.78,
+            },
+        ]);
+    }
+
+    makeSlider('{{idprefix}}-q', update);
+</script>

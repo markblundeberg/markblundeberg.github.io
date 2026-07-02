@@ -27,14 +27,10 @@ where $\varepsilon$ is the material's background permittivity and $\rho_{\mathrm
 
 One of the beautiful things about band diagrams is the perspective they give on screening: the $V_i$ are flat, and the accumulation of charges is purely due to the variation in $\phi$ or $V^\circ_i$, known as **band bending** in semiconductors:
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 460px">
+{% include "esbd-diagrams/esbd-es-defect.njk" %}
 {% figcaption %}
-- $V^\circ_i$ screening around a defect left and right.
-- slider controls defect charge
-- (1D)
-- subplot: charge density
-
-If a sharp charged defect is introduced inside a conductor, then mobile carriers naturally move in to cancel out the defect.
+A sharp charged defect introduced inside a conductor (here a salt solution), and the mobile carriers moving in to cancel it: the whole $V^\circ_i$ ladder bulges with $\phi$ over a screening length while the $V_i$ ride flat. Below, the defect's own charge and the equal-and-opposite screening cloud it gathers.
 {% endfigcaption %}
 </figure>
 
