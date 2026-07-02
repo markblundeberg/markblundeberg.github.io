@@ -92,9 +92,10 @@ Steady state is not the only place these ideas live. Picture a blob of salt left
 
 The coupling reaches past the spreading salt itself. A third, dilute species drifts in that same diffusion-potential field, so a tracer ion or a charged colloid can be carried along by another salt's gradient, even drawn *up* it, an effect known as {% wiki "diffusiophoresis" %}. The same mechanism runs inside a lithium-ion electrode: there the electrons are so much faster than the $\mathrm{Li}^+$ that it is the electrons who are held back, and the pair migrates as though neutral lithium were diffusing through the material, with no need to name a $\phi$ anywhere inside it.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 480px">
+{% include "esbd-diagrams/esbd-tb-saltblob.njk" %}
 {% figcaption %}
-A blob of salt spreading by diffusion (an animation of widening Gaussians). The faster ion is held back by the slower through the diffusion-potential field, so the salt moves as one; a dilute tracer is swept along by the same field.
+A blob of salt spreading by diffusion — scrub time with the slider. The two ions spread as one Gaussian (the ambipolar $D$); on the band diagram the diffusion-potential field shows up as the two $V_i$ features, with the *slower* ion carrying the larger one (it needs the bigger push to keep up). A dilute tracer is swept along by the same field.
 {% endfigcaption %}
 </figure>
 
