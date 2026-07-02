@@ -255,7 +255,6 @@ class XYPlot extends ResponsivePlot {
             cssClass: 'xy-trace',
             data: this.tracesData,
             dataKey: (d) => d.id,
-            onNew: (s) => s.attr('fill', 'none'),
             onUpdateTransition: (s) =>
                 s
                     .attr('d', (d) =>
@@ -264,7 +263,11 @@ class XYPlot extends ResponsivePlot {
                     .attr('stroke', (d) => d.color)
                     .attr('stroke-width', (d) => d.style.lineWidth ?? 2)
                     .attr('stroke-opacity', (d) => d.style.opacity ?? 1)
-                    .attr('stroke-dasharray', (d) => d.style.dasharray ?? null),
+                    .attr('stroke-dasharray', (d) => d.style.dasharray ?? null)
+                    // style.fillOpacity turns the trace into a filled area
+                    // (path left unclosed; endpoints define the closing edge)
+                    .attr('fill', (d) => (d.style.fillOpacity ? d.color : 'none'))
+                    .attr('fill-opacity', (d) => d.style.fillOpacity ?? null),
         });
     }
 
