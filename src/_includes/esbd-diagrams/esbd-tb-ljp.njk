@@ -10,13 +10,17 @@
     import { makeSlider, renderSpanMath, linspace } from '{{ esbdJsPath }}utils.js';
 
     // Steady liquid junction between concentrated (left, 0.1 M) and dilute
-    // (right, 1 mM) solutions of one 1:1 salt; the transition zone is the
-    // middle. Henderson for a binary salt: the whole V° ladder steps by
-    //   LJP = −(t+ − t−)(RT/F) ln(c_R/c_L),  t+ = D+/(D+ + D−);
-    // the ion splitting (V+ − V−) also narrows on the dilute side by
-    // 2·DEC·Δlog c (drawn about a compressed rung spacing). The slider is
-    // the mobility ratio: at D+ = D− the LJP vanishes; the default +0.9 is
-    // HCl-like (t+ ≈ 0.89).
+    // (right, 1 mM) solutions of one 1:1 salt. Analytic profiles (constant
+    // t±): steady state + neutrality force equal ion fluxes = ambipolar
+    // diffusion with constant D, so c(x) is LINEAR across the zone; then
+    // dφ = −(t+−t−)(RT/F) d ln c stacks with the activity terms to give
+    //   V+(x) = V+L + 2 t− (RT/F) ln[c(x)/c_L],
+    //   V−(x) = V−L − 2 t+ (RT/F) ln[c(x)/c_L],
+    //   ladder(x): −(t+−t−)(RT/F) ln[c(x)/c_L]  → LJP end to end.
+    // Slope-ratio invariant: dV+/dx : dV−/dx = −t−/t+ everywhere in the
+    // zone (flux check: c·D+·2t−·c'/c = const, and D+t− = D−t+). Curvature
+    // hugs the dilute end. Slider = mobility ratio; at D+ = D− the LJP
+    // vanishes; default +0.9 is HCl-like (t+ ≈ 0.89). Rungs compressed.
     const DEC = 0.05916;
     const DLOGC = -2; // log10(c_R/c_L)
     const MID = 0.5;
@@ -39,15 +43,20 @@
     ]);
     diagram.setVRange(0.1, 0.95);
 
-    const xs = linspace(0, 1, 121);
-    const sm = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
-    const prog = (x) => sm((x - 0.35) / 0.3); // 0 in left bulk → 1 in right
+    const xs = linspace(0, 1, 161);
+    const clamp01 = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t);
+    // linear salt profile across the junction zone, uniform in the bulks
+    const CRATIO = Math.pow(10, DLOGC); // c_R/c_L = 0.01
+    const crel = (x) => 1 + (CRATIO - 1) * clamp01((x - 0.35) / 0.3); // c/c_L
+    const lgrel = (x) => Math.log10(crel(x));
 
     function update(r) {
         const tp = Math.pow(10, r) / (Math.pow(10, r) + 1);
-        const ljp = -(2 * tp - 1) * DEC * DLOGC; // volts
-        const gap = (x) => GAP_R - 2 * DEC * DLOGC * (1 - prog(x)); // splitting
-        const phi = (x) => ljp * prog(x); // ladder offset, 0 on the left
+        const tm = 1 - tp;
+        const ljp = -(tp - tm) * DEC * DLOGC; // volts, end to end
+        const GAP_L = GAP_R - 2 * DEC * DLOGC; // splitting at the conc. end
+        const VPL = MID + GAP_L / 2,
+            VML = MID - GAP_L / 2; // left-bulk levels
 
         diagram.updateTraceData([
             {
@@ -55,7 +64,7 @@
                 speciesId: 'cation',
                 curveType: 'voltage',
                 x: [...xs],
-                y: xs.map((x) => MID + phi(x) + gap(x) / 2),
+                y: xs.map((x) => VPL + 2 * tm * DEC * lgrel(x)),
             },
             {
                 id: 'v0',
@@ -63,7 +72,7 @@
                 curveType: 'standardState',
                 label: 'V^\\circ_i',
                 x: [...xs],
-                y: xs.map((x) => MID + phi(x) - 0.02),
+                y: xs.map((x) => MID - 0.02 - (tp - tm) * DEC * lgrel(x)),
             },
             {
                 id: 'vm',
@@ -71,7 +80,7 @@
                 refShift: CL_SHIFT,
                 curveType: 'voltage',
                 x: [...xs],
-                y: xs.map((x) => MID + phi(x) - gap(x) / 2),
+                y: xs.map((x) => VML - 2 * tp * DEC * lgrel(x)),
             },
         ]);
 
