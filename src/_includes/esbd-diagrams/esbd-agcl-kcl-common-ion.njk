@@ -60,6 +60,12 @@
     const V_Ag_e = 0; // V_Ag+ - V_e- = mu_Ag / F   (which is 0)
     const V_AgCl = -109.79e3 / F; // V_Ag+ - V_Cl- = mu_AgCl/F (saturated AgCl) ~ -1.1 V
 
+    // refShift: anchoring the Ag/Cl/e- group (reaction-tied) as drawn-true,
+    // the K+ group is drawn 2.3 V above its IUPAC-referenced position so the
+    // figure doesn't need a 5.8 V-tall axis; 2.3 keeps it below the sliding
+    // H+ rung across the whole KCl sweep. Flagged with break glyphs.
+    const K_SHIFT = 2.3;
+
     // Ion standard states 'ladder'
     const V_std_H_H = 0; // reference point
     const V_std_Ag_H = +77.11e3 / F; // ~ +0.8 V
@@ -148,8 +154,9 @@
         const V_K_std = V_Cl_std + V_std_K_H - V_std_Cl_H;
         const V_NO3_std = V_Cl_std + V_std_NO3_H - V_std_Cl_H;
 
-        let V_K = -6;
-        if (c_K_plus != 0) V_K = V_K_std + +1 * Vth * Math.log(c_K_plus);
+        let V_K = -6; // sentinel: off-plot when no KCl added
+        if (c_K_plus != 0)
+            V_K = V_K_std + K_SHIFT + +1 * Vth * Math.log(c_K_plus);
 
         let V_NO3 = +4;
         if (c_NO3_minus != 0)
@@ -201,6 +208,7 @@
                 id: `K_trace`,
                 speciesId: 'k_ion',
                 curveType: 'voltage',
+                refShift: K_SHIFT,
                 showLabel: true,
                 x: [b[1], b[3]],
                 y: [V_K, V_K],
@@ -209,9 +217,10 @@
                 id: `K_std_trace`,
                 speciesId: 'k_ion',
                 curveType: 'standardState',
+                refShift: K_SHIFT,
                 showLabel: true,
                 x: [b[1], b[3]],
-                y: [V_K_std, V_K_std],
+                y: [V_K_std + K_SHIFT, V_K_std + K_SHIFT],
             },
             {
                 id: `H_std_trace`,
@@ -246,7 +255,8 @@
         if (zoomCheck.checked) {
             diagram.setVRange(V_el - 0.1, V_Cl + 0.1);
         } else {
-            diagram.setVRange(V_el - 4.2, V_el + 1.6);
+            // K+ shifted up means no more 5.8 V-tall axis
+            diagram.setVRange(V_el - 1.6, V_el + 1.6);
         }
     }
 
