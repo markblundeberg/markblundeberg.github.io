@@ -26,13 +26,17 @@ Do NOT screenshot against `eleventy --serve` (hot-reload mangles D3). Do:
 3. headless capture **with `?static`**:
    `chromium --headless --no-sandbox --disable-gpu --hide-scrollbars --force-device-scale-factor=2 --screenshot=/tmp/s.png --window-size=W,H --virtual-time-budget=8000 "http://127.0.0.1:8099/esbd/<page>/?static"`
 
-`?static` zeroes the fade/transition durations so the figure paints fully on the
-first frame — no more re-shoot loops. Keep images < 2000px (the Read limit). For
-a single figure in isolation, use the `/figtest/<name>/?static` gallery page.
-**Gotcha:** at `--force-device-scale-factor=2`, headless chromium flakily
-rasterizes the KaTeX `foreignObject` labels (any diagram type) as blank white
-boxes. If labels shoot blank, use `1.5` — it's a headless rendering quirk, not
-a figure bug (verified 2026-07-01).
+`?static` makes rendering fully deterministic (2026-07-02): transitions apply
+synchronously, fade-ins are skipped (no opacity-0 birth state), and the figure
+re-measures itself at load/fonts-ready — identical bytes across repeat shots.
+(The old "blank labels at scale 2" gotcha was this raciness; it's fixed.)
+Keep images < 2000px (the Read limit). For a single figure in isolation, use
+the `/figtest/<name>/?static` gallery page. Append `&debug` to tint the
+plot area lightpink (visualizes margins/padding instantly).
+**Gotcha:** headless chromium clamps the window to a ~500px minimum and CROPS
+the screenshot — `--window-size=340,...` does NOT give a narrow viewport. To
+test true narrow layouts, load the page in a fixed-width `<iframe>` harness
+and screenshot that.
 
 ## Figure conventions
 - **An include emits ONLY the figure mechanism** (the `bd-container` div, any
