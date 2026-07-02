@@ -68,7 +68,10 @@ class ElectrochemicalSpeciesBandDiagram {
      * @param {object} [diagramConfig={}] - Initial configuration options passed to BandDiagram
      */
     constructor(containerId, speciesInfo, diagramConfig = {}) {
-        this.diagram = new BandDiagram(containerId, diagramConfig);
+        this.diagram = new BandDiagram(containerId, {
+            legendLinkHref: '/esbd/reading/', // ESBD speaks the legend's language
+            ...diagramConfig,
+        });
         try {
             this.speciesInfo = speciesInfo;
             this.diagram.setYLabel('Species Voltage (V)');

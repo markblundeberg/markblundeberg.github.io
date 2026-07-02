@@ -48,12 +48,7 @@ class BandDiagram extends ResponsivePlot {
      */
     constructor(containerId, config = {}) {
         // Configuration with defaults
-        const defaults = {
-            xMode: 'abstract',
-            yMode: 'numeric',
-            hoverThrottleDelay: 50,
-            legendLinkHref: '/esbd/reading/',
-        };
+        const defaults = { xMode: 'abstract', yMode: 'numeric', hoverThrottleDelay: 50 };
         super({ containerId: containerId, ...defaults, ...config });
         // ^ sets this.config, with extra defaults
 
