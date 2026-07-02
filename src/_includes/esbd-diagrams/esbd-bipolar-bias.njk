@@ -1,0 +1,160 @@
+{% set idprefix = "esbd-bipolar-bias" %}
+{% import "macros/controls.njk" as controls %}
+<div style="display: flex; flex-wrap: wrap; justify-content: space-evenly; gap: 8px">
+<div style="flex: 1; min-width: 250px; max-width: 330px">
+<div style="text-align: center; font-size: 0.85em">pn junction</div>
+<div class="bd-container" id="{{idprefix}}-diode" style="height: 260px; border: 1px solid #eee"></div>
+</div>
+<div style="flex: 1; min-width: 250px; max-width: 330px">
+<div style="text-align: center; font-size: 0.85em">bipolar membrane</div>
+<div class="bd-container" id="{{idprefix}}-bpm" style="height: 260px; border: 1px solid #eee"></div>
+</div>
+</div>
+{{ controls.slider(idprefix + "-bias-slider", "Bias (&minus; reverse / + forward)", { min: -1.0, max: 0.6, step: "any", value: 0, snap: 0, readout: true, unit: "V" }) }}
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+
+    // Same numbers as the equilibrium twin figure (see esbd-bipolar-twin.njk):
+    // Si-flavoured diode (gap 1.12 V, majority edge gap 0.15 V, built-in 0.82 V);
+    // membrane offsets from mu_H2O and V°_OH- (iondata): -2.4578 V / +1.6297 V.
+    // Bias model (qualitative, matching the prose): carrier levels split by the
+    // full bias b at the junction; minority levels relax back to the majority
+    // level over a diffusion length; depletion widens as sqrt(1 - b/phi_bi).
+    const EG = 1.12,
+        ETA = 0.15,
+        PHI_D = 0.82;
+    const MU_W = -2.4578,
+        DG_OH = 1.6297,
+        DONNAN = MU_W + DG_OH,
+        PHI_M = -DONNAN;
+    const LDIFF = 0.18; // minority relaxation length (schematic)
+
+    const x = linspace(0, 1, 81);
+    const stepFn = (w) =>
+        x.map((xi) => {
+            const t = Math.min(1, Math.max(0, (xi - (0.5 - w)) / (2 * w)));
+            return t * t * (3 - 2 * t);
+        });
+    const interp = (s, a, b) => s.map((si) => a + si * (b - a));
+    // Carrier profiles: the "left" carrier sits at level b on the left and decays
+    // to 0 rightward from the junction; the "right" carrier is 0 on the right and
+    // rises to b leftward. (Levels here are offsets added to the equilibrium level.)
+    const leftCarrier = (b) =>
+        x.map((xi) => (xi <= 0.5 ? b : b * Math.exp(-(xi - 0.5) / LDIFF)));
+    const rightCarrier = (b) =>
+        x.map((xi) => (xi >= 0.5 ? 0 : b * (1 - Math.exp(-(0.5 - xi) / LDIFF))));
+
+    const diode = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-diode',
+        { electron: SPECIES.electron, hole: SPECIES.hole },
+        { margins: { right: 62 } }
+    );
+    diode.setSpatialLayout([0, 0.5, 1], [
+        { ...REGION.semi2, name: 'p' },
+        { ...REGION.semiconductor, name: 'n' },
+    ]);
+    diode.setVRange(-2.15, 1.2);
+
+    const bpm = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-bpm',
+        { proton: SPECIES.proton, hydroxide: SPECIES.hydroxide },
+        { margins: { right: 62 } }
+    );
+    bpm.setSpatialLayout([0, 0.5, 1], [
+        { ...REGION.solution2, name: 'CEM' },
+        { ...REGION.solution, name: 'AEM' },
+    ]);
+    bpm.setVRange(-3.65, 0.75); // top must fit V_OH- rising to ~+0.56 at full forward bias
+
+    function update(b) {
+        document.getElementById('{{idprefix}}-bias-slider-readout').textContent =
+            b.toFixed(2);
+        const merged = Math.abs(b) < 0.05;
+
+        // Depletion widens under reverse bias, narrows under forward.
+        const sD = stepFn(0.11 * Math.sqrt(Math.max(0.06, 1 - b / PHI_D)));
+        const sM = stepFn(0.045 * Math.sqrt(Math.max(0.06, 1 - b / PHI_M)));
+
+        const vh = leftCarrier(b); // hole level: b on the p side
+        const ve = rightCarrier(b); // electron level: 0 on the n side
+        // Edges follow the electrostatics: pinned to the majority carrier on
+        // each side (p side rides at +b with the p bulk), stepping through the
+        // (bias-dependent) depletion zone.
+        diode.updateTraceData([
+            {
+                id: 'vh_std',
+                speciesId: 'hole',
+                curveType: 'standardState',
+                x: x,
+                y: interp(sD, ETA + b, EG - ETA),
+            },
+            {
+                id: 'vh',
+                speciesId: 'hole',
+                curveType: 'voltage',
+                showLabel: !merged,
+                labelFrac: 0.07,
+                x: x,
+                y: vh,
+            },
+            {
+                id: 've',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                label: merged
+                    ? 'V_{\\mathrm{e}^-}{=}V_{\\mathrm{h}^+}'
+                    : 'V_{\\mathrm{e}^-}',
+                x: x,
+                y: ve,
+            },
+            {
+                id: 've_std',
+                speciesId: 'electron',
+                curveType: 'standardState',
+                labelFrac: 0.1,
+                x: x,
+                y: interp(sD, ETA - EG + b, -ETA),
+            },
+        ]);
+
+        const vhp = leftCarrier(b).map((v) => v + MU_W); // H+ level: MU_W + b on CEM side
+        const voh = rightCarrier(b); // OH- level: 0 on AEM side
+        bpm.updateTraceData([
+            {
+                id: 'voh',
+                speciesId: 'hydroxide',
+                curveType: 'voltage',
+                x: x,
+                y: voh,
+            },
+            {
+                id: 'voh_std',
+                speciesId: 'hydroxide',
+                curveType: 'standardState',
+                labelFrac: 0.1,
+                x: x,
+                y: interp(sM, DONNAN + b, 0),
+            },
+            {
+                id: 'vh_std',
+                speciesId: 'proton',
+                curveType: 'standardState',
+                x: x,
+                y: interp(sM, MU_W + b, -DG_OH),
+            },
+            {
+                id: 'vh',
+                speciesId: 'proton',
+                curveType: 'voltage',
+                labelFrac: 0.07,
+                x: x,
+                y: vhp,
+            },
+        ]);
+    }
+
+    makeSlider('{{idprefix}}-bias-slider', update);
+</script>

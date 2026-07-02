@@ -1,0 +1,143 @@
+{% set idprefix = "esbd-bipolar-twin" %}
+<div style="display: flex; flex-wrap: wrap; justify-content: space-evenly; gap: 8px">
+<div style="flex: 1; min-width: 250px; max-width: 330px">
+<div style="text-align: center; font-size: 0.85em">pn junction</div>
+<div class="bd-container" id="{{idprefix}}-diode" style="height: 260px; border: 1px solid #eee"></div>
+</div>
+<div style="flex: 1; min-width: 250px; max-width: 330px">
+<div style="text-align: center; font-size: 0.85em">bipolar membrane</div>
+<div class="bd-container" id="{{idprefix}}-bpm" style="height: 260px; border: 1px solid #eee"></div>
+</div>
+</div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { linspace } from '{{ esbdJsPath }}utils.js';
+
+    // ---- Numbers (provenance) ----
+    // Diode (Si-flavoured schematic): gap 1.12 V; majority edge-to-Fermi gap
+    // 0.15 V on each side (n or p ~1e17 cm^-3) => built-in 1.12-0.30 = 0.82 V.
+    // Membrane ("lightly doped water", unit activities for the majority ion):
+    // V_H+ - V_OH- = mu_H2O/F = -237.14e3/96485 = -2.4578 V (page: -2.457 V);
+    // ladder spacing V°_OH- - V°_H+ = 157.24e3/96485 = +1.6297 V (iondata.txt);
+    // Donnan/built-in = 2.4578 - 1.6297 = 0.8281 V = (RT/F)ln(1e14). pKw = 14.00.
+    const EG = 1.12,
+        ETA = 0.15;
+    const MU_W = -2.4578,
+        DG_OH = 1.6297,
+        DONNAN = MU_W + DG_OH; // -0.8281: ladder shift CEM relative to AEM
+
+    // Geometry: p/CEM on [0, 0.5], n/AEM on [0.5, 1]. Junction widths schematic;
+    // the membrane's is drawn sharper (real BPM depletion zone ~nm).
+    const x = linspace(0, 1, 81);
+    const step = (w) =>
+        x.map((xi) => {
+            const t = Math.min(1, Math.max(0, (xi - (0.5 - w)) / (2 * w)));
+            return t * t * (3 - 2 * t); // 0 on the left side, 1 on the right
+        });
+    const sD = step(0.11); // diode depletion (schematic)
+    const sM = step(0.045); // membrane junction (schematic, "not to scale")
+    const interp = (s, a, b) => s.map((si) => a + si * (b - a));
+
+    const diode = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-diode',
+        { electron: SPECIES.electron, hole: SPECIES.hole },
+        { margins: { right: 62 } }
+    );
+    diode.setSpatialLayout([0, 0.5, 1], [
+        { ...REGION.semi2, name: 'p' },
+        { ...REGION.semiconductor, name: 'n' },
+    ]);
+    // Both panels share the same volts-per-pixel (2.75 V span) so the one
+    // visible difference between the twins -- carrier levels merged vs
+    // 2.457 V apart -- is directly comparable.
+    diode.setVRange(-1.35, 1.4);
+    diode.updateTraceData([
+        {
+            id: 'vh_std',
+            speciesId: 'hole',
+            curveType: 'standardState',
+            x: x,
+            y: interp(sD, ETA, EG - ETA), // valence edge: p +0.15 -> n +0.97
+        },
+        {
+            id: 'v_carriers',
+            speciesId: 'electron',
+            curveType: 'voltage',
+            label: 'V_{\\mathrm{e}^-}{=}V_{\\mathrm{h}^+}',
+            x: [0, 1],
+            y: [0, 0],
+        },
+        {
+            id: 've_std',
+            speciesId: 'electron',
+            curveType: 'standardState',
+            labelFrac: 0.1,
+            x: x,
+            y: interp(sD, ETA - EG, -ETA), // conduction edge: p -0.97 -> n -0.15
+        },
+    ]);
+    diode.updateVerticalMarkers([
+        {
+            id: 'rxn',
+            symbol: '⇌',
+            x: 0.5,
+            yDefs: [{ y: 0 }],
+            popupCallback: () =>
+                '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightleftharpoons \\varnothing$',
+        },
+    ]);
+
+    const bpm = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-bpm',
+        { proton: SPECIES.proton, hydroxide: SPECIES.hydroxide },
+        { margins: { right: 62 } }
+    );
+    bpm.setSpatialLayout([0, 0.5, 1], [
+        { ...REGION.solution2, name: 'CEM' },
+        { ...REGION.solution, name: 'AEM' },
+    ]);
+    bpm.setVRange(-2.6, 0.15); // same 2.75 V span as the diode panel
+    bpm.updateTraceData([
+        {
+            id: 'voh',
+            speciesId: 'hydroxide',
+            curveType: 'voltage',
+            x: [0, 1],
+            y: [0, 0],
+        },
+        {
+            id: 'voh_std',
+            speciesId: 'hydroxide',
+            curveType: 'standardState',
+            labelFrac: 0.1,
+            x: x,
+            y: interp(sM, DONNAN, 0), // -0.828 (CEM) -> 0 (AEM)
+        },
+        {
+            id: 'vh_std',
+            speciesId: 'proton',
+            curveType: 'standardState',
+            x: x,
+            y: interp(sM, MU_W, -DG_OH), // -2.458 (CEM) -> -1.630 (AEM)
+        },
+        {
+            id: 'vh',
+            speciesId: 'proton',
+            curveType: 'voltage',
+            x: [0, 1],
+            y: [MU_W, MU_W],
+        },
+    ]);
+    bpm.updateVerticalMarkers([
+        {
+            id: 'rxn',
+            symbol: '⇌',
+            x: 0.5,
+            yDefs: [{ y: 0 }, { y: MU_W }],
+            popupCallback: () =>
+                '$\\mathrm{H}^+ + \\mathrm{OH}^- \\rightleftharpoons \\mathrm{H_2O}$',
+        },
+    ]);
+</script>

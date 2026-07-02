@@ -28,9 +28,10 @@ At equilibrium every mobile carrier's $V_i$ runs flat across the whole device. T
 
 The carrier voltages stay flat, but the standard-state ladder cannot. The fixed charge differs on the two sides, so the ladder must rest at a different offset on each in order to keep that bulk neutral, precisely as it did across the Donnan membrane. The transition between the two offsets is the built-in potential, and it falls across a narrow junction region where the mobile carriers have been swept aside, leaving only the bare fixed charge. This is the depletion zone. In the membrane the fixed-charge density is so high that this zone is squeezed down to a few nanometres, far thinner than its semiconductor counterpart, but it plays exactly the same role.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 700px">
+{% include "esbd-diagrams/esbd-bipolar-twin.njk" %}
 {% figcaption %}
-Equilibrium, side by side: a pn junction and a bipolar membrane as $V_i$ diagrams. The mobile carrier voltages run flat (held a fixed distance apart by the pairing reaction), while the $V^\circ_i$ ladder bends through the depletion zone, carrying the built-in potential. (Junction widths schematic, not to scale.)
+Equilibrium, side by side: a pn junction and a bipolar membrane as $V_i$ diagrams. The mobile carrier voltages run flat (held a fixed distance apart by the pairing reaction), while the $V^\circ_i$ ladder bends through the depletion zone, carrying the built-in potential. (Junction widths schematic, not to scale.) The two panels share the same voltage scale, so the twins' one visible difference stands out: the diode's carrier levels merge, the membrane's sit $2.457\ \mathrm{V}$ apart.
 {% endfigcaption %}
 </figure>
 
@@ -40,7 +41,8 @@ Reverse-bias the device and the mobile carriers are pulled away from the junctio
 
 Forward-bias it instead, and carriers are injected toward the junction from both sides, where they meet and annihilate. Electrons and holes recombine, $\mathrm{e}^- + \mathrm{h}^+ \rightarrow \varnothing$, and the energy they give up emerges as light in an LED or otherwise as heat; protons and hydroxides neutralize, $\mathrm{H}^+ + \mathrm{OH}^- \rightarrow \mathrm{H_2O}$, releasing their energy as heat.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 700px">
+{% include "esbd-diagrams/esbd-bipolar-bias.njk" %}
 {% figcaption %}
 Under bias (a slider sweeps from reverse to forward). Reverse bias widens the depletion zone and splits the carrier voltages, driving pair generation in the diode or water splitting in the membrane; forward bias injects carriers inward to recombine or neutralize at the junction.
 {% endfigcaption %}
