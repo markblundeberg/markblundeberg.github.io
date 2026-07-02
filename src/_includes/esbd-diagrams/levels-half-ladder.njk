@@ -1,0 +1,118 @@
+{% set idprefix = "levels-half-ladder" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 480px"></div>
+<div style="display: grid; grid-template-columns: max-content minmax(0, 180px); gap: 2px 10px; justify-content: center; align-items: center; margin-top: 0.4em">
+{{ controls.slider(idprefix + "-off", "Electrical offset", { min: -0.5, max: 0.5, step: "any", value: 0, snap: 0, inline: true, readout: true, unit: "V" }) }}
+{{ controls.slider(idprefix + "-dh", "$\\mu^\\circ(\\mathrm{H_2})$", { min: -40, max: 40, step: "any", value: 0, snap: 0, inline: true, readout: true, unit: "kJ/mol" }) }}
+{{ controls.slider(idprefix + "-do", "$\\mu^\\circ(\\mathrm{O_2})$", { min: -40, max: 40, step: "any", value: 0, snap: 0, inline: true, readout: true, unit: "kJ/mol" }) }}
+{{ controls.slider(idprefix + "-dfe", "$\\mu^\\circ(\\mathrm{Fe})$", { min: -40, max: 40, step: "any", value: 0, snap: 0, inline: true, readout: true, unit: "kJ/mol" }) }}
+</div>
+
+<script type="module">
+    import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
+    import { SPECIES } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
+
+    const BLUE = SPECIES.electron.color;
+
+    // Everything below is computed from one table of formation energies
+    // (iondata.txt: H⁺ 0, OH⁻ −157.24, Cl⁻ −131.23, Fe²⁺ −78.90, Fe³⁺ −4.7;
+    // plus H₂O(l) −237.14 and AgCl(s) −109.79 kJ/mol, CRC). The element
+    // sliders re-assign μ° of the neutral elements away from the conventional
+    // zero. Each ion's formation reaction (balanced with z·H⁺ ↔ z/2·H₂) gives
+    //   V°_i = [ΔG_f(i) + Σ μ°(own elements)]/(z_i F) + V°_e-(H⁺/H₂),
+    // with the float slider s acting as the electrical gauge via the H⁺/H₂
+    // level. The redox rungs are then computed FROM the ionic rungs and the
+    // neutral μ°'s — the element assignments cancel algebraically, so their
+    // immunity below is emergent, not hardcoded.
+    const F = 96.485; // kJ/(mol·V)
+    // deliberate arbitrary base offset so H⁺/H₂ doesn't sit at a
+    // meaningful-looking zero when the offset slider is centered
+    const BASE = 0.13;
+
+    const diagram = new EnergyLevelsDiagram('{{idprefix}}-container', {
+        yAxisLabel: 'Voltage (V) - arbitrary offset',
+        yRange: [-1.06, 2.74], // sized for the slider extremes (no clipping)
+        categories: [
+            { id: 'redox', label: 'Redox couples' },
+            { id: 'ion', label: 'Ions' },
+        ],
+        bandMinPaddingOuter: { left: 100, right: 48 },
+        bandMinPaddingInner: 46, // Fe/Cl ion labels hang left
+    });
+
+    function update() {
+        const s = parseFloat(offEl.value) + BASE; // = V°_e-(H⁺/H₂), the gauge
+        const muH2 = parseFloat(dhEl.value);
+        const muO2 = parseFloat(doEl.value);
+        const muFe = parseFloat(dfeEl.value);
+        const muH2O = -237.14 + muH2 + muO2 / 2;
+        const muAg = 0,
+            muAgCl = -109.79; // no slider: elements Ag, Cl₂ stay at μ° = 0
+
+        // ionic standard states
+        const VH = (0 + muH2 / 2) / (1 * F) + s;
+        const VOH = (-157.24 + muH2 / 2 + muO2 / 2) / (-1 * F) + s;
+        const VCL = (-131.23 + 0) / (-1 * F) + s;
+        const VFE2 = (-78.9 + muFe) / (2 * F) + s;
+        const VFE3 = (-4.7 + muFe) / (3 * F) + s;
+
+        // standard redox levels, from the ionic levels + neutral μ°'s
+        const R_HH2 = VH - muH2 / (2 * F); // H⁺ + e⁻ ⇌ ½H₂
+        const R_AGCL = VCL + (muAgCl - muAg) / F; // AgCl + e⁻ ⇌ Ag + Cl⁻
+        const R_O2OH = VOH + muO2 / (4 * F) + muH2O / (2 * F); // O₂ + 2H₂O + 4e⁻ ⇌ 4OH⁻
+        const R_O2H = VH + muO2 / (4 * F) - muH2O / (2 * F); // O₂ + 4H⁺ + 4e⁻ ⇌ 2H₂O
+        const R_FE32 = 3 * VFE3 - 2 * VFE2; // Fe³⁺ + e⁻ ⇌ Fe²⁺
+        const R_FE2FE = VFE2 - muFe / (2 * F); // Fe²⁺ + 2e⁻ ⇌ Fe
+
+        const thinDash = { lineWidth: 1, dasharray: '3,3' };
+        const thin = { lineWidth: 1 };
+        const rx = (levelId, yValue, label) => ({
+            categoryId: 'redox',
+            levelId,
+            yValue,
+            label,
+            color: BLUE,
+            style: thinDash,
+            labelSide: 'left',
+        });
+        const ion = (levelId, yValue, label, color, labelSide) => ({
+            categoryId: 'ion',
+            levelId,
+            yValue,
+            label,
+            color,
+            style: thin,
+            labelSide,
+        });
+
+        diagram.setLevels([
+            rx('hh2', R_HH2, '\\mathrm{H}^+\\!/\\mathrm{H_2}'),
+            rx('agcl', R_AGCL, '\\mathrm{AgCl}/\\mathrm{Ag},\\mathrm{Cl}^-'),
+            rx('o2oh', R_O2OH, '\\mathrm{O_2},\\mathrm{H_2O}/\\mathrm{OH}^-'),
+            rx('o2h', R_O2H, '\\mathrm{O_2},\\mathrm{H}^+\\!/\\mathrm{H_2O}'),
+            rx('fe32', R_FE32, '\\mathrm{Fe}^{3+}\\!/\\mathrm{Fe}^{2+}'),
+            rx('fe2fe', R_FE2FE, '\\mathrm{Fe}^{2+}\\!/\\mathrm{Fe}'),
+            ion('h', VH, 'V^\\circ_{\\mathrm{H}^+}', SPECIES.proton.color),
+            ion('oh', VOH, 'V^\\circ_{\\mathrm{OH}^-}', SPECIES.hydroxide.color),
+            ion('cl', VCL, 'V^\\circ_{\\mathrm{Cl}^-}', SPECIES.chloride.color, 'left'),
+            ion('fe2', VFE2, 'V^\\circ_{\\mathrm{Fe}^{2+}}', SPECIES.ferrous.color, 'left'),
+            ion('fe3', VFE3, 'V^\\circ_{\\mathrm{Fe}^{3+}}', SPECIES.ferric.color, 'left'),
+        ]);
+
+        document.getElementById('{{idprefix}}-off-readout').textContent =
+            parseFloat(offEl.value).toFixed(2);
+        document.getElementById('{{idprefix}}-dh-readout').textContent =
+            muH2.toFixed(0);
+        document.getElementById('{{idprefix}}-do-readout').textContent =
+            muO2.toFixed(0);
+        document.getElementById('{{idprefix}}-dfe-readout').textContent =
+            muFe.toFixed(0);
+    }
+
+    const offEl = makeSlider('{{idprefix}}-off', update, { fire: false });
+    const dhEl = makeSlider('{{idprefix}}-dh', update, { fire: false });
+    const doEl = makeSlider('{{idprefix}}-do', update, { fire: false });
+    const dfeEl = makeSlider('{{idprefix}}-dfe', update, { fire: false });
+    update();
+</script>

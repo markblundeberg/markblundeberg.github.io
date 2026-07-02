@@ -150,19 +150,10 @@ $$ E^\circ = V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm
 
 It's worth visualizing the $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ levels alogngside the ionic levels $V^\circ_i$. We plot the standard redox levels as dashed (representing that they are 'implied' levels), and as thin lines (representing that they are only standard states):
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 520px">
+{% include "esbd-diagrams/levels-half-ladder.njk" %}
 {% figcaption %}
-TODO: Energy levels plot!
-- left side: selected half reactions
-- right side: selected ions
-
-Controls:
-- slider 1: floating offset
-- slider 2: reference-state of H
-- slider 3: reference-state of O
-- slider 4: reference-state of Fe
-
-Caption: "water ..."
+Standard redox levels $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ (left) alongside ionic standard states $V^\circ_i$ (right), all computed from one table of formation energies in water. Try the sliders: the electrical offset, and our arbitrary assignments of $\mu^\circ$ for three neutral elements (conventionally zero).
 {% endfigcaption %}
 </figure>
 
