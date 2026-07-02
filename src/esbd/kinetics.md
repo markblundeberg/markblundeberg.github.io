@@ -7,8 +7,6 @@ orderESBD: 33.5
 
 # {{title}}
 
-**DRAFT — proposed topic, for review**
-
 Throughout this book, interfaces have been where the interesting steps happen: Donnan steps, junction steps, half-cell steps. So far those steps were all equilibrium facts. In the [Electrode potential](../e/) topic we saw what a current does to the picture: the metal's $V_{\mathrm{e}^-}$ peels away from the reaction level it was pinned to, by the surface overpotential
 
 $$ \eta = V_{\mathrm{e}^-}(\text{electrode}) - V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}). $$
