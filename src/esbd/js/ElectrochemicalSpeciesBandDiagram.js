@@ -105,6 +105,7 @@ class ElectrochemicalSpeciesBandDiagram {
                 id,
                 speciesId = null,
                 curveType,
+                color: colorOverride = null,
                 style: styleOverride = {},
                 showLabel = true,
                 label: labelOverride = null,
@@ -127,7 +128,7 @@ class ElectrochemicalSpeciesBandDiagram {
             const curveTypeInfo = CURVE_TYPES[curveType];
             const style = { ...curveTypeInfo.style, ...styleOverride };
             const curveDescription = curveTypeInfo.name;
-            const color = sInfo?.color ?? 'black';
+            const color = colorOverride ?? sInfo?.color ?? 'black';
             const label =
                 labelOverride ?? curveTypeInfo.labelGen(sInfo?.mathLabel);
 

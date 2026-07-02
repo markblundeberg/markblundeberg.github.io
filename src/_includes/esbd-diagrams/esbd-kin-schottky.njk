@@ -34,6 +34,47 @@
     diagram.setVRange(-0.78, 1.18);
 
     const xs = linspace(XI_IF, 1, 81);
+    // arrows drawn as traces (BandDiagram requires ascending x, so each
+    // arrow = shaft + two head-wing segments); geometry in ~px space
+    const KX = 380,
+        KY = 118;
+    const arrowTraces = (idBase, x1, y1, x2, y2) => {
+        const X1 = x1 * KX,
+            Y1 = -y1 * KY,
+            X2 = x2 * KX,
+            Y2 = -y2 * KY;
+        const L = Math.hypot(X2 - X1, Y2 - Y1) || 1;
+        const ux = (X2 - X1) / L,
+            uy = (Y2 - Y1) / L;
+        const BX = X2 - 7 * ux,
+            BY = Y2 - 7 * uy;
+        const wing = (sw) => [BX - sw * 3.5 * uy, BY + sw * 3.5 * ux];
+        const seg = (id, ax, ay, bx, by) => {
+            let pts = [
+                [ax / KX, -ay / KY],
+                [bx / KX, -by / KY],
+            ];
+            if (pts[0][0] > pts[1][0]) pts.reverse();
+            return {
+                id,
+                speciesId: null,
+                curveType: 'phi',
+                color: '#667',
+                style: { lineWidth: 1.3, dasharray: null },
+                showLabel: false,
+                x: [pts[0][0], pts[1][0]],
+                y: [pts[0][1], pts[1][1]],
+            };
+        };
+        const [wax, way] = wing(1),
+            [wbx, wby] = wing(-1);
+        return [
+            seg(idBase + '_s', X1, Y1, X2, Y2),
+            seg(idBase + '_w1', X2, Y2, wax, way),
+            seg(idBase + '_w2', X2, Y2, wbx, wby),
+        ];
+    };
+    let animGeom = null;
 
     function update(b) {
         document.getElementById('{{idprefix}}-bias-readout').textContent =
@@ -41,8 +82,13 @@
         const merged = Math.abs(b) < 0.03;
         const vSemi = -b; // metal V_e- fixed at 0; forward bias lowers the semi side
         const W = W0 * Math.sqrt(Math.max(0.05, (PHI_BI - b) / PHI_BI));
+        const edgeAt = (x) =>
+            vSemi - XI + (-PHI_B - (vSemi - XI)) * Math.exp(-(x - XI_IF) / W);
+        // emitter = the low-V side: semiconductor under forward bias
+        const sgn = b >= 0 ? 1 : -1;
+        animGeom = { active: !merged, sgn, edgeAt, vSemi };
 
-        diagram.updateTraceData([
+        const traces = [
             {
                 id: 'metal',
                 speciesId: 'electron',
@@ -75,7 +121,35 @@
                         (-PHI_B - (vSemi - XI)) * Math.exp(-(x - XI_IF) / W)
                 ),
             },
-        ]);
+        ];
+        if (!merged) {
+            const bp = -PHI_B + 0.07; // just above the barrier point
+            if (sgn > 0) {
+                // semiconductor emits: down along the bent edge, up into the metal
+                traces.push(
+                    ...arrowTraces('a1', 0.78, vSemi - 0.06, XI_IF + 0.045, bp),
+                    ...arrowTraces('a2', XI_IF - 0.01, bp, XI_IF - 0.11, -0.07)
+                );
+            } else {
+                // metal emits: over its fixed phi_B wall, up along the edge
+                traces.push(
+                    ...arrowTraces('a1', XI_IF - 0.16, -0.07, XI_IF - 0.01, bp),
+                    ...arrowTraces('a2', XI_IF + 0.045, bp, 0.78, vSemi - 0.06)
+                );
+            }
+            // the crossing electron (a fat-dot trace; animated when live)
+            const xp = XI_IF + 0.14;
+            traces.push({
+                id: 'eball',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                style: { lineWidth: 9 },
+                showLabel: false,
+                x: [xp, xp + 0.004],
+                y: [edgeAt(xp) + 0.05, edgeAt(xp) + 0.05],
+            });
+        }
+        diagram.updateTraceData(traces);
 
         diagram.updateVerticalMarkers(
             merged
@@ -94,4 +168,43 @@
     }
 
     makeSlider('{{idprefix}}-bias', update);
+
+    // live: the electron makes the crossing (rides just above the bent edge,
+    // hops the contact, glides off in the metal - reversed under reverse
+    // bias). Skipped under ?static; the parked dot stands in.
+    if (!new URLSearchParams(location.search).has('static')) {
+        const PERIOD = 2600,
+            TRAVEL = 2000;
+        const ease = (u) => u * u * (3 - 2 * u);
+        function hop(ts) {
+            const g = animGeom;
+            if (g && g.active && diagram.diagram.xScale) {
+                let s = ease(Math.min(1, (ts % PERIOD) / TRAVEL));
+                if (g.sgn < 0) s = 1 - s; // metal emits: run the path backwards
+                // path: semi bulk (s=0) -> contact -> metal (s=1)
+                let x, y;
+                if (s < 0.6) {
+                    const u = s / 0.6;
+                    x = 0.86 - (0.86 - XI_IF) * u;
+                    y = g.edgeAt(x) + 0.05;
+                } else if (s < 0.8) {
+                    const u = (s - 0.6) / 0.2;
+                    x = XI_IF - 0.02 * u;
+                    y = -PHI_B + 0.05 + (0.05 - (-PHI_B + 0.05)) * u;
+                } else {
+                    const u = (s - 0.8) / 0.2;
+                    x = XI_IF - 0.02 - (XI_IF - 0.02 - 0.12) * u;
+                    y = 0.05;
+                }
+                const X = diagram.diagram.xScale(x),
+                    Y = diagram.diagram.yScale(y);
+                diagram.diagram.linesGroup
+                    .selectAll('.bd-data-line')
+                    .filter((d) => d.id === 'eball')
+                    .attr('d', `M ${X} ${Y} l 1.5 0`);
+            }
+            requestAnimationFrame(hop);
+        }
+        requestAnimationFrame(hop);
+    }
 </script>
