@@ -1,0 +1,158 @@
+{% set idprefix = "esbd-cap-family" %}
+{% import "macros/controls.njk" as controls %}
+<div style="display: flex; flex-wrap: wrap; justify-content: space-evenly; gap: 6px">
+<div style="flex: 1; min-width: 180px; max-width: 240px">
+<div style="text-align: center; font-size: 0.85em">dielectric</div>
+<div class="bd-container" id="{{idprefix}}-mim" style="height: 230px; border: 1px solid #eee"></div>
+</div>
+<div style="flex: 1; min-width: 180px; max-width: 240px">
+<div style="text-align: center; font-size: 0.85em">electrolytic</div>
+<div class="bd-container" id="{{idprefix}}-lytic" style="height: 230px; border: 1px solid #eee"></div>
+</div>
+<div style="flex: 1; min-width: 180px; max-width: 240px">
+<div style="text-align: center; font-size: 0.85em">double layer</div>
+<div class="bd-container" id="{{idprefix}}-edl" style="height: 230px; border: 1px solid #eee"></div>
+</div>
+</div>
+{{ controls.slider(idprefix + "-v", "Applied voltage", { min: -1, max: 1, step: "any", value: 0.7, snap: 0, readout: true, unit: "V" }) }}
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+
+    // One kind of storage drawn three ways, sorted by screening length: the
+    // full applied voltage falls across the gap (MIM), a thin oxide film
+    // (electrolytic), or a Debye-length skin (double layer). phi drawn only
+    // where nothing screens, stepping down from each metal's V_e- by a
+    // work function (0.25 V here, schematic).
+    const WF = 0.25;
+    const LAM = 0.03; // EDL skin
+    const common = { margins: { right: 48, left: 42 } };
+
+    const mim = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-mim',
+        { electron: SPECIES.electron },
+        common
+    );
+    mim.setSpatialLayout([0, 0.3, 0.7, 1], [
+        { ...REGION.metal, name: '' },
+        { ...REGION.vacuum, name: 'dielectric' },
+        { ...REGION.metal, name: '' },
+    ]);
+    mim.setVRange(-1.05, 1.05);
+
+    const lytic = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-lytic',
+        { electron: SPECIES.electron, ion: SPECIES.sodium },
+        common
+    );
+    lytic.setSpatialLayout([0, 0.32, 0.44, 1], [
+        REGION.metal,
+        { ...REGION.vacuum, name: '' }, // (the thin oxide; labeled in caption)
+        REGION.solution,
+    ]);
+    lytic.setVRange(-1.05, 1.05);
+
+    const edl = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-edl',
+        { electron: SPECIES.electron, ion: SPECIES.sodium },
+        common
+    );
+    edl.setSpatialLayout([0, 0.4, 1], [REGION.metal, REGION.solution]);
+    edl.setVRange(-1.05, 1.05);
+
+    const xe = linspace(0.4, 1, 61);
+
+    function update(v) {
+        document.getElementById('{{idprefix}}-v-readout').textContent =
+            v.toFixed(2);
+        const vp = v / 2,
+            vm = -v / 2;
+
+        mim.updateTraceData([
+            {
+                id: 'vel',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                labelFrac: 0.4,
+                x: [0, 0.3],
+                y: [vp, vp],
+            },
+            {
+                id: 'phi',
+                speciesId: 'electron',
+                curveType: 'phi',
+                label: '\\phi',
+                labelFrac: 0.5,
+                x: [0.3, 0.7],
+                y: [vp - WF, vm - WF],
+            },
+            {
+                id: 'ver',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: false,
+                x: [0.7, 1],
+                y: [vm, vm],
+            },
+        ]);
+
+        lytic.updateTraceData([
+            {
+                id: 'vel',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                labelFrac: 0.4,
+                x: [0, 0.32],
+                y: [vp, vp],
+            },
+            {
+                id: 'phi',
+                speciesId: 'electron',
+                curveType: 'phi',
+                label: '\\phi',
+                labelFrac: 0.5,
+                x: [0.32, 0.44],
+                y: [vp - WF, vm - WF],
+            },
+            {
+                id: 'vion',
+                speciesId: 'ion',
+                curveType: 'voltage',
+                x: [0.44, 1],
+                y: [vm, vm],
+            },
+        ]);
+
+        edl.updateTraceData([
+            {
+                id: 'vel',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                labelFrac: 0.4,
+                x: [0, 0.4],
+                y: [vp, vp],
+            },
+            {
+                id: 'vion',
+                speciesId: 'ion',
+                curveType: 'voltage',
+                x: [0.4, 1],
+                y: [vm, vm],
+            },
+            {
+                // the ladder soaks up the whole drop within a Debye skin
+                id: 'v0ion',
+                speciesId: 'ion',
+                curveType: 'standardState',
+                labelFrac: 0.45,
+                x: [...xe],
+                y: xe.map(
+                    (x) => vm - 0.18 + v * Math.exp(-(x - 0.4) / LAM)
+                ),
+            },
+        ]);
+    }
+    makeSlider('{{idprefix}}-v', update);
+</script>

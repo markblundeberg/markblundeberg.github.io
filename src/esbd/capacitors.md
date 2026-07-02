@@ -15,9 +15,10 @@ The textbook capacitor stores charge in an electrostatic field strung across an 
 
 How far the charge spreads is set, once again, by the screening length. In a plain metal-dielectric-metal capacitor the insulator cannot screen at all ($\lambda \to \infty$) and the charge bridges the entire gap. In an aluminium {% wiki "electrolytic capacitor" %} the gap is a very thin oxide film between a metal and an electrolyte, so the capacitance per area is much larger. And in a {% wiki "supercapacitor" %} the dielectric is dropped altogether: a metal meets a concentrated electrolyte whose screening length is mere nanometres, so the whole potential drop is squeezed into a {% wiki "Double layer (surface science)", "double layer" %} that thin, and with an effective plate separation of only $\lambda$ the capacitance becomes enormous. It is one kind of storage drawn three ways, sorted by how far neutrality is allowed to break.^[The charging speeds differ accordingly: a dielectric capacitor charges as fast as its wires allow, while a double-layer or electrolytic one charges only as fast as its ions can reach the interface, which shows on the diagram as transient slopes in the electrolyte's $V_i$.]
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 760px">
+{% include "esbd-diagrams/esbd-cap-family.njk" %}
 {% figcaption %}
-Dielectric capacitance, sorted by screening length: a metal-dielectric-metal capacitor (charge across the full gap), an electrolytic capacitor (charge across a thin oxide between $V_{\mathrm{e}^-}$ and $V_{\mathrm{ion}}$), and an EDL supercapacitor (the drop confined to a Debye-length skin).
+Dielectric capacitance, sorted by screening length, one applied voltage across all three: a metal–dielectric–metal capacitor (the drop spans the full gap), an electrolytic capacitor (the drop across a thin oxide between $V_{\mathrm{e}^-}$ and $V_{\mathrm{ion}}$), and an EDL supercapacitor (no insulator at all — the ladder soaks up the whole drop within a Debye-length skin). The effective plate spacing shrinks left to right, and the capacitance grows accordingly.
 {% endfigcaption %}
 </figure>
 
@@ -31,9 +32,10 @@ the **chemical capacitance**, exactly the per-species piece of the screening $\c
 
 The devices that lean on it store charge in a material's chemical state rather than in a field. Chemical capacitance proper stores charge through the bulk, as when lithiating an intercalation electrode raises its lithium content and shifts the species voltages, so the material soaks up charge as $V_i$ moves. {% wiki "Pseudocapacitance" %} is the interfacial cousin: fast, reversible surface reactions that take up charge smoothly with voltage, behaving like a chemical capacitance pressed into a vanishingly thin surface layer.^[The line between pseudocapacitance and a plain double layer is somewhat fuzzy, and whether it is best read as a chemical or an inter-carrier capacitance is not always clear; on a $V_i$ diagram it would sit as a near-zero-thickness storage layer right at the surface.]
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 620px">
+{% include "esbd-diagrams/cap-chem.njk" %}
 {% figcaption %}
-Chemical capacitance in an intercalation host: adding charge raises the carrier concentration and slides $V_i$ away from its standard state, with no electrostatic gap involved.
+Chemical capacitance in an intercalation host: adding charge raises the lithium content and slides $V_{\mathrm{Li}^+}$ away from its standard state, with no electrostatic gap involved. The right panel is the same statement read as charge against voltage — the lattice-gas isotherm $V = V^\circ + \tfrac{RT}{F}\ln\tfrac{x}{1-x}$, whose slope is the (nonlinear) chemical capacitance; here $V^\circ$ sits at half-filling, the natural lattice-gas reference.
 {% endfigcaption %}
 </figure>
 
