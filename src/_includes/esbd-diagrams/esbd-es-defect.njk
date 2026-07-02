@@ -19,6 +19,10 @@
     const AMP = 0.22; // volts of phi per unit defect charge
     const V_NA = 0.62,
         V_CL = 0.38; // flat carrier levels (rung spacing compressed)
+    // Honesty flag: anchoring Cl⁻ as drawn-true, the Na⁺ group is displayed
+    // +4.55 V above its IUPAC-referenced position (true rung gap
+    // V°_Na − V°_Cl = −4.07 V; drawn +0.48 V). Marked with break glyphs.
+    const NA_SHIFT = 4.55;
 
     const band = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-band',
@@ -50,6 +54,7 @@
                 id: 'vna',
                 speciesId: 'cation',
                 curveType: 'voltage',
+                refShift: NA_SHIFT,
                 x: [0, 1],
                 y: [V_NA, V_NA],
             },
@@ -57,6 +62,7 @@
                 id: 'vna0',
                 speciesId: 'cation',
                 curveType: 'standardState',
+                refShift: NA_SHIFT,
                 x: xs,
                 y: xs.map((x) => V_NA + 0.12 + phi(x)),
             },
