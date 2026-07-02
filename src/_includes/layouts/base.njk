@@ -14,6 +14,13 @@
         {% block head_css %}
         {% endblock %}
 
+        {# ?static: disable all CSS animations/transitions before first paint
+           (deterministic screenshots; pairs with the JS-side handling in
+           ResponsivePlot). #}
+        <script>
+            if (new URLSearchParams(location.search).has('static'))
+                document.documentElement.classList.add('static-render');
+        </script>
         {# Block for additional head elements (scripts, meta tags) #}
         {% block head_extra %}
         {% endblock %}

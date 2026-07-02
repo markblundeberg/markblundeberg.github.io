@@ -285,6 +285,15 @@ figure {
     animation: fadeIn 0.6s ease-out forwards;
 }
 
+/* ?static (deterministic render): the html element gets .static-render from a
+   head script; kill ALL css animations/transitions, not just the figure one. */
+.static-render *,
+.static-render *::before,
+.static-render *::after {
+    animation: none !important;
+    transition: none !important;
+}
+
 /* Styles for ESBD examples' frame and controls */
 
 .controls.esbd-controls {
