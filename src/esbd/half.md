@@ -101,18 +101,10 @@ The reference value $(\mathrm{ref})$ usually refers to "the standard hydrogen el
 
 It's helpful to visualize an example of where these redox levels lie in relation to the ionic levels we've been discussing previously, in this case with the ferric/ferrous redox couple. Note that in order to read out $V_{\mathrm{e}^-}(\mathrm{Fe}^{3+}/\mathrm{Fe}^{2+})$ without influence from other reactions, a glassy carbon electrode could be used (but not a platinum electrode which would also strongly pick up hydrogen or oxygen redox couples).
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 480px">
+{% include "esbd-diagrams/levels-half-ferric.njk" %}
 {% figcaption %}
-Example usage of floating Nernst equation
-
-
-Illustration of redox levels, alongside the ionic levels as we've been discussing previously.
-
-Redox: $V_{\mathrm{e}^-}(\mathrm{Fe}^{3+}/\mathrm{Fe}^{2+})$,  $V^\circ_{\mathrm{e}^-}(\mathrm{Fe}^{3+}/\mathrm{Fe}^{2+})$,  $V^\circ_{\mathrm{e}^-}(\mathrm{H}^{+}/\mathrm{H_2})$
-
-Ion (optional checkbox?) : $V_{\mathrm{Fe}^{3+}}$, $V_{\mathrm{Fe}^{2+}}$, $V^\circ_{\mathrm{Fe}^{3+}}$, $V^\circ_{\mathrm{Fe}^{2+}}$.
-
-Sliders: $\mathrm{Fe}^{3+}$ and $\mathrm{Fe}^{2+}$ concentration.
+The ferric/ferrous redox levels alongside the ionic levels they are built from (ideal-dilute, $a_i = c_i/c^\circ$). The implied level is a weighted combination of the ion levels, $V_{\mathrm{e}^-}(\mathrm{Fe}^{3+}/\mathrm{Fe}^{2+}) = 3V_{\mathrm{Fe}^{3+}} - 2V_{\mathrm{Fe}^{2+}}$, and likewise for the standard levels. Note the leverage in that weighting: a decade of $\mathrm{Fe}^{3+}$ concentration moves $V_{\mathrm{Fe}^{3+}}$ by only 20&nbsp;mV, but moves the redox level by the full 59&nbsp;mV.
 {% endfigcaption %}
 </figure>
 

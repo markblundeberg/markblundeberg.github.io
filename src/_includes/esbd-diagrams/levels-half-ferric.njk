@@ -1,0 +1,125 @@
+{% set idprefix = "levels-half-ferric" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 300px"></div>
+{{ controls.slider(idprefix + "-c3", "$[\\mathrm{Fe}^{3+}]$", { min: -3, max: 0, step: "any", value: -3, snap: -3, readout: true, unit: "mol/L" }) }}
+{{ controls.slider(idprefix + "-c2", "$[\\mathrm{Fe}^{2+}]$", { min: -3, max: 0, step: "any", value: -1, snap: -1, readout: true, unit: "mol/L" }) }}
+
+<script type="module">
+    import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
+    import { SPECIES } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, renderSpanMath } from '{{ esbdJsPath }}utils.js';
+
+    const BLUE = SPECIES.electron.color;
+    const FE2 = SPECIES.ferrous.color;
+    const FE3 = SPECIES.ferric.color;
+
+    // Ionic standard states from iondata.txt (ΔG_f, kJ/mol): Fe²⁺ −78.90,
+    // Fe³⁺ −4.7 → V°_i = ΔG_f/(z_i F). Gauge: V°_e-(H⁺/H₂) = 0, plus a
+    // deliberate arbitrary offset so nothing sits at a meaningful-looking zero.
+    const F = 96.485; // kJ/(mol·V)
+    const DEC = 0.05916; // (RT/F) ln10 at 25 °C
+    const OFF = 0.08; // arbitrary electrical offset
+    const V0_FE2 = -78.9 / (2 * F) + OFF; // −0.409 + OFF
+    const V0_FE3 = -4.7 / (3 * F) + OFF; // −0.016 + OFF
+    const V0_SHE = 0 + OFF;
+
+    const diagram = new EnergyLevelsDiagram('{{idprefix}}-container', {
+        yAxisLabel: 'Voltage (V) - arbitrary offset',
+        yRange: [-0.52, 1.13],
+        categories: [
+            { id: 'redox', label: 'Redox levels' },
+            { id: 'ion', label: 'Ion levels' },
+        ],
+        bandMinPaddingOuter: { left: 118, right: 46 }, // V_e-(Fe³⁺/Fe²⁺) | V_Fe labels
+        bandMinPaddingInner: 48, // ion band's V°_Fe labels hang left
+    });
+
+    function update() {
+        const logc3 = parseFloat(c3El.value);
+        const logc2 = parseFloat(c2El.value);
+        // ideal-dilute: V_i = V°_i + (DEC/z_i)·log10(c_i/c°)
+        const V_FE3 = V0_FE3 + (DEC / 3) * logc3;
+        const V_FE2 = V0_FE2 + (DEC / 2) * logc2;
+        // implied electron levels ride on the ion levels (z-weighted, z = 1):
+        // V_e-(Fe³⁺/Fe²⁺) = 3·V_Fe³⁺ − 2·V_Fe²⁺, and likewise for standards.
+        const V_RXN = 3 * V_FE3 - 2 * V_FE2;
+        const V0_RXN = 3 * V0_FE3 - 2 * V0_FE2; // E° = 0.769 V above SHE level
+
+        diagram.setLevels([
+            {
+                categoryId: 'redox',
+                levelId: 'rxn',
+                yValue: V_RXN,
+                label: 'V_{\\mathrm{e}^-}(\\mathrm{Fe}^{3+}\\!/\\mathrm{Fe}^{2+})',
+                color: BLUE,
+                style: { lineWidth: 3, dasharray: '3,3' },
+                labelSide: 'left',
+            },
+            {
+                categoryId: 'redox',
+                levelId: 'rxn0',
+                yValue: V0_RXN,
+                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{Fe}^{3+}\\!/\\mathrm{Fe}^{2+})',
+                color: BLUE,
+                style: { lineWidth: 1, dasharray: '3,3' },
+                labelSide: 'left',
+            },
+            {
+                categoryId: 'redox',
+                levelId: 'she',
+                yValue: V0_SHE,
+                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{H}^+\\!/\\mathrm{H_2})',
+                color: BLUE,
+                style: { lineWidth: 1, dasharray: '3,3' },
+                labelSide: 'left',
+            },
+            {
+                categoryId: 'ion',
+                levelId: 'fe3',
+                yValue: V_FE3,
+                label: 'V_{\\mathrm{Fe}^{3+}}',
+                color: FE3,
+                style: { lineWidth: 3 },
+            },
+            {
+                categoryId: 'ion',
+                levelId: 'fe30',
+                yValue: V0_FE3,
+                label: 'V^\\circ_{\\mathrm{Fe}^{3+}}',
+                color: FE3,
+                style: { lineWidth: 1 },
+                labelSide: 'left',
+            },
+            {
+                categoryId: 'ion',
+                levelId: 'fe2',
+                yValue: V_FE2,
+                label: 'V_{\\mathrm{Fe}^{2+}}',
+                color: FE2,
+                style: { lineWidth: 3 },
+            },
+            {
+                categoryId: 'ion',
+                levelId: 'fe20',
+                yValue: V0_FE2,
+                label: 'V^\\circ_{\\mathrm{Fe}^{2+}}',
+                color: FE2,
+                style: { lineWidth: 1 },
+                labelSide: 'left',
+            },
+        ]);
+
+        renderSpanMath(
+            document.getElementById('{{idprefix}}-c3-readout'),
+            `10^{${logc3.toFixed(1)}}`
+        );
+        renderSpanMath(
+            document.getElementById('{{idprefix}}-c2-readout'),
+            `10^{${logc2.toFixed(1)}}`
+        );
+    }
+
+    const c3El = makeSlider('{{idprefix}}-c3', update, { fire: false });
+    const c2El = makeSlider('{{idprefix}}-c2', update, { fire: false });
+    update();
+</script>
