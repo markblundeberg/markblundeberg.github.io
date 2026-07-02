@@ -1,0 +1,106 @@
+{% set idprefix = "esbd-es-hetero" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 280px"></div>
+<div style="display: grid; grid-template-columns: max-content minmax(0, 180px); gap: 2px 10px; justify-content: center; align-items: center; margin-top: 0.4em">
+{{ controls.slider(idprefix + "-na", "doping A ($\\log_{10} n$)", { min: 12, max: 18, step: "any", value: 17, inline: true, readout: true }) }}
+{{ controls.slider(idprefix + "-nb", "doping B ($\\log_{10} n$)", { min: 12, max: 18, step: "any", value: 14, inline: true, readout: true }) }}
+</div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+
+    // Heterojunction between two n-type semiconductors, at equilibrium.
+    // The conduction-edge offset right AT the contact is a fixed property of
+    // the atomic interface (DALIGN, never moves). Each bulk's edge sits
+    // xi = DEC·(logNC − logn) below the shared flat Fermi level, so the
+    // bulk-to-bulk offset follows the dopings; the mismatch between that and
+    // the fixed alignment is absorbed by band bending, split between the
+    // sides in proportion to their screening lengths λ ∝ 1/√n (equal ε).
+    // Crank one side's doping to the max and it goes metal-like: rigid to
+    // the contact, the other side does all the accommodating.
+    const DEC = 0.05916;
+    const VF = 0.55; // flat Fermi level
+    const DALIGN = 0.25; // fixed interfacial edge offset (B above A)
+    const LOGNC = 19.45;
+    const xi = (logn) => DEC * (LOGNC - logn);
+    const lam = (logn) =>
+        Math.min(0.3, Math.max(0.015, 0.5 * Math.pow(10, (12 - logn) / 2)));
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        { electron: SPECIES.electron },
+        { margins: { right: 64 } }
+    );
+    diagram.setSpatialLayout([0, 0.5, 1], [
+        { ...REGION.semi2, name: 'Semiconductor A' },
+        { ...REGION.semiconductor, name: 'Semiconductor B' },
+    ]);
+    diagram.setVRange(0.0, 0.82);
+
+    const xA = linspace(0, 0.5, 61);
+    const xB = linspace(0.5, 1, 61);
+
+    function update() {
+        const lognA = parseFloat(naEl.value);
+        const lognB = parseFloat(nbEl.value);
+        const eAb = VF - xi(lognA);
+        const eBb = VF - xi(lognB);
+        const lA = lam(lognA),
+            lB = lam(lognB);
+        // bending needed to reconcile bulk offset with the fixed alignment,
+        // partitioned by screening length
+        const total = eBb - eAb - DALIGN;
+        const dA = (total * lA) / (lA + lB);
+        const dB = (total * lB) / (lA + lB);
+
+        diagram.updateTraceData([
+            {
+                id: 've',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                x: [0, 1],
+                y: [VF, VF],
+            },
+            {
+                id: 'edgeA',
+                speciesId: 'electron',
+                curveType: 'bandEdge_C',
+                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{A})',
+                labelFrac: 0.06,
+                x: xA,
+                y: xA.map((x) => eAb + dA * Math.exp(-(0.5 - x) / lA)),
+            },
+            {
+                id: 'edgeB',
+                speciesId: 'electron',
+                curveType: 'bandEdge_C',
+                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{B})',
+                x: xB,
+                y: xB.map((x) => eBb - dB * Math.exp(-(x - 0.5) / lB)),
+            },
+        ]);
+
+        // the one thing that never moves: the edge gap right at the contact
+        diagram.updateVerticalMarkers([
+            {
+                id: 'align',
+                x: 0.5,
+                yDefs: [{ y: eAb + dA }, { y: eBb - dB }],
+                symbol: '↕',
+                popupCallback: () =>
+                    'the interfacial alignment: a fixed property of the atomic contact, independent of the dopings',
+            },
+        ]);
+
+        document.getElementById('{{idprefix}}-na-readout').textContent =
+            lognA.toFixed(1);
+        document.getElementById('{{idprefix}}-nb-readout').textContent =
+            lognB.toFixed(1);
+    }
+
+    const naEl = makeSlider('{{idprefix}}-na', update, { fire: false });
+    const nbEl = makeSlider('{{idprefix}}-nb', update, { fire: false });
+    update();
+</script>
