@@ -26,8 +26,6 @@
 - [_Electrode potential_](/esbd/e/) - One electrode: visualizing $E$, overpotential, and mixed potentials.
 - [_Reference electrodes & cells_](/esbd/references/) - Reference electrodes, full cells, liquid junction potentials, and the "absolute" vacuum reference.
 - [_Interface kinetics_](/esbd/kinetics/) - The current–overpotential law: Butler–Volmer as the exponential interface element, Tafel, the diode connection, and Marcus–Gerischer.
-- [_Cells with junctions_](/esbd/junctions/) - Liquid junction potentials; concentration cells. *(pending redistribution / chop)*
-- [_pH_](/esbd/ph/) - *(pending redistribution / chop)*
 
 *Application highlights*:
 - [_Redox-flow Batteries_](/esbd/redoxflow)
@@ -47,14 +45,6 @@ The rabbit holes -- appendices, advanced topics, notes:
 - [_Quasi-charge-neutrality_](/esbd/qcn/) - The flexible tyranny of long-range electrostatics.
 - [_Interfaces_](x) - Interfaces between materials. Electric double layers. Insulators and capacitance.
 - [_Electrostatic subtleties_](x) - Graded interfaces: quasi-electric fields vs "real" electric field. Does $\phi$ represent real electrostatics?
-
-*Non-equilibrium topics*:
-
-- [_Drift-diffusion_](/esbd/dd/) - The motion of ions; Nernst-Planck equation; electric vs quasielectric forces.
-- [_Steady transport_](/esbd/transport1/) - A $V_i$ view on mass transport and concentration gradients.
-- [_Transport_](/esbd/transport2/) - Steady state transport & concentration gradients. (esp. two-ion)
-- [_Junctions_](/esbd/junctions/) - Salt bridges and ion membranes.
-- [_Transport dynamics_](/esbd/transport3/) - Time evolution of ion concentrations. Poisson-Nernst-Planck equation.
 
 *Thermodynamics*:
 - [_Understanding electrochemical potential_](/esbd/muintro/) - Why $\bar\mu_i$ is the real, indivisible chemical potential — and why that makes $V_i$ (and band diagrams) work.
