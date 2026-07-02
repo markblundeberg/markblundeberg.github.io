@@ -60,7 +60,9 @@ where $\rho_{\mathrm{bg}}$ is any fixed, immobile background charge. Each mobile
 <figure class="demo-container" style="max-width: 420px">
 {% include "esbd-diagrams/levels-cc-neutrality.njk" %}
 {% figcaption %}
-Top: a multi-ion solution with all $V_i$ fixed. Bottom: the total free charge density as a function of the $V^\circ_i$ ladder offset, crossing zero at the single neutral position (charge axis log-compressed). Sliding the ladder is how the system "finds" neutrality; the tick on the slider marks the neutral offset.
+
+A multi-ion solution with three $V_i$ fixed, and some fixed negative background charge. **Top**: species voltage levels and the $V^\circ_i$ ladder. **Bottom**: the total charge density as a function of the $V^\circ_i$ ladder offset, crossing zero at the single neutral position. Sliding the ladder is how the system "finds" neutrality; the tick on the slider marks the neutral offset.
+
 {% endfigcaption %}
 </figure>
 

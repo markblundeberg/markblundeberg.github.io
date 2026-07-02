@@ -1,8 +1,8 @@
 {% set idprefix = "levels-cc-neutrality" %}
 {% import "macros/controls.njk" as controls %}
-<div class="bd-container" id="{{idprefix}}-levels" style="height: 205px; max-width: 220px"></div>
-<div class="bd-container" id="{{idprefix}}-charge" style="height: 165px; max-width: 220px"></div>
-{{ controls.slider(idprefix + "-ladder-slider", "Ladder offset", { min: -0.1, max: 0.1, step: "any", value: -0.06, snap: 0.024 }) }}
+<div class="bd-container" id="{{idprefix}}-levels" style="height: 205px; max-width: 250px"></div>
+<div class="bd-container" id="{{idprefix}}-charge" style="height: 165px; max-width: 250px"></div>
+{{ controls.slider(idprefix + "-ladder-slider", "Ladder offset", { min: -0.07, max: 0.07, step: "any", value: 0, snap: -0.041 }) }}
 
 <script type="module">
     import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
@@ -13,33 +13,37 @@
     // Toy multi-ion solution: X+ (z=1), Y2+ (z=2), Z- (z=-1), all V_i pinned;
     // the rigid ladder slides by s. Concentrations follow the ideal-dilute law
     // (gaps in real volts), so net charge rho(s) is monotone with ONE zero
-    // crossing (s* ~ +0.024 V, marked on the slider's datalist).
+    // crossing (s* ~ +XXX V, marked on the slider's datalist).
     const DEC = 0.05916;
+    const xOff = +0.12;
+    const yOff = -0.06;
+    const zOff = 0;
     const IONS = [
-        { key: 'x', z: 1, V: 0.05, V0off: 0.1, sp: SPECIES.sodium, sym: 'X^{+}' },
-        { key: 'y', z: 2, V: 0.0, V0off: 0.0, sp: SPECIES.zinc, sym: 'Y^{2+}' },
-        { key: 'z', z: -1, V: -0.05, V0off: -0.1, sp: SPECIES.chloride, sym: 'Z^{-}' },
+        { key: 'x', z: 1,  V: xOff - 0.5*DEC, V0off: xOff, sp: SPECIES.sodium, sym: 'X^{+}' },
+        { key: 'y', z: 2,  V: yOff - 1*DEC, V0off: yOff, sp: SPECIES.zinc, sym: 'Y^{2+}' },
+        { key: 'z', z: -1, V: zOff + 0.8*DEC, V0off: zOff, sp: SPECIES.chloride, sym: 'Z^{-}' },
     ];
+    const rho_bg = -2;
     const conc = (ion, s) =>
         Math.pow(10, (ion.z * (ion.V - (s + ion.V0off))) / DEC);
-    const rho = (s) => IONS.reduce((acc, ion) => acc + ion.z * conc(ion, s), 0);
+    const rho = (s) => IONS.reduce((acc, ion) => acc + ion.z * conc(ion, s), rho_bg);
     const symlog = (v) => Math.asinh(v) / Math.LN10; // keeps the zero crossing honest
 
     const levels = new EnergyLevelsDiagram('{{idprefix}}-levels', {
         yAxisLabel: 'Voltage (V)',
-        yRange: [-0.28, 0.3],
+        yRange: [-0.17, 0.21],
         categories: [{ id: 'soln', label: 'Solution' }],
         bandMinPaddingOuter: { left: 48, right: 40 },
     });
 
     // Lower panel: net charge vs ladder offset (a non-spatial x axis → XYPlot).
-    const S_MIN = -0.1,
-        S_MAX = 0.1;
+    const S_MIN = -0.07,
+        S_MAX = 0.07;
     const chart = new XYPlot('{{idprefix}}-charge', {
         xLabel: 'ladder offset',
         yLabel: 'Net charge',
         xRange: [S_MIN, S_MAX],
-        yRange: [-1.6, 4.4],
+        yRange: [-5, 8],
         xMode: 'abstract',
         yMode: 'abstract',
         margins: { bottom: 30, left: 35, right:20 },
@@ -56,12 +60,13 @@
         },
         {
             id: 'rho',
-            label: '\\textstyle\\sum_i z_i c_i',
-            labelFrac: 0.35,
+            label: '\\textstyle \\rho_{\\mathrm{bg}} + \\sum_i q_i c_i',
+            labelFrac: 0.1,
+            labelHAlign: 'left',
             color: '#444',
             style: { lineWidth: 2 },
             x: sGrid,
-            y: sGrid.map((s) => symlog(rho(s))),
+            y: sGrid.map((s) => (rho(s))),
         },
     ]);
 
@@ -88,7 +93,7 @@
         }
         levels.setLevels(levelData);
 
-        chart.updateMarkers([{ id: 'here', x: s, y: symlog(rho(s)) }]);
+        chart.updateMarkers([{ id: 'here', x: s, y: (rho(s)) }]);
     }
 
     makeSlider('{{idprefix}}-ladder-slider', update);
