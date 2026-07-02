@@ -1,0 +1,112 @@
+{% set idprefix = "kin-barrier" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 240px"></div>
+{{ controls.slider(idprefix + "-eta", "Overpotential $\\eta$", { min: -0.25, max: 0.25, step: "any", value: 0.12, snap: 0, readout: true, unit: "V" }) }}
+{{ controls.slider(idprefix + "-alpha", "Symmetry $\\alpha$", { min: 0, max: 1, step: "any", value: 0.5, snap: 0.5, readout: true }) }}
+
+<script type="module">
+    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
+    import { SPECIES } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+
+    const BLUE = SPECIES.electron.color;
+    // Barrier-lowering schematic. The transferring electron passes through a
+    // transition state; remember the flip: high electron ENERGY = low V_e-,
+    // so the activation pass hangs BELOW the two levels on a voltage axis.
+    // The pass sits at V_TS = V0 − B + α·η (rides fraction α with the metal
+    // side): the metal→solution barrier grows by (1−α)η while the
+    // solution→metal barrier shrinks by αη — exactly Butler–Volmer.
+    const V0 = 0.5; // the reaction level (right plateau); metal = V0 + η
+    const B = 0.28; // equilibrium barrier depth, volts
+
+    const plot = new XYPlot('{{idprefix}}-container', {
+        xLabel: 'Reaction coordinate',
+        yLabel: 'Voltage $V_{\\mathrm{e}^-}$',
+        xRange: [0, 1],
+        yRange: [-0.12, 0.88],
+        xMode: 'abstract',
+        yMode: 'abstract',
+        margins: { bottom: 34, left: 26, right: 10 },
+    });
+
+    const FAINT = { lineWidth: 1, dasharray: '4,3', opacity: 0.5 };
+    const sm = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
+
+    function update() {
+        const eta = parseFloat(etaEl.value);
+        const alpha = parseFloat(alphaEl.value);
+        const VL = V0 + eta; // metal side
+        const VTS = V0 - B + alpha * eta; // transition state
+
+        const xs = linspace(0.25, 0.75, 101);
+        const pass = xs.map((x) => {
+            const base = VL + (V0 - VL) * sm((x - 0.25) / 0.5);
+            const mid = (VL + V0) / 2;
+            return base - (mid - VTS) * Math.exp(-(((x - 0.5) / 0.14) ** 2));
+        });
+
+        plot.updateTraceData([
+            {
+                id: 'ref',
+                x: [0.3, 0.98],
+                y: [V0 - B, V0 - B],
+                color: '#999',
+                style: FAINT,
+                showLabel: false,
+            },
+            {
+                id: 'left',
+                x: [0.02, 0.25],
+                y: [VL, VL],
+                color: BLUE,
+                style: { lineWidth: 3 },
+                showLabel: false,
+            },
+            {
+                id: 'right',
+                x: [0.75, 0.98],
+                y: [V0, V0],
+                color: BLUE,
+                style: { lineWidth: 3, dasharray: '3,3' },
+                showLabel: false,
+            },
+            {
+                id: 'pass',
+                x: xs,
+                y: pass,
+                color: '#667',
+                style: { lineWidth: 1.5, dasharray: '2,2' },
+                showLabel: false,
+            },
+            // invisible stubs that float the level labels above the plateaus
+            {
+                id: 'lbl_left',
+                x: [0.02, 0.03],
+                y: [VL + 0.07, VL + 0.07],
+                color: BLUE,
+                style: { lineWidth: 0, opacity: 0 },
+                label: 'V_{\\mathrm{e}^-}',
+                labelFrac: 1,
+            },
+            {
+                id: 'lbl_right',
+                x: [0.6, 0.61],
+                y: [V0 + 0.07, V0 + 0.07],
+                color: BLUE,
+                style: { lineWidth: 0, opacity: 0 },
+                label: 'V_{\\mathrm{e}^-}(\\mathrm{Ox}/\\mathrm{Red})',
+                labelFrac: 1,
+            },
+        ]);
+        plot.updateMarkers([{ id: 'ts', x: 0.5, y: VTS, color: '#667', r: 3 }]);
+
+        document.getElementById('{{idprefix}}-eta-readout').textContent =
+            eta.toFixed(2);
+        document.getElementById('{{idprefix}}-alpha-readout').textContent =
+            alpha.toFixed(2);
+    }
+
+    const etaEl = makeSlider('{{idprefix}}-eta', update, { fire: false });
+    const alphaEl = makeSlider('{{idprefix}}-alpha', update, { fire: false });
+    update();
+</script>

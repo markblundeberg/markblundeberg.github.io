@@ -26,6 +26,13 @@ with $\eta$ the $V_{\mathrm{e}^-}$ step defined above. Two parameters characteri
 * The **exchange current** $J_0$ is the two-way traffic at equilibrium. At $\eta = 0$ the anodic and cathodic partial currents each run at $J_0$ and cancel; equilibrium is busy, not idle. A large $J_0$ means the interface is hard to pull away from equilibrium (a good electrocatalyst, or a fast reference-electrode couple); a tiny $J_0$ means the level can be dragged far with little consequence.
 * The **charge-transfer coefficient** $\alpha$ splits the influence of $\eta$ between the two directions: a fraction $\alpha$ of the step lowers the anodic barrier, and the remaining $1-\alpha$ raises the cathodic one.^[The charge-transfer coefficients could be better named "barrier-lowering coefficients," reflecting the degree to which the overpotential controls the reaction barrier in each direction. Practically they end up as empirical fitting parameters, much like a diode's ideality factor.]
 
+<figure class="demo-container" style="max-width: 420px">
+{% include "esbd-diagrams/kin-barrier.njk" %}
+{% figcaption %}
+Where $\alpha$ lives: the transition state between the two levels. High electron energy is low voltage, so the activation pass hangs *below* the levels on this axis. Slide $\eta$ and the pass rides with the metal level by the fraction $\alpha$ (compare the grey equilibrium mark): one barrier shrinks by $\alpha\eta$ while the other grows by $(1-\alpha)\eta$. At $\alpha = 1$ the pass moves rigidly with the metal; at $\alpha = 0$ it ignores the metal entirely.
+{% endfigcaption %}
+</figure>
+
 <figure class="demo-container" style="max-width: 660px">
 {% include "esbd-diagrams/kin-bv-explainer.njk" %}
 {% figcaption %}
