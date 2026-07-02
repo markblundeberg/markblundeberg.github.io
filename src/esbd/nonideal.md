@@ -181,7 +181,7 @@ This shift leaves $\bar\mu_i$, $a_i$, and even $V^{\circ}_i$ totally unchanged. 
     By adopting activity conventions, we have already abandoned the pretense of $\phi'$ being a true electrostatic potential, so we might as well put $\phi'$ somewhere convenient. Some options:
     {# pbreak #}
     * Pin $\phi' = V^\circ_{\mathrm{H}^+}$, which puts $\mu^\circ_{\mathrm{int},\mathrm{H}^+} = 0$.
-    * Pin $\phi' = V^\circ_{\mathrm{SHE}}$, which is $\phi' = V^{\circ}_{\mathrm{H}^+} - \mu^{\text{SHE}}_{\mathrm{H_2}}/(2F)$. This would set $\phi'$ to the standard hydrogen electrode (SHE) in the given solvent. Here $\mu^{\text{SHE}}_{\mathrm{H_2}}$ is the chemical potential of the hydrogen gas in the SHE; see [the Potentials topic](../potentials/) for more information about the SHE. Then, all SHE-referenced electrode potentials would equal $V_{\mathrm{e}^-} - \phi'$ under all conditions.
+    * Pin $\phi' = V^\circ_{\mathrm{SHE}}$, which is $\phi' = V^{\circ}_{\mathrm{H}^+} - \mu^{\text{SHE}}_{\mathrm{H_2}}/(2F)$. This would set $\phi'$ to the standard hydrogen electrode (SHE) in the given solvent. Here $\mu^{\text{SHE}}_{\mathrm{H_2}}$ is the chemical potential of the hydrogen gas in the SHE; see [Reference electrodes & cells](../references/) for more information about the SHE. Then, all SHE-referenced electrode potentials would equal $V_{\mathrm{e}^-} - \phi'$ under all conditions.
     * Pin $\phi'$ to the ferrocenium-ferrocene electrode, which is often more appropriate in nonaqueous solvents.
     {# pbreak #}
     This would make liquid junction potentials $\phi_1' - \phi_2'$ well defined under all circumstances, even between non-ideal solutions with differing solvents, providing we have established a $\phi'$ convention for each solvent.

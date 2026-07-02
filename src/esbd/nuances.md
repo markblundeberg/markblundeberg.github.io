@@ -11,7 +11,7 @@ Are $V_i$ real voltages? Can we measure $V_i - V_j$ for arbitrary charged specie
 
 In principle, yes. In practice, only in certain conditions.
 
-Let's go back to the start, with [electrodes](../electrodes/). We established that for example, for a piece of zinc metal immersed in solution, we have:
+Let's go back to the start, with [electrodes at equilibrium](../equilibrium/). We established that for example, for a piece of zinc metal immersed in solution, we have:
 
 $$ V_{\mathrm{Zn}^{2+}} = V_{\mathrm{e}^-} + \frac{1}{2F} \mu_{\mathrm{Zn}} $$
 
