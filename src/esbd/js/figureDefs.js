@@ -28,6 +28,7 @@ export const SPECIES = {
     silver: { z: 1, color: '#E6AB02', mathLabel: '\\mathrm{Ag}^{+}' },
     zinc: { z: 2, color: '#c04060', mathLabel: '\\mathrm{Zn}^{2+}' },
     ferrous: { z: 2, color: '#bba442', mathLabel: '\\mathrm{Fe}^{2+}' },
+    oxide: { z: -2, color: '#8a4fa0', mathLabel: '\\mathrm{O}^{2-}' },
     ferric: { z: 3, color: '#a01808', mathLabel: '\\mathrm{Fe}^{3+}' },
 };
 

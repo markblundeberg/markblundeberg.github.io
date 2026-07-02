@@ -1,0 +1,39 @@
+{% set idprefix = "esbd-oc-ysz" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 200px"></div>
+{{ controls.slider(idprefix + "-j", "Current", { min: -1, max: 1, step: "any", value: 0.6, snap: 0, readout: true }) }}
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
+
+    // Deliberately the same picture as the metal-wire figure above, with the
+    // one trace relabeled: a fast ionic conductor is a metal for O2- ions.
+    // Charge-normalized V_i makes the two literally identical - charge flows
+    // downhill in V regardless of the carrier's sign or valence.
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        { oxide: SPECIES.oxide },
+        { margins: { right: 46 } }
+    );
+    diagram.setSpatialLayout([0, 1], [
+        { ...REGION.solid, name: 'YSZ (solid electrolyte)' },
+    ]);
+    diagram.setVRange(0.1, 0.9);
+
+    function update(j) {
+        document.getElementById('{{idprefix}}-j-readout').textContent =
+            j.toFixed(1);
+        diagram.updateTraceData([
+            {
+                id: 'vo',
+                speciesId: 'oxide',
+                curveType: 'voltage',
+                x: [0, 1],
+                y: [0.5 + 0.25 * j, 0.5 - 0.25 * j],
+            },
+        ]);
+    }
+    makeSlider('{{idprefix}}-j', update);
+</script>

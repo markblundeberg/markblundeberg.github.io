@@ -13,9 +13,10 @@ In the dilute solutions and semiconductors of the previous topics, the standard-
 
 A metal is the extreme of carrier density, something like $10^{22}$ mobile electrons per cubic centimetre, enough to screen any disturbance within a fraction of an ångström. Pinning down the internal $\phi$, the electrons' activity, or the detailed band structure is a genuine theoretical ordeal, and the response of the $V_i$ picture is simply not to bother. The only quantity that matters for the bulk is $V_{\mathrm{e}^-}$: flat at equilibrium, sloping by plain Ohm's law $J_{\mathrm{e}^-} = -\sigma_{\mathrm{e}^-}\nabla V_{\mathrm{e}^-}$ under load. A metal wire is a single $V_{\mathrm{e}^-}$ trace, and that is all we ever need from it.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 380px">
+{% include "esbd-diagrams/esbd-oc-metal.njk" %}
 {% figcaption %}
-A metal phase as an ESBD. Screening is perfect, so the electrical state is just the flat (or, under current, linearly sloping) $V_{\mathrm{e}^-}$ trace, with no need to draw $\phi$ or $V^\circ_{\mathrm{e}^-}$.
+A metal phase as an ESBD. Screening is perfect, so the electrical state is just the flat (or, under current, linearly sloping) $V_{\mathrm{e}^-}$ trace — deliberately drawn with nothing else, no $\phi$ and no $V^\circ_{\mathrm{e}^-}$.
 {% endfigcaption %}
 </figure>
 
@@ -23,9 +24,10 @@ A metal phase as an ESBD. Screening is perfect, so the electrical state is just 
 
 Some solids play the same trick with an ion. A fast, or "superionic," conductor such as {% wiki "Yttria-stabilized zirconia", "yttria-stabilized zirconia" %} carries a high concentration of mobile oxide ions, $\mathrm{O}^{2-}$, hopping through vacancies in the lattice. The microscopics are crowded and thoroughly non-dilute, yet thermodynamically the bulk is once again a single sloping species voltage, $J_{\mathrm{O}^{2-}} = -\sigma_{\mathrm{O}^{2-}}\nabla V_{\mathrm{O}^{2-}}$. These single-ion conductors are the ionic counterpart of the metal wire, and because they pass only one species, they are also the only kind of junction that can settle into true equilibrium without a standing current.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 380px">
+{% include "esbd-diagrams/esbd-oc-ysz.njk" %}
 {% figcaption %}
-A fast ionic conductor (YSZ). The single active trace $V_{\mathrm{O}^{2-}}$ carries the whole story of oxygen transport across the solid electrolyte.
+A fast ionic conductor (YSZ): the single trace $V_{\mathrm{O}^{2-}}$ carries the whole story of oxygen transport across the solid electrolyte. Deliberately the same picture as the metal above with one label changed — in charge-normalized voltage, a superionic conductor is a metal for its ion, sign and valence notwithstanding.
 {% endfigcaption %}
 </figure>
 
