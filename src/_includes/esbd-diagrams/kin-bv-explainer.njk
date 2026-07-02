@@ -6,6 +6,7 @@
 </div>
 {{ controls.slider(idprefix + "-eta", "Overpotential $\\eta$", { min: -0.12, max: 0.12, step: "any", value: 0.05, snap: 0, readout: true, unit: "V" }) }}
 {{ controls.slider(idprefix + "-alpha", "Symmetry $\\alpha$", { min: 0, max: 1, step: "any", value: 0.5, snap: 0.5, readout: true }) }}
+<div style="text-align: center">{{ controls.checkbox(idprefix + "-log", "log-current (Tafel) view") }}</div>
 
 <script type="module">
     import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
@@ -76,46 +77,103 @@
             },
         ]);
 
-        // trim each trace where it leaves the y-range (the exponential
-        // genuinely blows through the roof; let it exit mid-plot)
+        const logView = logEl.checked;
         const xs = linspace(-0.12, 0.12, 241);
-        const trim = (fn) => {
+        // trim a trace where it leaves the y-window (in the linear view the
+        // exponential genuinely blows through the roof; let it exit mid-plot)
+        const trim = (fn, lo, hi) => {
             const x = [], y = [];
             for (const e of xs) {
                 const v = fn(e);
-                if (Math.abs(v) <= JMAX) { x.push(e); y.push(v); }
+                if (v >= lo && v <= hi) { x.push(e); y.push(v); }
             }
             return { x, y };
         };
-        const tJ = trim(J);
-        const tA = trim((e) => Math.exp(alpha * f * e));
-        const tC = trim((e) => -Math.exp(-(1 - alpha) * f * e));
-        iv.updateTraceData([
-            {
-                id: 'anodic',
-                ...tA,
-                color: BLUE,
-                style: FAINT,
-                label: 'J_{\\mathrm{a}}',
-                labelFrac: 0.93,
-                labelHAlign: 'right',
-            },
-            {
-                id: 'cathodic',
-                ...tC,
-                color: '#E4571A',
-                style: FAINT,
-                label: '-J_{\\mathrm{c}}',
-                labelFrac: 0.07,
-            },
-            { id: 'J', ...tJ, color: '#333', style: { lineWidth: 2.5 }, label: '' },
-        ]);
-        const Jnow = J(eta);
-        iv.updateMarkers(
-            Math.abs(Jnow) <= JMAX
-                ? [{ id: 'op', x: eta, y: Jnow, color: '#333' }]
-                : []
-        );
+        const Ja = (e) => Math.exp(alpha * f * e);
+        const Jc = (e) => -Math.exp(-(1 - alpha) * f * e);
+
+        if (!logView) {
+            iv.setYLabel('Current $J/J_0$');
+            iv.setYRange(-JMAX, JMAX);
+            iv.updateTraceData([
+                {
+                    id: 'anodic',
+                    ...trim(Ja, -JMAX, JMAX),
+                    color: BLUE,
+                    style: FAINT,
+                    label: 'J_{\\mathrm{a}}',
+                    labelFrac: 0.93,
+                    labelHAlign: 'right',
+                },
+                {
+                    id: 'cathodic',
+                    ...trim(Jc, -JMAX, JMAX),
+                    color: '#E4571A',
+                    style: FAINT,
+                    label: '-J_{\\mathrm{c}}',
+                    labelFrac: 0.07,
+                },
+                {
+                    id: 'J',
+                    ...trim(J, -JMAX, JMAX),
+                    color: '#333',
+                    style: { lineWidth: 2.5 },
+                    label: '',
+                },
+            ]);
+            const Jnow = J(eta);
+            iv.updateMarkers(
+                Math.abs(Jnow) <= JMAX
+                    ? [{ id: 'op', x: eta, y: Jnow, color: '#333' }]
+                    : []
+            );
+        } else {
+            // Tafel view: log10|J/J0|. The partial currents become straight
+            // lines (the Tafel asymptotes); |J| dives to -infinity at eta = 0,
+            // so the notch bottom is trimmed and the branches drawn separately.
+            const LO = -2,
+                HI = 2.2;
+            iv.setYLabel('$\\log_{10} |J/J_0|$');
+            iv.setYRange(LO, HI);
+            const logAbs = (fn) => (e) => Math.log10(Math.abs(fn(e)) + 1e-300);
+            iv.updateTraceData([
+                {
+                    id: 'anodic',
+                    ...trim(logAbs(Ja), LO, HI),
+                    color: BLUE,
+                    style: FAINT,
+                    label: 'J_{\\mathrm{a}}',
+                    labelFrac: 0.93,
+                    labelHAlign: 'right',
+                },
+                {
+                    id: 'cathodic',
+                    ...trim(logAbs(Jc), LO, HI),
+                    color: '#E4571A',
+                    style: FAINT,
+                    label: '|J_{\\mathrm{c}}|',
+                    labelFrac: 0.07,
+                },
+                {
+                    id: 'Jneg',
+                    ...trim((e) => (e < 0 ? logAbs(J)(e) : LO - 1), LO, HI),
+                    color: '#333',
+                    style: { lineWidth: 2.5 },
+                    label: '',
+                },
+                {
+                    id: 'Jpos',
+                    ...trim((e) => (e > 0 ? logAbs(J)(e) : LO - 1), LO, HI),
+                    color: '#333',
+                    style: { lineWidth: 2.5 },
+                    label: '',
+                },
+            ]);
+            const yNow = logAbs(J)(eta);
+            iv.updateMarkers(
+                yNow >= LO ? [{ id: 'op', x: eta, y: yNow, color: '#333' }] : []
+            );
+        }
 
         document.getElementById('{{idprefix}}-eta-readout').textContent =
             eta.toFixed(2);
@@ -125,5 +183,7 @@
 
     const etaEl = makeSlider('{{idprefix}}-eta', update, { fire: false });
     const alphaEl = makeSlider('{{idprefix}}-alpha', update, { fire: false });
+    const logEl = document.getElementById('{{idprefix}}-log');
+    logEl.addEventListener('change', update);
     update();
 </script>

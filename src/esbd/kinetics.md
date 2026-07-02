@@ -33,13 +33,7 @@ The interface as a nonlinear circuit element. Left: the overpotential $\eta$ is 
 {% endfigcaption %}
 </figure>
 
-For small $\eta$ the exponentials linearize and the interface is just a resistor, $J \approx J_0 f \eta$, the *charge-transfer resistance* $R_{\mathrm{ct}} = RT/(F J_0)$ per unit area. For large $\eta$ one exponential dominates and $\eta$ grows only logarithmically with current — the {% wiki "Tafel equation" %}, a straight line of $(\ln 10) RT/(\alpha F) \approx 59\,\mathrm{mV}/\alpha$ per decade on a log-current plot.
-
-<figure class="diagram-placeholder">
-{% figcaption %}
-PROPOSED FIGURE (Tafel view): same curve on a $\log_{10}|J|$ axis — the V-shaped Tafel plot, straight anodic and cathodic asymptotes meeting in the rounded exchange-current notch. Could be a second y-mode of the figure above, or its own small XYPlot.
-{% endfigcaption %}
-</figure>
+For small $\eta$ the exponentials linearize and the interface is just a resistor, $J \approx J_0 f \eta$, the *charge-transfer resistance* $R_{\mathrm{ct}} = RT/(F J_0)$ per unit area. For large $\eta$ one exponential dominates and $\eta$ grows only logarithmically with current — the {% wiki "Tafel equation" %}, a straight line of $(\ln 10) RT/(\alpha F) \approx 59\,\mathrm{mV}/\alpha$ per decade on a log-current plot. Toggle the figure above into its Tafel view: the two partial currents become the straight asymptotes, meeting at the exchange-current notch.
 
 ## The diode connection
 
