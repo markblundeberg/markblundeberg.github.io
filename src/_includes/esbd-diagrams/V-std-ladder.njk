@@ -230,7 +230,7 @@
     const commonConfig = {
         showYTicks: true,
         categories: [{ id: 'levels', label: '' }],
-        margins: { top: 10, right: 0, bottom: 20, left: 25 },
+        margins: { top: 10, right: 28, bottom: 20, left: 25 },
     };
     const throttleDuration = 100; // should be 1/5 or less of transitionDuration
 
@@ -238,7 +238,7 @@
     const muBarConfig = {
         ...commonConfig,
         yAxisLabel:
-            'Standard species voltage $V^\\circ_i$ (V) - arbirary offset',
+            'Standard species voltage $V^\\circ_i$ (V) - arbitrary offset',
         yRange: [-3.1 + V_arb_offset, 4.1 + V_arb_offset], // Calculated range + padding
     };
 

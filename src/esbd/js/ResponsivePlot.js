@@ -396,14 +396,20 @@ class ResponsivePlot {
                 {
                     label: labelText,
                     hAlign: 'center',
-                    vAlign: 'center',
+                    // 'top' + the rotate(-90) below = the label box extends
+                    // from the anchor toward the axis.
+                    vAlign: 'top',
                 },
             ],
             fadeIn: false, // It's a static element
             onUpdateTransition: (s) =>
                 s.attr(
                     'transform',
-                    `translate(${-0.6 * this.margins.left}, ${0.5 * this.plotHeight}) rotate(-90)`
+                    // Anchored at the OUTER edge of the left margin, so the
+                    // margin size directly sets the label-to-axis gap (an
+                    // abstract axis with no tick text can use a small margin).
+                    // The old -0.6*left anchor floated proportionally far away.
+                    `translate(${-this.margins.left + 4}, ${0.5 * this.plotHeight}) rotate(-90)`
                 ),
         });
     }

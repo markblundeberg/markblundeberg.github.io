@@ -29,7 +29,8 @@
         yAxisLabel: 'Voltage (V)',
         yRange: [-0.28, 0.3],
         categories: [{ id: 'soln', label: 'Solution' }],
-        margins: { top: 8, right: 65, bottom: 24, left: 95 },
+        // right must fit the carrier labels; rung labels sit inside the plot
+        margins: { top: 8, right: 48, bottom: 24, left: 50 },
     });
 
     // Lower panel: net charge vs ladder offset (a non-spatial x axis → XYPlot).
@@ -40,8 +41,9 @@
         yLabel: 'Net charge',
         xRange: [S_MIN, S_MAX],
         yRange: [-1.6, 4.4],
+        xMode: 'abstract',
         yMode: 'abstract',
-        margins: { top: 6, right: 65, bottom: 38, left: 95 },
+        margins: { bottom: 30, left: 40 },
     });
     const sGrid = linspace(S_MIN, S_MAX, 121);
     chart.updateTraceData([

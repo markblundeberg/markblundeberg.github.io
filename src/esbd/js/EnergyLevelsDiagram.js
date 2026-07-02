@@ -173,7 +173,9 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             .scaleBand()
             .paddingInner(0.5) // Space between category bands
             .paddingOuter(0.2) // Space at edges
-            .align(0.25); // Shift left
+            .align(0.5); // centered — label room comes from margins, not
+        // from a hidden left-shift (the old align(0.25) dumped phantom
+        // whitespace on the right that margins couldn't control)
         this.yScale = d3.scaleLinear();
 
         // Axis drawing generators

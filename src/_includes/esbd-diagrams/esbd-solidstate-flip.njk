@@ -32,7 +32,7 @@
     // Left: electron energy increases upward.
     const energy = new BandDiagram('{{idprefix}}-energy', {
         yMode: 'abstract',
-        margins: { right: 70 },
+        margins: { right: 70, left: 28 },
     });
     energy.setSpatialLayout(boundaries, regions);
     energy.setYLabel('Electron energy');
@@ -68,7 +68,7 @@
     const esbd = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-esbd',
         { electron: SPECIES.electron, hole: SPECIES.hole },
-        { yMode: 'abstract', margins: { right: 70 } }
+        { yMode: 'abstract', margins: { right: 70, left: 28 } }
     );
     esbd.setSpatialLayout(boundaries, regions);
     esbd.diagram.setYLabel('Species voltage');
