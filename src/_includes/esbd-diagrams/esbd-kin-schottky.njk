@@ -1,0 +1,94 @@
+{% set idprefix = "esbd-kin-schottky" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 280px"></div>
+{{ controls.slider(idprefix + "-bias", "Bias (&minus; reverse / + forward)", { min: -1.0, max: 0.45, step: "any", value: 0, snap: 0, readout: true, unit: "V" }) }}
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+
+    // n-type Schottky diode. The interface is sharp and the barrier is
+    // PINNED: the conduction edge at the contact sits a fixed phi_B = 0.6 V
+    // below the metal's V_e- no matter the bias. The bulk edge rides with the
+    // semiconductor bulk (xi = 0.15 V below its V_e-), so bias is taken up by
+    // band bending in a depletion zone of width ∝ sqrt(phi_bi − b),
+    // phi_bi = phi_B − xi = 0.45 V (flat-band at slider max). The electron
+    // quasi-Fermi level stays ~flat through the depletion zone and steps at
+    // the interface — the interface element, metal-side barrier fixed.
+    const PHI_B = 0.6,
+        XI = 0.15,
+        PHI_BI = PHI_B - XI;
+    const XI_IF = 0.35; // interface position
+    const W0 = 0.3; // zero-bias depletion width (schematic)
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        { electron: SPECIES.electron },
+        { margins: { right: 70 } }
+    );
+    diagram.setSpatialLayout([0, XI_IF, 1], [
+        REGION.metal,
+        { ...REGION.semiconductor, name: 'n-type semiconductor' },
+    ]);
+    diagram.setVRange(-0.78, 1.18);
+
+    const xs = linspace(XI_IF, 1, 81);
+    const sm = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
+
+    function update(b) {
+        document.getElementById('{{idprefix}}-bias-readout').textContent =
+            b.toFixed(2);
+        const merged = Math.abs(b) < 0.03;
+        const vSemi = -b; // metal V_e- fixed at 0; forward bias lowers the semi side
+        const W = W0 * Math.sqrt(Math.max(0.05, (PHI_BI - b) / PHI_BI));
+
+        diagram.updateTraceData([
+            {
+                id: 'metal',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: !merged,
+                labelFrac: 0.4,
+                x: [0, XI_IF],
+                y: [0, 0],
+            },
+            {
+                id: 'semi',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                label: merged ? 'V_{\\mathrm{e}^-}' : 'V_{\\mathrm{e}^-}',
+                x: [XI_IF, 1],
+                y: [vSemi, vSemi],
+            },
+            {
+                id: 'edge',
+                speciesId: 'electron',
+                curveType: 'bandEdge_C',
+                label: 'V^\\circ_{\\mathrm{e}^-}',
+                x: xs,
+                // pinned at -PHI_B at the contact; bends to the bulk value
+                y: xs.map(
+                    (x) => -PHI_B + (vSemi - XI + PHI_B) * sm((x - XI_IF) / W)
+                ),
+            },
+        ]);
+
+        diagram.updateVerticalMarkers(
+            merged
+                ? [
+                      {
+                          id: 'te',
+                          x: XI_IF,
+                          yDefs: [{ y: 0 }, { y: -PHI_B }],
+                          symbol: '⇌',
+                          popupCallback: () =>
+                              '$\\mathrm{e}^-(\\text{semi}) \\rightleftharpoons \\mathrm{e}^-(\\text{metal})$',
+                      },
+                  ]
+                : []
+        );
+    }
+
+    makeSlider('{{idprefix}}-bias', update);
+</script>

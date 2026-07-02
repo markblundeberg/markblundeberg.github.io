@@ -48,6 +48,13 @@ Electronics has its own famous exponential interface law, the {% wiki "Shockley 
 $$ J = J_0\left[e^{fV} - 1\right], $$
 and it is exactly the Butler–Volmer equation with $\alpha = 1$: forward bias lowers the injection barrier one-for-one, while reverse bias does not raise any barrier — it only shuts off the forward traffic, leaving the fixed $-J_0$ of carriers that fall down the junction regardless. You can watch this happen on the figure above. The pn-junction and the electrode are twins here in the same way the [bipolar membrane and the diode](../bipolar/) were twins at equilibrium: same exponential physics, different carriers, and the electrochemists' $\alpha$ is the knob the semiconductor version has bolted at $1$.^[A Schottky barrier is the cleaner semiconductor twin of the electrode: a metal $V_{\mathrm{e}^-}$ meeting a semiconductor's carrier levels across one interface, with thermionic emission playing the role of the electrode reaction.]
 
+<figure class="demo-container" style="max-width: 460px">
+{% include "esbd-diagrams/esbd-kin-schottky.njk" %}
+{% figcaption %}
+A Schottky diode: the sharp interface with a pinned barrier. The conduction edge meets the contact a fixed $\phi_B$ below the metal's $V_{\mathrm{e}^-}$ at every bias, and the applied bias is taken up entirely by band bending on the semiconductor side (the depletion zone widening in reverse). The metal-side barrier never changes — that branch of the current saturates — while the semiconductor-side barrier follows the bias one-for-one: $\alpha = 1$, drawn in space.
+{% endfigcaption %}
+</figure>
+
 ## Ions cross interfaces too
 
 Nothing in the argument above was special to electrons. An ion crossing an interface — $\mathrm{Li}^+$ entering an intercalation particle, an ion transferring across an [ITIES](../charge_control/), water splitting at a bipolar-membrane junction — sees the same picture: a step $\Delta V_i$ across the interface, a barrier, and a current exponential in the step,
