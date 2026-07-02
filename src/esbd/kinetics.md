@@ -90,9 +90,10 @@ The Marcus–Gerischer picture on a $V_{\mathrm{e}^-}$ axis — upside-down rela
 
 The [Electrode potential](../e/) topic introduced mixed potentials as a fact about levels: an electrode coupled to several half-reactions settles at a $V_{\mathrm{e}^-}$ matching none of them. Kinetics says *where*: each couple $k$ contributes a Butler–Volmer current driven by its own $\eta_k$, and the electrode floats to the level where the currents cancel, $\sum_k J_k = 0$. A corroding metal is the canonical case — the metal-dissolution couple runs anodically, the oxygen couple cathodically, and the balance point (the *corrosion potential*) sits between the two equilibrium levels, with a steady corrosion current circulating even though the electrode as a whole draws nothing.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 420px">
+{% include "esbd-diagrams/levels-kin-mixed.njk" %}
 {% figcaption %}
-PROPOSED FIGURE (mixed potential): levels diagram with two reaction levels (say $\mathrm{Fe}^{2+}\!/\mathrm{Fe}$ and $\mathrm{O_2}/\mathrm{OH}^-$) and the metal's $V_{\mathrm{e}^-}$ floating between them at the zero-net-current point; small readouts of the two partial currents. Slider: relative $J_0$ of the two couples, showing the mixed potential sliding toward the faster couple.
+A corroding metal, coupled to two half-reactions at once. The electrode floats to the level where the two Butler–Volmer currents cancel, leaving both overpotentials nonzero: the oxygen couple runs cathodically and the iron couple anodically, a steady corrosion loop with zero net electrode current. The slider sets the ratio of exchange currents — the mixed potential slides toward the kinetically faster couple.
 {% endfigcaption %}
 </figure>
 
