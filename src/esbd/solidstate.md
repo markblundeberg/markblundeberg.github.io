@@ -88,9 +88,10 @@ $$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln\!\left(\frac{c_i}{c^\circ}\right). $$
 
 Set $z = -1$ and the minus sign for electrons falls right out; set $z = +1$ for holes. (The semiconductor convention writes $k_{\mathrm{B}}T/e$ per particle where chemistry writes $RT/F$ per mole — the same quantity in different clothing.) The band edges *are* a standard-state ladder; the carriers float above or below them by a logarithmic concentration term. A semiconductor is, in this light, just a peculiar two-ion solution whose "solvent" is the crystal.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 560px">
+{% include "esbd-diagrams/levels-ss-ladder.njk" %}
 {% figcaption %}
-The standard-state ladder, two ways. Left: a solution's $V^\circ_i$ rungs (e.g. $V^\circ_{\mathrm{Na}^+}$, $V^\circ_{\mathrm{H}^+}$, $V^\circ_{\mathrm{Cl}^-}$) with each ion's $V_i$ floating a $\log$-concentration distance away. Right: a semiconductor's two-rung ladder — the conduction-band edge $V^\circ_{\mathrm{e}^-}$ (bottom) and valence-band edge $V^\circ_{\mathrm{h}^+}$ (top) — with $V_{\mathrm{e}^-}$ and $V_{\mathrm{h}^+}$ floating away from them by carrier concentration.
+The standard-state ladder, two ways. Left: a solution's $V^\circ_i$ rungs with each ion's $V_i$ floating a $\log$-concentration distance away (an acidified nitrate/chloride solution — pH 4, 10 mM each, spectator cation not drawn). Right: silicon's two-rung ladder, the band edges, with the equilibrium Fermi level floating between them according to doping. The two carriers share one line ($V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$), so $n$ and $p$ move oppositely as it slides: the mass-action law again, $np$ fixed. The columns' relative alignment is arbitrary — nothing here is in contact.
 {% endfigcaption %}
 </figure>
 
