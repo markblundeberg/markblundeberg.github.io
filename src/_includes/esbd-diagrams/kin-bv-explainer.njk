@@ -34,6 +34,36 @@
         margins: { bottom: 34, left: 26, right: 10 },
     });
     const smf = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
+    // small arrow as a polyline trace; head geometry computed in ~pixel space
+    const KX = 210,
+        KY = 260; // nominal px per data unit (barrier panel)
+    const arrowTrace = (id, x1, y1, x2, y2) => {
+        const X1 = x1 * KX,
+            Y1 = -y1 * KY,
+            X2 = x2 * KX,
+            Y2 = -y2 * KY;
+        const L = Math.hypot(X2 - X1, Y2 - Y1) || 1;
+        const ux = (X2 - X1) / L,
+            uy = (Y2 - Y1) / L;
+        const BX = X2 - 7 * ux,
+            BY = Y2 - 7 * uy;
+        const pts = [
+            [X1, Y1],
+            [X2, Y2],
+            [BX - 3.5 * uy, BY + 3.5 * ux],
+            [X2, Y2],
+            [BX + 3.5 * uy, BY - 3.5 * ux],
+        ];
+        return {
+            id,
+            x: pts.map((q) => q[0] / KX),
+            y: pts.map((q) => -q[1] / KY),
+            color: '#667',
+            style: { lineWidth: 1.3 },
+            showLabel: false,
+        };
+    };
+    let animGeom = null; // set by update(); read by the electron animator
 
     const iv = new XYPlot('{{idprefix}}-iv', {
         xLabel: 'Overpotential $\\eta$ (V)',
@@ -52,13 +82,17 @@
 
         const VL = V_RXN + eta; // metal side
         const VTS = V_RXN - B + alpha * eta; // transition state
-        const bxs = linspace(0.25, 0.75, 101);
-        const pass = bxs.map((x) =>
+        const passAt = (x) =>
             x <= 0.5
                 ? VTS + (VL - VTS) * smf((0.5 - x) / 0.25)
-                : VTS + (V_RXN - VTS) * smf((x - 0.5) / 0.25)
-        );
-        bar.updateTraceData([
+                : VTS + (V_RXN - VTS) * smf((x - 0.5) / 0.25);
+        const bxs = linspace(0.25, 0.75, 101);
+        const pass = bxs.map(passAt);
+        // electron travels emitter -> collector = low-V side -> high-V side
+        const sgn = eta >= 0 ? 1 : -1; // +1: solution emits, metal collects
+        const active = Math.abs(eta) > 0.008;
+        animGeom = { sgn, passAt, active };
+        const barTraces = [
             {
                 id: 'ref',
                 x: [0.3, 0.98],
@@ -93,8 +127,8 @@
             },
             {
                 id: 'lbl_e',
-                x: [0.275, 0.285],
-                y: [VL - 0.095, VL - 0.095],
+                x: [0.5, 0.51],
+                y: [VTS - 0.09, VTS - 0.09],
                 color: BLUE,
                 style: { lineWidth: 0, opacity: 0 },
                 label: '\\mathrm{e}^-',
@@ -119,10 +153,33 @@
                 label: 'V_{\\mathrm{e}^-}(\\mathrm{Ox}/\\mathrm{Red})',
                 labelFrac: 1,
             },
-        ]);
+        ];
+        if (active) {
+            const vEm = sgn > 0 ? V_RXN : VL;
+            const vCol = sgn > 0 ? VL : V_RXN;
+            barTraces.push(
+                arrowTrace(
+                    'arr_down',
+                    0.5 + 0.22 * sgn,
+                    vEm - 0.035,
+                    0.5 + 0.055 * sgn,
+                    VTS + 0.035
+                ),
+                arrowTrace(
+                    'arr_up',
+                    0.5 - 0.055 * sgn,
+                    VTS + 0.035,
+                    0.5 - 0.22 * sgn,
+                    vCol - 0.035
+                )
+            );
+        }
+        bar.updateTraceData(barTraces);
+        // parked electron position (the animator takes over when live)
+        const xp = 0.5 + 0.14 * sgn;
         bar.updateMarkers([
             { id: 'ts', x: 0.5, y: VTS, color: '#667', r: 3 },
-            { id: 'e', x: 0.275, y: VL - 0.022, color: BLUE, r: 4.5 },
+            { id: 'e', x: xp, y: passAt(xp) - 0.022, color: BLUE, r: 4.5 },
         ]);
 
         const logView = logEl.checked;
@@ -234,4 +291,28 @@
     const logEl = document.getElementById('{{idprefix}}-log');
     logEl.addEventListener('change', update);
     update();
+
+    // the extra points: the electron makes the crossing, emitter to
+    // collector, looping. Skipped under ?static (deterministic captures);
+    // the parked marker from updateMarkers stands in.
+    if (!new URLSearchParams(location.search).has('static')) {
+        const PERIOD = 2400,
+            TRAVEL = 1800;
+        const ease = (t) => t * t * (3 - 2 * t);
+        function hop(ts) {
+            if (animGeom && animGeom.active && bar.xScale) {
+                const s = Math.min(1, (ts % PERIOD) / TRAVEL);
+                const x =
+                    0.5 + (0.25 - 0.5 * ease(s)) * animGeom.sgn;
+                const y = animGeom.passAt(x) - 0.022;
+                bar.markersGroup
+                    .selectAll('.xy-marker')
+                    .filter((d) => d.id === 'e')
+                    .attr('cx', bar.xScale(x))
+                    .attr('cy', bar.yScale(y));
+            }
+            requestAnimationFrame(hop);
+        }
+        requestAnimationFrame(hop);
+    }
 </script>
