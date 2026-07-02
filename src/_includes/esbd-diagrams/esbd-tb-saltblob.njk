@@ -15,8 +15,11 @@
     // diffusion potential holds the fast cation back and urges the anion
     // on: on the band diagram the slow anion carries the LARGER V-feature
     // (it needs the bigger push to keep up). A dilute tracer cation rides
-    // the same field, swept outward from where it started (its drift is
-    // fudged analytically, not simulated).
+    // the same field: its CENTER is integrated exactly (within the model)
+    // from dx/dt = M·r·∂ₓln c — with the fast-cation salt the field points
+    // INWARD (outer region charges +), so the tracer is drawn UP the salt
+    // gradient, toward the blob. Its width spreads by its own diffusion
+    // only (field-gradient dispersion neglected).
     const D = 0.015;
     const AMP = 0.05,
         CBG = 0.02;
@@ -42,17 +45,37 @@
     });
 
     const xs = linspace(0, 1, 161);
+    const XTR0 = 0.62,
+        T0 = 0.03; // tracer release point and earliest slider time
+    const MTR = 0.02; // tracer mobility scale (drift per unit ∂ₓln c)
+    const cAt = (x, tt) => {
+        const s2 = 4 * D * tt;
+        return (
+            CBG + (AMP / Math.sqrt(Math.PI * s2)) * Math.exp(-((x - 0.5) ** 2) / s2)
+        );
+    };
+    // deterministic fixed-step integration of the tracer center from T0
+    const tracerX = (tEnd) => {
+        let x = XTR0;
+        const dt = 0.004;
+        for (let tt = T0; tt < tEnd; tt += dt) {
+            const h = 0.004;
+            const dlnc =
+                (Math.log(cAt(x + h, tt)) - Math.log(cAt(x - h, tt))) / (2 * h);
+            x += MTR * RMOB * dlnc * dt;
+        }
+        return x;
+    };
 
     function update(t) {
         document.getElementById('{{idprefix}}-t-readout').textContent =
             t.toFixed(2);
-        const sig2 = 4 * D * t;
-        const c = (x) =>
-            CBG + (AMP / Math.sqrt(Math.PI * sig2)) * Math.exp(-((x - 0.5) ** 2) / sig2);
+        const c = (x) => cAt(x, t);
         const lg = (x) => Math.log10(c(x) / CBG);
-        // tracer: swept outward by the diffusion-potential field (fudged)
-        const xtr = 0.62 + 0.14 * (1 - Math.exp(-2.5 * t));
-        const str2 = 0.0015 + 0.004 * t;
+        // tracer center from the integrated drift equation; width by its
+        // own diffusion only
+        const xtr = tracerX(t);
+        const str2 = 0.0015 + 0.004 * (t - T0);
         const ctr = (x) =>
             0.1 * Math.exp(-((x - xtr) ** 2) / str2);
 

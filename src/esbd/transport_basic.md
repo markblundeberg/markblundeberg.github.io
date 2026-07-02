@@ -95,7 +95,7 @@ The coupling reaches past the spreading salt itself. A third, dilute species dri
 <figure class="demo-container" style="max-width: 480px">
 {% include "esbd-diagrams/esbd-tb-saltblob.njk" %}
 {% figcaption %}
-A blob of salt spreading by diffusion — scrub time with the slider. The two ions spread as one Gaussian (the ambipolar $D$); on the band diagram the diffusion-potential field shows up as the two $V_i$ features, with the *slower* ion carrying the larger one (it needs the bigger push to keep up). A dilute tracer is swept along by the same field.
+A blob of salt spreading by diffusion — scrub time with the slider. The two ions spread as one Gaussian (the ambipolar $D$); on the band diagram the diffusion-potential field shows up as the two $V_i$ features, with the *slower* ion carrying the larger one (it needs the bigger push to keep up). A dilute tracer cation rides the same field — drawn *up* the salt gradient, toward the blob (its trajectory integrated from the drift equation, not sketched).
 {% endfigcaption %}
 </figure>
 
