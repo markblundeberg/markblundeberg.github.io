@@ -43,9 +43,10 @@ The semiconductor version is the neutral base of a {% wiki "bipolar junction tra
 
 The electrochemical twin is a plating bath run with a large excess of inert **supporting electrolyte**. The background salt (say $\mathrm{KNO_3}$) screens the field, so a dilute active ion such as $\mathrm{Cu}^{2+}$ reaches the cathode only by diffusing across the stagnant **Nernst diffusion layer** between the electrode and the stirred bulk.^[The stirred bulk fixes the source boundary condition, holding $c_i^{\text{bulk}}$ a fixed distance $\delta$ from the electrode; $\delta$ is essentially the thickness of that unstirred layer.] The familiar **limiting current density** is reached when the surface $\mathrm{Cu}^{2+}$ concentration hits zero.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 700px">
+{% include "esbd-diagrams/esbd-sat-hard.njk" %}
 {% figcaption %}
-Hard pinning, side by side. Left: a BJT base, where abundant majority holes screen the field flat and injected electrons diffuse to a zero-concentration collector boundary. Right: a plating cathode, where supporting electrolyte screens the field and the active ion diffuses across the Nernst layer to a zero-concentration surface. In both, $V^\circ_i$ is held flat and only the active $V_i$ slopes.
+Hard pinning, side by side, one drive slider for both. Left: a BJT base — majority holes hold everything flat while injected electrons diffuse toward the collector. Right: a silver-plating cathode in excess $\mathrm{KNO_3}$ — the supporting ions hold the ladder flat while $\mathrm{Ag}^+$ diffuses across the Nernst layer (the reversible cathode's $V_{\mathrm{e}^-}$ rides the surface $V_{\mathrm{Ag}^+}$). In both, only the active carrier's $V_i$ bends, and at $j = j_{\mathrm{lim}}$ it dives off the plot at the draining boundary: the logarithmic divergence is the ceiling.
 {% endfigcaption %}
 </figure>
 
@@ -57,9 +58,10 @@ In a **binary electrolyte** the only ions present are the active cation and its 
 
 The semiconductor twin is the **FET channel**. There is no majority-carrier sea to screen along the channel, so a longitudinal field must drive the drift from source to drain; the gate supplies only a *transverse* pinning, coupling to $V^\circ_{\mathrm{e}^-}$ through the gate capacitance.^[This pinning is not spatially uniform. The gate's dielectric capacitance competes against the channel carriers' chemical capacitance, and their ratio shifts with carrier density, so the pinning stiffens as the channel nears depletion. It stays "soft" throughout, unlike the 1:1 binary electrolyte whose two chemical capacitances track each other at every concentration.] Near the drain the carrier concentration falls to zero, the channel **pinches off**, and the current saturates.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 700px">
+{% include "esbd-diagrams/esbd-sat-soft.njk" %}
 {% figcaption %}
-Soft pinning, side by side. Left: a FET channel, where the gate pins $V^\circ_{\mathrm{e}^-}$ only transversely while a longitudinal field drives the current to pinch-off at the drain. Right: a binary electrolyte, where neutrality ties the cation to the flat counter-anion rail but a diffusion-potential field persists until the cation depletes at the electrode.
+Soft pinning, side by side, one drive slider for both. Left: a FET channel — the gate rail pins $V^\circ_{\mathrm{e}^-}$ only through a capacitance, so the edge slopes and the electrons slope twice as steeply, pinching off at the drain. Right: a binary electrolyte — the blocked anion stays flat but the ladder bends with the salt concentration and $V_{\mathrm{Ag}^+}$ bends by twice that (the ambipolar factor). Same dive at $j_{\mathrm{lim}}$, but now the ladder dives too. (The FET is drawn as the electrolyte's mirror twin; its stiffening subtleties stay in the footnote.)
 {% endfigcaption %}
 </figure>
 

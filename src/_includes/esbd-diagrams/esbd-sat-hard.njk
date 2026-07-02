@@ -1,0 +1,159 @@
+{% set idprefix = "esbd-sat-hard" %}
+{% import "macros/controls.njk" as controls %}
+<div style="display: flex; flex-wrap: wrap; justify-content: space-evenly; gap: 8px">
+<div style="flex: 1; min-width: 250px; max-width: 330px">
+<div style="text-align: center; font-size: 0.85em">BJT base</div>
+<div class="bd-container" id="{{idprefix}}-bjt" style="height: 250px; border: 1px solid #eee"></div>
+</div>
+<div style="flex: 1; min-width: 250px; max-width: 330px">
+<div style="text-align: center; font-size: 0.85em">plating bath, supported</div>
+<div class="bd-container" id="{{idprefix}}-bath" style="height: 250px; border: 1px solid #eee"></div>
+</div>
+</div>
+{{ controls.slider(idprefix + "-a", "Drive $j/j_{\\mathrm{lim}}$", { min: 0, max: 1, step: "any", value: 0.5, snap: 1, readout: true }) }}
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+
+    // Hard pinning, side by side, one shared drive slider. In both panels the
+    // pinning sea (majority holes / supporting KNO3) holds V° flat, so the
+    // active carrier crosses by pure diffusion: linear c(x), dropping to
+    // c_s = (1−a)·c_b at the draining boundary (left). Its V_i bends
+    // logarithmically and at a = 1 dives off the plot at the boundary —
+    // the log divergence IS the current ceiling. Traces trimmed at the
+    // plot edge (BandDiagram doesn't clip).
+    // Plating panel: AgNO3 + excess KNO3; the reversible cathode's V_e-
+    // rides the interface V_Ag+ (no kinetic overpotential drawn).
+    const DEC = 0.05916;
+    const XL = 0.12,
+        XR = 0.88; // active-layer extent in both panels
+    const VLO = 0.05,
+        VHI = 0.95; // plot range; traces trimmed at edges
+
+    const bjt = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-bjt',
+        { electron: SPECIES.electron, hole: SPECIES.hole },
+        { margins: { right: 60 } }
+    );
+    bjt.setSpatialLayout([0, XL, XR, 1], [
+        { ...REGION.semi2, name: 'Collector' },
+        { ...REGION.semiconductor, name: 'p base' },
+        { ...REGION.semi2, name: 'Emitter' },
+    ]);
+    bjt.setVRange(VLO, VHI);
+
+    const bath = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-bath',
+        {
+            electron: SPECIES.electron,
+            silver: SPECIES.silver,
+            potassium: SPECIES.potassium,
+            nitrate: SPECIES.nitrate,
+        },
+        { margins: { right: 60 } }
+    );
+    bath.setSpatialLayout([0, XL, XR, 1], [
+        { ...REGION.metal, name: 'Cathode' },
+        { ...REGION.solution, name: 'Nernst layer' },
+        { ...REGION.solution2, name: 'stirred bulk' },
+    ]);
+    bath.setVRange(VLO, VHI);
+
+    const xs = linspace(XL, 1, 121);
+    // linear diffusion profile: c/c_b = 1 − a·(1 − x̃) inside the layer, 1 in bulk
+    const conc = (a) => (x) =>
+        x >= XR ? 1 : Math.max(1e-12, 1 - a * (1 - (x - XL) / (XR - XL)));
+    const trim = (fn) => {
+        const x = [],
+            y = [];
+        for (const xi of xs) {
+            const v = fn(xi);
+            if (v >= VLO && v <= VHI) {
+                x.push(xi);
+                y.push(v);
+            }
+        }
+        return { x, y };
+    };
+
+    function update(a) {
+        document.getElementById('{{idprefix}}-a-readout').textContent =
+            a.toFixed(2);
+        const c = conc(a);
+
+        // BJT: minority electrons injected from the emitter (right), swept
+        // out at the collector; z = −1 so depletion sends V_e- UP.
+        const ve = (x) => 0.68 - DEC * Math.log10(c(x));
+        bjt.updateTraceData([
+            {
+                id: 'vh',
+                speciesId: 'hole',
+                curveType: 'voltage',
+                x: [XL, 1],
+                y: [0.3, 0.3],
+            },
+            {
+                id: 'v0e',
+                speciesId: 'electron',
+                curveType: 'bandEdge_C',
+                labelFrac: 0.35,
+                x: [XL, 1],
+                y: [0.18, 0.18],
+            },
+            {
+                id: 've',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                ...trim(ve),
+            },
+        ]);
+
+        // plating bath: Ag+ dives DOWN (z = +1); the cathode's electrons
+        // follow the interface Ag+ level (reversible electrode)
+        const vag = (x) => 0.58 + DEC * Math.log10(c(x));
+        const vagIf = Math.max(VLO, vag(XL));
+        bath.updateTraceData([
+            {
+                id: 'vk',
+                speciesId: 'potassium',
+                curveType: 'voltage',
+                x: [XL, 1],
+                y: [0.78, 0.78],
+            },
+            {
+                id: 'v0ag',
+                speciesId: 'silver',
+                curveType: 'standardState',
+                labelFrac: 0.35,
+                x: [XL, 1],
+                y: [0.66, 0.66],
+            },
+            {
+                id: 'vag',
+                speciesId: 'silver',
+                curveType: 'voltage',
+                ...trim(vag),
+            },
+            {
+                id: 'vno3',
+                speciesId: 'nitrate',
+                curveType: 'voltage',
+                x: [XL, 1],
+                y: [0.3, 0.3],
+            },
+            {
+                id: 've_m',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: a < 0.99, // label dives off with the trace at the limit
+                labelFrac: 0.4,
+                x: [0, XL],
+                y: [vagIf, vagIf],
+            },
+        ]);
+    }
+
+    makeSlider('{{idprefix}}-a', update);
+</script>
