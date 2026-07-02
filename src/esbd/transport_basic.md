@@ -40,9 +40,10 @@ Reading off the last equality, $u_i$ and $D_i$ are tied by the {% wiki "Einstein
 
 There is a subtlety hiding in the drift term. We assumed $\nabla V^\circ_i = \nabla\phi$, but that holds only inside a uniform medium. Where the medium itself changes, at an interface or through a graded material, the standard state carries its own gradient, $\nabla V^\circ_i = \nabla\phi + \tfrac{1}{z_i F}\nabla\mu^\circ_{\mathrm{int},i}$, and that extra piece is a real driving force with no electrostatic origin, arising from changing binding energy, solvation, or steric packing. Carriers feel it as a "quasi-electric field," and it is why the textbook drift-diffusion split quietly fails across interfaces, where a dedicated interfacial law is usually wanted anyway.^[This is the transport face of the band-offset story from the [semiconductors](../solidstate/) and [bipolar](../bipolar/) topics: a step or grade in $V^\circ_i$ pushes carriers even where $\phi$ is flat. Kroemer's "quasi-electric fields" in graded heterojunctions are exactly this.] Beyond conduction, currents can also be driven by advection, thermoelectric gradients, and magnetic induction, but plain $-\nabla V_i$ conduction is our concern here.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 440px">
+{% include "esbd-diagrams/esbd-tb-driftdiff.njk" %}
 {% figcaption %}
-A single sloping $V_i$ split into its drift part (the slope of $\phi$, i.e. of $V^\circ_i$) and its diffusion part (the concentration term). The two add up to the one thermodynamic slope that actually drives the current.
+One current, split two ways. The slope of $V_i$ is held fixed (fixed current) while the slider reapportions it between drift — the shared slope of $V^\circ_i$ and $\phi$ — and diffusion, the changing concentration gap. The split is bookkeeping; the total slope is what drives the current.
 {% endfigcaption %}
 </figure>
 

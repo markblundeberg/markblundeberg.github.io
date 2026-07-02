@@ -1,0 +1,63 @@
+{% set idprefix = "esbd-tb-driftdiff" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 250px"></div>
+{{ controls.slider(idprefix + "-frac", "Drift fraction", { min: 0, max: 1, step: "any", value: 1, snap: 0.5, readout: true }) }}
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
+
+    // One and the same current, split differently between "drift" and
+    // "diffusion". The total slope of V_i is held fixed (fixed current);
+    // the slider sets how much of it comes from the slope of V°_i / phi
+    // (drift) versus from the changing concentration gap (diffusion).
+    // frac = 1: uniform concentration, all drift. frac = 0: flat phi,
+    // pure diffusion down a concentration gradient.
+    const SLOPE = -0.3; // total V_i drop, left to right
+    const GAP0 = 0.14; // V°−V gap at x = 0 (dilute cation: V below V°)
+    const V0L = 0.78; // V°_i at x = 0
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        { cation: SPECIES.sodium },
+        { margins: { right: 56 } }
+    );
+    diagram.setSpatialLayout([0, 1], [REGION.solution]);
+    diagram.setVRange(0.05, 1.0);
+
+    function update(frac) {
+        document.getElementById('{{idprefix}}-frac-readout').textContent =
+            frac.toFixed(2);
+        const x = [0, 1];
+        const vi = (xx) => V0L - GAP0 + SLOPE * xx;
+        const v0 = (xx) => V0L + frac * SLOPE * xx;
+
+        diagram.updateTraceData([
+            {
+                id: 'v0',
+                speciesId: 'cation',
+                curveType: 'standardState',
+                x: x,
+                y: x.map(v0),
+            },
+            {
+                id: 'vi',
+                speciesId: 'cation',
+                curveType: 'voltage',
+                x: x,
+                y: x.map(vi),
+            },
+            {
+                id: 'phi',
+                speciesId: 'cation',
+                curveType: 'phi',
+                label: '\\phi',
+                x: x,
+                y: x.map((xx) => v0(xx) - 0.35),
+            },
+        ]);
+    }
+
+    makeSlider('{{idprefix}}-frac', update);
+</script>
