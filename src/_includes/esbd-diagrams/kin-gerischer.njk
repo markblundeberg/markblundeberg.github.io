@@ -1,0 +1,131 @@
+{% set idprefix = "kin-gerischer" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 300px"></div>
+{{ controls.slider(idprefix + "-bias", "Electrode $V_{\\mathrm{e}^-}$", { min: -0.35, max: 1.35, step: "any", value: 0.8, snap: 0.5, readout: true, unit: "V" }) }}
+{{ controls.slider(idprefix + "-ratio", "$\\log_{10}(c_{\\mathrm{Ox}}/c_{\\mathrm{Red}})$", { min: -2, max: 2, step: "any", value: 0, snap: 0, readout: true }) }}
+
+<script type="module">
+    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
+    import { SPECIES } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+
+    const BLUE = SPECIES.electron.color;
+    // Marcus–Gerischer bumps, drawn sideways on a V_e- axis (energy up =
+    // voltage down, so the FILLED D_red bump sits ABOVE the couple's level
+    // and the empty D_ox below). Centers at V0 ± λ, Gaussian width
+    // σ = sqrt(2λkT) (Marcus), λ = 0.35 V → σ = 0.134 V. Amplitudes scale
+    // with the actual Ox and Red concentrations — they are densities of real
+    // ions — and the couple's level V0 moves by the Nernst term as the ratio
+    // slides. Bump outlines only for now (area fills would need a small
+    // XYPlot addition).
+    const KT = 0.0257;
+    const LAMBDA = 0.35;
+    const SIGMA = Math.sqrt(2 * LAMBDA * KT);
+    const V0_STD = 0.5; // standard level of the couple
+    const DEC = 0.05916;
+
+    const plot = new XYPlot('{{idprefix}}-container', {
+        xLabel: 'Density of states',
+        yLabel: 'Voltage $V_{\\mathrm{e}^-}$ (V)',
+        xRange: [0, 1.18],
+        yRange: [-0.55, 1.55],
+        xMode: 'abstract',
+        margins: { bottom: 34, left: 42, right: 12 },
+    });
+
+    const vgrid = linspace(-0.55, 1.55, 211);
+    const gauss = (v, c, amp) =>
+        amp * Math.exp(-(((v - c) / SIGMA) ** 2) / 2);
+
+    function update() {
+        const vElec = parseFloat(biasEl.value);
+        const r = parseFloat(ratioEl.value);
+        const V0 = V0_STD + DEC * r; // floating Nernst equation
+        const fRed = 1 / (1 + Math.pow(10, r)); // fraction Red
+        const fOx = 1 - fRed;
+        const eq = Math.abs(vElec - V0) < 0.05; // merged: label once
+
+        plot.updateTraceData([
+            {
+                id: 'dred',
+                x: vgrid.map((v) => gauss(v, V0 + LAMBDA, fRed)),
+                y: [...vgrid],
+                color: BLUE,
+                style: { lineWidth: 2 },
+                showLabel: false,
+            },
+            {
+                id: 'dox',
+                x: vgrid.map((v) => gauss(v, V0 - LAMBDA, fOx)),
+                y: [...vgrid],
+                color: BLUE,
+                style: { lineWidth: 2, dasharray: '4,3' },
+                showLabel: false,
+            },
+            {
+                id: 'v0',
+                x: [0, 1.15],
+                y: [V0, V0],
+                color: BLUE,
+                style: { lineWidth: 3, dasharray: '3,3' },
+                showLabel: false,
+            },
+            {
+                id: 'velec',
+                x: [0, 1.15],
+                y: [vElec, vElec],
+                color: BLUE,
+                style: { lineWidth: 3 },
+                showLabel: false,
+            },
+            {
+                id: 'lbl_v0',
+                x: [1.13, 1.14],
+                y: [V0 - 0.09, V0 - 0.09],
+                color: BLUE,
+                style: { lineWidth: 0, opacity: 0 },
+                label: 'V_{\\mathrm{e}^-}(\\mathrm{Ox}/\\mathrm{Red})',
+                labelFrac: 1,
+                labelHAlign: 'right',
+            },
+            {
+                id: 'lbl_velec',
+                x: [1.13, 1.14],
+                y: [vElec + 0.08, vElec + 0.08],
+                color: BLUE,
+                style: { lineWidth: 0, opacity: 0 },
+                label: eq ? '' : 'V_{\\mathrm{e}^-}(\\text{electrode})',
+                labelFrac: 1,
+                labelHAlign: 'right',
+            },
+            // label stubs at the bump peaks
+            {
+                id: 'lbl_red',
+                x: [fRed + 0.03, fRed + 0.04],
+                y: [V0 + LAMBDA, V0 + LAMBDA],
+                color: BLUE,
+                style: { lineWidth: 0, opacity: 0 },
+                label: 'D_{\\mathrm{red}}\\;\\text{(filled)}',
+                labelFrac: 1,
+            },
+            {
+                id: 'lbl_ox',
+                x: [fOx + 0.03, fOx + 0.04],
+                y: [V0 - LAMBDA, V0 - LAMBDA],
+                color: BLUE,
+                style: { lineWidth: 0, opacity: 0 },
+                label: 'D_{\\mathrm{ox}}\\;\\text{(empty)}',
+                labelFrac: 1,
+            },
+        ]);
+
+        document.getElementById('{{idprefix}}-bias-readout').textContent =
+            parseFloat(biasEl.value).toFixed(2);
+        document.getElementById('{{idprefix}}-ratio-readout').textContent =
+            r.toFixed(1);
+    }
+
+    const biasEl = makeSlider('{{idprefix}}-bias', update, { fire: false });
+    const ratioEl = makeSlider('{{idprefix}}-ratio', update, { fire: false });
+    update();
+</script>

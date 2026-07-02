@@ -79,9 +79,10 @@ This is the one place in the book where the traditional electron-energy diagram 
 * The bump *amplitudes* scale with the concentrations of $\mathrm{Ox}$ and $\mathrm{Red}$ — they are densities of actual ions, not of abstract states. A couple that is all $\mathrm{Red}$ has no $D_{\mathrm{ox}}$ bump to speak of.
 * A disequilibrated solution simply has several pairs of bumps, one per couple, each pinned to its own implied level — the multi-level picture from [Half-reactions](../half/) carries straight over.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 480px">
+{% include "esbd-diagrams/kin-gerischer.njk" %}
 {% figcaption %}
-PROPOSED FIGURE (Gerischer bumps): a $V_{\mathrm{e}^-}$ levels diagram with the $D_{\mathrm{red}}$/$D_{\mathrm{ox}}$ Gaussians drawn sideways in the solution band (XYPlot-style parametric traces, or area fills — small infra addition), electrode band on the left with a bias slider. Sliding the electrode level across the bumps shows where the tunneling overlap comes from. Optional deluxe version: concentration slider showing the amplitude effect and the Boltzmann "hard wall" squeeze.
+The Marcus–Gerischer picture on a $V_{\mathrm{e}^-}$ axis — upside-down relative to the usual energy plot, so the filled $D_{\mathrm{red}}$ sits *above* the couple's level and the empty $D_{\mathrm{ox}}$ below, offset by the reorganization energy $\lambda$ on either side. Slide the electrode level across the bumps: the current comes from where the electrode's empty states overlap $D_{\mathrm{red}}$ (anodic) and its filled states overlap $D_{\mathrm{ox}}$ (cathodic). Slide the concentration ratio and the bump amplitudes follow the actual ion populations, while the couple's level shifts by the Nernst term.
 {% endfigcaption %}
 </figure>
 
