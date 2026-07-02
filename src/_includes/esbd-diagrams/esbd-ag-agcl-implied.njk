@@ -1,0 +1,88 @@
+{% set idprefix = "esbd-ag-agcl-implied" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 280px"></div>
+{{ controls.slider(idprefix + "-bias", "Electrode bias", { min: -0.4, max: 0.4, step: "any", value: 0, snap: 0, readout: true, unit: "V" }) }}
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
+
+    // Same electrode as the figure above (V_Cl- − V_e- = 1.138 V from
+    // mu_AgCl = −109.8 kJ/mol), plus the implied V_e- drawn in the
+    // solution+coating. The slider moves the metal's electrons away from
+    // equilibrium while the solution composition (hence V_Cl- and the
+    // implied level) is held fixed — the dashed level is what the solution
+    // "wants" the electrode to be.
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        {
+            anion: SPECIES.chloride,
+            electron: SPECIES.electron,
+        },
+        { margins: { right: 88 } } // room for the "(implied)" label
+    );
+
+    const b = [0.0, 0.3, 0.7, 1.0];
+    diagram.setSpatialLayout(b, [
+        { ...REGION.metal, name: 'Silver wire' },
+        { name: 'AgCl coating', color: '#cccccc' },
+        REGION.solution,
+    ]);
+
+    const V_IMPLIED = 0;
+    const V_CL = V_IMPLIED + 1.138;
+    diagram.setVRange(-0.63, V_CL + 0.23);
+
+    function update(delta) {
+        document.getElementById('{{idprefix}}-bias-readout').textContent =
+            delta.toFixed(2);
+        const eq = Math.abs(delta) < 0.03;
+
+        diagram.updateTraceData([
+            {
+                id: 'electron_trace',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                labelFrac: 0.45,
+                x: [b[0], b[1]],
+                y: [V_IMPLIED + delta, V_IMPLIED + delta],
+            },
+            {
+                id: 'electron_implied',
+                speciesId: 'electron',
+                curveType: 'voltageImplied',
+                label: 'V_{\\mathrm{e}^-}\\,(\\text{implied})',
+                x: [b[1], b[3]],
+                y: [V_IMPLIED, V_IMPLIED],
+            },
+            {
+                id: 'anion_trace',
+                speciesId: 'anion',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [b[1], b[3]],
+                y: [V_CL, V_CL],
+            },
+        ]);
+
+        // the ⇌ marker only belongs on an equilibrated reaction
+        diagram.updateVerticalMarkers(
+            eq
+                ? [
+                      {
+                          id: 'ag-cl-',
+                          x: b[1],
+                          yDefs: [{ y: V_IMPLIED + delta }, { y: V_CL }],
+                          symbol: '⇌',
+                          popupCallback: () =>
+                              '$\\mathrm{AgCl} + \\mathrm{e}^- \\rightleftharpoons \\mathrm{Ag} + \\mathrm{Cl}^-$',
+                      },
+                  ]
+                : []
+        );
+    }
+
+    makeSlider('{{idprefix}}-bias', update);
+</script>

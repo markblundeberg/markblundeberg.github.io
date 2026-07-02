@@ -118,9 +118,10 @@ Electrons are not present as free constituents in a solution, however their ther
 * Some half-reactions are actually 'redox-active' in solution, and can swap electrons directly with other half-reactions. It's useful to plot their distinct $V_{\mathrm{e}^-}$ values to show disequilibrium.
 * Some half-reactions like the AgCl reaction are only happening at electrodes. It is helpful to show the $V_{\mathrm{e}^-}$ that the solution "wants" especially when it is out of equilibrium with the electrode.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 340px">
+{% include "esbd-diagrams/esbd-ag-agcl-implied.njk" %}
 {% figcaption %}
-- Repeat AgCl diagram with implied level.
+The silver chloride electrode again, now with the reaction's implied $V_{\mathrm{e}^-}$ drawn in the solution (thick dashed). At zero bias the metal's electrons line up with it and we recover the earlier diagram. Move the bias and the metal's $V_{\mathrm{e}^-}$ departs, while the solution — its composition held fixed here — still "wants" the same level; the gap between the two is the disequilibrium available to drive the reaction.
 {% endfigcaption %}
 </figure>
 
