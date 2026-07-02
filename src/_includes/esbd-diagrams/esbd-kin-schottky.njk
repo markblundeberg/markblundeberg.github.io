@@ -145,7 +145,7 @@
                 curveType: 'voltage',
                 style: { lineWidth: 9, linecap: 'round' },
                 showLabel: false,
-                x: [xp, xp + 0.004],
+                x: [xp, xp],
                 y: [edgeAt(xp) + 0.05, edgeAt(xp) + 0.05],
             });
         }
@@ -201,7 +201,7 @@
                 diagram.diagram.linesGroup
                     .selectAll('.bd-data-line')
                     .filter((d) => d.id === 'eball')
-                    .attr('d', `M ${X} ${Y} l 1.5 0`);
+                    .attr('d', `M ${X} ${Y} l 0.01 0`);
             }
             requestAnimationFrame(hop);
         }
