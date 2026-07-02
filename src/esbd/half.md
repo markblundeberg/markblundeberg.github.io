@@ -154,7 +154,7 @@ $$ E^\circ = V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm
 | ---: | --- | :--- | ---: | ---: |
 | $\mathrm{H}^+$ | / | $\mathrm{H_2(g)}$ | $V^\circ_{\mathrm{H}^+} - \tfrac{1}{2F} \mu^\circ_{\mathrm{H_2}}$ | 0 |
 | $\mathrm{O_2(g)},\mathrm{H_2O}$ | / | $\mathrm{OH}^-$ | $V^\circ_{\mathrm{OH}^-} + \tfrac{1}{4F} \mu^\circ_{\mathrm{O_2}} + \tfrac{1}{2F} \mu^\circ_{\mathrm{H_2O}} $ | +0.401 |
-| $\mathrm{O_2(g)},\mathrm{H}^+$ | / | $\mathrm{H_2O}$ | $V^\circ_{\mathrm{H}^+} + \tfrac{1}{4F} \mu^\circ_{\mathrm{O_2}} + \tfrac{1}{2F} \mu^\circ_{\mathrm{H_2O}} $ | +1.229 |
+| $\mathrm{O_2(g)},\mathrm{H}^+$ | / | $\mathrm{H_2O}$ | $V^\circ_{\mathrm{H}^+} + \tfrac{1}{4F} \mu^\circ_{\mathrm{O_2}} - \tfrac{1}{2F} \mu^\circ_{\mathrm{H_2O}} $ | +1.229 |
 | $\mathrm{AgCl(s)}$ | / | $\mathrm{Ag(s)},\mathrm{Cl}^-$ | $V^\circ_{\mathrm{Cl}^-} - \tfrac{1}{F} \mu^\circ_{\mathrm{Ag}} + \tfrac{1}{F}\mu^\circ_{\mathrm{AgCl}}$ | +0.222 |
 | $\mathrm{Fe}^{3+}$ | / | $\mathrm{Fe}^{2+}$ | $3V^\circ_{\mathrm{Fe}^{3+}} - 2V^\circ_{\mathrm{Fe}^{2+}}$ | +0.771 |
 | $\mathrm{Fe}^{2+}$ | / | $\mathrm{Fe(s)}$ | $V^\circ_{\mathrm{Fe}^{2+}} - \tfrac{1}{2F} \mu^\circ_{\mathrm{Fe}} $ | −0.44 |
