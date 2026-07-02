@@ -13,7 +13,6 @@
 </div>
 
 <div style="text-align: center; margin-top: 0.4em">
-    {{ controls.checkbox(idprefix + "-zoomCheck", "Zoom?") }}
     {{ controls.checkbox(idprefix + "-agno3Check", "AgNO<sub>3</sub>?") }}
 </div>
 
@@ -38,7 +37,6 @@
     // --- DOM Elements ---
     const kclSlider = document.getElementById('{{idprefix}}-kclSlider');
     const agno3Slider = document.getElementById('{{idprefix}}-agno3Slider');
-    const zoomCheck = document.getElementById('{{idprefix}}-zoomCheck');
     const agno3Check = document.getElementById('{{idprefix}}-agno3Check');
     const kclValueSpan = document.getElementById('{{idprefix}}-kclSlider-readout');
     const agno3ValueSpan = document.getElementById('{{idprefix}}-agno3Slider-readout');
@@ -252,18 +250,13 @@
 
         diagram.updateTraceData(traces);
 
-        if (zoomCheck.checked) {
-            diagram.setVRange(V_el - 0.1, V_Cl + 0.1);
-        } else {
-            // K+ shifted up means no more 5.8 V-tall axis
-            diagram.setVRange(V_el - 1.6, V_el + 1.6);
-        }
+        // K+ shifted up means the one range serves (no more Zoom toggle)
+        diagram.setVRange(V_el - 1.6, V_el + 1.6);
     }
 
     // --- Wire up controls (static markup; no layout shift) ---
     makeSlider('{{idprefix}}-kclSlider', () => doUpdate(), { fire: false });
     makeSlider('{{idprefix}}-agno3Slider', () => doUpdate(), { fire: false });
-    zoomCheck.addEventListener('input', doUpdate);
     agno3Check.addEventListener('input', doUpdate);
 
     // --- Initial Calculation ---
