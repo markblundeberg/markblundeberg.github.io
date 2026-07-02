@@ -1,134 +1,108 @@
 {% set idprefix = "esbd-tb-concpol" %}
 {% import "macros/controls.njk" as controls %}
-<div class="bd-container" id="{{idprefix}}-band" style="height: 240px"></div>
-<div class="bd-container" id="{{idprefix}}-conc" style="height: 130px"></div>
-{{ controls.slider(idprefix + "-j", "Current $j/j_{\\mathrm{lim}}$", { min: -0.95, max: 0.95, step: "any", value: 0.7, snap: 0, readout: true }) }}
+<div class="bd-container" id="{{idprefix}}-band" style="height: 260px"></div>
+{{ controls.slider(idprefix + "-j", "Current", { min: -1, max: 1, step: "any", value: 0.6, snap: 0, readout: true }) }}
 <div style="text-align: center">{{ controls.checkbox(idprefix + "-sup", "add supporting electrolyte") }}</div>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
-    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
     import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
 
-    // A Li electrode passing Li+ while the anion is blocked. Steady state,
-    // stirred bulk on the right: c(x) is linear, drawn down to c_s/c_b =
-    // 1 − j/j_lim at the interface. Binary electrolyte: the blocked anion is
-    // exactly flat, the whole V° ladder bends as DEC·log c, and V_Li+ picks
-    // up TWICE that bend (the classic factor 2). With supporting electrolyte
-    // the drift is screened: V° goes flat and V_Li+ bends by log c once —
-    // half the polarization at the same current. Rung spacing compressed.
+    // Concentration polarization, kept deliberately shallow (saturation digs
+    // deeper with the same chemistry). A silver cathode plates Ag+ out of
+    // binary AgNO3; the anion is blocked. Three zones:
+    //  - unstirred layer: linear c(x); the blocked NO3- is EXACTLY flat
+    //    (zero current => zero slope), the ladder bends as DEC*log c, and
+    //    Ag+ bends twice that (binary factor).
+    //  - stirred bulk: uniform c carrying the current ohmically - every
+    //    level tilts together.
+    //  - supporting electrolyte: the ladder pins flat in the layer AND the
+    //    bulk tilt is suppressed (Newman ch19 §19.5's point).
+    // Depletion capped well short of running dry - no j_lim here.
     const DEC = 0.05916;
-    const XIF = 0.25;
-    const V_X = 0.34; // blocked anion, exactly flat
-    const V0X_B = 0.46,
-        V0LI_B = 0.72; // bulk rung positions (fake 0.26 V spacing)
-    const GAP_LI = 0.06; // bulk V°_Li − V_Li (0.1 M-ish)
-    // refShift: anchoring Li+ (tied to the electrode's V_e-) as drawn-true,
-    // the anion group sits (0.46-0.72) - (1.3601-(-3.0399)) = -4.66 V from
-    // its IUPAC-referenced position
-    const X_SHIFT = -4.66;
+    const XIF = 0.25,
+        XB = 0.6; // electrode | layer | bulk boundaries
+    const V_X = 0.38; // blocked anion, flat (base)
+    const V0X_B = 0.303,
+        V0AG_B = 0.68; // rungs (compressed; NO3- group flagged below)
+    const GAP_AG = 0.077; // bulk V°_Ag - V_Ag (0.05 M)
+    const ROHM = 0.25; // bulk ohmic tilt per unit current
+    // refShift: anchoring Ag+/e- as drawn-true, the NO3- group sits
+    // ~0.303 - 1.01 = -0.71 V from its IUPAC-referenced position
+    const NO3_SHIFT = -0.71;
 
     const band = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-band',
-        { cation: SPECIES.lithium, anion: SPECIES.chloride },
+        { silver: SPECIES.silver, nitrate: SPECIES.nitrate, electron: SPECIES.electron },
         { margins: { right: 56 } }
     );
-    band.setSpatialLayout([0, XIF, 1], [
-        { ...REGION.metal, name: 'Li electrode' },
-        REGION.solution,
+    band.setSpatialLayout([0, XIF, XB, 1], [
+        { ...REGION.metal, name: 'Ag cathode' },
+        { ...REGION.solution, name: 'unstirred layer' },
+        { ...REGION.solution2, name: 'stirred bulk' },
     ]);
     band.setVRange(0.1, 0.95);
 
-    const conc = new XYPlot('{{idprefix}}-conc', {
-        xLabel: '',
-        yLabel: 'Concentration',
-        xRange: [0, 1],
-        yRange: [0, 2.1],
-        xMode: 'abstract',
-        yMode: 'abstract',
-        margins: { top: 4, bottom: 12, left: 26, right: 56 },
-    });
-
-    const xs = linspace(XIF, 1, 81);
+    const xs = linspace(XIF, 1, 91);
 
     function update() {
         const j = parseFloat(jEl.value);
         const sup = supEl.checked;
         document.getElementById('{{idprefix}}-j-readout').textContent =
-            j.toFixed(2);
+            j.toFixed(1);
 
-        const c = (x) => 1 - j * (1 - (x - XIF) / (1 - XIF)); // c/c_bulk
+        // c/c_bulk: linear across the layer, uniform (stirred) beyond
+        const c = (x) =>
+            x >= XB ? 1 : 1 - 0.9 * j * (1 - (x - XIF) / (XB - XIF));
         const bend = (x) => DEC * Math.log10(c(x));
+        // ohmic tilt of everything in the stirred bulk (suppressed by support)
+        const ohm = (x) => (sup ? 0 : ROHM * j * Math.max(0, x - XB));
+
+        const vAg = (x) => V0AG_B - GAP_AG + (sup ? 1 : 2) * bend(x) + ohm(x);
+        const vAgIf = vAg(XIF);
 
         band.updateTraceData([
             {
-                id: 'v0li',
-                speciesId: 'cation',
-                curveType: 'standardState',
-                x: xs,
-                y: xs.map((x) => V0LI_B + (sup ? 0 : bend(x))),
+                id: 've_m',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                labelFrac: 0.4,
+                x: [0, XIF],
+                y: [vAgIf, vAgIf],
             },
             {
-                id: 'vli',
-                speciesId: 'cation',
+                id: 'v0ag',
+                speciesId: 'silver',
+                curveType: 'standardState',
+                x: xs,
+                y: xs.map((x) => V0AG_B + (sup ? 0 : bend(x)) + ohm(x)),
+            },
+            {
+                id: 'vag',
+                speciesId: 'silver',
                 curveType: 'voltage',
                 x: xs,
-                y: xs.map(
-                    (x) => V0LI_B - GAP_LI + (sup ? 1 : 2) * bend(x)
-                ),
+                y: xs.map(vAg),
             },
             {
                 id: 'v0x',
-                speciesId: 'anion',
-                refShift: X_SHIFT,
+                speciesId: 'nitrate',
                 curveType: 'standardState',
+                refShift: NO3_SHIFT,
                 x: xs,
-                y: xs.map((x) => V0X_B + (sup ? 0 : bend(x))),
+                y: xs.map((x) => V0X_B + (sup ? 0 : bend(x)) + ohm(x)),
             },
             {
                 id: 'vx',
-                speciesId: 'anion',
-                refShift: X_SHIFT,
+                speciesId: 'nitrate',
                 curveType: 'voltage',
-                x: [XIF, 1],
-                y: [V_X, V_X],
+                refShift: NO3_SHIFT,
+                labelFrac: 1,
+                x: xs,
+                y: xs.map((x) => V_X + ohm(x)), // flat in the layer - the point
             },
         ]);
-
-        const concTraces = [
-            {
-                id: 'cli',
-                x: [...xs],
-                y: xs.map(c),
-                color: SPECIES.lithium.color,
-                style: { lineWidth: 2 },
-                label: 'c_{\\mathrm{Li}^+}',
-                labelFrac: 0.35,
-            },
-        ];
-        if (sup) {
-            concTraces.push({
-                id: 'csup',
-                x: [XIF, 1],
-                y: [1.8, 1.8],
-                color: '#999',
-                style: { lineWidth: 2 },
-                label: '\\text{supporting}',
-                labelFrac: 0.5,
-            });
-        } else {
-            concTraces.push({
-                id: 'cx',
-                x: [...xs],
-                y: xs.map((x) => c(x) + 0.04), // = c_Li (neutrality); offset to stay visible
-                color: SPECIES.chloride.color,
-                style: { lineWidth: 2, dasharray: '4,3' },
-                label: 'c_{\\mathrm{X}^-}',
-                labelFrac: 0.7,
-            });
-        }
-        conc.updateTraceData(concTraces);
     }
 
     const jEl = makeSlider('{{idprefix}}-j', update, { fire: false });

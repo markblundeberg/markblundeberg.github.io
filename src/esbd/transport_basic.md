@@ -67,7 +67,7 @@ Many interfaces are selective, letting one carrier through and blocking the rest
 <figure class="demo-container" style="max-width: 480px">
 {% include "esbd-diagrams/esbd-tb-concpol.njk" %}
 {% figcaption %}
-Concentration polarization at a blocking interface: a Li electrode passes $\mathrm{Li}^+$ while the anion banks up, flat. Top: the $V^\circ_i$ ladder bends with the depleted concentration and the conducting ion's drop is *twice* the bend (the binary-electrolyte factor of two). Bottom: the concentration profiles. Toggle the supporting electrolyte: $V^\circ_i$ flattens and the polarization halves at the same current. Rung spacing compressed.
+Concentration polarization at a silver plating cathode in binary $\mathrm{AgNO_3}$. The blocked $\mathrm{NO_3}^-$ carries no current, so its $V_i$ is *exactly flat* through the unstirred layer; the $V^\circ_i$ ladder bends with the depleted concentration and the conducting $\mathrm{Ag}^+$ bends by twice that. Out in the stirred bulk every level tilts together — the plain ohmic drop. Toggle the supporting electrolyte: the ladder pins flat and the bulk tilt vanishes. What happens when the interface is driven all the way dry is the [saturation](../saturation/) story.
 {% endfigcaption %}
 </figure>
 
