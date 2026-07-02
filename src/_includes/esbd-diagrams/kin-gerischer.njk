@@ -46,12 +46,15 @@
         const eq = Math.abs(vElec - V0) < 0.05; // merged: label once
 
         plot.updateTraceData([
+            // filled Gaussians, no edge lines; occupancy carried by the
+            // fill density (both stay electron blue - these are electron
+            // states either way)
             {
                 id: 'dred',
                 x: vgrid.map((v) => gauss(v, V0 + LAMBDA, fRed)),
                 y: [...vgrid],
                 color: BLUE,
-                style: { lineWidth: 2 },
+                style: { lineWidth: 0, fillOpacity: 0.45 },
                 showLabel: false,
             },
             {
@@ -59,7 +62,7 @@
                 x: vgrid.map((v) => gauss(v, V0 - LAMBDA, fOx)),
                 y: [...vgrid],
                 color: BLUE,
-                style: { lineWidth: 2, dasharray: '4,3' },
+                style: { lineWidth: 0, fillOpacity: 0.13 },
                 showLabel: false,
             },
             {
