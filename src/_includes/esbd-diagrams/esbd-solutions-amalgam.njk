@@ -1,0 +1,106 @@
+{% set idprefix = "esbd-solutions-amalgam" %}
+<div class="bd-container" id="{{idprefix}}-esbd" style="height: 220px"></div>
+<div class="bd-container" id="{{idprefix}}-conc" style="height: 175px"></div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import BandDiagram from '{{ esbdJsPath }}BandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { linspace } from '{{ esbdJsPath }}utils.js';
+
+    // Schematic (NOT to scale): Na+ plating from aqueous solution into a
+    // mercury amalgam, under a small current. Zones along x:
+    //   [0, 0.4]     bulk solution        log10 c = -1
+    //   [0.4, 0.78]  diffusion layer      c drops one decade (conc. polarization)
+    //   [0.78, 0.8]  diffuse (double) layer: counterion enrichment, sharp
+    //   0.8          water|mercury boundary: V° jumps (different medium)
+    //   [0.8, 1]     amalgam              log10 c = -2.5 (dilute Na in Hg)
+    // V_Na glides smoothly & monotonically throughout; V°_Na = V_Na - (RT/F)ln(c)
+    // in each medium, so the lower panel's log-concentration IS the gap.
+    const DEC = 0.05916;
+    const XB = 0.8; // water|mercury boundary
+
+    const smooth = (t) => t * t * (3 - 2 * t);
+    const ramp = (xi, a, b) =>
+        smooth(Math.min(1, Math.max(0, (xi - a) / (b - a))));
+
+    const x = linspace(0, 1, 201);
+    const logc = x.map((xi) =>
+        xi < XB
+            ? -1 - ramp(xi, 0.4, 0.78) + 1.5 * ramp(xi, 0.78, XB)
+            : -2.5
+    );
+    // Smooth gentle glide for V_Na: ~30 mV drop across the cell, flattening in
+    // the metal (it conducts well).
+    const vna = x.map((xi) => 0.3 - 0.023 * ramp(xi, 0.1, XB) - 0.004 * ramp(xi, XB, 1));
+    const v0na = x.map((xi, i) => vna[i] - DEC * logc[i]);
+
+    const iBoundary = x.findIndex((xi) => xi >= XB);
+
+    const regions = [
+        { ...REGION.solution, name: 'Solution' },
+        { ...REGION.metal, name: 'Mercury' },
+    ];
+
+    const esbd = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-esbd',
+        { sodium: SPECIES.sodium },
+        { margins: { right: 62 } }
+    );
+    esbd.setSpatialLayout([0, XB, 1], regions);
+    esbd.setVRange(0.24, 0.47);
+    esbd.updateTraceData([
+        {
+            // draw the standard state as two traces so the medium jump at the
+            // boundary is a genuine discontinuity, not a steep ramp
+            id: 'v0_w',
+            speciesId: 'sodium',
+            curveType: 'standardState',
+            labelFrac: 0.06,
+            x: x.slice(0, iBoundary),
+            y: v0na.slice(0, iBoundary),
+        },
+        {
+            id: 'v0_hg',
+            speciesId: 'sodium',
+            curveType: 'standardState',
+            showLabel: false,
+            x: x.slice(iBoundary),
+            y: v0na.slice(iBoundary),
+        },
+        {
+            id: 'v',
+            speciesId: 'sodium',
+            curveType: 'voltage',
+            x: x,
+            y: vna,
+        },
+    ]);
+
+    const conc = new BandDiagram('{{idprefix}}-conc', {
+        margins: { right: 62 },
+    });
+    conc.setSpatialLayout([0, XB, 1], regions);
+    conc.setYLabel('$\\log_{10} c_{\\mathrm{Na}^+}$');
+    conc.setYRange(-3.05, 0.05);
+    conc.updateTraceData([
+        {
+            id: 'logc_w',
+            label: '',
+            showLabel: false,
+            color: SPECIES.sodium.color,
+            style: { lineWidth: 2 },
+            x: x.slice(0, iBoundary),
+            y: logc.slice(0, iBoundary),
+        },
+        {
+            id: 'logc_hg',
+            label: '',
+            showLabel: false,
+            color: SPECIES.sodium.color,
+            style: { lineWidth: 2 },
+            x: x.slice(iBoundary),
+            y: logc.slice(iBoundary),
+        },
+    ]);
+</script>

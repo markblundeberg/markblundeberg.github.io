@@ -210,7 +210,13 @@ class EnergyLevelsDiagram extends ResponsivePlot {
                 xCenter,
                 xLeft,
                 xRight,
-                xLabel: xRight + labelOffset,
+                // labelSide 'left' puts the label at the line's left end
+                // (right-aligned) — lets two families of levels (e.g. carriers
+                // vs standard-state rungs) never collide.
+                xLabel:
+                    level.labelSide === 'left'
+                        ? xLeft - 5
+                        : xRight + labelOffset,
                 level,
             };
         });
@@ -277,7 +283,7 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             ...d,
             label: d.level.label,
             mathMode: true,
-            hAlign: 'left',
+            hAlign: d.level.labelSide === 'left' ? 'right' : 'left',
             vAlign: d.level.labelVAlign || 'center',
         }));
 

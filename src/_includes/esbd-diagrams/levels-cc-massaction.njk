@@ -1,0 +1,105 @@
+{% set idprefix = "levels-cc-massaction" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 250px"></div>
+{{ controls.slider(idprefix + "-ladder-slider", "Ladder offset", { min: -0.1, max: 0.1, step: "any", value: 0, snap: 0 }) }}
+<div style="text-align: center; font-size: 0.85em; margin-top: 0.2em"><span id="{{idprefix}}-product"></span></div>
+
+<script type="module">
+    import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
+    import { SPECIES } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, renderSpanMath } from '{{ esbdJsPath }}utils.js';
+
+    // Abstract two-carrier toy (caption speaks of generic A, B): a +1 cation A
+    // and a -1 anion B, both V_i pinned; the rigid ladder (rungs 0.3 V apart)
+    // slides by s. Gaps are real volts so c_i follows the ideal-dilute law;
+    // log10 c_A + log10 c_B = -0.1/0.05916 = -1.69 stays invariant.
+    const DEC = 0.05916; // (RT/F) ln10 at 25 °C
+    const V_A = 0.1,
+        V_B = -0.1; // pinned carrier voltages
+    const CATION = { color: SPECIES.sodium.color };
+    const ANION = { color: SPECIES.chloride.color };
+
+    const productSpan = document.getElementById('{{idprefix}}-product');
+
+    const diagram = new EnergyLevelsDiagram('{{idprefix}}-container', {
+        yAxisLabel: 'Voltage (V)',
+        yRange: [-0.32, 0.32],
+        categories: [{ id: 'soln', label: 'Solution' }],
+        margins: { top: 8, right: 70, bottom: 24, left: 95 },
+    });
+
+    function update(s) {
+        const V0_A = s + 0.15; // rigid ladder: rung spacing fixed at 0.3 V
+        const V0_B = s - 0.15;
+        const logcA = (V_A - V0_A) / DEC; // z = +1
+        const logcB = -(V_B - V0_B) / DEC; // z = -1
+
+        diagram.setLevels([
+            {
+                categoryId: 'soln',
+                levelId: 'va',
+                yValue: V_A,
+                label: 'V_A',
+                color: CATION.color,
+                style: { lineWidth: 3 },
+            },
+            {
+                categoryId: 'soln',
+                levelId: 'v0a',
+                yValue: V0_A,
+                label: 'V^\\circ_A',
+                color: CATION.color,
+                style: { lineWidth: 1 },
+                labelSide: 'left',
+            },
+            {
+                categoryId: 'soln',
+                levelId: 'v0b',
+                yValue: V0_B,
+                label: 'V^\\circ_B',
+                color: ANION.color,
+                style: { lineWidth: 1 },
+                labelSide: 'left',
+            },
+            {
+                categoryId: 'soln',
+                levelId: 'vb',
+                yValue: V_B,
+                label: 'V_B',
+                color: ANION.color,
+                style: { lineWidth: 3 },
+            },
+        ]);
+
+        const arrows = [];
+        if (Math.abs(V_A - V0_A) > 0.012) {
+            arrows.push({
+                arrowId: 'gapA',
+                fromLevelId: 'v0a',
+                toLevelId: 'va',
+                label: `c_A = 10^{${logcA.toFixed(1)}}c^\\circ`,
+                arrowStyle: '<->',
+                dxFrac: -0.22,
+                labelHAlign: 'right',
+            });
+        }
+        if (Math.abs(V_B - V0_B) > 0.012) {
+            arrows.push({
+                arrowId: 'gapB',
+                fromLevelId: 'v0b',
+                toLevelId: 'vb',
+                label: `c_B = 10^{${logcB.toFixed(1)}}c^\\circ`,
+                arrowStyle: '<->',
+                dxFrac: 0.22,
+            });
+        }
+        diagram.setArrows(arrows);
+
+        renderSpanMath(
+            productSpan,
+            `c_A c_B = 10^{${(logcA + logcB).toFixed(2)}}\\,(c^\\circ)^2 \\;\\text{(invariant)}`
+        );
+    }
+
+    makeSlider('{{idprefix}}-ladder-slider', update);
+</script>

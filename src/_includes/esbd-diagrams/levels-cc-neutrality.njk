@@ -1,0 +1,105 @@
+{% set idprefix = "levels-cc-neutrality" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-levels" style="height: 205px"></div>
+<div class="bd-container" id="{{idprefix}}-charge" style="height: 165px"></div>
+{{ controls.slider(idprefix + "-ladder-slider", "Ladder offset", { min: -0.1, max: 0.1, step: "any", value: -0.06, snap: 0.024 }) }}
+
+<script type="module">
+    import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
+    import BandDiagram from '{{ esbdJsPath }}BandDiagram.js';
+    import { SPECIES } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+
+    // Toy multi-ion solution: X+ (z=1), Y2+ (z=2), Z- (z=-1), all V_i pinned;
+    // the rigid ladder slides by s. Concentrations follow the ideal-dilute law
+    // (gaps in real volts), so net charge rho(s) is monotone with ONE zero
+    // crossing (s* ~ +0.024 V, marked on the slider's datalist).
+    const DEC = 0.05916;
+    const IONS = [
+        { key: 'x', z: 1, V: 0.05, V0off: 0.1, sp: SPECIES.sodium, sym: 'X^{+}' },
+        { key: 'y', z: 2, V: 0.0, V0off: 0.0, sp: SPECIES.zinc, sym: 'Y^{2+}' },
+        { key: 'z', z: -1, V: -0.05, V0off: -0.1, sp: SPECIES.chloride, sym: 'Z^{-}' },
+    ];
+    const conc = (ion, s) =>
+        Math.pow(10, (ion.z * (ion.V - (s + ion.V0off))) / DEC);
+    const rho = (s) => IONS.reduce((acc, ion) => acc + ion.z * conc(ion, s), 0);
+    const symlog = (v) => Math.asinh(v) / Math.LN10; // keeps the zero crossing honest
+
+    const levels = new EnergyLevelsDiagram('{{idprefix}}-levels', {
+        yAxisLabel: 'Voltage (V)',
+        yRange: [-0.28, 0.3],
+        categories: [{ id: 'soln', label: 'Solution' }],
+        margins: { top: 8, right: 65, bottom: 24, left: 95 },
+    });
+
+    // Lower panel: an xy-plot of net charge vs ladder offset, built on
+    // BandDiagram ("x" = offset, not position).
+    const chart = new BandDiagram('{{idprefix}}-charge', {
+        yMode: 'abstract',
+        margins: { top: 6, right: 65, bottom: 24, left: 95 },
+    });
+    const S_MIN = -0.1,
+        S_MAX = 0.1;
+    chart.setSpatialLayout([S_MIN, S_MAX], [
+        { name: 'ladder offset →', color: '#fafafa' },
+    ]);
+    chart.setYLabel('Net charge');
+    chart.setYRange(-1.6, 4.4);
+    const sGrid = linspace(S_MIN, S_MAX, 121);
+    chart.updateTraceData([
+        {
+            id: 'zero',
+            label: '0',
+            color: '#999',
+            style: { lineWidth: 1, dasharray: '4,3' },
+            x: [S_MIN, S_MAX],
+            y: [0, 0],
+        },
+        {
+            id: 'rho',
+            label: '\\textstyle\\sum_i z_i c_i',
+            labelFrac: 0.35,
+            color: '#444',
+            style: { lineWidth: 2 },
+            x: sGrid,
+            y: sGrid.map((s) => symlog(rho(s))),
+        },
+    ]);
+
+    function update(s) {
+        const levelData = [];
+        for (const ion of IONS) {
+            levelData.push({
+                categoryId: 'soln',
+                levelId: 'v_' + ion.key,
+                yValue: ion.V,
+                label: `V_{${ion.sym}}`,
+                color: ion.sp.color,
+                style: { lineWidth: 3 },
+            });
+            levelData.push({
+                categoryId: 'soln',
+                levelId: 'v0_' + ion.key,
+                yValue: s + ion.V0off,
+                label: `V^\\circ_{${ion.sym}}`,
+                color: ion.sp.color,
+                style: { lineWidth: 1 },
+                labelSide: 'left',
+            });
+        }
+        levels.setLevels(levelData);
+
+        chart.updateVerticalMarkers([
+            {
+                id: 'here',
+                symbol: '●',
+                x: s,
+                yDefs: [{ y: symlog(rho(s)) }],
+                popupCallback: () =>
+                    `net charge = ${rho(s).toPrecision(3)} · Fc°`,
+            },
+        ]);
+    }
+
+    makeSlider('{{idprefix}}-ladder-slider', update);
+</script>

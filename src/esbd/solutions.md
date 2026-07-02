@@ -75,7 +75,8 @@ The standard state ladder is also analogous to the conduction and valence band e
 
 We have drawn the ladder as a static object, but in a working device it rarely sits still. A brief look ahead is worth it here, even though every mechanism shown belongs to a later topic. The contrast to hold onto is this: while $V_i$ tends to ramp smoothly and monotonically across space, tied down as it is by the pull toward thermodynamic equilibrium, the $V^\circ_i$ levels are free to vary far more wildly. They slope gently under an ohmic or diffusion field, swing sharply over a few nanometres in the diffuse layer beside an interface, and jump outright wherever the medium itself changes, since a different solvent or phase carries its own ladder.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 480px">
+{% include "esbd-diagrams/esbd-solutions-amalgam.njk" %}
 {% figcaption %}
 Schematic, not to scale: a single ion, $\mathrm{Na}^+$, plated into a mercury amalgam from aqueous solution, as happens at a dropping-mercury electrode or a chlor-alkali mercury cell. Don't worry about the mechanisms yet, since each gets its own topic later; the point is only this. The species voltage $V_{\mathrm{Na}^+}$ glides smoothly across the whole system, while its standard state $V^\circ_{\mathrm{Na}^+}$ roams over three length scales at once: a gentle slope through the micron-thick diffusion layer, a sharp excursion in the nanometre diffuse layer at the surface, and an outright jump at the mercury–water boundary. The gap between the two lines, drawn in the lower panel, is exactly the concentration $c_{\mathrm{Na}^+}$.
 {% endfigcaption %}

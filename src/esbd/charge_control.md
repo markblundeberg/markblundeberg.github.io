@@ -42,7 +42,8 @@ so the cation can be enriched only at the anion's expense, and the reverse.
 
 Note the same combination holds just as well for two carriers of the same sign. Pairing $\mathrm{Na}^+$ with $\mathrm{Al}^{3+}$, for instance, gives $c_{\mathrm{Na}^+}\big/c_{\mathrm{Al}^{3+}}^{1/3} = \text{const}$. The fractional power^[In chemistry one usually clears the fractional exponents by raising the relation to the power $z_A z_B$, giving the tidy integer form $c_{\mathrm{Na}^+}^{3}\big/c_{\mathrm{Al}^{3+}} = \text{const}$. It is the same law; the fractional version is just the one written per unit of charge, which is the normalization the $V_i$ picture invites.] means that as the ladder slides, the trivalent $\mathrm{Al}^{3+}$ must swing three times as hard in its log-concentration as the $\mathrm{Na}^+$, which means the ratio between the two ions can vary greatly.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 420px">
+{% include "esbd-diagrams/levels-cc-massaction.njk" %}
 {% figcaption %}
 Two carriers pinned ($V_A$, $V_B$ fixed), with a slider for the $V^\circ_i$ ladder offset. As the ladder slides, $c_A$ and $c_B$ trade off against each other, but their mass-action product holds constant. Other ions are not shown.
 {% endfigcaption %}
@@ -56,9 +57,10 @@ $$ \sum_i z_i F c_i + \rho_{\mathrm{bg}} = 0, $$
 
 where $\rho_{\mathrm{bg}}$ is any fixed, immobile background charge. Each mobile $c_i$ in this sum is an exponential function of the ladder offset, so as the ladder slides the net charge passes monotonically through zero at exactly one position. Once the $V_i$ are given, the ladder floats to precisely the offset that neutrality requires, and to no other.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 420px">
+{% include "esbd-diagrams/levels-cc-neutrality.njk" %}
 {% figcaption %}
-Top: a multi-ion solution with all $V_i$ fixed. Bottom: the total free charge density as a function of the $V^\circ_i$ ladder offset, crossing zero at the single neutral position. Sliding the ladder is how the system "finds" neutrality.
+Top: a multi-ion solution with all $V_i$ fixed. Bottom: the total free charge density as a function of the $V^\circ_i$ ladder offset, crossing zero at the single neutral position (charge axis log-compressed). Sliding the ladder is how the system "finds" neutrality; the tick on the slider marks the neutral offset.
 {% endfigcaption %}
 </figure>
 
@@ -80,9 +82,10 @@ The same reasoning recovers a classic result of solution chemistry. Consider a s
 
 If the disturbance is confined to one side of a membrane, the effect becomes spatial. Let a membrane pass the small mobile ions ($\mathrm{Na}^+$ and $\mathrm{Cl}^-$) while blocking a large polyion, say a protein $\mathrm{Pr}^-$, on the right. The mobile ions equilibrate across the membrane, so $V_{\mathrm{Na}^+}$ and $V_{\mathrm{Cl}^-}$ run perfectly flat through it. The trapped $\mathrm{Pr}^-$, however, is a background charge present on the right alone, and so the ladder must sit at a different offset on each side in order to keep both sides neutral. That step in the $V^\circ_i$ ladder across the membrane is the {% wiki "Gibbs–Donnan effect", "Donnan potential" %}. With the mobile $V_i$ flat and the ladder stepped, the concentrations step as well: the protein side is left richer in $\mathrm{Na}^+$ and poorer in $\mathrm{Cl}^-$, which is precisely Donnan exclusion.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 420px">
+{% include "esbd-diagrams/esbd-cc-donnan.njk" %}
 {% figcaption %}
-Gibbs–Donnan equilibrium. The mobile-ion traces $V_{\mathrm{Na}^+}$ and $V_{\mathrm{Cl}^-}$ run flat across the membrane; the $V^\circ_i$ ladder steps between the two sides to neutralize the trapped protein, and that step is the Donnan potential. A slider sets the blocked-protein concentration on the right.
+Gibbs–Donnan equilibrium. The mobile-ion traces $V_{\mathrm{Na}^+}$ and $V_{\mathrm{Cl}^-}$ run flat across the membrane; the $V^\circ_i$ ladder steps between the two sides to neutralize the trapped protein, and that step is the Donnan potential. A slider sets the blocked-protein concentration on the right. (Saline at $1\ \mathrm{mmol/L}$; the drawn rung spacing is compressed for display, but the gaps and the step are to scale.)
 {% endfigcaption %}
 </figure>
 
@@ -92,9 +95,10 @@ The Donnan step assumed one solvent throughout, so the ladder shifted as a rigid
 
 Any ion free to cross still equilibrates to a flat $V_i$, just as the mobile ions did across the Donnan membrane, and pinning two such ions again leaves a charge-balanced combination independent of $\Delta\phi$, the same mass-action cancellation we saw above. Here that ladder-independent quantity is what an electrochemist calls the standard partition coefficient of the salt. The individual single-ion transfer energies, by contrast, are no more measurable than single-ion activities were, and for the same reason: they depend on the unknowable offset between the two ladders. This liquid–liquid interface is known as {% wiki "Interface between two immiscible electrolyte solutions", "ITIES" %}.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 420px">
+{% include "esbd-diagrams/esbd-cc-ities.njk" %}
 {% figcaption %}
-A liquid–liquid interface (ITIES): water against an immiscible organic solvent. A shared ion runs flat across the boundary ($V_i$ continuous), but the two solvents' $V^\circ_i$ ladders step by a different amount for each ion, set by how each prefers one solvent over the other. The salt's overall partition across the interface is fixed; how that partition splits between the individual ions is not.
+A liquid–liquid interface (ITIES): water against an immiscible organic solvent. A shared ion runs flat across the boundary ($V_i$ continuous), but the two solvents' $V^\circ_i$ ladders step by a different amount for each ion, set by how each prefers one solvent over the other. The salt's overall partition across the interface is fixed; how that partition splits between the individual ions is not. (Schematic, for a generic salt $\mathrm{C^+A^-}$ that prefers the water.)
 {% endfigcaption %}
 </figure>
 
