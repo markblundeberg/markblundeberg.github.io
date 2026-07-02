@@ -112,8 +112,12 @@ class ResponsivePlot {
                 .append('a')
                 .attr('class', 'bd-legend-link')
                 .attr('href', this.config.legendLinkHref)
-                .attr('title', 'How to read this diagram — the legend')
-                .attr('aria-label', 'Diagram legend')
+                // reference lookup, not navigation: a new tab preserves the
+                // reader's scroll position and slider states
+                .attr('target', '_blank')
+                .attr('rel', 'noopener')
+                .attr('title', 'How to read this diagram — the legend (opens in a new tab)')
+                .attr('aria-label', 'Diagram legend (opens in a new tab)')
                 .text('?');
         }
 
