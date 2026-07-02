@@ -91,7 +91,7 @@
                 id: 'vh',
                 speciesId: 'hole',
                 curveType: 'voltage',
-                x: [XL, 1],
+                x: [XL, XR], // majority holes of the p base only
                 y: [0.3, 0.3],
             },
             {
@@ -107,6 +107,14 @@
                 speciesId: 'electron',
                 curveType: 'voltage',
                 ...trim(ve),
+            },
+            {
+                id: 've_c',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: false,
+                x: [0, XL],
+                y: [Math.min(VHI, ve(XL)), Math.min(VHI, ve(XL))],
             },
         ]);
 

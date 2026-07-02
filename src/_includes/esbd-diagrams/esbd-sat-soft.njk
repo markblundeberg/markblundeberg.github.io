@@ -106,6 +106,17 @@
                 curveType: 'voltage',
                 ...trim((x) => 0.5 - 2 * DEC * lg(x)),
             },
+            {
+                id: 've_d',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: false,
+                x: [0, XL],
+                y: [
+                    Math.min(VHI, 0.5 - 2 * DEC * lg(XL)),
+                    Math.min(VHI, 0.5 - 2 * DEC * lg(XL)),
+                ],
+            },
         ]);
 
         // binary electrolyte: flat blocked anion, ladder bends 1×, Ag+ 2×,
