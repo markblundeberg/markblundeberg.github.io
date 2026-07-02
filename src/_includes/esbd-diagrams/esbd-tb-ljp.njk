@@ -21,6 +21,11 @@
     const DLOGC = -2; // log10(c_R/c_L)
     const MID = 0.5;
     const GAP_R = 0.15; // splitting at the dilute end (compressed)
+    // refShift: anchoring Na+ as drawn-true, the Cl- trace sits
+    // 0.15 - (-4.43) = -4.58 V from its IUPAC-referenced position (the
+    // x-dependence of the splitting is honest; only the base is shifted).
+    // The generic V°_i rung is schematic and unflagged.
+    const CL_SHIFT = -4.58;
 
     const diagram = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-container',
@@ -63,6 +68,7 @@
             {
                 id: 'vm',
                 speciesId: 'anion',
+                refShift: CL_SHIFT,
                 curveType: 'voltage',
                 x: [...xs],
                 y: xs.map((x) => MID + phi(x) - gap(x) / 2),

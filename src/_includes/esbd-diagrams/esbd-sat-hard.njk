@@ -31,6 +31,12 @@
         XR = 0.88; // active-layer extent in both panels
     const VLO = 0.05,
         VHI = 0.95; // plot range; traces trimmed at edges
+    // refShifts (display offsets vs IUPAC-referenced positions, ~0.1 V
+    // precision; nominal ~1 M support, activity terms neglected):
+    // bath anchored to Ag+/e-; BJT anchored to the hole/valence group.
+    const K_SHIFT = 3.86; // true V°_K in this gauge: -3.08, drawn 0.78
+    const NO3_SHIFT = -0.69; // true 0.99, drawn 0.30
+    const E_SHIFT = 0.96; // true edge -0.78, drawn 0.18
 
     const bjt = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-bjt',
@@ -98,6 +104,7 @@
                 id: 'v0e',
                 speciesId: 'electron',
                 curveType: 'bandEdge_C',
+                refShift: E_SHIFT,
                 labelFrac: 0.35,
                 x: [XL, 1],
                 y: [0.18, 0.18],
@@ -106,6 +113,7 @@
                 id: 've',
                 speciesId: 'electron',
                 curveType: 'voltage',
+                refShift: E_SHIFT,
                 ...trim(ve),
             },
             {
@@ -127,6 +135,7 @@
                 id: 'vk',
                 speciesId: 'potassium',
                 curveType: 'voltage',
+                refShift: K_SHIFT,
                 x: [XL, 1],
                 y: [0.78, 0.78],
             },
@@ -148,6 +157,7 @@
                 id: 'vno3',
                 speciesId: 'nitrate',
                 curveType: 'voltage',
+                refShift: NO3_SHIFT,
                 x: [XL, 1],
                 y: [0.3, 0.3],
             },

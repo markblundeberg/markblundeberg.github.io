@@ -24,6 +24,10 @@
     const V0X_B = 0.46,
         V0LI_B = 0.72; // bulk rung positions (fake 0.26 V spacing)
     const GAP_LI = 0.06; // bulk V°_Li − V_Li (0.1 M-ish)
+    // refShift: anchoring Li+ (tied to the electrode's V_e-) as drawn-true,
+    // the anion group sits (0.46-0.72) - (1.3601-(-3.0399)) = -4.66 V from
+    // its IUPAC-referenced position
+    const X_SHIFT = -4.66;
 
     const band = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-band',
@@ -77,6 +81,7 @@
             {
                 id: 'v0x',
                 speciesId: 'anion',
+                refShift: X_SHIFT,
                 curveType: 'standardState',
                 x: xs,
                 y: xs.map((x) => V0X_B + (sup ? 0 : bend(x))),
@@ -84,6 +89,7 @@
             {
                 id: 'vx',
                 speciesId: 'anion',
+                refShift: X_SHIFT,
                 curveType: 'voltage',
                 x: [XIF, 1],
                 y: [V_X, V_X],

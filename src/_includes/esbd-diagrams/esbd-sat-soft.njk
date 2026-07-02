@@ -29,6 +29,10 @@
         XR = 0.88;
     const VLO = 0.05,
         VHI = 0.95;
+    // refShift: anchoring Ag+/e- as drawn-true, NO3- sits ~-0.81 V from its
+    // IUPAC-referenced position (true rung 1.03 in this gauge + 0.077
+    // activity at 0.05 M, drawn 0.30). FET panel: no cross-species claims.
+    const NO3_SHIFT = -0.81;
 
     const fet = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-fet',
@@ -142,6 +146,7 @@
                 id: 'vno3',
                 speciesId: 'nitrate',
                 curveType: 'voltage',
+                refShift: NO3_SHIFT,
                 x: [XL, 1],
                 y: [0.3, 0.3],
             },

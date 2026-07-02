@@ -20,6 +20,9 @@
     const VT = 0.025693; // RT/F (V)
     const C_S = 1e-3;
     const LADDER = 1.2; // compressed rung spacing (see note)
+    // refShift: anchoring Na+ as drawn-true, the Cl- group sits
+    // 1.2 - 4.0746 = -2.87 V from its IUPAC-referenced position
+    const CL_SHIFT = -2.87;
 
     const naSpan = document.getElementById('{{idprefix}}-naConc');
     const clSpan = document.getElementById('{{idprefix}}-clConc');
@@ -64,6 +67,7 @@
             {
                 id: 'vcl',
                 speciesId: 'chloride',
+                refShift: CL_SHIFT,
                 curveType: 'voltage',
                 x: [0, 1],
                 y: [V_Cl, V_Cl],
@@ -71,6 +75,7 @@
             {
                 id: 'v0cl',
                 speciesId: 'chloride',
+                refShift: CL_SHIFT,
                 curveType: 'standardState',
                 labelFrac: 0.1,
                 x: x,
