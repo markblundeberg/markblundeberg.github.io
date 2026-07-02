@@ -10,10 +10,11 @@
     import { SPECIES } from '{{ esbdJsPath }}figureDefs.js';
     import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
 
-    // Toy multi-ion solution: X+ (z=1), Y2+ (z=2), Z- (z=-1), all V_i pinned;
-    // the rigid ladder slides by s. Concentrations follow the ideal-dilute law
-    // (gaps in real volts), so net charge rho(s) is monotone with ONE zero
-    // crossing (s* ~ +XXX V, marked on the slider's datalist).
+    // Toy multi-ion solution: X+ (z=1), Y2+ (z=2), Z- (z=-1), all V_i pinned,
+    // plus a fixed background charge; the rigid ladder slides by s.
+    // Concentrations follow the ideal-dilute law (gaps in real volts), so net
+    // charge rho(s) is monotone with ONE zero crossing (s* = -0.041 V, marked
+    // on the slider's datalist).
     const DEC = 0.05916;
     const xOff = +0.12;
     const yOff = -0.06;
@@ -27,7 +28,6 @@
     const conc = (ion, s) =>
         Math.pow(10, (ion.z * (ion.V - (s + ion.V0off))) / DEC);
     const rho = (s) => IONS.reduce((acc, ion) => acc + ion.z * conc(ion, s), rho_bg);
-    const symlog = (v) => Math.asinh(v) / Math.LN10; // keeps the zero crossing honest
 
     const levels = new EnergyLevelsDiagram('{{idprefix}}-levels', {
         yAxisLabel: 'Voltage (V)',
@@ -49,6 +49,9 @@
         margins: { bottom: 30, left: 35, right:20 },
     });
     const sGrid = linspace(S_MIN, S_MAX, 121);
+    // Faint component traces (per-ion exponentials in the ions' colors, flat
+    // background) under the bold total, so the sum is visibly a sum.
+    const FAINT = { lineWidth: 1.25, opacity: 0.55 };
     chart.updateTraceData([
         {
             id: 'zero',
@@ -57,6 +60,23 @@
             style: { lineWidth: 1, dasharray: '4,3' },
             x: [S_MIN, S_MAX],
             y: [0, 0],
+        },
+        ...IONS.map((ion) => ({
+            id: 'q_' + ion.key,
+            showLabel: false,
+            color: ion.sp.color,
+            style: FAINT,
+            x: sGrid,
+            y: sGrid.map((s) => ion.z * conc(ion, s)),
+        })),
+        {
+            id: 'q_bg',
+            label: '\\scriptstyle \\rho_{\\mathrm{bg}}',
+            labelFrac: 0.75,
+            color: '#777',
+            style: FAINT,
+            x: [S_MIN, S_MAX],
+            y: [rho_bg, rho_bg],
         },
         {
             id: 'rho',
