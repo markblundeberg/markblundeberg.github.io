@@ -1,0 +1,90 @@
+{% set idprefix = "cap-chem" %}
+{% import "macros/controls.njk" as controls %}
+<div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center">
+    <div class="bd-container" id="{{idprefix}}-levels" style="flex: 1 1 170px; height: 240px; max-width: 220px"></div>
+    <div class="bd-container" id="{{idprefix}}-qv" style="flex: 1 1 240px; height: 240px; max-width: 330px"></div>
+</div>
+{{ controls.slider(idprefix + "-x", "State of charge $x$", { min: 0.03, max: 0.97, step: "any", value: 0.25, snap: 0.5, readout: true }) }}
+
+<script type="module">
+    import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
+    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+
+    // Chemical capacitance in an intercalation host: stored charge IS the
+    // lithium content x, and V_Li+ rides the lattice-gas isotherm
+    // V = V° + (RT/F) ln(x/(1−x)) away from its standard state (drawn at
+    // half-filling, the natural lattice-gas reference). No field gap
+    // anywhere; the right panel is that exponential read as Q vs V.
+    const DEC = 0.05916;
+    const V0 = 0.5;
+    const LI = SPECIES.lithium.color;
+    const vOf = (x) => V0 + DEC * Math.log10(x / (1 - x));
+
+    const levels = new EnergyLevelsDiagram('{{idprefix}}-levels', {
+        yAxisLabel: 'Voltage (V)',
+        yRange: [0.3, 0.7],
+        categories: [{ id: 'host', label: 'Liₓ host' }],
+        showYTicks: false,
+        bandPaddingOuter: 0.5,
+        bandMinPaddingOuter: { left: 12, right: 50 },
+    });
+
+    const qv = new XYPlot('{{idprefix}}-qv', {
+        xLabel: 'Stored charge $\\propto x$',
+        yLabel: '$V_{\\mathrm{Li}^+}$ (V)',
+        xRange: [0, 1],
+        yRange: [0.3, 0.7],
+        margins: { bottom: 34, left: 46, right: 12 },
+    });
+
+    const xs = linspace(0.015, 0.985, 121);
+
+    function update(x) {
+        document.getElementById('{{idprefix}}-x-readout').textContent =
+            x.toFixed(2);
+        const v = vOf(x);
+
+        levels.setLevels([
+            {
+                categoryId: 'host',
+                levelId: 'v0',
+                yValue: V0,
+                label: 'V^\\circ_{\\mathrm{Li}^+}',
+                color: LI,
+                style: { lineWidth: 1 },
+                labelSide: 'left',
+            },
+            {
+                categoryId: 'host',
+                levelId: 'v',
+                yValue: v,
+                label: 'V_{\\mathrm{Li}^+}',
+                color: LI,
+                style: { lineWidth: 3 },
+            },
+        ]);
+
+        qv.updateTraceData([
+            {
+                id: 'v0line',
+                x: [0, 1],
+                y: [V0, V0],
+                color: LI,
+                style: { lineWidth: 1, dasharray: '4,3', opacity: 0.6 },
+                showLabel: false,
+            },
+            {
+                id: 'iso',
+                x: [...xs],
+                y: xs.map(vOf),
+                color: LI,
+                style: { lineWidth: 2.5 },
+                showLabel: false,
+            },
+        ]);
+        qv.updateMarkers([{ id: 'op', x: x, y: v, color: LI }]);
+    }
+    makeSlider('{{idprefix}}-x', update);
+</script>
