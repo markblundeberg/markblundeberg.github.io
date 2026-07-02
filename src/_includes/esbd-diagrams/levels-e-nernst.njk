@@ -14,6 +14,7 @@
     // = n × RT/F·ln10 = n × 0.05916 V (25 °C).
     const RT_F_LN10 = 0.05916;
     const E_std = 0.77;
+    const floatV = -0.374582; // random
 
     const readout = document.getElementById(
         '{{idprefix}}-ratio-slider-readout'
@@ -21,7 +22,7 @@
 
     const diagram = new EnergyLevelsDiagram('{{idprefix}}-container', {
         yAxisLabel: 'Voltage $V_{\\mathrm{e}^-}$ (V)',
-        yRange: [-0.12, 1.12],
+        yRange: [floatV - 0.12, floatV + 1.12],
         categories: [{ id: 'soln', label: 'Solution' }],
         bandMinPaddingOuter: { left: 8, right: 108 }, // V°(Ox/Red)-length labels
     });
@@ -35,7 +36,7 @@
             {
                 categoryId: 'soln',
                 levelId: 'rxn',
-                yValue: V_rxn,
+                yValue: floatV + V_rxn,
                 label: 'V_{\\mathrm{e}^-}(\\mathrm{Ox}/\\mathrm{Red})',
                 color: BLUE,
                 style: { lineWidth: 3, dasharray: '3,3' },
@@ -44,7 +45,7 @@
             {
                 categoryId: 'soln',
                 levelId: 'std',
-                yValue: E_std,
+                yValue: floatV + E_std,
                 label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{Ox}/\\mathrm{Red})',
                 color: BLUE,
                 style: { lineWidth: 1, dasharray: '3,3' },
@@ -53,7 +54,7 @@
             {
                 categoryId: 'soln',
                 levelId: 'she',
-                yValue: 0,
+                yValue: floatV + 0.0,
                 label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{SHE})',
                 color: BLUE,
                 style: { lineWidth: 1, dasharray: '3,3' },
