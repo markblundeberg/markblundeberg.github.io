@@ -30,12 +30,12 @@ const CURVE_TYPES = {
     },
     bandEdge_C: {
         name: 'conduction band edge',
-        style: { lineWidth: 2, dasharray: '4,2' },
+        style: { lineWidth: 1, dasharray: null },
         labelGen: (species) => `V_{${species}}^{\\text{band}}`,
     },
     bandEdge_V: {
         name: 'valence band edge',
-        style: { lineWidth: 2, dasharray: '4,2' },
+        style: { lineWidth: 1, dasharray: null },
         labelGen: (species) => `V_{${species}}^{\\text{band}}`,
     },
     phi: {
