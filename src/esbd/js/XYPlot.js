@@ -257,6 +257,7 @@ class XYPlot extends ResponsivePlot {
                     )
                     .attr('stroke', (d) => d.color)
                     .attr('stroke-width', (d) => d.style.lineWidth ?? 2)
+                    .attr('stroke-opacity', (d) => d.style.opacity ?? 1)
                     .attr('stroke-dasharray', (d) => d.style.dasharray ?? null),
         });
     }
