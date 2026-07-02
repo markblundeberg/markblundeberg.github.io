@@ -1,0 +1,60 @@
+{% set idprefix = "levels-half-implied" %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 240px"></div>
+
+<script type="module">
+    import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
+    import { SPECIES } from '{{ esbdJsPath }}figureDefs.js';
+
+    const BLUE = SPECIES.electron.color;
+
+    // Abstract: a metal with one actual V_e-, a solution carrying three
+    // implied levels (one per half-reaction), all mutually disequilibrated.
+    // Heights are arbitrary; chosen so no two levels look accidentally equal.
+    const diagram = new EnergyLevelsDiagram('{{idprefix}}-container', {
+        yAxisLabel: 'Voltage $V_{\\mathrm{e}^-}$',
+        yRange: [-0.04, 0.96],
+        categories: [
+            { id: 'metal', label: 'Metal' },
+            { id: 'soln', label: 'Solution' },
+        ],
+        showYTicks: false,
+        bandPaddingOuter: 0.5,
+        bandMinPaddingOuter: { left: 15, right: 100 }, // V_e-(Ox_n/Red_n) labels
+        bandMinPaddingInner: 34, // metal V_e- label hangs in the inter-band gap
+    });
+
+    diagram.setLevels([
+        {
+            categoryId: 'metal',
+            levelId: 'metal',
+            yValue: 0.5,
+            label: 'V_{\\mathrm{e}^-}',
+            color: BLUE,
+            style: { lineWidth: 3 },
+        },
+        {
+            categoryId: 'soln',
+            levelId: 'rxn1',
+            yValue: 0.78,
+            label: 'V_{\\mathrm{e}^-}(\\mathrm{Ox}_1/\\mathrm{Red}_1)',
+            color: BLUE,
+            style: { lineWidth: 3, dasharray: '3,3' },
+        },
+        {
+            categoryId: 'soln',
+            levelId: 'rxn2',
+            yValue: 0.3,
+            label: 'V_{\\mathrm{e}^-}(\\mathrm{Ox}_2/\\mathrm{Red}_2)',
+            color: BLUE,
+            style: { lineWidth: 3, dasharray: '3,3' },
+        },
+        {
+            categoryId: 'soln',
+            levelId: 'rxn3',
+            yValue: 0.08,
+            label: 'V_{\\mathrm{e}^-}(\\mathrm{Ox}_3/\\mathrm{Red}_3)',
+            color: BLUE,
+            style: { lineWidth: 3, dasharray: '3,3' },
+        },
+    ]);
+</script>

@@ -45,13 +45,10 @@ In the absence of an equilibrated electrode, it is indeed useful to calculate th
 
 On our diagrams we will depict these implied levels as dashed lines, inside the solution.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 420px">
+{% include "esbd-diagrams/levels-half-implied.njk" %}
 {% figcaption %}
-TODO: Abstract figure showing how implied levels look
-- Left: metal, one Ve
-- Right: solution multiple Ve implied
-
-Abstract diagram showing the appearance of implied $V_{\mathrm{e}^-}$ levels: dashed lines with electron blue color. In this case, the redox levels in solution are disequilibrated with the each other and the electrode, perhaps due to slow kinetics.
+How implied levels look: the metal has one actual $V_{\mathrm{e}^-}$, while the solution carries an implied level for each of its half-reactions. This particular solution is redox-disequilibrated — slow electron transfer lets four different $V_{\mathrm{e}^-}$ values coexist.
 {% endfigcaption %}
 </figure>
 
