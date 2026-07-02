@@ -25,6 +25,7 @@
 - [_Half-reactions_](/esbd/half/) - Electrons "in solution": redox and the Nernst equation in $V_i$ land. Standard electrode potentials as floating levels $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$.
 - [_Electrode potential_](/esbd/e/) - One electrode: visualizing $E$, overpotential, and mixed potentials.
 - [_Reference electrodes & cells_](/esbd/references/) - Reference electrodes, full cells, liquid junction potentials, and the "absolute" vacuum reference.
+- [_Interface kinetics_](/esbd/kinetics/) - The current–overpotential law: Butler–Volmer as the exponential interface element, Tafel, the diode connection, and Marcus–Gerischer.
 - [_Cells with junctions_](/esbd/junctions/) - Liquid junction potentials; concentration cells. *(pending redistribution / chop)*
 - [_pH_](/esbd/ph/) - *(pending redistribution / chop)*
 
