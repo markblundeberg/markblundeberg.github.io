@@ -4,6 +4,7 @@
 
 import * as d3 from 'd3';
 import ResponsivePlot from './ResponsivePlot.js';
+import { bandScale } from './utils.js';
 
 class EnergyLevelsDiagram extends ResponsivePlot {
     // ========================================================================
@@ -18,6 +19,8 @@ class EnergyLevelsDiagram extends ResponsivePlot {
      * @param {Array<number>} [config.yRange=[0, 1]] - Initial [min, max] for Y axis domain.
      * @param {boolean} [config.showYTicks=true] - Whether to show Y axis ticks and labels.
      * @param {Array<object>} [config.categories=[]] - Categories for the X axis. Array of {id: string, label: string}.
+     * @param {number} [config.bandPaddingInner=1.0] - Gap between bands, as a fraction of bandwidth.
+     * @param {number} [config.bandPaddingOuter=0.5] - Inset at each edge, as a fraction of bandwidth (0 = bands touch the margins; works for a single band too).
      * @param {object} [config.defaultLevelStyle] - Default styles for levels.
      */
     constructor(containerId, config = {}) {
@@ -27,6 +30,8 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             yRange: [0, 1],
             showYTicks: true,
             categories: [],
+            bandPaddingInner: 1.0,
+            bandPaddingOuter: 0.5,
             defaultLevelStyle: {
                 color: 'black',
                 lineWidth: 2,
@@ -168,14 +173,14 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             .append('g')
             .attr('class', 'energy-levels-axes-group');
 
-        // Set up axis scale functions
-        this.xScale = d3
-            .scaleBand()
-            .paddingInner(0.5) // Space between category bands
-            .paddingOuter(0.2) // Space at edges
-            .align(0.5); // centered — label room comes from margins, not
-        // from a hidden left-shift (the old align(0.25) dumped phantom
-        // whitespace on the right that margins couldn't control)
+        // Set up axis scale functions. Our own bandScale (see utils.js):
+        // paddings are fractions of the bandwidth and behave the same for any
+        // number of bands (d3.scaleBand ignores paddingOuter when n = 1).
+        // Defaults preserve the classic look (half-width centered band);
+        // set bandPaddingOuter: 0 for band edges exactly on the margins.
+        this.xScale = bandScale()
+            .paddingInner(this.config.bandPaddingInner)
+            .paddingOuter(this.config.bandPaddingOuter);
         this.yScale = d3.scaleLinear();
 
         // Axis drawing generators

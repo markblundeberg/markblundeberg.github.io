@@ -254,3 +254,80 @@ export function makeSlider(id, onInput, { throttleMs = 100, fire = true } = {}) 
     if (fire) onInput(parseFloat(el.value), null);
     return el;
 }
+
+// ========================================================================
+// bandScale — a band scale with sane padding semantics
+// ========================================================================
+
+/**
+ * Replacement for d3.scaleBand with predictable semantics (d3's version
+ * clamps its step formula with max(1, n - paddingInner + 2*paddingOuter),
+ * so with a single band paddingOuter is silently ignored and the band can
+ * never fill the range — see d3-scale/src/band.js).
+ *
+ * Here paddings are fractions of the BANDWIDTH and everything tiles the
+ * range exactly:  range = [pOut*bw][bw][pIn*bw][bw]...[bw][pOut*bw]
+ * so paddingInner only matters for n >= 2, paddingOuter works for ALL n,
+ * and with paddingOuter=0 the outer band edges sit exactly on the range
+ * ends (no hidden leftover, hence no align knob at all).
+ *
+ * Duck-type compatible with d3-axis (callable + domain/range/bandwidth/copy).
+ */
+export function bandScale() {
+    let domainVals = [];
+    let r0 = 0,
+        r1 = 1;
+    let pIn = 0,
+        pOut = 0;
+    let index = new Map();
+    let bw = 0,
+        stepv = 0;
+
+    function rescale() {
+        const n = domainVals.length;
+        if (n === 0) {
+            index = new Map();
+            bw = stepv = 0;
+            return scale;
+        }
+        bw = (r1 - r0) / (n + (n - 1) * pIn + 2 * pOut);
+        stepv = bw * (1 + pIn);
+        index = new Map(
+            domainVals.map((d, i) => [d, r0 + pOut * bw + i * stepv])
+        );
+        return scale;
+    }
+
+    function scale(d) {
+        return index.get(d);
+    }
+
+    scale.domain = function (_) {
+        return arguments.length
+            ? ((domainVals = Array.from(_)), rescale())
+            : domainVals.slice();
+    };
+    scale.range = function (_) {
+        return arguments.length
+            ? (([r0, r1] = _), (r0 = +r0), (r1 = +r1), rescale())
+            : [r0, r1];
+    };
+    scale.paddingInner = function (_) {
+        return arguments.length ? ((pIn = +_), rescale()) : pIn;
+    };
+    scale.paddingOuter = function (_) {
+        return arguments.length ? ((pOut = +_), rescale()) : pOut;
+    };
+    scale.bandwidth = () => bw;
+    scale.step = () => stepv;
+    // d3-axis's band-centering helper calls scale.round(); we don't round.
+    scale.round = () => false;
+    scale.copy = () =>
+        bandScale()
+            .paddingInner(pIn)
+            .paddingOuter(pOut)
+            .domain(domainVals)
+            .range([r0, r1]);
+
+    return scale;
+}
