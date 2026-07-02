@@ -107,6 +107,8 @@ class ElectrochemicalSpeciesBandDiagram {
                 label: labelOverride = null,
                 labelFrac,
                 labelHAlign,
+                refShift,
+                refShiftFrac,
                 x,
                 y,
                 ...extraFields
@@ -136,6 +138,8 @@ class ElectrochemicalSpeciesBandDiagram {
                 showLabel: showLabel,
                 labelFrac: labelFrac,
                 labelHAlign: labelHAlign,
+                refShift: refShift,
+                refShiftFrac: refShiftFrac,
                 extraData: {
                     speciesId: speciesId,
                     curveDescription: curveDescription,

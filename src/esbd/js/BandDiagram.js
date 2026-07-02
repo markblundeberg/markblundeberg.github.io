@@ -121,6 +121,8 @@ class BandDiagram extends ResponsivePlot {
                     extraData = null,
                     labelFrac = 1,
                     labelHAlign = 'left',
+                    refShift = null,
+                    refShiftFrac = 0.28,
                     ...extraFields
                 } = traceDef;
                 if (Object.keys(extraFields).length > 0) {
@@ -176,6 +178,29 @@ class BandDiagram extends ResponsivePlot {
 
                 toolTip = String(toolTip ?? '') || `$${label}$`;
 
+                // refShift: this species is drawn displaced from its true
+                // (IUPAC-referenced) position by refShift volts, for
+                // readability. Draws a small break glyph on the trace.
+                let refShiftPos = null;
+                if (typeof refShift === 'number' && isFinite(refShift)) {
+                    const gx =
+                        points[0].x +
+                        refShiftFrac * (points[len - 1].x - points[0].x);
+                    let gy = points[len - 1].y;
+                    for (let k = 1; k < len; k++) {
+                        if (gx <= points[k].x) {
+                            const a = points[k - 1];
+                            const b = points[k];
+                            const tt = b.x === a.x ? 0 : (gx - a.x) / (b.x - a.x);
+                            gy = a.y + tt * (b.y - a.y);
+                            break;
+                        }
+                    }
+                    refShiftPos = { x: gx, y: gy };
+                } else {
+                    refShift = null;
+                }
+
                 const processedTrace = {
                     id,
                     points,
@@ -183,6 +208,8 @@ class BandDiagram extends ResponsivePlot {
                     style,
                     label,
                     labelPos,
+                    refShift,
+                    refShiftPos,
                     labelHAlign,
                     toolTip,
                     extraData,
@@ -405,6 +432,7 @@ class BandDiagram extends ResponsivePlot {
 
         // 5. Draw Data Elements
         this._drawTraces();
+        this._drawRefShiftGlyphs();
         this._drawVerticalMarkers();
         this._drawTraceLabels();
     }
@@ -500,7 +528,15 @@ class BandDiagram extends ResponsivePlot {
             onUpdateTransition: (s) => s.call(this.yAxisGen),
         });
 
-        this.drawYAxisLabel(this.axesGroup, this._yAxisLabelStr);
+        const anyRefShift = (this.traceData ?? []).some(
+            (d) => d.refShift != null
+        );
+        this.drawYAxisLabel(
+            this.axesGroup,
+            anyRefShift
+                ? this._yAxisLabelStr + ' — per-species offsets ⌇'
+                : this._yAxisLabelStr
+        );
     }
 
     _drawBackgrounds() {
@@ -610,6 +646,50 @@ class BandDiagram extends ResponsivePlot {
             onUpdateTransition: (s) =>
                 s.attr('d', (d) => lineGenerator(d.points)),
         });
+    }
+
+    /** Break glyphs marking per-species display offsets (refShift). */
+    _drawRefShiftGlyphs() {
+        // a small vertical zigzag crossing the trace: axis-break vocabulary,
+        // per species. Hover gives the exact shift.
+        const ZIG = 'M0,-7 L-3,-3.5 L3,0.5 L-3,4.5 L0,8';
+        const groups = this.drawElements({
+            parentGroups: this.linesGroup,
+            element: 'g',
+            cssClass: 'bd-refshift',
+            data: this.traceData.filter((d) => d.refShift != null),
+            dataKey: (d) => d.id,
+            onNew: (g) => {
+                g.style('pointer-events', 'all').style('cursor', 'help');
+                g.append('title');
+                g.append('path')
+                    .attr('class', 'bd-refshift-halo')
+                    .attr('d', ZIG)
+                    .attr('fill', 'none')
+                    .attr('stroke', '#fff')
+                    .attr('stroke-width', 4.5)
+                    .attr('stroke-linecap', 'round');
+                g.append('path')
+                    .attr('class', 'bd-refshift-zig')
+                    .attr('d', ZIG)
+                    .attr('fill', 'none')
+                    .attr('stroke-width', 1.6)
+                    .attr('stroke-linecap', 'round');
+            },
+            onUpdateTransition: (s) =>
+                s.attr(
+                    'transform',
+                    (d) =>
+                        `translate(${this.xScale(d.refShiftPos.x)}, ${this.yScale(d.refShiftPos.y)})`
+                ),
+        });
+        groups
+            .select('title')
+            .text(
+                (d) =>
+                    `drawn ${d.refShift >= 0 ? '+' : ''}${d.refShift.toFixed(2)} V from its IUPAC-referenced position (per-species display offset)`
+            );
+        groups.select('.bd-refshift-zig').attr('stroke', (d) => d.color);
     }
 
     /** Draws or updates the vertical marker symbols. */
