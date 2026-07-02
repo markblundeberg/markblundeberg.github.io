@@ -180,10 +180,16 @@ class XYPlot extends ResponsivePlot {
     }
 
     _drawAxes() {
-        const xAxisGen = d3.axisBottom(this.xScale).tickSize(4).tickPadding(4);
+        // density-aware tick counts so narrow panels don't mash labels
+        const xAxisGen = d3
+            .axisBottom(this.xScale)
+            .ticks(Math.max(3, Math.round(this.plotWidth / 70)))
+            .tickSize(4)
+            .tickPadding(4);
         if (this.config.xMode === 'abstract') xAxisGen.tickValues([]);
         const yAxisGen = d3
             .axisLeft(this.yScale)
+            .ticks(Math.max(3, Math.round(this.plotHeight / 35)))
             .tickSize(-this.plotWidth)
             .tickPadding(6);
         if (this.config.yMode === 'abstract') yAxisGen.tickValues([]);
