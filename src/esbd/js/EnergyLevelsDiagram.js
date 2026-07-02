@@ -29,6 +29,7 @@ class EnergyLevelsDiagram extends ResponsivePlot {
         const defaults = {
             yAxisLabel: 'Potential / Energy',
             hoverThrottleDelay: 50,
+            legendLinkHref: '/esbd/reading/',
             yRange: [0, 1],
             showYTicks: true,
             categories: [],

@@ -104,6 +104,19 @@ class ResponsivePlot {
             .style('padding', '0')
             .style('border', '0');
 
+        // Legend link: a small corner chip -> the "How to read an ESBD" page.
+        // Components that speak the ESBD visual language default this on
+        // (config.legendLinkHref); pass legendLinkHref: null to suppress.
+        if (this.config.legendLinkHref) {
+            this.container
+                .append('a')
+                .attr('class', 'bd-legend-link')
+                .attr('href', this.config.legendLinkHref)
+                .attr('title', 'How to read this diagram — the legend')
+                .attr('aria-label', 'Diagram legend')
+                .text('?');
+        }
+
         this.svg = this.container
             .append('svg')
             .style('width', '100%')

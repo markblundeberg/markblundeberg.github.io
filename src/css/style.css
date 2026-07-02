@@ -371,6 +371,26 @@ figure {
     height: 250px;
 }
 
+/* the corner legend chip linking every diagram to /esbd/reading/ */
+.bd-legend-link {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    z-index: 5;
+    font-size: 11px;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 9px;
+    color: #aaa;
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid #ddd;
+    text-decoration: none;
+}
+.bd-legend-link:hover {
+    color: #1d4ed8;
+    border-color: #aaa;
+}
+
 /* ====== Start ResponsivePlot Styles ====== */
 
 /* For drawLabelsFancy - neutralizes the line-height of the foreignObject
