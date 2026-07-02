@@ -4,8 +4,10 @@ Eleventy (11ty v3, ESM) static site. Markdown topics in `src/esbd/*.md` are run
 through **Nunjucks first** (includes/macros), then **markdown-it**. Interactive
 D3 figures are includes in `src/_includes/esbd-diagrams/*.njk`; their components
 live in `src/esbd/js/` (`ResponsivePlot` → `BandDiagram` / `EnergyLevelsDiagram`
-→ the `ElectrochemicalSpeciesBandDiagram` wrapper; shared `figureDefs.js`,
-`utils.js`, and the `controls.njk` slider/checkbox macros).
+/ `XYPlot` → the `ElectrochemicalSpeciesBandDiagram` wrapper; shared
+`figureDefs.js`, `utils.js`, and the `controls.njk` slider/checkbox macros).
+Use `XYPlot` for any non-spatial x axis (charge-vs-offset, I–V, Q–V…) — don't
+abuse `BandDiagram`'s spatial regions for that.
 
 ## Commands (npm scripts)
 - `npm run build` / `npm run serve` — build / dev server.

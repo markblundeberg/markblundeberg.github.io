@@ -6,7 +6,7 @@
 
 <script type="module">
     import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
-    import BandDiagram from '{{ esbdJsPath }}BandDiagram.js';
+    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
     import { SPECIES } from '{{ esbdJsPath }}figureDefs.js';
     import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
 
@@ -32,19 +32,17 @@
         margins: { top: 8, right: 65, bottom: 24, left: 95 },
     });
 
-    // Lower panel: an xy-plot of net charge vs ladder offset, built on
-    // BandDiagram ("x" = offset, not position).
-    const chart = new BandDiagram('{{idprefix}}-charge', {
-        yMode: 'abstract',
-        margins: { top: 6, right: 65, bottom: 24, left: 95 },
-    });
+    // Lower panel: net charge vs ladder offset (a non-spatial x axis → XYPlot).
     const S_MIN = -0.1,
         S_MAX = 0.1;
-    chart.setSpatialLayout([S_MIN, S_MAX], [
-        { name: 'ladder offset →', color: '#fafafa' },
-    ]);
-    chart.setYLabel('Net charge');
-    chart.setYRange(-1.6, 4.4);
+    const chart = new XYPlot('{{idprefix}}-charge', {
+        xLabel: 'ladder offset (V)',
+        yLabel: 'Net charge',
+        xRange: [S_MIN, S_MAX],
+        yRange: [-1.6, 4.4],
+        yMode: 'abstract',
+        margins: { top: 6, right: 65, bottom: 38, left: 95 },
+    });
     const sGrid = linspace(S_MIN, S_MAX, 121);
     chart.updateTraceData([
         {
@@ -89,16 +87,7 @@
         }
         levels.setLevels(levelData);
 
-        chart.updateVerticalMarkers([
-            {
-                id: 'here',
-                symbol: '●',
-                x: s,
-                yDefs: [{ y: symlog(rho(s)) }],
-                popupCallback: () =>
-                    `net charge = ${rho(s).toPrecision(3)} · Fc°`,
-            },
-        ]);
+        chart.updateMarkers([{ id: 'here', x: s, y: symlog(rho(s)) }]);
     }
 
     makeSlider('{{idprefix}}-ladder-slider', update);

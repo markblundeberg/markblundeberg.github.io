@@ -503,3 +503,25 @@ figure {
 }
 
 /* ====== End EnergyLevelsDiagram Styles ====== */
+
+/* ====== Start XYPlot Styles ====== */
+
+.xy-x-axis text,
+.xy-y-axis text {
+    font-size: 9px;
+    fill: #555;
+}
+
+.xy-x-axis-label > span.rp-label-span {
+    font-size: 11px;
+    color: #333;
+}
+
+.xy-trace-label > span.rp-label-span {
+    font-size: 11px;
+    padding: 1px 3px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 2px;
+}
+
+/* ====== End XYPlot Styles ====== */
