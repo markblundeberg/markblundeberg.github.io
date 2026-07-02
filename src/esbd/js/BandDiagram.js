@@ -708,11 +708,14 @@ class BandDiagram extends ResponsivePlot {
                     .style('pointer-events', 'none')
                     .text((d) => d.symbol);
             },
-            onUpdateTransition: (s) =>
+            onUpdateTransition: (s) => {
                 s.attr(
                     'transform',
                     (d) => `translate(0,${this.yScale(d.ySymbol)})`
-                ),
+                );
+                // symbol text can change between updates (e.g. +/− markers)
+                s.select('text').text((d) => d.symbol);
+            },
         });
     }
 
