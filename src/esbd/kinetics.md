@@ -82,7 +82,7 @@ This is the one place in the book where the traditional electron-energy diagram 
 <figure class="demo-container" style="max-width: 480px">
 {% include "esbd-diagrams/kin-gerischer.njk" %}
 {% figcaption %}
-The Marcus–Gerischer picture on a $V_{\mathrm{e}^-}$ axis — upside-down relative to the usual energy plot, so the filled $D_{\mathrm{red}}$ sits *above* the couple's level and the empty $D_{\mathrm{ox}}$ below, offset by the reorganization energy $\lambda$ on either side. Slide the electrode level across the bumps: the current comes from where the electrode's empty states overlap $D_{\mathrm{red}}$ (anodic) and its filled states overlap $D_{\mathrm{ox}}$ (cathodic). Slide the concentration ratio and the bump amplitudes follow the actual ion populations, while the couple's level shifts by the Nernst term.
+The Marcus–Gerischer picture on a $V_{\mathrm{e}^-}$ axis — upside-down relative to the usual energy plot, so the filled $D_{\mathrm{red}}$ sits *above* and the empty $D_{\mathrm{ox}}$ below. The bumps sit $\pm\lambda$ about the *standard* level $V^\circ_{\mathrm{e}^-}$ (Gerischer's $E^\circ$, always their midpoint), and their amplitudes follow the actual ion populations. The couple's actual level $V_{\mathrm{e}^-}$ stays pinned as the ratio slides — the electron reservoir holds still while the whole density-of-states structure shifts beneath it by the Nernst term.
 {% endfigcaption %}
 </figure>
 
