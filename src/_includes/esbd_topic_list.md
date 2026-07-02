@@ -39,11 +39,6 @@
 
 The rabbit holes -- appendices, advanced topics, notes:
 
-*Electrostatics*:
-
-- [_Quasi-charge-neutrality_](/esbd/qcn/) - The flexible tyranny of long-range electrostatics.
-- [_Inhomogeneities and electrostatics_](/esbd/inhomog/) - Graded interfaces and quasi-electric fields; does $\phi$ represent real electrostatics? Plus the full beyond-the-simple-case catalog.
-
 *Thermodynamics*:
 - [_Understanding electrochemical potential_](/esbd/muintro/) - Why $\bar\mu_i$ is the real, indivisible chemical potential — and why that makes $V_i$ (and band diagrams) work.
 - [_Offsets galore_](/esbd/offsetsgalore/) - An interactive tour of every arbitrary convention in the framework — and which ones actually move anything.
@@ -51,6 +46,7 @@ The rabbit holes -- appendices, advanced topics, notes:
 - [_Capacitance_](/esbd/capacitance/) - Discussion of ambipolar capacitance (thermodynamic) vs chemical capacitance (extrathermodynamic).
 
 *Appendices*:
+- [_Inhomogeneities and electrostatics_](/esbd/inhomog/) - Graded interfaces and quasi-electric fields; does $\phi$ represent real electrostatics? Plus the full beyond-the-simple-case catalog.
 - [_Standard state data_](/esbd/data/) - Numerical data for ionic solutes' $V^\circ_i$ values in water.
 - [_Traditional electrochemistry, translated_](/esbd/translation/) - A Rosetta Stone: standard symbols and equations in $V_i$ terms.
 - [_Nuances_](/esbd/nuances/) - Are $V_i$ "real voltages"?
