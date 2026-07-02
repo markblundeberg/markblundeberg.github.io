@@ -642,7 +642,8 @@ class BandDiagram extends ResponsivePlot {
                     .attr('fill', 'none')
                     .attr('stroke', (d) => d.color)
                     .attr('stroke-width', (d) => d.style.lineWidth)
-                    .attr('stroke-dasharray', (d) => d.style.dasharray),
+                    .attr('stroke-dasharray', (d) => d.style.dasharray)
+                    .attr('stroke-linecap', (d) => d.style.linecap ?? null),
             onUpdateTransition: (s) =>
                 s.attr('d', (d) => lineGenerator(d.points)),
         });
