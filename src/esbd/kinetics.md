@@ -57,7 +57,7 @@ This evenhandedness is a quiet advantage of the $V_i$ picture: electron transfer
 <figure class="demo-container" style="max-width: 460px">
 {% include "esbd-diagrams/esbd-kin-driven.njk" %}
 {% figcaption %}
-One electrode under load, in space. The step at the interface is the surface overpotential; near the electrode the reaction's implied level bends as concentrations polarize across the diffusion layer, and everything in solution tilts ohmically — $E_{\mathrm{eq}}$ has become a field, as promised in [Electrode potential](../e/). Magnitudes are cartoon-sized.
+One electrode under load, in space. The step at the interface is the surface overpotential; through the unstirred layer the reaction's implied level bends as the couple's concentrations polarize (the supported ladder stays put), and out in the stirred bulk every level tilts together ohmically — $E_{\mathrm{eq}}$ has become a field, as promised in [Electrode potential](../e/). Magnitudes are cartoon-sized.
 {% endfigcaption %}
 </figure>
 

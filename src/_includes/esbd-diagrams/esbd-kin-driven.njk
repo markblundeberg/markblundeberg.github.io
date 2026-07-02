@@ -8,19 +8,21 @@
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
     import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
 
-    // One driven electrode, schematically (current j in units of ~J0):
+    // One driven electrode, schematically (current j in units of ~J0),
+    // using the same spatial vocabulary as the concpol/saturation figures:
     // - charge-transfer step at the interface: eta = 0.08·asinh(j) (BV-ish)
-    // - concentration polarization: the activity gap V_rxn − V°_rxn changes
-    //   near the electrode over a diffusion layer (exp tail, DL = 0.18)
-    // - ohmic drop: everything in solution tilts by R_OHM·j toward the bulk.
+    // - unstirred layer: linear c(x), so the activity term bends the
+    //   reaction level logarithmically while the (supported) ladder stays
+    //   flat there
+    // - stirred bulk: uniform c, everything tilts together ohmically.
     // At j = 0 all of it flattens back to equilibrium. Magnitudes are
     // cartoon-sized for legibility, not computed from a real cell.
-    const XIF = 0.3; // electrode | solution interface
+    const DEC = 0.05916;
+    const XIF = 0.25,
+        XB = 0.6; // electrode | unstirred layer | stirred bulk
     const V_BULK = 0.5; // bulk reaction level (right edge)
     const ACT = 0.18; // bulk activity gap V_rxn − V°_rxn
     const R_OHM = 0.035,
-        CP = 0.045,
-        DL = 0.18,
         ETA0 = 0.08;
 
     const diagram = new ElectrochemicalSpeciesBandDiagram(
@@ -28,23 +30,29 @@
         { electron: SPECIES.electron },
         { margins: { right: 78 } }
     );
-    diagram.setSpatialLayout([0, XIF, 1], [
+    diagram.setSpatialLayout([0, XIF, XB, 1], [
         { ...REGION.metal, name: 'Electrode' },
-        REGION.solution,
+        { ...REGION.solution, name: 'unstirred layer' },
+        { ...REGION.solution2, name: 'stirred bulk' },
     ]);
     diagram.setVRange(0.0, 1.05);
 
-    const xs = linspace(XIF, 1, 81);
+    const xs = linspace(XIF, 1, 91);
 
     function update(j) {
         document.getElementById('{{idprefix}}-j-readout').textContent =
             j.toFixed(1);
         const merged = Math.abs(j) < 0.1;
 
-        const ohm = (x) => R_OHM * j * (1 - x);
-        const cp = (x) => CP * j * Math.exp(-(x - XIF) / DL);
-        const vRxn = (x) => V_BULK + ohm(x) + cp(x);
-        const vStd = (x) => V_BULK - ACT + ohm(x);
+        // Ox accumulates and Red depletes linearly across the unstirred
+        // layer under anodic current (and vice versa), capped short of dry;
+        // the couple's activity RATIO polarizes from both sides
+        const c = (x) =>
+            x >= XB ? 1 : 1 + 0.3 * j * (1 - (x - XIF) / (XB - XIF));
+        const tilt = (x) => R_OHM * j * (1 - Math.max(x, XB));
+        const vRxn = (x) =>
+            V_BULK + DEC * Math.log10(c(x) / (2 - c(x))) + tilt(x);
+        const vStd = (x) => V_BULK - ACT + tilt(x);
         const eta = ETA0 * Math.asinh(j);
         const vMetal = vRxn(XIF) + eta;
 
