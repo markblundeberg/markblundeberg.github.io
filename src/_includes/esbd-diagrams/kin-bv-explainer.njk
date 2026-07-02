@@ -165,11 +165,14 @@
             );
         }
         bar.updateTraceData(barTraces);
-        // parked electron position (the animator takes over when live)
+        // parked electron position (the animator takes over when live);
+        // no crossing at eta ~ 0, so no electron either
         const xp = 0.5 + 0.14 * sgn;
         bar.updateMarkers([
             { id: 'ts', x: 0.5, y: VTS, color: '#667', r: 3 },
-            { id: 'e', x: xp, y: passAt(xp) - 0.022, color: BLUE, r: 4.5 },
+            ...(active
+                ? [{ id: 'e', x: xp, y: passAt(xp) - 0.022, color: BLUE, r: 4.5 }]
+                : []),
         ]);
 
         const logView = logEl.checked;
