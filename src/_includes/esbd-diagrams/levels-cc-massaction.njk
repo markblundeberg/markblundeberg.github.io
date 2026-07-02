@@ -1,6 +1,6 @@
 {% set idprefix = "levels-cc-massaction" %}
 {% import "macros/controls.njk" as controls %}
-<div class="bd-container" id="{{idprefix}}-container" style="height: 250px"></div>
+<div class="bd-container" id="{{idprefix}}-container" style="height: 250px; max-width: 250px"></div>
 {{ controls.slider(idprefix + "-ladder-slider", "Ladder offset", { min: -0.1, max: 0.1, step: "any", value: 0, snap: 0 }) }}
 <div style="text-align: center; font-size: 0.85em; margin-top: 0.2em"><span id="{{idprefix}}-product"></span></div>
 
@@ -73,27 +73,23 @@
         ]);
 
         const arrows = [];
-        if (Math.abs(V_A - V0_A) > 0.012) {
-            arrows.push({
-                arrowId: 'gapA',
-                fromLevelId: 'v0a',
-                toLevelId: 'va',
-                label: `c_A = 10^{${logcA.toFixed(1)}}c^\\circ`,
-                arrowStyle: '<->',
-                dxFrac: -0.22,
-                labelHAlign: 'right',
-            });
-        }
-        if (Math.abs(V_B - V0_B) > 0.012) {
-            arrows.push({
-                arrowId: 'gapB',
-                fromLevelId: 'v0b',
-                toLevelId: 'vb',
-                label: `c_B = 10^{${logcB.toFixed(1)}}c^\\circ`,
-                arrowStyle: '<->',
-                dxFrac: 0.22,
-            });
-        }
+        arrows.push({
+            arrowId: 'gapA',
+            fromLevelId: 'v0a',
+            toLevelId: 'va',
+            label: `c_A = 10^{${logcA.toFixed(1)}}c^\\circ`,
+            arrowStyle: '<->',
+            dxFrac: +0.22,
+            labelHAlign: 'right',
+        });
+        arrows.push({
+            arrowId: 'gapB',
+            fromLevelId: 'v0b',
+            toLevelId: 'vb',
+            label: `c_B = 10^{${logcB.toFixed(1)}}c^\\circ`,
+            arrowStyle: '<->',
+            dxFrac: -0.22,
+        });
         diagram.setArrows(arrows);
 
         renderSpanMath(
