@@ -1,0 +1,95 @@
+{% set idprefix = "esbd-ss-quasifermi" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 280px"></div>
+{{ controls.slider(idprefix + "-drive", "Drive", { min: 0, max: 0.8, step: "any", value: 0.4, snap: 0, readout: true, unit: "V" }) }}
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+
+    // Schematic LED-like bar: hole contact on the left (its metal electrons
+    // hand off to the hole rail), electron contact on the right. Under drive b
+    // the rails enter split by b at the contacts and relax toward each other
+    // over a recombination length L (~ sqrt(D·tau), drawn as a fraction of the
+    // bar). Recombination bridges the rails all along the bar — the ⇌ markers.
+    // Band edges and contact band-bending deliberately omitted (see the flip
+    // and band-bending figures for those); this figure is about the rails.
+    const L = 0.25;
+    const MID = 0.5; // equilibrium Fermi level (arbitrary height)
+    const XL = 0.15,
+        XR = 0.85; // semiconductor extent
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        {
+            electron: SPECIES.electron,
+            hole: SPECIES.hole,
+        },
+        { margins: { right: 70 } } // fits the merged V_e- = V_h+ label
+    );
+    diagram.setSpatialLayout([0, XL, XR, 1], [
+        { ...REGION.metal, name: 'Metal' },
+        REGION.semiconductor,
+        { ...REGION.metal, name: 'Metal' },
+    ]);
+    diagram.setVRange(0.0, 1.0);
+
+    const xh = linspace(XL, XR, 61);
+    const xe = linspace(XL, 1, 73); // electron trace continues into the right metal
+
+    function update(b) {
+        document.getElementById('{{idprefix}}-drive-readout').textContent =
+            b.toFixed(2);
+        const merged = b < 0.05;
+
+        const vh = (x) => MID + (b / 2) * Math.exp(-(x - XL) / L);
+        const ve = (x) =>
+            x >= XR ? MID - b / 2 : MID - (b / 2) * Math.exp(-(XR - x) / L);
+
+        diagram.updateTraceData([
+            {
+                id: 'metal_left',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: !merged, // the contact's electrons sit AT the hole rail
+                labelFrac: 0.35,
+                x: [0, XL],
+                y: [MID + b / 2, MID + b / 2],
+            },
+            {
+                id: 'vh',
+                speciesId: 'hole',
+                curveType: 'voltage',
+                showLabel: !merged,
+                labelFrac: 0.12,
+                x: xh,
+                y: xh.map(vh),
+            },
+            {
+                id: 've',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                label: merged
+                    ? 'V_{\\mathrm{e}^-}{=}V_{\\mathrm{h}^+}'
+                    : 'V_{\\mathrm{e}^-}',
+                x: xe,
+                y: xe.map(ve),
+            },
+        ]);
+
+        // recombination "leakage" bridging the rails along the bar
+        diagram.updateVerticalMarkers(
+            [0.35, 0.5, 0.65].map((x, i) => ({
+                id: 'recomb' + i,
+                x,
+                yDefs: [{ y: vh(x) }, { y: ve(x) }],
+                symbol: '⇌',
+                popupCallback: () =>
+                    '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightleftharpoons \\varnothing$',
+            }))
+        );
+    }
+
+    makeSlider('{{idprefix}}-drive', update);
+</script>
