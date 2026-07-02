@@ -65,6 +65,7 @@ class ResponsivePlot {
         ) {
             this.config.transitionDuration = 0;
             this.config.fadeDuration = 0;
+            this.config.resizeDebounceDelay = 0;
         }
         if (!this.config.containerId) {
             throw new Error(
@@ -120,6 +121,18 @@ class ResponsivePlot {
                 `translate(${this.margins.left},${this.margins.top})`
             );
 
+        // ?debug: visualize the plot-area extent (Mark's lightpink trick —
+        // instantly surfaces padding/margin bugs). Sized in _doRedraw.
+        this._debugBgRect = null;
+        if (
+            typeof location !== 'undefined' &&
+            new URLSearchParams(location.search).has('debug')
+        ) {
+            this._debugBgRect = this.plotArea
+                .append('rect')
+                .attr('fill', 'lightpink');
+        }
+
         // Debounced resize handler
         this._debouncedScheduleRedraw = debounce(() => {
             this.scheduleRedraw();
@@ -146,6 +159,25 @@ class ResponsivePlot {
 
         // Note ResizeObserver is guaranteed to be fired, will set our size appropriately
         // and then schedule our first redraw.
+
+        // ?static mode: ResizeObserver rides the rendering pipeline, and a
+        // headless capture stops producing frames once the page looks done —
+        // so a load-time container resize (scrollbar, late CSS/fonts) can be
+        // silently missed, leaving the figure drawn at a stale width. Force a
+        // fresh measure + redraw once the page has fully settled.
+        if (this.config.transitionDuration === 0) {
+            const settle = () => {
+                const node = this.container.node();
+                if (node.clientWidth > 0) {
+                    this.svgWidth = node.clientWidth;
+                    this.svgHeight = node.clientHeight;
+                    this.scheduleRedraw();
+                }
+            };
+            if (document.readyState === 'complete') queueMicrotask(settle);
+            else window.addEventListener('load', settle, { once: true });
+            if (document.fonts?.ready) document.fonts.ready.then(settle);
+        }
     }
 
     // ========================================================================
@@ -158,6 +190,16 @@ class ResponsivePlot {
 
         // Do not proceed if ResizeObserver has not yet fired.
         if (this.svgWidth === null) return;
+
+        // ?static mode: schedule via microtask, NOT requestAnimationFrame.
+        // Headless captures stop producing frames once the page looks
+        // "visually complete", starving any late rAF (e.g. the redraw after
+        // a load-time container resize) — microtasks always run.
+        if (this.config.transitionDuration === 0) {
+            this._redrawScheduled = true;
+            queueMicrotask(() => this._doRedraw());
+            return;
+        }
 
         console.assert(this._requestAnimationFrameID === null);
 
@@ -181,6 +223,12 @@ class ResponsivePlot {
      * @param {function} applyAttrsCallable
      */
     transition(applyAttrsCallable, name = undefined) {
+        // Zero duration (?static): apply synchronously with NO d3 transition.
+        // A zero-duration transition still waits for a timer tick, which a
+        // headless capture or an interrupting redraw can race — leaving
+        // elements at stale positions.
+        if (this.config.transitionDuration === 0)
+            return (s) => applyAttrsCallable(s);
         return (s) =>
             applyAttrsCallable(
                 s
@@ -234,7 +282,11 @@ class ResponsivePlot {
         const newElements = enterParents.append(element);
         if (!newElements.empty()) {
             if (cssClass) newElements.classed(cssClass, true);
-            if (fadeIn) {
+            // With fades disabled (?static), never pass through the opacity-0
+            // birth state at all: a zero-duration transition still needs its
+            // timer tick to fire, and a headless capture (or an interrupting
+            // redraw) can race it, leaving elements stuck invisible.
+            if (fadeIn && this.config.fadeDuration > 0) {
                 // Find which elements to fade in. If an ancestor has just started to
                 // fade in, then we should just appear directly (no double fade).
                 const elementsToFade = newElements.filter(
@@ -280,7 +332,7 @@ class ResponsivePlot {
             // so that once elements start fading out, they cannot
             // be picked up again by the selectChildren and re-enter
             // as 'zombies'.
-            if (fadeOut)
+            if (fadeOut && this.config.fadeDuration > 0)
                 exitingElements
                     .attr('data-join-exited', true)
                     .transition(fadeTransitionName)
@@ -288,6 +340,7 @@ class ResponsivePlot {
                     .ease(this.config.fadeEase)
                     .attr('opacity', 0)
                     .remove();
+            else exitingElements.remove();
         }
 
         return mergedElements;
@@ -451,14 +504,18 @@ class ResponsivePlot {
         // we can detect and flag that.
         this._redrawScheduled = false;
 
-        this.plotArea
-            .transition()
-            .duration(this.config.transitionDuration)
-            .ease(this.config.transitionEase)
-            .attr(
+        this.transition((s) =>
+            s.attr(
                 'transform',
                 `translate(${this.margins.left},${this.margins.top})`
-            );
+            )
+        )(this.plotArea);
+
+        if (this._debugBgRect)
+            this._debugBgRect
+                .attr('width', this.plotWidth)
+                .attr('height', this.plotHeight);
+
         this.redraw();
 
         if (this._redrawScheduled)

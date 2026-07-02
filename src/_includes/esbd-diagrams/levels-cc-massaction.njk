@@ -25,7 +25,8 @@
         yAxisLabel: 'Voltage (V)',
         yRange: [-0.32, 0.32],
         categories: [{ id: 'soln', label: 'Solution' }],
-        margins: { top: 8, right: 45, bottom: 24, left: 52 },
+        // pixel room for the side labels; band stretches with the figure
+        bandMinPaddingOuter: { left: 40, right: 36 },
     });
 
     function update(s) {

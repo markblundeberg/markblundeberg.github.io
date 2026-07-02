@@ -21,6 +21,8 @@ class EnergyLevelsDiagram extends ResponsivePlot {
      * @param {Array<object>} [config.categories=[]] - Categories for the X axis. Array of {id: string, label: string}.
      * @param {number} [config.bandPaddingInner=1.0] - Gap between bands, as a fraction of bandwidth.
      * @param {number} [config.bandPaddingOuter=0.5] - Inset at each edge, as a fraction of bandwidth (0 = bands touch the margins; works for a single band too).
+     * @param {number} [config.bandMinPaddingInner=0] - Pixel minimum for the inter-band gap (room for labels hung off band ends; survives responsive squeeze).
+     * @param {number|{left:number,right:number}} [config.bandMinPaddingOuter=0] - Pixel minimum for the edge insets, per side if an object.
      * @param {object} [config.defaultLevelStyle] - Default styles for levels.
      */
     constructor(containerId, config = {}) {
@@ -31,14 +33,26 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             showYTicks: true,
             categories: [],
             bandPaddingInner: 1.0,
-            bandPaddingOuter: 0.5,
+            bandPaddingOuter: 0.1,
+            bandMinPaddingInner: 0,
+            bandMinPaddingOuter: 40,
             defaultLevelStyle: {
                 color: 'black',
                 lineWidth: 2,
                 dasharray: null,
             },
         };
-        super({ containerId: containerId, ...defaults, ...config });
+        // Doctrine: margins default TIGHT (label room is exercised through the
+        // band padding controls, not the margins); numeric y ticks need a
+        // wider left margin than an abstract axis.
+        const margins = {
+            top: 8,
+            right: 12,
+            bottom: 20,
+            left: (config.showYTicks ?? defaults.showYTicks) ? 48 : 24,
+            ...config?.margins,
+        };
+        super({ containerId: containerId, ...defaults, ...config, margins });
         // ^ sets this.config, with extra defaults
 
         this.setYRange(...this.config.yRange);
@@ -180,7 +194,9 @@ class EnergyLevelsDiagram extends ResponsivePlot {
         // set bandPaddingOuter: 0 for band edges exactly on the margins.
         this.xScale = bandScale()
             .paddingInner(this.config.bandPaddingInner)
-            .paddingOuter(this.config.bandPaddingOuter);
+            .paddingOuter(this.config.bandPaddingOuter)
+            .minPaddingInner(this.config.bandMinPaddingInner)
+            .minPaddingOuter(this.config.bandMinPaddingOuter);
         this.yScale = d3.scaleLinear();
 
         // Axis drawing generators

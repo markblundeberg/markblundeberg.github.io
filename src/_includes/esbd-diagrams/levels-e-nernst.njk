@@ -23,7 +23,7 @@
         yAxisLabel: 'Voltage $V_{\\mathrm{e}^-}$ (V)',
         yRange: [-0.12, 1.12],
         categories: [{ id: 'soln', label: 'Solution' }],
-        margins: { top: 8, right: 118, bottom: 24, left: 50 },
+        bandMinPaddingOuter: { left: 8, right: 108 }, // V°(Ox/Red)-length labels
     });
 
     function update(logRatio) {

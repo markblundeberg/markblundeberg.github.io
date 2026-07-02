@@ -1,7 +1,7 @@
 {% set idprefix = "levels-cc-neutrality" %}
 {% import "macros/controls.njk" as controls %}
-<div class="bd-container" id="{{idprefix}}-levels" style="height: 205px"></div>
-<div class="bd-container" id="{{idprefix}}-charge" style="height: 165px"></div>
+<div class="bd-container" id="{{idprefix}}-levels" style="height: 205px; max-width: 220px"></div>
+<div class="bd-container" id="{{idprefix}}-charge" style="height: 165px; max-width: 220px"></div>
 {{ controls.slider(idprefix + "-ladder-slider", "Ladder offset", { min: -0.1, max: 0.1, step: "any", value: -0.06, snap: 0.024 }) }}
 
 <script type="module">
@@ -29,21 +29,20 @@
         yAxisLabel: 'Voltage (V)',
         yRange: [-0.28, 0.3],
         categories: [{ id: 'soln', label: 'Solution' }],
-        // right must fit the carrier labels; rung labels sit inside the plot
-        margins: { top: 8, right: 48, bottom: 24, left: 50 },
+        bandMinPaddingOuter: { left: 48, right: 40 },
     });
 
     // Lower panel: net charge vs ladder offset (a non-spatial x axis → XYPlot).
     const S_MIN = -0.1,
         S_MAX = 0.1;
     const chart = new XYPlot('{{idprefix}}-charge', {
-        xLabel: 'ladder offset (V)',
+        xLabel: 'ladder offset',
         yLabel: 'Net charge',
         xRange: [S_MIN, S_MAX],
         yRange: [-1.6, 4.4],
         xMode: 'abstract',
         yMode: 'abstract',
-        margins: { bottom: 30, left: 40 },
+        margins: { bottom: 30, left: 35, right:20 },
     });
     const sGrid = linspace(S_MIN, S_MAX, 121);
     chart.updateTraceData([

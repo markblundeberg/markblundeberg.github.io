@@ -266,10 +266,17 @@ export function makeSlider(id, onInput, { throttleMs = 100, fire = true } = {}) 
  * never fill the range — see d3-scale/src/band.js).
  *
  * Here paddings are fractions of the BANDWIDTH and everything tiles the
- * range exactly:  range = [pOut*bw][bw][pIn*bw][bw]...[bw][pOut*bw]
+ * range exactly:  range = [padL][bw][padIn][bw]...[bw][padR]
  * so paddingInner only matters for n >= 2, paddingOuter works for ALL n,
  * and with paddingOuter=0 the outer band edges sit exactly on the range
  * ends (no hidden leftover, hence no align knob at all).
+ *
+ * Paddings can also carry PIXEL MINIMUMS (labels are pixel-sized objects in
+ * a proportionally-scaled geometry, so pure-relative paddings collapse under
+ * responsive squeeze):  each padding is max(relative*bw, minPx), i.e. a
+ * minmax() crossover. minPaddingOuter takes a number or {left, right}.
+ * paddingOuter(0) + minPaddingOuter({right: 60}) = "always exactly 60px of
+ * label room on the right" (the honest version of the old align(0.25) hack).
  *
  * Duck-type compatible with d3-axis (callable + domain/range/bandwidth/copy).
  */
@@ -279,6 +286,9 @@ export function bandScale() {
         r1 = 1;
     let pIn = 0,
         pOut = 0;
+    let minIn = 0,
+        minL = 0,
+        minR = 0;
     let index = new Map();
     let bw = 0,
         stepv = 0;
@@ -290,10 +300,49 @@ export function bandScale() {
             bw = stepv = 0;
             return scale;
         }
-        bw = (r1 - r0) / (n + (n - 1) * pIn + 2 * pOut);
-        stepv = bw * (1 + pIn);
+        const W = r1 - r0;
+        // Solve n*bw + (n-1)*max(pIn*bw, minIn) + max(pOut*bw, minL)
+        //            + max(pOut*bw, minR) = W  for bw.
+        // The left side is monotone increasing & piecewise-linear in bw, so
+        // enumerate the 2^3 active-constraint cases and keep the consistent one.
+        bw = 0;
+        for (const iFix of [true, false])
+            for (const lFix of [true, false])
+                for (const rFix of [true, false]) {
+                    const fixed =
+                        (iFix ? (n - 1) * minIn : 0) +
+                        (lFix ? minL : 0) +
+                        (rFix ? minR : 0);
+                    const coeff =
+                        n +
+                        (iFix ? 0 : (n - 1) * pIn) +
+                        (lFix ? 0 : pOut) +
+                        (rFix ? 0 : pOut);
+                    const cand = (W - fixed) / coeff;
+                    // consistency: "fixed" constraints must really bind
+                    // (min >= relative) and "relative" ones must not.
+                    const ok =
+                        cand >= 0 &&
+                        (iFix
+                            ? pIn * cand <= minIn
+                            : pIn * cand >= minIn) &&
+                        (lFix
+                            ? pOut * cand <= minL
+                            : pOut * cand >= minL) &&
+                        (rFix
+                            ? pOut * cand <= minR
+                            : pOut * cand >= minR);
+                    if (ok) bw = Math.max(bw, cand);
+                }
+        // Degenerate (container smaller than the fixed minimums): keep a
+        // sliver of band rather than going negative.
+        if (bw <= 0) bw = Math.max(1, (W - minL - minR) / n);
+
+        const padIn = Math.max(pIn * bw, minIn);
+        const padL = Math.max(pOut * bw, minL);
+        stepv = bw + padIn;
         index = new Map(
-            domainVals.map((d, i) => [d, r0 + pOut * bw + i * stepv])
+            domainVals.map((d, i) => [d, r0 + padL + i * stepv])
         );
         return scale;
     }
@@ -318,6 +367,16 @@ export function bandScale() {
     scale.paddingOuter = function (_) {
         return arguments.length ? ((pOut = +_), rescale()) : pOut;
     };
+    scale.minPaddingInner = function (_) {
+        return arguments.length ? ((minIn = +_), rescale()) : minIn;
+    };
+    /** number (both sides) or {left, right} in px */
+    scale.minPaddingOuter = function (_) {
+        if (!arguments.length) return { left: minL, right: minR };
+        if (typeof _ === 'number') minL = minR = +_;
+        else ({ left: minL = minL, right: minR = minR } = _);
+        return rescale();
+    };
     scale.bandwidth = () => bw;
     scale.step = () => stepv;
     // d3-axis's band-centering helper calls scale.round(); we don't round.
@@ -326,6 +385,8 @@ export function bandScale() {
         bandScale()
             .paddingInner(pIn)
             .paddingOuter(pOut)
+            .minPaddingInner(minIn)
+            .minPaddingOuter({ left: minL, right: minR })
             .domain(domainVals)
             .range([r0, r1]);
 
