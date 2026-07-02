@@ -9,7 +9,6 @@
 <div style="text-align: center">{{ controls.checkbox(idprefix + "-log", "log-current (Tafel) view") }}</div>
 
 <script type="module">
-    import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
     import XYPlot from '{{ esbdJsPath }}XYPlot.js';
     import { SPECIES } from '{{ esbdJsPath }}figureDefs.js';
     import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
@@ -18,21 +17,23 @@
     // Butler-Volmer, one-electron: J/J0 = exp(α f η) − exp(−(1−α) f η),
     // f = F/RT = 38.92 V⁻¹ at 25 °C. α = 1 gives the Shockley diode law.
     const f = 38.92;
-    const V_RXN = 0.5; // arbitrary; the levels panel has an abstract axis
+    const V_RXN = 0.5; // arbitrary; the barrier panel has abstract axes
+    const B = 0.28; // equilibrium barrier depth, volts
     const JMAX = 15; // I–V panel y-limit; traces are trimmed where they exit
 
-    const levels = new EnergyLevelsDiagram('{{idprefix}}-levels', {
-        yAxisLabel: 'Voltage $V_{\\mathrm{e}^-}$',
-        yRange: [0.33, 0.69],
-        categories: [
-            { id: 'elec', label: 'Electrode' },
-            { id: 'soln', label: 'Solution' },
-        ],
-        showYTicks: false,
-        bandPaddingOuter: 0.5,
-        bandMinPaddingOuter: { left: 15, right: 100 },
-        bandMinPaddingInner: 30,
+    // Left panel: the barrier picture behind alpha. The pass hangs BELOW the
+    // levels (high electron energy = low voltage); its minimum sits at
+    // V_TS = V_RXN − B + α·η, riding fraction α with the metal level.
+    const bar = new XYPlot('{{idprefix}}-levels', {
+        xLabel: 'Reaction coordinate',
+        yLabel: 'Voltage $V_{\\mathrm{e}^-}$',
+        xRange: [0, 1],
+        yRange: [0.02, 0.76],
+        xMode: 'abstract',
+        yMode: 'abstract',
+        margins: { bottom: 34, left: 26, right: 10 },
     });
+    const smf = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
 
     const iv = new XYPlot('{{idprefix}}-iv', {
         xLabel: 'Overpotential $\\eta$ (V)',
@@ -49,32 +50,79 @@
         const alpha = parseFloat(alphaEl.value);
         const J = (e) => Math.exp(alpha * f * e) - Math.exp(-(1 - alpha) * f * e);
 
-        levels.setLevels([
+        const VL = V_RXN + eta; // metal side
+        const VTS = V_RXN - B + alpha * eta; // transition state
+        const bxs = linspace(0.25, 0.75, 101);
+        const pass = bxs.map((x) =>
+            x <= 0.5
+                ? VTS + (VL - VTS) * smf((0.5 - x) / 0.25)
+                : VTS + (V_RXN - VTS) * smf((x - 0.5) / 0.25)
+        );
+        bar.updateTraceData([
             {
-                categoryId: 'elec',
-                levelId: 'metal',
-                yValue: V_RXN + eta,
-                label: 'V_{\\mathrm{e}^-}',
+                id: 'ref',
+                x: [0.3, 0.98],
+                y: [V_RXN - B, V_RXN - B],
+                color: '#999',
+                style: { lineWidth: 1, dasharray: '4,3', opacity: 0.5 },
+                showLabel: false,
+            },
+            {
+                id: 'left',
+                x: [0.02, 0.25],
+                y: [VL, VL],
                 color: BLUE,
                 style: { lineWidth: 3 },
+                showLabel: false,
             },
             {
-                categoryId: 'soln',
-                levelId: 'rxn',
-                yValue: V_RXN,
-                label: 'V_{\\mathrm{e}^-}(\\mathrm{Ox}/\\mathrm{Red})',
+                id: 'right',
+                x: [0.75, 0.98],
+                y: [V_RXN, V_RXN],
                 color: BLUE,
                 style: { lineWidth: 3, dasharray: '3,3' },
+                showLabel: false,
+            },
+            {
+                id: 'pass',
+                x: bxs,
+                y: pass,
+                color: '#667',
+                style: { lineWidth: 1.5, dasharray: '2,2' },
+                showLabel: false,
+            },
+            {
+                id: 'lbl_e',
+                x: [0.275, 0.285],
+                y: [VL - 0.095, VL - 0.095],
+                color: BLUE,
+                style: { lineWidth: 0, opacity: 0 },
+                label: '\\mathrm{e}^-',
+                labelFrac: 0,
+                labelHAlign: 'center',
+            },
+            {
+                id: 'lbl_left',
+                x: [0.02, 0.03],
+                y: [VL + 0.07, VL + 0.07],
+                color: BLUE,
+                style: { lineWidth: 0, opacity: 0 },
+                label: 'V_{\\mathrm{e}^-}',
+                labelFrac: 1,
+            },
+            {
+                id: 'lbl_right',
+                x: [0.6, 0.61],
+                y: [V_RXN + 0.07, V_RXN + 0.07],
+                color: BLUE,
+                style: { lineWidth: 0, opacity: 0 },
+                label: 'V_{\\mathrm{e}^-}(\\mathrm{Ox}/\\mathrm{Red})',
+                labelFrac: 1,
             },
         ]);
-        levels.setArrows([
-            {
-                arrowId: 'eta',
-                fromLevelId: 'rxn',
-                toLevelId: 'metal',
-                label: '\\eta',
-                arrowStyle: '->',
-            },
+        bar.updateMarkers([
+            { id: 'ts', x: 0.5, y: VTS, color: '#667', r: 3 },
+            { id: 'e', x: 0.275, y: VL - 0.022, color: BLUE, r: 4.5 },
         ]);
 
         const logView = logEl.checked;
