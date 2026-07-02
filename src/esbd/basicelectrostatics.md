@@ -93,14 +93,6 @@ $$
 
 that is, there is no longer any constraint on the derivatives of $\phi$, and so $\phi$ at every point can independently 'float' to produce $0 = \rho_{\mathrm{free}}$.^[Note that we do not set $0 = \rho_{\mathrm{free}}$ outright (with $\varepsilon \neq 0$), which would imply $\nabla^2 \phi = 0$, which is in general not true in conductors and is only true in insulators. Somewhat confusingly though $\nabla^2 \phi = 0$ *can* occur in conductors for a totally unrelated reason within regions of homogeneous bulk transport, i.e. due to $\phi$ following $V_i$ and $\nabla \cdot \vec J_i = - \sigma \nabla^2 V_i = 0$, which has nothing to do with the Poisson equation! See also Newman *Electrochemical Systems* section 11.8 "Electroneutrality and Laplace's equation".]
 
-<figure class="diagram-placeholder">
-{% figcaption %}
-- flat region with tiny blips at the end
-
-In a realistic picture of a bulk solution, we should draw very sharp deviations of $V^\circ_i$ nearby surfaces. But we won't even bother to draw these for the most part.
-{% endfigcaption %}
-</figure>
-
 So, our $V^\circ_i$ ladder floats to whatever value it needs to be to be neutral. In a homogeneous medium where $V_i$ are flat (as they must be at equilibrium) then that means $V^\circ_i$ must be flat too, except at its surfaces (within a few Debye lengths). This is the basis of the neutrality as we assume in e.g. the [charge control topic](../charge_control/).
 
 ## Interfaces: aligning two materials
