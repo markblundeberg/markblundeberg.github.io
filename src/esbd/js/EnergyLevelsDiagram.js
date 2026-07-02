@@ -86,7 +86,11 @@ class EnergyLevelsDiagram extends ResponsivePlot {
     /**
      * Updates the arrows displayed between levels.
      * @param {Array<object>} [arrowData=[]] - Flat array of arrow definition objects.
-     * Expected format: [{ arrowId, fromLevelId, toLevelId, label?, arrowStyle? }, ...]
+     * Expected format: [{ arrowId, fromLevelId, toLevelId, label?, arrowStyle?,
+     *   dxFrac?, labelHAlign?, standoffPx? }, ...]
+     * standoffPx (default 4): the line is shortened at each end so the
+     * arrowheads stand off from the level lines instead of overshooting them
+     * (auto-clamped for very short arrows).
      */
     setArrows(arrowData = []) {
         if (!Array.isArray(arrowData)) {
@@ -340,12 +344,29 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             // dxFrac: horizontal offset as a fraction of the category bandwidth,
             // so several arrows within one category don't overlap.
             const dx = (arrowDef.dxFrac || 0) * bandwidth;
+            let x1 = pos1.xCenter + dx,
+                y1 = pos1.y,
+                x2 = pos2.xCenter + dx,
+                y2 = pos2.y;
+            // Stand the line off from the level lines at both ends (along the
+            // line direction, so diagonal arrows work too); clamp so very
+            // short arrows still render rather than inverting.
+            const len = Math.hypot(x2 - x1, y2 - y1);
+            const so = Math.min(arrowDef.standoffPx ?? 4, len / 4);
+            if (len > 0) {
+                const ux = (x2 - x1) / len,
+                    uy = (y2 - y1) / len;
+                x1 += ux * so;
+                y1 += uy * so;
+                x2 -= ux * so;
+                y2 -= uy * so;
+            }
             drawableArrowData.push({
                 arrowId: arrowDef.arrowId,
-                x1: pos1.xCenter + dx,
-                y1: pos1.y,
-                x2: pos2.xCenter + dx,
-                y2: pos2.y,
+                x1: x1,
+                y1: y1,
+                x2: x2,
+                y2: y2,
                 label: arrowDef.label, // Raw LaTeX
                 labelHAlign: arrowDef.labelHAlign || 'left',
                 arrowStyle: arrowDef.arrowStyle || '->', // Default to forward arrow
