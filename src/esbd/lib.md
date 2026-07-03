@@ -31,7 +31,7 @@ In the middle is the electrolyte / separator. Its job is simple: 1) allow $\math
 
 The fact that the step $V_{\mathrm{e}^-} - V_{\mathrm{Li}^+}$ is so hugely different on the left and right sides reflects how weakly bound the lithium ions are in graphite, compared to NMC. And of course this difference in step sizes is what sets the voltage of the cell. We can also see however that the step size varies with the state of charge: at a nominal 0% charge, most of the lithium is in the NMC (increasing its $\mu_{\mathrm{Li}}$), and at a nominal 100% charge level, most of the lithium has moved into the graphite (increasing its $\mu_{\mathrm{Li}}$).
 
-In the lithium-ion battery field, the step size is known as the OCV value, and I adopted OCV curves from [Chen et al. 2020 "Development of Experimental Techniques for Parameterization of Multi-scale Lithium-ion Battery Models"](https://dx.doi.org/10.1149/1945-7111/ab9050): Equations 8 and 9, which are fits to Figure 12. Technically, $\mathrm{OCV} = V_{\mathrm{e}^-} - V_{\mathrm{Li}^+} + \mu_{\mathrm{Li(metal)}}$, but since we're assuming $\mu_{\mathrm{Li(metal)}}=0$, then simply $\mathrm{OCV} = V_{\mathrm{e}^-} - V_{\mathrm{Li}^+}$.
+In the lithium-ion battery field, the step size is known as the OCV value, and I adopted OCV curves from [Chen et al. 2020 "Development of Experimental Techniques for Parameterization of Multi-scale Lithium-ion Battery Models"](https://dx.doi.org/10.1149/1945-7111/ab9050): Equations 8 and 9, which are fits to Figure 12. Technically, $\mathrm{OCV} = V_{\mathrm{e}^-} - V_{\mathrm{Li}^+} + \mu_{\mathrm{Li(metal)}}/F$, but since we're assuming $\mu_{\mathrm{Li(metal)}}=0$, then simply $\mathrm{OCV} = V_{\mathrm{e}^-} - V_{\mathrm{Li}^+}$.
 
 ## Battery discharge
 
@@ -46,9 +46,9 @@ From [Chen et al. 2020](https://dx.doi.org/10.1149/1945-7111/ab9050), license: [
 {% endfigcaption %}
 </figure>
 
-This porous structure is quite beneficial for the battery functioning: it is far easier for the lithium ions to move inside of the electrolyte than to move through the solid electrode materials. So, by providing ample electrolyte channels, it means the lithium ions do not have to move as far through the solid materials. Around each particle, there is a thin film layer called SEI (solid electrolyte interphase), a form of passivation that protects the solvent from being destroyed by battery.
+This porous structure is quite beneficial for the battery functioning: it is far easier for the lithium ions to move inside of the electrolyte than to move through the solid electrode materials. So, by providing ample electrolyte channels, it means the lithium ions do not have to move as far through the solid materials. Around each particle, there is a thin film layer called SEI (solid electrolyte interphase), a form of passivation that protects the solvent from being destroyed by the battery.
 
-Still, the particle sizes are not so small that we can neglect the lithium diffision. We can illustrate this using our $V_i$ band diagrams. For example, in an anode particle during discharge ($\mathrm{Li}^+$ being sucked out of it) we might see something like this where the $x$-axis represents a *radial* coordinate:
+Still, the particle sizes are not so small that we can neglect the lithium diffusion. We can illustrate this using our $V_i$ band diagrams. For example, in an anode particle during discharge ($\mathrm{Li}^+$ being sucked out of it) we might see something like this where the $x$-axis represents a *radial* coordinate:
 
 <figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/esbd-lib-particle-discharge.njk" %}
