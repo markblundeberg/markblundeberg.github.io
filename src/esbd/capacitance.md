@@ -7,7 +7,7 @@ orderESBD: 82
 
 # {{title}}
 
-We have been framing our electrochemical problems as 'voltage-controlled', and it's interesting to see how we naturally get a form of capacitance. We've already seen this in the previous Topics about [equilibrium](../equilibrium/) and [lithium-ion batteries](../lib/), and now we're going to return to it in a more generic view:
+We have been framing our electrochemical problems as 'voltage-controlled', and it's interesting to see how we naturally get a form of capacitance. We've already seen this in the [Capacitance topic](../capacitors/) (and in device form in [lithium-ion batteries](../lib/)), and now we're going to return to it in a more generic view:
 * any number of ions
 * any kinds of interactions, and
 * explaining "chemical capacitance"
