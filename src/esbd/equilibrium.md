@@ -11,7 +11,7 @@ One of the key questions with these $V_i$ is how different species' $V_i$ values
 
 $$ V_i - V_j = \Delta, $$
 
-where $\Delta$ is some nonzero offset (usually depending on neutral reactants or products). In the diagrams, we will show a symbol with the marker ⇌ to indicate an equlibrium reaction.
+where $\Delta$ is some nonzero offset (usually depending on neutral reactants or products). In the diagrams, we will show a symbol with the marker ⇌ to indicate an equilibrium reaction.
 
 <figure class="demo-container" style="max-width: 230px">
 {% include "esbd-diagrams/esbd-reaction-generic.njk" %}
@@ -43,7 +43,7 @@ Thus, auto-ionization in water directly sets up an offset between $V_{\mathrm{H}
 {% include "esbd-diagrams/esbd-h2o-autoionization.njk" %}
 </figure>
 
-How large is this offset? The chemical potential $\mu_{\mathrm{H_2O}}$ is the partial molar Gibbs energy for $\mathrm{H_2O}$. We can look up Gibbs *formation* energy energies for neutral chemicals like $\mathrm{H_2O}$ in chemical data tables, and for convenience, we adopt the chemical potential system that makes chemical potentials equal to Gibbs formation energies.
+How large is this offset? The chemical potential $\mu_{\mathrm{H_2O}}$ is the partial molar Gibbs energy for $\mathrm{H_2O}$. We can look up Gibbs *formation* energies for neutral chemicals like $\mathrm{H_2O}$ in chemical data tables, and for convenience, we adopt the chemical potential system that makes chemical potentials equal to Gibbs formation energies.
 
 For pure water at standard conditions we know from chemical data tables that the Gibbs formation energy of $\mathrm{H_2O}$ is $-237.1~\mathrm{kJ/mol}$. This means for pure water we have $\mu_{\mathrm{H_2O}} = -237.1~\mathrm{kJ/mol}$, and as a reminder the Faraday constant is $F = 96.485~\mathrm{kJ/mol/V}$. Thus $\mu_{\mathrm{H_2O}}/F = -2.457~\mathrm{V}$. So,
 
@@ -131,7 +131,8 @@ In principle other species can have implied levels. For example $\mathrm{H}^-$ (
 
 It can happen sometimes that a reaction involves more than just two $V_i$'s. For example, the case of a solution containing both ferrous ($\mathrm{Fe}^{2+}$) and ferric ($\mathrm{Fe}^{3+}$) ions, in equilibrium with an inert platinum electrode that provides electrons ($\mathrm{e}^-$):
 
-$$ \bar\mu_{\mathrm{Fe}^{2+}} \rightleftharpoons \bar\mu_{\mathrm{Fe}^{3+}} + \bar\mu_{\mathrm{e}^{-}} $$
+$$ \mathrm{Fe}^{2+} \rightleftharpoons \mathrm{Fe}^{3+} + \mathrm{e}^{-} $$
+$$ \bar\mu_{\mathrm{Fe}^{2+}} = \bar\mu_{\mathrm{Fe}^{3+}} + \bar\mu_{\mathrm{e}^{-}} $$
 $$ 2 V_{\mathrm{Fe}^{2+}} = 3 V_{\mathrm{Fe}^{3+}} - V_{\mathrm{e}^-} $$
 
 Note this can still be represented in terms of $V_i - V_j$ differences:
