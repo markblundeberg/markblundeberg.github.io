@@ -133,7 +133,7 @@ $$\begin{aligned}
 
 This is quite similar to ambipolar capacitance above, but note we are fixing $\phi$ instead of fixing $Q=0$.
 
-> Note that "chemical capacitance" is ambiguous. Sometimes that refers to internal chemical capacitance as just defined,^[J. Jamnik and J. Maier, [Generalised equivalent circuits for mass and charge transport](https://doi.org/10.1039/b100180i), *Phys. Chem. Chem. Phys.* **3**, 1668 (2001). They trace the term itself to A. D. Pelton, *J. Chim. Phys.* **89**, 1931 (1992).] but often in ionics the term "chemical capacitance" refers to the 2-carrier ambipolar capacitance described above.^[J. Jamnik and J. Maier, [Treatment of the impedance of mixed conductors](https://doi.org/10.1149/1.1392611), *J. Electrochem. Soc.* **146**, 4183 (1999).]
+> Note that "chemical capacitance" is ambiguous. Sometimes that refers to internal chemical capacitance as just defined,^[J. Jamnik and J. Maier, [Generalised equivalent circuits for mass and charge transport](https://doi.org/10.1039/b100180i), *Phys. Chem. Chem. Phys.* **3**, 1668 (2001). They trace the term itself to A. D. Pelton, [The chemical capacitance — a thermodynamic solution property.](https://doi.org/10.1051/jcp/1992891931) *J. Chim. Phys.* **89**, 1931 (1992).] but often in ionics the term "chemical capacitance" refers to the 2-carrier ambipolar capacitance described above.^[J. Jamnik and J. Maier, [Treatment of the impedance of mixed conductors](https://doi.org/10.1149/1.1392611), *J. Electrochem. Soc.* **146**, 4183 (1999).]
 
 Internal chemical capacitance is usually invoked in systems with a well defined mean field $\phi$, such as ideal-dilute solutes, ideal Fermi gases, and such. Consequently, it tends to be the case that $\mathcal{C}$ is diagonal:
 
