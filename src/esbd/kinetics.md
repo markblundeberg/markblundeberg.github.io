@@ -92,4 +92,6 @@ A corroding metal, coupled to two half-reactions at once. The electrode floats t
 
 An interface passing current carries a step in $V_i$, and the current is exponential in that step: Butler–Volmer for electrodes, Shockley for diodes, and the same element again for ion transfer. Exchange current sets how stiff the interface is, $\alpha$ how the step splits between the two barriers, and Marcus–Gerischer supplies the microscopic picture — one that lives natively on these diagrams. With transport ([slopes](../transport_basic/)) and kinetics (steps) both priced in $V_i$, a driven electrochemical device really can be read end to end like a circuit.
 
-[**NEXT TOPIC: Redox-flow batteries**](../redoxflow/)
+That closes the main sequence. The appendices dig into the foundations underneath, starting with the one this whole framework rests on:
+
+[**NEXT TOPIC: Understanding electrochemical potential**](../muintro/)

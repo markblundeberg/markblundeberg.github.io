@@ -28,7 +28,7 @@
 - [_Interface kinetics_](/esbd/kinetics/) - The current–overpotential law: Butler–Volmer as the exponential interface element, Tafel, the diode connection, and Marcus–Gerischer.
 
 *Application highlights*:
-- [_Redox-flow Batteries_](/esbd/redoxflow)
+- Redox-flow batteries: one redox couple per tank, exchanging $\mathrm{H}^+$ across a membrane.
 - Solid oxide fuel cells: $V_{\mathrm{O}^{2-}}$ landscape.
 - Cell biology: The proton motive force as a $V_{\mathrm{H}^+}$ drop; the electron transport chain as a $V_{\mathrm{e}^-}$ cascade.
 - Lead-Acid Batteries: A system where the electrolyte is a reactant.
