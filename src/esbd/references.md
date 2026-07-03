@@ -21,7 +21,7 @@ $$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} = \frac{1}{F}(\mu_{\mathrm{Ag}} - \mu_{\
 
 The **hydrogen electrode** interconverts hydrogen ions and hydrogen gas, $\mathrm{H}^+ + \mathrm{e}^- \rightleftharpoons \tfrac{1}{2}\mathrm{H_2}$, giving
 $$ V_{\mathrm{e}^-} = V_{\mathrm{H}^+} - \frac{\mu_{\mathrm{H_2}}}{2F}, $$
-with $\mu_{\mathrm{H_2}} = \mu^\circ_{\mathrm{H_2}} + \tfrac{RT}{F}\ln a_{\mathrm{H_2}}$ depending on the gas pressure. Its standard form is the reference the whole $E$ scale is built on.
+with $\mu_{\mathrm{H_2}} = \mu^\circ_{\mathrm{H_2}} + RT\ln a_{\mathrm{H_2}}$ depending on the gas pressure. Its standard form is the reference the whole $E$ scale is built on.
 <figure class="demo-container" style="max-width: 230px">
 {% include "esbd-diagrams/esbd-she.njk" %}
 </figure>
@@ -77,7 +77,7 @@ The chains above show what the standard reference levels are: a "standard electr
 $$
 \begin{aligned}
 V^\circ_{\mathrm{e}^-}(\mathrm{SHE}) &= V^\circ_{\mathrm{H}^+} - \frac{\mu^\circ_{\mathrm{H_2}}}{2F}, \\
-V^\circ_{\mathrm{e}^-}(\mathrm{SSCE}) &= V^\circ_{\mathrm{Cl}^-} + \frac{1}{F}(\mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}}),
+V^\circ_{\mathrm{e}^-}(\mathrm{SSCE}) &= V^\circ_{\mathrm{Cl}^-} - \frac{1}{F}(\mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}}),
 \end{aligned}
 $$
 and their difference is again the $0.222~\mathrm{V}$ from above. Re-drawn with only the electronic levels, the cell is just two $V_{\mathrm{e}^-}$ values sitting against two standard levels:
@@ -86,7 +86,7 @@ and their difference is again the $0.222~\mathrm{V}$ from above. Re-drawn with o
 </figure>
 Anchoring $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ to "0 V" recovers the usual reference frame of electrochemistry — an arbitrary choice that stops making sense the moment $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ varies in space.
 
-In practice the SHE is finicky to pin down: its nominal $a_{\mathrm{H}^+}=1$ implies an awkward pH of 0, its "1 bar" of $\mathrm{H_2}$ competes with water vapour, and like every standard level it must be reached by extrapolation from dilute cells (the junction-free Harned cell being the classic).^[TODO: Harned & Bates citations.] Any "$V_{\mathrm{e}^-}(\mathrm{SHE})$" is, in the end, a theoretical extrapolated level tied to the standard state of the aqueous proton, $V^\circ_{\mathrm{H}^+}$.
+In practice the SHE is finicky to pin down: its nominal $a_{\mathrm{H}^+}=1$ implies an awkward pH of 0, its "1 bar" of $\mathrm{H_2}$ competes with water vapour, and like every standard level it must be reached by extrapolation from dilute cells (the junction-free Harned cell being the classic).^[Harned, H. S., & Ehlers, R. W. (1932). J. Am. Chem. Soc., 54, 1350 & 2179 — the classic extrapolation; redone definitively in Bates, R. G., & Bower, V. E. (1954). [Standard potential of the silver-silver-chloride electrode from 0° to 95° C.](https://nvlpubs.nist.gov/nistpubs/jres/53/jresv53n5p283_A1b.pdf) J. Res. Natl. Bur. Stand., 53(5), 283–290.] Any "$V_{\mathrm{e}^-}(\mathrm{SHE})$" is, in the end, a theoretical extrapolated level tied to the standard state of the aqueous proton, $V^\circ_{\mathrm{H}^+}$.
 
 ## The "absolute" electrode potential
 
