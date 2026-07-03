@@ -22,7 +22,7 @@ and the relation between them.
 
 ### Thermodynamic setting
 
-In our $V_i$ view, we work with a free energy function of the species voltages — a grand free energy we'll call $F_{\mathrm{bulk}}$:
+In our $V_i$ view, we work with a free energy function of the species voltages — a grand free energy we'll call $F$:
 
 $$ F(V_1, \ldots, V_N) $$
 
@@ -53,19 +53,27 @@ $$\begin{aligned}
 
 where we added the subscript $Q=0$ to emphasize that this is for a charge-neutral (ambipolar) bulk. As we'll see below, removing that $Q=0$ makes a huge difference.
 
-This matrix $ \mathbf{C}^{\mathrm{amb}}$ is truly a {% wiki "capacitance matrix" %} in the mathematical sense: its units are farads, its rows and columns sum to zero, it is symmetric, and it is positive semi-definite. Normally we would use capacitance matrix to describe the self- and mutual capacitance of a collection of conductors, but in this case the "conductors" are actually all overlapping in space. A regular geometrical capacitance matrix is highly sensitive to arrangement, shapes, and distances, while the ambipolar capacitance is simply proportional to volume of solvent/medium (or mass, depending on what else we are holding fixed).
+This matrix $ \mathbf{C}^{\mathrm{amb}}$ is truly a {% wiki "capacitance matrix" %} in the mathematical sense: its units are farads, its rows and columns sum to zero, it is symmetric, and it is positive semi-definite. Normally we would use a capacitance matrix to describe the self- and mutual capacitance of a collection of conductors, but in this case the "conductors" are actually all overlapping in space. A regular geometrical capacitance matrix is highly sensitive to arrangement, shapes, and distances, while the ambipolar capacitance is simply proportional to volume of solvent/medium (or mass, depending on what else we are holding fixed).
 
 In general the ambipolar capacitance is a dense matrix (all entries nonzero) and can be thought of in terms of a fully connected equivalent circuit:
 
-*** CAPACITANCE DIAGRAM - DELTA and 5-CELL ***
+<figure class="diagram-placeholder">
+{% figcaption %}
+The ambipolar capacitance matrix as a circuit: one node per carrier, a capacitor between every pair (a fully connected mesh; e.g. five carriers).
+{% endfigcaption %}
+</figure>
 
-A special case of ambipolar capacitance is two-carrier case: a single capacitor. Battery electrodes. This results $\mathbf{C}^{\mathrm{amb}}$ being a $2 \times 2$ matrix of the form $\big[\begin{smallmatrix} C & -C \\ -C & C \end{smallmatrix}\big]$ for some $C > 0$. This is just a single capacitor in equivalent circuit:
+A special case of ambipolar capacitance is the two-carrier case, as found in battery electrodes. This results in $\mathbf{C}^{\mathrm{amb}}$ being a $2 \times 2$ matrix of the form $\big[\begin{smallmatrix} C & -C \\ -C & C \end{smallmatrix}\big]$ for some $C > 0$, which is just a single capacitor in the equivalent circuit:
 
-*** CAPACITANCE DIAGRAM - SINGLE-CAP (electron-ion) ***
+<figure class="diagram-placeholder">
+{% figcaption %}
+The two-carrier special case: a single capacitor between the electron and ion nodes (a battery electrode).
+{% endfigcaption %}
+</figure>
 
-(Often this two-species coupling $C$ value is called 'chemical capacitance' but that term is ambiguous. In other context it instead refers to the *internal* chemical capacitance defined below.)
+(Often this two-species coupling $C$ value is called 'chemical capacitance' but that term is ambiguous. In other contexts it instead refers to the *internal* chemical capacitance defined below.)
 
-If you only cared about two carriers, then the $\mathbf{C}^{\mathrm{amb}}$ matrix looks like overkill (why not just use $C$) but it is absolutely necessary in the case of more than two carriers. Note that some other multicarrier generalizations of chemical capacitance seen in the literature are not correct.^[E.g. In JM2001 they defined 'component chemical capacitance', which only works for the two ion case and is not meaningful beyond that.]
+If you only cared about two carriers, then the $\mathbf{C}^{\mathrm{amb}}$ matrix looks like overkill (why not just use $C$) but it is absolutely necessary in the case of more than two carriers. Note that some other multicarrier generalizations of chemical capacitance seen in the literature are not correct.^[E.g. Jamnik and Maier (2001, cited below) defined a 'component chemical capacitance', which only works for the two-ion case and is not meaningful beyond that.]
 
 Ambipolar capacitances can be very large, e.g. for a typical $1~\mathrm{mol/L}$ solution of $+e$ and $-e$ carriers, you'll have a $V_{\mathrm{cation}}$-$V_{\mathrm{anion}}$ mutual capacitance of order $2~\mathrm{farads}$ per $\mathrm{cm}^3$ of volume, which is a {% wiki "supercapacitor" %} level of volumetric capacitance. The ambipolar charge storage capacity is a key factor for both lithium ion batteries (in the electrodes) and lead-acid batteries (in solution). The ambipolar diffusion associated with ambipolar capacitance is often too slow for capacitor use cases, though finely ground mixtures of charge storage materials can alleviate this and so some supercapacitors can be described in terms of ambipolar capacitance (ambipolar capacitance can be equally well used to describe mixtures of materials as long as they are reasonably homogeneous on the large scale).
 
@@ -81,7 +89,7 @@ Integrated ambipolar capacitance *is* the charge storage of a bulk material such
 
 Ambipolar capacitance is a thermodynamic observable and directly relates to mean activities. E.g. Debye-Huckel or Pitzer models predict a specific ambipolar capacitance matrix.
 
-(In contrast, descriptions of electrolytes in terms of single-ion activities corresponds to a description in terms of internal chemical capacitance $\mathcal{C}$ (see below). In nonideal solutions, $\mathcal{C}$ will be a dense matrix and also generally regarded as unmeasurable; different activity conventions will have different $\mathcal{C}$ matrices.)
+(In contrast, descriptions of electrolytes in terms of single-ion activities correspond to a description in terms of internal chemical capacitance $\mathcal{C}$ (see below). In nonideal solutions, $\mathcal{C}$ will be a dense matrix and also generally regarded as unmeasurable; different activity conventions will have different $\mathcal{C}$ matrices.)
 
 #### Ambipolar diffusion
 
@@ -110,7 +118,7 @@ Near interfaces, impurities, and in/around depletion regions, there are variatio
 
 $$ F^\phi (V_1, \ldots, V_N, \phi) \propto \mathrm{d}V $$
 
-It's worth reminding that we are abandoning thermodynamic rigour when we asking for continuum thermodynamics to apply, especially in the case of space charge at microscopic scales. The local density approximation is justified in some idealized systems, but it is only approximately correct in reality.
+It's worth reminding that we are abandoning thermodynamic rigour when asking for continuum thermodynamics to apply, especially in the case of space charge at microscopic scales. The local density approximation is justified in some idealized systems, but it is only approximately correct in reality.
 
 We also now make the idealization that the medium is fixed, and does not expand at all due to the motion of the ionic/electronic solutes.
 
@@ -125,7 +133,7 @@ $$\begin{aligned}
 
 This is quite similar to ambipolar capacitance above, but note we are fixing $\phi$ instead of fixing $Q=0$.
 
-> Note that "chemical capacitance" is ambiguous. Sometimes that refers to internal chemical capacitance as just defined (cite JM2001 and others) but often in ionics the term "chemical capacitance" refers to the 2-carrier ambipolar capacitance described above (cite JM1999 and others). 
+> Note that "chemical capacitance" is ambiguous. Sometimes that refers to internal chemical capacitance as just defined,^[J. Jamnik and J. Maier, [Generalised equivalent circuits for mass and charge transport](https://doi.org/10.1039/b100180i), *Phys. Chem. Chem. Phys.* **3**, 1668 (2001). They trace the term itself to A. D. Pelton, *J. Chim. Phys.* **89**, 1931 (1992).] but often in ionics the term "chemical capacitance" refers to the 2-carrier ambipolar capacitance described above.^[J. Jamnik and J. Maier, [Treatment of the impedance of mixed conductors](https://doi.org/10.1149/1.1392611), *J. Electrochem. Soc.* **146**, 4183 (1999).]
 
 Internal chemical capacitance is usually invoked in systems with a well defined mean field $\phi$, such as ideal-dilute solutes, ideal Fermi gases, and such. Consequently, it tends to be the case that $\mathcal{C}$ is diagonal:
 
@@ -201,11 +209,11 @@ $$\begin{aligned}
 
 So, $\mathbf{C}^{\mathrm{amb}}$ has strictly less information than $\mathcal{C}$. On the other hand, $\mathbf{C}^{\mathrm{amb}}$ is a general thermodynamic property that does not make any microscopic assumptions as are usually needed for $\mathcal{C}$, but only the latter can be used to model continuum space charges.
 
-IDEA: SHOW VENN DIAGRAM OF APPLICABILITY? Ambipolar only: microscopically messy materials, $\phi$-agnostic. Both: long-range conduction, ambipolar diffusion, ideal bulk charge storage. Chem only: interfaces, screening, depletion/enhancement regions.
+As for where each description applies: the ambipolar $\mathbf{C}^{\mathrm{amb}}$ alone works for microscopically messy materials, since it is $\phi$-agnostic; either description serves for long-range conduction, ambipolar diffusion, and ideal bulk charge storage; and only the internal $\mathcal{C}$ can describe interfaces, screening, and depletion/enhancement regions.
 
 ### Extended chemical capacitance matrix (the Jamnik-Maier trick)
 
-As mentioned above $\mathcal{C}$ is not a capacitance matrix, and that's because the capacitances therein are with respect to $\phi$, which is unusual for a capacitance since usually capacitance needs a balanced charge on both sides (and $\phi$ normally does not 'store charge'). At this point we can do a cool trick:(cite JM2001) we define a 'displacement charge' to be the negative of the total charge. In effect this turns $\phi$ into a proper circuit node that contains a displacement charge.
+As mentioned above $\mathcal{C}$ is not a capacitance matrix, and that's because the capacitances therein are with respect to $\phi$, which is unusual for a capacitance since usually capacitance needs a balanced charge on both sides (and $\phi$ normally does not 'store charge'). At this point we can do a cool trick, following Jamnik and Maier:^[The displacement-node construction is the heart of J. Jamnik and J. Maier, [Generalised equivalent circuits for mass and charge transport](https://doi.org/10.1039/b100180i), *Phys. Chem. Chem. Phys.* **3**, 1668 (2001).] we define a 'displacement charge' to be the negative of the total charge. In effect this turns $\phi$ into a proper circuit node that contains a displacement charge.
 
 $$ \delta Q_{\mathrm d} = - \delta Q_{\mathrm{free}}  = -\mathbf{s}^T \delta \mathbf{V} + \mathcal{C}_{\mathrm{tot}} \delta \phi $$
 
@@ -241,13 +249,21 @@ $$ \mathbf{C}^{\mathrm{ext,ideal}} = \begin{bmatrix}
 \end{bmatrix} $$
 #}
 
-*** CAPACITANCE DIAGRAM - WYE+DELTA and WYE (ideal)***
+<figure class="diagram-placeholder">
+{% figcaption %}
+The extended matrix as a circuit: every carrier node capacitor-coupled to a central $\phi$ node (a star), plus direct carrier–carrier capacitors in the nonideal case; the ideal case is a pure star.
+{% endfigcaption %}
+</figure>
 
 In relation to this, the ambipolar capacitance can be seen as elimination of the $\phi$ node from the $\mathbf{C}^{\mathrm{ext}}$ capacitance matrix (a {% wiki "Schur complement" %} operation), which when viewing both $\mathbf{C}^{\mathrm{ext}}$ and $\mathbf{C}^{\mathrm{amb}}$ as capacitor networks is known as a {% wiki "Kron reduction" %} or a {% wiki "star-mesh transform" %}.
 
 This makes $\mathbf{C}^{\mathrm{amb}}$ to be a dense matrix ('fully connected'), even when $\mathcal{C}$ is ideal and diagonal (so $\mathbf{C}^{\mathrm{ext}}$ is a 'star' topology).
 
-*** CAPACITANCE DIAGRAMS - WYE (ideal) -> DELTA ***
+<figure class="diagram-placeholder">
+{% figcaption %}
+Eliminating the $\phi$ node (star-mesh / Kron reduction) turns the ideal star into the fully connected ambipolar mesh.
+{% endfigcaption %}
+</figure>
 
 We can use this to express the Jamnik-Maier equivalent circuit picture of charge conservation in transport and electrostatics. (Assuming that the movement of ions is not causing any expansion of the medium):
 
@@ -259,4 +275,4 @@ $$
 - \begin{bmatrix}  \nabla \cdot \mathbf{J}_1 \\ \vdots \\ \nabla \cdot \mathbf{J}_N \\ \nabla \cdot \mathbf{J}_{\mathrm{d}} \end{bmatrix}
 $$
 
-where $\mathbf{J}_{\mathrm{d}} = \partial \mathbf{D} / \partial t$ is the {% wiki "displacement current" %}. The last row is basically Gauss's law, $\rho_{\mathrm{free}} = \nabla \cdot D$ but in a time-derivated form!^[The fact that it's time derivative means we might start out with the 'wrong' displacement charges, which corresponds to the Jamnik-Maier equivalent circuit having $\phi$ nodes that are fully floating and thus having indeterminate starting charges.] The other part of the Jamnik-Maier picture is the constitutive relations: $\mathbf J_i = -\sigma_i \nabla V_i$ (ohm's law i.e. drift-diffusion; resistors in the equivalent circuit), and $\mathbf{D} = - \varepsilon \nabla \phi $ (capacitors between displacement nodes on the equivalent circuit). The Jamnik-Maier equivalent circuit is based on discretizing this into finite volumes, but in fact the above is an elegant restatement of the Poisson-Nernst-Planck equations (which are continuum).
+where $\mathbf{J}_{\mathrm{d}} = \partial \mathbf{D} / \partial t$ is the {% wiki "displacement current" %}. The last row is basically Gauss's law, $\rho_{\mathrm{free}} = \nabla \cdot D$ but in a time-derivative form!^[The fact that it's time derivative means we might start out with the 'wrong' displacement charges, which corresponds to the Jamnik-Maier equivalent circuit having $\phi$ nodes that are fully floating and thus having indeterminate starting charges.] The other part of the Jamnik-Maier picture is the constitutive relations: $\mathbf J_i = -\sigma_i \nabla V_i$ (Ohm's law i.e. drift-diffusion; resistors in the equivalent circuit), and $\mathbf{D} = - \varepsilon \nabla \phi $ (capacitors between displacement nodes on the equivalent circuit). The Jamnik-Maier equivalent circuit is based on discretizing this into finite volumes, but in fact the above is an elegant restatement of the Poisson-Nernst-Planck equations (which are continuum).
