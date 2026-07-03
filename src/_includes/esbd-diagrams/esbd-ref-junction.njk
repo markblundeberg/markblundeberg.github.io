@@ -40,12 +40,18 @@
     const K_SHIFT = 3.7; // drawn = true + K_SHIFT (auto ⌇ flag)
 
     const b = [0, 0.4, 0.58, 0.86, 1.0];
-    const diagram = new ElectrochemicalSpeciesBandDiagram('{{idprefix}}-container', {
-        hplus: SPECIES.proton,
-        kplus: SPECIES.potassium,
-        clminus: SPECIES.chloride,
-        electron: SPECIES.electron,
-    });
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        {
+            hplus: SPECIES.proton,
+            kplus: SPECIES.potassium,
+            clminus: SPECIES.chloride,
+            electron: SPECIES.electron,
+        },
+        // abstract y-axis: the exaggerated junction step would contradict
+        // numeric ticks; the true LJP lives in the readout instead
+        { yMode: 'abstract', margins: { left: 28 } }
+    );
     diagram.setSpatialLayout(b, [
         { ...REGION.solution, name: 'test solution' },
         { name: 'frit', color: '#f0f5ec' },
@@ -151,7 +157,7 @@
 
         renderSpanMath(
             document.getElementById('{{idprefix}}-ljp'),
-            `\\text{true LJP} = ${(1000 * ljp).toFixed(1)}\\,\\mathrm{mV} \\;\\; \\text{(drawn} \\times ${EXAG}\\text{)}`
+            `\\text{true LJP} = ${(1000 * ljp).toFixed(1)}\\,\\mathrm{mV}`
         );
         document.getElementById('{{idprefix}}-conc-readout').textContent =
             c1.toPrecision(2);
