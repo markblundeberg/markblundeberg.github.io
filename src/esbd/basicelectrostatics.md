@@ -132,6 +132,6 @@ But this raises a question about how we describe deviations from neutrality, whi
 
 ## Takeaways
 
-Now that we have established how electrostatic forces enforce local charge neutrality, we are ready to explore how these carriers move when driven by gradients under load.
+Electrostatics entered our picture mainly to justify leaving it out: screening is so strong that almost everywhere, the $V^\circ_i$ ladder simply floats to whatever offset keeps the bulk neutral, while the $V_i$ ride flat over the interfacial blips. Where two materials meet, the same screening decides how their ladders align, anchored to whichever side screens more stiffly. Along the way we met the screening response $\chi$, and it has a second life: read as charge banked against a voltage, it is a capacitance, which is where we turn next.
 
 [**NEXT TOPIC: Capacitance**](../capacitors/)
