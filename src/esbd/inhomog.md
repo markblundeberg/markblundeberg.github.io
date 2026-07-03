@@ -7,7 +7,7 @@ orderESBD: 90.5
 
 # {{title}}
 
-One of the main reasons these $V_i$ diagrams are powerful is in clearly visualizing devices with inhomogeneous composition and electric fields — that is, where $V^\circ_i$ is not flat. Typically all of this is conceived of as variations in $\phi$, but $V^\circ_i$ lets us dig a bit more precisely into what is actually going on. This appendix collects the fine print: what a varying ladder really involves, why $-\nabla\phi$ is not always a real electric field, and a catalog of everything that makes interfaces hard.
+One of the main reasons these $V_i$ diagrams are powerful is in clearly visualizing devices with inhomogeneous composition and electric fields, that is, where $V^\circ_i$ is not flat. Typically all of this is conceived of as variations in $\phi$, but $V^\circ_i$ lets us dig a bit more precisely into what is actually going on. This appendix collects the fine print: what a varying ladder really involves, why $-\nabla\phi$ is not always a real electric field, and a catalog of everything that makes interfaces hard.
 
 ## Two kinds of inhomogeneity
 
@@ -15,7 +15,7 @@ For a neutral solute, the standard-state level $\mu^\circ_i$ varies only where t
 
 $$ V^\circ_i = \phi + \text{const}. $$
 
-Microscopically, $\phi$ obeys the Poisson equation $\nabla^2 \phi = -\rho/\varepsilon_0$, so if free charges accumulate anywhere then $\phi$ shifts, and every $V^\circ_i$ shifts along with it. Note that the quasi-neutral bulk does not mean $\nabla^2\phi = 0$ — very much not. As in [basic electrostatics](../basicelectrostatics/), the local-electroneutrality trick sends $\varepsilon \to 0$, forcing $\rho \to 0$ while freeing $\phi$ at every point to float to whatever value neutrality demands.
+Microscopically, $\phi$ obeys the Poisson equation $\nabla^2 \phi = -\rho/\varepsilon_0$, so if free charges accumulate anywhere then $\phi$ shifts, and every $V^\circ_i$ shifts along with it. Note that the quasi-neutral bulk does not mean $\nabla^2\phi = 0$; in fact, very much not. As in [basic electrostatics](../basicelectrostatics/), the local-electroneutrality trick sends $\varepsilon \to 0$, forcing $\rho \to 0$ while freeing $\phi$ at every point to float to whatever value neutrality demands.
 
 ## The difference between $\phi$ and $V^\circ_i$: inhomogeneous electrostatics
 
@@ -31,7 +31,7 @@ In an inhomogeneous region, the constitutive relation must generalize as well:
 
 $$ D = -\varepsilon\nabla\phi + D_{\mathrm{inhomog}}. $$
 
-The built-in displacement $D_{\mathrm{inhomog}}$ is nonzero at interfaces (a sharp, delta-function dipole layer), through graded media, and — more subtly — wherever a nonideal solution carries concentration gradients, because there it is the activity convention that dictates how $\phi$ varies. Crucially, $D_{\mathrm{inhomog}}$ depends on how we defined $\phi$ in the first place: adopt a different convention $\phi(x) \to \phi(x) + \delta(x)$ and a compensating $D_{\mathrm{inhomog}}$ appears to soak up the change. In other words, $-\nabla\phi$ is not always a real electric field. (There are even materials where a bulk polarization ambiguity lets $D_{\mathrm{inhomog}}$ be nonzero throughout the material, not just at its boundaries!)
+The built-in displacement $D_{\mathrm{inhomog}}$ is nonzero at interfaces (a sharp, delta-function dipole layer), through graded media, and (more subtly) wherever a nonideal solution carries concentration gradients, because there it is the activity convention that dictates how $\phi$ varies. Crucially, $D_{\mathrm{inhomog}}$ depends on how we defined $\phi$ in the first place: adopt a different convention $\phi(x) \to \phi(x) + \delta(x)$ and a compensating $D_{\mathrm{inhomog}}$ appears to soak up the change. In other words, $-\nabla\phi$ is not always a real electric field. (There are even materials where a bulk polarization ambiguity lets $D_{\mathrm{inhomog}}$ be nonzero throughout the material, not just at its boundaries!)
 
 This sounds like a disaster for electromagnetism, yet notice what survives: the field $-\nabla\phi$ is subjective, the split between $-\varepsilon\nabla\phi$ and $D_{\mathrm{inhomog}}$ is subjective, and the total $D$ is unaffected by any of it. This "agree on $D$, disagree on $E$" is an interesting backwards twist on the usual polarization ambiguity, where everyone agrees on $E$ but the separation of charge into bound and free (and hence $D$) is ambiguous; I don't think the two are related. The practical upshot: on large scales we ignore $D_{\mathrm{inhomog}}$ by leaning on quasi-neutrality, while right at interfaces there is no honest way to reduce the physics to a naive $\phi$, which is part of why interfaces get their own laws.
 
@@ -57,4 +57,4 @@ In [basic electrostatics](../basicelectrostatics/) we described an incredibly el
 
 ## Takeaways
 
-In the bulk, quasi-neutrality spares us from almost all of this: the $V^\circ_i$ ladder acts as a mere neutralizer, and the diagrams stay simple. The difficulty concentrates at interfaces, in graded and nonideal media, and at small scales — exactly where $\phi$ splinters into per-species quasi-fields and even $E$ loses its objectivity. The $V_i$ themselves remain well defined through all of it, and that is the point of building on them.
+In the bulk, quasi-neutrality spares us from almost all of this: the $V^\circ_i$ ladder acts as a mere neutralizer, and the diagrams stay simple. The difficulty concentrates at interfaces, in graded and nonideal media, and at small scales, exactly where $\phi$ splinters into per-species quasi-fields and even $E$ loses its objectivity. The $V_i$ themselves remain well defined through all of it, and that is the point of building on them.
