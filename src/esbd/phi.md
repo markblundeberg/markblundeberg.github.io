@@ -11,7 +11,7 @@ When I came up with these $V_i$ band diagrams, it quickly became apparent that i
 
 I reaffirm Guggenheim's thesis, and I would modernize it further that it is not even necessary to reference $\phi$ in electrodes: voltmeters measure $V_{\mathrm{e}^-}$!
 
-On this page I'll ramble on a bit about why we ought to avoid discussing $\phi$ in both semiconductors and electrochemistry. While $\phi$-based approaches have been made to work, they actually complicate matters and create a minefield of misconceptions. None of this is new, I just want to collect my thoughts on the the topic.
+On this page I'll ramble on a bit about why we ought to avoid discussing $\phi$ in both semiconductors and electrochemistry. While $\phi$-based approaches have been made to work, they actually complicate matters and create a minefield of misconceptions. None of this is new, I just want to collect my thoughts on the topic.
 
 Note: Often, we distinguish between inner potential $\phi$ (inside materials), and outer potential $\psi$ (outside material surface, i.e. vacuum potential). I'm going to argue that they are both problematic, though for quite different reasons. I'm going to focus on the inner potential first and then later discuss why the outer potential is also *usually* problematic.
 
@@ -48,7 +48,7 @@ We want to know what an actual finitely-charged particle would see if placed in 
 * $z_i F \phi$ erroneously *omits* the local polarization of dielectric solvent and ionic atmosphere.
 * $z_i F \phi$ erroneously *includes* the strong electric potentials around nuclear cores of surrounding particles. These are places that test charges go but real charged species do not.
 
-And that is only a start. Of course, it may not even be possible to unambiguously specify such an idea as "electrostatic potential of an ion", as it there is no sharp distinction between chemical bond and electric interaction. Sometimes $z_i F \phi$ is called the 'long distance part' of electrostatic energy, but even this is not correct since $\phi$ contains systematic long-distance errors.
+And that is only a start. Of course, it may not even be possible to unambiguously specify such an idea as "electrostatic potential of an ion", as there is no sharp distinction between chemical bond and electric interaction. Sometimes $z_i F \phi$ is called the 'long distance part' of electrostatic energy, but even this is not correct since $\phi$ contains systematic long-distance errors.
 
 And, we simply don't have any experimental way to access $\phi$ inside materials, as that would require infinitesimal test charges that don't exist. So $z_i F \phi$ is not only a poor approximation, it's not even tangible.
 
@@ -99,9 +99,9 @@ Similarly, in introductory teaching of semiconductor p-n junctions we often see 
 
 ### Inner potentials of metals: tedious and misleading
 
-With semiconductors or electrolytes, the the notion of $\phi$ is at least helpful as a naive explanation of things like band bending or salt bridges. But in metals there is no significant band bending, and the concept of an inner potential is simply dubious.
+With semiconductors or electrolytes, the notion of $\phi$ is at least helpful as a naive explanation of things like band bending or salt bridges. But in metals there is no significant band bending, and the concept of an inner potential is simply dubious.
 
-One problem is with voltmeters: if we want to say that voltmeters to measure $\phi$, then we have to make sure all our unnecessary metal potentials cancel out. The common practice is to conceptually "bookend" our device's electrodes with two metals of identical composition, so that $\Delta \phi$ happens to agree with the voltage difference $\Delta V_{\mathrm{e}^-}$. For example, the following figure:
+One problem is with voltmeters: if we want to say that voltmeters measure $\phi$, then we have to make sure all our unnecessary metal potentials cancel out. The common practice is to conceptually "bookend" our device's electrodes with two metals of identical composition, so that $\Delta \phi$ happens to agree with the voltage difference $\Delta V_{\mathrm{e}^-}$. For example, the following figure:
 
 <figure class="demo-container" style="max-width: 400px">
 <img src="/esbd/img/bard-faulkner-fig1.1.2.png" style="max-width:100%"/>
@@ -116,7 +116,7 @@ Another problem relates to the double layers: where a metal meets a non-metal (s
 
 #### The thermoelectricity myth
 
-The elecrostatic potential of metals may seem merely tedious, but it can actually mislead. With thermoelectricity, there is a long-standing myth that thermoelectric voltages are generated at junctions, and attributed to the way that the Galvani potential varies with temperature. Alternatively they are attributed to contact potentials (*outer* potential differences), [as illustrated here](https://www.uni-konstanz.de/FuF/Physik/Jaeckle/papers/thermopower/node4.html). Anyway, both of these are simply wrong.
+The electrostatic potential of metals may seem merely tedious, but it can actually mislead. With thermoelectricity, there is a long-standing myth that thermoelectric voltages are generated at junctions, and attributed to the way that the Galvani potential varies with temperature. Alternatively they are attributed to contact potentials (*outer* potential differences), [as illustrated here](https://www.uni-konstanz.de/FuF/Physik/Jaeckle/papers/thermopower/node4.html). Anyway, both of these are simply wrong.
 
 In fact, the thermoelectric voltage has to do with gradients in the proper voltage (electrochemical potential, i.e., $V_{\mathrm{e}^-}$) that occur *only in regions of thermal gradient*, and $V_{\mathrm{e}^-}$ has no step at the junction itself. Thermodynamically, we describe thermoelectricity in terms of coupled transport of heat and electrons; it is only one of many kinds of coupled heat-particle transport phenomena.
 
@@ -126,7 +126,7 @@ Of course, it is possible to get the right thermoelectric voltage using $\phi$ (
 
 The idea that $\phi$ is ambiguous is fine for thermodynamics, but it is concerning since it means that there will be situations where even $-\nabla\phi$ is ambiguous, and that is the electric field which is supposed to be objective!
 
-Surprisingly, it is actually okay if the $E$ field is partially fictitious. The Maxwell equations in terms of $E$, $B$, $D$, $H$ are entirely fine if you add an arbitrary conservative field to $E$, provided that $D$, $J$, and $\rho$ remain unaffected. Only the curl of $E$ is of any direct importance. Of course, there is still a problem this does mean that we have to determine $D$ by other means than simply $D = \varepsilon E$, but actually this problem is basically intrinsic and unavoidable in precisely those situations when $E$ becomes ambiguous. We already know that interfaces have built-in $D$ fields, and that therefore distributed interfaces (like graded media) should have some extra built-in polarization like $D = P_{\mathrm{extra}} + \varepsilon E$. That $P_{\mathrm{extra}}$ can do the work of compensating for ambiguity in $E$. Anyway, this thermodynamic ambiguity to $E$, that does not affect $D$, is a surprising reversal on the usual polarization ambiguity we talk about (that $E$ is objective and the separation of charge into bound and free is ambiguous, i.e., $D$ is ambiguous).
+Surprisingly, it is actually okay if the $E$ field is partially fictitious. The Maxwell equations in terms of $E$, $B$, $D$, $H$ are entirely fine if you add an arbitrary conservative field to $E$, provided that $D$, $J$, and $\rho$ remain unaffected. Only the curl of $E$ is of any direct importance. Of course, there is still a problem: this does mean that we have to determine $D$ by other means than simply $D = \varepsilon E$, but actually this problem is basically intrinsic and unavoidable in precisely those situations when $E$ becomes ambiguous. We already know that interfaces have built-in $D$ fields, and that therefore distributed interfaces (like graded media) should have some extra built-in polarization like $D = P_{\mathrm{extra}} + \varepsilon E$. That $P_{\mathrm{extra}}$ can do the work of compensating for ambiguity in $E$. Anyway, this thermodynamic ambiguity to $E$, that does not affect $D$, is a surprising reversal on the usual polarization ambiguity we talk about (that $E$ is objective and the separation of charge into bound and free is ambiguous, i.e., $D$ is ambiguous).
 
 The usual argument for the reality of $E$ (and $B$) comes from the Lorentz force, but this argument breaks inside of media: we know for example that in graded bandgap heterostructures, we get a different $E$ field for electrons and holes! You can appeal to the Lorentz force on ghostly test charges to resolve this, but then you get back to the question of exactly how you choose those test charges should sit inside the material. Yes, you can insist on a true $\phi$ by smoothing out the microscopic $\phi$, which means $E$ will be smoothed out microscopic $E$, but *this does not even win you any favour from the Maxwell equations*.
 
@@ -228,7 +228,7 @@ In semiconductor physics, the vacuum contact idea gives {%wiki "Schottky–Mott 
 
 Arguably the vacuum contact thought experiment may have pedagogical value in introducing students to band bending, which truly does occur. Yet, it has to be immediately stressed that its quantitative predictions are not naturally expected to work, that $\psi$ is in fact allowed to be discontinuous, and that indeed the vacuum contact idea is known to fail spectacularly. Sadly, the vacuum contact myth is not only contained to educational settings. Vacuum alignment ideas regularly appear in scientific papers not just as an assumption, but even worse, as an *unstated* assumption.
 
-Conceptually, it is simply wrong to view vacuum surfaces as basic building blocks from which material interfaces are made. Materials are not legos. A vacuum surface is one kind of interface, with its own special considerations. A material-material interface is another kind of interface, with its own special conserations.
+Conceptually, it is simply wrong to view vacuum surfaces as basic building blocks from which material interfaces are made. Materials are not legos. A vacuum surface is one kind of interface, with its own special considerations. A material-material interface is another kind of interface, with its own special considerations.
 
 ## A plea to the theoretical and computational electrochemists
 
@@ -245,7 +245,7 @@ Unfortunately while it is easy to get $\phi$ in a simulation, it can be quite tr
 A theory of electronic and ionic conducting materials based on electrostatics is attractive. The inner potential $\phi$ seems well-defined and physically "real". It seems as if we can almost access it in certain special cases (junctions between similar materials), or at least control it (with salt bridges). Unfortunately, a thorough and functional theory of mobile charges based on $\phi$ gets quickly complicated with numerous unmeasurable quantities, which all stems from $\phi$ being a poor reference. And, it may seem like the outer potential $\psi$ provides an escape from this ambiguity, however, it actually presents a whole new class of problems and misconceptions. Quite simply, electrostatics make a poor foundation for a thermodynamic theory of conductors.
 
 Instead, we should place electrochemical potential $\bar\mu_i$ at the forefront. We must recognize that:
-* Electrochemical potential $\bar\mu_i$ the only fundamental chemical potential given by thermodynamics, and the partitioning of $\bar\mu_i$ into $\mu_{\mathrm{int},i} + z_i F \phi$ is "without physical significance", as Guggenheim said a hundred years ago.
+* Electrochemical potential $\bar\mu_i$ is the only fundamental chemical potential given by thermodynamics, and the partitioning of $\bar\mu_i$ into $\mu_{\mathrm{int},i} + z_i F \phi$ is "without physical significance", as Guggenheim said a hundred years ago.
 * The outer potential $\psi$ only deserves to be discussed in the context of actual vacuum surface experiments.
 
 I hope that the species voltage $V_i = \bar\mu_i/(z_i F)$ and its associated visual band diagrams will help promote this $\phi$-less approach and help bring together the semiconductor and electrochemical communities into a unified viewpoint.

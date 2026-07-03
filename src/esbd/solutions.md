@@ -67,7 +67,7 @@ I call this the **standard state ladder** for water. The standard state ladder i
 
 The [Data table](../data/) topic in the appendix contains the numerical values used above, as well as the procedure used to obtain them from standard ionic Gibbs energies of formation ($\Delta_{\mathrm{f}} G^\circ_i$ values).
 
-In effect, the standard state ladder of $V^\circ_i$ is a stand-in for the notion of electrostatic potential $\phi$, but combining it with the average differences in the local electrostatic potentials that each ion 'feels', as well the ion's chemical structure, and the way it disturbs its solvent environment with solvation shells.
+In effect, the standard state ladder of $V^\circ_i$ is a stand-in for the notion of electrostatic potential $\phi$, but combining it with the average differences in the local electrostatic potentials that each ion 'feels', as well as the ion's chemical structure, and the way it disturbs its solvent environment with solvation shells.
 
 The standard state ladder is also analogous to the conduction and valence band edges in semiconductors. We'll talk more about this analogy to semiconductors in the next topic.
 

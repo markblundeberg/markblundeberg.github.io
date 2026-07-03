@@ -106,7 +106,7 @@ So ionic $V_i$ is no less real than electronic $V_{\mathrm{e}^-}$; it is just th
 
 ## $V_i$ are thermodynamic state variables
 
-Alongside temperature $T$, pressure $P$, and the chemical potentials $\mu_i$ of neutral elements, the $V_i$ (or $\bar\mu_i$) are the proper intensive state variables for charged species. Since $T$, $P$, and the solvent $\mu$ tends to be constant or implicitly clear, it means that our plots of varying $V_i$ will be a complete visualization of the spatial varations thermodynamic state in many cases.
+Alongside temperature $T$, pressure $P$, and the chemical potentials $\mu_i$ of neutral elements, the $V_i$ (or $\bar\mu_i$) are the proper intensive state variables for charged species. Since $T$, $P$, and the solvent $\mu$ tends to be constant or implicitly clear, it means that our plots of varying $V_i$ will be a complete visualization of the spatial variations of the thermodynamic state in many cases.
 
 Note that in general if we have $N$ charged species then there are $N$ independent $V_i$ values, however there are only $N-1$ independent charged species concentrations, because the body has to (generally) be charge neutral. The extra degree of freedom in the set of $V_i$ values is not redundant but actually represents important state information: it is the electrical state of the body. If we uniformly increase all the $V_i \rightarrow V_i + \delta$ then the body is in a distinct thermodynamic state (electrically) even though it is equivalent in all other aspects. This brings us to our next point...
 

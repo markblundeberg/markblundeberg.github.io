@@ -30,7 +30,7 @@ Previously (in the [Equilibrium](../equilibrium/) topic), we associated this $V_
 
 ## Implied $V_{\mathrm{e}^-}$ of a reaction
 
-In the absence of an equilibrated electrode, it is indeed useful to calculate this $V_{\mathrm{e}^-}$ as an "implied" voltage, representing the a real thermodynamic availability of electrons even though no electrons roam freely in solution. For clarity, we write these implied values as $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ since they are specific to a certain reaction. This implied $V_{\mathrm{e}^-}$ value is useful in the following ways:
+In the absence of an equilibrated electrode, it is indeed useful to calculate this $V_{\mathrm{e}^-}$ as an "implied" voltage, representing a real thermodynamic availability of electrons even though no electrons roam freely in solution. For clarity, we write these implied values as $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ since they are specific to a certain reaction. This implied $V_{\mathrm{e}^-}$ value is useful in the following ways:
 
 1. *In-solution coupling between different half-reactions*
    $$V_{\mathrm{e}^-}(\mathrm{\mathrm{Ox1}/\mathrm{Red1}}) \rightleftharpoons V_{\mathrm{e}^-}(\mathrm{\mathrm{Ox2}/\mathrm{Red2}})$$
@@ -54,7 +54,7 @@ How implied levels look: the metal has one actual $V_{\mathrm{e}^-}$, while the 
 
 The idea that a solution can have an implied electronic $V_{\mathrm{e}^-}$ (or $\bar\mu_{\mathrm{e}^-}$) is not at all new. This is often called a 'redox Fermi level' and what's attractive about it is that $\bar\mu_{\mathrm{e}^-}$ can be directly plotted on a traditional electronic energy band diagram. However, I've found that past visualizations can be a bit confusing,^[Redox band diagrams are often special-cased to equilibrium situations, in a way that degrades intuition in terms of understanding out-of-equilibrium. My goal is to 1) discourage the casual referencing to 'the vacuum' or 'the SHE' since in real devices these references vary from place to place, i.e. to 2) promote proper covariant/"reference-free" style band diagrams, and 3) emphasize that disequilibrated solutions have multiple redox Fermi levels.] so I hope to present these diagrams in a fresh light.
 
- I emphasize though not all solutions have a meaningful redox Fermi level, and some disequilibrated solutions have multiple redox Fermi levels.
+I emphasize though that not all solutions have a meaningful redox Fermi level, and some disequilibrated solutions have multiple redox Fermi levels.
 
 ## Nernst equation
 
@@ -148,7 +148,7 @@ $$ E^\circ = V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm
 | $\mathrm{Fe}^{3+}$ | / | $\mathrm{Fe}^{2+}$ | $3V^\circ_{\mathrm{Fe}^{3+}} - 2V^\circ_{\mathrm{Fe}^{2+}}$ | +0.771 |
 | $\mathrm{Fe}^{2+}$ | / | $\mathrm{Fe(s)}$ | $V^\circ_{\mathrm{Fe}^{2+}} - \tfrac{1}{2F} \mu^\circ_{\mathrm{Fe}} $ | −0.44 |
 
-It's worth visualizing the $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ levels alogngside the ionic levels $V^\circ_i$. We plot the standard redox levels as dashed (representing that they are 'implied' levels), and as thin lines (representing that they are only standard states):
+It's worth visualizing the $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ levels alongside the ionic levels $V^\circ_i$. We plot the standard redox levels as dashed (representing that they are 'implied' levels), and as thin lines (representing that they are only standard states):
 
 <figure class="demo-container" style="max-width: 520px">
 {% include "esbd-diagrams/levels-half-ladder.njk" %}
@@ -176,7 +176,7 @@ The important of these Gaussians is that they represent the actual necessary act
 
 And so we've arrived at a description of redox half-reactions in terms of a virtual or implied value $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$, and in relating this to reactant activities, we've identified a new ladder of "standard redox levels" $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$. 
 
-In the next topic, we'll talk about how we can explain traditional elecrochemical variables in terms of these redox levels.
+In the next topic, we'll talk about how we can explain traditional electrochemical variables in terms of these redox levels.
 
 [**NEXT TOPIC: Electrode potential**](../e/)
 

@@ -49,7 +49,7 @@ Let's try generalizing our plot to include ionic energies:
 {% include "esbd-diagrams/bd-basicbattery-energy-ion-too.njk" %}
 </figure>
 
-Fantastic, we have filled the gap and closed the circuit! And, we can visualize how during charging or discharge, there is a gradient in $\bar\mu_{\mathrm{Li}^+}$ showing internal resistance. Note the value of $\bar\mu_{\mathrm{Li}^+}$ does penetrate into the anode/cathode, representing the mingling of electrons and lithum ions inside the active materials.
+Fantastic, we have filled the gap and closed the circuit! And, we can visualize how during charging or discharge, there is a gradient in $\bar\mu_{\mathrm{Li}^+}$ showing internal resistance. Note the value of $\bar\mu_{\mathrm{Li}^+}$ does penetrate into the anode/cathode, representing the mingling of electrons and lithium ions inside the active materials.
 
 Unfortunately, such a diagram has a serious flaw: if we change the overall electrostatic offset of the system (try moving the slider), the energy levels for the electron and the ion move in opposite directions because of their opposite charges. This breaks a key principle of band diagrams: the absolute vertical position is arbitrary, and only the *differences* between levels should have physical meaning. Here, the energy gap between the electron and ion levels changes with the offset, making the diagram ambiguous. So, just one more small but crucial tweak is needed...
 
