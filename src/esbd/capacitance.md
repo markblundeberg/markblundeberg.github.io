@@ -30,7 +30,7 @@ $$ F(V_1, \ldots, V_N) $$
 
 When we change one of these $V_i$'s, the partial derivative gives us the charge of that species:
 
-$$ Q_i(V_1, \ldots, V_N) = -\frac{\partial F}{\partial V_j}. $$
+$$ Q_i(V_1, \ldots, V_N) = -\frac{\partial F}{\partial V_i}. $$
 
 Each one of these $Q_i$ is a function of all the $V_i$ values. This has to be the case because the bulk is charge neutral: $ 0 = Q = Q_{\mathrm{fix}} + \sum Q_i $. So if $Q_1$ increases under some change of parameters then all the other $Q_i$'s have to decrease such that the net total change is 0. Note that there could be some dopants present which modify the free energy function, including by inducing a background charge $Q_{\mathrm{fix}} \neq 0$.
 
@@ -40,7 +40,7 @@ Each one of these $Q_i$ is a function of all the $V_i$ values. This has to be th
 
 Capacitance is a change in charge due to a change in some voltage difference $\mathrm{d}Q/\mathrm{d}V$. Beginners learn about linear plate capacitors with nice constant capacitance values ($Q/V$), but we are going to talk about capacitance in the generic differential sense: a change in some charge due to a change in some voltage.
 
-The case of charge storage in materials we must be aware of these complications: we have 1) multiple control voltages, not just two, 2) multiple *charge types*, 3) nonlinearity, and 4) no parallel-plate geometry at all, it is simply a bulk (volumetric or gravimetric) capacitance.
+In the case of charge storage in materials, we must be aware of these complications: we have 1) multiple control voltages, not just two, 2) multiple *charge types*, 3) nonlinearity, and 4) no parallel-plate geometry at all, it is simply a bulk (volumetric or gravimetric) capacitance.
 
 We can define capacitance as a matrix, which I call the **ambipolar capacitance matrix**:
 
@@ -97,7 +97,7 @@ where conductivity $\boldsymbol{\sigma}$ is also possibly a dense matrix (for si
 First, let's look at a homogeneous material, small-signal case. In this case both $\boldsymbol{\sigma}$ and $\mathbf{c}^{\mathrm{amb}}$ are constant in space, then this simplifies to $\mathbf{c}^{\mathrm{amb}} \partial_t \mathbf{V} = \boldsymbol{\sigma} \nabla^2 \mathbf{V}$, which reveals there are two distinct classes of modes:
 
 * One charge mode of the form $\mathbf{V}(x,t) = v(x,t) \mathbf{1}_N$, which follows $0 = \nabla^2 v$. The charge mode is representative of the naive form of electricity: all $V_i$ values (and $\phi$ too) vary in unison, and so all ions conduct together as if they have a single common conductivity $\sigma_{\mathrm{tot}} = \sum_{ij} \sigma_{ij}$, i.e. a total current $\vec{J}_{\mathrm{tot}} = -\sigma_{\mathrm{tot}} \nabla v$ driven by the common gradient. And each ion has $\nabla \cdot \vec{J}_i = 0$ so there is no piling up (but see below about material boundaries).
-* $N-1$ ambipolar modes of the form $\mathbf{V}(x,t) = v(x,t) \mathbf{a}$, where $\mathbf{a}$ is a {% wiki "generalized eigenvalue problem", "generalized eigenvector" %} satisfying $\mathbf{c}^{\mathrm{amb}} \mathbf{a} = D^{-1} \boldsymbol{\sigma} \mathbf{a}$ (often easy to solve^[Often the matrix $\boldsymbol{\sigma}$ is invertible and so we can get all the modes by eigendecomposing $\boldsymbol{\sigma}^{-1} \mathbf{c}^{\mathrm{amb}}$.]) for eigenvalue $D^{-1}$. Each of these modes evolves with a diffusion equation: $\partial_t v = D \nabla^2 v$ with diffusion coefficient $D$, and there may be $N-1$ distinct ambipolar diffusion constant. These are neutral current modes: $\sum_i \vec{J}_i = 0$.
+* $N-1$ ambipolar modes of the form $\mathbf{V}(x,t) = v(x,t) \mathbf{a}$, where $\mathbf{a}$ is a {% wiki "generalized eigenvalue problem", "generalized eigenvector" %} satisfying $\mathbf{c}^{\mathrm{amb}} \mathbf{a} = D^{-1} \boldsymbol{\sigma} \mathbf{a}$ (often easy to solve^[Often the matrix $\boldsymbol{\sigma}$ is invertible and so we can get all the modes by eigendecomposing $\boldsymbol{\sigma}^{-1} \mathbf{c}^{\mathrm{amb}}$.]) for eigenvalue $D^{-1}$. Each of these modes evolves with a diffusion equation: $\partial_t v = D \nabla^2 v$ with diffusion coefficient $D$, and there may be $N-1$ distinct ambipolar diffusion constants. These are neutral current modes: $\sum_i \vec{J}_i = 0$.
 
 For example in the binary (two-ion) case of cation $\mathrm{M}$ and anion $\mathrm{X}$, assuming a diagonal conductivity then the diffusion mode has $D^{-1} = (\sigma_{\mathrm{M}}^{-1} + \sigma_{\mathrm{X}}^{-1})c^{\mathrm{amb}}$, where $c^{\mathrm{amb}}$ is the single degree of freedom in the $\mathbf{c}^{\mathrm{amb}}$ matrix. This is the most simple kind of ambipolar diffusion as usually considered in the literature, in fact one usually sees a further ideality assumption that $(c^{\mathrm{amb}})^{-1} = ((z_{\mathrm{M}} F)^2 c_{\mathrm{M}} / (RT))^{-1} + ((z_{\mathrm{X}} F)^2 c_{\mathrm{X}} / (RT))^{-1}$ for ion molarities $c_{\mathrm{M}}$ and $c_{\mathrm{X}}$.
 
@@ -155,11 +155,11 @@ s_i
 &= \sum_j \left( \frac{\partial Q_i}{\partial V_j} \right)_{V_1, \cdots V_N,\phi} \\
 &= \sum_j \mathcal{C}_{ij}
 \end{aligned}$$
-where this step works because of gauge invariance shifting $\phi$ up is equivalent to shifting all $V_i$ down. We can write this as $\mathbf{s} = \mathcal{C} \mathbf{1}_{N}$. In the ideal case, we have simply $s_i = \mathcal{C}_{ii}$.
+where this step works because of gauge invariance: shifting $\phi$ up is equivalent to shifting all $V_i$ down. We can write this as $\mathbf{s} = \mathcal{C} \mathbf{1}_{N}$. In the ideal case, we have simply $s_i = \mathcal{C}_{ii}$.
 
 We then have for all ion charges a full description of charge variations.
 
-$$ \delta\mathbf{Q} = \mathcal{C} \delta \mathbf{V} + \mathbf{s} \delta \phi $$
+$$ \delta\mathbf{Q} = \mathcal{C} \delta \mathbf{V} - \mathbf{s} \delta \phi $$
 
 or in matrix form:
 $$
@@ -180,16 +180,16 @@ $$ \delta Q_{\mathrm{free}} = \sum_i(\delta Q_i) = \mathbf{s}^T \delta \mathbf{V
 
 Where $\mathcal{C}_{\mathrm{tot}} = \sum_i s_i = \sum_{ij} \mathcal{C}_{ij}$ is the total screening power.
 
-> Screening is often derived laboriously in a particle-number basis. But in a $V_i$ basis we know simply that all $V_i$ are flat at equilibrium, and so the above equation means that at every point in space the induced free charge density from small variations $\delta \phi$ is $\delta \rho_{\mathrm{free}} = c_s \delta \phi $ where $c_s = \mathcal{C}_{\mathrm{tot}} / \mathrm{volume}$ is the volumetric screening power, and again this is a sum of all the internal chemical capacitances, per unit volume.
+> Screening is often derived laboriously in a particle-number basis. But in a $V_i$ basis we know simply that all $V_i$ are flat at equilibrium, and so the above equation means that at every point in space the induced free charge density from small variations $\delta \phi$ is $\delta \rho_{\mathrm{free}} = -c_s \delta \phi $ where $c_s = \mathcal{C}_{\mathrm{tot}} / \mathrm{volume}$ is the volumetric screening power, and again this is a sum of all the internal chemical capacitances, per unit volume.
 >
-> The Poisson equation then leads exactly to the linear screening equation, $$\varepsilon \nabla^2 \delta \phi = c_s \delta \phi + \rho_{\mathrm{imp}},$$ where $\varepsilon$ is the medium's absolute permittivity and $\rho_{\mathrm{imp}}$ is the impurity charge density. This means $\sqrt{\varepsilon/c_s}$ is precisely the screening length in the general case of mixed charge carriers with any statistics (the {% wiki "Debye length" %} and {% wiki "Thomas–Fermi screening length" %} are both special cases of this).
+> The Poisson equation then leads exactly to the linear screening equation, $$\varepsilon \nabla^2 \delta \phi = c_s \delta \phi - \rho_{\mathrm{imp}},$$ where $\varepsilon$ is the medium's absolute permittivity and $\rho_{\mathrm{imp}}$ is the impurity charge density. This means $\sqrt{\varepsilon/c_s}$ is precisely the screening length in the general case of mixed charge carriers with any statistics (the {% wiki "Debye length" %} and {% wiki "Thomas–Fermi screening length" %} are both special cases of this).
 
 ### Ambipolar capacitance and internal chemical capacitance related
 
 If we take our internal chemical capacitance and force the volume to be charge neutral ($\delta Q_{\mathrm{free}} = 0$), then $\phi$ must float to whatever value is necessary to get neutrality. We then get:
 
 $$ 0 = - \mathbf{s}^T \delta \mathbf{V} + \mathcal{C}_{\mathrm{tot}} \delta\phi $$
-$$ \mathbf{Q} = \mathcal{C} \delta \mathbf{V} + \mathbf{s} \delta \phi $$
+$$ \delta\mathbf{Q} = \mathcal{C} \delta \mathbf{V} - \mathbf{s} \delta \phi $$
 
 and so we see that the ambipolar and internal chemical capacitance matrices are precisely related:
 
@@ -259,4 +259,4 @@ $$
 - \begin{bmatrix}  \nabla \cdot \mathbf{J}_1 \\ \vdots \\ \nabla \cdot \mathbf{J}_N \\ \nabla \cdot \mathbf{J}_{\mathrm{d}} \end{bmatrix}
 $$
 
-where $\mathbf{J}_{\mathrm{d}} = \partial \mathbf{D} / \partial t$ is the {% wiki "displacement current" %}. The last row is basically Gauss's law, $\rho_{\mathrm{free}} = \nabla \cdot D$ but in a time-derivated form!^[The fact that it's time derivative means we might start out with the 'wrong' displacment charges, which corresponds to the Jamnik-Maier equivalent circuit having $\phi$ nodes that are fully floating and thus having indeterminate starting charges.] The other part of the Jamnik-Maier picture is the constitutive relations: $\mathbf J_i = -\sigma_i \nabla V_i$ (ohm's law i.e. drift-diffusion; resistors in the equivalent circuit), and $\mathbf{D} = - \varepsilon \nabla \phi $ (capacitors between displacement nodes on the equivalent circuit). The Jamnik-Maier equivalent circuit is based on discretizing this into finite volumes, but in fact the above is an elegant restatement of the Poisson-Nernst-Planck equations (which are continuum).
+where $\mathbf{J}_{\mathrm{d}} = \partial \mathbf{D} / \partial t$ is the {% wiki "displacement current" %}. The last row is basically Gauss's law, $\rho_{\mathrm{free}} = \nabla \cdot D$ but in a time-derivated form!^[The fact that it's time derivative means we might start out with the 'wrong' displacement charges, which corresponds to the Jamnik-Maier equivalent circuit having $\phi$ nodes that are fully floating and thus having indeterminate starting charges.] The other part of the Jamnik-Maier picture is the constitutive relations: $\mathbf J_i = -\sigma_i \nabla V_i$ (ohm's law i.e. drift-diffusion; resistors in the equivalent circuit), and $\mathbf{D} = - \varepsilon \nabla \phi $ (capacitors between displacement nodes on the equivalent circuit). The Jamnik-Maier equivalent circuit is based on discretizing this into finite volumes, but in fact the above is an elegant restatement of the Poisson-Nernst-Planck equations (which are continuum).
