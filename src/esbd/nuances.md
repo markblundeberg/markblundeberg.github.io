@@ -57,11 +57,9 @@ On one side we could place the target solution that we want to probe, and on the
 
 Upon dipping such an electrode into an arbitrary solution, a tiny amount of species $i$ may flow across the membrane but only to charge up the capacitance (or self-capacitance) of the probe circuitry. If the capacitance is small enough, then the fixed solution composition will not change significantly.
 
-For example, to access $V_{\mathrm{Na}^+}$ we would need a membrane that only passes $\mathrm{Na}^+$, and the fixed solution could be aqueous, containing saturated $\mathrm{NaCl}$ (known $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} $) together with a silver chloride electrode (known $V_{\mathrm{e}^-} - V_{\mathrm{Cl}^-}$). Actually since the membrane blocks solvent molecules, the fixed solution need not be aqeuous, and the electrode might even be solid sodium metal in that case.
+For example, to access $V_{\mathrm{Na}^+}$ we would need a membrane that only passes $\mathrm{Na}^+$, and the fixed solution could be aqueous, containing saturated $\mathrm{NaCl}$ (known $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} $) together with a silver chloride electrode (known $V_{\mathrm{e}^-} - V_{\mathrm{Cl}^-}$). Actually since the membrane blocks solvent molecules, the fixed solution need not be aqueous, and the electrode might even be solid sodium metal in that case.
 
-At least *in principle* we can have an ion-selective membrane for any ion. Thus, in principle every $V_i$ is accessible. We are only limited by technology in creating these membranes.
-
-https://en.wikipedia.org/wiki/Fluoride_selective_electrode
+At least *in principle* we can have an ion-selective membrane for any ion. Thus, in principle every $V_i$ is accessible. We are only limited by technology in creating these membranes. (The classic real example is the {% wiki "Fluoride selective electrode", "fluoride-selective electrode" %}, whose $\mathrm{LaF_3}$ crystal membrane passes $\mathrm{F}^-$ and nearly nothing else.)
 
 ## Repurposing ion-selective electrodes
 
