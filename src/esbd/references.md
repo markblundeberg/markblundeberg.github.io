@@ -69,6 +69,13 @@ $$
 $$
 where the **liquid junction potential** is the step in the reference level across the junction, $\mathrm{LJP} = V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2}, \text{right}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2}, \text{left})$.^[Expanding both $E$'s with the Nernst equation gives the full-cell form with the LJP carried along explicitly; the textbook version usually drops the LJP and the left/right labelling. In a concentrated cell only $\Delta V$ is unambiguous: the LJP and the activity terms are each individually ambiguous, because the two half-cells carry distinct activity ambiguities.] The point worth dwelling on is that whenever the $V^\circ_{\mathrm{e}^-}$ levels vary in space — across a junction, a Donnan membrane, or under load — "the SHE" itself varies from place to place. There is a reason a perfectly defined reference is a fiction.
 
+<figure class="demo-container" style="max-width: 480px">
+{% include "esbd-diagrams/esbd-ref-junction.njk" %}
+{% figcaption %}
+How a reference electrode really attaches: the silver-chloride electrode sits in its own $3\ \mathrm{M}$ KCl filling solution and reaches the test solution only through a porous frit. Unlike the junction-free cells above, the junction is a <em>non-equilibrium</em> object, idling at a steady interdiffusion: no species' $V_i$ runs flat across it, and the invading ions dive away as they dilute ($V_{\mathrm{H}^+}$ resurfaces at the filling solution's own pH-7 level). The dashed line is the local $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$; it steps at the junction by the LJP, so the reference reads the test solution through exactly the $\mathrm{LJP}$ term above, and that step drifts with the very solution being measured (slider). The reference wire is our $0\ \mathrm{V}$. Junction step drawn $\times 15$; the true Henderson value is in the readout. (At $1\ \mathrm{mol/L}$, pH 0, the $\mathrm{H}^+$ trace lands exactly on the dashed SHE line.)
+{% endfigcaption %}
+</figure>
+
 Two readings of this $\Delta V$ coexist happily: an engineer sees the electrodes' $V_{\mathrm{e}^-}$ as reservoirs and the reaction as a generic {% wiki "electromotive force" %} pump; a chemist sees a reversible free-energy change, $\Delta G = -zF\,\Delta V$, per electron passed.
 
 ## What a "standard electrode" really is

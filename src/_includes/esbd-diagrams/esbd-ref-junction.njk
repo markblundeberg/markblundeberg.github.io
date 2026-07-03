@@ -1,0 +1,161 @@
+{% set idprefix = "esbd-ref-junction" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 300px"></div>
+{{ controls.slider(idprefix + "-conc", "test $\\mathrm{HCl}$ concentration", { min: -3, max: 0, step: "any", value: -1, readout: true, unit: "mol/L" }) }}
+<div style="text-align: center; font-size: 0.85em; margin-top: 0.2em"><span id="{{idprefix}}-ljp"></span></div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, renderSpanMath, linspace } from '{{ esbdJsPath }}utils.js';
+
+    // A real reference attachment: Ag/AgCl in its own 3 M KCl filling
+    // solution, reaching the test solution (HCl, slider) only through a
+    // porous frit. The junction is a steady NON-equilibrium object: H+ and
+    // K+ invade each other's sides and dive away as they dilute (no V_i
+    // connects flat across it; V_H+ resurfaces at the filling solution's
+    // own pH-7 level). The whole test-side ladder - drawn via the dashed
+    // local V°_e-(SHE) - sits one liquid-junction step off the reference
+    // side. LJP from the Henderson equation (univalent form; checked
+    // against the classic HCl(0.1)|KCl(0.1) = -26.8 mV). Against 3 M KCl
+    // the true LJP is only a few mV, so the DRAWN step is exaggerated
+    // (EXAG) for visibility; the readout reports the true value. Gauge:
+    // the reference wire is ground, V_e-(Ag) = 0. At the slider max
+    // (1 M ~ pH 0) the H+ trace lands exactly on the dashed SHE line.
+    const RT_F = 0.025693; // V at 25 °C
+    const EXAG = 15;
+    const C_KCL = 3.0;
+    // mobilities, 1e-8 m^2/(V s); only ratios x concentrations matter
+    const U_H = 36.23,
+        U_K = 7.62,
+        U_CL = 7.91;
+    const DV_HCL = 1.3601; // V°_Cl- - V°_H+ in water (iondata)
+    const DV_KCL = 4.296; // V°_Cl- - V°_K+ in water (iondata)
+    const V_AGCL = 1.138; // V_Cl- - V_e- at the Ag/AgCl electrode
+    // fixed reference-side levels (V_e-(Ag) = 0):
+    const V_CL_R = V_AGCL;
+    const V0_CL_R = V_CL_R + RT_F * Math.log(C_KCL);
+    const V0_SHE_R = V0_CL_R - DV_HCL; // = V°_H+(R) since μ°_H2 = 0
+    const V_K_TRUE_R = V0_CL_R - DV_KCL + RT_F * Math.log(C_KCL);
+    const K_SHIFT = 3.7; // drawn = true + K_SHIFT (auto ⌇ flag)
+
+    const b = [0, 0.4, 0.58, 0.86, 1.0];
+    const diagram = new ElectrochemicalSpeciesBandDiagram('{{idprefix}}-container', {
+        hplus: SPECIES.proton,
+        kplus: SPECIES.potassium,
+        clminus: SPECIES.chloride,
+        electron: SPECIES.electron,
+    });
+    diagram.setSpatialLayout(b, [
+        { ...REGION.solution, name: 'test solution' },
+        { name: 'frit', color: '#f0f5ec' },
+        { ...REGION.solution2, name: 'KCl 3 M' },
+        { ...REGION.metal, name: 'Ag/AgCl' },
+    ]);
+    diagram.setVRange(-0.68, 1.45);
+
+    const S = (x) => {
+        // smoothstep across the junction zone, clamped flat outside it
+        const t = Math.min(1, Math.max(0, (x - b[1]) / (b[2] - b[1])));
+        return t * t * (3 - 2 * t);
+    };
+    const xsAll = linspace(b[0], b[3], 241);
+
+    function update(r) {
+        const c1 = Math.pow(10, r);
+        // Henderson LJP (all ions univalent): φ_test - φ_ref
+        const UL = U_H * c1,
+            VL = U_CL * c1;
+        const UR = U_K * C_KCL,
+            VR = U_CL * C_KCL;
+        const num = UL - VL - (UR - VR);
+        const den = UL + VL - (UR + VR);
+        const ljp = RT_F * (num / den) * Math.log((UR + VR) / (UL + VL));
+        const ljpD = EXAG * ljp; // the cartoon universe's LJP
+
+        const lad = (x) => V0_SHE_R + ljpD * (1 - S(x)); // local SHE / ladder anchor
+        const cCl = (x) => c1 + (C_KCL - c1) * S(x);
+        const cH = (x) => c1 * (1 - S(x)) + 1e-7; // pH 7 floor in the filling sol.
+        const cK = (x) => C_KCL * S(x);
+        const kPts = xsAll.filter((x) => cK(x) > 3e-4); // truncate the dive tail
+
+        diagram.updateTraceData([
+            {
+                id: 've',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [b[3], b[4]],
+                y: [0, 0],
+            },
+            {
+                id: 'vcl',
+                speciesId: 'clminus',
+                curveType: 'voltage',
+                showLabel: true,
+                labelFrac: 0.22,
+                x: [...xsAll],
+                y: xsAll.map((x) => lad(x) + DV_HCL - RT_F * Math.log(cCl(x))),
+            },
+            {
+                id: 'vh',
+                speciesId: 'hplus',
+                curveType: 'voltage',
+                showLabel: true,
+                labelFrac: 0.1,
+                x: [...xsAll],
+                y: xsAll.map((x) => lad(x) + RT_F * Math.log(cH(x))),
+            },
+            {
+                id: 'vk',
+                speciesId: 'kplus',
+                curveType: 'voltage',
+                showLabel: true,
+                labelFrac: 0.78,
+                refShift: K_SHIFT,
+                x: [...kPts],
+                y: kPts.map(
+                    (x) => lad(x) + DV_HCL - DV_KCL + K_SHIFT + RT_F * Math.log(cK(x))
+                ),
+            },
+            {
+                id: 'vshe',
+                speciesId: 'electron',
+                curveType: 'standardStateImplied',
+                showLabel: true,
+                labelFrac: 0.3,
+                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{SHE})',
+                x: [...xsAll],
+                y: xsAll.map(lad),
+            },
+        ]);
+
+        diagram.updateVerticalMarkers([
+            {
+                id: 'agcl',
+                symbol: '⇌',
+                x: b[3],
+                yDefs: [{ y: 0 }, { y: V_CL_R }],
+                popupCallback: () =>
+                    String.raw`$\mathrm{AgCl} + \mathrm{e}^- \rightleftharpoons \mathrm{Ag} + \mathrm{Cl}^-$`,
+            },
+            {
+                id: 'ljpstep',
+                symbol: '↕',
+                x: (b[1] + b[2]) / 2,
+                yDefs: [{ y: V0_SHE_R + ljpD }, { y: V0_SHE_R }],
+                popupCallback: () =>
+                    String.raw`the liquid junction step (drawn exaggerated; true value below)`,
+            },
+        ]);
+
+        renderSpanMath(
+            document.getElementById('{{idprefix}}-ljp'),
+            `\\text{true LJP} = ${(1000 * ljp).toFixed(1)}\\,\\mathrm{mV} \\;\\; \\text{(drawn} \\times ${EXAG}\\text{)}`
+        );
+        document.getElementById('{{idprefix}}-conc-readout').textContent =
+            c1.toPrecision(2);
+    }
+
+    makeSlider('{{idprefix}}-conc', update);
+</script>
