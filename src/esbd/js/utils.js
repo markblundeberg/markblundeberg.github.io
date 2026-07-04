@@ -229,6 +229,32 @@ export function linspace(start, end, numPoints) {
     return arr;
 }
 
+/**
+ * The point at a fraction `frac` (0..1) along a polyline's x-extent, with y
+ * linearly interpolated between the bracketing vertices. Assumes `xs` is
+ * non-decreasing. Returns `{x, y}` (or null for an empty polyline).
+ *
+ * Shared by the trace classes to place trace labels and the refShift glyph —
+ * the same "walk to tx, interpolate y" was previously inlined in BandDiagram
+ * (twice) and XYPlot.
+ */
+export function interpAtFrac(xs, ys, frac) {
+    const n = xs.length;
+    if (n === 0) return null;
+    if (n === 1) return { x: xs[0], y: ys[0] };
+    const tx = xs[0] + frac * (xs[n - 1] - xs[0]);
+    let ty = ys[n - 1]; // default: past the last vertex → the end value
+    for (let k = 1; k < n; k++) {
+        if (tx <= xs[k]) {
+            const t =
+                xs[k] === xs[k - 1] ? 0 : (tx - xs[k - 1]) / (xs[k] - xs[k - 1]);
+            ty = ys[k - 1] + t * (ys[k] - ys[k - 1]);
+            break;
+        }
+    }
+    return { x: tx, y: ty };
+}
+
 // ========================================================================
 // Controls
 // ========================================================================

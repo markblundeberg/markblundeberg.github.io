@@ -11,6 +11,7 @@
 
 import * as d3 from 'd3';
 import ResponsivePlot from './ResponsivePlot.js';
+import { interpAtFrac } from './utils.js';
 
 class XYPlot extends ResponsivePlot {
     /**
@@ -101,25 +102,11 @@ class XYPlot extends ResponsivePlot {
                 if (xData.length !== yData.length || xData.length < 2)
                     throw Error('bad x/y lengths');
 
-                // Label anchor: a fraction along the trace's x-extent,
-                // y linearly interpolated (same convention as BandDiagram).
+                // Label anchor: a fraction along the trace's x-extent, y linearly
+                // interpolated (same convention as BandDiagram — see interpAtFrac).
                 let labelPos = null;
                 if (showLabel && label) {
-                    const n = xData.length;
-                    const tx = xData[0] + labelFrac * (xData[n - 1] - xData[0]);
-                    let ty = yData[n - 1];
-                    for (let k = 1; k < n; k++) {
-                        if (tx <= xData[k]) {
-                            const t =
-                                xData[k] === xData[k - 1]
-                                    ? 0
-                                    : (tx - xData[k - 1]) /
-                                      (xData[k] - xData[k - 1]);
-                            ty = yData[k - 1] + t * (yData[k] - yData[k - 1]);
-                            break;
-                        }
-                    }
-                    labelPos = { x: tx, y: ty };
+                    labelPos = interpAtFrac(xData, yData, labelFrac);
                 }
 
                 this.tracesData.push({
@@ -288,28 +275,10 @@ class XYPlot extends ResponsivePlot {
     }
 
     _drawTraceLabels() {
-        const labelData = this.tracesData
-            .filter((d) => d.labelPos && d.label)
-            .map((d) => ({
-                ...d,
-                mathMode: true,
-                hAlign: d.labelHAlign || 'left',
-                vAlign: 'center',
-            }));
-
-        this.drawLabelsFancy({
+        this.drawTraceLabels({
+            traces: this.tracesData,
             parentGroups: this.labelsGroup,
             cssClass: 'xy-trace-label',
-            labelData: labelData,
-            dataKey: (d) => d.id,
-            onUpdateTransition: (s) =>
-                s
-                    .attr('transform', (d) => {
-                        const dx = d.labelHAlign === 'right' ? -5 : 5;
-                        return `translate(${this.xScale(d.labelPos.x) + dx}, ${this.yScale(d.labelPos.y)})`;
-                    })
-                    .select('span.rp-label-span')
-                    .style('color', (d) => d.color),
         });
     }
 }

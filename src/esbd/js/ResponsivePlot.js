@@ -484,6 +484,48 @@ class ResponsivePlot {
         });
     }
 
+    /**
+     * Standard trace-label pass shared by BandDiagram & XYPlot: a KaTeX label at
+     * each trace's `labelPos`, nudged off the line per `labelHAlign`, coloured to
+     * match the trace. Requires the subclass to expose `this.xScale`/`this.yScale`
+     * (both linear plot classes do). Call from redraw() after scales are set.
+     * @param {object} opts
+     * @param {Array} opts.traces - trace objects: {id, label, labelPos:{x,y}, labelHAlign?, color}
+     * @param {d3.Selection} opts.parentGroups - group to draw labels into.
+     * @param {string} opts.cssClass - CSS class for the label elements.
+     */
+    drawTraceLabels({ traces, parentGroups, cssClass }) {
+        const labelData = traces
+            .filter((d) => d.labelPos && d.label)
+            .map((d) => ({
+                ...d,
+                mathMode: true,
+                hAlign: d.labelHAlign || 'left',
+                vAlign: 'center',
+            }));
+
+        this.drawLabelsFancy({
+            parentGroups,
+            cssClass,
+            labelData,
+            dataKey: (d) => d.id,
+            onUpdateTransition: (s) =>
+                s
+                    .attr('transform', (d) => {
+                        // nudge the label off the trace, away from its anchored side
+                        const dx =
+                            d.labelHAlign === 'right'
+                                ? -5
+                                : d.labelHAlign === 'center'
+                                  ? 0
+                                  : 5;
+                        return `translate(${this.xScale(d.labelPos.x) + dx}, ${this.yScale(d.labelPos.y)})`;
+                    })
+                    .select('span.rp-label-span')
+                    .style('color', (d) => d.color),
+        });
+    }
+
     // ========================================================================
     // Public Accessors (Getters)
     // ========================================================================

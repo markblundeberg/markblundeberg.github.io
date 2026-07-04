@@ -3,6 +3,7 @@
 import * as d3 from 'd3';
 import renderMathInElement from 'katex/contrib/auto-render';
 import ResponsivePlot from './ResponsivePlot.js';
+import { interpAtFrac } from './utils.js';
 
 // Default styling constants
 const STYLE_DEFAULTS = {
@@ -161,49 +162,26 @@ class BandDiagram extends ResponsivePlot {
                 style = style ?? STYLE_DEFAULTS.line;
 
                 label = String(label ?? '');
-                // place the label at a fraction along the trace's x-extent (default: the
-                // right end), interpolating y; labelHAlign decides which side it sits on.
-                let labelPos = null;
-                if (showLabel && label) {
-                    const tx =
-                        points[0].x + labelFrac * (points[len - 1].x - points[0].x);
-                    let ty = points[len - 1].y;
-                    for (let k = 1; k < len; k++) {
-                        if (tx <= points[k].x) {
-                            const a = points[k - 1];
-                            const b = points[k];
-                            const t = b.x === a.x ? 0 : (tx - a.x) / (b.x - a.x);
-                            ty = a.y + t * (b.y - a.y);
-                            break;
-                        }
-                    }
-                    labelPos = { x: tx, y: ty };
-                }
-
                 toolTip = String(toolTip ?? '') || `$${label}$`;
 
-                // refShift: this species is drawn displaced from its true
-                // (IUPAC-referenced) position by refShift volts, for
-                // readability. Draws a small break glyph on the trace.
+                // Label sits at a fraction along the trace's x-extent (default: the
+                // right end), y interpolated; labelHAlign decides which side. The
+                // refShift break glyph sits at refShiftFrac. refShift: this species
+                // is drawn displaced from its true (IUPAC-referenced) position by
+                // `refShift` volts, for readability.
+                const hasLabel = showLabel && label;
+                const hasRefShift =
+                    typeof refShift === 'number' && isFinite(refShift);
+                let labelPos = null;
                 let refShiftPos = null;
-                if (typeof refShift === 'number' && isFinite(refShift)) {
-                    const gx =
-                        points[0].x +
-                        refShiftFrac * (points[len - 1].x - points[0].x);
-                    let gy = points[len - 1].y;
-                    for (let k = 1; k < len; k++) {
-                        if (gx <= points[k].x) {
-                            const a = points[k - 1];
-                            const b = points[k];
-                            const tt = b.x === a.x ? 0 : (gx - a.x) / (b.x - a.x);
-                            gy = a.y + tt * (b.y - a.y);
-                            break;
-                        }
-                    }
-                    refShiftPos = { x: gx, y: gy };
-                } else {
-                    refShift = null;
+                if (hasLabel || hasRefShift) {
+                    const xs = points.map((p) => p.x);
+                    const ys = points.map((p) => p.y);
+                    if (hasLabel) labelPos = interpAtFrac(xs, ys, labelFrac);
+                    if (hasRefShift)
+                        refShiftPos = interpAtFrac(xs, ys, refShiftFrac);
                 }
+                if (!hasRefShift) refShift = null;
 
                 const processedTrace = {
                     id,
@@ -806,37 +784,11 @@ class BandDiagram extends ResponsivePlot {
     }
 
     _drawTraceLabels() {
-        // Map trace data to the format expected by drawLabelsFancy
-        const labelData = this.traceData
-            .filter((d) => d.labelPos && d.label)
-            .map((d) => ({
-                ...d, // Pass original data through
-                mathMode: true, // Trace labels are KaTeX math
-                hAlign: d.labelHAlign || 'left',
-                vAlign: 'center',
-            }));
-
         // TODO: Smarter label positioning to avoid overlaps.
-
-        this.drawLabelsFancy({
+        this.drawTraceLabels({
+            traces: this.traceData,
             parentGroups: this.traceLabelsGroup,
             cssClass: 'bd-line-label',
-            labelData: labelData,
-            dataKey: (d) => d.id,
-            onUpdateTransition: (s) =>
-                s
-                    .attr('transform', (d) => {
-                        // nudge the label off the trace, away from its anchored side
-                        const dx =
-                            d.labelHAlign === 'right'
-                                ? -5
-                                : d.labelHAlign === 'center'
-                                  ? 0
-                                  : 5;
-                        return `translate(${this.xScale(d.labelPos.x) + dx}, ${this.yScale(d.labelPos.y)})`;
-                    })
-                    .select('span.rp-label-span')
-                    .style('color', (d) => d.color),
         });
     }
 
