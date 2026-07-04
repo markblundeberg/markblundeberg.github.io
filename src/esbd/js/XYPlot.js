@@ -11,7 +11,7 @@
 
 import * as d3 from 'd3';
 import ResponsivePlot from './ResponsivePlot.js';
-import { interpAtFrac } from './utils.js';
+import { interpAtFrac, rejectUnexpectedFields } from './utils.js';
 
 class XYPlot extends ResponsivePlot {
     /**
@@ -90,11 +90,7 @@ class XYPlot extends ResponsivePlot {
                     labelHAlign = 'left',
                     ...extraFields
                 } = def;
-                if (Object.keys(extraFields).length > 0)
-                    throw Error(
-                        'Unexpected fields: ' +
-                            Object.keys(extraFields).join(', ')
-                    );
+                rejectUnexpectedFields(extraFields);
                 if (typeof id !== 'string') throw Error('missing/bad id');
                 if (seenIds.has(id)) throw Error('duplicate id: ' + id);
                 if (!Array.isArray(xData) || !Array.isArray(yData))

@@ -3,7 +3,7 @@
 import * as d3 from 'd3';
 import renderMathInElement from 'katex/contrib/auto-render';
 import ResponsivePlot from './ResponsivePlot.js';
-import { interpAtFrac } from './utils.js';
+import { interpAtFrac, rejectUnexpectedFields } from './utils.js';
 
 // Default styling constants
 const STYLE_DEFAULTS = {
@@ -130,12 +130,7 @@ class BandDiagram extends ResponsivePlot {
                     refShiftFrac = 0.28,
                     ...extraFields
                 } = traceDef;
-                if (Object.keys(extraFields).length > 0) {
-                    const unexpectedKeys = Object.keys(extraFields).join(', ');
-                    throw new Error(
-                        `Unexpected fields were provided: ${unexpectedKeys}`
-                    );
-                }
+                rejectUnexpectedFields(extraFields);
 
                 if (typeof id !== 'string') throw Error('missing/bad id');
                 if (seenIds.has(id)) throw Error('duplicate id: ' + id);
@@ -258,12 +253,7 @@ class BandDiagram extends ResponsivePlot {
                 dy = null,
                 ...extraFields
             } = labelDef;
-            if (Object.keys(extraFields).length > 0) {
-                const unexpectedKeys = Object.keys(extraFields).join(', ');
-                throw new Error(
-                    `Unexpected fields were provided: ${unexpectedKeys}`
-                );
-            }
+            rejectUnexpectedFields(extraFields);
             if (dy === null) {
                 if (y === 'bottom') {
                     dy = '+0.8em';
@@ -297,12 +287,7 @@ class BandDiagram extends ResponsivePlot {
                 popupArgs = null,
                 ...extraFields
             } = markerDef;
-            if (Object.keys(extraFields).length > 0) {
-                const unexpectedKeys = Object.keys(extraFields).join(', ');
-                throw new Error(
-                    `Unexpected fields were provided: ${unexpectedKeys}`
-                );
-            }
+            rejectUnexpectedFields(extraFields);
 
             if (typeof id !== 'string') throw Error('missing/bad id');
             if (seenIds.has(id)) throw Error('duplicate id: ' + id);

@@ -1,6 +1,6 @@
 // ElectrochemicalSpeciesBandDiagram.js
 
-import { formatPopupBaseContent } from './utils.js';
+import { formatPopupBaseContent, rejectUnexpectedFields } from './utils.js';
 import BandDiagram from './BandDiagram.js';
 
 // --- Constants ---
@@ -117,12 +117,7 @@ class ElectrochemicalSpeciesBandDiagram {
                 y,
                 ...extraFields
             } = def;
-            if (Object.keys(extraFields).length > 0) {
-                const unexpectedKeys = Object.keys(extraFields).join(', ');
-                throw new Error(
-                    `Unexpected fields were provided: ${unexpectedKeys}`
-                );
-            }
+            rejectUnexpectedFields(extraFields);
 
             const sInfo = this.speciesInfo[speciesId];
             const curveTypeInfo = CURVE_TYPES[curveType];

@@ -255,6 +255,17 @@ export function interpAtFrac(xs, ys, frac) {
     return { x: tx, y: ty };
 }
 
+/**
+ * Throws if `extra` (a `...extraFields` rest object from a def destructure) has
+ * any keys — the shared "reject unknown fields" typo-guard used by every
+ * updateTraceData / setSpatialLayout / updateVerticalMarkers. No-op when empty.
+ */
+export function rejectUnexpectedFields(extra) {
+    const keys = Object.keys(extra);
+    if (keys.length > 0)
+        throw new Error('Unexpected fields were provided: ' + keys.join(', '));
+}
+
 // ========================================================================
 // Controls
 // ========================================================================
