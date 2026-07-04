@@ -760,6 +760,7 @@ class BandDiagram extends ResponsivePlot {
             onNew: (symbolGroup) => {
                 symbolGroup
                     .append('circle')
+                    .attr('class', 'bd-marker-bg')
                     .attr('r', markerStyle.backgroundRadius)
                     .attr('fill', markerStyle.backgroundColor)
                     .attr('stroke', markerStyle.backgroundStroke)
@@ -873,6 +874,10 @@ class BandDiagram extends ResponsivePlot {
                 this._showTracePopup(event, closestResult); // Show trace popup
             }
             // If no close trace, _hidePopup was already called, so nothing more to do
+        } else {
+            // Click on a vertical marker → show its custom popup (if one is
+            // registered); otherwise this quietly leaves the popup hidden.
+            this._showVerticalMarkerPopup(event, targetId);
         }
     }
 
@@ -953,19 +958,18 @@ class BandDiagram extends ResponsivePlot {
     _showVerticalMarkerPopup(event, markerId) {
         const markerData = this.markerData.find((x) => x.id === markerId);
         if (!markerData || typeof markerData.popupCallback !== 'function') {
-            console.warn(
-                `No marker data or callback found for markerId: ${markerId}`
-            );
+            // No custom popup registered for this marker — leave the hover
+            // tooltip as the only affordance; nothing to pin.
             this._hidePopup();
             return;
         }
 
         const markerPopupInfo = {
             markerId: markerId,
-            xValue: d.x,
-            y1_display: d.y1,
-            y2_display: d.y2,
-            customArgs: d.popupArgs,
+            xValue: markerData.x,
+            y1_display: markerData.yMin,
+            y2_display: markerData.yMax,
+            customArgs: markerData.popupArgs,
             pointEvent: event,
         };
 
@@ -1156,14 +1160,14 @@ class BandDiagram extends ResponsivePlot {
 
         // Select all marker groups: highlight our target and return the others to normal.
         this.verticalMarkersGroup
-            .selectAll('g.bd-vertical-marker')
+            .selectAll('g.bd-marker')
             .each((d, i, nodes) => {
                 const group = d3.select(nodes[i]);
                 const isTarget = d.id === targetMarkerId; // Is this the specific marker to highlight?
 
                 // Transition background circle style
                 group
-                    .select('circle.marker-bg')
+                    .select('circle.bd-marker-bg')
                     .interrupt()
                     .transition()
                     .duration(50)
@@ -1191,7 +1195,7 @@ class BandDiagram extends ResponsivePlot {
                     : markerStyle.legEndRadius;
 
                 group
-                    .selectAll('line.marker-leg-1, line.marker-leg-2')
+                    .selectAll('line.bd-marker-line')
                     .interrupt()
                     .transition()
                     .duration(50)
@@ -1199,7 +1203,7 @@ class BandDiagram extends ResponsivePlot {
                     .attr('stroke', myLegColor);
 
                 group
-                    .selectAll('circle.marker-leg-end-circle')
+                    .selectAll('circle.bd-marker-leg-dot')
                     .interrupt()
                     .transition()
                     .duration(50)
