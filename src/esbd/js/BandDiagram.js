@@ -27,6 +27,10 @@ const STYLE_DEFAULTS = {
     },
 };
 
+// px: how close (vertically) a pointer must be to a trace to hit it, for both
+// hover tooltips and click-to-pin.
+const HIT_THRESHOLD_PX = 15;
+
 /**
  * Creates an interactive Band Diagram using D3.js.
  * Uses a boundaries array and region properties array for layout.
@@ -84,7 +88,7 @@ class BandDiagram extends ResponsivePlot {
     // ========================================================================
 
     setYLabel(yLabelStr) {
-        if (!typeof yLabelStr == 'string') {
+        if (typeof yLabelStr !== 'string') {
             throw TypeError('not a string');
         }
         this._yAxisLabelStr = yLabelStr;
@@ -867,10 +871,9 @@ class BandDiagram extends ResponsivePlot {
                 this.plotArea.node()
             );
             const xValue = this.xScale.invert(pointerX);
-            const clickThresholdPx = 15; // How close vertically?
             const closestResult = this._findClosestTrace(xValue, pointerY);
 
-            if (closestResult && closestResult.minDistPx < clickThresholdPx) {
+            if (closestResult && closestResult.minDistPx < HIT_THRESHOLD_PX) {
                 this._showTracePopup(event, closestResult); // Show trace popup
             }
             // If no close trace, _hidePopup was already called, so nothing more to do
@@ -1002,10 +1005,9 @@ class BandDiagram extends ResponsivePlot {
 
         const [pointerX, pointerY] = d3.pointer(event, this.plotArea.node());
         const xValue = this.xScale.invert(pointerX);
-        const hoverThresholdPx = 15;
         const closestResult = this._findClosestTrace(xValue, pointerY);
 
-        if (closestResult && closestResult.minDistPx < hoverThresholdPx) {
+        if (closestResult && closestResult.minDistPx < HIT_THRESHOLD_PX) {
             const trace = closestResult.trace;
             // Generate brief content
             const briefContent = trace.toolTip + ' ›'; // Add hint arrow

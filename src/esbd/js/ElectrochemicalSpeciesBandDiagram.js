@@ -193,9 +193,6 @@ class ElectrochemicalSpeciesBandDiagram {
             ...popupInfo,
         };
         return this._tracePopupCallback(expandedPopupInfo);
-        //     speciesId: trace.speciesId,
-        //     curveType: trace.curveType,
-        //     labelString: trace.labelString,
     }
 
     // ========================================================================
