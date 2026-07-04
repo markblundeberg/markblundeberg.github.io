@@ -7,6 +7,7 @@
 import { execSync } from 'node:child_process';
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
+import { runUnitTests } from './unit.mjs';
 
 const OUT = '/tmp/esbd_check_build';
 let failures = 0;
@@ -32,6 +33,9 @@ const sh = (cmd) => {
         return (e.stdout || '') + (e.stderr || '');
     }
 };
+
+// 0. Unit tests (pure utils; fast, no build required) -----------------------
+failures += runUnitTests();
 
 // 1. Build ------------------------------------------------------------------
 section('build');
