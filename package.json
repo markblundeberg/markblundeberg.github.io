@@ -12,7 +12,8 @@
     "voicelint": "node bin/voicelint.mjs",
     "test": "node bin/check.mjs",
     "circuits": "node bin/render-circuits.mjs",
-    "prerender": "node bin/prerender.mjs"
+    "prerender": "node bin/prerender.mjs",
+    "gallery": "node bin/gallery.mjs"
   },
   "keywords": [],
   "author": "",
