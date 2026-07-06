@@ -20,7 +20,8 @@
     const DEC = 0.05916;
     const XIF = 0.25,
         XB = 0.6; // electrode | unstirred layer | stirred bulk
-    const V_BULK = 0.5; // bulk reaction level (right edge)
+    const V_ELEC = 0.6; // fixed electrode level — the controlled quantity we anchor to
+    const V_BULK = 0.5; // bulk reaction level, pre-shift reference for the profile
     const ACT = 0.18; // bulk activity gap V_rxn − V°_rxn
     const R_OHM = 0.035,
         ETA0 = 0.08;
@@ -49,12 +50,18 @@
         // the couple's activity RATIO polarizes from both sides
         const c = (x) =>
             x >= XB ? 1 : 1 + 0.3 * j * (1 - (x - XIF) / (XB - XIF));
+        const conc = (x) => DEC * Math.log10(c(x) / (2 - c(x)));
         const tilt = (x) => R_OHM * j * (1 - Math.max(x, XB));
-        const vRxn = (x) =>
-            V_BULK + DEC * Math.log10(c(x) / (2 - c(x))) + tilt(x);
-        const vStd = (x) => V_BULK - ACT + tilt(x);
         const eta = ETA0 * Math.asinh(j);
-        const vMetal = vRxn(XIF) + eta;
+        // Anchor the ELECTRODE level (the quantity you actually set), not the
+        // arbitrary right edge of the plot: the metal sits at a fixed V_ELEC,
+        // the interface reaction level is eta away from it, and the whole
+        // solution profile floats off that — so V°_e- at the right limit
+        // moves with the current instead of being pinned there.
+        const shift = V_ELEC - eta - (V_BULK + conc(XIF) + tilt(XIF));
+        const vRxn = (x) => V_BULK + conc(x) + tilt(x) + shift;
+        const vStd = (x) => V_BULK - ACT + tilt(x) + shift;
+        const vMetal = V_ELEC;
 
         diagram.updateTraceData([
             {
