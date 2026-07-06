@@ -25,12 +25,11 @@ Suppose we fix a single carrier's voltage and then slide the ladder. Because onl
 
 Now pin two carriers, a species $A$ and a species $B$, and again slide the ladder. Both concentrations shift, yet a particular combination of them does not budge. If we take the gap for each carrier, divide through by its charge, and subtract, the term $V^\circ_A - V^\circ_B$ appears; because the ladder is rigid, this difference is a fixed property of the medium, and it cancels:
 
-$$
-\begin{aligned}
-\left(\frac{c_A}{c^\circ}\right)^{1/z_A}\!\left(\frac{c_B}{c^\circ}\right)^{-1/z_B} &= K, \\
-K &= \exp\!\left(\frac{F\big[(V_A - V_B) - (V^\circ_A - V^\circ_B)\big]}{RT}\right).
-\end{aligned}
-$$
+$$ \left(\frac{c_A}{c^\circ}\right)^{1/z_A}\!\left(\frac{c_B}{c^\circ}\right)^{-1/z_B} = K, $$
+
+with
+
+$$ K = \exp\!\left(\frac{F\big[(V_A - V_B) - (V^\circ_A - V^\circ_B)\big]}{RT}\right). $$
 
 The ladder offset has dropped out completely, leaving $K$ a function only of the pinned difference $V_A - V_B$ and a material constant. It therefore holds fixed no matter where the ladder happens to float. (More rigorously, activities can be used^[In a nonideal solution, replace each $c_i/c^\circ$ with the activity $a_i$. The left-hand combination $(a_A)^{1/z_A}(a_B)^{-1/z_B}$ is then a {% wiki "Activity coefficient#Ionic_solutions", "mean-activity" %}-type product, which is exactly the charge-balanced, ladder-independent quantity that remains measurable even when single-ion activities are not. In fact this ladder-shifting is exactly the source of the ion-activity ambiguity; see the [nonideality topic](../nonideal/).].)
 
@@ -71,6 +70,27 @@ This one principle accounts for a whole family of effects that, in their convent
 ## Dopants
 
 The simplest disturbance is a fixed charge that has no $V_i$ of its own, because it cannot move: the ionized donors ($N_{\mathrm{D}}^+$) and acceptors ($N_{\mathrm{A}}^-$) of a semiconductor, or the fixed charged groups built into an ion-exchange membrane. Such charges enter the balance only through $\rho_{\mathrm{bg}}$, and the ladder shifts until the mobile carriers compensate them: downward toward the conduction edge for $n$-type material, upward toward the valence edge for $p$-type. This is exactly the doping story from the [previous topic](../solidstate/), now read directly as a question of where the ladder sits.
+
+>>Mark: give the equations (in semiconductor n_i, e notation) - direct parallel to above
+
+$$ n_e n_h = K   (mass action law) $$
+
+$$  -e n_e + e n_h + rho_bg = 0  (neutrality law) $$
+
+<figure class="diagram-placeholder">
+{% figcaption %}
+TODO: This 100% needs a figure right here.
+
+Unlike the preceding two figures, the slider on this one shall be dopant charge, not direct ladder offset control.
+
+Unlike prior topic, here V_e and V_h are the firm anchors, and V^0 shifts -- it's a ladder shift just indirectly, leaning on neutrality.
+
+We can include the total charge vs ladder offset figure from above; now we are PINNED to 0. We are shifting rho_bg which makes the rho(delta ladder) move up and down, changing the zero crossing. A visual solve for neutrality.
+
+[subtlety to watch out for: because V_e = V_h, it is not immediately visually obvious that there are two V_i levels. But that is OK I think, the neutrality point stands if there are 1 carrier species or 20 carrier species.]
+
+{% endfigcaption %}
+</figure>
 
 ## The common-ion effect
 
