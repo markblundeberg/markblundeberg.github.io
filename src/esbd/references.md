@@ -76,7 +76,7 @@ How a reference electrode really attaches: the silver-chloride electrode sits in
 {% endfigcaption %}
 </figure>
 
-Two readings of this $\Delta V$ coexist happily: an engineer sees the electrodes' $V_{\mathrm{e}^-}$ as reservoirs and the reaction as a generic {% wiki "electromotive force" %} pump; a chemist sees a reversible free-energy change, $\Delta G = -zF\,\Delta V$, per electron passed.
+Two readings of this $\Delta V$ coexist happily: an engineer sees the electrodes' $V_{\mathrm{e}^-}$ as reservoirs and the reaction as a generic {% wiki "electromotive force" %} pump; a chemist sees a reversible free-energy change, $\Delta G = -zF\,\Delta V$, per formula unit ($z$ electrons passed).
 
 ## What a "standard electrode" really is
 
