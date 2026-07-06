@@ -120,6 +120,37 @@ export default async function myConfig(eleventyConfig) {
         }
     });
 
+    // --- Prerendered figure seeds (nojs / no-flash) ---
+    // Inject committed seed SVGs (from `npm run prerender`) into each diagram
+    // container at build time, keyed by container id. The engine clears the
+    // container on boot, so JS wipes the seed and redraws — the seed is only
+    // the pre-JS / no-JS frame. Inert when no seeds are committed (the dir is
+    // empty), so this is a no-op until the v1.0 seed rollout.
+    const PRERENDER_DIR = 'src/esbd/prerendered';
+    const figureSeeds = {};
+    if (fs.existsSync(PRERENDER_DIR)) {
+        for (const f of fs.readdirSync(PRERENDER_DIR)) {
+            if (f.endsWith('.svg')) {
+                figureSeeds[f.replace(/\.svg$/, '')] = fs
+                    .readFileSync(`${PRERENDER_DIR}/${f}`, 'utf8')
+                    .trim();
+            }
+        }
+    }
+    if (Object.keys(figureSeeds).length) {
+        eleventyConfig.addTransform('inject-prerender', function (content) {
+            if (!(this.page.outputPath || '').endsWith('.html')) return content;
+            // inject into empty container divs whose id has a committed seed
+            return content.replace(
+                /<div\b([^>]*)>\s*<\/div>/g,
+                (m, attrs) => {
+                    const id = (attrs.match(/id="([^"]+)"/) || [])[1];
+                    return id && figureSeeds[id] ? `<div${attrs}>${figureSeeds[id]}</div>` : m;
+                }
+            );
+        });
+    }
+
     eleventyConfig.addPairedShortcode('figcaption', (content) => {
         // Renders markdown inside of it, which avoid the issues from trying
         // to temporarily escape into the outer markdown. This lets us render

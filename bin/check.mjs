@@ -147,6 +147,40 @@ section('circuit figures');
     }
 }
 
+// 7. Prerendered figure-seed freshness (nojs) ------------------------------
+// Skips entirely until seeds are committed (machinery ships before the v1.0
+// seed rollout). When present: re-hash each seed's include + engine vs the
+// manifest. Pure text — no browser/chromium, so it runs in CI.
+section('prerendered seeds');
+{
+    const pdir = 'src/esbd/prerendered';
+    const engDir = 'src/esbd/js';
+    const manPath = join(pdir, 'manifest.json');
+    if (!existsSync(manPath)) {
+        ok('no committed seeds yet (skipped)');
+    } else {
+        const man = JSON.parse(readFileSync(manPath, 'utf8'));
+        const engHash = sha256(
+            readdirSync(engDir)
+                .filter((f) => f.endsWith('.js'))
+                .sort()
+                .map((f) => readFileSync(join(engDir, f), 'utf8'))
+                .join('\n')
+        );
+        const drift = [];
+        for (const [id, rec] of Object.entries(man)) {
+            if (!existsSync(join(pdir, id + '.svg'))) { drift.push(`${id}.svg missing`); continue; }
+            const incPath = join('src/_includes/esbd-diagrams', rec.include + '.njk');
+            if (!existsSync(incPath)) { drift.push(`${id}: include ${rec.include}.njk gone`); continue; }
+            if (sha256(readFileSync(incPath, 'utf8') + engHash) !== rec.hash)
+                drift.push(`${id}: include or engine changed since capture`);
+        }
+        if (drift.length)
+            bad('prerendered seeds stale (run: npm run prerender):\n    ' + drift.join('\n    '));
+        else ok(`all ${Object.keys(man).length} seeds fresh`);
+    }
+}
+
 // ---------------------------------------------------------------------------
 console.log(
     failures ? `\n✗ ${failures} check(s) FAILED.` : '\n✓ All checks passed.'
