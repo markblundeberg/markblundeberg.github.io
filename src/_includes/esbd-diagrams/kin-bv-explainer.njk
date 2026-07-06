@@ -6,6 +6,7 @@
 </div>
 {{ controls.slider(idprefix + "-eta", "Overpotential $\\eta$", { min: -0.12, max: 0.12, step: "any", value: 0.05, snap: 0, readout: true, unit: "V" }) }}
 {{ controls.slider(idprefix + "-alpha", "Symmetry $\\alpha$", { min: 0, max: 1, step: "any", value: 0.5, snap: 0.5, readout: true }) }}
+{{ controls.slider(idprefix + "-z", "Electrons $z$", { min: 1, max: 4, step: 1, value: 1, readout: true }) }}
 <div style="text-align: center">{{ controls.checkbox(idprefix + "-log", "log-current (Tafel) view") }}</div>
 
 <script type="module">
@@ -14,12 +15,16 @@
     import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
 
     const BLUE = SPECIES.electron.color;
-    // Butler-Volmer, one-electron: J/J0 = exp(α f η) − exp(−(1−α) f η),
+    // Butler-Volmer: J/J0 = exp(α z f η) − exp(−(1−α) z f η),
     // f = F/RT = 38.92 V⁻¹ at 25 °C. α = 1 gives the Shockley diode law.
+    // z = electrons transferred together in the concerted step ("hop as
+    // buddies"): it multiplies f, so each unit of η counts z times over and
+    // the curve steepens by z. The barrier panel stays a one-electron schematic.
     const f = 38.92;
     const V_RXN = 0.5; // arbitrary; the barrier panel has abstract axes
     const B = 0.28; // equilibrium barrier depth, volts
     const JMAX = 15; // I–V panel y-limit; traces are trimmed where they exit
+    const EGAP = 0.032; // reaction-coordinate spacing between buddy electrons
 
     // Left panel: the barrier picture behind alpha. The pass hangs BELOW the
     // levels (high electron energy = low voltage); its minimum sits at
@@ -78,7 +83,8 @@
     function update() {
         const eta = parseFloat(etaEl.value);
         const alpha = parseFloat(alphaEl.value);
-        const J = (e) => Math.exp(alpha * f * e) - Math.exp(-(1 - alpha) * f * e);
+        const z = parseInt(zEl.value, 10);
+        const J = (e) => Math.exp(alpha * z * f * e) - Math.exp(-(1 - alpha) * z * f * e);
 
         const VL = V_RXN + eta; // metal side
         const VTS = V_RXN - B + alpha * eta; // transition state
@@ -91,7 +97,7 @@
         // electron travels emitter -> collector = low-V side -> high-V side
         const sgn = eta >= 0 ? 1 : -1; // +1: solution emits, metal collects
         const active = Math.abs(eta) > 0.008;
-        animGeom = { sgn, passAt, active };
+        animGeom = { sgn, passAt, active, z };
         const barTraces = [
             {
                 id: 'ref',
@@ -165,14 +171,19 @@
             );
         }
         bar.updateTraceData(barTraces);
-        // parked electron position (the animator takes over when live);
-        // no crossing at eta ~ 0, so no electron either
+        // parked electron positions (the animator takes over when live); no
+        // crossing at eta ~ 0, so no electrons either. z of them ride the pass
+        // as a queue — "hop as buddies" — trailing the leader toward the shelf.
         const xp = 0.5 + 0.14 * sgn;
+        const emarks = active
+            ? Array.from({ length: z }, (_, i) => {
+                  const xi = xp + i * EGAP * sgn;
+                  return { id: 'e' + i, x: xi, y: passAt(xi) - 0.022, color: BLUE, r: 4.5 };
+              })
+            : [];
         bar.updateMarkers([
             { id: 'ts', x: 0.5, y: VTS, color: '#667', r: 3 },
-            ...(active
-                ? [{ id: 'e', x: xp, y: passAt(xp) - 0.022, color: BLUE, r: 4.5 }]
-                : []),
+            ...emarks,
         ]);
 
         const logView = logEl.checked;
@@ -187,8 +198,8 @@
             }
             return { x, y };
         };
-        const Ja = (e) => Math.exp(alpha * f * e);
-        const Jc = (e) => -Math.exp(-(1 - alpha) * f * e);
+        const Ja = (e) => Math.exp(alpha * z * f * e);
+        const Jc = (e) => -Math.exp(-(1 - alpha) * z * f * e);
 
         if (!logView) {
             iv.setYLabel('Current $J/J_0$');
@@ -277,10 +288,12 @@
             eta.toFixed(2);
         document.getElementById('{{idprefix}}-alpha-readout').textContent =
             alpha.toFixed(2);
+        document.getElementById('{{idprefix}}-z-readout').textContent = z;
     }
 
     const etaEl = makeSlider('{{idprefix}}-eta', update, { fire: false });
     const alphaEl = makeSlider('{{idprefix}}-alpha', update, { fire: false });
+    const zEl = makeSlider('{{idprefix}}-z', update, { fire: false });
     const logEl = document.getElementById('{{idprefix}}-log');
     logEl.addEventListener('change', update);
     update();
@@ -295,14 +308,15 @@
         function hop(ts) {
             if (animGeom && animGeom.active && bar.xScale) {
                 const s = Math.min(1, (ts % PERIOD) / TRAVEL);
-                const x =
-                    0.5 + (0.25 - 0.5 * ease(s)) * animGeom.sgn;
-                const y = animGeom.passAt(x) - 0.022;
-                bar.markersGroup
-                    .selectAll('.xy-marker')
-                    .filter((d) => d.id === 'e')
-                    .attr('cx', bar.xScale(x))
-                    .attr('cy', bar.yScale(y));
+                const xLead = 0.5 + (0.25 - 0.5 * ease(s)) * animGeom.sgn;
+                const sel = bar.markersGroup.selectAll('.xy-marker');
+                for (let i = 0; i < animGeom.z; i++) {
+                    const x = xLead + i * EGAP * animGeom.sgn;
+                    const y = animGeom.passAt(x) - 0.022;
+                    sel.filter((d) => d.id === 'e' + i)
+                        .attr('cx', bar.xScale(x))
+                        .attr('cy', bar.yScale(y));
+                }
             }
             requestAnimationFrame(hop);
         }

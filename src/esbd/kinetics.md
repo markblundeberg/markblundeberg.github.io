@@ -15,9 +15,9 @@ What we deferred is the question a device designer actually cares about: *how mu
 
 ## The Butler–Volmer element
 
-For a one-electron reaction at an electrode, the standard current–overpotential relation is the {% wiki "Butler–Volmer equation" %}, which in our terms reads
+For an electrode reaction transferring $z$ electrons, the standard current–overpotential relation is the {% wiki "Butler–Volmer equation" %}, which in our terms reads
 
-$$ J = J_0 \left[ e^{\alpha f \eta} - e^{-(1-\alpha) f \eta} \right], \qquad f = F/RT, $$
+$$ J = J_0 \left[ e^{\alpha z f \eta} - e^{-(1-\alpha) z f \eta} \right], \qquad f = F/RT, $$
 
 with $\eta$ the $V_{\mathrm{e}^-}$ step defined above. Two parameters characterize the interface:
 
@@ -27,11 +27,11 @@ with $\eta$ the $V_{\mathrm{e}^-}$ step defined above. Two parameters characteri
 <figure class="demo-container" style="max-width: 660px">
 {% include "esbd-diagrams/kin-bv-explainer.njk" %}
 {% figcaption %}
-The interface as a nonlinear circuit element. Left: the two levels, $\eta$ apart, with the transition state between them — high electron energy is low voltage, so the activation pass hangs *below* the levels, and it rides with the metal level by the fraction $\alpha$ (the grey dash marks its equilibrium position). Right: the resulting current, with the anodic and cathodic partial currents drawn faint; they cancel at $\eta = 0$ where both equal $J_0$. Slide $\alpha$ to $1$ and the cathodic branch saturates: this is the Shockley diode law.
+The interface as a nonlinear circuit element. Left: the two levels, $\eta$ apart, with the transition state between them — high electron energy is low voltage, so the activation pass hangs *below* the levels, and it rides with the metal level by the fraction $\alpha$ (the grey dash marks its equilibrium position). Right: the resulting current, with the anodic and cathodic partial currents drawn faint; they cancel at $\eta = 0$ where both equal $J_0$. Slide $\alpha$ to $1$ and the cathodic branch saturates: this is the Shockley diode law. Raise $z$ and the electrons cross as a convoy — each one multiplies the leverage of $\eta$, steepening the response by that factor.
 {% endfigcaption %}
 </figure>
 
-For small $\eta$ the exponentials linearize and the interface is just a resistor, $J \approx J_0 f \eta$, the *charge-transfer resistance* $R_{\mathrm{ct}} = RT/(F J_0)$ per unit area. For large $\eta$ one exponential dominates and $\eta$ grows only logarithmically with current — the {% wiki "Tafel equation" %}, a straight line of $(\ln 10) RT/(\alpha F) \approx 59\,\mathrm{mV}/\alpha$ per decade on a log-current plot. Toggle the figure above into its Tafel view: the two partial currents become the straight asymptotes, meeting at the exchange-current notch.
+For small $\eta$ the exponentials linearize and the interface is just a resistor, $J \approx J_0 z f \eta$, the *charge-transfer resistance* $R_{\mathrm{ct}} = RT/(z F J_0)$ per unit area. For large $\eta$ one exponential dominates and $\eta$ grows only logarithmically with current — the {% wiki "Tafel equation" %}, a straight line of $(\ln 10) RT/(\alpha z F) \approx 59\,\mathrm{mV}/(\alpha z)$ per decade on a log-current plot. Toggle the figure above into its Tafel view: the two partial currents become the straight asymptotes, meeting at the exchange-current notch.
 
 ## The diode connection
 
@@ -43,21 +43,6 @@ and it is exactly the Butler–Volmer equation with $\alpha = 1$: forward bias l
 {% include "esbd-diagrams/esbd-kin-schottky.njk" %}
 {% figcaption %}
 A Schottky diode: the sharp interface with a pinned barrier. The conduction edge meets the contact a fixed $\phi_B$ below the metal's $V_{\mathrm{e}^-}$ at every bias, and the applied bias is taken up entirely by band bending on the semiconductor side (the depletion zone widening in reverse). The metal-side barrier never changes — that branch of the current saturates — while the semiconductor-side barrier follows the bias one-for-one: $\alpha = 1$, drawn in space.
-{% endfigcaption %}
-</figure>
-
-## Ions cross interfaces too
-
-Nothing in the argument above was special to electrons. An ion crossing an interface — $\mathrm{Li}^+$ entering an intercalation particle, an ion transferring across an [ITIES](../charge_control/) — sees the same picture: a step $\Delta V_i$ across the interface, a barrier, and a current exponential in the step,
-
-$$ J_i \propto e^{|z_i| F \Delta V_i \cdot \alpha / RT} - e^{-|z_i| F \Delta V_i (1-\alpha)/RT}. $$
-
-Here $\Delta V_i$ is the interfacial step in $V_i$, signed so a positive step drives the forward current (for electrons, $\Delta V_i = \eta$); the $|z_i|$ keeps the current running down the step whatever the carrier's charge. This evenhandedness is a quiet advantage of the $V_i$ picture: electron transfer and ion transfer are drawn with the same element, and a battery's interfaces can carry an overpotential on the $V_{\mathrm{Li}^+}$ rail just as legitimately as on the $V_{\mathrm{e}^-}$ rail.
-
-<figure class="demo-container" style="max-width: 460px">
-{% include "esbd-diagrams/esbd-kin-driven.njk" %}
-{% figcaption %}
-One electrode under load, in space. The step at the interface is the surface overpotential; through the unstirred layer the reaction's implied level bends as the couple's concentrations polarize (the supported ladder stays put), and out in the stirred bulk every level tilts together ohmically — $E_{\mathrm{eq}}$ has become a field, as promised in [Electrode potential](../e/). Magnitudes are cartoon-sized.
 {% endfigcaption %}
 </figure>
 
@@ -90,7 +75,7 @@ A corroding metal, coupled to two half-reactions at once. The electrode floats t
 
 ## Takeaways
 
-An interface passing current carries a step in $V_i$, and the current is exponential in that step: Butler–Volmer for electrodes, Shockley for diodes, and the same element again for ion transfer. Exchange current sets how stiff the interface is, $\alpha$ how the step splits between the two barriers, and Marcus–Gerischer supplies the microscopic picture — one that lives natively on these diagrams. With transport ([slopes](../transport_basic/)) and kinetics (steps) both priced in $V_i$, a driven electrochemical device really can be read end to end like a circuit.
+An interface passing current carries a step in $V_i$, and the current is exponential in that step: Butler–Volmer for electrodes, Shockley for diodes. Exchange current sets how stiff the interface is, $\alpha$ how the step splits between the two barriers, and Marcus–Gerischer supplies the microscopic picture — one that lives natively on these diagrams. With transport ([slopes](../transport_basic/)) and kinetics (steps) both priced in $V_i$, a driven electrochemical device really can be read end to end like a circuit.
 
 That closes the main sequence. The appendices dig into the foundations underneath, starting with the one this whole framework rests on:
 

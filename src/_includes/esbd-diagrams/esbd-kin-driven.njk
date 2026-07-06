@@ -28,7 +28,7 @@
     const diagram = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-container',
         { electron: SPECIES.electron },
-        { margins: { right: 78 } }
+        { margins: { right: 104 } }
     );
     diagram.setSpatialLayout([0, XIF, XB, 1], [
         { ...REGION.metal, name: 'Electrode' },
@@ -70,9 +70,7 @@
                 id: 'rxn',
                 speciesId: 'electron',
                 curveType: 'voltageImplied',
-                label: merged
-                    ? 'V_{\\mathrm{e}^-}(\\mathrm{rxn})'
-                    : 'V_{\\mathrm{e}^-}(\\mathrm{rxn})',
+                label: 'V_{\\mathrm{e}^-}(\\mathrm{Ox}/\\mathrm{Red})',
                 x: xs,
                 y: xs.map(vRxn),
             },
@@ -80,7 +78,7 @@
                 id: 'rxn_std',
                 speciesId: 'electron',
                 curveType: 'standardStateImplied',
-                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{rxn})',
+                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{Ox}/\\mathrm{Red})',
                 x: xs,
                 y: xs.map(vStd),
             },
