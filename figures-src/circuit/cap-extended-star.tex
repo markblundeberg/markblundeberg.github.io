@@ -44,19 +44,26 @@
           label={[label distance=-1pt, text=\c]{72 * (\i - 1) + 90}:$V_{\i}$}] at (N\i) {};
   }
 
+  % nonideal extras: direct carrier-carrier couplings are ALL pairs (dashed) -
+  % the pentagon perimeter plus the across-the-middle diagonals. Drawn first,
+  % so the solid ideal star and phi sit cleanly on top.
+  \bicap[dashed]{N1}{N2}{spA}{spB}
+  \bicap[dashed]{N2}{N3}{spB}{spC}
+  \bicap[dashed]{N3}{N4}{spC}{spD}
+  \bicap[dashed]{N4}{N5}{spD}{spE}
+  \bicap[dashed]{N5}{N1}{spE}{spA}
+  \bicap[dashed]{N1}{N3}{spA}{spC}
+  \bicap[dashed]{N2}{N4}{spB}{spD}
+  \bicap[dashed]{N3}{N5}{spC}{spE}
+  \bicap[dashed]{N4}{N1}{spD}{spA}
+  \bicap[dashed]{N5}{N2}{spE}{spB}
+
   % ideal star: each carrier capacitor-coupled to phi (carrier half coloured, phi half black)
   \bicap{N1}{C}{spA}{black}
   \bicap{N2}{C}{spB}{black}
   \bicap{N3}{C}{spC}{black}
   \bicap{N4}{C}{spD}{black}
   \bicap{N5}{C}{spE}{black}
-
-  % nonideal extras: direct carrier-carrier couplings (dashed perimeter)
-  \bicap[dashed]{N1}{N2}{spA}{spB}
-  \bicap[dashed]{N2}{N3}{spB}{spC}
-  \bicap[dashed]{N3}{N4}{spC}{spD}
-  \bicap[dashed]{N4}{N5}{spD}{spE}
-  \bicap[dashed]{N5}{N1}{spE}{spA}
 
   % phi node drawn last so it sits on top
   \node[circle, fill=black, inner sep=1.5pt, label={[label distance=1pt]-90:$\phi$}] at (C) {};
