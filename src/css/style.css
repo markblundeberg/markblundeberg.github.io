@@ -258,6 +258,17 @@ figure.diagram-placeholder {
     background-color: #fdfdfd;
 }
 
+/* Diagram controls do nothing without JS (they drive the live figure). Render
+   them visibly inert until the no-js -> js flip in base.njk enables them, so a
+   no-JS visitor isn't misled into dragging a dead slider. */
+.no-js .bd-control input,
+.no-js .bd-control button,
+.no-js .bd-control select {
+    pointer-events: none;
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
 /* Pre-rendered circuitikz figures: scale to container, follow text color. */
 .circuit-svg {
     display: block;

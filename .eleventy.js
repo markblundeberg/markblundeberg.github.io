@@ -2,6 +2,7 @@
 import markdownIt from 'markdown-it';
 import eleventyNavigationPlugin from '@11ty/eleventy-navigation';
 import markdownItKatex from '@vscode/markdown-it-katex';
+import katex from 'katex';
 import markdownItFootnote from 'markdown-it-footnote';
 import fs from 'node:fs';
 
@@ -109,6 +110,23 @@ export default async function myConfig(eleventyConfig) {
             return `<a href="${url}" class="wikipedia-link" target="_blank" rel="noopener noreferrer">${displayText}${iconHTML}</a>`;
         }
     );
+
+    // --- Server-side KaTeX for control labels ---
+    // Slider/checkbox labels are njk macro output (not markdown), so their $…$
+    // math is normally only rendered client-side by the auto-render hook — which
+    // means it shows as raw "$…$" with no JS. Render it at build time instead, so
+    // labels are correct without JS (and JS users get no flash of raw TeX either).
+    // Plain-text labels pass through untouched.
+    eleventyConfig.addFilter('katex', (str) => {
+        if (str == null) return str;
+        const s = String(str);
+        if (!s.includes('$')) return s;
+        return s
+            .replace(/\$\$([^$]+)\$\$/g, (_, m) =>
+                katex.renderToString(m, { throwOnError: false, displayMode: true }))
+            .replace(/\$([^$]+)\$/g, (_, m) =>
+                katex.renderToString(m, { throwOnError: false, displayMode: false }));
+    });
 
     // --- Circuit figure shortcode ---
     // Inlines a committed, pre-rendered SVG from src/_includes/circuit/<name>.svg

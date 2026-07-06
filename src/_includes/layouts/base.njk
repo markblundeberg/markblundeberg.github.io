@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,6 +18,10 @@
            (deterministic screenshots; pairs with the JS-side handling in
            ResponsivePlot). #}
         <script>
+            // Progressive enhancement: flip no-js -> js before first paint, so
+            // JS visitors never see the disabled-control state. Diagram controls
+            // are inert until JS wires them up (see .no-js rules in style.css).
+            document.documentElement.classList.replace('no-js', 'js');
             if (new URLSearchParams(location.search).has('static'))
                 document.documentElement.classList.add('static-render');
         </script>
