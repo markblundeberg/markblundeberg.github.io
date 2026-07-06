@@ -1,32 +1,64 @@
 % Extended chemical capacitance matrix C^ext as a star: every carrier node
 % couples through a capacitor to a central phi node (the ideal case is a pure
 % star). The nonideal direct carrier-carrier couplings are drawn dashed.
+% Each capacitor half is coloured by its node's species; phi is black.
 \documentclass[tikz, border=4pt]{standalone}
 \usepackage[american]{circuitikz}
+\usetikzlibrary{calc}
+
+\definecolor{spA}{HTML}{377EB8} % electron
+\definecolor{spB}{HTML}{E41A1C} % lithium
+\definecolor{spC}{HTML}{80B030} % chloride
+\definecolor{spD}{HTML}{8A4FA0} % oxide
+\definecolor{spE}{HTML}{E6AB02} % silver
+
+\newcommand{\bicap}[5][]{% [style] A B cA cB
+  \path (#2) -- (#3) coordinate[midway] (bcM);
+  \begin{scope}
+    \pgfinterruptboundingbox
+    \clip let \p1=(#2), \p2=(#3), \n1={atan2(\y2-\y1,\x2-\x1)} in
+      [rotate around={\n1:(bcM)}] ($(bcM)+(-6,-6)$) rectangle ($(bcM)+(0,6)$);
+    \endpgfinterruptboundingbox
+    \draw[#1,#4] (#2) to[C] (#3);
+  \end{scope}
+  \begin{scope}
+    \pgfinterruptboundingbox
+    \clip let \p1=(#2), \p2=(#3), \n1={atan2(\y2-\y1,\x2-\x1)} in
+      [rotate around={\n1:(bcM)}] ($(bcM)+(0,-6)$) rectangle ($(bcM)+(6,6)$);
+    \endpgfinterruptboundingbox
+    \draw[#1,#5] (#2) to[C] (#3);
+  \end{scope}
+}
 
 \begin{document}
 \begin{tikzpicture}
   \ctikzset{bipoles/length=0.7cm}
 
-  % central phi node
-  \node[circle, fill, inner sep=1.5pt, label={[label distance=1pt]-90:$\phi$}] (C) at (0,0) {};
+  % central phi node (black)
+  \coordinate (C) at (0,0);
 
-  % 5 carrier nodes on a pentagon
-  \foreach \i in {1,...,5} {
+  % 5 carrier nodes on a pentagon, one species colour each
+  \foreach \i/\c in {1/spA, 2/spB, 3/spC, 4/spD, 5/spE} {
     \coordinate (N\i) at ({72 * (\i - 1) + 90}: 3);
-    \node[circle, fill, inner sep=1.5pt,
-          label={[label distance=-1pt]{72 * (\i - 1) + 90}:$V_{\i}$}] at (N\i) {};
+    \node[circle, fill=\c, inner sep=1.5pt,
+          label={[label distance=-1pt, text=\c]{72 * (\i - 1) + 90}:$V_{\i}$}] at (N\i) {};
   }
 
-  % ideal star: each carrier capacitor-coupled to phi (solid)
-  \foreach \i in {1,...,5} {
-    \draw (N\i) to[C] (C);
-  }
+  % ideal star: each carrier capacitor-coupled to phi (carrier half coloured, phi half black)
+  \bicap{N1}{C}{spA}{black}
+  \bicap{N2}{C}{spB}{black}
+  \bicap{N3}{C}{spC}{black}
+  \bicap{N4}{C}{spD}{black}
+  \bicap{N5}{C}{spE}{black}
 
   % nonideal extras: direct carrier-carrier couplings (dashed perimeter)
-  \foreach \i in {1,...,5} {
-    \pgfmathtruncatemacro{\j}{mod(\i, 5) + 1}
-    \draw[dashed] (N\i) to[C] (N\j);
-  }
+  \bicap[dashed]{N1}{N2}{spA}{spB}
+  \bicap[dashed]{N2}{N3}{spB}{spC}
+  \bicap[dashed]{N3}{N4}{spC}{spD}
+  \bicap[dashed]{N4}{N5}{spD}{spE}
+  \bicap[dashed]{N5}{N1}{spE}{spA}
+
+  % phi node drawn last so it sits on top
+  \node[circle, fill=black, inner sep=1.5pt, label={[label distance=1pt]-90:$\phi$}] at (C) {};
 \end{tikzpicture}
 \end{document}

@@ -4,8 +4,10 @@
 \documentclass[tikz, border=4pt]{standalone}
 \usepackage[american]{circuitikz}
 
+\definecolor{elec}{HTML}{377EB8} % electron blue: an electronic circuit is all V_e-
+
 \begin{document}
-\begin{tikzpicture}
+\begin{tikzpicture}[color=elec]
   \ctikzset{bipoles/length=0.85cm}
   \ctikzset{transistors/scale=1.5}
 

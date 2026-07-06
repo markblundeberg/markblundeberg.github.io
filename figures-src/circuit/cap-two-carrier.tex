@@ -1,7 +1,29 @@
 % Two-carrier special case: a single capacitor between the electron node
-% and the ion node (a battery electrode).
+% and the ion node (a battery electrode). Each half coloured by its species.
 \documentclass[tikz, border=4pt]{standalone}
 \usepackage[american]{circuitikz}
+\usetikzlibrary{calc}
+
+\definecolor{spA}{HTML}{377EB8} % electron
+\definecolor{spB}{HTML}{E41A1C} % lithium (ion)
+
+\newcommand{\bicap}[5][]{% [style] A B cA cB
+  \path (#2) -- (#3) coordinate[midway] (bcM);
+  \begin{scope}
+    \pgfinterruptboundingbox
+    \clip let \p1=(#2), \p2=(#3), \n1={atan2(\y2-\y1,\x2-\x1)} in
+      [rotate around={\n1:(bcM)}] ($(bcM)+(-6,-6)$) rectangle ($(bcM)+(0,6)$);
+    \endpgfinterruptboundingbox
+    \draw[#1,#4] (#2) to[C] (#3);
+  \end{scope}
+  \begin{scope}
+    \pgfinterruptboundingbox
+    \clip let \p1=(#2), \p2=(#3), \n1={atan2(\y2-\y1,\x2-\x1)} in
+      [rotate around={\n1:(bcM)}] ($(bcM)+(0,-6)$) rectangle ($(bcM)+(6,6)$);
+    \endpgfinterruptboundingbox
+    \draw[#1,#5] (#2) to[C] (#3);
+  \end{scope}
+}
 
 \begin{document}
 \begin{tikzpicture}
@@ -10,9 +32,10 @@
   \coordinate (L) at (0, 0);
   \coordinate (R) at (4, 0);
 
-  \node[circle, fill, inner sep=1.5pt, label=left:$V_{\mathrm{e}^-}$]  at (L) {};
-  \node[circle, fill, inner sep=1.5pt, label=right:$V_{\mathrm{ion}}$] at (R) {};
+  \bicap{L}{R}{spA}{spB}
+  \node[above] at (2, 0.28) {$C$};
 
-  \draw (L) to[C, l=$C$] (R);
+  \node[circle, fill=spA, inner sep=1.5pt, label={[text=spA]left:$V_{\mathrm{e}^-}$}]  at (L) {};
+  \node[circle, fill=spB, inner sep=1.5pt, label={[text=spB]right:$V_{\mathrm{ion}}$}] at (R) {};
 \end{tikzpicture}
 \end{document}
