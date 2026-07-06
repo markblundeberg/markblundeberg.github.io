@@ -10,5 +10,3 @@
 # OS generated files
 .DS_Store
 Thumbs.db
-# Prerendered figure seeds — generated locally, committed at v1.0 (machinery only for now)
-src/esbd/prerendered/

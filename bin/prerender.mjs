@@ -1,18 +1,20 @@
 #!/usr/bin/env node
 // Prerender the live D3 figures to committed seed SVGs (nojs / no-flash).
-// Run:  npm run prerender          (all figures)
-//       npm run prerender <name>…  (only these include names)
+// Run:  npm run prerender
 //
-// LOCAL-ONLY (needs chromium; never runs in CI). For each diagram include it
-// loads the FIGTEST page headlessly with ?static&capture, lets the figure
-// render, and captures every bd-container's <svg> (keyed by the container id,
-// which is identical on the real topic pages). Writes src/esbd/prerendered/
-// <id>.svg plus a manifest of id -> source hash (include + engine). The 11ty
-// transform injects these at build time; the guard in check.mjs re-hashes and
-// fails on drift. The engine already clears bd-container on boot, so the seed
-// is wiped and redrawn with zero JS change.
+// LOCAL-ONLY (needs chromium; never runs in CI). Builds the real site with a
+// capture hook (CAPTURE=1), serves it locally, and for each topic page loads it
+// headlessly with ?static so every figure renders at its true on-page width.
+// The hook stamps each diagram svg with a viewBox + its container id; we capture
+// each (keyed by id, identical on the production pages) into
+// src/esbd/prerendered/<id>.svg. Capturing from the real pages — not a fixed-
+// width harness — is what keeps the seed at native scale (no scrunching).
+//
+// Freshness: one global source hash over all includes + engine. Any figure or
+// engine edit stales every seed; regen is ~30s and the guard in check.mjs flags
+// it. Coarse but simple, and it needs no container->include map.
 import { execFileSync, spawn } from 'node:child_process';
-import { readFileSync, writeFileSync, readdirSync, mkdirSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, rmSync } from 'node:fs';
 import { join, basename } from 'node:path';
 import { createHash } from 'node:crypto';
 import http from 'node:http';
@@ -22,23 +24,24 @@ const ENGINE_DIR = 'src/esbd/js';
 const OUT_DIR = 'src/esbd/prerendered';
 const BUILD_DIR = '/tmp/esbd_prerender_site';
 const PORT = 8123;
-const BUDGET_MS = 10000; // virtual-time budget: module load + KaTeX + render
+const BUDGET_MS = 10000;
 
 const sha256 = (s) => createHash('sha256').update(s).digest('hex');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-// engine hash: all engine JS concatenated (option (b) — an engine edit stales
-// every seed, which is honest; the guard then tells you exactly what to regen).
-const engineHash = sha256(
-    readdirSync(ENGINE_DIR)
-        .filter((f) => f.endsWith('.js'))
-        .sort()
-        .map((f) => readFileSync(join(ENGINE_DIR, f), 'utf8'))
-        .join('\n')
+// one global hash over every diagram include + all engine JS (option (b),
+// extended to includes): any change stales all seeds. Regen is cheap (~30s).
+const sourceHash = sha256(
+    [
+        ...readdirSync(INCLUDE_DIR).filter((f) => f.endsWith('.njk')).sort()
+            .map((f) => readFileSync(join(INCLUDE_DIR, f), 'utf8')),
+        ...readdirSync(ENGINE_DIR).filter((f) => f.endsWith('.js')).sort()
+            .map((f) => readFileSync(join(ENGINE_DIR, f), 'utf8')),
+    ].join('\n')
 );
 
-// namespace every id (and reference) so multiple seed SVGs on one topic page
-// don't collide on shared clip/gradient/marker ids.
+// namespace ids so multiple seed SVGs on one page can't collide on shared
+// clip/gradient/marker ids
 function postprocess(svg, id) {
     const pfx = id + '-';
     svg = svg.replace(/\bid="([^"]*)"/g, (_, x) => `id="${pfx}${x}"`);
@@ -47,7 +50,7 @@ function postprocess(svg, id) {
     return svg;
 }
 
-// balanced <svg>…</svg> slice starting at `start` (handles KaTeX inline svgs)
+// balanced <svg>…</svg> slice (handles KaTeX inline svgs)
 function sliceSvg(html, start) {
     let pos = start + 4, depth = 1;
     while (depth > 0) {
@@ -58,8 +61,6 @@ function sliceSvg(html, start) {
     }
 }
 
-// pull every tagged diagram svg out of a dumped page. The capture hook tags each
-// with data-container="<id>" (the container the engine drew into).
 function extractContainers(html) {
     const out = [];
     const re = /<svg\b[^>]*\bdata-container="([^"]+)"[^>]*>/g;
@@ -81,22 +82,25 @@ function waitForServer(url, tries = 50) {
     });
 }
 
-// --------------------------------------------------------------------------
-const only = process.argv.slice(2);
-const names = readdirSync(INCLUDE_DIR)
-    .filter((f) => f.endsWith('.njk'))
-    .map((f) => basename(f, '.njk'))
-    .filter((n) => !only.length || only.includes(n))
-    .sort();
-
-if (!names.length) {
-    console.error('No matching include names.');
-    process.exit(1);
+// every built page that loads the diagram engine (i.e. has figures), by URL path
+function figurePageUrls() {
+    const urls = [];
+    const walk = (dir) => {
+        for (const e of readdirSync(dir, { withFileTypes: true })) {
+            const p = join(dir, e.name);
+            if (e.isDirectory()) walk(p);
+            else if (e.name === 'index.html' && readFileSync(p, 'utf8').includes('/esbd/js/'))
+                urls.push('/' + p.slice(BUILD_DIR.length + 1).replace(/index\.html$/, ''));
+        }
+    };
+    walk(BUILD_DIR);
+    return urls.sort();
 }
 
-console.log('Building FIGTEST site…');
+// --------------------------------------------------------------------------
+console.log('Building site with capture hook (CAPTURE=1)…');
 execFileSync('npx', ['@11ty/eleventy', `--output=${BUILD_DIR}`], {
-    env: { ...process.env, FIGTEST: '1' },
+    env: { ...process.env, CAPTURE: '1' },
     stdio: 'ignore',
 });
 
@@ -105,38 +109,35 @@ const server = spawn('python3', ['-m', 'http.server', String(PORT), '--bind', '1
     stdio: 'ignore',
 });
 
+rmSync(OUT_DIR, { recursive: true, force: true });
 mkdirSync(OUT_DIR, { recursive: true });
-let manifest = {};
-try {
-    manifest = JSON.parse(readFileSync(join(OUT_DIR, 'manifest.json'), 'utf8'));
-} catch { /* first run */ }
 
-let captured = 0;
+const ids = [];
 try {
-    await waitForServer(`http://127.0.0.1:${PORT}/figtest/`);
+    await waitForServer(`http://127.0.0.1:${PORT}/`);
     await sleep(300);
-    for (const name of names) {
-        const url = `http://127.0.0.1:${PORT}/figtest/${name}/?static&capture`;
+    for (const path of figurePageUrls()) {
         const html = execFileSync(
             'chromium',
-            ['--headless', '--no-sandbox', `--virtual-time-budget=${BUDGET_MS}`, '--dump-dom', url],
-            { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }
+            ['--headless', '--no-sandbox', '--window-size=1400,2400',
+             `--virtual-time-budget=${BUDGET_MS}`, '--dump-dom', `http://127.0.0.1:${PORT}${path}?static`],
+            { encoding: 'utf8', maxBuffer: 96 * 1024 * 1024 }
         );
         const containers = extractContainers(html);
-        if (!containers.length) { console.warn(`  ⚠ ${name}: no rendered container captured`); continue; }
-        const srcHash = sha256(readFileSync(join(INCLUDE_DIR, name + '.njk'), 'utf8') + engineHash);
         for (const { id, svg } of containers) {
             writeFileSync(join(OUT_DIR, id + '.svg'), postprocess(svg, id).trim() + '\n');
-            manifest[id] = { include: name, hash: srcHash };
-            captured++;
+            ids.push(id);
         }
-        console.log(`  ✓ ${name} (${containers.length})`);
+        if (containers.length) console.log(`  ✓ ${path} (${containers.length})`);
     }
 } finally {
     server.kill();
     rmSync(BUILD_DIR, { recursive: true, force: true });
 }
 
-const sorted = Object.fromEntries(Object.keys(manifest).sort().map((k) => [k, manifest[k]]));
-writeFileSync(join(OUT_DIR, 'manifest.json'), JSON.stringify(sorted, null, 2) + '\n');
-console.log(`\nCaptured ${captured} seed SVG(s) from ${names.length} figure(s).`);
+const uniqueIds = [...new Set(ids)].sort();
+writeFileSync(
+    join(OUT_DIR, 'manifest.json'),
+    JSON.stringify({ hash: sourceHash, ids: uniqueIds }, null, 2) + '\n'
+);
+console.log(`\nCaptured ${uniqueIds.length} seed SVG(s) across figure pages.`);

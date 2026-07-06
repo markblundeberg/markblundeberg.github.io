@@ -156,28 +156,27 @@ section('prerendered seeds');
     const pdir = 'src/esbd/prerendered';
     const engDir = 'src/esbd/js';
     const manPath = join(pdir, 'manifest.json');
+    const incDir2 = 'src/_includes/esbd-diagrams';
     if (!existsSync(manPath)) {
         ok('no committed seeds yet (skipped)');
     } else {
         const man = JSON.parse(readFileSync(manPath, 'utf8'));
-        const engHash = sha256(
-            readdirSync(engDir)
-                .filter((f) => f.endsWith('.js'))
-                .sort()
-                .map((f) => readFileSync(join(engDir, f), 'utf8'))
-                .join('\n')
+        // recompute the global source hash the same way prerender.mjs does
+        const srcHash = sha256(
+            [
+                ...readdirSync(incDir2).filter((f) => f.endsWith('.njk')).sort()
+                    .map((f) => readFileSync(join(incDir2, f), 'utf8')),
+                ...readdirSync(engDir).filter((f) => f.endsWith('.js')).sort()
+                    .map((f) => readFileSync(join(engDir, f), 'utf8')),
+            ].join('\n')
         );
         const drift = [];
-        for (const [id, rec] of Object.entries(man)) {
-            if (!existsSync(join(pdir, id + '.svg'))) { drift.push(`${id}.svg missing`); continue; }
-            const incPath = join('src/_includes/esbd-diagrams', rec.include + '.njk');
-            if (!existsSync(incPath)) { drift.push(`${id}: include ${rec.include}.njk gone`); continue; }
-            if (sha256(readFileSync(incPath, 'utf8') + engHash) !== rec.hash)
-                drift.push(`${id}: include or engine changed since capture`);
-        }
+        if (srcHash !== man.hash) drift.push('a diagram include or engine file changed since capture');
+        for (const id of man.ids || [])
+            if (!existsSync(join(pdir, id + '.svg'))) drift.push(`${id}.svg missing`);
         if (drift.length)
             bad('prerendered seeds stale (run: npm run prerender):\n    ' + drift.join('\n    '));
-        else ok(`all ${Object.keys(man).length} seeds fresh`);
+        else ok(`all ${(man.ids || []).length} seeds fresh`);
     }
 }
 

@@ -20,39 +20,3 @@ tags: []
 {% set _figpath = "esbd-diagrams/" + figname + ".njk" %}
 {% include _figpath %}
 </figure>
-
-<script>
-// Capture hook (dev-only, used by bin/prerender.mjs via ?capture): once the
-// figure has rendered, stamp each bd-container's <svg> with a viewBox derived
-// from its measured pixel size and make it flow responsively. The engine draws
-// in absolute pixels (no viewBox) and re-lays-out on resize; stamping the
-// measured size as a viewBox turns the captured frame into a self-contained,
-// scalable seed. Inert unless ?capture is present, so normal previews are
-// untouched.
-if (new URLSearchParams(location.search).has('capture')) {
-    // A diagram svg is a large svg inside the figure. Container ids follow no
-    // single convention (-container, -plot, -rho, bare idprefix, …) and not all
-    // containers carry the bd-container class, so we identify the container
-    // structurally: walk up from the svg to the nearest id-bearing ancestor
-    // (ResponsivePlot's inner wrapper div has no id, so this lands on the
-    // container). Tag the svg with that id and stamp a viewBox from its measured
-    // size (the engine draws in absolute px with no viewBox) so the seed scales.
-    const stamp = () => {
-        document.querySelectorAll('figure svg').forEach((svg) => {
-            if (svg.getAttribute('data-container')) return; // already done
-            const r = svg.getBoundingClientRect();
-            if (r.width < 40 || r.height < 40) return; // skip icons, not-yet-rendered
-            let el = svg.parentElement;
-            while (el && !el.id) el = el.parentElement;
-            if (!el || !el.id) return;
-            svg.setAttribute('data-container', el.id);
-            svg.setAttribute('viewBox', `0 0 ${Math.round(r.width)} ${Math.round(r.height)}`);
-            svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-            svg.style.position = 'static';
-            svg.style.width = '100%';
-            svg.style.height = 'auto';
-        });
-    };
-    for (let t = 120; t <= 9000; t += 200) setTimeout(stamp, t); // re-poll until render settles
-}
-</script>

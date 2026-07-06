@@ -19,6 +19,10 @@ export default async function myConfig(eleventyConfig) {
 
     // --- Set variables ---
     eleventyConfig.addGlobalData('esbdJsPath', '/esbd/js/');
+    // CAPTURE=1 (set by bin/prerender.mjs) injects a client-side hook into the
+    // topic layout that stamps each rendered diagram svg with a viewBox + its
+    // container id, for headless seed capture. Empty in normal/production builds.
+    eleventyConfig.addGlobalData('captureMode', process.env.CAPTURE || '');
 
     // --- Markdown Options ---
     const md = new markdownIt({

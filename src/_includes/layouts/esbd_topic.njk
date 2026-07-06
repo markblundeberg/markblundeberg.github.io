@@ -46,6 +46,40 @@
         });
     </script>
     {# prettier-ignore-end #}
+
+    {% if captureMode %}
+    {# Seed-capture hook (only in CAPTURE=1 builds, used by bin/prerender.mjs;
+       never shipped to production). Once each live D3 figure has rendered at its
+       real on-page width, stamp its <svg> with a viewBox from the measured size
+       (the engine draws in absolute px, no viewBox) and tag it with its container
+       id, so the capture is self-contained, scalable, and correctly sized.
+       Container ids follow no convention and not all carry the bd-container
+       class, so the container is found structurally: walk up (≤3 levels) to the
+       nearest id-bearing ancestor. Static circuit figures are skipped. #}
+    <script>
+        (function () {
+            const stamp = () => {
+                document.querySelectorAll('figure svg').forEach((svg) => {
+                    if (svg.getAttribute('data-container')) return;
+                    if (svg.classList.contains('circuit-svg')) return;
+                    const r = svg.getBoundingClientRect();
+                    if (r.width < 40 || r.height < 40) return;
+                    let el = svg.parentElement, depth = 0;
+                    while (el && !el.id && depth < 3) { el = el.parentElement; depth++; }
+                    if (!el || !el.id) return;
+                    svg.setAttribute('data-container', el.id);
+                    svg.setAttribute('viewBox',
+                        `0 0 ${Math.round(r.width)} ${Math.round(r.height)}`);
+                    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+                    svg.style.position = 'static';
+                    svg.style.width = '100%';
+                    svg.style.height = 'auto';
+                });
+            };
+            for (let t = 150; t <= 9000; t += 200) setTimeout(stamp, t);
+        })();
+    </script>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
