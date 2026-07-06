@@ -81,7 +81,7 @@ Current driven from a low-resistivity region into a high-resistivity one: $V_{\m
 
 ## $V^\circ_i$ as a perfect neutralizer
 
-As a convenient approximation we can 'assert' local neutrality almost everywhere as a convenience. Mathematically, we do this indirectly by sending $\varepsilon \rightarrow 0$, which converts the Poisson equation into the **local electroneutrality approximation**:^[Newman & Balsara (2005), *Electrochemical Systems*.]
+As a convenient approximation we can 'assert' local neutrality almost everywhere as a convenience. Mathematically, we do this indirectly by sending $\varepsilon \rightarrow 0$, which converts the Poisson equation into the **local electroneutrality approximation**:^[Newman & Balsara (2021), *Electrochemical Systems*.]
 
 $$
 \begin{aligned}

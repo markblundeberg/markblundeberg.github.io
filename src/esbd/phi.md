@@ -58,7 +58,7 @@ Let's go back to our electrochemical potential partitioning:
 
 $$ \bar\mu_i = \mu_{\mathrm{int},i} + z_i F \phi. $$
 
-As discussed on [the intro page](../), this does get rid of some annoying aspects of electricity like general arbitrary offsets. But since $z_i F \phi$ is a bad estimate of the electrostatic energy felt by an ion, that means $\mu_{\mathrm{int},i}$ must include all the necessary electrostatic corrections to $z_i F \phi$. And that is in addition to any 'chemical-only' $\mu$ that might behave like an uncharged solute.
+As discussed on the [electrochemical potential tutorial](../muintro/), this does get rid of some annoying aspects of electricity like general arbitrary offsets. But since $z_i F \phi$ is a bad estimate of the electrostatic energy felt by an ion, that means $\mu_{\mathrm{int},i}$ must include all the necessary electrostatic corrections to $z_i F \phi$. And that is in addition to any 'chemical-only' $\mu$ that might behave like an uncharged solute.
 
 In principle this is fine, we can just say $\mu_{\mathrm{int},i}$ is an artificial number that shall compensate for all deficiencies in $z_i F \phi$. But then, $\mu_{\mathrm{int},i}$ has no physical meaning: it is merely an artificial difference between two energies of different nature ($\bar\mu_i$ being a thermodynamic property of ions, $z_i F \phi$ being the rest energy extrapolated from imaginary test charges that unnaturally permeate the material).
 
@@ -184,11 +184,11 @@ a quantity that is unfortunately called "real chemical potential".
 
 The work function $W$ of electrons is one such quantity, actually a negative: $W = -\alpha_{\mathrm{e}^-}$. And we can generalize the idea of work function to other charged species:
 
-$$ W_i = \varepsilon_{i,0} - \alpha_{\mathrm{e}^-}, $$
+$$ W_i = \varepsilon_{i,0} - \alpha_i, $$
 
 where $\varepsilon_{i,0}$ is the internal rest energy of the particle in vacuum. (In general $\varepsilon_{i,0}$ includes things like molecular binding energies but also arbitrary offsets that have to be consistent with our convention of setting chemical potentials. Anyway, we can say $\varepsilon_{i,0}$ is just a constant for each kind of ion, and conventionally we set it to 0 for electrons.)
 
-The naive notion is that $W_i$ describes the strength with which species $i$ is bound inside that material. With uncharged solutes we can imagine dropping them in from vacuum and $\varepsilon_{i,0} - \mu_i$ gives us an energy of solvation. This sure looks similar to $\varepsilon_{i,0} - \alpha_{\mathrm{e}^-}$, so why can't we just say that work function $W_i$ is the equivalent energy of solvation for charged solutes?
+The naive notion is that $W_i$ describes the strength with which species $i$ is bound inside that material. With uncharged solutes we can imagine dropping them in from vacuum and $\varepsilon_{i,0} - \mu_i$ gives us an energy of solvation. This sure looks similar to $\varepsilon_{i,0} - \alpha_i$, so why can't we just say that work function $W_i$ is the equivalent energy of solvation for charged solutes?
 
 Well, $W_i$ is only the energy of solvation for an electron or ion that starts out exactly just outside the surface. Its starting energy is sensitive to $\psi$, in other words, *its starting energy already under the control of the surface*! This is quite different from uncharged solutes where we don't care where they start in vacuum, and their energy is totally independent of proximity to surfaces.
 

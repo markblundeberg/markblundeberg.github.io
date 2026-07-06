@@ -27,7 +27,7 @@ That is,
 * $V_{\mathrm{e}^-}$ equalizes when we short metal wires together,
 * $V_{\mathrm{e}^-}$ drops across a resistor according to $\Delta V = IR$,
 * $V_{\mathrm{e}^-}$ is thermodynamically analogous to an electronic 'pressure',
-* $V_{\mathrm{e}^-}$ differences are what we measure with voltmeters,^[Riess, I. (1997). [What does a voltmeter measure?](https://doi.org/10.1016/s0167-2738(96)00542-5) Solid State Ionics, 95(3–4), 327–328.]^[Kittel & Kroemer (2000), *Thermal Physics*]
+* $V_{\mathrm{e}^-}$ differences are what we measure with voltmeters,^[Riess, I. (1997). [What does a voltmeter measure?](https://doi.org/10.1016/s0167-2738(96)00542-5) Solid State Ionics, 95(3–4), 327–328.]^[Kittel & Kroemer (1980), *Thermal Physics*]
 * it is a $V_{\mathrm{e}^-}$ difference that you measure across a battery's terminals,
 * $V_{\mathrm{e}^-}$ is conventionally assigned to $0$ for the electrical ground,
 * and so on, you get the idea.
