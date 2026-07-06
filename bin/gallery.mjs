@@ -29,6 +29,22 @@ main { max-width: none !important; padding: 14px !important; }
 body { background: #fff !important; }
 </style>`;
 
+// Each figure's real display width = the max-width of its enclosing <figure> in
+// the owning .md. The figtest harness always uses 560px, which over-widens any
+// figure that's narrower on its real page (e.g. copper-solder is 320). Recover
+// the real width so the gallery shows true proportions.
+function realWidths() {
+    const map = {};
+    const dir = 'src/esbd';
+    for (const f of readdirSync(dir).filter((f) => f.endsWith('.md'))) {
+        const md = readFileSync(join(dir, f), 'utf8');
+        const re = /<figure[^>]*max-width:\s*(\d+)px[\s\S]{0,300}?esbd-diagrams\/([\w-]+)/g;
+        let m;
+        while ((m = re.exec(md))) if (!(m[2] in map)) map[m[2]] = parseInt(m[1], 10);
+    }
+    return map;
+}
+
 function waitForServer(url, tries = 50) {
     return new Promise((resolve, reject) => {
         const tick = (n) => {
@@ -59,12 +75,15 @@ const server = spawn('python3', ['-m', 'http.server', String(PORT), '--bind', '1
 });
 
 mkdirSync(OUT_DIR, { recursive: true });
+const widths = realWidths();
 try {
     await waitForServer(`http://127.0.0.1:${PORT}/figtest/`);
     await sleep(300);
     for (const name of names) {
+        const w = widths[name] || 560; // real display width; 560 = figtest default
         const pagePath = join(BUILD_DIR, 'figtest', name, 'index.html');
-        let html = readFileSync(pagePath, 'utf8').replace('</head>', HIDE_CHROME + '</head>');
+        let html = readFileSync(pagePath, 'utf8').replace('</head>',
+            `${HIDE_CHROME}<style>.demo-container{max-width:${w}px!important}</style></head>`);
         // replace everything in <main> before the figure (the literal "# Figure
         // preview…" text + <style>) with a clean one-line name label
         html = html.replace(/(<main[^>]*>)[\s\S]*?(<figure)/, `$1<div class="galtitle">${name}</div>$2`);
@@ -73,19 +92,20 @@ try {
             `<script>for(let t=200;t<=6000;t+=200)setTimeout(()=>{document.title=String(Math.ceil(document.body.scrollHeight))},t)</script></body>`);
         writeFileSync(pagePath, html);
         const url = `http://127.0.0.1:${PORT}/figtest/${name}/?static`;
+        const winW = w + 40; // figure width + main padding, so the canvas fits it
         // pass 1: read the rendered content height from <title>
         const dom = execFileSync('chromium',
-            ['--headless', '--no-sandbox', '--window-size=760,1200', '--virtual-time-budget=6000', '--dump-dom', url],
+            ['--headless', '--no-sandbox', `--window-size=${winW},1200`, '--virtual-time-budget=6000', '--dump-dom', url],
             { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
-        const h = Math.min(4000, Math.max(300, parseInt((dom.match(/<title>(\d+)<\/title>/) || [])[1] || '1000', 10) + 16));
-        // pass 2: screenshot at exactly that height (no dead whitespace)
+        const h = Math.min(4000, Math.max(200, parseInt((dom.match(/<title>(\d+)<\/title>/) || [])[1] || '1000', 10) + 16));
+        // pass 2: screenshot at exactly that width×height (no dead whitespace)
         execFileSync('chromium', [
             '--headless', '--no-sandbox', '--hide-scrollbars',
-            '--force-device-scale-factor=2', `--window-size=760,${h}`,
+            '--force-device-scale-factor=2', `--window-size=${winW},${h}`,
             '--virtual-time-budget=6000',
             `--screenshot=${join(OUT_DIR, name + '.png')}`, url,
         ], { stdio: 'ignore' });
-        console.log(`  ✓ ${name}.png (${h}px)`);
+        console.log(`  ✓ ${name}.png (${winW}×${h})`);
     }
 } finally {
     server.kill();
