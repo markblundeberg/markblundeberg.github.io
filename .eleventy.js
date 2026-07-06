@@ -131,29 +131,36 @@ export default async function myConfig(eleventyConfig) {
     // the pre-JS / no-JS frame. Inert when no seeds are committed (the dir is
     // empty), so this is a no-op until the v1.0 seed rollout.
     const PRERENDER_DIR = 'src/esbd/prerendered';
-    const figureSeeds = {};
-    if (fs.existsSync(PRERENDER_DIR)) {
-        for (const f of fs.readdirSync(PRERENDER_DIR)) {
-            if (f.endsWith('.svg')) {
-                figureSeeds[f.replace(/\.svg$/, '')] = fs
-                    .readFileSync(`${PRERENDER_DIR}/${f}`, 'utf8')
-                    .trim();
+    // Re-read seeds whenever the dir changes (mtime), and watch the dir, so a
+    // fresh `npm run prerender` is picked up during `eleventy --serve` WITHOUT a
+    // restart (prerender rebuilds the dir, bumping its mtime). Inert when empty.
+    eleventyConfig.addWatchTarget(PRERENDER_DIR);
+    let seedCache = { mtime: -1, seeds: {} };
+    const currentSeeds = () => {
+        let mt;
+        try { mt = fs.statSync(PRERENDER_DIR).mtimeMs; } catch { return {}; }
+        if (mt !== seedCache.mtime) {
+            const seeds = {};
+            for (const f of fs.readdirSync(PRERENDER_DIR)) {
+                if (f.endsWith('.svg'))
+                    seeds[f.replace(/\.svg$/, '')] = fs
+                        .readFileSync(`${PRERENDER_DIR}/${f}`, 'utf8')
+                        .trim();
             }
+            seedCache = { mtime: mt, seeds };
         }
-    }
-    if (Object.keys(figureSeeds).length) {
-        eleventyConfig.addTransform('inject-prerender', function (content) {
-            if (!(this.page.outputPath || '').endsWith('.html')) return content;
-            // inject into empty container divs whose id has a committed seed
-            return content.replace(
-                /<div\b([^>]*)>\s*<\/div>/g,
-                (m, attrs) => {
-                    const id = (attrs.match(/id="([^"]+)"/) || [])[1];
-                    return id && figureSeeds[id] ? `<div${attrs}>${figureSeeds[id]}</div>` : m;
-                }
-            );
+        return seedCache.seeds;
+    };
+    eleventyConfig.addTransform('inject-prerender', function (content) {
+        if (!(this.page.outputPath || '').endsWith('.html')) return content;
+        const seeds = currentSeeds();
+        if (!Object.keys(seeds).length) return content;
+        // inject into empty container divs whose id has a committed seed
+        return content.replace(/<div\b([^>]*)>\s*<\/div>/g, (m, attrs) => {
+            const id = (attrs.match(/id="([^"]+)"/) || [])[1];
+            return id && seeds[id] ? `<div${attrs}>${seeds[id]}</div>` : m;
         });
-    }
+    });
 
     eleventyConfig.addPairedShortcode('figcaption', (content) => {
         // Renders markdown inside of it, which avoid the issues from trying
