@@ -64,15 +64,15 @@ The problem is that our thermodynamic measurements really only have access to $V
 
 The following transformation shifts the ${V^{\circ}_i}$ ladder to ${V^{\circ}_i}'$, and produces an equally valid collection of values $\gamma_i '$ and $a_i'$:
 
-$$ {V^{\circ}_i}' = V^{\circ}_i - \lambda , $$
+$$ {V^{\circ}_i}' = V^{\circ}_i - \xi , $$
 
-$$ \gamma_i ' = \gamma_i \exp([z_i F / (RT)] \cdot \lambda) , $$
+$$ \gamma_i ' = \gamma_i \exp([z_i F / (RT)] \cdot \xi) , $$
 
-$$ a_i ' = a_i \exp([z_i F / (RT)] \cdot \lambda) , $$
+$$ a_i ' = a_i \exp([z_i F / (RT)] \cdot \xi) , $$
 
-for any value of $\lambda$. For example, with $\lambda=\tfrac{RT}{F}\ln(10) = 59~\mathrm{mV}$ we can lower the entire $V^{\circ}_i$ ladder by 59 mV, and multiply $a_i$ and $\gamma_i$ for $\mathrm{[]^+}$ ions by ×10, multiply $a_i$ and $\gamma_i$ for $\mathrm{[]^{2-}}$ ions by ×0.01, and so on.
+for any value of $\xi$. For example, with $\xi=\tfrac{RT}{F}\ln(10) = 59~\mathrm{mV}$ we can lower the entire $V^{\circ}_i$ ladder by 59 mV, and multiply $a_i$ and $\gamma_i$ for $\mathrm{[]^+}$ ions by ×10, multiply $a_i$ and $\gamma_i$ for $\mathrm{[]^{2-}}$ ions by ×0.01, and so on.
 
-This is a *severe* form of arbitrariness, not merely a simple one-time offset but instead a continuum of offsets. We can choose a different value of $\lambda$ for each kind of solution in each set of conditions. If we have a curve of some ion's activity vs concentration, we can turn it into any other curve by making $\lambda$ vary with concentration (and adjusting all other ions' activities accordingly). This ambiguity seems troublesome, but on the other hand, it is purely a mathematical obstacle that we have created by insisting on relating non-ideal solutions to ideal solutions.
+This is a *severe* form of arbitrariness, not merely a simple one-time offset but instead a continuum of offsets. We can choose a different value of $\xi$ for each kind of solution in each set of conditions. If we have a curve of some ion's activity vs concentration, we can turn it into any other curve by making $\xi$ vary with concentration (and adjusting all other ions' activities accordingly). This ambiguity seems troublesome, but on the other hand, it is purely a mathematical obstacle that we have created by insisting on relating non-ideal solutions to ideal solutions.
 
 As we'll see below, this ambiguity gets addressed in practice by:
 * focussing on activity combinations that are unaffected by the ambiguity, or,
@@ -80,7 +80,7 @@ As we'll see below, this ambiguity gets addressed in practice by:
 
 ### Mean activity / mean activity coefficient
 
-There are certain products of ion activities or ion activity coefficients that are overall charge-neutral, and so the $\lambda$ arbitrariness cancels out. That makes them unambiguously measurable. These are known as **mean activities** or **mean activity coefficients**. For example, products like $\gamma_{\mathrm{Na}^+}\gamma_{\mathrm{Cl}^-}$, or $a_{\mathrm{Zn}^{2+}} (a_{\mathrm{Cl}^-})^2 $ are measurable. Often we talk about the logarithms of these quantities.
+There are certain products of ion activities or ion activity coefficients that are overall charge-neutral, and so the $\xi$ arbitrariness cancels out. That makes them unambiguously measurable. These are known as **mean activities** or **mean activity coefficients**. For example, products like $\gamma_{\mathrm{Na}^+}\gamma_{\mathrm{Cl}^-}$, or $a_{\mathrm{Zn}^{2+}} (a_{\mathrm{Cl}^-})^2 $ are measurable. Often we talk about the logarithms of these quantities.
 
 <figure class="demo-container" style="max-width: 350px">
 <img src="/esbd/img/nacl_solvent_comparison_gamma.svg" style="max-width:100%"/>
@@ -95,9 +95,9 @@ for some weights $w_i$, satisfying:
 $$\sum_i w_i = 0.$$
 The same condition applies for a mean activity coefficient $\prod_{i} \gamma_i ^{w_i / z_i}$.
 
-Let's prove this. We can perform the $\lambda$-transformation on $\prod_{i} a_i ^{w_i / z_i}$ and see that:
-$$\prod_{i} (a_i) ^{w_i / z_i} = \Big[\prod_{i} (a_i') ^{w_i / z_i}\Big] \cdot \exp\Big(-\tfrac{F}{RT} \lambda \sum_i w_i \Big) . $$
-Therefore, in order to be insensitive to $\lambda$, the weights $w_i$ must be zero-sum. $\prod_{i} (a_i) ^{w_i / z_i} = \prod_{i} (a_i') ^{w_i / z_i}$, and likewise $\prod_{i} (\gamma_i) ^{w_i / z_i} = \prod_{i} (\gamma_i') ^{w_i / z_i}$.
+Let's prove this. We can perform the $\xi$-transformation on $\prod_{i} a_i ^{w_i / z_i}$ and see that:
+$$\prod_{i} (a_i) ^{w_i / z_i} = \Big[\prod_{i} (a_i') ^{w_i / z_i}\Big] \cdot \exp\Big(-\tfrac{F}{RT} \xi \sum_i w_i \Big) . $$
+Therefore, in order to be insensitive to $\xi$, the weights $w_i$ must be zero-sum. $\prod_{i} (a_i) ^{w_i / z_i} = \prod_{i} (a_i') ^{w_i / z_i}$, and likewise $\prod_{i} (\gamma_i) ^{w_i / z_i} = \prod_{i} (\gamma_i') ^{w_i / z_i}$.
 
 A mean activity like this corresponds to a sum of $V_i - V_j$ differences, i.e., a linear combination of voltages $\sum_i w_i V_i$ with zero-sum weights $w_i$:
 
@@ -105,7 +105,7 @@ $$
 \sum_i w_i V_i = \sum_i w_i V^\circ_i + \tfrac{RT}{F} \ln \prod_i a_i^{w_i / z_i}.
 $$
 
-Here, $\sum_i w_i V^\circ_i$ is also insensitive to the overall offset (including $\lambda$ arbitrariness) because it has zero-sum weights, so it is a constant for given solvent and $w_i$'s.
+Here, $\sum_i w_i V^\circ_i$ is also insensitive to the overall offset (including $\xi$ arbitrariness) because it has zero-sum weights, so it is a constant for given solvent and $w_i$'s.
 
 > On binary salts: usually mean activity coefficients are described only for binary salts.^[LibreTexts ["Activities of Electrolytes - The Mean Activity Coefficient".](https://chem.libretexts.org/Bookshelves/Physical_and_Theoretical_Chemistry_Textbook_Maps/Thermodynamics_and_Chemical_Equilibrium_(Ellgen)/16%3A_The_Chemical_Activity_of_the_Components_of_a_Solution/16.17%3A_Activities_of_Electrolytes_-_The_Mean_Activity_Coefficient)] Here's how that works: suppose we have a compound $M_p X_q$ and we add it to the pure solvent with formal molality $b$. It dissolves completely, and we assume that it formally dissociates into ion molalities $b_M = pb$ and $b_X = qb$ (and the combination must be charge neutral hence $p z_M + q z_X = 0$). After some math, we then have:
 > $$ V_M - V_X = \underbrace{V^\circ_{M_p X_q} + s \ln(b/b^\circ) }_{\text{ideal}} + \underbrace{\frac{p+q}{pz_M}\tfrac{RT}{F} \ln ( \gamma^\pm )}_{\text{deviation}}. $$
@@ -153,7 +153,7 @@ In other words, we should really say that $\bar\mu_i$ is decomposed as so:
 
 $$\bar\mu_i = z_i F\phi' + \mu^\circ_{\mathrm{int},i} + RT \ln a_i $$
 
-which serves as a *definition* of $\phi'$, an "electrostatic potential" that no longer needs to correspond to any precise physical electrical property. The flexibility in choosing an activity convention (i.e., defining the concentration-dependence of $\phi'$ regardless of what $\phi$ is actually doing) basically takes advantage of the $\lambda$-shifting property described in the previous section.
+which serves as a *definition* of $\phi'$, an "electrostatic potential" that no longer needs to correspond to any precise physical electrical property. The flexibility in choosing an activity convention (i.e., defining the concentration-dependence of $\phi'$ regardless of what $\phi$ is actually doing) basically takes advantage of the $\xi$-shifting property described in the previous section.
 
 In summary: **When you adopt an ion activity convention, then $\phi$ no longer represents an electrostatic potential.**
 
