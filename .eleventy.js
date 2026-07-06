@@ -106,6 +106,20 @@ export default async function myConfig(eleventyConfig) {
         }
     );
 
+    // --- Circuit figure shortcode ---
+    // Inlines a committed, pre-rendered SVG from src/_includes/circuit/<name>.svg
+    // (produced by `npm run circuits`: circuitikz -> dvisvgm -> recolored to
+    // currentColor). Static; no browser/LaTeX at build time. Freshness is
+    // enforced by the circuit-figure guard in bin/check.mjs.
+    eleventyConfig.addShortcode('circuit', function (name) {
+        const p = `src/_includes/circuit/${name}.svg`;
+        try {
+            return fs.readFileSync(p, 'utf8').trim();
+        } catch {
+            return `[missing circuit figure: ${name} — run npm run circuits]`;
+        }
+    });
+
     eleventyConfig.addPairedShortcode('figcaption', (content) => {
         // Renders markdown inside of it, which avoid the issues from trying
         // to temporarily escape into the outer markdown. This lets us render

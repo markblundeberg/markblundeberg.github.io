@@ -57,7 +57,8 @@ This matrix $ \mathbf{C}^{\mathrm{amb}}$ is truly a {% wiki "capacitance matrix"
 
 In general the ambipolar capacitance is a dense matrix (all entries nonzero) and can be thought of in terms of a fully connected equivalent circuit:
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 320px">
+{% circuit "cap-ambipolar-mesh" %}
 {% figcaption %}
 The ambipolar capacitance matrix as a circuit: one node per carrier, a capacitor between every pair (a fully connected mesh; e.g. five carriers).
 {% endfigcaption %}
@@ -65,7 +66,8 @@ The ambipolar capacitance matrix as a circuit: one node per carrier, a capacitor
 
 A special case of ambipolar capacitance is the two-carrier case, as found in battery electrodes. This results in $\mathbf{C}^{\mathrm{amb}}$ being a $2 \times 2$ matrix of the form $\big[\begin{smallmatrix} C & -C \\ -C & C \end{smallmatrix}\big]$ for some $C > 0$, which is just a single capacitor in the equivalent circuit:
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 300px">
+{% circuit "cap-two-carrier" %}
 {% figcaption %}
 The two-carrier special case: a single capacitor between the electron and ion nodes (a battery electrode).
 {% endfigcaption %}
@@ -249,7 +251,8 @@ $$ \mathbf{C}^{\mathrm{ext,ideal}} = \begin{bmatrix}
 \end{bmatrix} $$
 #}
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 330px">
+{% circuit "cap-extended-star" %}
 {% figcaption %}
 The extended matrix as a circuit: every carrier node capacitor-coupled to a central $\phi$ node (a star), plus direct carrier–carrier capacitors in the nonideal case; the ideal case is a pure star.
 {% endfigcaption %}
@@ -259,7 +262,8 @@ In relation to this, the ambipolar capacitance can be seen as elimination of the
 
 This makes $\mathbf{C}^{\mathrm{amb}}$ to be a dense matrix ('fully connected'), even when $\mathcal{C}$ is ideal and diagonal (so $\mathbf{C}^{\mathrm{ext}}$ is a 'star' topology).
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 520px">
+{% circuit "cap-kron-reduction" %}
 {% figcaption %}
 Eliminating the $\phi$ node (star-mesh / Kron reduction) turns the ideal star into the fully connected ambipolar mesh.
 {% endfigcaption %}

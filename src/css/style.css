@@ -258,6 +258,14 @@ figure.diagram-placeholder {
     background-color: #fdfdfd;
 }
 
+/* Pre-rendered circuitikz figures: scale to container, follow text color. */
+.circuit-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0.25em auto;
+}
+
 figcaption {
     font-size: small;
 }

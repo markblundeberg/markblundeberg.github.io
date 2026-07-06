@@ -10,7 +10,8 @@
     "unit": "node bin/unit.mjs",
     "newfig": "node bin/newfig.mjs",
     "voicelint": "node bin/voicelint.mjs",
-    "test": "node bin/check.mjs"
+    "test": "node bin/check.mjs",
+    "circuits": "node bin/render-circuits.mjs"
   },
   "keywords": [],
   "author": "",

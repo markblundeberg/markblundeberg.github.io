@@ -8,6 +8,9 @@ import { execSync } from 'node:child_process';
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { runUnitTests } from './unit.mjs';
+import { createHash } from 'node:crypto';
+
+const sha256 = (s) => createHash('sha256').update(s).digest('hex');
 
 const OUT = '/tmp/esbd_check_build';
 let failures = 0;
@@ -102,6 +105,47 @@ const katexErr = htmlFiles.filter((f) =>
 if (katexErr.length)
     bad('KaTeX parse errors in: ' + katexErr.map((f) => f.replace(OUT, '')).join(', '));
 else ok('no KaTeX parse errors');
+
+// 6. Circuit figure freshness (committed SVGs vs source .tex) ---------------
+// Pure text: re-hash source + committed SVG, compare to manifest. No LaTeX/
+// browser, so it runs in CI. Rendering (npm run circuits) is local-only.
+section('circuit figures');
+{
+    const cdir = 'figures-src/circuit';
+    const odir = 'src/_includes/circuit';
+    const manPath = join(cdir, 'manifest.json');
+    if (!existsSync(manPath)) {
+        bad('circuit manifest.json missing (run: npm run circuits)');
+    } else {
+        const man = JSON.parse(readFileSync(manPath, 'utf8'));
+        const texs = readdirSync(cdir)
+            .filter((f) => f.endsWith('.tex'))
+            .map((f) => f.replace(/\.tex$/, ''));
+        const drift = [];
+        for (const name of texs) {
+            const rec = man[name];
+            if (!rec) {
+                drift.push(`${name}: no manifest entry`);
+                continue;
+            }
+            if (sha256(readFileSync(join(cdir, name + '.tex'), 'utf8')) !== rec.tex)
+                drift.push(`${name}.tex changed since last render`);
+            const svgPath = join(odir, name + '.svg');
+            if (!existsSync(svgPath)) {
+                drift.push(`${name}.svg missing`);
+                continue;
+            }
+            if (sha256(readFileSync(svgPath, 'utf8')) !== rec.svg)
+                drift.push(`${name}.svg edited/corrupted since render`);
+        }
+        for (const name of Object.keys(man))
+            if (!texs.includes(name))
+                drift.push(`${name}: manifest entry has no source .tex`);
+        if (drift.length)
+            bad('circuit figures stale (run: npm run circuits):\n    ' + drift.join('\n    '));
+        else ok(`all ${texs.length} circuit figures fresh`);
+    }
+}
 
 // ---------------------------------------------------------------------------
 console.log(

@@ -1,0 +1,25 @@
+% Ambipolar capacitance matrix C^amb as a fully-connected mesh (K5).
+% One node per carrier, a capacitor between every pair.
+\documentclass[tikz, border=4pt]{standalone}
+\usepackage[american]{circuitikz}
+
+\begin{document}
+\begin{tikzpicture}
+  \ctikzset{bipoles/length=0.7cm}
+
+  % 5 nodes on a pentagon, apex up
+  \foreach \i in {1,...,5} {
+    \coordinate (N\i) at ({72 * (\i - 1) + 90}: 3);
+    \node[circle, fill, inner sep=1.5pt,
+          label={[label distance=-1pt]{72 * (\i - 1) + 90}:$V_{\i}$}] at (N\i) {};
+  }
+
+  % fully connected: a capacitor between every pair
+  \foreach \i in {1,...,4} {
+    \pgfmathtruncatemacro{\start}{\i + 1}
+    \foreach \j in {\start,...,5} {
+      \draw (N\i) to[C] (N\j);
+    }
+  }
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,39 @@
+% Kron reduction / star-mesh transform: eliminating the phi node turns the
+% ideal star (C^ext) into the fully-connected ambipolar mesh (C^amb).
+\documentclass[tikz, border=4pt]{standalone}
+\usepackage[american]{circuitikz}
+
+\begin{document}
+\begin{tikzpicture}
+  \ctikzset{bipoles/length=0.55cm}
+  \def\rad{1.7}
+
+  % ---- left: star (with central phi) ----
+  \begin{scope}[shift={(0,0)}]
+    \node[circle, fill, inner sep=1.3pt, label={[label distance=0pt]-90:$\phi$}] (C) at (0,0) {};
+    \foreach \i in {1,...,5} {
+      \coordinate (L\i) at ({72 * (\i - 1) + 90}: \rad);
+      \node[circle, fill, inner sep=1.3pt] at (L\i) {};
+    }
+    \foreach \i in {1,...,5} { \draw (L\i) to[C] (C); }
+    \node at (0,-2.6) {$\mathbf{C}^{\mathrm{ext}}$ (star)};
+  \end{scope}
+
+  % ---- arrow ----
+  \draw[-{Latex[length=3mm]}, line width=0.6pt] (2.7,0) -- (4.5,0)
+    node[midway, above=1pt] {Kron};
+
+  % ---- right: mesh (phi eliminated) ----
+  \begin{scope}[shift={(7.2,0)}]
+    \foreach \i in {1,...,5} {
+      \coordinate (R\i) at ({72 * (\i - 1) + 90}: \rad);
+      \node[circle, fill, inner sep=1.3pt] at (R\i) {};
+    }
+    \foreach \i in {1,...,4} {
+      \pgfmathtruncatemacro{\start}{\i + 1}
+      \foreach \j in {\start,...,5} { \draw (R\i) to[C] (R\j); }
+    }
+    \node at (0,-2.6) {$\mathbf{C}^{\mathrm{amb}}$ (mesh)};
+  \end{scope}
+\end{tikzpicture}
+\end{document}

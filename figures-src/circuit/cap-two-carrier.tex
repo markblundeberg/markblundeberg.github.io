@@ -1,0 +1,18 @@
+% Two-carrier special case: a single capacitor between the electron node
+% and the ion node (a battery electrode).
+\documentclass[tikz, border=4pt]{standalone}
+\usepackage[american]{circuitikz}
+
+\begin{document}
+\begin{tikzpicture}
+  \ctikzset{bipoles/length=0.9cm}
+
+  \coordinate (L) at (0, 0);
+  \coordinate (R) at (4, 0);
+
+  \node[circle, fill, inner sep=1.5pt, label=left:$V_{\mathrm{e}^-}$]  at (L) {};
+  \node[circle, fill, inner sep=1.5pt, label=right:$V_{\mathrm{ion}}$] at (R) {};
+
+  \draw (L) to[C, l=$C$] (R);
+\end{tikzpicture}
+\end{document}

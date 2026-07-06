@@ -1,0 +1,18 @@
+{
+  "cap-ambipolar-mesh": {
+    "tex": "671eeae50388d7249fb648fa06ee994851e2ba1b5f347ffab2d7e541387c726e",
+    "svg": "20fe7328b7c21a36256dff71e1297e8b40b1c59c1d0f6dc8200a153fd7ede2e9"
+  },
+  "cap-extended-star": {
+    "tex": "e28585284df57833704673b063961241b17fae2b7445f7b78afddf5d59bde40b",
+    "svg": "bdf105ce5a68615b20c990ab0593a795fdf0925395cd7c0c759ac89ddb33dc7e"
+  },
+  "cap-kron-reduction": {
+    "tex": "fa3217c55a067d35c54361ceb6e38a6bfef0a676135116df3a8b14915f57ac75",
+    "svg": "77fb4d9cf99d0be12d95c8f835f09706b4972676beefb1d0ec655271640da949"
+  },
+  "cap-two-carrier": {
+    "tex": "81a7db4e35f850d27a16e620647fefb24ef12ccbd988fa198452e80c4adb7b9a",
+    "svg": "2e6026237581e4e5a1d8c8a45ab63f0a432f95d46cbfad8a7e0a1e9d791ac2f5"
+  }
+}
