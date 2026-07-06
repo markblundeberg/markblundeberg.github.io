@@ -71,11 +71,15 @@ This one principle accounts for a whole family of effects that, in their convent
 
 The simplest disturbance is a fixed charge that has no $V_i$ of its own, because it cannot move: the ionized donors ($N_{\mathrm{D}}^+$) and acceptors ($N_{\mathrm{A}}^-$) of a semiconductor, or the fixed charged groups built into an ion-exchange membrane. Such charges enter the balance only through $\rho_{\mathrm{bg}}$, and the ladder shifts until the mobile carriers compensate them: downward toward the conduction edge for $n$-type material, upward toward the valence edge for $p$-type. This is exactly the doping story from the [previous topic](../solidstate/), now read directly as a question of where the ladder sits.
 
->>Mark: give the equations (in semiconductor n_i, e notation) - direct parallel to above
+The semiconductor case is the same pair of statements in the physicist's notation. Electrons and holes are the two mobile carriers; at equilibrium they share a single rail, $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$ (the Fermi level), and it is the band-edge ladder that floats instead. Mass action on the generation reaction $\varnothing \rightleftharpoons \mathrm{e}^- + \mathrm{h}^+$ locks their product,
 
-$$ n_e n_h = K   (mass action law) $$
+$$ n_{\mathrm{e}}\, n_{\mathrm{h}} = K = n_i^2, $$
 
-$$  -e n_e + e n_h + rho_bg = 0  (neutrality law) $$
+which is exactly the ladder-independent constant $K$ from above — here the squared intrinsic carrier density, set by the band gap alone. Neutrality then selects where the ladder rests,
+
+$$ -e\, n_{\mathrm{e}} + e\, n_{\mathrm{h}} + \rho_{\mathrm{bg}} = 0, $$
+
+with $\rho_{\mathrm{bg}}$ the ionized dopants ($+eN_{\mathrm{D}}^+$ for donors, $-eN_{\mathrm{A}}^-$ for acceptors). The two equations close the system just as before: mass action fixes the product, neutrality picks the offset, and together they place $n_{\mathrm{e}}$ and $n_{\mathrm{h}}$ — the same ladder shift as the ionic case, reached here indirectly through neutrality rather than by pinning the offset outright.
 
 <figure class="diagram-placeholder">
 {% figcaption %}
