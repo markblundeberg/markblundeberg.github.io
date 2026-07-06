@@ -156,6 +156,13 @@ Going beyond the ideal case, however, correlations will cause cross terms. And i
 
 Note the internal chemical capacitance matrix $\mathcal{C}$ is generally symmetric and positive definite, but it is *not* a proper capacitance matrix because it's not charge neutral: the rows do not add to zero.
 
+<figure class="demo-container" style="max-width: 300px">
+{% circuit "cap-internal-incomplete" %}
+{% figcaption %}
+The internal chemical capacitance $\mathcal{C}$ as a circuit: like the extended star, but the shared $\phi$ terminal — and every capacitor's $\phi$-half — is missing. Each carrier's capacitor is left open, its charge with nowhere to return, which is exactly why the rows do not sum to zero.
+{% endfigcaption %}
+</figure>
+
 ### Screening properties
 
 We define a per-ion screening vector:

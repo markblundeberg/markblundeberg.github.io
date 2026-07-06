@@ -1,0 +1,49 @@
+% Internal chemical capacitance C (script-C): like the extended star, but with
+% the central phi node and every phi-half of the capacitors removed. Each
+% carrier keeps only its own half-capacitor, a stub pointing at nothing -- the
+% shared return terminal is missing, so the rows do not sum to zero. This is
+% the visual of a matrix that is symmetric + positive-definite but NOT a proper
+% (charge-neutral) capacitance matrix.
+\documentclass[tikz, border=4pt]{standalone}
+\usepackage[american]{circuitikz}
+\usetikzlibrary{calc}
+
+\definecolor{spA}{HTML}{377EB8} % electron
+\definecolor{spB}{HTML}{E41A1C} % lithium
+\definecolor{spC}{HTML}{80B030} % chloride
+\definecolor{spD}{HTML}{8A4FA0} % oxide
+\definecolor{spE}{HTML}{E6AB02} % silver
+
+% Half capacitor: only A's half of the A--B capacitor (lead + near plate),
+% clipped to A's side of the midpoint. The far (B) half is simply not drawn.
+\newcommand{\halfcap}[4][]{% [style] A B cA
+  \path (#2) -- (#3) coordinate[midway] (bcM);
+  \begin{scope}
+    \pgfinterruptboundingbox
+    \clip let \p1=(#2), \p2=(#3), \n1={atan2(\y2-\y1,\x2-\x1)} in
+      [rotate around={\n1:(bcM)}] ($(bcM)+(-6,-6)$) rectangle ($(bcM)+(0,6)$);
+    \endpgfinterruptboundingbox
+    \draw[#1,#4] (#2) to[C] (#3);
+  \end{scope}
+}
+
+\begin{document}
+\begin{tikzpicture}
+  \ctikzset{bipoles/length=0.7cm}
+
+  \coordinate (C) at (0,0); % where phi WOULD be -- deliberately absent
+
+  \foreach \i/\c in {1/spA, 2/spB, 3/spC, 4/spD, 5/spE} {
+    \coordinate (N\i) at ({72 * (\i - 1) + 90}: 3);
+    \node[circle, fill=\c, inner sep=1.5pt,
+          label={[label distance=-1pt, text=\c]{72 * (\i - 1) + 90}:$V_{\i}$}] at (N\i) {};
+  }
+
+  % each carrier: only its own half-capacitor, pointing inward at the missing phi
+  \halfcap{N1}{C}{spA}
+  \halfcap{N2}{C}{spB}
+  \halfcap{N3}{C}{spC}
+  \halfcap{N4}{C}{spD}
+  \halfcap{N5}{C}{spE}
+\end{tikzpicture}
+\end{document}
