@@ -15,7 +15,7 @@ The thermodynamic force on a carrier is the gradient of its electrochemical pote
 
 $$ -\nabla V_i. $$
 
-That is the whole of what drives a current: each species is pushed down its own $V_i$ slope. On the band diagram the reading could not be more direct. A flat $V_i$ carries no net current, the species being either at equilibrium or perfectly conducting; a sloping $V_i$ marks a driving force, and the steeper the slope, the harder the dissipation. Resistance is visible as gradient.
+That is the whole of what drives a current: each species is pushed down its own $V_i$ slope. On the band diagram the reading could not be more direct. A flat $V_i$ ordinarily carries no net current, the species sitting at equilibrium; a sloping $V_i$ marks a driving force, and the steeper the slope, the harder the dissipation. Resistance is visible as gradient.^[The exception is a perfect conductor: as $\sigma_i \to \infty$ the slope needed to carry a given current shrinks to zero, so a superconductor keeps $V_i$ flat *while* carrying current — the finite product $J_i = -\sigma_i\nabla V_i$ surviving the $0\times\infty$. It is that well-defined flat $V_{\mathrm{e}^-}$ that lets it connect sensibly to ordinary conductors; see [other conductors](../other_conductors/).]
 
 ## Drift and diffusion are one law
 

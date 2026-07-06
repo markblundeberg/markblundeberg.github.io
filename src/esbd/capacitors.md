@@ -45,7 +45,7 @@ The third coupling is between two carriers sharing one place. When two species c
 
 ## The capacitive divider
 
-These capacitances seldom act alone. When one carrier's $V_i$ is driven while its neighbours are held, the standard state $V^\circ_i$ follows neither cleanly but settles at a point fixed by the *ratio* of the capacitances on each side: a capacitive divider. This is the quiet machinery behind two effects we lean on elsewhere. It is why an abundant background charge pins $V^\circ_i$ and screens so stiffly back [in electrostatics](../basicelectrostatics/), and it is what will pin $V^\circ_i$ in [saturation](../saturation/), where a plentiful spectator clamps the standard state and forces the active carrier to deplete.
+These capacitances seldom act alone. When one carrier's $V_i$ is driven while its neighbours are held, the standard state $V^\circ_i$ follows neither cleanly but settles at a point fixed by the *ratio* of the capacitances on each side: a capacitive divider. This is the quiet machinery behind two effects we lean on elsewhere. It is why an abundant *mobile* carrier pins $V^\circ_i$ and screens so stiffly back [in electrostatics](../basicelectrostatics/), and it is what will pin $V^\circ_i$ in [saturation](../saturation/), where a plentiful spectator clamps the standard state and forces the active carrier to deplete.
 
 ## Takeaways
 

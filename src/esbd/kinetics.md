@@ -48,7 +48,7 @@ A Schottky diode: the sharp interface with a pinned barrier. The conduction edge
 
 ## Ions cross interfaces too
 
-Nothing in the argument above was special to electrons. An ion crossing an interface — $\mathrm{Li}^+$ entering an intercalation particle, an ion transferring across an [ITIES](../charge_control/), water splitting at a bipolar-membrane junction — sees the same picture: a step $\Delta V_i$ across the interface, a barrier, and a current exponential in the step,
+Nothing in the argument above was special to electrons. An ion crossing an interface — $\mathrm{Li}^+$ entering an intercalation particle, an ion transferring across an [ITIES](../charge_control/) — sees the same picture: a step $\Delta V_i$ across the interface, a barrier, and a current exponential in the step,
 
 $$ J_i \propto e^{|z_i| F \Delta V_i \cdot \alpha / RT} - e^{-|z_i| F \Delta V_i (1-\alpha)/RT}. $$
 
@@ -63,7 +63,7 @@ One electrode under load, in space. The step at the interface is the surface ove
 
 ## Where the electrons jump: Marcus–Gerischer
 
-Why an exponential, and what sets $J_0$? The classic microscopic picture is due to Marcus and Gerischer. Each $\mathrm{Ox}$ ion offers a vacant electronic state and each $\mathrm{Red}$ ion an occupied one, but solvent fluctuations smear these into two broad distributions — a filled band $D_{\mathrm{red}}$ and an empty band $D_{\mathrm{ox}}$, Gaussian bumps offset from the couple's level by the reorganization energy $\lambda$ on either side. Electrons tunnel between the electrode and whatever portion of these bumps lines up with the electrode's own filled or empty states; bias slides the electrode's levels across the bumps, and the overlap integral is the current.
+Why an exponential, and what sets $J_0$? The classic microscopic picture is due to Marcus and Gerischer. Each $\mathrm{Ox}$ ion offers a vacant electronic state and each $\mathrm{Red}$ ion an occupied one, but solvent fluctuations smear these into two broad distributions — a filled band $D_{\mathrm{red}}$ and an empty band $D_{\mathrm{ox}}$, Gaussian bumps offset to either side of the couple's *standard* level $V^\circ_{\mathrm{e}^-}$ by the reorganization energy $\lambda$. Electrons tunnel between the electrode and whatever portion of these bumps lines up with the electrode's own filled or empty states; bias slides the electrode's levels across the bumps, and the overlap integral is the current.
 
 This is the one place in the book where the traditional electron-energy diagram and ours meet almost verbatim: a Gerischer diagram *is* a redox-level band diagram, and our $V_{\mathrm{e}^-}$ diagrams are the same picture flipped upside down (energy up = voltage down), with the $D_{\mathrm{red}}$ bump sitting above the couple's $V_{\mathrm{e}^-}$ and $D_{\mathrm{ox}}$ below. The quantitative machinery is well covered in the literature,^[Gerischer, H. (1960–61). [Über den Ablauf von Redoxreaktionen an Metallen und an Halbleitern, I–III.](https://doi.org/10.1524/zpch.1960.26.3_4.223) Z. Phys. Chem. NF, 26, 223–247 & 325–338; 27, 48–79. Modern treatments: Schmickler, W., & Santos, E. (2010). *Interfacial Electrochemistry* (2nd ed.). Springer; Bard, A. J., & Faulkner, L. R. (2022). *Electrochemical Methods* (3rd ed.), ch. 3.] so I'll restrict myself to two points the standard cartoons tend to blur:
 

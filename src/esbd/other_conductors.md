@@ -22,7 +22,7 @@ A metal phase as an ESBD. Screening is perfect, so the electrical state is just 
 
 ## Fast ionic conductors: metals for ions
 
-Some solids play the same trick with an ion. A fast, or "superionic," conductor such as {% wiki "Yttria-stabilized zirconia", "yttria-stabilized zirconia" %} carries a high concentration of mobile oxide ions, $\mathrm{O}^{2-}$, hopping through vacancies in the lattice. The microscopics are crowded and thoroughly non-dilute, yet thermodynamically the bulk is once again a single sloping species voltage, $J_{\mathrm{O}^{2-}} = -\sigma_{\mathrm{O}^{2-}}\nabla V_{\mathrm{O}^{2-}}$. These single-ion conductors are the ionic counterpart of the metal wire, and because they pass only one species, they are also the only kind of junction that can settle into true equilibrium without a standing current.
+Some solids play the same trick with an ion. A fast, or "superionic," conductor such as {% wiki "Yttria-stabilized zirconia", "yttria-stabilized zirconia" %} carries a high concentration of mobile oxide ions, $\mathrm{O}^{2-}$, hopping through vacancies in the lattice. The microscopics are crowded and thoroughly non-dilute, yet thermodynamically the bulk is once again a single sloping species voltage, $J_{\mathrm{O}^{2-}} = -\sigma_{\mathrm{O}^{2-}}\nabla V_{\mathrm{O}^{2-}}$. These single-ion conductors are the ionic counterpart of the metal wire, and because they pass only one species, a junction involving such an 'ion wire' can settle into equilibrium without a standing current. (No diffusion potentials with only one carrier.)
 
 <figure class="demo-container" style="max-width: 380px">
 {% include "esbd-diagrams/esbd-oc-ysz.njk" %}
