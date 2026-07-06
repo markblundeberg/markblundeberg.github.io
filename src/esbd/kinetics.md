@@ -50,9 +50,9 @@ A Schottky diode: the sharp interface with a pinned barrier. The conduction edge
 
 Nothing in the argument above was special to electrons. An ion crossing an interface — $\mathrm{Li}^+$ entering an intercalation particle, an ion transferring across an [ITIES](../charge_control/), water splitting at a bipolar-membrane junction — sees the same picture: a step $\Delta V_i$ across the interface, a barrier, and a current exponential in the step,
 
-$$ J_i \propto e^{z_i F \Delta V_i \cdot \alpha / RT} - e^{-z_i F \Delta V_i (1-\alpha)/RT}. $$
+$$ J_i \propto e^{|z_i| F \Delta V_i \cdot \alpha / RT} - e^{-|z_i| F \Delta V_i (1-\alpha)/RT}. $$
 
-This evenhandedness is a quiet advantage of the $V_i$ picture: electron transfer and ion transfer are drawn with the same element, and a battery's interfaces can carry an overpotential on the $V_{\mathrm{Li}^+}$ rail just as legitimately as on the $V_{\mathrm{e}^-}$ rail.
+Here $\Delta V_i$ is the interfacial step in $V_i$, signed so a positive step drives the forward current (for electrons, $\Delta V_i = \eta$); the $|z_i|$ keeps the current running down the step whatever the carrier's charge. This evenhandedness is a quiet advantage of the $V_i$ picture: electron transfer and ion transfer are drawn with the same element, and a battery's interfaces can carry an overpotential on the $V_{\mathrm{Li}^+}$ rail just as legitimately as on the $V_{\mathrm{e}^-}$ rail.
 
 <figure class="demo-container" style="max-width: 460px">
 {% include "esbd-diagrams/esbd-kin-driven.njk" %}
