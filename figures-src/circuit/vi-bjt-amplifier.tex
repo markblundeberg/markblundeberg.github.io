@@ -1,0 +1,28 @@
+% Common-emitter NPN amplifier: an everyday electronic circuit whose node
+% voltages (V_IN, V_OUT, V_CC) are all the electronic species voltage V_e-.
+% Replaces the borrowed Wikimedia image on v_i.md.
+\documentclass[tikz, border=4pt]{standalone}
+\usepackage[american]{circuitikz}
+
+\begin{document}
+\begin{tikzpicture}
+  \ctikzset{bipoles/length=0.85cm}
+
+  \node[npn] (Q) at (0,0) {};
+
+  % base <- input
+  \draw (Q.base) to[short] ++(-0.5,0)
+        to[short, -o] ++(-1.1,0) node[left] {$V_{\mathrm{IN}}$};
+
+  % emitter -> ground
+  \draw (Q.emitter) -- ++(0,-0.9) node[ground] {};
+
+  % collector -> R -> Vcc rail
+  \draw (Q.collector) -- ++(0,0.35) coordinate (cnode)
+        to[R, l=$R$] ++(0,2.1)
+        to[short, -o] ++(0,0.2) node[above] {$V_{CC}$};
+
+  % output tap at collector node
+  \draw (cnode) to[short, -o] ++(1.3,0) node[right] {$V_{\mathrm{OUT}}$};
+\end{tikzpicture}
+\end{document}

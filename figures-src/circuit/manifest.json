@@ -14,5 +14,9 @@
   "cap-two-carrier": {
     "tex": "81a7db4e35f850d27a16e620647fefb24ef12ccbd988fa198452e80c4adb7b9a",
     "svg": "2e6026237581e4e5a1d8c8a45ab63f0a432f95d46cbfad8a7e0a1e9d791ac2f5"
+  },
+  "vi-bjt-amplifier": {
+    "tex": "36f68ee9888ef71ce6e5b4183a5d52e953164e74e2fc92ca62c0c53174c19c06",
+    "svg": "c31c621f250b709663ad71f9aa00300a4aafb90118bfa98d398d4c32e74add4d"
   }
 }
