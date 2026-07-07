@@ -1,6 +1,6 @@
 ---
 layout: layouts/esbd_topic.njk
-title: 'Capacitance'
+title: 'Chemical capacitance matrices'
 tags: [page, esbd_topic]
 orderESBD: 82
 ---
