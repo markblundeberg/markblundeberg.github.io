@@ -109,13 +109,13 @@ Since we have $\mu_{\mathrm{Ag}} = 0~\mathrm{kJ/mol}$ and $\mu_{\mathrm{AgCl}} =
 
 $$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} = +1.138~\mathrm{V}$$
 
-By the way, don't confuse this with the electrode potential $E = V_{\mathrm{e}^-} - V_{\mathrm{SHE}}$, which is approximately 0.2 V with this electrode.
+By the way, don't confuse this with the [electrode potential](../e/) $E = V_{\mathrm{e}^-} - V_{\mathrm{SHE}}$, which is approximately 0.2 V with this electrode.
 
 ## Implied levels and half-reactions
 
 Electrons are not present as free constituents in a solution, however their thermodynamic availability (and $V_{\mathrm{e}^-}$) can be well defined in specific contexts, particularly with half-reactions.
 
-* Some half-reactions are actually 'redox-active' in solution, and can swap electrons directly with other half-reactions. It's useful to plot their distinct $V_{\mathrm{e}^-}$ values to show disequilibrium.
+* Some half-reactions are actually 'redox-active' in solution, and can swap electrons directly with other half-reactions. It's useful to plot their distinct $V_{\mathrm{e}^-}$ values to show disequilibrium. (→ [half-reactions](../half/))
 * Some half-reactions like the AgCl reaction are only happening at electrodes. It is helpful to show the $V_{\mathrm{e}^-}$ that the solution "wants" especially when it is out of equilibrium with the electrode.
 
 <figure class="demo-container" style="max-width: 340px">

@@ -75,7 +75,7 @@ What's important is that this detailed landscape reveals all sorts of local diss
 
 ## Takeaways
 
-As we saw, the ESBD diagram is quite simple in a lithium-ion battery at equilibrium, where the main operation involves only $V_{\mathrm{Li}^+}$ and $V_{\mathrm{e}^-}$ levels, and we can visually see the per-electrode OCV value.
+As we saw, the ESBD diagram is quite simple in a lithium-ion battery at equilibrium, where the main operation involves only $V_{\mathrm{Li}^+}$ and $V_{\mathrm{e}^-}$ levels, and we can visually see the per-electrode OCV value (each electrode's [electrode potential](../e/) against a $\mathrm{Li}/\mathrm{Li}^+$ reference).
 
 During charge and discharge, the $V_i$ voltages form a direct visualization of how various electronic and ionic resistances are responsible for the total "internal resistance".
 
@@ -107,7 +107,7 @@ At the leftmost part of the plot, we see that $V_{\mathrm{Li}^+}$ is equal betwe
 
 As we move more right, we see the surface $V_{\mathrm{Li}^+}$ drop quickly, indicating that the graphite particles there are being heavily delithiated. And finally as we approach the separator, we see that even the core $V_{\mathrm{Li}^+}$ level has dropped, indicating that these particles are being fully depleted.
 
-We see a roughly constant gap between $V_{\mathrm{Li}^+}$ on the surface and $V_{\mathrm{Li}^+}$ in the electrolyte, even with the particles that are barely used yet. This is because the model uses an "activation" type of equation for the $\mathrm{Li}^+$ moving between the particle and electrolyte. Thus, even a tiny $\mathrm{Li}^+$ current out of the graphite corresponds to a significant $V_{\mathrm{Li}^+}$ step, and a slight increase in $V_{\mathrm{Li}^+}$ gives a much larger current.
+We see a roughly constant gap between $V_{\mathrm{Li}^+}$ on the surface and $V_{\mathrm{Li}^+}$ in the electrolyte, even with the particles that are barely used yet. This is because the model uses an "activation" type of equation ([interface kinetics](../kinetics/)) for the $\mathrm{Li}^+$ moving between the particle and electrolyte. Thus, even a tiny $\mathrm{Li}^+$ current out of the graphite corresponds to a significant $V_{\mathrm{Li}^+}$ step, and a slight increase in $V_{\mathrm{Li}^+}$ gives a much larger current.
 
 ### Electrolyte
 
