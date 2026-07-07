@@ -55,7 +55,7 @@ The above concludes our discussion of electrostatics for now, because we usually
 
 > <p align="center"><b>Quasi-neutrality principle</b><br/>"screening is very very strong"</p> 
 >
-> **In most conductors, the screening length $\lambda$ tends to be quite small (nanometers or less) and so by sensible macroscopic length scales, the system is *almost* exactly neutral everywhere.**
+> **In most conductors, the screening length $\lambda$ tends to be small (nanometers in metals and concentrated electrolytes, though reaching microns in lightly doped semiconductors or dilute solutions), so on sensible macroscopic length scales the system is usually *almost* exactly neutral everywhere.**
 >
 > Corollary: **the concentration of mobile charge carriers needed to produce a gradually varying $\phi$ is a tiny and negligible fraction of the total carrier concentration.**
 

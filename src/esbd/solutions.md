@@ -30,7 +30,7 @@ Statistical mechanics tells us that a dilute solute's electrochemical potential 
 
 $$ \bar\mu_i = \underbrace{z_i F \phi}_{\text{electrostatic}} + \underbrace{\mu^\circ_{\mathrm{int},i}}_{\text{offset}} + \underbrace{RT \ln(c_i/c^\circ)}_{\text{entropic}}. $$
 
-The first term is the electrostatic energy of the ion's charge at a local potential $\phi$. The second, the **standard internal chemical potential** $\mu^\circ_{\mathrm{int},i}$, is fixed by the ion's chemical identity and the way it disturbs its solvent (its solvation shell); it does not depend on concentration.^[I label this term the *offset* rather than "chemical," because neither word quite fits. It is not purely chemical: $\mu^\circ_{\mathrm{int},i}$ quietly absorbs the ion's solvation electrostatics (the Born energy and more) and local entropy alongside any chemical binding. Nor is it the full "chemical part," which a chemist would take to include the activity term as well. It is really just the fixed, ion-specific piece left once the bath potential and the dilution entropy are set aside, and even its boundary with $z_i F \phi$ is a convention rather than a physical fact. I make this case in [the case against $\phi$](../phi/).] Only the third, entropic term does, growing logarithmically as the solute is diluted. Here $c_i$ is the {% wiki "molar concentration" %} (moles per litre, also called molarity) and $c^\circ = 1~\mathrm{mol/L}$ is a fixed reference.
+The first term is written as the electrostatic energy of the ion's charge at a local potential $\phi$. The second, the **standard internal chemical potential** $\mu^\circ_{\mathrm{int},i}$, is fixed by the ion's chemical identity and the way it disturbs its solvent (its solvation shell); it does not depend on concentration.^[I label this term the *offset* rather than "chemical," because neither word quite fits. It is not purely chemical: $\mu^\circ_{\mathrm{int},i}$ quietly absorbs the ion's solvation electrostatics (the Born energy and more) and local entropy alongside any chemical binding. Nor is it the full "chemical part," which a chemist would take to include the activity term as well. It is really just the fixed, ion-specific piece left once the bath potential and the dilution entropy are set aside, and even its boundary with $z_i F \phi$ is a convention rather than a physical fact. I make this case in [the case against $\phi$](../phi/).] Only the third, entropic term does, growing logarithmically as the solute is diluted. Here $c_i$ is the {% wiki "molar concentration" %} (moles per litre, also called molarity) and $c^\circ = 1~\mathrm{mol/L}$ is a fixed reference.
 
 The split between the first two terms is partly conventional, since it turns on how one defines the ambiguous $\phi$, so rather than carry them separately we fold them together. Dividing through by the molar charge $z_i F$ to cast everything in volts, and gathering the two concentration-independent terms into one, gives
 
@@ -56,14 +56,13 @@ where $c = c_{\mathrm{Na}^+} = c_{\mathrm{Cl}^-}$ is the concentration of either
 
 Although the $V^\circ_i$ values float, crucially all the differences $V^\circ_i - V^\circ_j$ are invariant properties of the pure solvent. These differences also vary with temperature and pressure but that won't be too important for our purposes.
 
-Here are a number of selected $V^\circ_i$ values for water at standard conditions (25&nbsp;°C, 1 bar):
-[[Data table here](../data/)]
+A selection of $V^\circ_i$ values for water at standard conditions (25&nbsp;°C, 1 bar) is [tabulated on the data page](../data/).
 
 <figure class="demo-container" style="max-width: 200px">
 {% include "esbd-diagrams/V-std-ladder.njk" %}
 </figure>
 
-I call this the **standard state ladder** for water. The standard state ladder is a rigid ladder: as we change the electrical state or solute composition of the solution, the $V^\circ_i$ values may move up and down but they have to all stay rigidly locked to one another. In contrast, $V_i$ values are not rigid and their relative positions will change with composition.
+I call this the **standard state ladder** for water. The standard state ladder is a rigid ladder: as we change the electrical state or solute composition of the solution, the $V^\circ_i$ values may move up and down but they have to all stay rigidly locked to one another.^[Within one solvent, that is: a different solvent has its own ladder, and where two solutions meet or a medium grades between them the ladders can step. See [inhomogeneities](../inhomog/).] In contrast, $V_i$ values are not rigid and their relative positions will change with composition.
 
 The [Data table](../data/) topic in the appendix contains the numerical values used above, as well as the procedure used to obtain them from standard ionic Gibbs energies of formation ($\Delta_{\mathrm{f}} G^\circ_i$ values).
 

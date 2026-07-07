@@ -20,7 +20,7 @@ The first is a convenience. The second is the claim I actually care about, and i
 
 ## What particles want
 
-How does a mobile particle know where to go? For any single particle that is a hopeless tangle of microscopic forces, but on average the statistical tendency is captured by one number, the {% wiki "chemical_potential" %} $\mu_i$ for species $i$. Chemical potential is to particles what temperature is to energy: two bodies in contact equilibrate by exchanging particles until their $\mu_i$ match, exactly as they exchange heat until their temperatures match. Particles drift from high $\mu_i$ to low $\mu_i$, and the spontaneous flow stops precisely when $\mu_i$ is everywhere equal.
+How does a mobile particle know where to go? For any single particle that is a hopeless tangle of microscopic forces, but on average the statistical tendency is captured by one number, the {% wiki "chemical_potential" %} $\mu_i$ for species $i$. Chemical potential is to particles what temperature is to energy: two bodies in contact equilibrate by exchanging particles until their $\mu_i$ match, exactly as they exchange heat until their temperatures match. Particles drift from high $\mu_i$ to low $\mu_i$ (at a fixed temperature), and the spontaneous flow stops precisely when $\mu_i$ is everywhere equal.
 
 That last sentence is the whole reason chemical potential is worth defining. The equality of $\mu_i$ at equilibrium is a kind of zeroth law for particles, and everything downstream (reactions, phase changes, diffusion, the readings on a voltmeter) is a statement about $\mu_i$ trying to level out.
 
