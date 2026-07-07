@@ -63,6 +63,6 @@ So mobile electrons are practically unique, though not thermodynamically special
 
 "Every ion has a voltage" sounds too good to be true, but the $V_i$ really are meaningful, and really are reachable: trivially for electrons, and with more effort (an ion-reversible electrode, or ultimately an ion-selective membrane) for the rest. The difficulty is only ever one of reach, set by our instruments, and it never bears on whether each $V_i$ is a genuine voltage.
 
-Next, having leaned so hard on species voltages, I turn to criticize the traditional foundation of electrochemistry: the electrostatic potential $\phi$.
+Next, [offsets galore](../offsetsgalore/) makes those conventions concrete: an interactive tour of every arbitrary offset in the framework, and which ones actually move the picture.
 
-[**NEXT TOPIC: The case against $\phi$**](../phi/)
+[**NEXT TOPIC: Offsets galore**](../offsetsgalore/)

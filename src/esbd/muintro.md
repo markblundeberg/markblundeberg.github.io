@@ -108,4 +108,6 @@ A closing attitude, rather than a result: by now you can see that the urge to na
 
 *(Out of scope here: what sets each species' individual offset — its standard state $V^\circ_i$. That is a separate question, and an open one even for neutral species; this page is only about whether $\bar\mu_i$ is one thing, not about where each species' zero sits.)*
 
-[**NEXT TOPIC: Offsets galore**](../offsetsgalore/)
+What we can physically do with these voltages, and where each species' zero really sits, are the threads the rest of this chapter picks up, expanding [species voltage](../v_i/) much as this page expanded $\bar\mu_i$. First, [reaching any $V_i$](../nuances/) carries $V_i$ from a bare rescaling of $\bar\mu_i$ to something we can get at in the lab: what it takes to measure an arbitrary species' voltage, and why electrons are the easy case. Then [offsets galore](../offsetsgalore/) makes the conventions concrete, touring every arbitrary offset in the framework and sorting the ones that move the picture from the ones that change nothing.
+
+[**NEXT TOPIC: Reaching any $V_i$**](../nuances/)
