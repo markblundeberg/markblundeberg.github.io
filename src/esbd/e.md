@@ -7,7 +7,7 @@ orderESBD: 32
 
 # {{title}}
 
-We can now visualize the electrode potential $E$ on a $V_i$ diagram, along with its relatives — the 'redox potential' $E_h$, the 'equilibrium potential' $E_{\mathrm{eq}}$, and so on. They all share the form $E = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\text{ref})$, and every subtlety comes down to *which* $V_{\mathrm{e}^-}$ and *which* reference we have in mind. We take the simple case first and add the complications afterward.
+We can now visualize the electrode potential $E$^[The IUPAC Gold Book defines the [electrode potential](https://goldbook.iupac.org/terms/view/E01956) as the EMF of a cell in which the standard hydrogen electrode is the left-hand electrode — that is, "$E$ vs SHE." The redox potential $E_h$ is the same idea applied to a solution's own $V_{\mathrm{e}^-}$.] on a $V_i$ diagram, along with its relatives — the 'redox potential' $E_h$, the 'equilibrium potential' $E_{\mathrm{eq}}$, and so on. They all share the form $E = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\text{ref})$, and every subtlety comes down to *which* $V_{\mathrm{e}^-}$ and *which* reference we have in mind. We take the simple case first and add the complications afterward.
 
 ## Electrode potential at equilibrium
 
