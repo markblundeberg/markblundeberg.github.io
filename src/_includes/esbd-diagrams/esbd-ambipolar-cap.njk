@@ -1,0 +1,70 @@
+{% set idprefix = "esbd-ambipolar-cap" %}
+<div class="bd-container" id="{{idprefix}}" style="height: 235px; max-width: 340px"></div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+
+    // A static ESBD of three co-located ions, with an ambipolar chemical
+    // capacitor drawn between each pair of V_i rails. These are NOT dielectric
+    // capacitors: nothing here references phi or a standard state. Charge shifted
+    // onto one rail and off another (the pocket staying neutral) opens that pair's
+    // V_i - V_j gap, exactly as a capacitor stores charge for a voltage. Three
+    // carriers close the set into a triangle of three such capacitors. The plates
+    // are coloured by the two rails they bridge; the outer (Na-H) capacitor's wire
+    // crosses the Cl rail without a junction dot (a plain crossing, no connection).
+    const V = { na: 0.55, cl: 0.0, h: -0.55 };
+    const esbd = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}',
+        { sodium: SPECIES.sodium, chloride: SPECIES.chloride, proton: SPECIES.proton },
+        { yMode: 'abstract', margins: { right: 66, left: 30 } }
+    );
+    esbd.setSpatialLayout([0, 1], [{ ...REGION.solution, name: 'one solution' }]);
+    esbd.diagram.setYLabel('Species voltage');
+    esbd.setVRange(-0.95, 0.95);
+
+    esbd.updateTraceData([
+        { id: 'na', speciesId: 'sodium', curveType: 'voltage', label: 'V_{\\mathrm{Na}^+}', x: [0, 1], y: [V.na, V.na] },
+        { id: 'cl', speciesId: 'chloride', curveType: 'voltage', label: 'V_{\\mathrm{Cl}^-}', x: [0, 1], y: [V.cl, V.cl] },
+        { id: 'h', speciesId: 'proton', curveType: 'voltage', label: 'V_{\\mathrm{H}^+}', x: [0, 1], y: [V.h, V.h] },
+    ]);
+
+    // One capacitor per pair of rails. pcf = where the plates sit as a fraction
+    // from the high rail to the low one (0.5 = midway); the outer capacitor uses
+    // 0.3 so its plates stay in the upper gap rather than landing on the Cl rail.
+    const CAP = [
+        { hi: V.na, lo: V.cl, fx: 0.30, cHi: SPECIES.sodium.color, cLo: SPECIES.chloride.color, pcf: 0.5 },
+        { hi: V.cl, lo: V.h, fx: 0.50, cHi: SPECIES.chloride.color, cLo: SPECIES.proton.color, pcf: 0.5 },
+        { hi: V.na, lo: V.h, fx: 0.72, cHi: SPECIES.sodium.color, cLo: SPECIES.proton.color, pcf: 0.30 },
+    ];
+    const PLATE = 14, GAP = 5, WIRE = '#666';
+
+    function drawCaps() {
+        const g = esbd.diagram.customGroup;
+        const ys = esbd.diagram.yScale;
+        const pw = esbd.diagram.plotWidth;
+        if (!g || !ys || !pw) return;
+        g.selectAll('*').remove();
+        for (const c of CAP) {
+            const x = c.fx * pw;
+            const yHi = ys(c.hi), yLo = ys(c.lo);
+            const yMid = ys(c.hi + c.pcf * (c.lo - c.hi));
+            const yTop = yMid - GAP / 2, yBot = yMid + GAP / 2;
+            const wire = (y1, y2) => g.append('line').attr('x1', x).attr('y1', y1).attr('x2', x).attr('y2', y2).attr('stroke', WIRE).attr('stroke-width', 1.5);
+            const plate = (y, col) => g.append('line').attr('x1', x - PLATE).attr('y1', y).attr('x2', x + PLATE).attr('y2', y).attr('stroke', col).attr('stroke-width', 3).attr('stroke-linecap', 'round');
+            const dot = (y, col) => g.append('circle').attr('cx', x).attr('cy', y).attr('r', 2.6).attr('fill', col);
+            wire(yHi, yTop);
+            wire(yBot, yLo);
+            plate(yTop, c.cHi);
+            plate(yBot, c.cLo);
+            dot(yHi, c.cHi);
+            dot(yLo, c.cLo);
+        }
+    }
+
+    // The engine has no post-redraw hook, so wrap redraw to keep the capacitors
+    // positioned when the figure resizes.
+    const origRedraw = esbd.diagram.redraw.bind(esbd.diagram);
+    esbd.diagram.redraw = function () { origRedraw(); drawCaps(); };
+    drawCaps();
+</script>

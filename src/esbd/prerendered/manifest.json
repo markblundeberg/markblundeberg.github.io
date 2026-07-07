@@ -1,5 +1,5 @@
 {
-  "hash": "29398b0201917dff1668efd9cddb32177392b54e5a3955c6bd959fab5122c054",
+  "hash": "f37ee76bf50b4fdfb2b5c939c220db21dcdbfae051bbb1f50bd8e4cb8569a849",
   "ids": [
     "V-sd-ladder--diagram-container",
     "ag-agcl-electrode-container",
@@ -14,6 +14,7 @@
     "electrode-generic-differential-container",
     "esbd-ag-agcl-implied-container",
     "esbd-agcl-kcl-common-ion-bd-container",
+    "esbd-ambipolar-cap",
     "esbd-bipolar-bias-bpm",
     "esbd-bipolar-bias-diode",
     "esbd-bipolar-twin-bpm",
