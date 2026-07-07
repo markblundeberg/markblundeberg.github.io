@@ -7,7 +7,7 @@ orderESBD: 27
 
 # {{title}}
 
-Until now we have stayed at equilibrium, where every species voltage runs flat and reactions only fix offsets between them. A working device is never quite there. The moment current flows the $V_i$ lines tilt, and the appeal of the picture is that those tilts are precisely the dissipation. This topic works out how carriers move once the lines are free to slope.
+$V_i$ hands us transport almost for free: back in [species voltage](../v_i/) we saw that a carrier simply flows down its own $V_i$ slope, one of the quiet beauties of the picture, and we have even glimpsed it in action already, in [a battery's discharge](../lib/) and a [driven double layer](../basicelectrostatics/). A working device is never quite at equilibrium; the moment current flows the $V_i$ lines tilt, and the appeal of the picture is that those tilts are precisely the dissipation. This topic unpacks what that one simple law implies once the lines are free to slope.
 
 ## One driving force per species
 
