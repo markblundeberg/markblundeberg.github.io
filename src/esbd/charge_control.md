@@ -81,17 +81,11 @@ $$ -e\, n_{\mathrm{e}} + e\, n_{\mathrm{h}} + \rho_{\mathrm{bg}} = 0, $$
 
 with $\rho_{\mathrm{bg}}$ the ionized dopants ($+eN_{\mathrm{D}}^+$ for donors, $-eN_{\mathrm{A}}^-$ for acceptors). The two equations close the system just as before: mass action fixes the product, neutrality picks the offset, and together they place $n_{\mathrm{e}}$ and $n_{\mathrm{h}}$ — the same ladder shift as the ionic case, reached here indirectly through neutrality rather than by pinning the offset outright.
 
-<figure class="diagram-placeholder">
+<figure class="demo-container" style="max-width: 320px">
+{% include "esbd-diagrams/levels-cc-dopant.njk" %}
 {% figcaption %}
-TODO: This 100% needs a figure right here.
 
-Unlike the preceding two figures, the slider on this one shall be dopant charge, not direct ladder offset control.
-
-Unlike prior topic, here V_e and V_h are the firm anchors, and V^0 shifts -- it's a ladder shift just indirectly, leaning on neutrality.
-
-We can include the total charge vs ladder offset figure from above; now we are PINNED to 0. We are shifting rho_bg which makes the rho(delta ladder) move up and down, changing the zero crossing. A visual solve for neutrality.
-
-[subtlety to watch out for: because V_e = V_h, it is not immediately visually obvious that there are two V_i levels. But that is OK I think, the neutrality point stands if there are 1 carrier species or 20 carrier species.]
+The same solve in the physicist's notation. **Top**: the two carriers share a single pinned rail $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$ (the Fermi level), and it is the band-edge ladder $V^\circ_{\mathrm{e}^-}$, $V^\circ_{\mathrm{h}^+}$ that floats. **Bottom**: net charge versus ladder offset. This time the slider sets the fixed dopant charge $\rho_{\mathrm{bg}}$, not the offset: raising it lifts the $\rho$ curve bodily, sliding its zero-crossing — the neutral offset — to a new place, and the ladder follows. Donors ($\rho_{\mathrm{bg}} > 0$) drive it $n$-type, lifting the conduction edge toward the rail; acceptors do the reverse. (The two $V_i$ coincide, so the rail looks single — but neutrality is found the same way whether there is one mobile carrier or twenty.)
 
 {% endfigcaption %}
 </figure>

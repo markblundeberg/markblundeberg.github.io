@@ -1,0 +1,170 @@
+{% set idprefix = "levels-cc-dopant" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-levels" style="height: 205px; max-width: 250px"></div>
+<div class="bd-container" id="{{idprefix}}-charge" style="height: 165px; max-width: 250px"></div>
+{{ controls.slider(idprefix + "-rhobg", "Dopant charge $\\rho_{\\mathrm{bg}}$", { min: -7, max: 7, step: "any", value: 3, snap: 0, readout: true }) }}
+<div style="text-align: center; font-size: 0.78em; color: #777; margin-top: -0.1em">← acceptors ($p$)&nbsp;&nbsp;·&nbsp;&nbsp;donors ($n$) →</div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+
+    // Semiconductor as a two-carrier neutrality solve. Electrons and holes
+    // share ONE pinned rail V_e- = V_h+ (the Fermi level, here at 0); the
+    // band-edge ladder floats. In our voltage convention high electron energy
+    // is low voltage, so the conduction edge V°_e- sits BELOW the rail and the
+    // valence edge V°_h+ ABOVE it; both shift together by the ladder offset δ.
+    // Carrier counts follow the ideal-dilute law off their own band edge:
+    //   n_e = N·10^((V°_e- − V_F)/DEC),  n_h = N·10^((V_F − V°_h+)/DEC)
+    // Unlike the neutrality figure, the SLIDER is the fixed dopant charge
+    // ρ_bg, not δ. For each ρ_bg the system is pinned to neutrality (ρ = 0);
+    // we solve for the offset δ* where the net charge crosses zero, and draw
+    // the ladder there. Donors (ρ_bg > 0) push δ* up → n-type; acceptors down.
+    const DEC = 0.05916;
+    const V_F = 0; // pinned rail: V_e- = V_h+
+    const G = 0.07; // half band gap (edge offset from the rail at δ = 0)
+    const N = 10; // effective density-of-states prefactor (abstract units)
+    const ELE = SPECIES.electron.color;
+    const HOLE = SPECIES.hole.color;
+
+    const vCond = (d) => d - G; // conduction edge V°_e-  (below the rail)
+    const vVal = (d) => d + G; //  valence edge V°_h+  (above the rail)
+    const ne = (d) => N * Math.pow(10, (vCond(d) - V_F) / DEC);
+    const nh = (d) => N * Math.pow(10, (V_F - vVal(d)) / DEC);
+    // net mobile charge (units of e): +holes − electrons
+    const qMob = (d) => nh(d) - ne(d);
+    const rho = (d, rhobg) => qMob(d) + rhobg;
+
+    const S_MIN = -0.09,
+        S_MAX = 0.09;
+    // The mass-action product n_e·n_h is independent of δ (= n_i²), so
+    // neutrality n_e − n_h = ρ_bg is just a quadratic — solve it directly, no
+    // iteration: n_e = ρ_bg/2 + √((ρ_bg/2)² + n_i²), then read δ* off n_e.
+    const n_i = N * Math.pow(10, -G / DEC); // intrinsic carrier density (√K)
+    function solveOffset(rhobg) {
+        const neStar = rhobg / 2 + Math.sqrt((rhobg / 2) ** 2 + n_i * n_i);
+        return G + DEC * Math.log10(neStar / N); // n_e = N·10^((δ−G)/DEC)
+    }
+
+    // Top panel: an ESBD of the bulk semiconductor, styled after
+    // esbd-solidstate-flip — the band edges as shaded standard-state bands
+    // (electron→conduction, hole→valence) straddling the single pinned rail.
+    const esbd = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-levels',
+        { electron: SPECIES.electron, hole: SPECIES.hole },
+        { yMode: 'abstract', margins: { right: 60, left: 24 } }
+    );
+    esbd.setSpatialLayout([0, 1], [{ ...REGION.semiconductor, name: 'Semiconductor' }]);
+    esbd.diagram.setYLabel('Species voltage');
+    esbd.setVRange(-0.19, 0.19);
+    const xFlat = [0, 1];
+
+    const YR = 9; // net-charge y-limit
+    const chart = new XYPlot('{{idprefix}}-charge', {
+        xLabel: 'ladder offset',
+        yLabel: 'Net charge',
+        xRange: [S_MIN, S_MAX],
+        yRange: [-YR, YR],
+        xMode: 'abstract',
+        yMode: 'abstract',
+        margins: { bottom: 30, left: 35, right: 28 },
+    });
+    const sGrid = linspace(S_MIN, S_MAX, 121);
+    const FAINT = { lineWidth: 1.25, opacity: 0.55 };
+    // trim a trace where it leaves the y-window (the exponentials blow up near
+    // the panel edges; let them exit rather than spike)
+    const trim = (fn) => {
+        const x = [],
+            y = [];
+        for (const s of sGrid) {
+            const v = fn(s);
+            if (v >= -YR && v <= YR) {
+                x.push(s);
+                y.push(v);
+            }
+        }
+        return { x, y };
+    };
+
+    function update(rhobg) {
+        const dStar = solveOffset(rhobg);
+
+        esbd.updateTraceData([
+            {
+                id: 'vh_std',
+                speciesId: 'hole',
+                curveType: 'standardState',
+                label: 'V^\\circ_{\\mathrm{h}^+}',
+                x: xFlat,
+                y: [vVal(dStar), vVal(dStar)],
+            },
+            {
+                id: 've',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                label: 'V_{\\mathrm{e}^-}{=}V_{\\mathrm{h}^+}',
+                x: xFlat,
+                y: [V_F, V_F],
+            },
+            {
+                id: 've_std',
+                speciesId: 'electron',
+                curveType: 'standardState',
+                label: 'V^\\circ_{\\mathrm{e}^-}',
+                x: xFlat,
+                y: [vCond(dStar), vCond(dStar)],
+            },
+        ]);
+
+        chart.updateTraceData([
+            {
+                id: 'zero',
+                label: '0',
+                color: '#999',
+                style: { lineWidth: 1, dasharray: '4,3' },
+                x: [S_MIN, S_MAX],
+                y: [0, 0],
+            },
+            {
+                id: 'q_h',
+                showLabel: false,
+                color: HOLE,
+                style: FAINT,
+                ...trim((s) => nh(s)),
+            },
+            {
+                id: 'q_e',
+                showLabel: false,
+                color: ELE,
+                style: FAINT,
+                ...trim((s) => -ne(s)),
+            },
+            {
+                id: 'q_bg',
+                label: '\\rho_{\\mathrm{bg}}',
+                labelFrac: 0.08,
+                labelHAlign: 'left',
+                color: '#777',
+                style: FAINT,
+                x: [S_MIN, S_MAX],
+                y: [rhobg, rhobg],
+            },
+            {
+                id: 'rho',
+                label: '\\rho',
+                labelFrac: 0.92,
+                color: '#444',
+                style: { lineWidth: 2 },
+                ...trim((s) => rho(s, rhobg)),
+            },
+        ]);
+        chart.updateMarkers([{ id: 'here', x: dStar, y: 0 }]);
+
+        document.getElementById('{{idprefix}}-rhobg-readout').textContent =
+            (rhobg >= 0 ? '+' : '') + rhobg.toFixed(1);
+    }
+
+    makeSlider('{{idprefix}}-rhobg', update);
+</script>

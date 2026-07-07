@@ -1,5 +1,5 @@
 {
-  "hash": "6c3d690c4a7c0d5bb48f516cc3d1c9033e946076a7133925bb3e06077fd09845",
+  "hash": "ac9c64114fbdbf19b07e8abab4c0a12c31dadefce4d5855bcf3756363b6f72fd",
   "ids": [
     "V-sd-ladder--diagram-container",
     "ag-agcl-electrode-container",
@@ -64,6 +64,8 @@
     "kin-bv-explainer-iv",
     "kin-bv-explainer-levels",
     "kin-gerischer-container",
+    "levels-cc-dopant-charge",
+    "levels-cc-dopant-levels",
     "levels-cc-massaction-container",
     "levels-cc-neutrality-charge",
     "levels-cc-neutrality-levels",

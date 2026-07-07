@@ -1,13 +1,9 @@
 {% set idprefix = "levels-ss-ladder" %}
-{% import "macros/controls.njk" as controls %}
 <div class="bd-container" id="{{idprefix}}-container" style="height: 300px"></div>
-{{ controls.slider(idprefix + "-n", "Electron density $n$", { min: 8.5, max: 17.5, step: "any", value: 16, snap: 9.77, readout: true, unit: "cm<sup>&minus;3</sup>" }) }}
-<div style="text-align: center; font-size: 0.85em; margin-top: 0.2em"><span id="{{idprefix}}-np"></span></div>
 
 <script type="module">
     import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
     import { SPECIES } from '{{ esbdJsPath }}figureDefs.js';
-    import { makeSlider, renderSpanMath } from '{{ esbdJsPath }}utils.js';
 
     // Left band: acidified nitrate/chloride solution. V°_i from iondata.txt
     // (H⁺ 0, NO₃⁻ +1.127, Cl⁻ +1.360 V), chosen so the rung span (~1.4 V) is
@@ -27,8 +23,7 @@
     const V0E = 0.05, // conduction edge (electron standard state)
         V0H = V0E + 1.12; // valence edge (hole standard state)
     const LOG_NC = 19.447,
-        LOG_NV = 19.017,
-        LOG_NP = LOG_NC + LOG_NV - 1.12 / DEC; // 19.53
+        LOG_NV = 19.017;
 
     const BLUE = SPECIES.electron.color;
     const EDGE = { lineWidth: 2, dasharray: '4,2' }; // band-edge style
@@ -45,11 +40,6 @@
         bandMinPaddingOuter: { left: 48, right: 42 },
         bandMinPaddingInner: 80, // V_e- = V_h+ label hangs left of the semi band
     });
-
-    renderSpanMath(
-        document.getElementById('{{idprefix}}-np'),
-        `n\\,p = 10^{${LOG_NP.toFixed(1)}}\\,\\mathrm{cm^{-6}}\\;\\text{(fixed)}`
-    );
 
     function update(logn) {
         const VF = V0E + DEC * (LOG_NC - logn); // Fermi level, from the n side
@@ -153,12 +143,10 @@
                 labelHAlign: 'right',
             },
         ]);
-
-        renderSpanMath(
-            document.getElementById('{{idprefix}}-n-readout'),
-            `10^{${logn.toFixed(1)}}`
-        );
     }
 
-    makeSlider('{{idprefix}}-n', update);
+    // Static: a fixed representative n-type doping (n = 10^16 cm^-3). The
+    // interactive electron-density solve now lives in the Charge control topic
+    // (levels-cc-dopant); here the point is only the two-ladder analogy.
+    update(16);
 </script>
