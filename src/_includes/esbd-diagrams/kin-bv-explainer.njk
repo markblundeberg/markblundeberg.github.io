@@ -76,6 +76,7 @@
         xRange: [-0.12, 0.12],
         yRange: [-JMAX, JMAX],
         margins: { bottom: 34, left: 42, right: 10 },
+        clipTraces: true,
     });
 
     const FAINT = { lineWidth: 1.25, opacity: 0.55 };
@@ -188,15 +189,21 @@
 
         const logView = logEl.checked;
         const xs = linspace(-0.12, 0.12, 241);
-        // trim a trace where it leaves the y-window (in the linear view the
-        // exponential genuinely blows through the roof; let it exit mid-plot)
+        // Keep every grid point (constant count → smooth D3 path transitions);
+        // clamp values that blow past the window to just outside it and let the
+        // plot's clip-path cut them at the axis. Dropping points instead makes
+        // the path length jump and the transition interpolate garbage.
         const trim = (fn, lo, hi) => {
-            const x = [], y = [];
-            for (const e of xs) {
-                const v = fn(e);
-                if (v >= lo && v <= hi) { x.push(e); y.push(v); }
-            }
-            return { x, y };
+            const span = hi - lo,
+                ylo = lo - span,
+                yhi = hi + span;
+            return {
+                x: xs,
+                y: xs.map((e) => {
+                    const v = fn(e);
+                    return v < ylo ? ylo : v > yhi ? yhi : v;
+                }),
+            };
         };
         const Ja = (e) => Math.exp(alpha * z * f * e);
         const Jc = (e) => -Math.exp(-(1 - alpha) * z * f * e);

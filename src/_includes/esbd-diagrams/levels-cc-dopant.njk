@@ -70,26 +70,28 @@
         xMode: 'abstract',
         yMode: 'abstract',
         margins: { bottom: 30, left: 35, right: 28 },
+        clipTraces: true,
     });
     const sGrid = linspace(S_MIN, S_MAX, 121);
     const FAINT = { lineWidth: 1.25, opacity: 0.55 };
-    // trim a trace where it leaves the y-window (the exponentials blow up near
-    // the panel edges; let them exit rather than spike)
-    const trim = (fn) => {
-        const x = [],
-            y = [];
-        for (const s of sGrid) {
+    // Every trace carries the SAME grid (constant point count → D3's path
+    // transition stays smooth); values that run past the window are clamped
+    // just outside and the plot's clip-path cuts them cleanly at the axis.
+    const curve = (fn) => ({
+        x: sGrid,
+        y: sGrid.map((s) => {
             const v = fn(s);
-            if (v >= -YR && v <= YR) {
-                x.push(s);
-                y.push(v);
-            }
-        }
-        return { x, y };
-    };
+            return v < -3 * YR ? -3 * YR : v > 3 * YR ? 3 * YR : v;
+        }),
+    });
 
     function update(rhobg) {
         const dStar = solveOffset(rhobg);
+        // Park the ρ label where the curve passes the upper window (ρ = YR/2) —
+        // solveOffset(ρbg − h) gives the δ at which ρ = h — so it rides the
+        // visible part instead of flying off the clipped tail.
+        const rhoFrac = Math.min(0.9, Math.max(0.1,
+            (solveOffset(rhobg - YR / 2) - S_MIN) / (S_MAX - S_MIN)));
 
         esbd.updateTraceData([
             {
@@ -132,14 +134,14 @@
                 showLabel: false,
                 color: HOLE,
                 style: FAINT,
-                ...trim((s) => nh(s)),
+                ...curve((s) => nh(s)),
             },
             {
                 id: 'q_e',
                 showLabel: false,
                 color: ELE,
                 style: FAINT,
-                ...trim((s) => -ne(s)),
+                ...curve((s) => -ne(s)),
             },
             {
                 id: 'q_bg',
@@ -154,10 +156,11 @@
             {
                 id: 'rho',
                 label: '\\rho',
-                labelFrac: 0.92,
+                labelFrac: rhoFrac,
+                labelHAlign: 'right',
                 color: '#444',
                 style: { lineWidth: 2 },
-                ...trim((s) => rho(s, rhobg)),
+                ...curve((s) => rho(s, rhobg)),
             },
         ]);
         chart.updateMarkers([{ id: 'here', x: dStar, y: 0 }]);

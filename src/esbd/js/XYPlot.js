@@ -32,9 +32,15 @@ class XYPlot extends ResponsivePlot {
             yRange: [0, 1],
             xMode: 'numeric',
             yMode: 'numeric',
+            // Clip traces to the plot rect, so a trace can carry a CONSTANT set
+            // of points (wild values clamped just outside the window) and be cut
+            // cleanly at the axis — instead of dropping points, which makes the
+            // path length jump and D3's 'd' transition interpolate garbage.
+            clipTraces: false,
             defaultTraceStyle: { lineWidth: 2, dasharray: null },
         };
         super({ containerId: containerId, ...defaults, ...config });
+        this._containerId = containerId;
 
         this.xRange = [...this.config.xRange];
         this.yRange = [...this.config.yRange];
@@ -143,6 +149,11 @@ class XYPlot extends ResponsivePlot {
             .domain(this.yRange)
             .range([this.plotHeight, 0]);
 
+        if (this._clipRect)
+            this._clipRect
+                .attr('width', this.plotWidth + 4)
+                .attr('height', this.plotHeight);
+
         this._drawAxes();
         this._drawTraces();
         this._drawMarkers();
@@ -155,7 +166,20 @@ class XYPlot extends ResponsivePlot {
 
     _setupD3Structure() {
         this.axesGroup = this.plotArea.append('g').attr('class', 'xy-axes');
+        if (this.config.clipTraces) {
+            // unique per instance (containerIds are unique); prerender's id
+            // namespacing rewrites both the id and the url(#…) ref together.
+            this._clipId = 'xyclip-' + this._containerId;
+            this._clipRect = this.plotArea
+                .append('clipPath')
+                .attr('id', this._clipId)
+                .append('rect')
+                .attr('x', -2)
+                .attr('y', 0);
+        }
         this.tracesGroup = this.plotArea.append('g');
+        if (this.config.clipTraces)
+            this.tracesGroup.attr('clip-path', `url(#${this._clipId})`);
         this.markersGroup = this.plotArea.append('g');
         this.labelsGroup = this.plotArea
             .append('g')
