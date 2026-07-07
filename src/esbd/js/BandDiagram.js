@@ -66,6 +66,7 @@ class BandDiagram extends ResponsivePlot {
 
         // Callbacks & Interaction state
         this._tracePopupCallback = null;
+        this._customDrawCallback = null;
         this._pinnedPopupInfo = null; // Stores null or ['trace'|'marker', id]
         this._highlightedElementInfo = null; // Stores null or {type, id}
         this._hoverThrottleTimeout = null; // Throttle timer for pointermove highlights
@@ -340,6 +341,18 @@ class BandDiagram extends ResponsivePlot {
         this._tracePopupCallback = callbackFn; // Use base formatter if null/invalid
     }
 
+    /**
+     * Registers a callback for drawing custom artwork (e.g. capacitors between
+     * rails) on top of the diagram. It runs at the end of every redraw with the
+     * diagram itself as its argument, so it has the live scales, the `customGroup`
+     * layer, and `drawElements()`/`transition()` for full fade-and-motion support.
+     * Pass null to clear.
+     */
+    setCustomDrawCallback(callbackFn) {
+        this._customDrawCallback = callbackFn;
+        this.scheduleRedraw();
+    }
+
     /** Main drawing/update function. */
     redraw() {
         const pw = this.plotWidth;
@@ -402,6 +415,9 @@ class BandDiagram extends ResponsivePlot {
         this._drawRefShiftGlyphs();
         this._drawVerticalMarkers();
         this._drawTraceLabels();
+
+        // Custom artwork on top (capacitors, etc.), with the live scales.
+        if (this._customDrawCallback) this._customDrawCallback(this);
     }
 
     // ========================================================================

@@ -164,6 +164,12 @@ class ElectrochemicalSpeciesBandDiagram {
         this.diagram.setYRange(min, max);
     }
 
+    /** See {@link BandDiagram.setCustomDrawCallback}. The callback receives the
+     * underlying BandDiagram (with customGroup, scales, drawElements, transition). */
+    setCustomDrawCallback(callbackFn) {
+        this.diagram.setCustomDrawCallback(callbackFn);
+    }
+
     /** Registers a callback function to generate verbose popup content for data traces. */
     setTracePopupCallback(callbackFn) {
         this._tracePopupCallback =

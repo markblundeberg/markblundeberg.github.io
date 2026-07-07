@@ -429,3 +429,67 @@ export function bandScale() {
 
     return scale;
 }
+
+/**
+ * Draw a set of capacitor glyphs between pairs of rails, for use inside a
+ * BandDiagram custom-draw callback (see BandDiagram.setCustomDrawCallback).
+ * Each capacitor is a `<g>` so it inherits drawElements' full lifecycle: it
+ * fades in on enter, glides on update (same transition as the traces), and
+ * fades out on exit.
+ *
+ * @param {BandDiagram} plot - the diagram passed to the custom-draw callback.
+ * @param {Array<object>} caps - one entry per capacitor:
+ *   { id, x, hi, lo, cHi, cLo, pcf? }
+ *   id   - stable key (drives enter/update/exit)
+ *   x    - position in DATA coordinates (mapped through plot.xScale)
+ *   hi,lo- the two rail voltages the capacitor bridges (hi is the upper plate)
+ *   cHi,cLo - plate colours for the hi/lo rails
+ *   pcf  - optional plate-centre fraction from hi→lo (default 0.5); nudge it
+ *          off-centre when the plates would otherwise land on a third rail.
+ * @param {object} [opts] - glyph sizing overrides.
+ */
+export function drawCapacitors(plot, caps, opts = {}) {
+    const {
+        plateHalfWidth = 13,
+        plateGap = 5,
+        plateWidth = 3,
+        wireColor = '#666',
+        wireWidth = 1.5,
+        dotRadius = 2.6,
+    } = opts;
+
+    const px = (d) => plot.xScale(d.x);
+    const yHi = (d) => plot.yScale(d.hi);
+    const yLo = (d) => plot.yScale(d.lo);
+    const yMid = (d) => plot.yScale(d.hi + (d.pcf ?? 0.5) * (d.lo - d.hi));
+    const yTop = (d) => yMid(d) - plateGap / 2;
+    const yBot = (d) => yMid(d) + plateGap / 2;
+
+    plot.drawElements({
+        parentGroups: plot.customGroup,
+        element: 'g',
+        cssClass: 'bd-capacitor',
+        data: caps,
+        dataKey: (d) => d.id,
+        onNew: (s) => {
+            // Static per-capacitor attributes (colours, weights); positions are
+            // set by onUpdateTransition, which runs immediately for new elements.
+            s.append('line').attr('class', 'cap-w1').attr('stroke', wireColor).attr('stroke-width', wireWidth);
+            s.append('line').attr('class', 'cap-w2').attr('stroke', wireColor).attr('stroke-width', wireWidth);
+            s.append('line').attr('class', 'cap-p1').attr('stroke', (d) => d.cHi).attr('stroke-width', plateWidth).attr('stroke-linecap', 'round');
+            s.append('line').attr('class', 'cap-p2').attr('stroke', (d) => d.cLo).attr('stroke-width', plateWidth).attr('stroke-linecap', 'round');
+            s.append('circle').attr('class', 'cap-d1').attr('r', dotRadius).attr('fill', (d) => d.cHi);
+            s.append('circle').attr('class', 'cap-d2').attr('r', dotRadius).attr('fill', (d) => d.cLo);
+        },
+        onUpdateTransition: (s) => {
+            // s is a plain selection for newborns and a transition for updates;
+            // .select() propagates either to the children, so the parts animate.
+            s.select('.cap-w1').attr('x1', px).attr('x2', px).attr('y1', yHi).attr('y2', yTop);
+            s.select('.cap-w2').attr('x1', px).attr('x2', px).attr('y1', yBot).attr('y2', yLo);
+            s.select('.cap-p1').attr('x1', (d) => px(d) - plateHalfWidth).attr('x2', (d) => px(d) + plateHalfWidth).attr('y1', yTop).attr('y2', yTop);
+            s.select('.cap-p2').attr('x1', (d) => px(d) - plateHalfWidth).attr('x2', (d) => px(d) + plateHalfWidth).attr('y1', yBot).attr('y2', yBot);
+            s.select('.cap-d1').attr('cx', px).attr('cy', yHi);
+            s.select('.cap-d2').attr('cx', px).attr('cy', yLo);
+        },
+    });
+}
