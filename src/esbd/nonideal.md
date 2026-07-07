@@ -171,20 +171,7 @@ Let's say we are using the same activities for our $V_i$ framework as in our tra
 $$V^{\circ}_i = \phi' + \mu^\circ_{\mathrm{int},i}/(z_i F).$$
 Since the $\mu^\circ_{\mathrm{int},i}$ are constants, then this means $\phi'$ actually sits fixed at some position on our $V^{\circ}_i$ ladder and they move rigidly together.
 
-Interestingly, there remains an overall single degree of freedom per solvent: keeping everything else the same, we may freely redefine
-$$\phi' \rightarrow \phi' - \delta$$
-provided we also redefine all the ionic standard internal chemical potentials,
-$$\mu^\circ_{\mathrm{int},i} \rightarrow \mu^\circ_{\mathrm{int},i} + z_i F \delta. $$
-This shift leaves $\bar\mu_i$, $a_i$, and even $V^{\circ}_i$ totally unchanged. Effectively we can freely choose where we want $\phi'$ to sit on the $V^{\circ}_i$ ladder. If chemists wanted they could actually use this to make liquid junction potentials $\phi_1' - \phi_2'$ well defined under all circumstances.[^longnote]
-
-[^longnote]:
-    By adopting activity conventions, we have already abandoned the pretense of $\phi'$ being a true electrostatic potential, so we might as well put $\phi'$ somewhere convenient. Some options:
-    {# pbreak #}
-    * Pin $\phi' = V^\circ_{\mathrm{H}^+}$, which puts $\mu^\circ_{\mathrm{int},\mathrm{H}^+} = 0$.
-    * Pin $\phi' = V^\circ_{\mathrm{SHE}}$, which is $\phi' = V^{\circ}_{\mathrm{H}^+} - \mu^{\text{SHE}}_{\mathrm{H_2}}/(2F)$. This would set $\phi'$ to the standard hydrogen electrode (SHE) in the given solvent. Here $\mu^{\text{SHE}}_{\mathrm{H_2}}$ is the chemical potential of the hydrogen gas in the SHE; see [Reference electrodes & cells](../references/) for more information about the SHE. Then, all SHE-referenced electrode potentials would equal $V_{\mathrm{e}^-} - \phi'$ under all conditions.
-    * Pin $\phi'$ to the ferrocenium-ferrocene electrode, which is often more appropriate in nonaqueous solvents.
-    {# pbreak #}
-    This would make liquid junction potentials $\phi_1' - \phi_2'$ well defined under all circumstances, even between non-ideal solutions with differing solvents, providing we have established a $\phi'$ convention for each solvent.
+This exposes a *second* convention in the decomposition, beyond the activity choice: the $\mu^\circ_{\mathrm{int},i}$ list is not given to us a priori, so energy may be reallocated between $z_i F \phi'$ and the $\mu^\circ_{\mathrm{int},i}$ with nothing physical (no $\bar\mu_i$, $a_i$, or $V^\circ_i$) changing. This is isomorphic to freely choosing where $\phi'$ sits on the $V^\circ_i$ ladder. That offset freedom is charted in [offsets galore](../offsetsgalore/); here we keep to the activity problem.
 
 ## Concentration ambiguity
 
