@@ -1,92 +1,68 @@
 ---
 layout: layouts/esbd_topic.njk
-title: 'Nuances'
+title: 'Reaching any species voltage'
 tags: [page, esbd_topic]
 orderESBD: 92
 ---
 
-# Nuances about $V_i$
+# Reaching any $V_i$
 
-Are $V_i$ real voltages? Can we measure $V_i - V_j$ for arbitrary charged species $i$ and $j$?
+We [saw earlier](../v_i/) that electrons are the easy case (any voltmeter reads a difference in $V_{\mathrm{e}^-}$), while an ion takes a carefully prepared ion-reversible electrode, and even then what comes out cleanly is a *same-ion difference*, not an absolute. Two honest questions are left. When does even that indirect route fail? And is there a recipe that reaches an *arbitrary* $V_i$?
 
-In principle, yes. In practice, only in certain conditions.
+One piece of fine print carries over from before: to *access* a $V_i$ means only that we can measure some voltage difference involving it, never an absolute voltage, since no absolute voltage is measurable for any species, electrons included.
 
-Let's go back to the start, with [electrodes at equilibrium](../equilibrium/). We established that for example, for a piece of zinc metal immersed in solution, we have:
-
-$$ V_{\mathrm{Zn}^{2+}} = V_{\mathrm{e}^-} + \frac{1}{2F} \mu_{\mathrm{Zn}} $$
-
-Thus, if we attach a voltmeter probe to the zinc metal (accessing $V_{\mathrm{e}^-}$), and provided we know $\mu_{\mathrm{Zn}}$, then it means we have access to $V_{\mathrm{Zn}^{2+}}$. Of course, this is slightly indirect, but it is also thermodynamically exact.
-
-(To be clear, when I say "we can access $V_i$", I don't mean we can actually measure $V_i$. We cannot measure any absolute voltage, only voltage differences. But to access $V_i$ means that we can measure any voltage difference that involves $V_i$.)
-
-Similarly, with our silver chloride electrode, we established that we can access $V_{\mathrm{Cl}^-}$ in a solution. So, if we immersed both the zinc electrode and the silver chloride electrode into a solution containing zinc and chloride ions (such as obtained by dissolving zinc chloride), we can obtain a measurement of $V_{\mathrm{Zn}^{2+}} - V_{\mathrm{Cl}^-}$ as simply a constant thermodynamic offset from our voltmeter measurement:
+Two ion-reversible electrodes already reach past a single one. Dip a zinc electrode (accessing $V_{\mathrm{Zn}^{2+}}$) and a silver chloride electrode (accessing $V_{\mathrm{Cl}^-}$) into the same zinc chloride solution, and the voltmeter reading between them is fixed to the physical *different*-ion difference $V_{\mathrm{Zn}^{2+}} - V_{\mathrm{Cl}^-}$ by a constant offset:
 
 $$ V_{\mathrm{Zn}^{2+}} - V_{\mathrm{Cl}^-} = V_{\mathrm{e}^-}(\text{Zn}) - V_{\mathrm{e}^-}(\text{Ag}) + \text{const}. $$
 
-### A technicality: the choice of $\mu$ convention
+## The one convention behind the constant
 
-Of course, the $\text{const}$ above does depend on our convention for setting chemical potentials. Our choice has been to set $\mu = 0$ for elements in their most stable state, at reference conditions. Another choice is fine too, though we should take care to be fully consistent, and be aware that it changes the offsets in our ESBD diagrams.
+That $\text{const}$ depends on our convention for chemical potentials. Our choice has been $\mu = 0$ for elements in their most stable state at reference conditions; another choice is fine, provided we stay consistent and remember it shifts the offsets in our ESBD diagrams. In that sense we do not truly reach absolute $V_i$ *levels* until we fix a convention.
 
-In that sense, we do not truly have access to $V_i$ levels unless we specify the convention.
+Differences in $V_i$ at different places, for the *same* species, escape this entirely: they are well defined no matter the convention. In a discharging lithium-ion battery the gradients in $V_{\mathrm{e}^-}$ and in $V_{\mathrm{Li}^+}$ are each perfectly meaningful, and the convention only sets the overall offset between the electron and lithium-ion ladders.
 
-However, differences between $V_i$ levels in different places, for the same species $i$, are still well defined regardless of convention. So for example in the example of a discharging lithium ion battery, the gradients in each of $V_{\mathrm{e}^-}$ and $V_{\mathrm{Li}^+}$ are both quite well defined, and the choice of convention only affects the general offset between electron and lithium ion levels.
-
-In principle, I could have defined species voltage differently and have it subtract off conventional offsets (as constants), which would basically be equivalent to fixing a chemical potential convention. As an example this "proper species voltage" $V'_i$ for sulfate ions could be defined as:
+One could fold the convention straight into the definition, subtracting explicit reference-state constants. This "proper species voltage" $V'_i$ for sulfate would read
 
 $$ V'_{\mathrm{SO_4}^{2-}} = \frac{\bar\mu_{\mathrm{SO_4}^{2-}} - \varepsilon_{\mathrm{S}} - 4 \varepsilon_{\mathrm{O}} - 2 \varepsilon_{\mathrm{e}^-} }{z_i F}, $$
 
-where $\varepsilon_i$ are all energies of atoms or electrons in some kind of explicit reference state, consistent with the chemical potential scale. The reference state could be the IUPAC one, or alternatively could even be chosen more fundamentally like being the rest energy of the atom at 0 temperature in vacuum. Anyway, the $\varepsilon_i$ would all be constants so we would just get more explicit constants showing up in some of our formulae. Such a definition is technically superior, however it is also more verbose especially when it comes to multi-element ions. For that reason I prefer the concise $V_i = \bar\mu_i / z_i F$, which is casual but I think harmlessly so.
+where the $\varepsilon$'s are energies of atoms and electrons in some explicit reference state, whether the IUPAC one or something more fundamental like the atom's rest energy at zero temperature in vacuum.^[These elemental references are exactly the constants written $\mu^*_i$ in [offsets galore](../offsetsgalore/); $\varepsilon_i$ and $\mu^*_i$ name the same thing.] It is technically superior but verbose, especially for multi-element ions, so I keep the concise $V_i = \bar\mu_i / z_i F$, which is casual but I think harmlessly so.
 
-## Practical difficulties with accessing $V_i$
+## When the direct electrode fails
 
-Sometimes, we just don't have an easy direct electrode that can noninvasively probe $V_i$ for a chosen species $i$.
+Sometimes no easy electrode noninvasively probes the $V_i$ we want. Dip a zinc electrode into a solution holding both zinc and iron ions and it erodes as the iron plates out; try to reach $V_{\mathrm{Na}^+}$ by dipping sodium metal into water and it reacts violently, probably explosively.
 
-Suppose we had a solution containing both zinc ions and iron ions, and we want to measure $V_{\mathrm{Zn}^{2+}}$. Unfortunately if we dip in our zinc electrode, we would find it immediately erodes as the iron drops out in a metallic precipitate. Similarly, suppose we want to access $V_{\mathrm{Na}^+}$, we cannot simply dip a bar of sodium into an aqueous solution as it will react violently, probably explosively.
+An electrode can interfere more subtly. In a solution of $\mathrm{Fe}^{2+}$ and $\mathrm{Fe}^{3+}$ we might want $V_{\mathrm{Fe}^{2+}}$ and $V_{\mathrm{Fe}^{3+}}$ separately, but an iron electrode forces a fixed relationship among $V_{\mathrm{Fe}^{2+}}$, $V_{\mathrm{Fe}^{3+}}$, and $V_{\mathrm{e}^-}$ (namely $V_{\mathrm{Fe}^{2+}} - \tfrac{1}{2F}\mu_{\mathrm{Fe(s)}} = V_{\mathrm{Fe}^{3+}} - \tfrac{1}{3F}\mu_{\mathrm{Fe(s)}} = V_{\mathrm{e}^-}$). A silver/silver chloride electrode in a very dilute solution starts to dissolve its own $\mathrm{AgCl}$. Electrodes can also be 'poisoned' by a solution, forming coatings that make them equilibrate slowly or never. And for some ions no straightforward reversible electrode exists in *any* solvent.
 
-The electrode might interfere in other ways. For example in a redox solution containing $\mathrm{Fe}^{2+}$ and $\mathrm{Fe}^{3+}$ ions, we might want to access each of $V_{\mathrm{Fe}^{2+}}$ and $V_{\mathrm{Fe}^{3+}}$ separately. But if we dip an iron electrode, it will enforce a fixed relationship between $V_{\mathrm{Fe}^{2+}}$, $V_{\mathrm{Fe}^{3+}}$, and $V_{\mathrm{e}^-}$ (namely, $V_{\mathrm{Fe}^{2+}} - \tfrac{1}{2F}\mu_{\mathrm{Fe(s)}} = V_{\mathrm{Fe}^{3+}} - \tfrac{1}{3F}\mu_{\mathrm{Fe(s)}} = V_{\mathrm{e}^-} $). And if we use our silver/silver chloride electrode in a very very dilute solution, then in fact some of its $\mathrm{AgCl}$ salt will dissolve.
+## A recipe that reaches any ion
 
-Likewise, it is known in standard electrochemistry that certain electrodes get 'poisoned' by certain kinds of solutions, forming coatings that make them equilibrate very slowly or never.
+To reach *any* $V_i$, return to the ideal ion-selective membrane, one that passes species $i$ and nothing else, charged or neutral. Thermodynamically it equilibrates to hold $V_i$ equal on its two sides.
 
-For certain anions and cations, we might not be able to come up with any straight-forward electrode that probes their $V_i$, in *any* solvent. Such an electrode requires some kind of reversible reaction, which might be simply unavailable.
+Put the target solution on one side and, on the other, a fixed solution of known composition with an electrode in it. That electrode's $V_{\mathrm{e}^-}$ sits a fixed, calibrated offset from $V_i$ in the fixed solution, and the membrane pins that $V_i$ to the target's, so $V_{\mathrm{e}^-} + \text{const}$ tracks the target's $V_i$. Dipping the probe lets a trace of $i$ cross the membrane, but only enough to charge the probe's small capacitance; keep that capacitance low and the fixed solution's composition barely moves.
 
-## Hypothetical measurement of any $V_i$
-
-To access any $V_i$, we return to the concept of an ideal ion-selective membrane. This membrane would only allow the species $i$ to pass through. No other charged species, and no other uncharged species either. Thermodynamically, such a membrane would equilibrate to have $V_i$ equal on both sides for species $i$.
-
-On one side we could place the target solution that we want to probe, and on the other side, place a fixed solution with a known (consistent) composition and an electrode. The electrode $V_{\mathrm{e}^-}$ will have some fixed offset from $V_i$, which can be calculated or calibrated, and since $V_i$ in the fixed solution will equilibrate perfectly to the target solution, then this $V_{\mathrm{e}^-} + \text{const}$ will provide access to $V_i$.
-
-Upon dipping such an electrode into an arbitrary solution, a tiny amount of species $i$ may flow across the membrane but only to charge up the capacitance (or self-capacitance) of the probe circuitry. If the capacitance is small enough, then the fixed solution composition will not change significantly.
-
-For example, to access $V_{\mathrm{Na}^+}$ we would need a membrane that only passes $\mathrm{Na}^+$, and the fixed solution could be aqueous, containing saturated $\mathrm{NaCl}$ (known $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} $) together with a silver chloride electrode (known $V_{\mathrm{e}^-} - V_{\mathrm{Cl}^-}$). Actually since the membrane blocks solvent molecules, the fixed solution need not be aqueous, and the electrode might even be solid sodium metal in that case.
-
-At least *in principle* we can have an ion-selective membrane for any ion. Thus, in principle every $V_i$ is accessible. We are only limited by technology in creating these membranes. (The classic real example is the {% wiki "Fluoride selective electrode", "fluoride-selective electrode" %}, whose $\mathrm{LaF_3}$ crystal membrane passes $\mathrm{F}^-$ and nearly nothing else.)
+To reach $V_{\mathrm{Na}^+}$, for instance, we would want a membrane passing only $\mathrm{Na}^+$, with a fixed solution of saturated $\mathrm{NaCl}$ (known $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$) and a silver chloride electrode (known $V_{\mathrm{e}^-} - V_{\mathrm{Cl}^-}$). Since the membrane blocks solvent too, the fixed solution need not even be aqueous, and the electrode could be solid sodium. In principle a membrane exists for any ion, so in principle every $V_i$ is reachable, limited only by the technology of making the membranes. (The classic real one is the {% wiki "Fluoride selective electrode", "fluoride-selective electrode" %}, whose $\mathrm{LaF_3}$ crystal passes $\mathrm{F}^-$ and little else.)
 
 ## Repurposing ion-selective electrodes
 
-The idea of accessing $V_i$ through an ion-selective membrane is closely related to the {%wiki "ion-selective electrode" %} (ISE), which is normally thought of as a way to measure activity of ion $i$. I'd like to reinterpret the ISE in the $V_i$ framework and show how it is useful (and maybe more appropriate) to say that an ISE actually accesses $V_i$.
+This is closely related to the {%wiki "ion-selective electrode" %} (ISE), normally described as a way to measure the activity of ion $i$. I would rather reinterpret it in the $V_i$ framework, where it is more honest to say an ISE *accesses* $V_i$.
 
-An ion-selective electrode actually contains two electrodes: one side equilibrates to the target solution through an ion-selective membrane ($V_i$ flat), and the other side is a standard reference electrode that connects to the target solution through a salt bridge (or similar). After some calibration, this combination lets us measure $V_i - V^\circ_i$. This means we can determine the single-ion activity $a_i$, according to the definition of ion activity: $V_i - V^\circ_i = \tfrac{RT}{z_i F}\ln a_i$.
+An ISE really contains two electrodes: one equilibrates to the target through an ion-selective membrane ($V_i$ flat across it), the other is a standard reference electrode joined to the target by a salt bridge. After calibration the pair reports $V_i - V^\circ_i$, and hence the single-ion activity, via $V_i - V^\circ_i = \tfrac{RT}{z_i F}\ln a_i$.
 
-However, we know that we cannot actually measure single-ion activities (except in the ideal dilute limit, where activity is simply $a_i = c_i/c^\circ$), because single-ion activities have serious fundamental ambiguities. Therefore the ISE must have a hidden non-thermodynamic assumption. Indeed, the reference electrode in an ISE generally is connected by a porous plug or salt bridge, and assumptions are made about the liquid junction potential. Specifically, something would have to be assumed about how the liquid junction potential changes from calibration solutions to target solutions. So, the claim that ISEs measure activity is on shaky foundations.
+But single-ion activities can't actually be measured outside the ideal-dilute limit (where $a_i = c_i/c^\circ$); they carry deep ambiguities, so the ISE must be smuggling in a non-thermodynamic assumption. It is: the reference side's salt bridge needs an assumption about how the liquid junction potential drifts from the calibration solutions to the target. The claim that an ISE measures activity rests on that shaky footing.
 
-But, let's forget about the reference electrode, and just use the ion-selective half of the ISE! The ion-selective part has exactly what we want in terms of equilibrating $V_i$ with a fixed solution, and we can simply not make use of the reference electrode and its shaky assumptions about liquid junction potentials. To the extent that we have a good ion selective electrode for species $i$, we have good access to $V_i$.
+So drop the reference electrode and keep the ion-selective half. That half does exactly what we want, equilibrating $V_i$ to a fixed solution with none of the liquid-junction guesswork. To the extent the ion-selective electrode is good, we have good access to $V_i$.
 
-## Why electrons are different
+## Electrons are just the easy case
 
-It is so much easier to measure $V_{\mathrm{e}^-}$, just use a voltmeter. By now it should be clear why this is the case:
+Seen this way the voltmeter is not a special instrument at all: a metal wire, or a junction between metals, simply *is* an ideal 'electron-selective membrane', and it comes for free because electrons are the only mobile charge in ordinary conductors. That is the whole of why $V_{\mathrm{e}^-}$ is so easy to reach.
 
-Electrons are the *only* mobile charge in most familiar conductors, like metals. For these electronic conductors, and for the junctions between them, we automatically have the behaviour of an 'electron-selective membrane'. So, the flatness of $V_{\mathrm{e}^-}$ across a wide variety of connected electronic materials comes for free.
+This is not guaranteed, of course. Some electronic conductors carry other mobile charges too (liquid mercury and graphite both take up lithium), which can make $V_{\mathrm{e}^-}$ as awkward to pin down as any ion, though electronic conductivity usually swamps the ionic. And in semiconductors out of equilibrium, electrons *and* holes both matter, so the multi-$V_i$ subtleties reappear in full: a bipolar transistor's contacts to $p$-type material are, in effect, directly accessing the $V_{\mathrm{h}^+}$ level.
 
-Of course, this is not a guarantee. Some electronic conductors *will* contain other mobile charges, for example both liquid mercury and graphite can contain lithium ions (dissolved or intercalated). This can make determination of $V_{\mathrm{e}^-}$ as tricky as any other ion, but it will tend to be the case that electronic conductivity vastly exceeds ionic conductivities.
-
-In the case of semiconductors, when we have to treat both electrons and holes (out of equilibrium) we do actually effectively have two charged species present, and so many of the subtleties of having multiple $V_i$'s actually do appear! In bipolar junction transistors, for example we can basically say the electrodes attached to *p*-type material are directly accessing the $V_{\mathrm{h}^+}$ level.
-
-So, mobile electrons and their $V_{\mathrm{e}^-}$ are practically unique, even though they are not special from the point of view of pure thermodynamics.
+So mobile electrons are practically unique, though not thermodynamically special: they are the easy case of a principle that reaches every species.
 
 ## Takeaways
 
-The notion that "every ion has a voltage" might sound too good to be true, but I hope the above discussion makes it clear that the $V_i$ truly are meaningful and accessible voltages. Although ionic $V_i$'s are practically more difficult to access than the regular electronic voltage $V_{\mathrm{e}^-}$, they are fundamentally (and sometimes practically) real voltages!
+"Every ion has a voltage" sounds too good to be true, but the $V_i$ really are meaningful, and really are reachable: trivially for electrons, and with more effort (an ion-reversible electrode, or ultimately an ion-selective membrane) for the rest. The difficulty is only ever one of reach, set by our instruments, and it never bears on whether each $V_i$ is a genuine voltage.
 
-For the next topic, I am going to criticise the traditional approach to electrochemistry, which is based on electrostatic potential $\phi$.
+Next, having leaned so hard on species voltages, I turn to criticize the traditional foundation of electrochemistry: the electrostatic potential $\phi$.
 
 [**NEXT TOPIC: The case against $\phi$**](../phi/)
