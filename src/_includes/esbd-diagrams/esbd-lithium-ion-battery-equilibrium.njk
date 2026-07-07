@@ -12,7 +12,7 @@
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
-    import { makeSlider } from '{{ esbdJsPath }}utils.js';
+    import { makeSlider, drawCapacitors } from '{{ esbdJsPath }}utils.js';
 
     const socReadout = document.getElementById('{{idprefix}}-soc-readout');
     const ocvOut = document.getElementById('{{idprefix}}-ocv');
@@ -55,6 +55,8 @@
     diagram.setVRange(-1.2, 4.7);
 
     const b = boundaries;
+    const ELE = SPECIES.electron.color, LI = SPECIES.lithium.color;
+    let cur = { xA: 0, xC: 0, vEanode: 0, vEcathode: 0, vLi: 0 };
     function doUpdate(soc) {
         const x_anode = (soc + 5) / 105.0; // anode lithiation
         const y_cathode = 1.0 - x_anode; // cathode lithiation
@@ -96,25 +98,26 @@
             },
         ]);
 
-        diagram.updateVerticalMarkers([
-            {
-                id: 'anode_eq',
-                symbol: '⇌',
-                x: 0.5 * (b[1] + b[2]),
-                yDefs: [{ y: V_e_anode }, { y: V_Li }],
-                popupCallback: () =>
-                    '$\\mathrm{Li(graphite)} \\rightleftharpoons \\mathrm{Li}^+ + \\mathrm{e}^-$',
-            },
-            {
-                id: 'cathode_eq',
-                symbol: '⇌',
-                x: 0.5 * (b[5] + b[6]),
-                yDefs: [{ y: V_e_cathode }, { y: V_Li }],
-                popupCallback: () =>
-                    '$\\mathrm{Li(oxide)} \\rightleftharpoons \\mathrm{Li}^+ + \\mathrm{e}^-$',
-            },
-        ]);
+        // Each electrode is a capacitor between its V_e- and V_Li+ rails; stash
+        // the current geometry for drawCaps() (called from the redraw wrap).
+        cur = {
+            xA: 0.5 * (b[1] + b[2]),
+            xC: 0.5 * (b[5] + b[6]),
+            vEanode: V_e_anode,
+            vEcathode: V_e_cathode,
+            vLi: V_Li,
+        };
     }
+
+    // Draw each electrode as a capacitor between its V_e- and V_Li+ rails, in
+    // place of the old reaction ⇌ marker. The custom-draw callback re-runs on
+    // every redraw, so the capacitors fade in and glide along with the rails.
+    diagram.setCustomDrawCallback((bd) =>
+        drawCapacitors(bd, [
+            { id: 'anode', x: cur.xA, hi: cur.vEanode, lo: cur.vLi, cHi: ELE, cLo: LI },
+            { id: 'cathode', x: cur.xC, hi: cur.vEcathode, lo: cur.vLi, cHi: ELE, cLo: LI },
+        ])
+    );
 
     makeSlider('{{idprefix}}-soc', (v) => doUpdate(v));
 </script>

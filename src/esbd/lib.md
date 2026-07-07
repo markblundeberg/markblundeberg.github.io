@@ -23,6 +23,9 @@ With that, let's show the electrochemical species band diagram for a lithium ion
 
 <figure class="demo-container" style="max-width: 600px">
 {% include "esbd-diagrams/esbd-lithium-ion-battery-equilibrium.njk" %}
+{% figcaption %}
+A lithium-ion cell at open circuit. Each electrode is drawn as a **capacitor between its $V_{\mathrm{e}^-}$ and $V_{\mathrm{Li}^+}$ rails** rather than with a reaction arrow: intercalating lithium ($\mathrm{Li(host)} \rightleftharpoons \mathrm{Li}^+ + \mathrm{e}^-$) simply banks charge and slides that gap. Drag the state of charge and the gaps move unevenly, steep through some ranges and nearly flat through others, so the capacitance (charge banked per volt) is anything but uniform.
+{% endfigcaption %}
 </figure>
 
 On the left, we have the negative terminal, where the intercalation host material is graphite. On the right, positive, electrode the intercalation host material is {%wiki "Lithium nickel manganese cobalt oxides", "nickel manganese cobalt oxides" %} (NMC for short). There are many other choices for lithium ion electrode materials, however we'll just focus on the graphite-NMC cell as an example.
