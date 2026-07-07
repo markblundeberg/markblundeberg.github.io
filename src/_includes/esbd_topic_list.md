@@ -44,7 +44,7 @@ The rabbit holes -- appendices, advanced topics, notes:
 - [_Reaching any $V_i$_](/esbd/nuances/) - Are $V_i$ "real voltages"? How to access each one in practice.
 - [_Offsets galore_](/esbd/offsetsgalore/) - An interactive tour of every arbitrary convention in the framework — and which ones actually move anything.
 - [_Non-ideal solutions_](/esbd/nonideal/) - Focussing on technical difficulties of single-ion activities.
-- [_Chemical capacitance matrices_](/esbd/capacitance/) - Ambipolar capacitance (thermodynamic) vs internal chemical capacitance (extrathermodynamic), as capacitance matrices.
+- [_Chemical capacitance matrices_](/esbd/chemical_capacitance_matrices/) - Ambipolar capacitance (thermodynamic) vs internal chemical capacitance (extrathermodynamic), as capacitance matrices.
 
 *Appendices*:
 - [_Inhomogeneities and electrostatics_](/esbd/inhomog/) - Graded interfaces and quasi-electric fields; does $\phi$ represent real electrostatics? Plus the full beyond-the-simple-case catalog.
