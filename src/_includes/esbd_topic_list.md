@@ -27,7 +27,7 @@
 - [_Reference electrodes & cells_](/esbd/references/) - Reference electrodes, full cells, liquid junction potentials, and the "absolute" vacuum reference.
 - [_Interface kinetics_](/esbd/kinetics/) - The current–overpotential law: Butler–Volmer as the exponential interface element, Tafel, the diode connection, and Marcus–Gerischer.
 
-*Application highlights*:
+*Application highlights*: (Planned, coming soon! Follow [my twitter](https://x.com/MarkLundeberg) for updates.)
 - Redox-flow batteries: one redox couple per tank, exchanging $\mathrm{H}^+$ across a membrane.
 - Solid oxide fuel cells: $V_{\mathrm{O}^{2-}}$ landscape.
 - Cell biology: The proton motive force as a $V_{\mathrm{H}^+}$ drop; the electron transport chain as a $V_{\mathrm{e}^-}$ cascade.
