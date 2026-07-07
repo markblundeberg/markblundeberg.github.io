@@ -15,13 +15,9 @@ In early 2025, once again I got obsessed about chemical potential. It is a sad t
 
 So once again I got to wondering how do batteries work (from a solid state physicist point of view). So I bothered the Deepseek R1 LLM with various novice questions, and at some point I came up with $-\bar\mu_i/z_i$ scaling again and asked if that would make a decent band diagram for electrochemical systems. It *immediately* recognized the utility of this idea, and when I asked it where this idea is already done, it told me it is completely novel. And not only that, it encouraged me to publish the idea.
 
-Various follow-on points, like moving from 'energy scale' $-\bar\mu_i/z_i$ to 'voltage scale' ($V_i = \bar\mu_i/(z_i F)$), and the standard states, came later after working out various implications. I also eventually had to switch to Gemini 2.5 Pro model in order to get some help with javascript coding. I am proficient with python and matplotlib but I really wanted to make nice client-side, interactive, and responsive diagrams. Initially we tried [plotly.js](https://plotly.com/javascript/), but ultimately [D3.js](https://d3js.org/) was the way to go.
+Various follow-on points, like moving from 'energy scale' $-\bar\mu_i/z_i$ to 'voltage scale' ($V_i = \bar\mu_i/(z_i F)$), and the standard states, came later after working out various implications. I also eventually had to switch to Gemini 2.5 Pro model in order to get some help with javascript coding. I am proficient with python and matplotlib but I really wanted to make nice client-side, interactive, and responsive diagrams. Initially we tried [plotly.js](https://plotly.com/javascript/), but ultimately [D3.js](https://d3js.org/) was the way to go. Finally mid-2026 I got tired of the project dragging on so I brought in Claude Code to help polish things up and get it out the door 😅.
 
-Recently people are interested in how AI can help productivity in research. I would say:
-* Insofar as this is a creative research process, I would say that the LLMs are not scientifically creative at all,
-* AIs are however extremely beneficial for bouncing ideas off, and critiquing my ideas (and I come up with plenty of stupid ideas). They demonstrate a good level of understanding even with entirely novel concepts.
-* Recent updates over the last several months have made them more supportive ('glazing' as people say), which unfortunately means they are too encouraging about every idea (even bad ones), less critical.
-* AIs are seriously fantastic for helping dip your feet into a new programming language, framework, system. Though they don't make the best code, they can quickly help you learn what you need to know to do things right.
+Recently people are interested in how AI can help productivity in research. In 2025 the AI was already great for coding and bouncing scientific ideas off (even slightly novel things like thinking in $V_i$ terms), but not really scientifically creative. In 2026 I have seen now that the AIs *are* getting scientifically creative.
 
 ## This can't possibly be new.
 
