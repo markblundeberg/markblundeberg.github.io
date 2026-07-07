@@ -109,7 +109,7 @@ Since we have $\mu_{\mathrm{Ag}} = 0~\mathrm{kJ/mol}$ and $\mu_{\mathrm{AgCl}} =
 
 $$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} = +1.138~\mathrm{V}$$
 
-By the way, don't confuse this with the [electrode potential](../e/) $E = V_{\mathrm{e}^-} - V_{\mathrm{SHE}}$, which is approximately 0.2 V with this electrode.
+By the way, don't confuse this with the [electrode potential](../e/) $E = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$, which is approximately 0.2 V with this electrode.
 
 ## Implied levels and half-reactions
 
