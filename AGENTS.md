@@ -46,6 +46,13 @@ and screenshot that.
   `controls.slider` macro. Inline sliders go in a grid
   (`grid-template-columns: max-content minmax(0, 200px)`). Per-trace label
   placement via `labelFrac` + `labelHAlign`; hide y-ticks with `{ yMode: 'abstract' }`.
+- **Custom artwork over a diagram** (capacitors between rails, decorations, …): use
+  `diagram.setCustomDrawCallback(fn)`. `fn(plot)` runs at the end of every redraw with the
+  live scales + `customGroup` layer, and draws via `plot.drawElements(...)` (or the ready-made
+  `drawCapacitors(plot, caps)` in `utils.js`) so the art inherits the **full trace lifecycle**:
+  fade-in on enter, transitioned motion on update, fade-out on exit. Do **not** monkeypatch
+  `redraw` or hand-append to `customGroup` — you lose the transitions, and the inner BandDiagram
+  lives at `wrapper.diagram` (easy to get wrong). See `esbd-ambipolar-cap` / the lib-cell figure.
 - **markdown-it whitespace gotcha:** a blank line inside the page's `<figure>`
   drops it out of raw-HTML mode and markdown-it injects `<p>` tags that wreck
   slider grids. The `controls` macro is whitespace-controlled (`{%- … -%}`,
