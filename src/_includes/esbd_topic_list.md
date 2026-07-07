@@ -49,6 +49,6 @@ The rabbit holes -- appendices, advanced topics, notes:
 - [_Inhomogeneities and electrostatics_](/esbd/inhomog/) - Graded interfaces and quasi-electric fields; does $\phi$ represent real electrostatics? Plus the full beyond-the-simple-case catalog.
 - [_Standard state data_](/esbd/data/) - Numerical data for ionic solutes' $V^\circ_i$ values in water.
 - [_Traditional electrochemistry, translated_](/esbd/translation/) - A Rosetta Stone: standard symbols and equations in $V_i$ terms.
-- [_Nuances_](/esbd/nuances/) - Are $V_i$ "real voltages"?
+- [_Reaching any $V_i$_](/esbd/nuances/) - Are $V_i$ "real voltages"? How to access each one in practice.
 - [_The case against $\phi$_](/esbd/phi/) - Why we should bypass using an electrostatic potential.
 - [_About_](/esbd/about/) - How this project came about.
