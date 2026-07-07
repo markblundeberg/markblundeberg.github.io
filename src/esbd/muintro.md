@@ -88,8 +88,6 @@ There it is. The naive $\partial G / \partial N_i$ was ill-posed because it viol
 
 There is a tempting mistake here. If you only ever look at $N_i$ and $N_j$ at the *same place* (a local cluster of ions), then internal chemical potentials seem just as good as the floaty electrochemical ones: locally, both are self-consistent. But nothing stops us from transferring charge *at a distance*, between *here* and *there*. The moment we do, every chemical potential across the whole domain is chained to every other by differences like the one above, and there is *still* only one undetermined offset. Widening our view from one spot to many does not grant each spot its own private float; it locks them together, leaving a single common-mode float for the entire domain. That is the precise difference between $\bar\mu_i$ and $\mu_{\mathrm{int},i}$: $\bar\mu_i$ differences are consistent *across the whole domain*, while $\mu_{\mathrm{int},i}$ only pretends to a per-spot freedom that long-range charge transfer forbids.
 
-(One practical corollary: "here" and "there" share a diagram only once charge can actually pass between them. Two disconnected, floating bodies have no defined relative level until you open a path; working out the offset across a real junction is its own problem, not a matter of lining up vacuum levels.)
-
 ## Why a band diagram works
 
 The real content, we just found, is the web of $V_i$ *differences*, with a single common float left free. Now put space back in: let the voltages vary with position across a real device. The float becomes one slider, and watching it is the whole payoff.
