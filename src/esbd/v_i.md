@@ -76,7 +76,7 @@ Not all currents are so simple as Ohm's law, of course. Interfaces often have a 
 
 ## Differences in $V_i$ are measurable
 
-Because $\Delta V_i$ is available work, it is in principle measurable for any species, though in practice one species, electrons, is far easier to probe than the rest.
+The previous two sections were about what a difference $\Delta V_i$ *does* in nature — it drives currents and delivers work — and those hold for every species alike. Being *measurable* is a claim of a different kind: it is about what we can **reach**, and reach depends on the instrument. A difference $\Delta V_i$ is physically defined for any species; but only for electrons is it *easy* to get at.
 
 A common voltmeter has metal probes and reads differences in $V_{\mathrm{e}^-}$, letting a tiny, ideally negligible electron current flow in. It works so cleanly because so many of our conductors are purely electronic: join wires of any assortment of metals and, since electrons are the only mobile carrier, $V_{\mathrm{e}^-}$ carries across all of them perfectly.
 
@@ -89,7 +89,7 @@ A common voltmeter has metal probes and reads differences in $V_{\mathrm{e}^-}$,
 {% endfigcaption %}
 </figure>
 
-Ions are harder. We have no good "ion wires" (an electrolyte carries at least one cation *and* one anion), and no ionic voltmeters, so we can only probe $V_{\mathrm{ion}}$ indirectly, by coupling it to $V_{\mathrm{e}^-}$. A carefully prepared **ion-reversible electrode** chemically locks $V_{\mathrm{e}^-}$ to the $V_i$ of exactly one ion, producing a fixed step $V_{\mathrm{e}^-} - V_{\mathrm{ion}} = \Delta$.
+Ions are harder. We have no good "ion wires" — an electrolyte carries at least one cation *and* one anion — and no ionic voltmeter, so we reach $V_{\mathrm{ion}}$ only indirectly, by coupling it to $V_{\mathrm{e}^-}$. A carefully prepared **ion-reversible electrode** chemically locks $V_{\mathrm{e}^-}$ to the $V_i$ of exactly one ion, producing a fixed step $V_{\mathrm{e}^-} - V_{\mathrm{ion}} = \Delta$ that an ordinary voltmeter can then read.
 
 <figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/esbd-electrode-generic.njk" %}
@@ -101,7 +101,7 @@ But $\Delta$ is a gap between *different* species (an electron and an ion), so, 
 {% include "esbd-diagrams/esbd-electrode-generic-differential.njk" %}
 </figure>
 
-So ionic $V_i$ is no less real than electronic $V_{\mathrm{e}^-}$; it is just that only its differences, for a given ion, are directly accessible. (A more general but less practical recipe, using ion-selective membranes, comes [later](../nuances/).)
+So an ionic $V_i$ is no less *real* than the electronic $V_{\mathrm{e}^-}$: it is defined the same way and carries the same physical difference. It is only less *reachable* — what an ordinary instrument hands you is its same-ion difference, not its absolute value. This is all I mean by saying we can **access** a $V_i$: that we can measure some voltage difference involving it. (A more general recipe, using ion-selective membranes, comes [later](../nuances/) — it reaches every ion in principle, at the cost of being far less practical.)
 
 ## $V_i$ are thermodynamic state variables
 
