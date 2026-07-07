@@ -1,0 +1,61 @@
+{% set idprefix = "esbd-cap-reps" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}" style="height: 240px; max-width: 320px"></div>
+<div style="text-align: center; margin-top: 0.4em">
+{{ controls.checkbox(idprefix + "-ambi", "Ambipolar view", { checked: false }) }}
+</div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { drawCapacitors } from '{{ esbdJsPath }}utils.js';
+
+    // Two representations of the SAME chemical capacitance in an intercalation
+    // host (electrons + Li+ co-located). Per-carrier: one capacitor from each
+    // rail to its own standard state (V_i -||- V°_i, and V°_i tracks φ). Ambipolar:
+    // the two in series with the standard-state (φ) node eliminated, a single
+    // rail-to-rail capacitor V_e- -||- V_Li+. Checking the box drops the V°
+    // levels too, dramatising that the standard-state node is gone. A switch
+    // between two views, NOT two parallel couplings, so we only show one at a time.
+    const ELE = SPECIES.electron.color, LI = SPECIES.lithium.color;
+    const VE = 0.45, VE0 = 0.15, VLI0 = -0.15, VLI = -0.45;
+    const X = 0.5;
+
+    const esbd = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}',
+        { electron: SPECIES.electron, lithium: SPECIES.lithium },
+        { yMode: 'abstract', margins: { right: 62, left: 26 } }
+    );
+    esbd.setSpatialLayout([0, 1], [{ ...REGION.solid, name: 'intercalation host' }]);
+    esbd.diagram.setYLabel('Species voltage');
+    esbd.setVRange(-0.8, 0.8);
+
+    const T = {
+        ve: { id: 've', speciesId: 'electron', curveType: 'voltage', label: 'V_{\\mathrm{e}^-}', x: [0, 1], y: [VE, VE] },
+        ve0: { id: 've0', speciesId: 'electron', curveType: 'standardState', label: 'V^\\circ_{\\mathrm{e}^-}', x: [0, 1], y: [VE0, VE0] },
+        vli0: { id: 'vli0', speciesId: 'lithium', curveType: 'standardState', label: 'V^\\circ_{\\mathrm{Li}^+}', x: [0, 1], y: [VLI0, VLI0] },
+        vli: { id: 'vli', speciesId: 'lithium', curveType: 'voltage', label: 'V_{\\mathrm{Li}^+}', x: [0, 1], y: [VLI, VLI] },
+    };
+
+    // Per-carrier view: a capacitor from each rail to its standard state.
+    // Ambipolar view: the single series-combined rail-to-rail capacitor.
+    const internal = [
+        { id: 'e-int', x: X, hi: VE, lo: VE0, cHi: ELE, cLo: ELE },
+        { id: 'li-int', x: X, hi: VLI0, lo: VLI, cHi: LI, cLo: LI },
+    ];
+    const ambipolar = [{ id: 'amb', x: X, hi: VE, lo: VLI, cHi: ELE, cLo: LI }];
+
+    let ambi = false;
+    esbd.setCustomDrawCallback((bd) => drawCapacitors(bd, ambi ? ambipolar : internal));
+
+    function update(isAmbi) {
+        ambi = isAmbi;
+        // Drop the V° levels in the ambipolar view: the standard-state node is
+        // eliminated. Removed traces fade out (and fade back in) on their own.
+        esbd.updateTraceData(isAmbi ? [T.ve, T.vli] : [T.ve, T.ve0, T.vli0, T.vli]);
+    }
+
+    const box = document.getElementById('{{idprefix}}-ambi');
+    box.addEventListener('change', (e) => update(e.target.checked));
+    update(box.checked);
+</script>
