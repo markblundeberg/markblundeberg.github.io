@@ -250,6 +250,4 @@ Instead, we should place electrochemical potential $\bar\mu_i$ at the forefront.
 
 I hope that the species voltage $V_i = \bar\mu_i/(z_i F)$ and its associated visual band diagrams will help promote this $\phi$-less approach and help bring together the semiconductor and electrochemical communities into a unified viewpoint.
 
--- Mark Lundeberg, 2025 May
-
 (and if you're curious about this project, [the next topic](../about/) is about how this project came to be.)
