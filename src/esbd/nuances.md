@@ -23,7 +23,7 @@ Differences in $V_i$ at different places, for the *same* species, escape this en
 
 One could fold the convention straight into the definition, subtracting explicit reference-state constants. This "proper species voltage" $V'_i$ for sulfate would read
 
-$$ V'_{\mathrm{SO_4}^{2-}} = \frac{\bar\mu_{\mathrm{SO_4}^{2-}} - \varepsilon_{\mathrm{S}} - 4 \varepsilon_{\mathrm{O}} - 2 \varepsilon_{\mathrm{e}^-} }{z_i F}, $$
+$$ V'_{\mathrm{SO_4}^{2-}} = \frac{\bar\mu_{\mathrm{SO_4}^{2-}} - \varepsilon_{\mathrm{S}} - 4 \varepsilon_{\mathrm{O}} - 2 \varepsilon_{\mathrm{e}^-} }{z_{\mathrm{SO_4}^{2-}} F}, $$
 
 where the $\varepsilon$'s are energies of atoms and electrons in some explicit reference state, whether the IUPAC one or something more fundamental like the atom's rest energy at zero temperature in vacuum.^[These elemental references are exactly the constants written $\mu^*_i$ in [offsets galore](../offsetsgalore/); $\varepsilon_i$ and $\mu^*_i$ name the same thing.] It is technically superior but verbose, especially for multi-element ions, so I keep the concise $V_i = \bar\mu_i / z_i F$, which is casual but I think harmlessly so.
 

@@ -46,8 +46,8 @@ We can define capacitance as a matrix, which I call the **ambipolar capacitance 
 
 $$\begin{aligned}
 \mathbf{C}^{\mathrm{amb}}_{ij}
-& = \left(\frac{\partial Q_i}{\partial V_j}\right)_{V_1, \ldots V_N, Q=0} & (V_i~\text{definition}) \\
-& = q_i q_j \left(\frac{\partial N_i}{\partial \bar\mu_j}\right)_{\bar\mu_1, \ldots \bar\mu_N, Q=0} & (\text{usual definition})
+& = \left(\frac{\partial Q_i}{\partial V_j}\right)_{\{V_k\}_{k \neq j},\, Q=0} & (V_i~\text{definition}) \\
+& = q_i q_j \left(\frac{\partial N_i}{\partial \bar\mu_j}\right)_{\{\bar\mu_k\}_{k \neq j},\, Q=0} & (\text{usual definition})
 ,
 \end{aligned}$$
 
@@ -129,7 +129,7 @@ We're going to define internal chemical capacitance. It is exactly equivalent to
 $$\begin{aligned}
 \mathcal{C}_{ij}
 &= -\frac{\partial^2 F^\phi}{\partial V_i \partial V_j} \\
-&= \left( \frac{\partial Q_i}{\partial V_j} \right)_{\{V_1\ldots V_N\},\phi} \\
+&= \left( \frac{\partial Q_i}{\partial V_j} \right)_{\{V_k\}_{k \neq j},\, \phi} \\
 &= q_i q_j \frac{\partial N_i}{\partial \mu^{\mathrm{int}}_j} \\
 \end{aligned}$$
 

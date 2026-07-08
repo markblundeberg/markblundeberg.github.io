@@ -194,7 +194,7 @@ Well, $W_i$ is only the energy of solvation for an electron or ion that starts o
 
 Examples of where this matters:
 
-* $\psi$ may vary over the surface. Consider a "[Janus particle](https://pubs.acs.org/doi/10.1021/acs.langmuir.6b01282)" made up of two metals: the proper definition of its electron binding energy (ionization energy) is the same value for both metals despite their different $W_i$, because ionization energy requires moving the ejected electron far away, not just moving it to the surface. The exact value of this binding energy is sensitive to geometrical details, to both $W_i$ values.
+* $\psi$ may vary over the surface. Consider a "[Janus particle](https://pubs.acs.org/doi/10.1021/acs.langmuir.6b01282)" made up of two metals: the proper definition of its electron binding energy (ionization energy) is the same value for both metals despite their different $W$, because ionization energy requires moving the ejected electron far away, not just moving it to the surface. The exact value of this binding energy is sensitive to geometrical details, to both $W$ values.
 * Even if $\psi$ is uniform, the energy required to remove a particle still depends on the total charge of the parent body.
 
 This is just like how when we define ionization energies for molecules floating in vacuum, we require the electron to be moved far away, not just to the "surface" of the molecule where it is sensitive to the parent molecule's 'surface variations' (electric dipole) and total charge.

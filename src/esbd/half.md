@@ -73,7 +73,7 @@ where we define the **standard redox level for the $\mathrm{Ox}/\mathrm{Red}$ re
 
 $$ V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) = \frac{\bar\mu^\circ_{\mathrm{Ox}} - \bar\mu^\circ_{\mathrm{Red}}}{zF} .$$
 
-These are floating levels that float alongside our $V^\circ_i$ ionic standard states. Note that we can substitute $\bar\mu^\circ_i$ for $z_i F V^\circ_i$ for the ion reactants, to get formulae involving $V^\circ_i$ (see below for a more general formula).
+These are floating levels that float alongside our $V^\circ_i$ ionic standard states. Note that we can substitute $z_i F V^\circ_i$ for $\bar\mu^\circ_i$ for the ion reactants, to get formulae involving $V^\circ_i$ (see below for a more general formula).
 
 {#
 [^redformulae]:
