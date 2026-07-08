@@ -28,7 +28,7 @@ That last sentence is the whole reason chemical potential is worth defining. The
 {% include "esbd-diagrams/mu-driving-force.njk" %}
 </figure>
 
-Thermodynamically, $\mu_i$ is just a derivative of a free energy: take a body with free energy $G$, add one particle of species $i$ while holding the rest fixed, and the cost is
+Thermodynamically, $\mu_i$ is just a derivative of a free energy: take a body with free energy $G$, add one particle of species $i$ while holding temperature, pressure, and every other species fixed, and the cost is
 
 $$ \mu_i = \frac{\partial G}{\partial N_i}. $$
 

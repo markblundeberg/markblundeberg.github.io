@@ -23,7 +23,7 @@ Accordingly, inside of each material, the $V^\circ_i$ ladder follows a {% wiki "
 
 $$ - \varepsilon \nabla^2 V^\circ_i = - \varepsilon \nabla^2 \phi = \rho_{\mathrm{free}}, $$
 
-where $\varepsilon$ is the material's background permittivity and $\rho_{\mathrm{free}}$ is the space charge density described above. But as we saw in the [charge control topic](../charge_control/), $\rho_{\mathrm{free}}$ is itself a function of the $V^\circ_i$ offset! This creates a natural feedback loop: the result of this equation is that any deviation of $\phi$ from its neutral point is going to be naturally suppressed, which is {% wiki "electrostatic screening" %}.
+where $\varepsilon$ is the material's background permittivity and $\rho_{\mathrm{free}}$ is the space charge density of the mobile carriers (plus any fixed charges). But as we saw in the [charge control topic](../charge_control/), $\rho_{\mathrm{free}}$ is itself a function of the $V^\circ_i$ offset! This creates a natural feedback loop: the result of this equation is that any deviation of $\phi$ from its neutral point is going to be naturally suppressed, which is {% wiki "electrostatic screening" %}.
 
 One of the beautiful things about band diagrams is the perspective they give on screening: the $V_i$ are flat, and the accumulation of charges is purely due to the variation in $\phi$ or $V^\circ_i$, known as **band bending** in semiconductors:
 
@@ -51,7 +51,7 @@ where $\chi = -\mathrm{d}\rho_{\mathrm{free}}/\mathrm{d}\phi$ is a "total chemic
 
 ## Quasi-neutrality: a simplification of electrostatics
 
-The above concludes our discussion of electrostatics for now, because we usually won't need it! This is due to the practical principle of **quasi-neutrality**:
+That is the heart of the electrostatics, and the good news is that we can mostly ignore it! This is due to the practical principle of **quasi-neutrality**:
 
 > <p align="center"><b>Quasi-neutrality principle</b><br/>"screening is very very strong"</p> 
 >
@@ -81,7 +81,7 @@ Current driven from a low-resistivity region into a high-resistivity one: $V_{\m
 
 ## $V^\circ_i$ as a perfect neutralizer
 
-As a convenient approximation we can 'assert' local neutrality almost everywhere as a convenience. Mathematically, we do this indirectly by sending $\varepsilon \rightarrow 0$, which converts the Poisson equation into the **local electroneutrality approximation**:^[Newman & Balsara (2021), *Electrochemical Systems*.]
+As a convenient approximation, we can simply 'assert' local neutrality almost everywhere. Mathematically, we do this indirectly by sending $\varepsilon \rightarrow 0$, which converts the Poisson equation into the **local electroneutrality approximation**:^[Newman & Balsara (2021), *Electrochemical Systems*.]
 
 $$
 \begin{aligned}

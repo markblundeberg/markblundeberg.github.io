@@ -53,12 +53,12 @@ Engineering practice often collapses all of this into a single bulk current driv
 
 $$
 \begin{aligned}
-I &= -\sigma\,\nabla\phi, \\
+J_{\mathrm{tot}} &= -\sigma\,\nabla\phi, \\
 \sigma &= \sum_i \sigma_i.
 \end{aligned}
 $$
 
-It is a handy shortcut, and its origin is easy to see: sum the per-species drift currents and assume uniform concentrations, so that every $\nabla V_i$ reduces to the shared $\nabla\phi$. The weakness is that very assumption. As soon as concentration gradients appear, the species' $V_i$ slopes part ways, the diffusion currents start contributing to the charge flow, and $I = -\sigma\nabla\phi$ no longer holds. Tracking the individual $V_i$ keeps us honest in exactly the situations where the lumped law breaks down, and those situations are the next two effects.
+It is a handy shortcut, and its origin is easy to see: sum the per-species drift currents and assume uniform concentrations, so that every $\nabla V_i$ reduces to the shared $\nabla\phi$. The weakness is that very assumption. As soon as concentration gradients appear, the species' $V_i$ slopes part ways, the diffusion currents start contributing to the charge flow, and $J_{\mathrm{tot}} = -\sigma\nabla\phi$ no longer holds. Tracking the individual $V_i$ keeps us honest in exactly the situations where the lumped law breaks down, and those situations are the next two effects.
 
 ## Concentration polarization
 

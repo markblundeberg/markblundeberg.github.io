@@ -72,7 +72,7 @@ $$J_i = -\sigma_i \nabla V_i$$
 
 Note this is simpler than the common split seen in electrochemistry and solid state physics, where the driving force $-\nabla V_i$ is split into drift (from $-\nabla\phi$) and diffusion (from $-\nabla c_i$), then reunited by the {% wiki "Einstein relation" %} because both are really the one $-\nabla V_i$ (worked out in [basic transport](../transport_basic/)).
 
-Not all currents are so simple as Ohm's law, of course. Interfaces often have a nonlinear current-voltage relationship; there may be cross coupling where electrochemical potential gradients in one species drives another species (including neutral species); there may be other driving forces like magnetic induction or thermoelectricity; there may be convection/advection.
+Not all currents are so simple as Ohm's law, of course. Interfaces often have a nonlinear current-voltage relationship; there may be cross coupling where electrochemical potential gradients in one species drive another species (including neutral species); there may be other driving forces like magnetic induction or thermoelectricity; there may be convection/advection.
 
 ## Differences in $V_i$ store charge
 
@@ -116,7 +116,7 @@ So an ionic $V_i$ is no less *real* than the electronic $V_{\mathrm{e}^-}$: it i
 
 ## $V_i$ are thermodynamic state variables
 
-Alongside temperature $T$, pressure $P$, and the chemical potentials $\mu_i$ of neutral elements, the $V_i$ (or $\bar\mu_i$) are the proper intensive state variables for charged species. Since $T$, $P$, and the solvent $\mu$ tends to be constant or implicitly clear, it means that our plots of varying $V_i$ will be a complete visualization of the spatial variations of the thermodynamic state in many cases.
+Alongside temperature $T$, pressure $P$, and the chemical potentials $\mu_i$ of neutral elements, the $V_i$ (or $\bar\mu_i$) are the proper intensive state variables for charged species. Since $T$, $P$, and the solvent $\mu$ tend to be constant or implicitly clear, our plots of varying $V_i$ will be a complete visualization of the spatial variations of the thermodynamic state in many cases.
 
 Note that in general if we have $N$ charged species then there are $N$ independent $V_i$ values, however there are only $N-1$ independent charged species concentrations, because the body has to (generally) be charge neutral. The extra degree of freedom in the set of $V_i$ values is not redundant but actually represents important state information: it is the electrical state of the body. If we uniformly increase all the $V_i \rightarrow V_i + \delta$ then the body is in a distinct thermodynamic state (electrically) even though it is equivalent in all other aspects. This brings us to our next point...
 
@@ -133,7 +133,7 @@ Comparing *different* species, $V_i - V_j$, inherits a chemical-potential conven
 
 So, we've seen that this electrochemical species voltage $V_i$ is no stranger to us, and in fact it just rigorously generalizes the familiar notion of electronic circuit voltage. What we are going to see going forward is that $V_i$ has a simultaneous triple function: 1) it is a hands-on voltage, 2) it is a visual tool, and 3) it is a deeply thermodynamically and chemically meaningful quantity.
 
-As we go along through the next topics, we're going to follow a 'top-down' approach, starting with pure thermodynamics ($V_i$ only), and keeping $V_i$ as our reliable lifeline as we later dive down into microscopic concepts. This is the opposite of usual 'bottom-up' solid-state and electrochemistry teaching, which starts with idealized microscopic concepts like independent electrons and infinite crystalline solids, or ideal solutes and homogeneous solutions, and gradually adds on complications like nonideality, inhomogeneity, and junctions. In the bottom-up pedagogy, when we finally arrive at the full thermodynamic picture, we are often left clinging to strained and bandaged microscopic concepts, and the unifying power of $\bar\mu_i$ is left unappreciated.
+As we go along through the next topics, we're going to follow a 'top-down' approach, starting with pure thermodynamics ($V_i$ only), and keeping $V_i$ as our reliable lifeline as we later dive down into microscopic concepts. This is the opposite of the usual 'bottom-up' solid-state and electrochemistry teaching, which starts with idealized microscopic concepts like independent electrons and infinite crystalline solids, or ideal solutes and homogeneous solutions, and gradually adds on complications like nonideality, inhomogeneity, and junctions. In the bottom-up pedagogy, when we finally arrive at the full thermodynamic picture, we are often left clinging to strained and bandaged microscopic concepts, and the unifying power of $\bar\mu_i$ is left unappreciated.
 
 Now that we've established $V_i$ as our core quantity, we're ready to put it to work. Next we turn to equilibrium and the electrochemical reactions that link different charged species (connecting our electronic and ionic circuits) and thereby set $V_i - V_j$.
 

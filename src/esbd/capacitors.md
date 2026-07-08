@@ -58,6 +58,6 @@ These capacitances seldom act alone. When one carrier's $V_i$ is driven while it
 
 ## Takeaways
 
-Capacitance is the storage twin of conductance, and the $V_i$ picture shows it wearing three forms: a dielectric field across a gap, a single carrier crowding against its own standard state, and charge traded between two carriers. The dielectric kind sorts its devices by screening length, from the full-gap capacitor to the nanometre double layer of a supercapacitor; the chemical kind, $z_i^2 F^2 c_i/RT$, grows with concentration and underlies intercalation and pseudocapacitance; and acting together as a capacitive divider, they set where the standard state sits whenever charge is stored or screened. With both responses now in hand, storage and flow, we turn to transport.
+Capacitance is the storage twin of conductance, and the $V_i$ picture shows it wearing three forms: a dielectric field across a gap, a single carrier crowding against its own standard state, and charge traded between two carriers. The dielectric kind sorts its devices by screening length, from the full-gap capacitor to the nanometre double layer of a supercapacitor; the chemical kind, $z_i^2 F^2 c_i/RT$, grows with concentration and underlies intercalation and pseudocapacitance; and acting together as a capacitive divider, they set where the standard state sits whenever charge is stored or screened. With the storage response in hand, we turn to its flow-side twin: transport.
 
 [**NEXT TOPIC: Basic transport**](../transport_basic/)

@@ -7,7 +7,7 @@ orderESBD: 31
 
 # {{title}}
 
-In this topic and the next few topics we're going to explore the $V_i$ world visualization of concepts like "electrode potential", "redox potential", "standard hydrogen electrode", and so on. These are all built around electron transfer, aka "redox".
+In this topic and the next few topics we're going to explore how concepts like "electrode potential", "redox potential", and "standard hydrogen electrode" look in the $V_i$ world. These are all built around electron transfer, aka "redox".
 
 The general idea of redox chemistry is considering **half-reactions** of the following generic form:
 $$ \mathrm{Ox} + z\mathrm{e}^- \rightleftharpoons \mathrm{Red} $$
@@ -73,7 +73,7 @@ where we define the **standard redox level for the $\mathrm{Ox}/\mathrm{Red}$ re
 
 $$ V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) = \frac{\bar\mu^\circ_{\mathrm{Ox}} - \bar\mu^\circ_{\mathrm{Red}}}{zF} .$$
 
-These are floating levels that float alongside our $V^\circ_i$ ionic standard states. Note that we can substitute $z_i F V^\circ_i$ for $\bar\mu^\circ_i$ for the ion reactants, to get formulae involving $V^\circ_i$ (see below for a more general formula).
+These levels float alongside our $V^\circ_i$ ionic standard states. Note that we can substitute $z_i F V^\circ_i$ for $\bar\mu^\circ_i$ for the ion reactants, to get formulae involving $V^\circ_i$ (see below for a more general formula).
 
 The above equation for $V_{\mathrm{e}^-}$ looks extremely similar to the regular {%wiki "Nernst equation" %}, though it involves $V_{\mathrm{e}^-}$ instead of $E$. We'll get back to what this traditional electrochemical $E$ actually means in the next topic, but we don't need it for now.
 
@@ -101,7 +101,7 @@ and for the standard redox level we can use $V^\circ_i$ for the charged species:
 $$V^\circ_{\mathrm{e}^-}(\mathrm{rxn}) = \frac{az_{\mathrm{A}}}{z}V^\circ_{\mathrm{A}} - \frac{cz_{\mathrm{C}}}{z}V^\circ_{\mathrm{C}} + \frac{b\mu^\circ_{\mathrm{B}} - d\mu^\circ_{\mathrm{D}}}{zF} . $$
 
 This provides a general recipe and it's easy to see how to extend it to more ionic or more neutral reactants.
-(Note that the weighting of $V^\circ_i$ levels is always balanced to a total of 1, since original reaction is neutral, $az_{\mathrm{A}} - z = cz_{\mathrm{C}}$ in this case.)
+(Note that the weighting of $V^\circ_i$ levels is always balanced to a total of 1, since the original reaction is charge-balanced: $az_{\mathrm{A}} - z = cz_{\mathrm{C}}$ in this case.)
 
 ## Standard redox levels in water
 
@@ -117,7 +117,7 @@ As with our ionic standard states, we can tabulate all the relative positions of
 
 $$ E^\circ = V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2}) $$
 
-| Ox | / | Red | $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ | $E^0$ (V) |
+| Ox | / | Red | $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ | $E^\circ$ (V) |
 | ---: | --- | :--- | ---: | ---: |
 | $\mathrm{H}^+$ | / | $\mathrm{H_2(g)}$ | $V^\circ_{\mathrm{H}^+} - \tfrac{1}{2F} \mu^\circ_{\mathrm{H_2}}$ | 0 |
 | $\mathrm{O_2(g)},\mathrm{H_2O}$ | / | $\mathrm{OH}^-$ | $V^\circ_{\mathrm{OH}^-} + \tfrac{1}{4F} \mu^\circ_{\mathrm{O_2}} + \tfrac{1}{2F} \mu^\circ_{\mathrm{H_2O}} $ | +0.401 |

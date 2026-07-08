@@ -7,7 +7,7 @@ orderESBD: 24
 
 # {{title}}
 
-The [previous topic](../charge_control/) ended with a fixed background charge forcing the standard-state ladder to step across a boundary, the Donnan potential. Put two such regions back to back, with fixed charge of opposite sign on each side, and you have built one of the most satisfying objects in this subject: a device that is at once a semiconductor pn-junction diode and an electrochemical bipolar membrane. The two are not merely analogous; built as $V_i$ diagrams they share the same construction and obey the same rules of depletion, generation, and recombination.
+The [previous topic](../charge_control/) ended with a fixed background charge forcing the standard-state ladder to step across a boundary, the Donnan potential. Put two such regions back to back, with fixed charge of opposite sign on each side, and you have built one of the most satisfying objects in this subject: a device that is at once a semiconductor pn-junction diode and an electrochemical bipolar membrane. Built as $V_i$ diagrams, the two share one construction and one set of rules: depletion, generation, recombination.
 
 ## Functional twins
 

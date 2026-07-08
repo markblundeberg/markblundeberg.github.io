@@ -147,7 +147,7 @@ It seems this should leave no ambiguity at all: everything besides activity $a_i
 
 But this raises a contradiction if we choose an activity convention. We are then setting $a_i$, and therefore we are setting $\phi$ (up to a single, constant offset per solvent). If $a_i$ is subjective then so must $\phi$ be, which totally contradicts the idea that $\phi$ is a real quantity.
 
-The answer to this paradox is that the above equation is reinterpreted into a redefinition of $\phi$ based on a practial convention for $a_i$'s. The true $\phi$ is in fact abandoned.
+The answer to this paradox is that the above equation is reinterpreted into a redefinition of $\phi$ based on a practical convention for $a_i$'s. The true $\phi$ is in fact abandoned.
 
 In other words, we should really say that $\bar\mu_i$ is decomposed as so:
 
@@ -187,7 +187,7 @@ Basically, this is the distinction between a formal/nominal solute concentration
 
 It is important to remind that all the standard states of solutes, such as $\mu^\circ_{\mathrm{int},i}$ and $V^\circ_i$, will always refer to 'fully solvated' ions: the ions are ideally dilute, being far from other solutes, but they are subject to arbitrarily complicated and real influence of the solvent medium. It is normal that an ion will exert a severe disturbance on the solvent around it, and that disturbance is fully included in the definition of the standard state.
 
-For example, when we refer to an $\mathrm{H}^+$ ion we are always referring the total concentration of a lumped group of species: $\mathrm{H}^+$, $\mathrm{H_3O}^+$, $\mathrm{H_5O_2}^+$, and so on. The actual concentration of 'naked proton' $\mathrm{H}^+$ is going to be a tiny fraction of the lumped $\mathrm{H}^+$ concentration.
+For example, when we refer to an $\mathrm{H}^+$ ion we are always referring to the total concentration of a lumped group of species: $\mathrm{H}^+$, $\mathrm{H_3O}^+$, $\mathrm{H_5O_2}^+$, and so on. The actual concentration of 'naked proton' $\mathrm{H}^+$ is going to be a tiny fraction of the lumped $\mathrm{H}^+$ concentration.
 
 Insofar as counting, there is not much point in trying to distinguish the differing hydration levels as distinct species. First, it would be hard to distinguish them. Second, we would have to actually redefine the existing standard state $V^\circ_i$ positions and add new positions. E.g., $V^\circ_{\mathrm{H}^+}$ would have to be greatly increased to reflect the rarity of naked protons, and the 'actual $\mathrm{H}^+$ activity' would be tiny (very inconsistent with the usual pH definition!).
 

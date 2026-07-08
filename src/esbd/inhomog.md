@@ -46,14 +46,14 @@ In [basic electrostatics](../basicelectrostatics/) we described an incredibly el
 * Graded media (as used in the {% wiki "heterojunction bipolar transistor" %}): these are effectively slow distributed interfaces, which means all the problems of the interface exist through a whole continuum region. $\phi$ and $V^\circ_i$ now all vary differently. Charge carriers only see "quasi-electric fields" $-\nabla V^\circ_i$ which differ from each other and from the "real" electric field $-\nabla\phi$.
 * Nano geometry: for example in conductors which are very thin (such as a graphene {% wiki "2D electron gas" %}), the active material can only screen and conduct in two dimensions but electrostatics remains three dimensional. Such conductors have no quasi-neutral bulk; they are 'all interface'.
 * Non-ideal conductors (concentrated electrolytes): establishing an $E$ field here requires single-ion activity coefficients, which are not measurable from bulk neutral solutions (see the [nonideality topic](../nonideal/), which owns this caveat). (Though ultimately, the $D$ field is the goal.)
-* Complex constitutive relations ($\mathbf{D} \neq \varepsilon \mathbf{E}$ for many reasons, that cannot be described by any linear 'effective $\varepsilon$'):
+* Complex constitutive relations ($\mathbf{D} \neq \varepsilon \mathbf{E}$ for many reasons that no linear 'effective $\varepsilon$' can capture):
   * Static dipoles: especially at interfaces but also inside of graded media.
   * Chemical gradient dipoles: where there is a strong gradient in chemical concentration, it is perfectly possible for there to be induced dipoles.
   * Ambiguous $E$ field: the Gibbs–Guggenheim principle that the value of $\phi$ is ambiguous means that in many complex cases, even $\mathbf{E} = -\nabla\phi$ is ambiguous. This is permitted in Maxwell's equations, but crucially the $\mathbf{D}$ field is not affected by this thermodynamic-type ambiguity. Thus $\mathbf{D}$ becomes partially independent of $\mathbf{E}$.
 * Local linear continuum breakdown:
   * Very short ranges: even in linear response both charge density and $\varepsilon$ can get nonlocal. (Fermi gas gets Friedel oscillations; ions get pair correlations etc.; solvent exhibits a correlation length and 'overscreening'.)
   * High electric fields: in general, the dielectric response of a solvent is nonlinear ({% wiki "dielectric saturation" %}). Note though that dielectric saturation in an electric double layer tends to occur in the same conditions that the aforementioned non-local effects also appear, so it becomes a real mess!
-  * Local thermodynamic equilibrium breakdown: $V_i$ itself can become ill-defined or requires further refinement in meaning when there is a combination of both small scales and strong driving conditions.
+  * Local thermodynamic equilibrium breakdown: $V_i$ itself can become ill-defined or require further refinement in meaning when there is a combination of both small scales and strong driving conditions.
 
 ## Takeaways
 

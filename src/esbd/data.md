@@ -9,7 +9,7 @@ orderESBD: 91
 
 ## Standard state ladder data (aqueous)
 
-Here is the data table of relative $V^\circ_i$ values for water, that was plotted in the [Solutions](../solutions/) topic. These are converted from Atkins' _Physical Chemistry_ (8th edition, Table 2.7 in the back pages). Note these are all:
+Here is the data table of relative $V^\circ_i$ values for water, as plotted in the [Solutions](../solutions/) topic. These are converted from Atkins' _Physical Chemistry_ (8th edition, Table 2.7 in the back pages). Note these are all:
 
 * for **ideally dilute** ions in **water**,
 * at 298 K and 1 bar,

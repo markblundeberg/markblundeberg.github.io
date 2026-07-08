@@ -40,7 +40,7 @@ I struggled with this a fair bit! "Species voltage" is an improper term in that 
 
 So then, I should have named it as "species potential", or maybe "electrochemical potential potential" (just kidding on that one)?
 
-However, I believe any term with "potential" is just going to add to existing confusion. To quote the fantastic paper by Boettcher et al., ["Potentially Confusing: Potentials in Electrochemistry"](https://doi.org/10.1021/acsenergylett.0c02443), we have already:
+However, I believe any term with "potential" is just going to add to existing confusion. As catalogued in the fantastic paper by Boettcher et al., ["Potentially Confusing: Potentials in Electrochemistry"](https://doi.org/10.1021/acsenergylett.0c02443), we already have:
 
 * Electrochemical potential $\bar\mu_i$ (energy units)
 * Chemical potential $\mu_i$ (energy units)
@@ -61,7 +61,7 @@ Some of these are absolute and some are in fact potential differences. And to ad
 
 (The last one is particularly ironic as it literally is a voltage in the voltmeter sense.)
 
-On the other hand, in the field of electronics and in most casual conversation, we are perfectly comfortable with talking absolute voltages, or at least voltages that are measured *with respect to a globally-defined reference point* (ground/common/earth). This is so common that we often use term "voltage difference" or differential voltage to unambiguously describe what we are technically supposed to simply call "voltage" i.e. potential difference. So, I would say $V_i$ are perfectly acceptable "voltage"s, and indeed my recommendation is to borrow the tradition of using the electrical ground as our reference point. To be precise, we set $V_{\mathrm{e}^-} = 0$ at the electrical ground. This electronic ground in turn fixes the entire system of $V_i$ values!
+On the other hand, in the field of electronics and in most casual conversation, we are perfectly comfortable with talking absolute voltages, or at least voltages that are measured *with respect to a globally-defined reference point* (ground/common/earth). This is so common that we often use the term "voltage difference" or differential voltage to unambiguously describe what we are technically supposed to simply call "voltage", i.e., potential difference. So, I would say $V_i$ are perfectly acceptable "voltage"s, and indeed my recommendation is to borrow the tradition of using the electrical ground as our reference point. To be precise, we set $V_{\mathrm{e}^-} = 0$ at the electrical ground. This electronic ground in turn fixes the entire system of $V_i$ values!
 
 So, "species voltage" for $V_i$ because:
 

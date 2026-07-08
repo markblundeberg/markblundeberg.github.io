@@ -66,7 +66,7 @@ I call this the **standard state ladder** for water. The standard state ladder i
 
 The [Data table](../data/) topic in the appendix contains the numerical values used above, as well as the procedure used to obtain them from standard ionic Gibbs energies of formation ($\Delta_{\mathrm{f}} G^\circ_i$ values).
 
-In effect, the standard state ladder of $V^\circ_i$ is a stand-in for the notion of electrostatic potential $\phi$, but combining it with the average differences in the local electrostatic potentials that each ion 'feels', as well as the ion's chemical structure, and the way it disturbs its solvent environment with solvation shells.
+In effect, the standard state ladder of $V^\circ_i$ is a stand-in for the notion of electrostatic potential $\phi$, but one that also folds in the average differences in the local electrostatic potentials that each ion 'feels', as well as the ion's chemical structure, and the way it disturbs its solvent environment with solvation shells.
 
 The standard state ladder is also analogous to the conduction and valence band edges in semiconductors. We'll talk more about this analogy to semiconductors in the next topic.
 
@@ -97,7 +97,7 @@ The standard state is fixed by the convention that $a_i \to c_i/c^\circ$ in the 
 
 There are a number of big gotchas when it comes to nonideality. I talk about this a lot more in the [appendix Topic on non-ideality](../nonideal/), but the key points are:
 
-* **Single-ion activities are ambiguous**: we can access $V_i$ but we cannot directly access $\phi$ nor $V^\circ_i$. Consequently in nonideal solutions we have no basis on how to fix the reference point for activities. In chemistry it is said "we can only measure {% wiki "Activity_coefficient#Ionic_solutions", "*mean* ion activities" %}"; those [exactly correspond](../nonideal/) to measurable differences like $(V_i - V^\circ_i) - (V_j - V^\circ_j)$, where the 'ladder offset' or $\phi$ cancels out. This ambiguity is very severe: it adds infinite degrees of freedom as every solution of every composition can settle the ambiguity independently.
+* **Single-ion activities are ambiguous**: we can access $V_i$ but we cannot directly access $\phi$ nor $V^\circ_i$. Consequently in nonideal solutions we have no basis for fixing the reference point for activities. In chemistry it is said "we can only measure {% wiki "Activity_coefficient#Ionic_solutions", "*mean* ion activities" %}"; those [exactly correspond](../nonideal/) to measurable differences like $(V_i - V^\circ_i) - (V_j - V^\circ_j)$, where the 'ladder offset' or $\phi$ cancels out. This ambiguity is very severe: it adds infinite degrees of freedom as every solution of every composition can settle the ambiguity independently.
 * **Activities depend on concentration reference**: depending on our choice of concentration reference (either switching from molarity $c^\circ$ to molality $b^\circ$, or changing their values), we will have different $V^\circ_i$ values. This choice doesn't change the $V_i$, rather it changes activity $a_i$. This can get confusing!^[See Adam Přáda's blog (2019), ["On chemical activities"](https://adamprada.net/blog/on-chemical-activities/)]
 * **Activity coefficients are trickier**: it is common in chemistry to introduce a dimensionless activity coefficient as a sort of fudge factor on the concentration. These become especially tricky when trying to convert between different concentration measures.
 

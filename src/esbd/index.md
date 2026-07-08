@@ -19,11 +19,11 @@ If we try to visualize this by plotting voltage versus position, we immediately 
 {% include "esbd-diagrams/bd-basicbattery-voltage-missing.njk" %}
 </figure>
 
-What are we supposed to draw in place of the '???'? A straight line? A sudden jump? The mystery deepens when we try to understand more complex situations; how can we visualize the voltage drops from internal resistance during battery discharge?
+What are we supposed to draw in place of the '???'? A straight line? A sudden jump? The mystery deepens when we try to understand more complex situations: how can we visualize the voltage drops from internal resistance during battery discharge?
 
 While the equations of electrochemistry are precise, the visual tools for building intuition are often lacking. There is a head-smackingly simple solution to this, which generalizes to visualize all of electrochemistry, but until now it has been unused. None of it is new physics, to be clear: the thermodynamics of electrochemical potentials is textbook material, and what has been missing is only a good way to *picture* it.
 
-## Electrons: An Incomplete Picture
+## Electrons: an incomplete picture
 
 Semiconductor physicists are used to understanding everything in terms of electronic energies, and we use the term "{%wiki "energy band diagram", "Band diagram" %}" to refer to a plot of electronic energies vs. position. These band diagrams are the primary visual and pedagogical tool for showing what is happening, thermodynamically, inside semiconductor devices. So, what happens when we try to represent a battery with a regular band diagram?
 
@@ -39,7 +39,7 @@ We still have a missing middle! We can be more precise and say _the middle is un
 
 This seems to suggest that there is no meaningful way to complete the picture. But it is quite unsatisfying to stop at this point. To paraphrase Herbert Kroemer: "if you don't draw a band diagram, then nobody knows what you're talking about".^[[H. Kroemer (2000). Nobel Lecture.](https://www.nobelprize.org/uploads/2018/06/kroemer-lecture.pdf)] The need for visualizations means that band diagrams do get drawn for batteries anyway, but are often full of irrelevant or even unphysical ideas^[Peljo, P., & Girault, H. (2018). [Electrochemical potential window of battery electrolytes: the HOMO–LUMO misconception.](http://dx.doi.org/10.1039/C8EE01286E) Energy Environ. Sci., 11, 2306-2309.].
 
-## Including the Ions: Awkward Energies
+## Including the ions: awkward energies
 
 To make headway, let's recognize something crucial: in batteries, electrons are not the only charge carriers. For example, we have $\mathrm{Li}^+$ ions in the case of lithium-ion batteries. Why should we expect to get away with only talking about electronic energies? Why shouldn't we treat the lithium ions on equal footing? After all, ions have their own well-defined electrochemical potential, such as $\bar\mu_{\mathrm{Li}^+}$.
 
@@ -53,7 +53,7 @@ Fantastic, we have filled the gap and closed the circuit! And, we can visualize 
 
 Unfortunately, such a diagram has a serious flaw: if we change the overall electrostatic offset of the system (try moving the slider), the energy levels for the electron and the ion move in opposite directions because of their opposite charges. This breaks a key principle of band diagrams: the absolute vertical position is arbitrary, and only the *differences* between levels should have physical meaning. Here, the energy gap between the electron and ion levels changes with the offset, making the diagram ambiguous. So, just one more small but crucial tweak is needed...
 
-## The $V_i$ Solution
+## The $V_i$ solution
 
 We saw that electronic voltage is $V_{\mathrm{e}^-} = \bar\mu_{\mathrm{e}^-}/(-e)$. Why not just generalize this to ions as well?
 
@@ -61,7 +61,7 @@ $$ V_i = \frac{\bar\mu_i}{q_i}, $$
 
 where $q_i$ is the charge of the species: $-e$ for electrons, $+e$ for lithium ions, and so on for any kind of charge carrier. I call this quantity $V_i$ the **species voltage**.
 
-> **Chemistry units**: In chemistry, we work with molar quantities, so $\bar\mu_i$ would be in joules/mol and $q_i$ in coulombs/mol. In that case, $q_i = z_i F$ where $z_i$ is the charge number (&minus;1, +1, +3, etc.) and $F$ is the {%wiki "Faraday constant" %}. Either way, the final quantity $V_i$ is a voltage measured in Volts (V).
+> **Chemistry units**: In chemistry, we work with molar quantities, so $\bar\mu_i$ would be in joules/mol and $q_i$ in coulombs/mol. In that case, $q_i = z_i F$ where $z_i$ is the charge number (&minus;1, +1, +3, etc.) and $F$ is the {%wiki "Faraday constant" %}. Either way, the final quantity $V_i$ is a voltage measured in volts (V).
 
 Let's re-plot our battery with this new representation. I call these diagrams **electrochemical species band diagrams (ESBDs)**.
 
@@ -92,9 +92,9 @@ In fact, what started out as a niche picture about batteries has turned into a r
 
 In the next few topics we're going to dig a little bit more into how $V_i$ works.
 
-[**NEXT TOPIC: Species Voltage**](v_i/)
+[**NEXT TOPIC: Species voltage**](v_i/)
 
-## Explore More
+## Explore more
 
 Intrigued? The real power of ESBDs becomes apparent when applied to various systems. Explore these topics through interactive diagrams and detailed explanations by clicking on a topic below:
 

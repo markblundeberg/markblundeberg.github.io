@@ -13,7 +13,7 @@ What makes saturation worth its own topic is that the same mechanism turns up in
 
 ## The choke point
 
-Apply a voltage and, for the first instant before anything moves, an electric field appears and every carrier drifts in unison. That does not last. Within a moment one species takes over the job of carrying current while the others, the spectators, find themselves blocked. (In a transistor the new steady state arrives in well under a nanosecond; in an electrochemical cell it can take minutes or hours.) Let us look at that steady state, where a single active species $i$ carries all the current.
+Apply a voltage and, for the first instant before anything moves, an electric field appears and every carrier drifts in unison, but that does not last: within a moment one species takes over the job of carrying current while the others, the spectators, find themselves blocked. (In a transistor the new steady state arrives in well under a nanosecond; in an electrochemical cell it can take minutes or hours.) Let us look at that steady state, where a single active species $i$ carries all the current.
 
 A spectator species $j$ carries no current, so its voltage is flat, a level rail across the whole channel. The active species is the opposite. Carrying a steady current down a varying conductivity, its voltage has to slope,
 

@@ -33,7 +33,7 @@ $$ \nabla^2 \phi = -\rho / \varepsilon_0 . $$
 
 This defines $\phi$ in a consistent manner both inside and outside of materials. We'll refer to $\phi$ outside of materials (in vacuum) as $\phi_{\mathrm{vac}}$, but we'll discuss that later. For now let's focus on $\phi$ inside of materials, and especially inside of conductors (which have mobile charges).
 
-Most importantly, inside of a homogeneous electronic or ionic conducting material we say that $\rho = 0$ (charge neutrality on average), but also $\nabla \phi = 0$ (no internal electric fields) and therefore $\phi$ is flat throughout. Whatever averaging procedure we use is going to have to smear enough over the microscopic mess enough to get that $\rho=0$ and flat $\phi$.
+Most importantly, inside of a homogeneous electronic or ionic conducting material we say that $\rho = 0$ (charge neutrality on average), but also $\nabla \phi = 0$ (no internal electric fields) and therefore $\phi$ is flat throughout. Whatever averaging procedure we use is going to have to smear over the microscopic mess enough to get that $\rho=0$ and flat $\phi$.
 
 As far as a particle cares, what does $\phi$ even mean? The answer is:
 
@@ -112,11 +112,11 @@ Profile of $\phi$ across a device, as relating to measured voltage $E$. From Bar
 
 Unlike a proper band diagram, a plot of $\phi$ vs position is cluttered by the matching-metal bookends and all sorts of extra Galvani potentials between metals. A pragmatic electrochemist will soon sweep this tedious $\phi$ visualization under the rug and thereafter focus on the math of electrode potentials.
 
-Another problem relates to the double layers: where a metal meets a non-metal (semiconductor or electrolyte), there is a near-discontinuous (angstrom-scale) jump in $\phi$ just at the surface, that is going to depend nontrivially on the nature of the other material, followed by a smoother region where $\phi$ approaches its equilibrium value more gradually ({% wiki "band bending" %}). Thus we actually have a triple layer. Although we can do all sorts of experiments probing the gradual-$\phi$ region (again, since bending $\phi$ corresponds to bending of relevant energy levels!), we are never able to do an experiment that relates to the abrupt $\phi$ jump, i.e, we never probe the full triple layer. The only potential of a metal that enters is $V_{\mathrm{e}^-}$, or Fermi level.
+Another problem relates to the double layers: where a metal meets a non-metal (semiconductor or electrolyte), there is a near-discontinuous (angstrom-scale) jump in $\phi$ just at the surface, that is going to depend nontrivially on the nature of the other material, followed by a smoother region where $\phi$ approaches its equilibrium value more gradually ({% wiki "band bending" %}). Thus we actually have a triple layer. Although we can do all sorts of experiments probing the gradual-$\phi$ region (again, since bending $\phi$ corresponds to bending of relevant energy levels!), we are never able to do an experiment that relates to the abrupt $\phi$ jump, i.e., we never probe the full triple layer. The only potential of a metal that enters is $V_{\mathrm{e}^-}$, or Fermi level.
 
 #### The thermoelectricity myth
 
-The electrostatic potential of metals may seem merely tedious, but it can actually mislead. With thermoelectricity, there is a long-standing myth that thermoelectric voltages are generated at junctions, and attributed to the way that the Galvani potential varies with temperature. Alternatively they are attributed to contact potentials (*outer* potential differences), [as illustrated here](https://www.uni-konstanz.de/FuF/Physik/Jaeckle/papers/thermopower/node4.html). Anyway, both of these are simply wrong.
+The electrostatic potential of metals may seem merely tedious, but it can actually mislead. With thermoelectricity, there is a long-standing myth that thermoelectric voltages are generated at junctions, attributed to the way the Galvani potential varies with temperature. Alternatively they are attributed to contact potentials (*outer* potential differences), [as illustrated here](https://www.uni-konstanz.de/FuF/Physik/Jaeckle/papers/thermopower/node4.html). Anyway, both of these are simply wrong.
 
 In fact, the thermoelectric voltage has to do with gradients in the proper voltage (electrochemical potential, i.e., $V_{\mathrm{e}^-}$) that occur *only in regions of thermal gradient*, and $V_{\mathrm{e}^-}$ has no step at the junction itself. Thermodynamically, we describe thermoelectricity in terms of coupled transport of heat and electrons; it is only one of many kinds of coupled heat-particle transport phenomena.
 
@@ -128,7 +128,7 @@ The idea that $\phi$ is ambiguous is fine for thermodynamics, but it is concerni
 
 Surprisingly, it is actually okay if the $E$ field is partially fictitious. The Maxwell equations in terms of $E$, $B$, $D$, $H$ are entirely fine if you add an arbitrary conservative field to $E$, provided that $D$, $J$, and $\rho$ remain unaffected. Only the curl of $E$ is of any direct importance. Of course, there is still a problem: this does mean that we have to determine $D$ by other means than simply $D = \varepsilon E$, but actually this problem is basically intrinsic and unavoidable in precisely those situations when $E$ becomes ambiguous. We already know that interfaces have built-in $D$ fields, and that therefore distributed interfaces (like graded media) should have some extra built-in polarization like $D = P_{\mathrm{extra}} + \varepsilon E$. That $P_{\mathrm{extra}}$ can do the work of compensating for ambiguity in $E$. Anyway, this thermodynamic ambiguity to $E$, that does not affect $D$, is a surprising reversal on the usual polarization ambiguity we talk about (that $E$ is objective and the separation of charge into bound and free is ambiguous, i.e., $D$ is ambiguous).
 
-The usual argument for the reality of $E$ (and $B$) comes from the Lorentz force, but this argument breaks inside of media: we know for example that in graded bandgap heterostructures, we get a different $E$ field for electrons and holes! You can appeal to the Lorentz force on ghostly test charges to resolve this, but then you get back to the question of exactly how you choose those test charges should sit inside the material. Yes, you can insist on a true $\phi$ by smoothing out the microscopic $\phi$, which means $E$ will be smoothed out microscopic $E$, but *this does not even win you any favour from the Maxwell equations*.
+The usual argument for the reality of $E$ (and $B$) comes from the Lorentz force, but this argument breaks inside of media: we know for example that in graded bandgap heterostructures, we get a different $E$ field for electrons and holes! You can appeal to the Lorentz force on ghostly test charges to resolve this, but then you get back to the question of exactly how those test charges should sit inside the material. Yes, you can insist on a true $\phi$ by smoothing out the microscopic $\phi$, which means $E$ will be the smoothed-out microscopic $E$, but *this does not even win you any favour from the Maxwell equations*.
 
 ## Vacuum levels (outer potentials / Volta potentials)
 
@@ -145,7 +145,7 @@ So, given all the difficulties with the inner potential $\phi$ that we've discus
 
 There are two major issues with $\psi$. First, $\psi$ is a poor reference, as it introduces all sorts of special surface considerations and in fact *complicates* the discussion of what is happening inside materials. Second, $\psi$ is often misused to predict the interface between two materials. The next sections will expand on these two issues.
 
-### The vacuum is a not a good reference
+### The vacuum is not a good reference
 
 It is common to see energies in a material referenced "relative to vacuum".
 
@@ -176,13 +176,13 @@ The reality is that for a particle that is deep inside a material, it does not c
 
 Notwithstanding the above, let's suppose that 'bulk $\psi$' was actually a reliable property for every material. It is then a reliable reference, but is it a *meaningful* reference?
 
-We can define a quantity
+We can define
 
 $$\alpha_i = \bar\mu_i - z_i F \psi$$
 
 a quantity that is unfortunately called "real chemical potential".
 
-The work function $W$ of electrons is one such quantity, actually a negative: $W = -\alpha_{\mathrm{e}^-}$. And we can generalize the idea of work function to other charged species:
+The work function $W$ of electrons is one such quantity, actually its negative: $W = -\alpha_{\mathrm{e}^-}$. And we can generalize the idea of work function to other charged species:
 
 $$ W_i = \varepsilon_{i,0} - \alpha_i, $$
 
@@ -190,7 +190,7 @@ where $\varepsilon_{i,0}$ is the internal rest energy of the particle in vacuum.
 
 The naive notion is that $W_i$ describes the strength with which species $i$ is bound inside that material. With uncharged solutes we can imagine dropping them in from vacuum and $\varepsilon_{i,0} - \mu_i$ gives us an energy of solvation. This sure looks similar to $\varepsilon_{i,0} - \alpha_i$, so why can't we just say that work function $W_i$ is the equivalent energy of solvation for charged solutes?
 
-Well, $W_i$ is only the energy of solvation for an electron or ion that starts out exactly just outside the surface. Its starting energy is sensitive to $\psi$, in other words, *its starting energy already under the control of the surface*! This is quite different from uncharged solutes where we don't care where they start in vacuum, and their energy is totally independent of proximity to surfaces.
+Well, $W_i$ is only the energy of solvation for an electron or ion that starts out exactly just outside the surface. Its starting energy is sensitive to $\psi$, in other words, *its starting energy is already under the control of the surface*! This is quite different from uncharged solutes where we don't care where they start in vacuum, and their energy is totally independent of proximity to surfaces.
 
 Examples of where this matters:
 
@@ -209,7 +209,7 @@ It is unfortunately [very common](https://www.google.com/search?q="band+diagram"
 
 > Suppose we have two uncharged materials floating in vacuum some distance apart. Since they are uncharged, $\phi_\mathrm{vac}$ is flat inbetween them and equal to $\psi$ of both bodies. We then bring the materials closer and closer together until their $\psi$ levels *magically fuse together*.
 
-> From contact assumption, we then derive the degree of semiconductor {% wiki "band bending" %} or a solution's {% wiki "diffuse layer" %}. (Since the electrochemical potentials of the various charged species in the materials likely started out unequal, then some charges will move between the materials. The net movement of charge raises the potentials in one material vs. the other until there is no net movement of charges.)
+> From the contact assumption, we then derive the degree of semiconductor {% wiki "band bending" %} or a solution's {% wiki "diffuse layer" %}. (Since the electrochemical potentials of the various charged species in the materials likely started out unequal, then some charges will move between the materials. The net movement of charge raises the potentials in one material vs. the other until there is no net movement of charges.)
 
 [As argued by R. Tung](https://doi.org/10.1063/1.4858400), the vacuum contact thought experiment basically supposes that the two materials come together without any interaction, in a weird unphysical sort of superposition. What actually happens when materials meet is a detailed chemical bonding process that depends quite sensitively on microscopic details, and the specific identities of all atoms involved. In *all* cases there will be some kind of atomic-scale rearrangement of atoms, bonds, and charges, right there at the interface. This creates an additional atomic-scale double-layer that cannot be predicted from macroscopic observables ($\psi$ and electrochemical potentials).
 
@@ -226,7 +226,7 @@ This is wrong on two fronts: 1. the outer potential $\psi$ should not be depicte
 
 In semiconductor physics, the vacuum contact idea gives {%wiki "Schottky–Mott rule" %} and {%wiki "Anderson's rule" %}. These are very testable predictions and they are **almost completely wrong**, not even being a useful first approximation. Measurable Schottky barriers on the common covalent semiconductors (silicon, GaAs) are [almost completely decorrelated](http://academic.brooklyn.cuny.edu/physics/tung/Schottky/systematics.htm) from the Schottky–Mott rule, and likewise semiconductor heterojunction alignment disagrees with Anderson's rule.^[More ionic semiconductors — many oxides — obey the rule more closely; the degree of Fermi-level pinning is captured by an interface index $S$ that runs from $0$ (covalent, fully pinned, the rule fails) toward $1$ (ionic, the rule works).]
 
-Arguably the vacuum contact thought experiment may have pedagogical value in introducing students to band bending, which truly does occur. Yet, it has to be immediately stressed that its quantitative predictions are not naturally expected to work, that $\psi$ is in fact allowed to be discontinuous, and that indeed the vacuum contact idea is known to fail spectacularly. Sadly, the vacuum contact myth is not only contained to educational settings. Vacuum alignment ideas regularly appear in scientific papers not just as an assumption, but even worse, as an *unstated* assumption.
+Arguably the vacuum contact thought experiment may have pedagogical value in introducing students to band bending, which truly does occur. Yet, it has to be immediately stressed that its quantitative predictions are not naturally expected to work, that $\psi$ is in fact allowed to be discontinuous, and that indeed the vacuum contact idea is known to fail spectacularly. Sadly, the vacuum contact myth is not confined to educational settings. Vacuum alignment ideas regularly appear in scientific papers not just as an assumption, but even worse, as an *unstated* assumption.
 
 Conceptually, it is simply wrong to view vacuum surfaces as basic building blocks from which material interfaces are made. Materials are not legos. A vacuum surface is one kind of interface, with its own special considerations. A material-material interface is another kind of interface, with its own special considerations.
 

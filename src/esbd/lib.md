@@ -22,9 +22,9 @@ A lithium-ion cell at open circuit. Each electrode is drawn as a **capacitor bet
 {% endfigcaption %}
 </figure>
 
-On the left, we have the negative terminal, where the intercalation host material is graphite. On the right, positive, electrode the intercalation host material is {%wiki "Lithium nickel manganese cobalt oxides", "nickel manganese cobalt oxides" %} (NMC for short). There are many other choices for lithium ion electrode materials, however we'll just focus on the graphite-NMC cell as an example.
+On the left, we have the negative terminal, where the intercalation host material is graphite. On the right (positive) electrode, the intercalation host material is {%wiki "Lithium nickel manganese cobalt oxides", "nickel manganese cobalt oxides" %} (NMC for short). There are many other choices for lithium ion electrode materials, however we'll just focus on the graphite-NMC cell as an example.
 
-In the middle is the electrolyte / separator. Its job is simple: 1) allow $\mathrm{Li}^+$ ions to flow smoothly (keeping $V_{\mathrm{Li}^+}$ flat), and 2) do not permit electrons to flow (providing a break in $V_{\mathrm{e}^-}$), nor anything else. To allow an appreciable density of $\mathrm{Li}^+$, the electrolyte also contains some counterions ($\mathrm{PF}_6^-$) to maintain charge neutrality; they are not consumed at the electrodes and play no direct role in the reaction, though their transport does matter, as we will see below.
+In the middle is the electrolyte / separator. Its job is simple: 1) let $\mathrm{Li}^+$ ions flow smoothly (keeping $V_{\mathrm{Li}^+}$ flat), and 2) let nothing else through: in particular no electrons (providing a break in $V_{\mathrm{e}^-}$). To allow an appreciable density of $\mathrm{Li}^+$, the electrolyte also contains some counterions ($\mathrm{PF}_6^-$) to maintain charge neutrality; they are not consumed at the electrodes and play no direct role in the reaction, though their transport does matter, as we will see below.
 
 The fact that the step $V_{\mathrm{e}^-} - V_{\mathrm{Li}^+}$ is so hugely different on the left and right sides reflects how weakly bound the lithium ions are in graphite, compared to NMC. And of course this difference in step sizes is what sets the voltage of the cell. We can also see however that the step size varies with the state of charge: at a nominal 0% charge, most of the lithium is in the NMC (increasing its $\mu_{\mathrm{Li}}$), and at a nominal 100% charge level, most of the lithium has moved into the graphite (increasing its $\mu_{\mathrm{Li}}$). This is the capacitor from the intro made concrete: each electrode's whole charge capacity is banked by taking up lithium, and every stored $\mathrm{Li}^+$ (with its electron) shifts the local $V_{\mathrm{e}^-} - V_{\mathrm{Li}^+}$ gap.
 
@@ -108,7 +108,7 @@ We see a roughly constant gap between $V_{\mathrm{Li}^+}$ on the surface and $V_
 
 ### Electrolyte
 
-We see significant gradients in $V_{\mathrm{Li}^+}$ in the electrolyte because these dissolved lithium ions have to work their way through the narrow and twisty spaces between the particles in the electrolyte material. We do see $V_{\mathrm{Li}^+}$ flatten out in the middle separator region however. Even though the separator is a porous material, its pores are bigger and let the lithium ions pass more easily.
+We see significant gradients in $V_{\mathrm{Li}^+}$ in the electrolyte because these dissolved lithium ions have to work their way through the electrolyte, in the narrow and twisty spaces between the particles. We do see $V_{\mathrm{Li}^+}$ flatten out in the middle separator region however. Even though the separator is a porous material, its pores are bigger and let the lithium ions pass more easily.
 
 Another aspect (that is not very visible) is a concentration gradient in the $\mathrm{Li}^+$ ions in the electrolyte, which further reduces the electrolyte conductivity on the cathode side. This is not solely due to the $\mathrm{Li}^+$ ions behaviour, but rather has to do with a depletion of the more mobile counterion ($\mathrm{PF_6}^-$). We will talk about this two-ion transport effect in the [transport topic](../transport_basic/).
 

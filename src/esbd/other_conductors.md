@@ -33,7 +33,7 @@ A fast ionic conductor (YSZ): the single trace $V_{\mathrm{O}^{2-}}$ carries the
 
 ## Mixed ionic-electronic conductors
 
-Between the purely electronic metal and the purely ionic conductor sit materials that move both at once: a battery cathode like $\mathrm{Li}_x\mathrm{CoO}_2$, or a mixed-conducting polymer. With an electronic and an ionic carrier sharing one medium, these {% wiki "Mixed ionic-electronic conductor", "mixed conductors" %} are where the electronic circuit and the ionic circuit physically meet, and they show the full richness of coupled transport, internal concentration polarization, and local charge storage. They are, in a real sense, the material embodiment of this project's premise that electrons and ions belong on the same diagram.
+Between the purely electronic metal and the purely ionic conductor sit materials that move both at once: a battery cathode like $\mathrm{Li}_x\mathrm{CoO}_2$, or a mixed-conducting polymer. With an electronic and an ionic carrier sharing one medium, these {% wiki "Mixed ionic-electronic conductor", "mixed conductors" %} are where the electronic circuit and the ionic circuit physically meet, and they show the full richness of coupled transport, internal concentration polarization, and local charge storage.
 
 This is also where the per-species Ohm's law has to generalize. Once more than one mobile carrier shares a dense medium, transport need not stay a private affair of each species: the general linear law lets every gradient push every carrier,
 

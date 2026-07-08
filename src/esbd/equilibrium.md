@@ -11,7 +11,7 @@ One of the key questions with these $V_i$ is how different species' $V_i$ values
 
 $$ V_i - V_j = \Delta, $$
 
-where $\Delta$ is some nonzero offset (usually depending on neutral reactants or products). In the diagrams, we will show a symbol with the marker ⇌ to indicate an equilibrium reaction.
+where $\Delta$ is some nonzero offset (usually depending on neutral reactants or products). In the diagrams, we will mark equilibrium reactions with the symbol ⇌.
 
 <figure class="demo-container" style="max-width: 230px">
 {% include "esbd-diagrams/esbd-reaction-generic.njk" %}
@@ -75,7 +75,7 @@ which becomes:
 
 $$ V_{\mathrm{Zn}^{2+}} - V_{\mathrm{e}^-} =  \frac{1}{2F} \mu_{\mathrm{Zn}} $$
 
-Note there is a factor of $1/2$, a consequence of the double charged nature of the reaction, but we still see a balanced $V_i - V_j$ on the left hand side. We will *always* see balanced differences like this (and never something like $V_i - 2V_j$), as a consequence of the reactions being charge-neutral overall.
+Note there is a factor of $1/2$, a consequence of the two charges transferred per ion, but we still see a balanced $V_i - V_j$ on the left hand side. We will *always* see balanced differences like this (and never something like $V_i - 2V_j$), as a consequence of the reactions being charge-neutral overall.
 
 Plotting the ESBD now,
 
@@ -125,7 +125,7 @@ The silver chloride electrode again, now with the reaction's implied $V_{\mathrm
 {% endfigcaption %}
 </figure>
 
-In principle other species can have implied levels. For example $\mathrm{H}^-$ (hydride) are not present in solution but half-reactions may exchange $\mathrm{H}^-$; we can draw $V_{\mathrm{H}^-}$ implied levels. Similarly, reactions may output $\mathrm{O}^{2-}$ into certain ceramic solid electrolytes (like YSZ) that can transport $\mathrm{O}^{2-}$.
+In principle other species can have implied levels. For example $\mathrm{H}^-$ (hydride) ions are not present in solution, but half-reactions may exchange $\mathrm{H}^-$; we can draw $V_{\mathrm{H}^-}$ implied levels. Similarly, reactions may output $\mathrm{O}^{2-}$ into certain ceramic solid electrolytes (like YSZ) that can transport $\mathrm{O}^{2-}$.
 
 ## Three or more charged species
 
@@ -146,7 +146,7 @@ Such a reaction no longer sets a rigid gap, and now a degree of freedom remains:
 
 Much like we discussed with $ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ earlier, the difference like $V_{\mathrm{Fe}^{2+}} - V_{\mathrm{Fe}^{3+}}$ relates to ion concentrations, but we will elaborate this later in a few topics.
 
-Note that the $\mathrm{Fe}^{2+}$/$\mathrm{Fe}^{3+}$ combination acts as an in-solution redox couple: it can supply or remove electrons to other reactions, not just to inert metals. For this reason, I am plotting a "virtual" $V_{\mathrm{e}^-}$ in solution, which corresponds to the notion that a redox-active solution can have a meaningful Fermi level.^[Reiss, H. (1985). [The Fermi level and the redox potential.](https://doi.org/10.1021/j100264a005) The Journal of Physical Chemistry, 89(18), 3783–3791.]^[Peljo, P., Villevieille, C., & Girault, H. H. (2025). [The redox aspects of lithium-ion batteries.](https://doi.org/10.1039/d4ee04560b) Energy &amp; Environmental Science, 18(4), 1658–1672.  ]
+Note that the $\mathrm{Fe}^{2+}$/$\mathrm{Fe}^{3+}$ combination acts as an in-solution redox couple: it can supply or remove electrons to other reactions, not just to inert metals. For this reason, I am plotting an implied $V_{\mathrm{e}^-}$ in solution, which corresponds to the notion that a redox-active solution can have a meaningful Fermi level.^[Reiss, H. (1985). [The Fermi level and the redox potential.](https://doi.org/10.1021/j100264a005) The Journal of Physical Chemistry, 89(18), 3783–3791.]^[Peljo, P., Villevieille, C., & Girault, H. H. (2025). [The redox aspects of lithium-ion batteries.](https://doi.org/10.1039/d4ee04560b) Energy &amp; Environmental Science, 18(4), 1658–1672.  ]
 
 ## Takeaways
 
