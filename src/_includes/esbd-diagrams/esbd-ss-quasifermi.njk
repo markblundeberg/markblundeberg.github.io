@@ -79,9 +79,12 @@
             },
         ]);
 
-        // recombination "leakage" bridging the rails along the bar
-        diagram.updateVerticalMarkers(
-            [0.35, 0.5, 0.65].map((x, i) => ({
+        // recombination "leakage" bridging the rails along the bar (driven Ω),
+        // plus the always-equilibrated ⇌ at the left ohmic contact, where the
+        // metal's electrons pin to the hole rail (a zero-height marker: the two
+        // levels coincide there — that coincidence is the equilibrium)
+        diagram.updateVerticalMarkers([
+            ...[0.35, 0.5, 0.65].map((x, i) => ({
                 id: 'recomb' + i,
                 x,
                 yDefs: [{ y: vh(x) }, { y: ve(x) }],
@@ -92,8 +95,16 @@
                     merged
                         ? '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightleftharpoons \\varnothing$'
                         : '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightarrow \\varnothing$',
-            }))
-        );
+            })),
+            {
+                id: 'contact',
+                x: XL,
+                yDefs: [{ y: vh(XL) }],
+                symbol: '⇌',
+                popupCallback: () =>
+                    '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightleftharpoons \\varnothing$',
+            },
+        ]);
     }
 
     makeSlider('{{idprefix}}-drive', update);
