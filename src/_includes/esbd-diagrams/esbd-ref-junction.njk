@@ -18,9 +18,9 @@
     // local V°_e-(SHE) - sits one liquid-junction step off the reference
     // side. LJP from the Henderson equation (univalent form; checked
     // against the classic HCl(0.1)|KCl(0.1) = -26.8 mV). Against 3 M KCl
-    // the true LJP is only a few mV, so the DRAWN step is exaggerated
-    // (EXAG) for visibility; the readout reports the true value. Gauge:
-    // the reference wire is ground, V_e-(Ag) = 0. At the slider max
+    // the LJP is only a few mV, so the DRAWN step is scaled up (EXAG) to
+    // stay visible on the abstract axis; the readout carries the number.
+    // Gauge: the reference wire is ground, V_e-(Ag) = 0. At the slider max
     // (1 M ~ pH 0) the H+ trace lands exactly on the dashed SHE line.
     const RT_F = 0.025693; // V at 25 °C
     const EXAG = 15;
@@ -48,8 +48,8 @@
             clminus: SPECIES.chloride,
             electron: SPECIES.electron,
         },
-        // abstract y-axis: the exaggerated junction step would contradict
-        // numeric ticks; the true LJP lives in the readout instead
+        // abstract y-axis: a scaled-up junction step would contradict
+        // numeric ticks; the LJP value lives in the readout instead
         { yMode: 'abstract', margins: { left: 28 } }
     );
     diagram.setSpatialLayout(b, [
@@ -151,13 +151,13 @@
                 x: (b[1] + b[2]) / 2,
                 yDefs: [{ y: V0_SHE_R + ljpD }, { y: V0_SHE_R }],
                 popupCallback: () =>
-                    String.raw`the liquid junction step (drawn exaggerated; true value below)`,
+                    String.raw`the liquid junction step (value in the readout below)`,
             },
         ]);
 
         renderSpanMath(
             document.getElementById('{{idprefix}}-ljp'),
-            `\\text{true LJP} = ${(1000 * ljp).toFixed(1)}\\,\\mathrm{mV}`
+            `\\text{LJP} = ${(1000 * ljp).toFixed(1)}\\,\\mathrm{mV}`
         );
         document.getElementById('{{idprefix}}-conc-readout').textContent =
             c1.toPrecision(2);
