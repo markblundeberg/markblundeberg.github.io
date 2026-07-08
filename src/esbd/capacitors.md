@@ -35,7 +35,7 @@ The devices that lean on it store charge in a material's chemical state rather t
 <figure class="demo-container" style="max-width: 620px">
 {% include "esbd-diagrams/cap-chem.njk" %}
 {% figcaption %}
-Chemical capacitance in an intercalation host: adding charge raises the lithium content and slides $V_{\mathrm{Li}^+}$ away from its standard state, with no electrostatic gap involved. The right panel is the same statement read as charge against voltage — the lattice-gas isotherm $V = V^\circ + \tfrac{RT}{F}\ln\tfrac{x}{1-x}$, whose slope is the (nonlinear) chemical capacitance; here $V^\circ$ sits at half-filling, the natural lattice-gas reference.
+Chemical capacitance in an intercalation host: adding charge raises the lithium content and slides $V_{\mathrm{Li}^+}$ away from its standard state, with no electrostatic gap involved. The right panel is the same statement read as charge against voltage — the lattice-gas isotherm $V = V^\circ + \tfrac{RT}{F}\ln\tfrac{x}{1-x}$, plotted as filling (hence charge) against $V$, so the slope of the plotted curve is the (nonlinear) chemical capacitance; here $V^\circ$ sits at half-filling, the natural lattice-gas reference.
 {% endfigcaption %}
 </figure>
 

@@ -20,7 +20,7 @@ In detail: five regions sit side by side: two aqueous solutions (an acid and a b
 
 Note: the actual potentials shown in this figure are not to scale, nor are the slider magnitudes realistic. The point here is just to show the effects.
 
-Give yourself a minute with it before reading on. The whole point is to tell apart the sliders that move something physical from the ones that are pure bookkeeping.
+Give yourself a minute with it before reading on. The whole point is to tell apart the sliders that actually move something from the ones that are pure bookkeeping.
 
 ## Kinds of knobs
 

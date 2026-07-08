@@ -33,7 +33,7 @@ The whole diagram can be slid up or down freely: only vertical *differences* car
 
 ## The markers
 
-**The ⇌ symbol** marks a reaction that links two species, fixing the step $V_i - V_j$ between their lines — including the step from $V_{\mathrm{e}^-}$ to an ion's $V_i$ at an electrode. (→ [equilibrium](../equilibrium/))
+**The ⇌ symbol** marks a reaction. With two species, this fixes the step $V_i - V_j$ between their lines — including the step from $V_{\mathrm{e}^-}$ to an ion's $V_i$ at an electrode. (→ [equilibrium](../equilibrium/))
 
 **A capacitor symbol (‖) between two lines** marks a chemical capacitance: the storage that lets their gap flex as charge is banked, the elastic counterpart to the rigid ⇌. It may bridge a carrier and its own standard state $V^\circ_i$, or two different carriers' rails $V_i$ and $V_j$; those are two portrayals of the same chemical capacitance. (→ [capacitance](../capacitors/))
 
