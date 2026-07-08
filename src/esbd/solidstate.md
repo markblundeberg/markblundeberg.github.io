@@ -58,7 +58,7 @@ At equilibrium the two collapse onto each other, $V_{\mathrm{e}^-} = V_{\mathrm{
 <figure class="demo-container" style="max-width: 460px">
 {% include "esbd-diagrams/esbd-ss-quasifermi.njk" %}
 {% figcaption %}
-Out of equilibrium, the electron rail $V_{\mathrm{e}^-}$ and hole rail $V_{\mathrm{h}^+}$ pull apart and slope independently; recombination ($\mathrm{e}^- + \mathrm{h}^+ \rightarrow \varnothing$) shows up as leakage bridging the rails all along the bar (the ⇌ markers). Slide the drive to zero and the rails merge into a single flat Fermi level. Note the handoff at the left contact: that metal's electrons sit at the *hole* rail's level.
+Out of equilibrium, the electron rail $V_{\mathrm{e}^-}$ and hole rail $V_{\mathrm{h}^+}$ pull apart and slope independently; recombination ($\mathrm{e}^- + \mathrm{h}^+ \rightarrow \varnothing$) shows up as leakage bridging the rails all along the bar (the Ω markers, our glyph for a reaction running under drive). Slide the drive to zero and the rails merge into a single flat Fermi level, the Ω markers reverting to the equilibrium ⇌. Note the handoff at the left contact: that metal's electrons sit at the *hole* rail's level.
 {% endfigcaption %}
 </figure>
 

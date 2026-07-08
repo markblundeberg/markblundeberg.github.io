@@ -12,7 +12,8 @@
     // hand off to the hole rail), electron contact on the right. Under drive b
     // the rails enter split by b at the contacts and relax toward each other
     // over a recombination length L (~ sqrt(D·tau), drawn as a fraction of the
-    // bar). Recombination bridges the rails all along the bar — the ⇌ markers.
+    // bar). Recombination bridges the rails all along the bar — the Ω markers
+    // (driven; they revert to the equilibrium ⇌ when the drive is off).
     // Band edges and contact band-bending deliberately omitted (see the flip
     // and band-bending figures for those); this figure is about the rails.
     const L = 0.25;
@@ -84,9 +85,13 @@
                 id: 'recomb' + i,
                 x,
                 yDefs: [{ y: vh(x) }, { y: ve(x) }],
-                symbol: '⇌',
+                // driven glyph Ω (net-forward recombination); collapses to the
+                // equilibrium ⇌ once the drive is switched off
+                symbol: merged ? '⇌' : 'Ω',
                 popupCallback: () =>
-                    '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightleftharpoons \\varnothing$',
+                    merged
+                        ? '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightleftharpoons \\varnothing$'
+                        : '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightarrow \\varnothing$',
             }))
         );
     }
