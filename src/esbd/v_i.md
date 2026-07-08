@@ -120,6 +120,13 @@ Alongside temperature $T$, pressure $P$, and the chemical potentials $\mu_i$ of 
 
 Note that in general if we have $N$ charged species then there are $N$ independent $V_i$ values, but only $N-1$ independent *bulk* concentrations, because the bulk has to (generally) be charge neutral. That extra $V_i$ degree of freedom looks redundant, and as far as the bulk goes it is; but it is not truly redundant, because it carries the electrical state of the body. If we raise all of one body's $V_i$ together, $V_i \rightarrow V_i + \delta$, *relative to its surroundings*, the body is in a genuinely distinct state: we have charged it. The bulk stays neutral, so that added charge sits on the surface, but the electrical state has really changed. Shifting *everything* by the same $\delta$, on the other hand, changes nothing physical, only our bookkeeping. This brings us to our next point...
 
+<figure class="demo-container" style="max-width: 520px">
+{% include "esbd-diagrams/esbd-vi-charging-float.njk" %}
+{% figcaption %}
+Raise the body's whole $V_i$ ladder by $\delta$, relative to the fixed surroundings, and you charge it: the bulk stays neutral, so the charge lands on the surface (the $\pm$ marks, growing with $\delta$). The **global float** slider slides body and surroundings together — every level and the datum at once — and no charge appears; that gauge freedom is the subject of the next section.
+{% endfigcaption %}
+</figure>
+
 ## $V_i$ floats, and $V_i - V_j$ carries a convention
 
 Two last subtleties round out the picture. Both are better *seen* than told, so the [Offsets galore](../offsetsgalore/) topic puts them under interactive sliders; here is the short version.

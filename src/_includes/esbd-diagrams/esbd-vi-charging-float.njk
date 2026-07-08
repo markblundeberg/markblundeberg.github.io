@@ -1,0 +1,113 @@
+{% set idprefix = "esbd-vi-charging-float" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-plot" style="height: 320px; width: 100%"></div>
+<div id="{{idprefix}}-sliders" style="display: grid; grid-template-columns: max-content minmax(0, 220px); gap: 0.35em 0.7em; align-items: center; justify-content: center; margin-top: 0.7em">
+    {{ controls.slider(idprefix + "-delta", "Raise the body's ladder $\\delta$", { min: -0.35, max: 0.35, step: "any", value: 0, snap: 0, inline: true, readout: true }) }}
+    {{ controls.slider(idprefix + "-global", "Global float", { min: -0.25, max: 0.25, step: "any", value: 0, snap: 0, inline: true, readout: true }) }}
+</div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
+
+    // "Charging a floating body." A body (centre region) holds three species,
+    // its V_i ladder drawn as three rails. Two sliders:
+    //  • δ raises the body's WHOLE ladder relative to the surroundings datum →
+    //    deposits surface charge (the ± glyphs at the two boundaries, ∝ |δ|),
+    //    because the bulk stays neutral so the charge lands on the surface.
+    //  • the GLOBAL FLOAT slides everything — datum, ladder, glyphs — together;
+    //    nothing relative changes, so NO surface charge appears. This is the
+    //    gauge freedom the next section ("V_i floats") makes its subject.
+    // Surface charge tracks δ ONLY; the global float never creates any.
+    const boundaries = [0.0, 0.30, 0.70, 1.0];
+    const regions = [
+        { ...REGION.vacuum, name: 'Surroundings' },
+        { ...REGION.solution, name: 'Body' },
+        { ...REGION.vacuum, name: 'Surroundings' },
+    ];
+    const xBody = [boundaries[1], boundaries[2]];
+
+    // base ladder (abstract units); three rails so "raise them all together"
+    // reads as a rigid ladder. Same palette as the neighbouring ambipolar-cap.
+    // Offset so the datum (v=0) sits in a gap, not on a rail, at δ=0.
+    const base = [
+        { id: 'na', species: 'sodium',   label: 'V_{\\mathrm{Na}^+}', v:  0.55 },
+        { id: 'h',  species: 'proton',   label: 'V_{\\mathrm{H}^+}',  v:  0.15 },
+        { id: 'cl', species: 'chloride', label: 'V_{\\mathrm{Cl}^-}', v: -0.35 },
+    ];
+
+    const POS = '#c0392b'; // + surface charge
+    const NEG = '#2c6fb0'; // − surface charge
+
+    const esbd = new ElectrochemicalSpeciesBandDiagram('{{idprefix}}-plot', {
+        sodium: SPECIES.sodium, proton: SPECIES.proton, chloride: SPECIES.chloride,
+    }, { yMode: 'abstract' });
+    esbd.setSpatialLayout(boundaries, regions);
+    esbd.diagram.setYLabel('Species voltage $V_i$');
+    esbd.setVRange(-1.25, 1.25);
+
+    let delta = 0, gfloat = 0;
+
+    // Surface charge + surroundings datum, drawn in the custom layer so they
+    // ride the redraw lifecycle. Everything sits at + gfloat (the global float),
+    // so the whole picture slides together; only δ opens a body/surroundings gap.
+    esbd.setCustomDrawCallback((bd) => {
+        const x = bd.xScale, y = bd.yScale;
+        // (a) surroundings datum — rides the global float, so δ=0 never charges
+        bd.drawElements({
+            parentGroups: bd.customGroup, element: 'line', cssClass: 'vi-datum',
+            data: [{ id: 'datum' }], dataKey: (d) => d.id,
+            onNew: (s) => s.attr('stroke', '#9aa0a6').attr('stroke-width', 1).attr('stroke-dasharray', '2,3'),
+            onUpdateTransition: (s) => s.attr('x1', x(0)).attr('x2', x(1)).attr('y1', y(gfloat)).attr('y2', y(gfloat)),
+        });
+        // (b) datum label (the "bulk stays neutral" point lives in the caption)
+        bd.drawElements({
+            parentGroups: bd.customGroup, element: 'text', cssClass: 'vi-note',
+            data: [{ id: 'sur', tx: x(0.03), ty: y(gfloat) - 5 }], dataKey: (d) => d.id,
+            onNew: (s) => s.attr('font-size', 11).attr('font-style', 'italic')
+                .attr('text-anchor', 'start').attr('fill', '#80868b').text('surroundings'),
+            onUpdateTransition: (s) => s.attr('x', (d) => d.tx).attr('y', (d) => d.ty),
+        });
+        // (c) surface charge glyphs at both body boundaries, count ∝ |δ| only
+        const n = Math.min(4, Math.round(Math.abs(delta) / 0.085));
+        const sign = delta > 0 ? '+' : '−';
+        const col = delta > 0 ? POS : NEG;
+        const glyphs = [];
+        for (const [side, xb] of [['L', boundaries[1]], ['R', boundaries[2]]]) {
+            for (let k = 0; k < n; k++) {
+                const vy = delta + gfloat + (k - (n - 1) / 2) * 0.20;
+                glyphs.push({ id: `${side}-${sign}-${k}`, gx: x(xb), gy: y(vy) });
+            }
+        }
+        bd.drawElements({
+            parentGroups: bd.customGroup, element: 'text', cssClass: 'vi-surfq',
+            data: glyphs, dataKey: (d) => d.id,
+            onNew: (s) => s.attr('font-size', 17).attr('font-weight', 700).attr('fill', col)
+                .attr('text-anchor', 'middle').attr('dominant-baseline', 'central').text(sign),
+            onUpdateTransition: (s) => s.attr('x', (d) => d.gx).attr('y', (d) => d.gy),
+        });
+    });
+
+    const deltaEl = document.getElementById('{{idprefix}}-delta');
+    const globalEl = document.getElementById('{{idprefix}}-global');
+
+    function update() {
+        delta = parseFloat(deltaEl.value);   // body relative to surroundings
+        gfloat = parseFloat(globalEl.value); // everything together (gauge)
+        const traces = base.map((t) => ({
+            id: t.id, speciesId: t.species, curveType: 'voltage',
+            showLabel: true, label: t.label, labelFrac: 0.5, labelHAlign: 'center',
+            x: xBody, y: [t.v + delta + gfloat, t.v + delta + gfloat],
+        }));
+        esbd.updateTraceData(traces);
+        const rd = document.getElementById('{{idprefix}}-delta-readout');
+        if (rd) rd.textContent = Math.abs(delta) < 0.02 ? 'neutral'
+            : (delta > 0 ? 'charged +' : 'charged −');
+        const rg = document.getElementById('{{idprefix}}-global-readout');
+        if (rg) rg.textContent = 'nothing changes';
+    }
+
+    ['delta', 'global'].forEach((n) => makeSlider('{{idprefix}}-' + n, update, { fire: false }));
+    update();
+</script>
