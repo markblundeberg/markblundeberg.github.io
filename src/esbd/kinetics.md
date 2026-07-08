@@ -53,7 +53,7 @@ Why an exponential, and what sets $J_0$? The classic microscopic picture is due 
 This is the one place in the book where the traditional electron-energy diagram and ours meet almost verbatim: a Gerischer diagram *is* a redox-level band diagram, and our $V_{\mathrm{e}^-}$ diagrams are the same picture flipped upside down (energy up = voltage down), with the $D_{\mathrm{red}}$ bump sitting above the couple's $V_{\mathrm{e}^-}$ and $D_{\mathrm{ox}}$ below. The quantitative machinery is well covered in the literature,^[Gerischer, H. (1960–61). [Über den Ablauf von Redoxreaktionen an Metallen und an Halbleitern, I–III.](https://doi.org/10.1524/zpch.1960.26.3_4.223) Z. Phys. Chem. NF, 26, 223–247 & 325–338; 27, 48–79. Modern treatments: Schmickler, W., & Santos, E. (2010). *Interfacial Electrochemistry* (2nd ed.). Springer; Bard, A. J., & Faulkner, L. R. (2022). *Electrochemical Methods* (3rd ed.), ch. 3.] so I'll restrict myself to two points the standard cartoons tend to blur:
 
 * The bump *amplitudes* scale with the concentrations of $\mathrm{Ox}$ and $\mathrm{Red}$ — they are densities of actual ions, not of abstract states. A couple that is all $\mathrm{Red}$ has no $D_{\mathrm{ox}}$ bump to speak of.
-* A disequilibrated solution simply has several pairs of bumps, one per couple, each pinned to its own implied level — the multi-level picture from [Half-reactions](../half/) carries straight over.
+* A disequilibrated solution simply has several pairs of bumps, one per couple, each pinned to its own standard level — the multi-level picture from [Half-reactions](../half/) carries straight over.
 
 <figure class="demo-container" style="max-width: 480px">
 {% include "esbd-diagrams/kin-gerischer.njk" %}

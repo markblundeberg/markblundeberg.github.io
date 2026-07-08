@@ -24,7 +24,7 @@ Dielectric capacitance, sorted by screening length, one applied voltage across a
 
 ## Chemical capacitance
 
-A carrier can also store charge with no dielectric gap at all, simply by growing more or less concentrated. Because its stored charge $Q_i = z_i F c_i$ rides the concentration, and that concentration depends *exponentially* on $V_i - V^\circ_i$, this is a thoroughly **nonlinear** capacitor: it is the very exponential response to a shifting ladder that we charted in [mass action and charge control](../charge_control/), now read as charge stored against voltage. Its small-signal value is the slope of that exponential,
+A carrier can also store charge with no dielectric gap at all, simply by growing more or less concentrated. Because its stored charge density $Q_i = z_i F c_i$ rides the concentration, and that concentration depends *exponentially* on $V_i - V^\circ_i$, this is a thoroughly **nonlinear** capacitor: it is the very exponential response to a shifting ladder that we charted in [mass action and charge control](../charge_control/), now read as charge stored against voltage. Its small-signal value is the slope of that exponential,
 
 $$ c^{\mathrm{chem}}_i = \frac{\mathrm{d}Q_i}{\mathrm{d}V_i} = \frac{z_i^2 F^2 c_i}{RT}, $$
 

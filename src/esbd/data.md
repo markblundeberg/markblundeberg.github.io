@@ -77,7 +77,7 @@ $$
 
 This seems so complex but it reflects the reality that we can't measure the standard state of $\mathrm{H}^+$ alone. Rather we experimentally measure, say, the standard state of aqueous $\mathrm{HCl}$ that dissociates into $\mathrm{H}^+$ and $\mathrm{Cl}^-$, and all we really learn is that $\Delta_{\mathrm{f}} G^\circ_{\mathrm{H}^+\text{ with }\mathrm{Cl}^-} = -131.23~\mathrm{kJ/mol}$.
 
-> Note that all of these equations leave one degree of freedom unsatisfied. Accordingly, the table makers freely choose $\Delta_{\mathrm{f}} G^\circ_{\mathrm{H}^+} = 0$. In fact we even assert this to be 0 at all temperatures, so the standard entropy of $\mathrm{H}^+$ is zero, and the standard entropy for some other ions is negative!
+> Note that all of these equations leave one degree of freedom unsatisfied. Accordingly, the table makers freely choose $\Delta_{\mathrm{f}} G^\circ_{\mathrm{H}^+} = 0$. In fact we even assert this to be 0 at all temperatures, so the formation entropy of $\mathrm{H}^+$ is zero, and the formation entropy for some other ions is negative!
 
 Now, we assert our convention that charge-neutral chemical potentials are equal to Gibbs formation energies, but we only apply it to that charge-neutral measurable difference:
 
