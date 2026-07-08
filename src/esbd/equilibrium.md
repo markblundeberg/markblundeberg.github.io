@@ -43,7 +43,7 @@ Thus, auto-ionization in water directly sets up an offset between $V_{\mathrm{H}
 {% include "esbd-diagrams/esbd-h2o-autoionization.njk" %}
 </figure>
 
-How large is this offset? The chemical potential $\mu_{\mathrm{H_2O}}$ is the partial molar Gibbs energy for $\mathrm{H_2O}$. We can look up Gibbs *formation* energies for neutral chemicals like $\mathrm{H_2O}$ in chemical data tables, and for convenience, we adopt the chemical potential system that makes chemical potentials equal to Gibbs formation energies.
+How large is this offset? The chemical potential $\mu_{\mathrm{H_2O}}$ is the partial molar Gibbs energy for $\mathrm{H_2O}$. We can look up Gibbs *formation* energies for neutral chemicals like $\mathrm{H_2O}$ in chemical data tables, and by the convention noted above these directly give the chemical potentials.
 
 For pure water at standard conditions we know from chemical data tables that the Gibbs formation energy of $\mathrm{H_2O}$ is $-237.1~\mathrm{kJ/mol}$. This means for pure water we have $\mu_{\mathrm{H_2O}} = -237.1~\mathrm{kJ/mol}$, and as a reminder the Faraday constant is $F = 96.485~\mathrm{kJ/mol/V}$. Thus $\mu_{\mathrm{H_2O}}/F = -2.457~\mathrm{V}$. So,
 

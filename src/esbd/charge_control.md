@@ -98,7 +98,7 @@ The same reasoning recovers a classic result of solution chemistry. Consider a s
 {% include "esbd-diagrams/esbd-agcl-kcl-common-ion.njk" %}
 </figure>
 
-## Spectator ions and the Donnan potential
+## Trapped charge and the Donnan potential
 
 If the disturbance is confined to one side of a membrane, the effect becomes spatial. Let a membrane pass the small mobile ions ($\mathrm{Na}^+$ and $\mathrm{Cl}^-$) while blocking a large polyion, say a protein $\mathrm{Pr}^-$, on the right. The mobile ions equilibrate across the membrane, so $V_{\mathrm{Na}^+}$ and $V_{\mathrm{Cl}^-}$ run perfectly flat through it. The trapped $\mathrm{Pr}^-$, however, is a background charge present on the right alone, and so the ladder must sit at a different offset on each side in order to keep both sides neutral. That step in the $V^\circ_i$ ladder across the membrane is the {% wiki "Gibbs–Donnan effect", "Donnan potential" %}. With the mobile $V_i$ flat and the ladder stepped, the concentrations step as well: the protein side is left richer in $\mathrm{Na}^+$ and poorer in $\mathrm{Cl}^-$, which is precisely Donnan exclusion.
 

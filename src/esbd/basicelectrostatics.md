@@ -9,9 +9,7 @@ orderESBD: 25
 
 The [previous topic](../bipolar/) left a question hanging: what sets the width and shape of the depletion zone at a pn junction or bipolar membrane, that sliver where the $V^\circ_i$ ladder bends and neutrality briefly breaks?
 
-While the $V_i$ values want to flatten out for thermodynamic reasons, the same is not necessarily true of the $V^\circ_i$. To explain why $V^\circ_i$ might be flat (or not!) at equilibrium, we have to finally dip into the actual mechanics of electricity. Somewhat surprisingly, we have managed to dance around the actual electrostatic nature of electricity until now!
-
-We can now briefly step into electrostatics to explain *why* $V^\circ_i$ wants to move to neutrality. The crucial point is that the $V^\circ_i$ ladder's spatial variations are (usually) equal to variations in the electrostatic potential $\phi$, and from electrostatics we know that variations in $\phi$ come from variations in charge. So, variations in $V^\circ_i$ must be related to variations in charge.
+While the $V_i$ values want to flatten out for thermodynamic reasons, the same is not necessarily true of the $V^\circ_i$. To explain why $V^\circ_i$ might be flat (or not!) at equilibrium, we have to finally dip into the actual mechanics of electricity, which we have somehow managed to dance around until now! The crucial point is that the $V^\circ_i$ ladder's spatial variations are (usually) equal to variations in the electrostatic potential $\phi$, and from electrostatics we know that variations in $\phi$ come from variations in charge. So, variations in $V^\circ_i$ must be related to variations in charge.
 
 ## $V^\circ_i$ as an agent of electrostatic screening
 

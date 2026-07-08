@@ -122,7 +122,7 @@ In fact, the thermoelectric voltage has to do with gradients in the proper volta
 
 Of course, it is possible to get the right thermoelectric voltage using $\phi$ (and $\mu_{\mathrm{int},\mathrm{e}^-}$), instead of $\bar\mu_{\mathrm{e}^-}$. This does involve the difference between hot and cold junctions' Galvani potentials, but we also have to include the gradients in $\phi$ in regions of thermal gradient. The thermal gradients' $\delta \phi$ contribution would then fully cancel the Galvani potentials' $\delta \phi$ contribution, and add back in the correct thermoelectric result. We could also do the same with reference to outer potential $\psi$, or conduction band $E_{\mathrm{C}}$, with all the same considerations but different in quantity. In the end, we would have to get the same result as simply using $\bar\mu_{\mathrm{e}^-}$ but it would be highly tedious and tend to obscure the interesting physics.^[Apertet et al. (2016) ["A note on the electrochemical nature of the thermoelectric power".](https://arxiv.org/abs/1502.05697)]
 
-### But what about Maxwell equations?
+## But what about Maxwell equations?
 
 The idea that $\phi$ is ambiguous is fine for thermodynamics, but it is concerning since it means that there will be situations where even $-\nabla\phi$ is ambiguous, and that is the electric field which is supposed to be objective!
 

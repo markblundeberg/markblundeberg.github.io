@@ -18,9 +18,7 @@ So here is a sandbox, and I'm going to throw all of them in at once. The followi
 
 In detail: five regions sit side by side: two aqueous solutions (an acid and a base) flanking a metal electrode, then — across a vacuum gap, so no junction is implied — a third solution in a different solvent, a lithium salt in an organic electrolyte. Every arbitrary choice in the picture is wired to its own slider. Drag them and watch what moves. Again: *none of these sliders is changing anything of physical meaning: the ion concentrations are fixed; all charges and measurable potential differences are fixed*.
 
-Note: the actual potentials shown in this figure are not to scale, nor are the slider magnitudes realistic. The point here is just to show the effects.
-
-Give yourself a minute with it before reading on. The whole point is to tell apart the sliders that actually move something from the ones that are pure bookkeeping.
+Note: the potentials and slider magnitudes shown are not to scale or realistic; the point is just to show the effects. Give yourself a minute with it before reading on, to tell apart the sliders that actually move something from the ones that are pure bookkeeping.
 
 ## Kinds of knobs
 
