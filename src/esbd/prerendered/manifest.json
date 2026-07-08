@@ -1,5 +1,5 @@
 {
-  "hash": "93134da06dbea0a00a87a36e8017763d16e80a2f62fc26aaf0041ed1ab3244b9",
+  "hash": "30a2a2abf143f4c448edbee87a9846433b6f47986b68c68af1f7c4b92e38baa7",
   "ids": [
     "V-sd-ladder--diagram-container",
     "ag-agcl-electrode-container",
@@ -62,6 +62,7 @@
     "esbd-tb-ljp-container",
     "esbd-tb-saltblob-band",
     "esbd-tb-saltblob-conc",
+    "esbd-vi-charging-float-plot",
     "h2o-autoionization-container",
     "kin-bv-explainer-iv",
     "kin-bv-explainer-levels",
