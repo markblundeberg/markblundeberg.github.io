@@ -98,3 +98,5 @@ And, to clarify, this means we have the following relationship:
 $$ \mu^\circ_{\mathrm{int},i} = \Delta_{\mathrm{f}} G^\circ_i + z_i F \xi, $$
 
 for some value of $\xi$ that we simply do not know, nor do we need to know it in order to get our $V^\circ_i$'s. The value of $\xi$ depends on solvent, temperature, and pressure, and especially it depends on how we defined $\phi$, and this broad freedom is what lets chemists keep $\Delta_{\mathrm{f}} G^\circ_{\mathrm{H}^+} = 0$ for all situations.
+
+[**NEXT TOPIC: Traditional electrochemistry, translated**](../translation/)

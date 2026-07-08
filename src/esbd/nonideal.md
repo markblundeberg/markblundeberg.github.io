@@ -202,3 +202,5 @@ Still, as we approach more and more concentrated solutions it is important to re
 Ionic solutes tend to be non-ideal, which begs for them to be treated with activities or activity coefficients. But, the concept of single-ion activity can be surprisingly subtle. There is a fundamental ambiguity which requires us to specify some kind of convention, and since there are many different slightly incompatible conventions, things can get imprecise.
 
 For activity coefficients (but not activities), there is also the issue of how we are counting solute concentrations, and in particular whether we are including dissociated / associated forms explicitly or implicitly.
+
+[**NEXT TOPIC: Chemical capacitance matrices**](../chemical_capacitance_matrices/)

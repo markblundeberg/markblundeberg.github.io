@@ -45,3 +45,5 @@ If you arrive already fluent in electrochemistry, here is a Rosetta Stone: the f
 ## What does *not* translate cleanly
 
 A few traditional quantities have no clean $V_i$ counterpart, and that is the point rather than a gap. The inner potential $\phi$, single-ion activities $a_i$, and single-ion activity coefficients $\gamma_i$ are each individually ambiguous; only charge-balanced combinations, and differences sampled within one solution, are well defined. The $V_i$ picture keeps exactly the unambiguous part and leaves the rest floating, which is why it never needs to commit to a value of $\phi$. (See [non-ideal solutions](../nonideal/).)
+
+[**NEXT TOPIC: The case against $\phi$**](../phi/)

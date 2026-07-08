@@ -110,7 +110,7 @@ We see a roughly constant gap between $V_{\mathrm{Li}^+}$ on the surface and $V_
 
 We see significant gradients in $V_{\mathrm{Li}^+}$ in the electrolyte because these dissolved lithium ions have to work their way through the narrow and twisty spaces between the particles in the electrolyte material. We do see $V_{\mathrm{Li}^+}$ flatten out in the middle separator region however. Even though the separator is a porous material, its pores are bigger and let the lithium ions pass more easily.
 
-Another aspect (that is not very visible) is a concentration gradient in the $\mathrm{Li}^+$ ions in the electrolyte, which further reduces the electrolyte conductivity on the cathode side. This is not solely due to the $\mathrm{Li}^+$ ions behaviour, but rather has to do with a depletion of the more mobile counterion ($\mathrm{PF_6}^-$). We will talk about this two-ion transport effect in a later topic.
+Another aspect (that is not very visible) is a concentration gradient in the $\mathrm{Li}^+$ ions in the electrolyte, which further reduces the electrolyte conductivity on the cathode side. This is not solely due to the $\mathrm{Li}^+$ ions behaviour, but rather has to do with a depletion of the more mobile counterion ($\mathrm{PF_6}^-$). We will talk about this two-ion transport effect in the [transport topic](../transport_basic/).
 
 ### Cathode
 

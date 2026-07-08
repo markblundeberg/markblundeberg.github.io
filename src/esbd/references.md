@@ -28,7 +28,7 @@ with $\mu_{\mathrm{H_2}} = \mu^\circ_{\mathrm{H_2}} + RT\ln a_{\mathrm{H_2}}$ de
 
 ## A reference cell
 
-Now stick the two together: a hydrogen electrode on the left, a silver chloride electrode on the right, both dipping into the same dissolved $\mathrm{HCl}$. The left electrode couples $V_{\mathrm{e}^-}(\text{left})$ to $V_{\mathrm{H}^+}$, the right couples $V_{\mathrm{Cl}^-}$ to $V_{\mathrm{e}^-}(\text{right})$, and the middle is bridged by the solution's fixed ladder gap $V^\circ_{\mathrm{Cl}^-} - V^\circ_{\mathrm{H}^+} = 1.3601~\mathrm{V}$ (from the [solutions topic](../solutions/)).
+Now stick the two together: a hydrogen electrode on the left, a silver chloride electrode on the right, both dipping into the same dissolved $\mathrm{HCl}$. The left electrode couples $V_{\mathrm{e}^-}(\text{left})$ to $V_{\mathrm{H}^+}$, the right couples $V_{\mathrm{Cl}^-}$ to $V_{\mathrm{e}^-}(\text{right})$, and the middle is bridged by the solution's fixed ladder gap $V^\circ_{\mathrm{Cl}^-} - V^\circ_{\mathrm{H}^+} = 1.3601~\mathrm{V}$ (from the [standard-state data](../data/)).
 <figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/esbd-she-agcl.njk" %}
 </figure>

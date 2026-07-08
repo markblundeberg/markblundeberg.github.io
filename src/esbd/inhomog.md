@@ -58,3 +58,5 @@ In [basic electrostatics](../basicelectrostatics/) we described an incredibly el
 ## Takeaways
 
 In the bulk, quasi-neutrality spares us from almost all of this: the $V^\circ_i$ ladder acts as a mere neutralizer, and the diagrams stay simple. The difficulty concentrates at interfaces, in graded and nonideal media, and at small scales, exactly where $\phi$ splinters into per-species quasi-fields and even $E$ loses its objectivity. The $V_i$ themselves remain well defined through all of it, and that is the point of building on them.
+
+[**NEXT TOPIC: Standard state data**](../data/)
