@@ -13,12 +13,12 @@ We have been framing our electrochemical problems as 'voltage-controlled', and i
 * explaining "chemical capacitance"
 
 We are going to define two key kinds of chemical capacitance here:
-* **ambipolar capacitance** (describing bulk charge storage),
+* **ambipolar chemical capacitance** (describing bulk charge storage),
 * **internal chemical capacitance** (for describing space charge regions),
 
 and the relation between them.
 
-## Ambipolar capacitance (bulk charge storage)
+## Ambipolar chemical capacitance (bulk charge storage)
 
 ### Thermodynamic setting
 
@@ -36,13 +36,13 @@ Each one of these $Q_i$ is a function of all the $V_i$ values. This has to be th
 
 (And again, to remind, this is usually expressed in terms of electrochemical potential $\bar\mu_i = q_i V_i$ and particle number $N_i = Q_i / q_i$ but the voltage and charge units are more familiar in our context.)
 
-### Ambipolar capacitance defined
+### Ambipolar chemical capacitance defined
 
 Capacitance is a change in charge due to a change in some voltage difference $\mathrm{d}Q/\mathrm{d}V$. Beginners learn about linear plate capacitors with nice constant capacitance values ($Q/V$), but we are going to talk about capacitance in the generic differential sense: a change in some charge due to a change in some voltage.
 
 In the case of charge storage in materials, we must be aware of these complications: we have 1) multiple control voltages, not just two, 2) multiple *charge types*, 3) nonlinearity, and 4) no parallel-plate geometry at all, it is simply a bulk (volumetric or gravimetric) capacitance.
 
-We can define capacitance as a matrix, which I call the **ambipolar capacitance matrix**:
+We can define capacitance as a matrix, which I call the **ambipolar chemical capacitance matrix**:
 
 $$\begin{aligned}
 \mathbf{C}^{\mathrm{amb}}_{ij}
@@ -53,18 +53,18 @@ $$\begin{aligned}
 
 where we added the subscript $Q=0$ to emphasize that this is for a charge-neutral (ambipolar) bulk. As we'll see below, removing that $Q=0$ makes a huge difference.
 
-This matrix $ \mathbf{C}^{\mathrm{amb}}$ is truly a {% wiki "capacitance matrix" %} in the mathematical sense: its units are farads, its rows and columns sum to zero, it is symmetric, and it is positive semi-definite. Normally we would use a capacitance matrix to describe the self- and mutual capacitance of a collection of conductors, but in this case the "conductors" are actually all overlapping in space. A regular geometrical capacitance matrix is highly sensitive to arrangement, shapes, and distances, while the ambipolar capacitance is simply proportional to volume of solvent/medium (or mass, depending on what else we are holding fixed).
+This matrix $ \mathbf{C}^{\mathrm{amb}}$ is truly a {% wiki "capacitance matrix" %} in the mathematical sense: its units are farads, its rows and columns sum to zero, it is symmetric, and it is positive semi-definite. Normally we would use a capacitance matrix to describe the self- and mutual capacitance of a collection of conductors, but in this case the "conductors" are actually all overlapping in space. A regular geometrical capacitance matrix is highly sensitive to arrangement, shapes, and distances, while the ambipolar chemical capacitance is simply proportional to volume of solvent/medium (or mass, depending on what else we are holding fixed).
 
-In general the ambipolar capacitance is a dense matrix (all entries nonzero) and can be thought of in terms of a fully connected equivalent circuit:
+In general the ambipolar chemical capacitance is a dense matrix (all entries nonzero) and can be thought of in terms of a fully connected equivalent circuit:
 
 <figure class="demo-container" style="max-width: 320px">
 {% circuit "cap-ambipolar-mesh" %}
 {% figcaption %}
-The ambipolar capacitance matrix as a circuit: one node per carrier, a capacitor between every pair (a fully connected mesh; e.g. five carriers).
+The ambipolar chemical capacitance matrix as a circuit: one node per carrier, a capacitor between every pair (a fully connected mesh; e.g. five carriers).
 {% endfigcaption %}
 </figure>
 
-A special case of ambipolar capacitance is the two-carrier case, as found in battery electrodes. This results in $\mathbf{C}^{\mathrm{amb}}$ being a $2 \times 2$ matrix of the form $\big[\begin{smallmatrix} C & -C \\ -C & C \end{smallmatrix}\big]$ for some $C > 0$, which is just a single capacitor in the equivalent circuit:
+A special case of ambipolar chemical capacitance is the two-carrier case, as found in battery electrodes. This results in $\mathbf{C}^{\mathrm{amb}}$ being a $2 \times 2$ matrix of the form $\big[\begin{smallmatrix} C & -C \\ -C & C \end{smallmatrix}\big]$ for some $C > 0$, which is just a single capacitor in the equivalent circuit:
 
 <figure class="demo-container" style="max-width: 300px">
 {% circuit "cap-two-carrier" %}
@@ -77,25 +77,25 @@ The two-carrier special case: a single capacitor between the electron and ion no
 
 If you only cared about two carriers, then the $\mathbf{C}^{\mathrm{amb}}$ matrix looks like overkill (why not just use $C$) but it is absolutely necessary in the case of more than two carriers. Note that some other multicarrier generalizations of chemical capacitance seen in the literature are not correct.^[E.g. Jamnik and Maier (2001, cited below) defined a 'component chemical capacitance', which only works for the two-ion case and is not meaningful beyond that.]
 
-Ambipolar capacitances can be very large, e.g. for a typical $1~\mathrm{mol/L}$ solution of $+e$ and $-e$ carriers, you'll have a $V_{\mathrm{cation}}$-$V_{\mathrm{anion}}$ mutual capacitance of order $2~\mathrm{kF}$ per $\mathrm{cm}^3$ of volume, far beyond {% wiki "supercapacitor" %} levels of volumetric capacitance. The ambipolar charge storage capacity is a key factor for both lithium ion batteries (in the electrodes) and lead-acid batteries (in solution). The ambipolar diffusion associated with ambipolar capacitance is often too slow for capacitor use cases, though finely ground mixtures of charge storage materials can alleviate this and so some supercapacitors can be described in terms of ambipolar capacitance (ambipolar capacitance can be equally well used to describe mixtures of materials as long as they are reasonably homogeneous on the large scale).
+Ambipolar chemical capacitances can be very large, e.g. for a typical $1~\mathrm{mol/L}$ solution of $+e$ and $-e$ carriers, you'll have a $V_{\mathrm{cation}}$-$V_{\mathrm{anion}}$ mutual capacitance of order $2~\mathrm{kF}$ per $\mathrm{cm}^3$ of volume, far beyond {% wiki "supercapacitor" %} levels of volumetric capacitance. The ambipolar charge storage capacity is a key factor for both lithium ion batteries (in the electrodes) and lead-acid batteries (in solution). The ambipolar diffusion associated with ambipolar chemical capacitance is often too slow for capacitor use cases, though finely ground mixtures of charge storage materials can alleviate this and so some supercapacitors can be described in terms of ambipolar chemical capacitance (ambipolar chemical capacitance can be equally well used to describe mixtures of materials as long as they are reasonably homogeneous on the large scale).
 
-We'll see below how ambipolar capacitance naturally comes about even in ideal systems, and how the ambipolar capacitance can be expressed in terms of ideal quantities.
+We'll see below how ambipolar chemical capacitance naturally comes about even in ideal systems, and how the ambipolar chemical capacitance can be expressed in terms of ideal quantities.
 
-### Why ambipolar capacitance matters
+### Why ambipolar chemical capacitance matters
 
 #### Charge storage
 
-Integrated ambipolar capacitance *is* the charge storage of a bulk material such as a battery electrode. Note that for $N$ independent charged species, the charge storage 'space' is $(N-1)$-dimensional. For all practical charge storage materials $N=2$ so the charging is one dimensional.
+Integrated ambipolar chemical capacitance *is* the charge storage of a bulk material such as a battery electrode. Note that for $N$ independent charged species, the charge storage 'space' is $(N-1)$-dimensional. For all practical charge storage materials $N=2$ so the charging is one dimensional.
 
 #### Rigour in nonideal solutions
 
-Ambipolar capacitance is a thermodynamic observable and directly relates to mean activities. E.g. Debye-Huckel or Pitzer models predict a specific ambipolar capacitance matrix.
+Ambipolar chemical capacitance is a thermodynamic observable and directly relates to mean activities. E.g. Debye-Huckel or Pitzer models predict a specific ambipolar chemical capacitance matrix.
 
 (In contrast, descriptions of electrolytes in terms of single-ion activities correspond to a description in terms of internal chemical capacitance $\mathcal{C}$ (see below). In nonideal solutions, $\mathcal{C}$ will be a dense matrix and also generally regarded as unmeasurable; different activity conventions will have different $\mathcal{C}$ matrices.)
 
 #### Ambipolar diffusion
 
-The volumetric ambipolar capacitance, $\mathbf{c}^{\mathrm{amb}} = \mathbf{C}^{\mathrm{amb}}/V$ directly appears in the continuity equation in the quasi-charge-neutral regime, together with the regular conductivity equation:
+The volumetric ambipolar chemical capacitance, $\mathbf{c}^{\mathrm{amb}} = \mathbf{C}^{\mathrm{amb}}/V$ directly appears in the continuity equation in the quasi-charge-neutral regime, together with the regular conductivity equation:
 
 $$\begin{aligned}
 \mathbf{c}^{\mathrm{amb}} \frac{\partial \mathbf{V}}{\partial t} & = -\nabla \cdot \mathbf{\vec{J}}, & \quad \text{(continuity)},\\
@@ -133,9 +133,9 @@ $$\begin{aligned}
 &= q_i q_j \frac{\partial N_i}{\partial \mu^{\mathrm{int}}_j} \\
 \end{aligned}$$
 
-This is quite similar to ambipolar capacitance above, but note we are fixing $\phi$ instead of fixing $Q=0$.
+This is quite similar to ambipolar chemical capacitance above, but note we are fixing $\phi$ instead of fixing $Q=0$.
 
-> Note that "chemical capacitance" is ambiguous. Sometimes that refers to internal chemical capacitance as just defined,^[J. Jamnik and J. Maier, [Generalised equivalent circuits for mass and charge transport](https://doi.org/10.1039/b100180i), *Phys. Chem. Chem. Phys.* **3**, 1668 (2001). They trace the term itself to A. D. Pelton, [The chemical capacitance — a thermodynamic solution property.](https://doi.org/10.1051/jcp/1992891931) *J. Chim. Phys.* **89**, 1931 (1992).] but often in ionics the term "chemical capacitance" refers to the 2-carrier ambipolar capacitance described above.^[J. Jamnik and J. Maier, [Treatment of the impedance of mixed conductors](https://doi.org/10.1149/1.1392611), *J. Electrochem. Soc.* **146**, 4183 (1999).]
+> Note that "chemical capacitance" is ambiguous. Sometimes that refers to internal chemical capacitance as just defined,^[J. Jamnik and J. Maier, [Generalised equivalent circuits for mass and charge transport](https://doi.org/10.1039/b100180i), *Phys. Chem. Chem. Phys.* **3**, 1668 (2001). They trace the term itself to A. D. Pelton, [The chemical capacitance — a thermodynamic solution property.](https://doi.org/10.1051/jcp/1992891931) *J. Chim. Phys.* **89**, 1931 (1992).] but often in ionics the term "chemical capacitance" refers to the 2-carrier ambipolar chemical capacitance described above.^[J. Jamnik and J. Maier, [Treatment of the impedance of mixed conductors](https://doi.org/10.1149/1.1392611), *J. Electrochem. Soc.* **146**, 4183 (1999).]
 
 Internal chemical capacitance is usually invoked in systems with a well defined mean field $\phi$, such as ideal-dilute solutes, ideal Fermi gases, and such. Consequently, it tends to be the case that $\mathcal{C}$ is diagonal:
 
@@ -197,11 +197,11 @@ $$ \delta Q_{\mathrm{free}} = \sum_i(\delta Q_i) = \mathbf{s}^T \delta \mathbf{V
 
 Where $\mathcal{C}_{\mathrm{tot}} = \sum_i s_i = \sum_{ij} \mathcal{C}_{ij}$ is the total screening power.
 
-> Screening is often derived laboriously in a particle-number basis. But in a $V_i$ basis we know simply that all $V_i$ are flat at equilibrium, and so the above equation means that at every point in space the induced free charge density from small variations $\delta \phi$ is $\delta \rho_{\mathrm{free}} = -c_s \delta \phi $ where $c_s = \mathcal{C}_{\mathrm{tot}} / \mathrm{volume}$ is the volumetric screening power, and again this is a sum of all the internal chemical capacitances, per unit volume.
+> Screening is often derived laboriously in a particle-number basis. But in a $V_i$ basis we know simply that all $V_i$ are flat at equilibrium, and so the above equation means that at every point in space the induced free charge density from small variations $\delta \phi$ is $\delta \rho_{\mathrm{free}} = -\chi \delta \phi $ where $\chi = \mathcal{C}_{\mathrm{tot}} / \mathrm{volume}$ is the volumetric screening power — the same $\chi = -\mathrm{d}\rho_{\mathrm{free}}/\mathrm{d}\phi$ met in [basic electrostatics](../basicelectrostatics/) — and again this is a sum of all the internal chemical capacitances, per unit volume.
 >
-> The Poisson equation then leads exactly to the linear screening equation, $$\varepsilon \nabla^2 \delta \phi = c_s \delta \phi - \rho_{\mathrm{imp}},$$ where $\varepsilon$ is the medium's absolute permittivity and $\rho_{\mathrm{imp}}$ is the impurity charge density. This means $\sqrt{\varepsilon/c_s}$ is precisely the screening length in the general case of mixed charge carriers with any statistics (the {% wiki "Debye length" %} and {% wiki "Thomas–Fermi screening length" %} are both special cases of this).
+> The Poisson equation then leads exactly to the linear screening equation, $$\varepsilon \nabla^2 \delta \phi = \chi \delta \phi - \rho_{\mathrm{imp}},$$ where $\varepsilon$ is the medium's absolute permittivity and $\rho_{\mathrm{imp}}$ is the impurity charge density. This means $\sqrt{\varepsilon/\chi}$ is precisely the screening length in the general case of mixed charge carriers with any statistics (the {% wiki "Debye length" %} and {% wiki "Thomas–Fermi screening length" %} are both special cases of this).
 
-### Ambipolar capacitance and internal chemical capacitance related
+### Ambipolar and internal chemical capacitance related
 
 If we take our internal chemical capacitance and force the volume to be charge neutral ($\delta Q_{\mathrm{free}} = 0$), then $\phi$ must float to whatever value is necessary to get neutrality. We then get:
 
@@ -265,7 +265,7 @@ The extended matrix as a circuit: every carrier node capacitor-coupled to a cent
 {% endfigcaption %}
 </figure>
 
-In relation to this, the ambipolar capacitance can be seen as elimination of the $\phi$ node from the $\mathbf{C}^{\mathrm{ext}}$ capacitance matrix (a {% wiki "Schur complement" %} operation), which when viewing both $\mathbf{C}^{\mathrm{ext}}$ and $\mathbf{C}^{\mathrm{amb}}$ as capacitor networks is known as a {% wiki "Kron reduction" %} or a {% wiki "star-mesh transform" %}.
+In relation to this, the ambipolar chemical capacitance can be seen as elimination of the $\phi$ node from the $\mathbf{C}^{\mathrm{ext}}$ capacitance matrix (a {% wiki "Schur complement" %} operation), which when viewing both $\mathbf{C}^{\mathrm{ext}}$ and $\mathbf{C}^{\mathrm{amb}}$ as capacitor networks is known as a {% wiki "Kron reduction" %} or a {% wiki "star-mesh transform" %}.
 
 This makes $\mathbf{C}^{\mathrm{amb}}$ to be a dense matrix ('fully connected'), even when $\mathcal{C}$ is ideal and diagonal (so $\mathbf{C}^{\mathrm{ext}}$ is a 'star' topology).
 

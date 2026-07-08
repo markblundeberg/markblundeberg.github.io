@@ -43,6 +43,6 @@ The whole diagram can be slid up or down freely: only vertical *differences* car
 
 ## Lost?
 
-That is the whole menagerie. If a later figure ever shows a line or symbol you don't recognise, the link in its corner brings you straight back to this page.
+Those are the core players. If a later figure ever shows a line or symbol you don't recognise, the link in its corner brings you straight back to this page.
 
 [**NEXT TOPIC: Solutions**](../solutions/)
