@@ -67,7 +67,7 @@ $$
 &= E(\text{right}) - E(\text{left}) + \mathrm{LJP},
 \end{aligned}
 $$
-where the **liquid junction potential** is the step in the reference level across the junction, $\mathrm{LJP} = V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2}, \text{right}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2}, \text{left})$.^[Expanding both $E$'s with the Nernst equation gives the full-cell form with the LJP carried along explicitly; the textbook version usually drops the LJP and the left/right labelling. In a concentrated cell only $\Delta V$ is unambiguous: the LJP and the activity terms are each individually ambiguous, because the two half-cells carry distinct activity ambiguities.] The point worth dwelling on is that whenever the $V^\circ_{\mathrm{e}^-}$ levels vary in space — across a junction, a Donnan membrane, or under load — "the SHE" itself varies from place to place. There is a reason a perfectly defined reference is a fiction.
+where the **liquid junction potential** is the step in the reference level across the junction, $\mathrm{LJP} = V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2}, \text{right}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2}, \text{left})$.^[Expanding both $E$'s with the Nernst equation gives the full-cell form with the LJP carried along explicitly; the textbook version usually drops the LJP and the left/right labelling. In a concentrated cell only $\Delta V$ is unambiguous: the LJP and the activity terms are each individually ambiguous, because the two half-cells carry distinct activity ambiguities.] The point worth dwelling on is that whenever the $V^\circ_{\mathrm{e}^-}(\mathrm{rxn})$ levels vary in space — across a junction, a Donnan membrane, or under load — "the SHE" itself varies from place to place. There is a reason a perfectly defined reference is a fiction.
 
 <figure class="demo-container" style="max-width: 480px">
 {% include "esbd-diagrams/esbd-ref-junction.njk" %}
@@ -101,6 +101,6 @@ Could we sidestep all this by referencing to the vacuum instead — an "absolute
 
 ## Takeaways
 
-A reference electrode is a device for pinning one $V^\circ_{\mathrm{e}^-}(\mathrm{rxn})$ level so a working electrode's $V_{\mathrm{e}^-}$ can be read against it; a cell is two such electrodes; and a junction between them adds a liquid-junction step. The whole zoo of "potentials" — electrode potential, solution potential, cell voltage, liquid junction potential, the absolute reference — are particular gaps among the $V_{\mathrm{e}^-}$ and $V^\circ_{\mathrm{e}^-}$ levels, and the $V_i$ diagram simply shows them as the separate lines they always were.
+A reference electrode is a device for pinning one $V^\circ_{\mathrm{e}^-}(\mathrm{rxn})$ level so a working electrode's $V_{\mathrm{e}^-}$ can be read against it; a cell is two such electrodes; and a junction between them adds a liquid-junction step. The whole zoo of "potentials" — electrode potential, solution potential, cell voltage, liquid junction potential, the absolute reference — are particular gaps among the $V_{\mathrm{e}^-}$ and $V^\circ_{\mathrm{e}^-}(\mathrm{rxn})$ levels, and the $V_i$ diagram simply shows them as the separate lines they always were.
 
 [**NEXT TOPIC: Interface kinetics**](../kinetics/)
