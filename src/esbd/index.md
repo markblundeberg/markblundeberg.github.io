@@ -88,7 +88,7 @@ In fact, what started out as a niche picture about batteries has turned into a r
 * We will see that **ionic standard states** appear as reference levels $V_i^\circ$, functioning like semiconductor band edges.
 * We can build a complete picture without ever needing to bring up the practically inaccessible concept of an in-material electrostatic potential ($\phi$).
 * We **directly represent the fundamental thermodynamics** of charged species: their electrochemical potentials.
-* This is not just a mere normalization trick, but rather the $V_i$ are **real voltages** that can be directly probed by specialized electrodes.
+* This is not just a mere normalization trick, but rather the $V_i$ are **real voltages** — measurable directly for electrons, and indirectly (through ion-reversible electrodes) for ions.
 
 In the next few topics we're going to dig a little bit more into how $V_i$ works.
 
