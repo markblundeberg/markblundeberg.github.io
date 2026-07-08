@@ -37,7 +37,7 @@ If you arrive already fluent in electrochemistry, here is a Rosetta Stone: the f
 
 | Traditional | In $V_i$ terms |
 | --- | --- |
-| Nernst–Planck (drift + diffusion) flux | $J_i = -\sigma_i \nabla V_i$ ([transport](../transport_basic/)) |
+| Nernst–Planck (drift + diffusion) flux | $J_i = -\sigma_i \nabla V_i$ (charge-current form; number flux $N_i = J_i/z_i F$) ([transport](../transport_basic/)) |
 | ionic conductivity $\sigma_i$ | $z_i^2 F^2 D_i\, c_i / RT$ |
 | "ohmic" electrolyte current $-\sigma\nabla\phi$ | the uniform-concentration limit of $\textstyle\sum_i -\sigma_i\nabla V_i$ |
 | chemical capacitance | $z_i^2 F^2 c_i / RT$ ([capacitance](../capacitors/)) |

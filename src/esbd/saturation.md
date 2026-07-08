@@ -9,7 +9,7 @@ orderESBD: 29
 
 Drive a current through a uniform block of a single conductor and the rule is the comfortable one: raise the voltage across the terminals and the current rises in step. Real devices keep breaking that rule. Past a certain point the current stops responding to voltage at all, flattening into a ceiling it refuses to cross. It **saturates**.
 
-What makes saturation worth its own topic is that the same mechanism turns up in places that look unrelated: the "mass-transfer limit" of electroplating, the "pinch-off" of a field-effect transistor, the minority-carrier sweep-out of a bipolar transistor, the "salt depletion" of a battery electrolyte. In each, a *spectator* species screens the field and forces the active carrier into a depleted choke point, and on a $V_i$ diagram they all look the same. It is the point the [transport topic](../transport_basic/) left hanging: we set the voltage, but the current that flows has a ceiling, fixed by where the active carrier runs out.
+What makes saturation worth its own topic is that the same mechanism turns up in places that look unrelated: the "mass-transfer limit" of electroplating, the "pinch-off" of a field-effect transistor, the minority-carrier sweep-out of a bipolar transistor, the "salt depletion" of a battery electrolyte. In each, a *spectator* (an abundant blocked species, or a gate) screens the field and forces the active carrier into a depleted choke point, and on a $V_i$ diagram they all look the same. It is the point the [transport topic](../transport_basic/) left hanging: we set the voltage, but the current that flows has a ceiling, fixed by where the active carrier runs out.
 
 ## The choke point
 

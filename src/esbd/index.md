@@ -25,7 +25,7 @@ While the equations of electrochemistry are precise, the visual tools for buildi
 
 ## Electrons: an incomplete picture
 
-Semiconductor physicists are used to understanding everything in terms of electronic energies, and we use the term "{%wiki "energy band diagram", "Band diagram" %}" to refer to a plot of electronic energies vs. position. These band diagrams are the primary visual and pedagogical tool for showing what is happening, thermodynamically, inside semiconductor devices. So, what happens when we try to represent a battery with a regular band diagram?
+Semiconductor physicists are used to understanding everything in terms of electronic energies, and we use the term "{%wiki "Band diagram", "energy band diagram" %}" to refer to a plot of electronic energies vs. position. These band diagrams are the primary visual and pedagogical tool for showing what is happening, thermodynamically, inside semiconductor devices. So, what happens when we try to represent a battery with a regular band diagram?
 
 <figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/bd-basicbattery-energy-missing.njk" %}

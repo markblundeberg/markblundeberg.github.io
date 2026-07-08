@@ -45,7 +45,7 @@ the familiar standard potential of the silver chloride electrode against the SHE
 
 That derivation took a peculiar route, and it is worth seeing why. We walked the chain
 $$ V_{\mathrm{e}^-}(\text{left}) \to V_{\mathrm{H}^+} \to V^\circ_{\mathrm{H}^+} \to V^\circ_{\mathrm{Cl}^-} \to V_{\mathrm{Cl}^-} \to V_{\mathrm{e}^-}(\text{right}), $$
-stepping from one real species voltage to the next. Call this the **circuit-centered** reading: track the actual $V_i$ straight across, dipping into single-ion activities only for the middle ladder step (which is ultimately thermodynamic anyway).
+stepping from one real species voltage to the next. Call this the **circuit-centered** reading: track the actual $V_i$ straight across, dipping into single-ion activities only at the two $V_i \to V^\circ_i$ excursions (whose sum, the mean activity, is unambiguous).
 
 Traditional electrochemistry takes the other route, which is **solution-centered** (really *potential*-centered). It starts in the middle, at the solution's $\phi$ — a stand-in for the $V^\circ_i$ ladder — and works outward to each electrode:
 $$
@@ -56,7 +56,7 @@ $$
 $$
 The cell voltage is the difference of the two, and $\phi$ cancels. Its appeal is that each electrode is described against a common reference; its cost is that each half now leans on a single-ion activity, and on the unmeasurable $\phi$. The $V_i$ picture keeps the same split into two electrodes but anchors it to the real, ladder-based $V^\circ_i$ rather than to $\phi$.
 
-This is the distinction Boettcher et al. draw between the **electrode potential** (the electrode's own electronic level, our $V_{\mathrm{e}^-}(\text{electrode})$) and the **solution potential** (the solution's level, our $V^\circ_{\mathrm{e}^-}$): two different "potentials" that the bare word runs together.
+This is the distinction Boettcher et al. draw between the **electrode potential** (the electrode's own electronic level, our $V_{\mathrm{e}^-}(\text{electrode})$) and the **solution potential** (the solution's level, our $V^\circ_{\mathrm{e}^-}(\mathrm{rxn})$): two different "potentials" that the bare word runs together.
 
 ## The liquid junction potential
 

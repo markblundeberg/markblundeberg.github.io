@@ -62,7 +62,7 @@ Out of equilibrium, the electron rail $V_{\mathrm{e}^-}$ and hole rail $V_{\math
 {% endfigcaption %}
 </figure>
 
-This kind of pinning between two carriers, $V_i = V_j$, has direct parallels throughout electrochemistry; we pick up its consequences in the next topic.
+This kind of pinning between two carriers, fixing the step $V_i - V_j$, has direct parallels throughout electrochemistry; we pick up its consequences in the next topic.
 
 ## Band edges are standard states ($V^\circ_i$)
 

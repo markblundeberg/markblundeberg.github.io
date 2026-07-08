@@ -23,7 +23,7 @@ Suppose we fix a single carrier's voltage and then slide the ladder. Because onl
 
 ## Pinning two carriers: an electrostatic mass-action law
 
-Now pin two carriers, a species $A$ and a species $B$, and again slide the ladder. Both concentrations shift, yet a particular combination of them does not budge. If we take the gap for each carrier, divide through by its charge, and subtract, the term $V^\circ_A - V^\circ_B$ appears; because the ladder is rigid, this difference is a fixed property of the medium, and it cancels:
+Now pin two carriers, a species $A$ and a species $B$, and again slide the ladder. Both concentrations shift, yet a particular combination of them does not budge. If we take each carrier's log-concentration $RT\ln(c_i/c^\circ)$, divide by its molar charge $z_i F$, and subtract, the term $V^\circ_A - V^\circ_B$ appears; because the ladder is rigid, this difference is a fixed property of the medium, and it cancels:
 
 $$ \left(\frac{c_A}{c^\circ}\right)^{1/z_A}\!\left(\frac{c_B}{c^\circ}\right)^{-1/z_B} = K, $$
 

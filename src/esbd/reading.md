@@ -25,7 +25,7 @@ The whole diagram can be slid up or down freely: only vertical *differences* car
 
 **Standard state $V^\circ_i$** — a thinner line of the same colour, the carrier's "band edge" or reference level. A carrier's $V_i$ floats a distance away from its $V^\circ_i$ that grows with the logarithm of concentration, so the gap between the two reads as a concentration. The $V^\circ_i$ lines shift together as one rigid ladder. (→ [solutions](../solutions/), [semiconductors](../solidstate/))
 
-**Implied redox level $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$** — a dashed, electron-coloured line drawn inside a solution: the level where the solution's redox couples "want" the electrons to sit, even with no electrode present. A solution out of equilibrium can show several at once. (→ [half-reactions](../half/))
+**Implied redox level $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$** — a dashed, electron-coloured line drawn inside a solution: the level where one of the solution's redox couples "wants" the electrons to sit, even with no electrode present. A solution out of equilibrium can show several at once. (→ [half-reactions](../half/))
 
 **Standard redox level $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$** — the standard-state sibling of the line above, drawn thin *and* dashed: a redox couple's level at unit activities, floating along with the rest of the $V^\circ$ ladder. It is the "standard electrode potential" $E^\circ$, before any reference has been subtracted off. (→ [half-reactions](../half/))
 

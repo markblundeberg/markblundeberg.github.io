@@ -120,16 +120,6 @@ The full catalog of what can go wrong — patchy and charged interfaces, graded 
 
 All of those concerns are real and important when describing interfaces, especially 1) interface kinetics and 2) interface capacitance. And there is a huge engineering importance: as Herbert Kroemer said, "the interface is the device". But interfaces are always connected to bulky reservoirs, which themselves are internally quasi-electrostatic. The vast majority of bulky regions in our devices and circuits are quasi-neutral which means electrostatics can be largely ignored inside them, and we only need to worry about the $V_i$ values (with $V^\circ_i$ acting as a mere neutralizer, as described above).
 
-{#
-
-For a complete set of $\{V_i\}$ values, we only fix the mean activity products. Principle of neutrality can now only be used 'backwards': for a large homogeneous solution we know it is neutral and hence we may assign $V^\circ_i$ to any position, which fixes all the activities. The Gibbs–Guggenheim principle says that we have no reason to prefer one convention for $\phi$ over another.
-
-Pethica, B. A. (2007). Are electrostatic potentials between regions of different chemical composition measurable? The Gibbs–Guggenheim principle reconsidered, extended and its consequences revisited. Physical Chemistry Chemical Physics, 9(47), 6253. https://doi.org/10.1039/b706153f
-
-But this raises a question about how we describe deviations from neutrality, which we need to describe electrostatics. The concept of a "real $\phi$" seems like it would help but that's only true if the constitutive relation of the medium has a simple permittivity, which is no longer even necessarily true: any false $\phi$ will work with an appropriate constitutive relation! Fortunately, the practical reality of a highly concentrated and non-ideal substance is that the screening length $\lambda$ tends to be extremely small. So, it is precisely in these situations where electrostatics is the least important and where we care the least about what the "real $\phi$" actually is. While there is still a surface double layer, we can comfortably describe it as a 0-thickness isotherm as in the .
-
-#}
-
 ## Takeaways
 
 Electrostatics entered our picture mainly to justify leaving it out: screening is so strong that almost everywhere, the $V^\circ_i$ ladder simply floats to whatever offset keeps the bulk neutral, while the $V_i$ ride flat over the interfacial blips. Where two materials meet, the same screening decides how their ladders align, anchored to whichever side screens more stiffly. Along the way we met the screening response $\chi$, and it has a second life: read as charge banked against a voltage, it is a capacitance, which is where we turn next.

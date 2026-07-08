@@ -22,15 +22,15 @@ and the relation between them.
 
 ### Thermodynamic setting
 
-In our $V_i$ view, we work with a free energy function of the species voltages — a grand free energy we'll call $F$:
+In our $V_i$ view, we work with a free energy function of the species voltages — a grand free energy we'll call $\Omega$:
 
-$$ F(V_1, \ldots, V_N) $$
+$$ \Omega(V_1, \ldots, V_N) $$
 
 (I'm being a bit vague about the other control variables -- is it constant-volume with fixed solvent chemical potential or constant-pressure with fixed solvent mass? Is it isothermal or adiabatic? We'll leave that undecided for now but note that the choice does affect the capacitance values.)
 
 When we change one of these $V_i$'s, the partial derivative gives us the charge of that species:
 
-$$ Q_i(V_1, \ldots, V_N) = -\frac{\partial F}{\partial V_i}. $$
+$$ Q_i(V_1, \ldots, V_N) = -\frac{\partial \Omega}{\partial V_i}. $$
 
 Each one of these $Q_i$ is a function of all the $V_i$ values. This has to be the case because the bulk is charge neutral: $ 0 = Q = Q_{\mathrm{fix}} + \sum Q_i $. So if $Q_1$ increases under some change of parameters then all the other $Q_i$'s have to decrease such that the net total change is 0. Note that there could be some dopants present which modify the free energy function, including by inducing a background charge $Q_{\mathrm{fix}} \neq 0$.
 
@@ -116,9 +116,9 @@ Besides that, even with a single material, the boundary conditions (e.g. one ion
 
 ## Internal chemical capacitance (space charge)
 
-Near interfaces, impurities, and in/around depletion regions, there are variations in charge neutrality. We want to model these regions as having some continuum space charge $\rho$ and some continuum electrostatic potential $\phi$. To this end we make a "local density approximation", by declaring that each infinitesimal volume $\mathrm{d}V$ has a local free energy function where $\phi$ is now a control variable:
+Near interfaces, impurities, and in/around depletion regions, there are variations in charge neutrality. We want to model these regions as having some continuum space charge $\rho$ and some continuum electrostatic potential $\phi$. To this end we make a "local density approximation", by declaring that each infinitesimal volume $\mathrm{d}\tau$ has a local free energy function where $\phi$ is now a control variable:
 
-$$ F^\phi (V_1, \ldots, V_N, \phi) \propto \mathrm{d}V $$
+$$ \Omega^\phi (V_1, \ldots, V_N, \phi) \propto \mathrm{d}\tau $$
 
 It's worth reminding that we are abandoning thermodynamic rigour when asking for continuum thermodynamics to apply, especially in the case of space charge at microscopic scales. The local density approximation is justified in some idealized systems, but it is only approximately correct in reality.
 
@@ -128,7 +128,7 @@ We're going to define internal chemical capacitance. It is exactly equivalent to
 
 $$\begin{aligned}
 \mathcal{C}_{ij}
-&= -\frac{\partial^2 F^\phi}{\partial V_i \partial V_j} \\
+&= -\frac{\partial^2 \Omega^\phi}{\partial V_i \partial V_j} \\
 &= \left( \frac{\partial Q_i}{\partial V_j} \right)_{\{V_k\}_{k \neq j},\, \phi} \\
 &= q_i q_j \frac{\partial N_i}{\partial \mu^{\mathrm{int}}_j} \\
 \end{aligned}$$
