@@ -75,29 +75,7 @@ $$ V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) = \frac{\bar\mu^\circ_{\math
 
 These are floating levels that float alongside our $V^\circ_i$ ionic standard states. Note that we can substitute $z_i F V^\circ_i$ for $\bar\mu^\circ_i$ for the ion reactants, to get formulae involving $V^\circ_i$ (see below for a more general formula).
 
-{#
-[^redformulae]:
-    For the simple case of one Ox and one Red species, we have three cases:
-    $$\begin{aligned}
-    V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) &= V^\circ_{\mathrm{Ox}} - \mu^\circ_{\mathrm{Red}}/(zF) & \text{($\mathrm{Red}$ neutral)} \\
-    V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) &= V^\circ_{\mathrm{Red}} + \mu^\circ_{\mathrm{Ox}}/(zF) & \text{($\mathrm{Ox}$ neutral)} \\
-    V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) &= \frac{z_{\mathrm{Ox}}}{z} V^\circ_{\mathrm{Ox}} - \frac{z_{\mathrm{Red}}}{z} V^\circ_{\mathrm{Red}} & \text{(neither neutral)}
-    \end{aligned}$$
-    We can see here that indeed, $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ is anchored to the $V^\circ_i$ ladder.
-#}
-
 The above equation for $V_{\mathrm{e}^-}$ looks extremely similar to the regular {%wiki "Nernst equation" %}, though it involves $V_{\mathrm{e}^-}$ instead of $E$. We'll get back to what this traditional electrochemical $E$ actually means in the next topic, but we don't need it for now.
-
-{#
-$$ E(\mathrm{Ox}/\mathrm{Red}) = E^\circ(\mathrm{Ox}/\mathrm{Red}) + \frac{RT}{zF} \ln\bigg(\frac{a_{\mathrm{Ox}}}{a_{\mathrm{Red}}}\bigg). $$
-
-In essence, in the regular Nernst equation the $E$ and $E^\circ$ simply have had a local reference value subtracted from them, so that they are no longer floating:
-
-$$ E(\mathrm{Ox}/\mathrm{Red}) = V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - (\mathrm{ref}) $$
-$$ E^\circ(\mathrm{Ox}/\mathrm{Red}) = V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - (\mathrm{ref}) .$$
-
-The reference value $(\mathrm{ref})$ usually refers to "the standard hydrogen electrode", which is vague. To be precise, the reference is the a *local* value $(\mathrm{ref}) = V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2})$. The distinction matters when you have an inhomogeneous solution, or you have more than one solution, then $V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2})$ will vary from place to place.
-#}
 
 It's helpful to visualize an example of where these redox levels lie in relation to the ionic levels we've been discussing previously, in this case with the ferric/ferrous redox couple. Note that in order to read out $V_{\mathrm{e}^-}(\mathrm{Fe}^{3+}/\mathrm{Fe}^{2+})$ potentiometrically without influence from other reactions, a glassy carbon electrode could be used, since a platinum electrode may also pick up hydrogen or oxygen redox couples and drift toward a mixed potential.^[This is a worry for open-circuit *potentiometry*. In *voltammetry*, by contrast, platinum is a standard working electrode for the ferric/ferrous couple — its fast electron-transfer [kinetics](../kinetics/) outweigh the mixed-potential concern.]
 
@@ -159,19 +137,6 @@ Standard redox levels $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ (left) 
 
 As can be seen, when we change the electrical offset, both 'ladders' move in lockstep. However, the ionic standard states are sensitive to our choice of zero of neutral elements' chemical potentials, whereas the standard redox levels are totally immune to that (since they really are electronic in nature).
 
-{#
-## Redox kinetics
-
-When it comes to understanding redox processes, one very helpful idea is the Marcus-Gerischer theory, where one plots two Gaussian bumps representing "redox density of states".  These naturally fit onto energy band diagrams (as pioneered by Gerischer), and could also be plotted (though perhaps awkwardly as they would be upside down) on $V_{\mathrm{e}^-}$ diagrams. However, it's a bit beyond the scope of this project so we won't be getting into this.
-
-It's important to understand that these are a sort of 'electron tunneling density of states' and they largely represent irreversible processes. As Marcus theory indicates, these Gaussians have a significant spread due to random thermal variations in molecular configurations.
-
-* The unfilled bump (at higher energy / lower voltage) represents low energy unoccupied states of the $\mathrm{Ox}$ species. If an electron does jump in, it forms a temporary excited $\mathrm{Red}$ molecule, which then relaxes.
-* The filled bump (at lower energy / higher voltage) represents high energy occupied states of the $\mathrm{Red}$ species. If an electron does jump out, it forms a temporary excited $\mathrm{Ox}$ molecule, which then relaxes.
-
-The important of these Gaussians is that they represent the actual necessary activation window for redox processes. If two redox processes' windows don't overlap, then they might not proceed even if there is a strong thermodynamic drive.
-#}
-
 ## Takeaways
 
 And so we've arrived at a description of redox half-reactions in terms of a virtual or implied value $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$, and in relating this to reactant activities, we've identified a new ladder of "standard redox levels" $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$. 
@@ -179,13 +144,3 @@ And so we've arrived at a description of redox half-reactions in terms of a virt
 In the next topic, we'll talk about how we can explain traditional electrochemical variables in terms of these redox levels.
 
 [**NEXT TOPIC: Electrode potential**](../e/)
-
-{#   
-
-## Optional discussion
-
-<details>
-<summary>
-Click to open extended discussion.
-</summary>
-#}
