@@ -99,6 +99,13 @@ In practice the SHE is finicky to pin down: its nominal $a_{\mathrm{H}^+}=1$ imp
 
 Could we sidestep all this by referencing to the vacuum instead — an "absolute" electrode potential? On a $V_i$ diagram the vacuum is just one more level, $\phi_{\mathrm{vac}} = V_{\mathrm{e}^-} - \Phi/e$, sitting $\Phi/e$ *below* the metal's electrons on this voltage axis (equivalently a work function $\Phi$ *above* them in electron energy — the step we drew for [capacitors](../capacitors/)). The widely-quoted "absolute" value of about $4.44~\mathrm{V}$ for the SHE is best read as an electrode's work function: a genuine *surface* property that drifts with preparation and contamination, not a cleaner fundamental reference, and the in-material $\phi$ it leans on is not well defined to begin with (the subject of [$\phi$ under the microscope](../phi/)). The vacuum offers no escape — it is one more floating level, handy for lining up work functions, not a universal zero. Where the $4.44~\mathrm{V}$ comes from, and what vacuum levels are honestly good for, is covered in [Vacuum levels](../vacuum/).
 
+<figure class="demo-container" style="max-width: 480px">
+<div style="border: 2px dashed #bbb; border-radius: 8px; padding: 3em 1.5em; text-align: center; color: #888; font-style: italic">Figure placeholder: the "absolute" SHE potential as a gap ($V^\circ_{\mathrm{e}^-}(\mathrm{SHE}) \leftrightarrow \phi_{\mathrm{vac}}$)</div>
+{% figcaption %}
+The "absolute" electrode potential on a $V_i$ diagram: $\phi_{\mathrm{vac}}$ just outside the cell sits $4.44~\mathrm{V}$ below the SHE rung, exactly as a work function sits below a metal's $V_{\mathrm{e}^-}$. One more floating level to line things up with, not a universal zero.
+{% endfigcaption %}
+</figure>
+
 ## Takeaways
 
 A reference electrode is a device for pinning one $V^\circ_{\mathrm{e}^-}(\mathrm{rxn})$ level so a working electrode's $V_{\mathrm{e}^-}$ can be read against it; a cell is two such electrodes; and a junction between them adds a liquid-junction step. The whole zoo of "potentials" — electrode potential, solution potential, cell voltage, liquid junction potential, the absolute reference — are particular gaps among the $V_{\mathrm{e}^-}$ and $V^\circ_{\mathrm{e}^-}(\mathrm{rxn})$ levels, and the $V_i$ diagram simply shows them as the separate lines they always were.
