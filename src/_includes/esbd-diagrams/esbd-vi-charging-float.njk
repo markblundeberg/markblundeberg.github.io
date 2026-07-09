@@ -2,7 +2,7 @@
 {% import "macros/controls.njk" as controls %}
 <div class="bd-container" id="{{idprefix}}-plot" style="height: 320px; width: 100%"></div>
 <div id="{{idprefix}}-sliders" style="display: grid; grid-template-columns: max-content minmax(0, 220px); gap: 0.35em 0.7em; align-items: center; justify-content: center; margin-top: 0.7em">
-    {{ controls.slider(idprefix + "-delta", "Raise the body's ladder $\\delta$", { min: -0.35, max: 0.35, step: "any", value: 0, snap: 0, inline: true, readout: true }) }}
+    {{ controls.slider(idprefix + "-delta", "Raise the body's ladder $\\delta$", { min: -0.35, max: 0.35, step: "any", value: 0.17, snap: 0, inline: true, readout: true }) }}
     {{ controls.slider(idprefix + "-global", "Global float", { min: -0.25, max: 0.25, step: "any", value: 0, snap: 0, inline: true, readout: true }) }}
 </div>
 
@@ -39,6 +39,7 @@
 
     const POS = '#c0392b'; // + surface charge
     const NEG = '#2c6fb0'; // − surface charge
+    const Q_STEP = 0.085; // δ per surface-charge glyph; also the neutral threshold
 
     const esbd = new ElectrochemicalSpeciesBandDiagram('{{idprefix}}-plot', {
         sodium: SPECIES.sodium, proton: SPECIES.proton, chloride: SPECIES.chloride,
@@ -70,7 +71,7 @@
             onUpdateTransition: (s) => s.attr('x', (d) => d.tx).attr('y', (d) => d.ty),
         });
         // (c) surface charge glyphs at both body boundaries, count ∝ |δ| only
-        const n = Math.min(4, Math.round(Math.abs(delta) / 0.085));
+        const n = Math.min(4, Math.round(Math.abs(delta) / Q_STEP));
         const sign = delta > 0 ? '+' : '−';
         const col = delta > 0 ? POS : NEG;
         const glyphs = [];
@@ -102,7 +103,7 @@
         }));
         esbd.updateTraceData(traces);
         const rd = document.getElementById('{{idprefix}}-delta-readout');
-        if (rd) rd.textContent = Math.abs(delta) < 0.02 ? 'neutral'
+        if (rd) rd.textContent = Math.round(Math.abs(delta) / Q_STEP) < 1 ? 'neutral'
             : (delta > 0 ? 'charged +' : 'charged −');
         const rg = document.getElementById('{{idprefix}}-global-readout');
         if (rg) rg.textContent = 'nothing changes';
