@@ -46,9 +46,12 @@ The rabbit holes -- appendices, advanced topics, notes:
 - [_Non-ideal solutions_](/esbd/nonideal/) - Focussing on technical difficulties of single-ion activities.
 - [_Chemical capacitance matrices_](/esbd/chemical_capacitance_matrices/) - Ambipolar capacitance (thermodynamic) vs internal chemical capacitance (extrathermodynamic), as capacitance matrices.
 
-*Appendices*:
+*Messy electrostatics*:
+- [_The case against $\phi$_](/esbd/phi/) - Why we should bypass using an electrostatic potential.
+- [_Vacuum levels_](/esbd/vacuum/) - The outer potential $\psi$, work functions, and the "absolute" vacuum reference.
 - [_Inhomogeneities and electrostatics_](/esbd/inhomog/) - Graded interfaces and quasi-electric fields; does $\phi$ represent real electrostatics? Plus the full beyond-the-simple-case catalog.
+
+*Appendices*:
 - [_Standard state data_](/esbd/data/) - Numerical data for ionic solutes' $V^\circ_i$ values in water.
 - [_Traditional electrochemistry, translated_](/esbd/translation/) - A Rosetta Stone: standard symbols and equations in $V_i$ terms.
-- [_The case against $\phi$_](/esbd/phi/) - Why we should bypass using an electrostatic potential.
 - [_About_](/esbd/about/) - How this project came about.

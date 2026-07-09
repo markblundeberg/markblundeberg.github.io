@@ -108,7 +108,7 @@ A heterojunction between two n-type semiconductors, at equilibrium. The edge gap
 {% endfigcaption %}
 </figure>
 
-Predicting the *size* of that offset from scratch is a separate and much harder problem, which we will not attempt; the popular shortcut of lining materials up by a shared vacuum level is a rule of thumb that is notoriously unreliable, since every interface carries its own dipole. But the size is just one number. The *structure* of the alignment — electrostatic, screening-mediated, anchored to the stronger screener — is the essential part, and it is what lets the rest of this book draw interfaces at all.
+Predicting the *size* of that offset from scratch is a separate and much harder problem, which we will not attempt; the popular shortcut of lining materials up by a shared vacuum level is a rule of thumb that is [notoriously unreliable](../vacuum/), since every interface carries its own dipole. But the size is just one number. The *structure* of the alignment — electrostatic, screening-mediated, anchored to the stronger screener — is the essential part, and it is what lets the rest of this book draw interfaces at all.
 
 ## Beyond the simple case
 
