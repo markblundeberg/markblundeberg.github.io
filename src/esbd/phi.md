@@ -30,7 +30,7 @@ $$ \nabla^2 \langle\phi\rangle = -\langle\rho\rangle / \varepsilon_0 . $$
 This defines $\langle\phi\rangle$ consistently both inside and outside of materials, up to the usual harmless global offset. (Outside of materials, in vacuum, no smoothing is needed and we write simply $\phi_{\mathrm{vac}}$; that is [the next topic](../vacuum/).) Inside a homogeneous conductor the average is neutral, $\langle\rho\rangle = 0$, and $\langle\phi\rangle$ is flat throughout; whatever averaging procedure we use has to smear over the microscopic mess enough to make that so. This averaged potential is what most physical discussions of "the inner potential" have in mind.
 
 <figure class="demo-container" style="max-width: 480px">
-<div style="border: 2px dashed #bbb; border-radius: 8px; padding: 3em 1.5em; text-align: center; color: #888; font-style: italic">Figure placeholder: $\phi_{\mathrm{micro}}$ vs its running mean $\langle\phi\rangle$</div>
+<img src="/esbd/img/phi-micro-mean.svg" style="max-width:100%"/>
 {% figcaption %}
 The microscopic potential in a material: violent spikes at the nuclear cores, wells in the bonds, all of it jiggling in time. Its running average $\langle\phi\rangle$ rides flat across the interior at the mean inner potential, several volts above the vacuum outside.
 {% endfigcaption %}
@@ -103,7 +103,7 @@ Since no ion can tell the two solvents apart, nothing happens at the interface: 
 Now compute $\langle\phi\rangle$. Deep in each bulk it is flat, but the two flat values differ: a pointlike core buried in its electron cloud raises the volume average more than a smeared-out one does, even though (by Gauss's law) the two produce identical fields outside the core region, which is exactly why no solute could tell them apart. So $\langle\phi\rangle$ takes a step at the interface, quite possibly of several volts, of the same nature as the mean-inner-potential offsets measured above. There is our Galvani potential difference: a step between two liquids that no solute can distinguish, made entirely out of core architecture. No charge moved to create it, no ion feels it, and no experiment on the solutes could ever find it.^[Its precise size even depends on the choice of smoothing recipe, a point that will return in [the inhomogeneities topic](../inhomog/).] The practical $\phi'$, meanwhile, rides at a fixed offset from the $V^\circ_i$ ladder (that is what an activity convention pins), so it runs dead flat through the junction: here the bookkeeping potential is more faithful to what the ions experience than the honest average is. (The empty potentials from earlier likewise sail through flat, since they sample the medium only from outside the core radii; the step belongs to $\langle\phi\rangle$ alone.)
 
 <figure class="demo-container" style="max-width: 480px">
-<div style="border: 2px dashed #bbb; border-radius: 8px; padding: 3em 1.5em; text-align: center; color: #888; font-style: italic">Figure placeholder: the hillium–mountainium junction (microscopic + smoothed panels)</div>
+<img src="/esbd/img/hillium-junction.svg" style="max-width:100%"/>
 {% figcaption %}
 Hillium and mountainium: two solvents identical to every solute, differing only in core architecture. Top: $\phi_{\mathrm{micro}}$, gentle on the left, spiky on the right. Bottom: $\langle\phi\rangle$ steps at the junction while the $V^\circ_i$ ladder and every $V_i$ run dead flat. The Galvani step is made of core shape, and no ion feels it.
 {% endfigcaption %}
