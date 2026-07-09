@@ -73,7 +73,7 @@
         { id: 'h3_0',   species: 'proton',    curveType: 'standardState',  kind: 'V0',  region: 3, nH: 1,  v:  V0_Hplus + dV0, x: x3 },
         { id: 'phi3',                         curveType: 'phi',            kind: 'phi', region: 3,         v:  V0_phi + dV0, x: x3 },
         // Region 4 — vacuum (no solvent slider; φ_vac just floats)
-        { id: 'phivac',                       curveType: 'phi',            kind: 'phi', region: 4,         v: [-1.2,-1.6], x: xVac, label: '\\phi_{\\mathrm{vac}}' },
+        { id: 'phivac',                       curveType: 'phi',            kind: 'phi', region: 4,         v: [-1.2,-1.6], x: xVac, label: '\\phi_{\\mathrm{vac}}', color: '#377EB8' },
         // Region 5 — LiPF₆ in EC (a different solvent)
         { id: 'li5',    species: 'lithium',   curveType: 'voltage',        kind: 'Vi',  region: 5, nLi: 1, v: -0.18, x: x5 },
         { id: 'li5_0',  species: 'lithium',   curveType: 'standardState',  kind: 'V0',  region: 5, nLi: 1, v:  0.12, x: x5 },
@@ -134,6 +134,7 @@
                 id: t.id,
                 speciesId: t.species ?? null,
                 curveType: t.curveType,
+                color: t.color ?? null,
                 showLabel: true,
                 label: t.label ?? null,
                 x: t.x,
