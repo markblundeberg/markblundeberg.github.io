@@ -16,6 +16,8 @@ Here is the data table of relative $V^\circ_i$ values for water, as plotted in t
 * using a reference ionic concentration of $c^\circ = 1~\mathrm{mol/L}$ (actually for molality $b^\circ = 1~\mathrm{mol/kg}$, but for pure water these are equivalent)
 * continuing our usual convention that neutral chemical potentials are equal to the Gibbs formation energies (see below for how this works technically).
 
+The third column follows from the second by $V^\circ_i - V^\circ_{\mathrm{H}^+} = \Delta_{\mathrm{f}} G^\circ_i / (z_i F)$ (with the reference value $\Delta_{\mathrm{f}} G^\circ_{\mathrm{H}^+}$ set to zero; see the derivation below).
+
 | Ion $i$ | $\Delta_{\mathrm{f}} G^\circ_i$ (kJ/mol) | $V^\circ_i - V^\circ_{\mathrm{H}^+}$ (V) |
 | ---: | ---: | ---: |
 | $\mathrm{HSO_4}^{-}$ | -755.91&#8199; | +7.8345&#8199; |

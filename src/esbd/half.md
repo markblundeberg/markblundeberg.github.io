@@ -105,8 +105,6 @@ This provides a general recipe and it's easy to see how to extend it to more ion
 
 ## Standard redox levels in water
 
-Wikipedia's {% wiki "Standard_electrode_potential_(data_page)", "standard electrode potential data page" %} is a fantastic resource to find more of these.
-
 Also known as the standard electrode potential, the standard reduction potential $E^\circ$ is the reduction potential for a reaction that involves species in their standard states. In particular this means that dissolved ions are at a hypothetical ideally-dilute concentration of $c^\circ = 1~\mathrm{mol/L}$; practically this means that these standard reduction potentials are best extrapolated from dilute solutions.
 
 It is also assumed that the temperature is 25&nbsp;°C and the pressure is 1 bar. (Actually, 1 atm is commonly used, which tweaks $\mu_{\mathrm{H}_2} / 2F$ by a sub-millivolt correction ($\approx 0.2~\mathrm{mV}$), but we'll ignore that.)
@@ -125,6 +123,8 @@ $$ E^\circ = V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm
 | $\mathrm{AgCl(s)}$ | / | $\mathrm{Ag(s)},\mathrm{Cl}^-$ | $V^\circ_{\mathrm{Cl}^-} - \tfrac{1}{F} \mu^\circ_{\mathrm{Ag}} + \tfrac{1}{F}\mu^\circ_{\mathrm{AgCl}}$ | +0.222 |
 | $\mathrm{Fe}^{3+}$ | / | $\mathrm{Fe}^{2+}$ | $3V^\circ_{\mathrm{Fe}^{3+}} - 2V^\circ_{\mathrm{Fe}^{2+}}$ | +0.769 |
 | $\mathrm{Fe}^{2+}$ | / | $\mathrm{Fe(s)}$ | $V^\circ_{\mathrm{Fe}^{2+}} - \tfrac{1}{2F} \mu^\circ_{\mathrm{Fe}} $ | −0.409 |
+
+Wikipedia's {% wiki "Standard_electrode_potential_(data_page)", "standard electrode potential data page" %} is a fantastic resource to find more of these.
 
 It's worth visualizing the $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ levels alongside the ionic levels $V^\circ_i$. We plot the standard redox levels as dashed (representing that they are 'implied' levels), and as thin lines (representing that they are only standard states):
 
