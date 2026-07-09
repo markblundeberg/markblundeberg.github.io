@@ -65,7 +65,7 @@ In [basic electrostatics](../basicelectrostatics/) we described an incredibly el
 * **Interfaces are hard to pin down.** Even for a simple interface (an electrode or heterojunction), fixing the *value* of the offset from first principles is hard; the "vacuum contact" / contact-potential-difference rule of thumb is [notoriously unreliable](../vacuum/) in semiconductors. Real interfaces are also patchy and non-planar (electrostatics is fundamentally three-dimensional, and even 'planar' interfaces are microscopically irregular), and they can carry built-in monopolar charges, whether static and dopant-like (fixed oxide charge at the Si/SiO2 interface) or interface-specific (metal-induced gap states, electronic {% wiki "surface states" %}, specific ion adsorption).
 
 <figure class="demo-container" style="max-width: 480px">
-<div style="border: 2px dashed #bbb; border-radius: 8px; padding: 3em 1.5em; text-align: center; color: #888; font-style: italic">Figure placeholder: the potential landscape in front of a patchy interface (Tung's pinch-off)</div>
+<img src="/esbd/img/tung-pinchoff.svg" style="max-width:100%"/>
 {% figcaption %}
 The first item drawn: in front of an interface whose barrier height varies from patch to patch, the potential is a genuinely three-dimensional Laplace problem. A low-barrier patch sits in a saddle point walled in by its higher-barrier surroundings (R. Tung's "pinch-off": Figs. 15–18 of his [Schottky-barrier review](https://doi.org/10.1063/1.4858400)), so the junction behaves like no single one-dimensional barrier at all.
 {% endfigcaption %}
