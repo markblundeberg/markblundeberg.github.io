@@ -67,7 +67,7 @@ In [basic electrostatics](../basicelectrostatics/) we described an incredibly el
 <figure class="demo-container" style="max-width: 480px">
 <div style="border: 2px dashed #bbb; border-radius: 8px; padding: 3em 1.5em; text-align: center; color: #888; font-style: italic">Figure placeholder: the potential landscape in front of a patchy interface (Tung's pinch-off)</div>
 {% figcaption %}
-The first item drawn: in front of an interface whose barrier height varies from patch to patch, the potential is a genuinely three-dimensional Laplace problem. A low-barrier patch sits in a saddle point walled in by its higher-barrier surroundings ([R. Tung's](https://doi.org/10.1063/1.4858400) "pinch-off"), so the junction behaves like no single one-dimensional barrier at all.
+The first item drawn: in front of an interface whose barrier height varies from patch to patch, the potential is a genuinely three-dimensional Laplace problem. A low-barrier patch sits in a saddle point walled in by its higher-barrier surroundings (R. Tung's "pinch-off": Figs. 15–18 of his [Schottky-barrier review](https://doi.org/10.1063/1.4858400)), so the junction behaves like no single one-dimensional barrier at all.
 {% endfigcaption %}
 </figure>
 
