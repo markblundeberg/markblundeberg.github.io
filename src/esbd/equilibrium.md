@@ -21,7 +21,7 @@ And of course, at equilibrium every species equilibrates with itself (which can 
 
 A few classic examples below will demonstrate how this can appear.
 
-> **Important technical note**: For these ESBDs, I adopt the common convention that $\mu=0$ for elements in their most stable form (such as $\mathrm{H_2}$, or $\mathrm{O_2}$, or $\mathrm{Zn}$ metal), at the usual reference conditions (25&nbsp;°C and 1 bar). This is convenient since it means tabulated Gibbs formation energies of neutral species (such as $\mathrm{H_2O}$) directly give their chemical potentials.
+> **Important technical note**: For these ESBDs, I adopt the common convention that $\mu=0$ for elements in their most stable form (such as $\mathrm{H_2}$, or $\mathrm{O_2}$, or $\mathrm{Zn}$ metal), at the usual reference conditions (25&nbsp;°C and 1 bar). This is convenient since it means tabulated Gibbs formation energies of neutral species (such as $\mathrm{H_2O}$) directly give their chemical potentials. This convention is a free bookkeeping choice, not a physical input: adopting a different one slides the $V_i - V_j$ offsets around but moves nothing measurable, as [Offsets galore](../offsetsgalore/) makes concrete.
 
 ## Reactions
 
