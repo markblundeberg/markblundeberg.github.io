@@ -1,0 +1,171 @@
+{% set idprefix = "esbd-vac-rungs" %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 360px"></div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+
+    // Static hero: "the vacuum level" is a per-species family. An inert
+    // (blocking) metal, an aqueous NaCl solution, and vacuum above the
+    // solution's surface. Values honest: in-material ladder at the real
+    // IUPAC/SHE-consistent gaps (V°_Na+ ≈ −2.71, V°_Cl− ≈ +1.36 with the
+    // metal's V_e− gauged to 0); each ion's vacuum rung sits at its
+    // gas-phase formation offset above phi_vac (Na+: ΔfG°≈574 kJ/mol →
+    // +5.95 V; Cl−: ΔfG°≈−240 kJ/mol, z=−1 → +2.49 V); phi_vac itself is
+    // the electron's rung (the E = −e·phi_vac weld). phi_vac at −4.3
+    // (schematic surface value). Each species' work function = the gap from
+    // its in-material V_i to ITS OWN rung; the resulting spans land at
+    // realistic hydration-energy magnitudes (~4.5, ~3.4 V).
+    const PHIVAC = -4.3;
+    const RUNG_NA = PHIVAC + 5.95;
+    const RUNG_CL = PHIVAC + 2.49;
+    const VE = 0.0;
+    const V0NA = -2.71, VNA = -2.89; // dilute: cation V below V°
+    const V0CL = 1.36, VCL = 1.54; // dilute: anion V above V°
+    const XS = 0.25, XV = 0.62; // region boundaries
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        {
+            electron: SPECIES.electron,
+            cation: SPECIES.sodium,
+            anion: SPECIES.chloride,
+        },
+        { margins: { right: 58 } }
+    );
+    diagram.setSpatialLayout([0, XS, XV, 1], [
+        REGION.metal,
+        REGION.solution,
+        REGION.vacuum,
+    ]);
+    diagram.setVRange(-4.75, 2.05);
+
+    const guideStyle = { lineWidth: 1, dasharray: '1.5,3' };
+
+    diagram.updateTraceData([
+        // in-material levels
+        {
+            id: 've',
+            speciesId: 'electron',
+            curveType: 'voltage',
+            labelFrac: 0.4,
+            x: [0, XS],
+            y: [VE, VE],
+        },
+        {
+            id: 'vna',
+            speciesId: 'cation',
+            curveType: 'voltage',
+            labelFrac: 0.5,
+            x: [XS, XV],
+            y: [VNA, VNA],
+        },
+        {
+            id: 'vna0',
+            speciesId: 'cation',
+            curveType: 'standardState',
+            labelFrac: 0.25,
+            x: [XS, XV],
+            y: [V0NA, V0NA],
+        },
+        {
+            id: 'vcl',
+            speciesId: 'anion',
+            curveType: 'voltage',
+            labelFrac: 0.5,
+            x: [XS, XV],
+            y: [VCL, VCL],
+        },
+        {
+            id: 'vcl0',
+            speciesId: 'anion',
+            curveType: 'standardState',
+            labelFrac: 0.25,
+            x: [XS, XV],
+            y: [V0CL, V0CL],
+        },
+        // the vacuum family
+        {
+            id: 'phivac',
+            speciesId: 'electron',
+            curveType: 'phi',
+            label: '\\phi_{\\mathrm{vac}}',
+            labelFrac: 0.82,
+            x: [XV, 1],
+            y: [PHIVAC, PHIVAC],
+        },
+        {
+            id: 'rungNa',
+            speciesId: 'cation',
+            curveType: 'standardState',
+            label: '\\mathrm{Na}^+(\\mathrm{g})',
+            labelFrac: 0.82,
+            x: [XV + 0.02, 1],
+            y: [RUNG_NA, RUNG_NA],
+        },
+        {
+            id: 'rungCl',
+            speciesId: 'anion',
+            curveType: 'standardState',
+            label: '\\mathrm{Cl}^-(\\mathrm{g})',
+            labelFrac: 0.82,
+            x: [XV + 0.02, 1],
+            y: [RUNG_CL, RUNG_CL],
+        },
+        // dotted guides carrying each in-material V_i to its own bracket
+        {
+            id: 'guideE',
+            speciesId: 'electron',
+            curveType: 'voltage',
+            style: guideStyle,
+            showLabel: false,
+            x: [XS, 0.72],
+            y: [VE, VE],
+        },
+        {
+            id: 'guideCl',
+            speciesId: 'anion',
+            curveType: 'voltage',
+            style: guideStyle,
+            showLabel: false,
+            x: [XV, 0.84],
+            y: [VCL, VCL],
+        },
+        {
+            id: 'guideNa',
+            speciesId: 'cation',
+            curveType: 'voltage',
+            style: guideStyle,
+            showLabel: false,
+            x: [XV, 0.95],
+            y: [VNA, VNA],
+        },
+    ]);
+
+    diagram.updateVerticalMarkers([
+        {
+            id: 'we',
+            x: 0.7,
+            yDefs: [{ y: VE }, { y: PHIVAC }],
+            symbol: '↕',
+            popupCallback: () =>
+                "the electron's work function: from the metal's V<sub>e−</sub> down to its own vacuum rung, which is φ<sub>vac</sub> itself (the E = −eφ<sub>vac</sub> convention)",
+        },
+        {
+            id: 'wcl',
+            x: 0.82,
+            yDefs: [{ y: VCL }, { y: RUNG_CL }],
+            symbol: '↕',
+            popupCallback: () =>
+                "the chloride work function: from V<sub>Cl−</sub> to chloride's OWN vacuum rung, ≈ 3.4 V — never to φ<sub>vac</sub>",
+        },
+        {
+            id: 'wna',
+            x: 0.93,
+            yDefs: [{ y: VNA }, { y: RUNG_NA }],
+            symbol: '↕',
+            popupCallback: () =>
+                "the sodium work function: from V<sub>Na+</sub> UP to sodium's own vacuum rung, ≈ 4.5 V — gas-phase Na<sup>+</sup> parks nearly 6 V above φ<sub>vac</sub>",
+        },
+    ]);
+</script>
