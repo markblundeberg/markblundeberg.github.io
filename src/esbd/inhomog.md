@@ -52,7 +52,7 @@ The electrochemical version is a compositionally graded **mixed ionic-electronic
 One thing worth stating plainly: a fast solid-ion conductor is a concentrated, strongly non-ideal medium, so the placement of the $V^\circ_i$ levels themselves inherits the single-ion activity ambiguity we keep running into. That is less a defect of the example than the whole point of this topic. The graded solid is exactly where the standard-state ladder, the per-carrier quasi-fields, and the activity conventions all turn subtle at once, and where reading everything off the $V_i$ traces rather than off $\phi$ earns its keep.
 
 <figure class="demo-container" style="max-width: 480px">
-<div style="border: 2px dashed #bbb; border-radius: 8px; padding: 3em 1.5em; text-align: center; color: #888; font-style: italic">Figure placeholder: graded-MIEC quasi-electric fields (Kroemer homage)</div>
+{% include "esbd-diagrams/esbd-inh-miec.njk" %}
 {% figcaption %}
 Homage to Kroemer's graded-bandgap picture, in ionic form: across a compositionally graded MIEC, the electronic level $V^\circ_{\mathrm{e}^-}$ and the ionic level $V^\circ_{\mathrm{O}^{2-}}$ slope at different rates, so electrons and oxide ions feel different quasi-electric fields $-\nabla V^\circ_i$, while the electrostatic $-\nabla\phi$ is a third, separate slope. No single field describes all the carriers.
 {% endfigcaption %}

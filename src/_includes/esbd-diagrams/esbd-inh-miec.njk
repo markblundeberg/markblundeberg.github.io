@@ -1,0 +1,77 @@
+{% set idprefix = "esbd-inh-miec" %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 280px"></div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { linspace } from '{{ esbdJsPath }}utils.js';
+
+    // Static: Kroemer's graded-bandgap picture in ionic form. A doping-graded
+    // ceria-like MIEC (mobile e- and O2-) at full equilibrium: both V_i dead
+    // flat, but through the graded zone the two standard-state levels slope
+    // at different rates — here in OPPOSITE directions, a trick no single
+    // electrostatic field could play on two like-signed carriers — and the
+    // (convention-pinned) phi is a third, separate slope. Values schematic.
+    const XA = 0.3, XB = 0.7; // graded zone
+    const ramp = (x, y0, y1) =>
+        x <= XA ? y0 : x >= XB ? y1 : y0 + ((y1 - y0) * (x - XA)) / (XB - XA);
+    const xs = linspace(0, 1, 121);
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        { electron: SPECIES.electron, oxide: SPECIES.oxide },
+        { margins: { right: 60 } }
+    );
+    diagram.setSpatialLayout([0, XA, XB, 1], [
+        { ...REGION.solid, name: 'MIEC A', color: '#ece5d3' },
+        { ...REGION.solid, name: 'graded', color: '#e3dcce' },
+        { ...REGION.solid, name: 'MIEC B', color: '#d9d2c4' },
+    ]);
+    diagram.setVRange(-0.22, 0.66);
+
+    diagram.updateTraceData([
+        {
+            id: 've',
+            speciesId: 'electron',
+            curveType: 'voltage',
+            labelFrac: 0.12,
+            x: [0, 1],
+            y: [0.52, 0.52],
+        },
+        {
+            id: 'vox',
+            speciesId: 'oxide',
+            curveType: 'voltage',
+            labelFrac: 0.12,
+            x: [0, 1],
+            y: [0.36, 0.36],
+        },
+        {
+            id: 've0',
+            speciesId: 'electron',
+            curveType: 'bandEdge_C',
+            label: 'V^\\circ_{\\mathrm{e}^-}',
+            labelFrac: 0.88,
+            x: xs,
+            y: xs.map((x) => ramp(x, 0.14, 0.3)),
+        },
+        {
+            id: 'vox0',
+            speciesId: 'oxide',
+            curveType: 'standardState',
+            labelFrac: 0.88,
+            x: xs,
+            y: xs.map((x) => ramp(x, 0.06, 0.01)),
+        },
+        {
+            id: 'phi',
+            speciesId: null,
+            color: '#888',
+            curveType: 'phi',
+            label: '\\phi',
+            labelFrac: 0.5,
+            x: xs,
+            y: xs.map((x) => ramp(x, -0.1, -0.04)),
+        },
+    ]);
+</script>
