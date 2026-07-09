@@ -29,7 +29,7 @@ The whole diagram can be slid up or down freely: only vertical *differences* car
 
 **Standard redox level $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$** — the standard-state sibling of the line above, drawn thin *and* dashed: a redox couple's level at unit activities, floating along with the rest of the $V^\circ$ ladder. It is the "standard electrode potential" $E^\circ$, before any reference has been subtracted off. (→ [half-reactions](../half/))
 
-**Vacuum level $\phi_{\mathrm{vac}}$** — drawn only out in a vacuum or insulator, stepping *down* from a metal's $V_{\mathrm{e}^-}$ by the work function. We never thread it through the bulk of a conductor. (→ [capacitance](../capacitors/))
+**Vacuum level $\phi_{\mathrm{vac}}$** — drawn only out in a vacuum or insulator, stepping *down* from a metal's $V_{\mathrm{e}^-}$ by the work function. We never thread it through the bulk of a conductor. (→ [capacitance](../capacitors/), [vacuum levels](../vacuum/))
 
 ## The markers
 
