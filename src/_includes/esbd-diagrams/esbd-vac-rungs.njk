@@ -98,7 +98,7 @@
             id: 'rungNa',
             speciesId: 'cation',
             curveType: 'standardState',
-            label: '\\mathrm{Na}^+(\\mathrm{g})',
+            label: 'V^\\circ_{\\mathrm{Na}^+}(\\mathrm{g})',
             labelFrac: 0.82,
             x: [XV + 0.02, 1],
             y: [RUNG_NA, RUNG_NA],
@@ -107,7 +107,7 @@
             id: 'rungCl',
             speciesId: 'anion',
             curveType: 'standardState',
-            label: '\\mathrm{Cl}^-(\\mathrm{g})',
+            label: 'V^\\circ_{\\mathrm{Cl}^-}(\\mathrm{g})',
             labelFrac: 0.82,
             x: [XV + 0.02, 1],
             y: [RUNG_CL, RUNG_CL],
@@ -149,7 +149,7 @@
             yDefs: [{ y: VE }, { y: PHIVAC }],
             symbol: '↕',
             popupCallback: () =>
-                "the electron's work function: from the metal's V<sub>e−</sub> down to its own vacuum rung, which is φ<sub>vac</sub> itself (the E = −eφ<sub>vac</sub> convention)",
+                "the electron's gap: from the electrode's V<sub>e−</sub> down to the electron's own rung, φ<sub>vac</sub> itself (the E = −eφ<sub>vac</sub> weld). With solution in between, this is an electrode work function of the Trasatti kind, not the bare metal's Φ",
         },
         {
             id: 'wcl',
