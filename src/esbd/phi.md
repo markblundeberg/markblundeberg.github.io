@@ -124,11 +124,7 @@ Of course, it is possible to get the right thermoelectric voltage using $\phi$ (
 
 ## But what about Maxwell equations?
 
-The idea that $\phi$ is ambiguous is fine for thermodynamics, but it is concerning since it means that there will be situations where even $-\nabla\phi$ is ambiguous, and that is the electric field which is supposed to be objective!
-
-Surprisingly, it is actually okay if the $E$ field is partially fictitious. The Maxwell equations in terms of $E$, $B$, $D$, $H$ are entirely fine if you add an arbitrary conservative field to $E$, provided that $D$, $J$, and $\rho$ remain unaffected. Only the curl of $E$ is of any direct importance. Of course, there is still a problem: this does mean that we have to determine $D$ by other means than simply $D = \varepsilon E$, but actually this problem is basically intrinsic and unavoidable in precisely those situations when $E$ becomes ambiguous. We already know that interfaces have built-in $D$ fields, and that therefore distributed interfaces (like graded media) should have some extra built-in polarization like $D = P_{\mathrm{extra}} + \varepsilon E$. That $P_{\mathrm{extra}}$ can do the work of compensating for ambiguity in $E$. Anyway, this thermodynamic ambiguity to $E$, that does not affect $D$, is a surprising reversal on the usual polarization ambiguity we talk about (that $E$ is objective and the separation of charge into bound and free is ambiguous, i.e., $D$ is ambiguous).
-
-The usual argument for the reality of $E$ (and $B$) comes from the Lorentz force, but this argument breaks inside of media: we know for example that in graded bandgap heterostructures, we get a different $E$ field for electrons and holes! You can appeal to the Lorentz force on ghostly test charges to resolve this, but then you get back to the question of exactly how those test charges should sit inside the material. Yes, you can insist on a true $\phi$ by smoothing out the microscopic $\phi$, which means $E$ will be the smoothed-out microscopic $E$, but *this does not even win you any favour from the Maxwell equations*.
+If $\phi$ is ambiguous, then in places so is $-\nabla\phi$, the electric field that is supposed to be objective. Surprisingly, that is fine: Maxwell's equations lean only on the curl of $E$ and on $D$, and both survive the ambiguity untouched. Since the story is really one about inhomogeneous media, I develop it in the [inhomogeneities appendix](../inhomog/) rather than piling it on here.
 
 ## Vacuum levels (outer potentials / Volta potentials)
 
