@@ -1,45 +1,39 @@
 ---
 layout: layouts/esbd_topic.njk
-title: 'The case against ϕ'
+title: 'ϕ under the microscope'
 tags: [page, esbd_topic]
 orderESBD: 83
 ---
 
-# The case against $\phi$
+# $\phi$ under the microscope
 
 When I came up with these $V_i$ band diagrams, it quickly became apparent that it is possible to entirely avoid invoking the electrostatic potential $\phi$. This was not surprising given my semiconductor physics background, yet this is so dissonant with $\phi$ being so fundamental in the usual electrochemistry analysis. Digging a little bit deeper, however, we find that the theoretical electrochemists are already uncomfortable with the unmeasurable $\phi$, and sometimes have argued to abolish $\phi$ entirely. This dates back to Guggenheim's [1929](https://doi.org/10.1021/j150300a003) and [1930](https://doi.org/10.1021/j150313a014) papers, and even earlier to Taylor and perhaps Gibbs.
 
 I reaffirm Guggenheim's thesis, and I would modernize it further that it is not even necessary to reference $\phi$ in electrodes: voltmeters measure $V_{\mathrm{e}^-}$!
 
-On this page I'll ramble on a bit about why we ought to avoid discussing $\phi$ in both semiconductors and electrochemistry. While $\phi$-based approaches have been made to work, they actually complicate matters and create a minefield of misconceptions. None of this is new, I just want to collect my thoughts on the topic.
+Let me be clear from the start about what is being questioned here. The microscopic electric potential inside a material is perfectly real, and so are the microscopic fields; they are what hold the material together, and nobody is taking them from you. My complaint is with the macroscopic $\phi$ that claims to represent them inside a material. On this page I want to pin down what that in-material $\phi$ actually is, where it genuinely earns its keep, and where it quietly stops referring to anything physical. While $\phi$-based approaches have been made to work, they complicate matters and create a minefield of misconceptions; none of this is new, I just want to collect the argument in one place. The vacuum level $\psi$ gets [the next topic](../vacuum/) to itself, and what becomes of the electric field is [the topic after that](../inhomog/).
 
-Note: Often, we distinguish between inner potential $\phi$ (inside materials), and outer potential $\psi$ (outside material surface, i.e. vacuum potential). I'm going to argue that they are both problematic, though for quite different reasons. This page focuses on the inner potential; the outer potential gets [the next topic](../vacuum/) to itself.
+## Which $\phi$?
 
-## What is $\phi$?
+Much of the confusion around $\phi$ comes from one symbol being made to stand for three different objects. It is worth meeting each one properly.
 
-Before we talk about problems with electrostatic potential $\phi$, let's just establish what it is, as a physical quantity. For that we're going to have to go back into principles from the fundamental equations of electromagnetism, and especially, the electric scalar potential.
+**The microscopic potential.** The actual nano-scale electric scalar potential in a material has rapid variations in space and time, with all the various jigglings-about of nuclear cores and electrons: enormous positive spikes at every core, deep wells in the bonds. It is not even a classical field, as it contains quantum correlations with all the particle movements.^[It is also subject to gauge ambiguity with the magnetic vector potential; as usual we invoke the "electrostatic approximation", in which the electric field curl is negligible and the potential is the anti-gradient of the electric field.] This potential is completely physical, and it (together with its fields) is what actually pushes on electrons and ions.
 
-Obviously, the actual nano-scale electric scalar potential in a material is going to have rapid variations in space and time, with all the various jigglings-about of nuclear cores and electrons. The electric scalar potential is not even a classical field, as it will contain quantum correlations with all the particle movements. And worse yet, the electric scalar potential is subject to a huge amount of ambiguity given all the gauge transformations with magnetic vector potential!
-
-So let's nail all that down:
-
-* We invoke the "electrostatic approximation" that the electric field curl is negligible, and electrostatic potential is the anti-gradient of electric field.
-* We are interested in an _average_ electric scalar potential, which is smoothed out in space and time.
-* We are however fine with an undetermined global offset in electrostatic potential since we'll always consider differences anyway.
-
-The primary equation determining $\phi$ is the electrostatic Poisson equation in terms of an associated _average_ charge density $\rho$:
+**The averaged potential.** For a macroscopic theory we smooth the microscopic potential in space and time until the atomic-scale mess disappears. The result obeys the electrostatic Poisson equation in a similarly-averaged charge density $\rho$:
 
 $$ \nabla^2 \phi = -\rho / \varepsilon_0 . $$
 
-This defines $\phi$ in a consistent manner both inside and outside of materials. We'll refer to $\phi$ outside of materials (in vacuum) as $\phi_{\mathrm{vac}}$, but we'll discuss that in [the next topic](../vacuum/). For now let's focus on $\phi$ inside of materials, and especially inside of conductors (which have mobile charges).
+This defines $\phi$ consistently both inside and outside of materials, up to the usual harmless global offset. (We'll refer to $\phi$ outside of materials, in vacuum, as $\phi_{\mathrm{vac}}$; that is [the next topic](../vacuum/).) Inside a homogeneous conductor the average is neutral, $\rho = 0$, and $\phi$ is flat throughout; whatever averaging procedure we use has to smear over the microscopic mess enough to make that so. This averaged potential is what the present page means by $\phi$, and it is what most physical discussions of "the inner potential" have in mind.
 
-Most importantly, inside of a homogeneous electronic or ionic conducting material we say that $\rho = 0$ (charge neutrality on average), but also $\nabla \phi = 0$ (no internal electric fields) and therefore $\phi$ is flat throughout. Whatever averaging procedure we use is going to have to smear over the microscopic mess enough to get that $\rho=0$ and flat $\phi$.
+**The practical $\phi'$.** Finally there is the $\phi$ that working electrochemistry actually pins down, which is defined through ion activity conventions. We met it in [non-ideal solutions](../nonideal/): once an activity convention is adopted, $\phi'$ is whatever value makes the bookkeeping come out, and it no longer corresponds to any physically-based electrostatic potential. It is a useful convention wearing $\phi$'s notation, and we will come back to it.
 
-As far as a particle cares, what does $\phi$ even mean? The answer is:
+Keeping the three separate already does a lot of work: the microscopic potential is real but unusable, the practical $\phi'$ is usable but openly conventional, and all the interesting claims ride on the averaged potential in the middle. So what does the averaged $\phi$ mean, for a particle? Exactly this:
 
 > The potential $\phi$ is the electrostatic energy per unit charge, of a *hypothetical infinitesimally charged test particle* that can permeate materials without disturbing them, and whose position is blurry enough to smear out the atomic-scale variations in the actual electric scalar potential.
 
-Unfortunately, we are not actually interested in infinitesimally charged test particles.
+That may sound like a quantity beyond any experiment, but the surprise is that this ghostly test particle very nearly exists. A fast electron in a transmission electron microscope crosses a thin specimen in around $10^{-16}$ s, far too quickly to disturb it or be captured, and it flies straight through the core regions that real chemistry never visits, sampling the whole volume evenly. The phase of its wavefunction reads off the volume-averaged potential directly, and electron holographers routinely measure this **mean inner potential**: $+9.26 \pm 0.08$ V in silicon, $+13.0$ V in MgO, $+14.5$ V in GaAs, $+17.2$ V in PbS.^[M. Gajdardziska-Josifovska, M. R. McCartney, W. J. de Ruijter, D. J. Smith, J. K. Weiss and J. M. Zuo, [Accurate measurements of mean inner potential of crystal wedges using digital electron holograms](https://doi.org/10.1016/0304-3991(93)90197-6), *Ultramicroscopy* **50**, 285 (1993).]
+
+Notice the scale. The averaged potential inside a material sits roughly ten volts above the vacuum outside, dominated by those spiky nuclear cores, while every energy difference in electrochemistry (electrode potentials, junction steps, overpotentials) plays out within a volt or two. So the averaged $\phi$ is real, and even measurable; it is the answer to a question about fast electron beams. What it is not, as we'll now see, is an ingredient in the energy of any thermalized ion or electron.
 
 ## Real charges don't see $\phi$
 
@@ -50,9 +44,9 @@ We want to know what an actual finitely-charged particle would see if placed in 
 
 And that is only a start. Of course, it may not even be possible to unambiguously specify such an idea as "electrostatic potential of an ion", as there is no sharp distinction between chemical bond and electric interaction. Sometimes $z_i F \phi$ is called the 'long distance part' of electrostatic energy, but even this is not correct since $\phi$ contains systematic long-distance errors.
 
-And, we simply don't have any experimental way to access $\phi$ inside materials, as that would require infinitesimal test charges that don't exist. So $z_i F \phi$ is not only a poor approximation, it's not even tangible.
+And there is no experiment we can perform *on the ions or electrons themselves* that accesses $\phi$: the mean inner potential is read out by fast beam particles, which are precisely the near-ideal test charges that no chemical species resembles. For the species we actually care about, $z_i F \phi$ is a poor approximation to anything, and an intangible one at that.
 
-## Internal chemical potential is not real
+## The internal chemical potential inherits the trouble
 
 Let's go back to our electrochemical potential partitioning:
 
@@ -67,7 +61,7 @@ Really, $\mu_{\mathrm{int},i}$ does not deserve the name "chemical potential" si
 * it is not any meaningful partial molar Gibbs energy (except in charge-neutral combinations of $\mu_{\mathrm{int},i}$, such as $\mu_{\mathrm{int},i} - \tfrac{z_i}{z_j}\mu_{\mathrm{int},j} = \bar\mu_i - \tfrac{z_i}{z_j}\bar\mu_j = (V_i - V_j)z_i F$).
 * $\mu_{\mathrm{int},i}$ is not even experimentally accessible, since $\phi$ is experimentally inaccessible.
 
-## Actually $\phi$ doesn't even have to be real
+## Any consistent $\phi$ works equally well
 
 The one benefit of $z_i F \phi$ is that it is at least consistently applied to all ions in the same place. This means that any local chemical reaction within a bulk solution, such as
 $$ \bar\mu_{\mathrm{H}^+} + \bar\mu_{\mathrm{OH}^-} = \mu_{\mathrm{H_2O}} $$
@@ -81,23 +75,29 @@ As we saw [in the case of non-ideal solutions](../nonideal/), that is precisely 
 
 When we have two conductors made of different materials in direct contact, they will each internally have flat $\phi$ but there will be some step $\phi_2 - \phi_1$. Such a step corresponds to displaced positive and negative charges near the interface: on net (on the smoothing scale we use to establish $\phi$) there will be an overall nonzero electric field at/near the junction, and therefore a net step in $\phi$. The step $\phi_2 - \phi_1$ is a {%wiki "Galvani potential" %} difference — the umbrella name for any such inner-potential step between two phases. The {%wiki "liquid junction potential" %} is one special case of it: the step across a diffusing junction between two electrolyte solutions, held at zero current. A step between two metals in contact is a Galvani difference too, but never an LJP.
 
-Let's be clear, the charge double layer is absolutely real. Our averages $\rho$ and $\phi$ do smudge out some of the details, but there truly is some kind of local charge displacement and electric field. Surely this is of real importance, right? No! Only our test charges would perceive the complex interface as a mere electric double layer. For any real ion, the energy difference that it experiences is *not* going to be $z_i F(\phi_2 - \phi_1)$. The double layer may be physically real, but it is mostly a distraction from what we actually care about.
+Let's be clear, the charge double layer is absolutely real. Our averages $\rho$ and $\phi$ do smudge out some of the details, but there truly is some kind of local charge displacement and electric field. What is questionable is its importance: only a test charge would perceive the complex interface as a mere electric double layer, and for any real ion, the energy difference that it experiences is *not* going to be $z_i F(\phi_2 - \phi_1)$. The double layer may be physically real, but it is mostly a distraction from what we actually care about.
 
 For example, between a metal and semiconductor, or between two distinct semiconductors (like AlGaAs and GaAs), we really care about the relative positions of Fermi levels $\bar\mu_{\mathrm{e}^-}$ and the semiconductors' conduction bands $E_{\mathrm{C}}$. Not only that, we care about the detailed structure inside of the junction (the {% wiki "band bending" %}, and the atomic jump). All of this can be addressed without ever talking about the infinitesimal test charge's $\phi_2 - \phi_1$.
 
 When it comes to electrolytes, we can ask what is the double layer (or $\phi_2 - \phi_1$) at the interface of a water-based solution and a benzene-based solution. But that is not what we care about, and indeed $\phi_2 - \phi_1$ is totally unmeasurable here. Instead we want to analyze equilibration of (electro-) chemical potentials, and we also care about the ionic {% wiki "diffuse layer" %} ("band bending").
 
-### Galvani potentials between similar materials: a misleading special case
+### A step made of nothing
 
-When it comes to similar materials (same semiconductor or same solvent, with very dilute mobile charges), then we *can* try to access $\phi_2 - \phi_1$. But this is only because $z_i F\phi$ changes are going to automatically correspond to the difference in the meaningful energy levels like conduction band energy $E_{\mathrm{C}}$, or ionic standard states $V^\circ_i $.
+Just how disconnected the Galvani step can be from anything an ion experiences is easiest to see in a thought experiment. Imagine two solvents, *hillium* and *mountainium*, engineered to be chemically identical: the same valence electron structure, the same dielectric response, the same solvation of every solute. They differ only in the architecture of their deep, inert atomic cores, which are smooth and smeared-out in hillium but compact and spiky in mountainium. Fill the left half of a vessel with one and the right half with the other, dissolve some salt throughout, and let everything equilibrate.
 
-You can say that "the corrections to $\phi_2 - \phi_1$ become small in this case", but I am saying "in this case, $\phi_2 - \phi_1$ accidentally mimics the energy differences that actually matter".
+Since no ion can tell the two solvents apart, nothing happens at the interface: the concentrations stay uniform, every $V_i$ and the whole $V^\circ_i$ ladder run dead flat across the junction, no double layer forms, and the physical displacement field is zero everywhere.
 
-I suspect a big reason for the emphasis on liquid junction potentials ($\phi_2 - \phi_1$) in electrochemistry was the early discovery of the salt bridge. As discussed in [Basic transport](../transport_basic/), the minimization of $\phi_2 - \phi_1$ by a salt bridge is a complicated *nonequilibrium* phenomenon that relies on certain conditions (identical solvents and correctly selected salts that are able to dominate diffusion). Yet, introductory electrochemistry texts routinely present the salt bridge as "shorting together" the two aqueous solutions' $\phi$ values as if it was as natural as shorting together two wires. This is misleading as it suggests salt bridges between different solvents, or even between non-ideal solutions with the same solvent, should also naturally "just work" and minimize the liquid junction potentials there as well.
+Now compute the averaged $\phi$. Deep in each bulk it is flat, but the two flat values differ, because mountainium's spiky cores dominate its volume average (exactly as in the mean-inner-potential measurements above). So $\phi$ takes a step at the interface, quite possibly of several volts. There is our Galvani potential difference: a step between two liquids that no solute can distinguish, made entirely out of core architecture. No charge moved to create it, no ion feels it, and no experiment on the solutes could ever find it.^[Its precise size even depends on the choice of smoothing recipe, a point that will return in [the inhomogeneities topic](../inhomog/).]
 
-Similarly, in introductory teaching of semiconductor p-n junctions we often see discussion of the "built-in potential" $\phi_2 - \phi_1$, which corresponds to a shift in the band energies. Eventually we encounter semiconductor heterostructures and graded heterojunctions, and we learn that $\phi$ actually didn't matter all along: [what truly matters is how the *bands* are bending](https://www.nobelprize.org/uploads/2018/06/kroemer-lecture.pdf).
+### Where $\phi$ genuinely works, and why
 
-### Inner potentials of metals: tedious and misleading
+The hillium picture also explains where $\phi$ has honestly earned its keep. Between two regions of the *same* medium (the same semiconductor with different doping, say, or the same dilute solvent with different salt content), the core-architecture contributions to the average are identical on both sides and cancel out of $\phi_2 - \phi_1$. What remains of the step faithfully tracks the differences in the meaningful energy levels, like the conduction band edge $E_{\mathrm{C}}$ or the ionic standard states $V^\circ_i$. This is the regime behind every success of $\phi$: band bending, Debye screening, Donnan steps, built-in potentials. Within one medium, following $\phi$ is the same thing as following the $V^\circ_i$ ladder, and no harm comes of it.
+
+You can say that "the corrections to $\phi_2 - \phi_1$ become small in this case", but I would rather say that in this case $\phi_2 - \phi_1$ mimics the energy differences that actually matter. The distinction bites as soon as the two sides are *not* the same medium. A salt bridge, for instance, is routinely presented as "shorting together" two solutions' $\phi$ values as naturally as shorting together two wires; in reality, as discussed in [Basic transport](../transport_basic/), its minimization of the junction step is a complicated *nonequilibrium* phenomenon that relies on identical solvents and on correctly selected salts that dominate the diffusion. The picture quietly fails for different solvents, and even for non-ideal solutions of the same solvent.
+
+The semiconductor community learned the same lesson within its own borders. Introductory teaching leans on the "built-in potential" $\phi_2 - \phi_1$ of the p-n junction, which works because both sides are the same crystal. Then come heterostructures and graded junctions, where $\phi$ stops mattering at all: [what truly matters is how the *bands* are bending](https://www.nobelprize.org/uploads/2018/06/kroemer-lecture.pdf).
+
+### Inner potentials of metals
 
 With semiconductors or electrolytes, the notion of $\phi$ is at least helpful as a naive explanation of things like band bending or salt bridges. But in metals there is no significant band bending, and the concept of an inner potential is simply dubious.
 
@@ -112,37 +112,21 @@ Profile of $\phi$ across a device, as relating to measured voltage $E$. From Bar
 
 Unlike a proper band diagram, a plot of $\phi$ vs position is cluttered by the matching-metal bookends and all sorts of extra Galvani potentials between metals. A pragmatic electrochemist will soon sweep this tedious $\phi$ visualization under the rug and thereafter focus on the math of electrode potentials.
 
-Another problem relates to the double layers: where a metal meets a non-metal (semiconductor or electrolyte), there is a near-discontinuous (angstrom-scale) jump in $\phi$ just at the surface, that is going to depend nontrivially on the nature of the other material, followed by a smoother region where $\phi$ approaches its equilibrium value more gradually ({% wiki "band bending" %}). Thus we actually have a triple layer. Although we can do all sorts of experiments probing the gradual-$\phi$ region (again, since bending $\phi$ corresponds to bending of relevant energy levels!), we are never able to do an experiment that relates to the abrupt $\phi$ jump, i.e., we never probe the full triple layer. The only potential of a metal that enters is $V_{\mathrm{e}^-}$, or Fermi level.
+Another problem relates to the double layers: where a metal meets a non-metal (semiconductor or electrolyte), there is a near-discontinuous (angstrom-scale) jump in $\phi$ just at the surface, that is going to depend nontrivially on the nature of the other material, followed by a smoother region where $\phi$ approaches its equilibrium value more gradually ({% wiki "band bending" %}). Thus we actually have a triple layer. Although we can do all sorts of experiments probing the gradual-$\phi$ region (again, since bending $\phi$ corresponds to bending of relevant energy levels!), we are never able to do an experiment that relates to the abrupt $\phi$ jump, i.e., we never probe the full triple layer. The only potential of a metal that enters is $V_{\mathrm{e}^-}$, or Fermi level.^[The potentials of metals can actively mislead, too. A long-standing myth attributes thermoelectric voltages to junctions, via the temperature dependence of Galvani potentials (or of contact potentials, [as illustrated here](https://www.uni-konstanz.de/FuF/Physik/Jaeckle/papers/thermopower/node4.html)). In fact the thermoelectric voltage develops as a gradient of $V_{\mathrm{e}^-}$ only in the regions of thermal gradient, and $V_{\mathrm{e}^-}$ takes no step at the junction itself. A correct account can be forced through $\phi$ or $\psi$ or $E_{\mathrm{C}}$, but every extra reference level must then be dragged through the thermal gradients only to cancel back out of the final answer; see Apertet et al. (2016), ["A note on the electrochemical nature of the thermoelectric power"](https://arxiv.org/abs/1502.05697).]
 
-#### The thermoelectricity myth
+## Two doors out
 
-The electrostatic potential of metals may seem merely tedious, but it can actually mislead. With thermoelectricity, there is a long-standing myth that thermoelectric voltages are generated at junctions, attributed to the way the Galvani potential varies with temperature. Alternatively they are attributed to contact potentials (*outer* potential differences), [as illustrated here](https://www.uni-konstanz.de/FuF/Physik/Jaeckle/papers/thermopower/node4.html). Anyway, both of these are simply wrong.
+If $\phi$ is ambiguous, then in places so is $-\nabla\phi$, the electric field that is supposed to be objective. Surprisingly, Maxwell's equations take no offense: they lean only on the curl of $E$ and on $D$, and both survive the ambiguity untouched. That story really belongs to inhomogeneous media, so it gets [its own topic](../inhomog/), the one after next.
 
-In fact, the thermoelectric voltage has to do with gradients in the proper voltage (electrochemical potential, i.e., $V_{\mathrm{e}^-}$) that occur *only in regions of thermal gradient*, and $V_{\mathrm{e}^-}$ has no step at the junction itself. Thermodynamically, we describe thermoelectricity in terms of coupled transport of heat and electrons; it is only one of many kinds of coupled heat-particle transport phenomena.
+The other natural exit is outward. Just outside any surface, in the vacuum, sits a potential that is unambiguous, honestly measurable, and free of every complaint raised on this page, and it is tempting to anchor everything to it. How far that actually carries is [the next topic](../vacuum/).
 
-Of course, it is possible to get the right thermoelectric voltage using $\phi$ (and $\mu_{\mathrm{int},\mathrm{e}^-}$), instead of $\bar\mu_{\mathrm{e}^-}$. This does involve the difference between hot and cold junctions' Galvani potentials, but we also have to include the gradients in $\phi$ in regions of thermal gradient. The thermal gradients' $\delta \phi$ contribution would then fully cancel the Galvani potentials' $\delta \phi$ contribution, and add back in the correct thermoelectric result. We could also do the same with reference to outer potential $\psi$, or conduction band $E_{\mathrm{C}}$, with all the same considerations but different in quantity. In the end, we would have to get the same result as simply using $\bar\mu_{\mathrm{e}^-}$ but it would be highly tedious and tend to obscure the interesting physics.^[Apertet et al. (2016) ["A note on the electrochemical nature of the thermoelectric power".](https://arxiv.org/abs/1502.05697)]
-
-## But what about Maxwell equations?
-
-If $\phi$ is ambiguous, then in places so is $-\nabla\phi$, the electric field that is supposed to be objective. Surprisingly, that is fine: Maxwell's equations lean only on the curl of $E$ and on $D$, and both survive the ambiguity untouched. Since the story is really one about inhomogeneous media, I develop it in the [inhomogeneities appendix](../inhomog/) rather than piling it on here.
-
-## A plea to the theoretical and computational electrochemists
-
-These days, we have fantastic computers and algorithms that are able to properly simulate materials, and $\phi$ is a tangible quantity in these simulations. The electric scalar potential basically comes for free, as it's necessary to model the precise microscopic electric interactions. And so, it is no problem to [smooth this out](https://doi.org/10.1021/acsomega.0c04420) to obtain $\phi$. [It may even be computationally advantageous](https://www.nature.com/articles/s41524-023-01184-4) to use $\phi$ as a control variable in the simulation.
-
-But, even in computation, the inner potential $\phi$ *still* only corresponds to the energy of an infinitesimal ghost charge. So it is calculable, but it is not physically relevant. So, if you report results referenced to $\phi$, or equivalently if you set $\phi=0$ and your results are unreferenced, then your results have lost physical significance.
-
-Regarding vacuum level (and specifically, outer potential $\psi$), all of the considerations I stated about vacuum levels still apply! If you don't take sufficient consideration in modelling the surface conditions (analogous to the experimentalist reproducibly creating certain surface conditions), then the $\psi$ value you obtain is going to be an unreliable reference. But even if $\psi$ is carefully modelled, remember that a work function does not represent a binding energy reference level, but only a surface barrier height. (As for the vacuum contact myth, molecular simulations of course easily reveal this.)
-
-Unfortunately while it is easy to get $\phi$ in a simulation, it can be quite tricky and delicate to obtain electrochemical potentials $\bar\mu_i$. But, it simply has to be done if the simulation is to output something useful. Please do the work to calculate such meaningful energies that are actually experienced by the electrons/ions, and then output the differences in these real quantities. Not only will this aid in comparison with experiments, but it will also put your results on more rigorous thermodynamic grounds and simplify comparison with other theoretical results.
+Before that, a closing word to the theoretical and computational electrochemists. In a simulation the averaged $\phi$ comes nearly for free ([smoothing recipes exist](https://doi.org/10.1021/acsomega.0c04420)), and [it can even be advantageous](https://www.nature.com/articles/s41524-023-01184-4) as a control variable. But a computed $\phi$ is still the mean inner potential: report energies referenced to it (or set $\phi=0$ and leave results unreferenced) and your numbers are tied to the arbitrary shape of the inert cores, as the holography values above make vivid. The quantities worth the extra effort are the electrochemical potentials $\bar\mu_i$, since they are what the ions and electrons actually experience; output differences of those, and comparison with experiment, and between codes, becomes direct.
 
 ## Takeaways
 
-A theory of electronic and ionic conducting materials based on electrostatics is attractive. The inner potential $\phi$ seems well-defined and physically "real". It seems as if we can almost access it in certain special cases (junctions between similar materials), or at least control it (with salt bridges). Unfortunately, a thorough and functional theory of mobile charges based on $\phi$ gets quickly complicated with numerous unmeasurable quantities, which all stems from $\phi$ being a poor reference. And, it may seem like the outer potential $\psi$ provides an escape from this ambiguity, however, [as the next topic shows](../vacuum/), it actually presents a whole new class of problems and misconceptions. Quite simply, electrostatics make a poor foundation for a thermodynamic theory of conductors.
+"The electrostatic potential" of a material names three different things. The microscopic potential is real and violently structured, and no one disputes it. Its smoothed average is also real, and even measurable (a mean inner potential of order $+10$ V, read out by fast electron beams), but it answers a beam-physics question: for thermalized ions and electrons, $z_i F \phi$ estimates nothing, and the partitioning of $\bar\mu_i$ into $\mu_{\mathrm{int},i} + z_i F \phi$ is "without physical significance", as Guggenheim said a hundred years ago. And the practical $\phi'$ of working electrochemistry is a bookkeeping convention, pinned by ion-activity choices rather than by electrostatics.
 
-Instead, we should place electrochemical potential $\bar\mu_i$ at the forefront. We must recognize that:
-* Electrochemical potential $\bar\mu_i$ is the only fundamental chemical potential given by thermodynamics, and the partitioning of $\bar\mu_i$ into $\mu_{\mathrm{int},i} + z_i F \phi$ is "without physical significance", as Guggenheim said a hundred years ago.
-* The outer potential $\psi$ only deserves to be discussed in the context of actual vacuum surface experiments.
+Where $\phi$ seems to work (band bending, built-in potentials, salt bridges between like solutions), it is because within one medium the step in $\phi$ mimics the step in the $V^\circ_i$ ladder, and the ladder is the part that matters. The electrochemical potentials $\bar\mu_i$ are the quantities thermodynamics actually provides, and voltmeters measure $V_{\mathrm{e}^-}$.
 
 I hope that the species voltage $V_i = \bar\mu_i/(z_i F)$ and its associated visual band diagrams will help promote this $\phi$-less approach and help bring together the semiconductor and electrochemical communities into a unified viewpoint.
 

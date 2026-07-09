@@ -294,4 +294,4 @@ This whole appendix is one object, the chemical capacitance, seen through two ma
 
 The two are not rivals but the same information at different resolutions. Eliminate the $\phi$ node from $\mathcal{C}$ (a Schur complement, or a Kron reduction of the equivalent circuit) and $\mathbf{C}^{\mathrm{amb}}$ drops out: strictly less detailed, yet more robust. Push the construction one step further, with Jamnik and Maier's displacement node, and the matrix becomes a full equivalent circuit: a finite-volume restatement of the Poisson-Nernst-Planck equations, with one capacitor hung from every carrier's $V_i$ rail. The interfaces that only $\mathcal{C}$ can see are exactly where the [inhomogeneities topic](../inhomog/) picks up.
 
-[**NEXT TOPIC: The case against $\phi$**](../phi/)
+[**NEXT TOPIC: $\phi$ under the microscope**](../phi/)

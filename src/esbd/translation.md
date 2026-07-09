@@ -15,7 +15,7 @@ If you arrive already fluent in electrochemistry, here is a Rosetta Stone: the f
 | --- | --- |
 | electrochemical potential $\bar\mu_i$ | $z_i F\,V_i$ |
 | Fermi level $E_{\mathrm{F}}$ ($=\bar\mu_{\mathrm{e}^-}$) | $-e\,V_{\mathrm{e}^-}$ |
-| (Galvani / inner) potential $\phi$ | an unmeasurable stand-in for the $V^\circ_i$ ladder ([the case against $\phi$](../phi/)) |
+| (Galvani / inner) potential $\phi$ | an unmeasurable stand-in for the $V^\circ_i$ ladder ([$\phi$ under the microscope](../phi/)) |
 | electrode potential $E$ (vs SHE) | $V_{\mathrm{e}^-}(\text{electrode}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ ([electrode potential](../e/)) |
 | standard electrode potential $E^\circ$ | $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ ([half-reactions](../half/)) |
 | redox (solution) potential $E_h$ | $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ |
