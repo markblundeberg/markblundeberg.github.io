@@ -57,6 +57,8 @@ And that is only a start. Of course, it may not even be possible to unambiguousl
 
 And there is no experiment we can perform *on the ions or electrons themselves* that accesses $\langle\phi\rangle$: the mean inner potential is read out by fast beam particles, which are precisely the near-ideal test charges that no chemical species resembles. For the species we actually care about, $z_i F \langle\phi\rangle$ is a poor approximation to anything, and an intangible one at that.
 
+So what *would* be the right potential for a real charge? Theory has made several attempts to construct one, by asking what sits at an emptied site: the potential at the centre of an idealized {% wiki "Born equation", "Born cavity" %}; the potential inside a cavity pushed open in the medium (close kin to the outer potential of a clean surface, up to curvature effects); or the potential at a site where a host and its electron cloud have been cut out of the frozen charge density.^[The last is the "empty potential" of R. T. Tung's host–bath analysis: [*Energy Level Alignment of Solid Interfaces*](https://doi.org/10.1142/14659) (World Scientific, 2026), ch. 1.] These empty potentials are far better motivated than $\langle\phi\rangle$, since they at least ask what an arriving species would feel. But they are a family rather than a number: the continuum idealization, the relaxed cavity, and the frozen cut-out disagree with one another by surface-dipole terms of exactly the kind this chapter keeps meeting, and that residual arbitrariness is one more reason to keep the bookkeeping anchored to $\bar\mu_i$ itself.
+
 ## The internal chemical potential inherits the trouble
 
 Let's go back to our electrochemical potential partitioning:
