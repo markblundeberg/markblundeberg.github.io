@@ -8,7 +8,7 @@ orderESBD: 80.5
 # {{title}}
 
 Every time you draw an ESBD you are forced, somewhere, to fix a zero. The big easy one is the global float, the single overall level the whole diagram is free to slide.
-In the [previous topic](../muintro/) we derived this one thermodynamically. But that is not the only arbitrary choice lurking in the framework. There are chemical conventions, single-ion activity conventions, and the unmeasurable inner potential $\phi$ of every phase. It is easy to lose track of which of these actually move something and which are pure bookkeeping.
+In the [previous topic](../muintro/) we derived this one thermodynamically. But that is not the only arbitrary choice lurking in the framework. There are chemical conventions, single-ion activity conventions, and the inner potential $\phi$ of every phase, which no ion can measure. It is easy to lose track of which of these actually move something and which are pure bookkeeping.
 
 So here is a sandbox, and I'm going to throw all of them in at once. The following band diagram shows a **fixed physical situation**, together with sliders that control our various *arbitrary conventions / interpretations* of the situation. It looks like a lot, but just play with it.
 

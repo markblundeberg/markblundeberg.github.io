@@ -54,7 +54,7 @@ $$
 \phi(\text{soln}) &\to V^\circ_{\mathrm{Cl}^-} \to V_{\mathrm{Cl}^-} \to V_{\mathrm{e}^-}(\text{right}).
 \end{aligned}
 $$
-The cell voltage is the difference of the two, and $\phi$ cancels. Its appeal is that each electrode is described against a common reference; its cost is that each half now leans on a single-ion activity, and on the unmeasurable $\phi$. The $V_i$ picture keeps the same split into two electrodes but anchors it to the real, ladder-based $V^\circ_i$ rather than to $\phi$.
+The cell voltage is the difference of the two, and $\phi$ cancels. Its appeal is that each electrode is described against a common reference; its cost is that each half now leans on a single-ion activity, and on a $\phi$ that no ion can measure. The $V_i$ picture keeps the same split into two electrodes but anchors it to the real, ladder-based $V^\circ_i$ rather than to $\phi$.
 
 This is the distinction Boettcher et al. draw between the **electrode potential** (the electrode's own electronic level, our $V_{\mathrm{e}^-}(\text{electrode})$) and the **solution potential** (the solution's level, our $V^\circ_{\mathrm{e}^-}(\mathrm{rxn})$): two different "potentials" that the bare word runs together.
 
