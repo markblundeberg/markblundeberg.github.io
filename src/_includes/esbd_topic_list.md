@@ -47,9 +47,9 @@ The rabbit holes -- appendices, advanced topics, notes:
 - [_Chemical capacitance matrices_](/esbd/chemical_capacitance_matrices/) - Ambipolar capacitance (thermodynamic) vs internal chemical capacitance (extrathermodynamic), as capacitance matrices.
 
 *Messy electrostatics*:
-- [_The case against $\phi$_](/esbd/phi/) - Why we should bypass using an electrostatic potential.
-- [_Vacuum levels_](/esbd/vacuum/) - The outer potential $\psi$, work functions, and the "absolute" vacuum reference.
-- [_Inhomogeneities and electrostatics_](/esbd/inhomog/) - Graded interfaces and quasi-electric fields; does $\phi$ represent real electrostatics? Plus the full beyond-the-simple-case catalog.
+- [_$\phi$ under the microscope_](/esbd/phi/) - Which $\phi$? The microscopic potential, its smoothed average, and the working convention: why ions answer to none of them.
+- [_Vacuum levels_](/esbd/vacuum/) - The one honest potential: real, measurable, and ending at the surface.
+- [_Inhomogeneities and electrostatics_](/esbd/inhomog/) - Per-species quasi-electric fields: what replaces "the electric field" inside materials. Plus the beyond-the-simple-case catalog.
 
 *Appendices*:
 - [_Standard state data_](/esbd/data/) - Numerical data for ionic solutes' $V^\circ_i$ values in water.

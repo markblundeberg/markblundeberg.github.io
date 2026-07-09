@@ -7,7 +7,7 @@ orderESBD: 85
 
 # {{title}}
 
-One of the main reasons these $V_i$ diagrams are powerful is in clearly visualizing devices with inhomogeneous composition and electric fields, that is, where $V^\circ_i$ is not flat. Typically all of this is conceived of as variations in $\phi$, but $V^\circ_i$ lets us dig a bit more precisely into what is actually going on. This appendix collects the fine print: what a varying ladder really involves, why $-\nabla\phi$ is not always a real electric field, and a catalog of everything that makes interfaces hard.
+Having seen what the in-material $\phi$ [cannot deliver](../phi/) and where the vacuum level's [writ ends](../vacuum/), we turn to what actually governs the spatial landscape inside materials. One of the main reasons these $V_i$ diagrams are powerful is in clearly visualizing devices with inhomogeneous composition and electric fields, that is, where $V^\circ_i$ is not flat. Typically all of this is conceived of as variations in $\phi$, but $V^\circ_i$ lets us dig a bit more precisely into what is actually going on. This appendix collects the fine print: what a varying ladder really involves, why $-\nabla\phi$ is not always a real electric field, and a catalog of everything that makes interfaces hard.
 
 ## Two kinds of inhomogeneity
 
@@ -32,6 +32,8 @@ In an inhomogeneous region, the constitutive relation must generalize as well:
 $$ D = -\varepsilon\nabla\phi + D_{\mathrm{inhomog}}. $$
 
 The built-in displacement $D_{\mathrm{inhomog}}$ is nonzero at interfaces (a sharp, delta-function dipole layer), through graded media, and (more subtly) wherever a nonideal solution carries concentration gradients, because there it is the activity convention that dictates how $\phi$ varies (a caveat the [nonideality topic](../nonideal/) owns). Crucially, $D_{\mathrm{inhomog}}$ depends on how we defined $\phi$ in the first place: adopt a different convention $\phi(x) \to \phi(x) + \delta\phi(x)$ and a compensating $D_{\mathrm{inhomog}}$ appears to soak up the change. In other words, $-\nabla\phi$ is not always a real electric field. (There are even materials where a bulk polarization ambiguity lets $D_{\mathrm{inhomog}}$ be nonzero throughout the material, not just at its boundaries!)
+
+The [hillium–mountainium junction](../phi/) makes this concrete. There, the averaged $\phi$ stepped at an interface between two chemically identical liquids, so $-\varepsilon\nabla\phi$ acquired a violent spike that no ion feels; and since the physical $D$ vanishes everywhere in that system, $D_{\mathrm{inhomog}}$ must contain the exact opposite spike. The fictitious field and its cancelling partner are two entries of one bookkeeping identity, and both evaporate under a different choice of smoothing.
 
 ### Is the electric field real?
 
