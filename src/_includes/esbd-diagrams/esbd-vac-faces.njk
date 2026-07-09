@@ -1,0 +1,81 @@
+{% set idprefix = "esbd-vac-faces" %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 280px"></div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+
+    // Static: one homogeneous gold block with two different exposed faces.
+    // V_e- is a single flat level through the bulk, but each face sets its
+    // own outer potential psi: real facet work functions Au(111) ≈ 5.33 V and
+    // Au(110) ≈ 5.16 V. A dotted guide extends the (111) level so the
+    // mismatch is visible at a glance. "The vacuum level of gold" is not one
+    // number.
+    const VF = 0.0;
+    const W111 = 5.33;
+    const W110 = 5.16;
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        { electron: SPECIES.electron },
+        { margins: { right: 60 } }
+    );
+    diagram.setSpatialLayout([0, 0.3, 0.7, 1], [
+        REGION.vacuum,
+        { ...REGION.metal, name: 'Gold', color: '#e8e0a8' },
+        REGION.vacuum,
+    ]);
+    diagram.setVRange(-5.85, 0.5);
+
+    diagram.updateTraceData([
+        {
+            id: 've',
+            speciesId: 'electron',
+            curveType: 'voltage',
+            labelFrac: 0.5,
+            x: [0.3, 0.7],
+            y: [VF, VF],
+        },
+        {
+            id: 'psi111',
+            speciesId: 'electron',
+            curveType: 'phi',
+            label: '\\psi_{(111)}',
+            labelFrac: 0.35,
+            x: [0, 0.3],
+            y: [VF - W111, VF - W111],
+        },
+        {
+            id: 'psi110',
+            speciesId: 'electron',
+            curveType: 'phi',
+            label: '\\psi_{(110)}',
+            labelFrac: 0.3,
+            x: [0.7, 1],
+            y: [VF - W110, VF - W110],
+        },
+        {
+            // dotted guide carrying the (111) level across, to make the
+            // per-face mismatch legible
+            id: 'guide',
+            speciesId: 'electron',
+            curveType: 'phi',
+            color: '#999',
+            style: { lineWidth: 1, dasharray: '1.5,2.5' },
+            showLabel: false,
+            x: [0.7, 1],
+            y: [VF - W111, VF - W111],
+        },
+    ]);
+
+    diagram.updateVerticalMarkers([
+        {
+            id: 'dpsi',
+            x: 0.92,
+            yDefs: [{ y: VF - W110 }, { y: VF - W111 }],
+            symbol: '↕',
+            popupCallback: () =>
+                'two honest surfaces of one homogeneous crystal disagree about "the" vacuum level: Φ(111) ≈ 5.33 V vs Φ(110) ≈ 5.16 V',
+        },
+    ]);
+</script>

@@ -1,0 +1,59 @@
+{% set idprefix = "esbd-vac-she" %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 300px"></div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+
+    // Static: the "absolute" electrode potential drawn as what it is — a gap.
+    // The outer potential just above a standard hydrogen electrode's solution
+    // sits 4.44 V below the SHE rung V°_e-(SHE) on the voltage axis (Farrell &
+    // McTigue via Trasatti), exactly as a work function sits below a metal's
+    // V_e-. Deliberately NOT drawn at V°_e-(SHE) = 0: the global float is
+    // free, and the vacuum is one more floating level, not a universal zero.
+    const VSHE = 0.15; // floated off zero on purpose
+    const WSHE = 4.44;
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        { electron: SPECIES.electron },
+        { margins: { right: 46, left: 46 } }
+    );
+    diagram.setSpatialLayout([0, 0.55, 1], [
+        { ...REGION.solution, name: 'SHE solution' },
+        REGION.vacuum,
+    ]);
+    diagram.setVRange(-4.75, 0.7);
+
+    diagram.updateTraceData([
+        {
+            id: 'vshe',
+            speciesId: 'electron',
+            curveType: 'standardStateImplied',
+            label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{SHE})',
+            labelFrac: 0.42,
+            x: [0, 0.55],
+            y: [VSHE, VSHE],
+        },
+        {
+            id: 'phivac',
+            speciesId: 'electron',
+            curveType: 'phi',
+            label: '\\phi_{\\mathrm{vac}}',
+            labelFrac: 0.6,
+            x: [0.55, 1],
+            y: [VSHE - WSHE, VSHE - WSHE],
+        },
+    ]);
+
+    diagram.updateVerticalMarkers([
+        {
+            id: 'wshe',
+            x: 0.62,
+            yDefs: [{ y: VSHE }, { y: VSHE - WSHE }],
+            symbol: '↕',
+            popupCallback: () =>
+                'the widely-quoted "absolute" SHE potential, ≈ 4.44 V: an electrode work function — a per-surface quantity, not a universal zero',
+        },
+    ]);
+</script>

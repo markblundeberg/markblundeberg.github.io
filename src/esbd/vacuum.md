@@ -21,7 +21,7 @@ The trouble begins when the vacuum is promoted from a material to a *reference f
 Frequently we see energy level charts with 'vacuum level' drawn flat across the top as a zero line, a common reference for different materials. But the vacuum is naturally an electrically inhomogeneous "material": containing no mobile charges, it cannot screen, so it has no mechanism to flatten its own $\phi_{\mathrm{vac}}$. Every conductor sets its surface $\psi$ differently (every metal surface has its own {% wiki "work function" %}), and in between the surfaces, the vacuum level interpolates according to the Laplace equation.
 
 <figure class="demo-container" style="max-width: 480px">
-<div style="border: 2px dashed #bbb; border-radius: 8px; padding: 3em 1.5em; text-align: center; color: #888; font-style: italic">Figure placeholder: two work functions, one $V_{\mathrm{e}^-}$ (remake of the 2013 Wikipedia gold/aluminum figure, flipped to the voltage axis)</div>
+{% include "esbd-diagrams/esbd-vac-mismatch.njk" %}
 {% figcaption %}
 Gold and aluminum wired together at equilibrium: one flat $V_{\mathrm{e}^-}$, two different work functions, so each surface sets its own outer potential and $\phi_{\mathrm{vac}}$ slopes across the gap between them. There is a real electric field in the vacuum between two connected metals at equilibrium, and no current flows anywhere.
 {% endfigcaption %}
@@ -34,7 +34,7 @@ Achieving a flat $\phi_{\mathrm{vac}}$ would require every surface of every body
 Even for a single, perfectly homogeneous bulk material, $\psi$ varies over its surface with contamination, oxidation, crystal facet, roughness, termination, and spontaneous {% wiki "surface reconstruction" %}. We can nail $\psi$ down with heroic surface preparation, but what we have then defined is "what $\psi$ would be for such-and-such surface condition", which is a property of the preparation, no longer of the bulk. A particle deep inside the material does not know or care how well we prepared some distant surface, or whether its host has any exposed surface at all.
 
 <figure class="demo-container" style="max-width: 480px">
-<div style="border: 2px dashed #bbb; border-radius: 8px; padding: 3em 1.5em; text-align: center; color: #888; font-style: italic">Figure placeholder: one gold block, two faces, two $\psi$'s</div>
+{% include "esbd-diagrams/esbd-vac-faces.njk" %}
 {% figcaption %}
 A single homogeneous gold block at equilibrium, with two different exposed faces (say, two crystal facets). $V_{\mathrm{e}^-}$ is one flat level through the bulk, yet each face sets its own outer potential $\psi$. "The vacuum level of gold" is not one number; it is a property of each surface.
 {% endfigcaption %}
@@ -85,7 +85,7 @@ Vacuum levels are excellent at their actual job, which is the physics of surface
 The famous "absolute" electrode potential belongs on this list. The widely-quoted $4.44\ \mathrm{V}$ for the standard hydrogen electrode^[From Farrell & McTigue's measurements as interpreted by Trasatti; the procedure quietly splits a mean activity coefficient evenly between the ions to locate "the SHE." See also Hees & Zhang, [doi:10.1021/acs.jpclett.4c02923](https://doi.org/10.1021/acs.jpclett.4c02923), on the link to an "ionic work function."] is best read as an electrode's work function: a legitimate, useful *surface* property, drifting with surface preparation and contamination like any other work function, and no more a universal zero than any other rung. [The reference-electrodes topic](../references/) shows where it sits on a cell diagram.
 
 <figure class="demo-container" style="max-width: 480px">
-<div style="border: 2px dashed #bbb; border-radius: 8px; padding: 3em 1.5em; text-align: center; color: #888; font-style: italic">Figure placeholder: the "absolute" SHE potential as a gap ($V^\circ_{\mathrm{e}^-}(\mathrm{SHE}) \leftrightarrow \phi_{\mathrm{vac}}$)</div>
+{% include "esbd-diagrams/esbd-vac-she.njk" %}
 {% figcaption %}
 The "absolute" electrode potential, drawn: the outer potential just above the solution's surface sits $4.44\ \mathrm{V}$ below the SHE rung $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ on the voltage axis. It is a work function of an electrode, one more gap on the diagram, not a universal zero.
 {% endfigcaption %}

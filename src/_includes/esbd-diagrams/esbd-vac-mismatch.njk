@@ -1,0 +1,76 @@
+{% set idprefix = "esbd-vac-mismatch" %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 300px"></div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+
+    // Static: gold and aluminum wired together (one flat V_e-), with vacuum
+    // between them. Each surface sets its own outer potential, phi_vac =
+    // V_e- − Φ/e (poly Au ≈ 5.1 V, poly Al ≈ 4.2 V), and in the gap phi_vac
+    // interpolates by the 1D Laplace equation: a straight slope, i.e. a real
+    // electric field in the vacuum at equilibrium. Voltage-axis remake of
+    // Mark's 2013 Wikipedia figure (Work_function_mismatch_gold_aluminum.svg).
+    const VF = 0.0; // the shared Fermi level (wire out of frame)
+    const WAU = 5.1;
+    const WAL = 4.2;
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        { electron: SPECIES.electron },
+        { margins: { right: 52 } }
+    );
+    diagram.setSpatialLayout([0, 0.34, 0.66, 1], [
+        { ...REGION.metal, name: 'Gold', color: '#e8e0a8' },
+        REGION.vacuum,
+        { ...REGION.metal, name: 'Aluminum', color: '#dfe3ea' },
+    ]);
+    diagram.setVRange(-5.65, 0.55);
+
+    diagram.updateTraceData([
+        {
+            id: 'veAu',
+            speciesId: 'electron',
+            curveType: 'voltage',
+            labelFrac: 0.45,
+            x: [0, 0.34],
+            y: [VF, VF],
+        },
+        {
+            id: 'veAl',
+            speciesId: 'electron',
+            curveType: 'voltage',
+            showLabel: false,
+            x: [0.66, 1],
+            y: [VF, VF],
+        },
+        {
+            id: 'phivac',
+            speciesId: 'electron',
+            curveType: 'phi',
+            label: '\\phi_{\\mathrm{vac}}',
+            labelFrac: 0.55,
+            x: [0.34, 0.66],
+            y: [VF - WAU, VF - WAL],
+        },
+    ]);
+
+    diagram.updateVerticalMarkers([
+        {
+            id: 'wAu',
+            x: 0.385,
+            yDefs: [{ y: VF }, { y: VF - WAU }],
+            symbol: '↕',
+            popupCallback: () =>
+                'the work function of gold, Φ/e ≈ 5.1 V: how far the outer potential ψ sits below V<sub>e−</sub> just outside this surface',
+        },
+        {
+            id: 'wAl',
+            x: 0.615,
+            yDefs: [{ y: VF }, { y: VF - WAL }],
+            symbol: '↕',
+            popupCallback: () =>
+                'the work function of aluminum, Φ/e ≈ 4.2 V: a different surface, a different outer potential ψ',
+        },
+    ]);
+</script>
