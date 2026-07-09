@@ -129,13 +129,11 @@ Raise the body's whole $V_i$ ladder by $\delta$, relative to the fixed surroundi
 
 ## $V_i$ floats, and $V_i - V_j$ carries a convention
 
-Two last subtleties round out the picture, both better *seen* than told; here is the short version.
+Two last subtleties round out the picture; here is the short version.
 
 We have in fact already met the first of these in the figure just above. The whole set of $V_i$ shares one **global float**: raise every $V_i$ (along with $V^\circ_i$, $\phi_{\mathrm{vac}}$, and the rest) by the same amount, and nothing observable changes, exactly as the *global float* slider does. It is a single gauge degree of freedom for the entire universe, so there is no meaningful *absolute* voltage; only differences carry meaning.^[This covariance is a feature, not a redundancy to apologize for. Traditional electrochemistry instead leans on a patchwork of *local* references (the SHE, the vacuum, …), one per phase, and these can even drift across a device under bias, when there is really only ever *one* global freedom to fix. Staying reference-free sidesteps the perennial "but what is the *true* zero?" debates. The thermodynamic origin of this float is derived in [Understanding electrochemical potential](../muintro/).] To actually draw a diagram we of course pin the zero somewhere; I put the negative electrode at $0$, as is usual in electronics.
 
-Comparing *different* species, $V_i - V_j$, inherits a chemical-potential convention: a globally-consistent but somewhat arbitrary offset, set by how we reference each element. Comparing the *same* species across places, $V_i(x) - V_i(y)$, has no such ambiguity; it is always physical, even between different solvents. (This is the same fact we just met when measuring ions: a matched pair of electrodes cleanly reads exactly these same-ion differences.)
-
-These *arbitrary* choices are all gathered into one interactive sandbox in [Offsets galore](../offsetsgalore/): the gauge freedoms already at work in the figures above (the global float, and where we choose to pin the zero), the chemical offsets that fix each $V_i - V_j$, and the ion-activity conventions we take up [later](../nonideal/) (which, notably, leave the $V_i$ themselves untouched). It deliberately leaves out the one genuinely *physical* shift from this page, the charging of a body relative to its surroundings, since its subject is only the offsets we are free to choose.
+Comparing *different* species, $V_i - V_j$, inherits a chemical-potential convention: a globally-consistent but somewhat arbitrary offset, set by how we reference each element. Comparing the *same* species across places, $V_i(x) - V_i(y)$, has no such ambiguity; it is always physical, even between different solvents. (This is the same fact we just met when measuring ions: a matched pair of electrodes cleanly reads exactly these same-ion differences.) The specific convention we adopt is introduced in the [next topic](../equilibrium/), which opens on exactly this point: once chemical reactions enter, each $V_i - V_j$ offset takes a concrete value, set by how we reference the neutral elements.
 
 
 ## Takeaways
