@@ -17,22 +17,26 @@ Let me be clear from the start about what is being questioned here. The microsco
 
 Much of the confusion around $\phi$ comes from one symbol being made to stand for three different objects. It is worth meeting each one properly.
 
-**The microscopic potential.** The actual nano-scale electric scalar potential in a material has rapid variations in space and time, with all the various jigglings-about of nuclear cores and electrons: enormous positive spikes at every core, deep wells in the bonds. It is not even a classical field, as it contains quantum correlations with all the particle movements.^[It is also subject to gauge ambiguity with the magnetic vector potential; as usual we invoke the "electrostatic approximation", in which the electric field curl is negligible and the potential is the anti-gradient of the electric field.] This potential is completely physical, and it (together with its fields) is what actually pushes on electrons and ions.
+**The microscopic potential $\phi_{\mathrm{micro}}$.** The actual nano-scale electric scalar potential in a material has rapid variations in space and time, with all the various jigglings-about of nuclear cores and electrons: enormous positive spikes at every core, deep wells in the bonds. It obeys the Poisson equation in the exact, instantaneous charge density, point-like nuclei and all,
 
-**The averaged potential $\langle\phi\rangle$.** For a macroscopic theory we smooth the microscopic potential in space and time until the atomic-scale mess disappears. The result, which this page writes $\langle\phi\rangle$, obeys the electrostatic Poisson equation in the similarly-averaged charge density $\langle\rho\rangle$:
+$$ \nabla^2 \phi_{\mathrm{micro}} = -\rho_{\mathrm{micro}} / \varepsilon_0 , $$
+
+and it is not even a classical field, as it carries quantum correlations with all the particle movements.^[It is also subject to gauge ambiguity with the magnetic vector potential; as usual we invoke the "electrostatic approximation", in which the electric field curl is negligible and the potential is the anti-gradient of the electric field.] This potential is completely physical, and it (together with its fields) is what actually pushes on electrons and ions.
+
+**The averaged potential $\langle\phi\rangle$.** For a macroscopic theory we smooth $\phi_{\mathrm{micro}}$ in space and time until the atomic-scale mess disappears. The result, which this page writes $\langle\phi\rangle$, obeys the same Poisson equation in the similarly-averaged charge density $\langle\rho\rangle$ (averaging commutes with derivatives, so the equation survives the smoothing exactly):
 
 $$ \nabla^2 \langle\phi\rangle = -\langle\rho\rangle / \varepsilon_0 . $$
 
 This defines $\langle\phi\rangle$ consistently both inside and outside of materials, up to the usual harmless global offset. (Outside of materials, in vacuum, no smoothing is needed and we write simply $\phi_{\mathrm{vac}}$; that is [the next topic](../vacuum/).) Inside a homogeneous conductor the average is neutral, $\langle\rho\rangle = 0$, and $\langle\phi\rangle$ is flat throughout; whatever averaging procedure we use has to smear over the microscopic mess enough to make that so. This averaged potential is what most physical discussions of "the inner potential" have in mind.
 
 <figure class="demo-container" style="max-width: 480px">
-<div style="border: 2px dashed #bbb; border-radius: 8px; padding: 3em 1.5em; text-align: center; color: #888; font-style: italic">Figure placeholder: microscopic $\phi$ vs its running mean</div>
+<div style="border: 2px dashed #bbb; border-radius: 8px; padding: 3em 1.5em; text-align: center; color: #888; font-style: italic">Figure placeholder: $\phi_{\mathrm{micro}}$ vs its running mean $\langle\phi\rangle$</div>
 {% figcaption %}
 The microscopic potential in a material: violent spikes at the nuclear cores, wells in the bonds, all of it jiggling in time. Its running average $\langle\phi\rangle$ rides flat across the interior at the mean inner potential, several volts above the vacuum outside.
 {% endfigcaption %}
 </figure>
 
-**The practical $\phi'$.** Finally there is the $\phi$ that working electrochemistry actually pins down, which is defined through ion activity conventions. We met it in [non-ideal solutions](../nonideal/): once an activity convention is adopted, $\phi'$ is whatever value makes the bookkeeping come out, and it no longer corresponds to any physically-based electrostatic potential. It is a useful convention wearing $\phi$'s notation, and we will come back to it.
+**The practical $\phi'$.** Finally there is the $\phi$ that working electrochemistry actually pins down, which is defined through ion activity conventions; the prime is a reminder that it is one choice among many, since every activity convention defines its own. We met it in [non-ideal solutions](../nonideal/): once a convention is adopted, $\phi'$ is whatever value makes the bookkeeping come out, and it no longer corresponds to any physically-based electrostatic potential. It is a useful convention wearing $\phi$'s notation, and we will come back to it.
 
 Keeping the three separate already does a lot of work: the microscopic potential is real but unusable, the practical $\phi'$ is usable but openly conventional, and all the interesting claims ride on $\langle\phi\rangle$ in the middle. (Elsewhere in this book a bare $\phi$ appears only where the family members agree, or where their ambiguity is itself the topic; on this page the differences are the point, so the marks stay on.) So what does $\langle\phi\rangle$ mean, for a particle? Exactly this:
 
@@ -99,7 +103,7 @@ Now compute $\langle\phi\rangle$. Deep in each bulk it is flat, but the two flat
 <figure class="demo-container" style="max-width: 480px">
 <div style="border: 2px dashed #bbb; border-radius: 8px; padding: 3em 1.5em; text-align: center; color: #888; font-style: italic">Figure placeholder: the hillium–mountainium junction (microscopic + smoothed panels)</div>
 {% figcaption %}
-Hillium and mountainium: two solvents identical to every solute, differing only in core architecture. Top: the microscopic potential, gentle on the left, spiky on the right. Bottom: $\langle\phi\rangle$ steps at the junction while the $V^\circ_i$ ladder and every $V_i$ run dead flat. The Galvani step is made of core shape, and no ion feels it.
+Hillium and mountainium: two solvents identical to every solute, differing only in core architecture. Top: $\phi_{\mathrm{micro}}$, gentle on the left, spiky on the right. Bottom: $\langle\phi\rangle$ steps at the junction while the $V^\circ_i$ ladder and every $V_i$ run dead flat. The Galvani step is made of core shape, and no ion feels it.
 {% endfigcaption %}
 </figure>
 
