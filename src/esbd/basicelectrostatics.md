@@ -120,6 +120,8 @@ All of those concerns are real and important when describing interfaces, especia
 
 ## Takeaways
 
-Electrostatics entered our picture mainly to justify leaving it out: screening is so strong that almost everywhere, the $V^\circ_i$ ladder simply floats to whatever offset keeps the bulk neutral, while the $V_i$ ride flat over the interfacial blips. Where two materials meet, the same screening decides how their ladders align, anchored to whichever side screens more stiffly. Along the way we met the screening response $\chi$, and it has a second life: read as charge banked against a voltage, it is a capacitance, which is where we turn next.
+Electrostatics entered our picture mainly to justify leaving it out: screening is so strong that almost everywhere, the $V^\circ_i$ ladder simply floats to whatever offset keeps the bulk neutral, while the $V_i$ ride flat over the interfacial blips. Where two materials meet, the same screening decides how their ladders align, anchored to whichever side screens more stiffly.
+
+The exceptions are narrow, and they are readable. Wherever the ladder does bend, the bend is paid for in charge — curvature of $V^\circ_i$ *is* local charge density, by the Poisson equation — and the payment always arrives in equal-and-opposite pairs a screening length apart: a defect and its cloud, a surface charge and its screened answer, the two lobes of a contact's double layer. That is what the charge panels under this topic's figures draw, and it is a read to keep: the bends of a band diagram are a map of its charge. The screening length $\lambda = \sqrt{\varepsilon/\chi}$ says how far each bend reaches, and the response $\chi$ that sets it has a second life: read as charge banked against a voltage, it is a capacitance, which is where we turn next.
 
 [**NEXT TOPIC: Capacitance**](../capacitors/)
