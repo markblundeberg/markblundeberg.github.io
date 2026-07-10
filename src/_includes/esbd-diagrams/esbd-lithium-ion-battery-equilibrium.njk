@@ -51,6 +51,15 @@
         { ...REGION.solution, name: '' }, // second electrolyte unlabelled: three names in a row overprint
         { ...REGION.oxideCathode },
         { ...REGION.collector },
+    ], [
+        // explicit spots: the thin separator's centered label collides with
+        // its long Electrolyte neighbour, so it rides the top edge
+        { label: 'Collector', x: 0.05 },
+        { label: 'Anode (graphite)', x: 0.225 },
+        { label: 'Electrolyte', x: 0.415 },
+        { label: 'Separator', x: 0.5, y: 'top', dy: '+0.9em' }, // inside the frame
+        { label: 'Cathode (oxide)', x: 0.775 },
+        { label: 'Collector', x: 0.95 },
     ]);
     diagram.setVRange(-1.2, 4.7);
 
