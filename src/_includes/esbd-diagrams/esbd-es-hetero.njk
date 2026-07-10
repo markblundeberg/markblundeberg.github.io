@@ -71,16 +71,29 @@
         margins: { top: 4, bottom: 12, left: 60, right: 64 },
     });
 
+    // fixed spatial grid of distances from the contact, geometrically
+    // packed toward it: every update lands on the SAME x points, so the
+    // d3 trace tweens stay coherent under slider motion (a per-update
+    // quadrature grid pairs unrelated points and glitches)
+    const NG = 120;
+    const DGRID = [];
+    for (let k = 0; k <= NG; k++)
+        DGRID.push(
+            (0.5 * (Math.pow(1.05, k) - 1)) / (Math.pow(1.05, NG) - 1)
+        );
+    const XGA = DGRID.map((d) => 0.5 - d).reverse(); // ascending, 0 → 0.5
+    const XGB = DGRID.map((d) => 0.5 + d); // ascending, 0.5 → 1
+
     // march from the contact into a bulk by quadrature on the first
     // integral, dx = λ·|du|/(√2·G); log-spaced u resolves the sharp knee
-    // and the long tail alike. dir: −1 = side A (leftward), +1 = side B.
+    // and the long tail alike. Returns distance-from-contact profile.
     // ucut: where to declare the tail settled — must scale with 1/N, since
     // the residual CHARGE N·u is what has to be negligible, not u itself
     // (a heavily doped side still carries visible ρ at tiny bendings).
-    const profile = (uIf, lamS, dir, ucut) => {
-        const pts = [{ x: 0.5, u: uIf }];
-        const xEnd = dir < 0 ? 0 : 1;
-        let x = 0.5;
+    const profile = (uIf, lamS, ucut) => {
+        const dArr = [0],
+            uArr = [uIf];
+        let d = 0;
         let uPrev = uIf;
         const NPT = 140;
         for (let i = 1; i <= NPT; i++) {
@@ -88,20 +101,35 @@
             const step =
                 (lamS * Math.abs(uPrev - u) * (1 / G(uPrev) + 1 / G(u))) /
                 (2 * Math.SQRT2);
-            if (Math.abs(xEnd - x) <= step) {
+            if (d + step >= 0.5) {
                 // frame edge arrives mid-transition: interpolate and stop
-                pts.push({
-                    x: xEnd,
-                    u: uPrev + ((u - uPrev) * Math.abs(xEnd - x)) / step,
-                });
-                return pts;
+                uArr.push(uPrev + ((u - uPrev) * (0.5 - d)) / step);
+                dArr.push(0.5);
+                return { d: dArr, u: uArr };
             }
-            x += dir * step;
+            d += step;
             uPrev = u;
-            pts.push({ x, u });
+            dArr.push(d);
+            uArr.push(u);
         }
-        pts.push({ x: xEnd, u: 0 }); // settled: flat bulk to the frame edge
-        return pts;
+        dArr.push(0.5); // settled: flat bulk to the frame edge
+        uArr.push(0);
+        return { d: dArr, u: uArr };
+    };
+
+    // resample a profile's u onto DGRID (both sorted: one forward pass)
+    const sample = (prof) => {
+        const out = [];
+        let j = 0;
+        for (const d of DGRID) {
+            while (j < prof.d.length - 2 && prof.d[j + 1] < d) j++;
+            const d0 = prof.d[j],
+                d1 = prof.d[j + 1];
+            const f =
+                d1 > d0 ? Math.min(1, Math.max(0, (d - d0) / (d1 - d0))) : 0;
+            out.push(prof.u[j] + (prof.u[j + 1] - prof.u[j]) * f);
+        }
+        return out;
     };
 
     function update() {
@@ -131,8 +159,8 @@
         const norm = NA * (1 - Math.exp(uA)); // the boxcar's height
         const ucut = (N) =>
             Math.min(0.004, Math.max(1e-6, (0.002 * norm) / N));
-        const pA = profile(uA, lA, -1, ucut(NA)).reverse();
-        const pB = profile(uB, lB, +1, ucut(NB));
+        const uAs = sample(profile(uA, lA, ucut(NA))).reverse(); // matches XGA
+        const uBs = sample(profile(uB, lB, ucut(NB))); // matches XGB
 
         rho.updateTraceData([
             {
@@ -145,10 +173,10 @@
             },
             {
                 id: 'dl',
-                x: [...pA.map((p) => p.x), ...pB.map((p) => p.x)],
+                x: [...XGA, ...XGB],
                 y: [
-                    ...pA.map((p) => (NA * (1 - Math.exp(p.u))) / norm),
-                    ...pB.map((p) => (NB * (1 - Math.exp(p.u))) / norm),
+                    ...uAs.map((u) => (NA * (1 - Math.exp(u))) / norm),
+                    ...uBs.map((u) => (NB * (1 - Math.exp(u))) / norm),
                 ],
                 color: '#7a5fb5',
                 style: { lineWidth: 2 },
@@ -171,16 +199,16 @@
                 curveType: 'bandEdge_C',
                 label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{A})',
                 labelFrac: 0.06,
-                x: pA.map((p) => p.x),
-                y: pA.map((p) => eAb + VT * p.u),
+                x: [...XGA],
+                y: uAs.map((u) => eAb + VT * u),
             },
             {
                 id: 'edgeB',
                 speciesId: 'electron',
                 curveType: 'bandEdge_C',
                 label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{B})',
-                x: pB.map((p) => p.x),
-                y: pB.map((p) => eBb + VT * p.u),
+                x: [...XGB],
+                y: uBs.map((u) => eBb + VT * u),
             },
         ]);
 
