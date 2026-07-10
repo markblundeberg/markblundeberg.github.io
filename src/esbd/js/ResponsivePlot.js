@@ -520,7 +520,15 @@ class ResponsivePlot {
                                 : d.labelHAlign === 'center'
                                   ? 0
                                   : 5;
-                        return `translate(${this.xScale(d.labelPos.x) + dx}, ${this.yScale(d.labelPos.y)})`;
+                        // above/below labels get extra clearance so the
+                        // backing plate clears the labelled trace itself
+                        const dy =
+                            d.labelVAlign === 'bottom'
+                                ? -3
+                                : d.labelVAlign === 'top'
+                                  ? 3
+                                  : 0;
+                        return `translate(${this.xScale(d.labelPos.x) + dx}, ${this.yScale(d.labelPos.y) + dy})`;
                     })
                     .select('span.rp-label-span')
                     .style('color', (d) => d.color),
