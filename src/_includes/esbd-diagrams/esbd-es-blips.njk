@@ -1,8 +1,10 @@
 {% set idprefix = "esbd-es-blips" %}
 <div class="bd-container" id="{{idprefix}}-container" style="height: 260px"></div>
+<div class="bd-container" id="{{idprefix}}-rho" style="height: 110px"></div>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
     import { linspace } from '{{ esbdJsPath }}utils.js';
 
@@ -88,6 +90,57 @@
             label: '\\phi_{\\mathrm{vac}}',
             x: [0.78, 1],
             y: [0.1, 0.1],
+        },
+    ]);
+
+    // charge panel: each wall hides a double layer — a surface sheet and
+    // its diffuse answer in the solution, equal and opposite, a few Debye
+    // lengths wide. Zero everywhere else: THAT is quasi-neutrality.
+    // Left wall (metal): blip dips -0.13 -> positive diffuse charge in the
+    // solution, negative sheet on the metal surface. Right wall (vacuum):
+    // blip +0.09, mirrored and weaker. Sheet/lobe areas match per wall
+    // (0.63·0.008·sqrt(pi) ≈ 0.75·0.012).
+    const rho = new XYPlot('{{idprefix}}-rho', {
+        xLabel: '',
+        yLabel: 'Charge density',
+        xRange: [0, 1],
+        yRange: [-1.0, 1.0],
+        xMode: 'abstract',
+        yMode: 'abstract',
+        // left/right match the band diagram above so the walls line up
+        margins: { top: 4, bottom: 12, left: 60, right: 56 },
+    });
+    const xr = linspace(0, 1, 401);
+    const R = 0.09 / 0.13; // the right wall's blip is weaker
+    const sheet = (x, x0) => Math.exp(-(((x - x0) / 0.008) ** 2));
+    const lobeL = (x) => (x < 0.22 ? 0 : Math.exp(-(x - 0.22) / LAM));
+    const lobeR = (x) => (x > 0.78 ? 0 : Math.exp(-(0.78 - x) / LAM));
+    rho.updateTraceData([
+        {
+            id: 'zero',
+            x: [0, 1],
+            y: [0, 0],
+            color: '#bbb',
+            style: { lineWidth: 1 },
+            showLabel: false,
+        },
+        {
+            id: 'sheets',
+            x: [...xr],
+            y: xr.map((x) => -0.63 * sheet(x, 0.213) + 0.63 * R * sheet(x, 0.787)),
+            color: '#555',
+            style: { lineWidth: 1.5 },
+            showLabel: false,
+        },
+        {
+            id: 'lobes',
+            x: [...xr],
+            y: xr.map((x) => 0.75 * lobeL(x) - 0.75 * R * lobeR(x)),
+            color: '#7a5fb5',
+            style: { lineWidth: 2 },
+            label: '\\text{double-layer charges}',
+            labelFrac: 0.5,
+            labelHAlign: 'center',
         },
     ]);
 </script>

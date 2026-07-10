@@ -1,5 +1,5 @@
 {
-  "hash": "937163d9ed56ee923667d9e3499250acb8f080a7fc66b3c45f92de7ac41e6eac",
+  "hash": "9309926bf15965211736684fc6157b3fc668479a94f30c94d6c88e36a1670eea",
   "ids": [
     "V-std-ladder--diagram-container",
     "ag-agcl-electrode-container",
@@ -28,10 +28,13 @@
     "esbd-electrode-generic-container",
     "esbd-electrode-generic-differential-container",
     "esbd-es-blips-container",
+    "esbd-es-blips-rho",
     "esbd-es-defect-band",
     "esbd-es-defect-rho",
     "esbd-es-hetero-container",
+    "esbd-es-hetero-rho",
     "esbd-es-interface-container",
+    "esbd-es-interface-rho",
     "esbd-es-kink-container",
     "esbd-ferrous-ferric-container",
     "esbd-inh-miec-container",

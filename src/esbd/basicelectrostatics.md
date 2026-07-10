@@ -35,7 +35,7 @@ A sharp charged defect introduced inside a conductor (here a salt solution), and
 <figure class="demo-container" style="max-width: 440px">
 {% include "esbd-diagrams/esbd-es-interface.njk" %}
 {% figcaption %}
-Band bending: something at an interface nudges $\phi$ away from its bulk neutral value, and the deviation is screened away into the bulk. Drawn for a generic n-type semiconductor, where the effect got its name — the band edges bend together while $V_{\mathrm{e}^-}$ stays perfectly flat, this being still an equilibrium.
+Band bending: something at an interface nudges $\phi$ away from its bulk neutral value, and the deviation is screened away into the bulk. Drawn for a generic n-type semiconductor, where the effect got its name — the band edges bend together while $V_{\mathrm{e}^-}$ stays perfectly flat, this being still an equilibrium. Below, the charge pair responsible: the surface charge doing the nudging and the equal-and-opposite screening tail answering it.
 {% endfigcaption %}
 </figure>
 
@@ -64,7 +64,7 @@ Many interfaces in our devices are explicitly *not* of interest, yet each interf
 <figure class="demo-container" style="max-width: 460px">
 {% include "esbd-diagrams/esbd-es-blips.njk" %}
 {% figcaption %}
-The honest picture of a bulk solution between a metal electrode and vacuum: everything is flat except tiny double-layer blips of $V^\circ_i$ within a few Debye lengths of each surface. The $V_i$ ride flat straight over them — which is why, for the most part, we won't bother drawing the blips at all. (The step down to $\phi_{\mathrm{vac}}$ is compressed, like the rung spacing (⌇), to keep everything in one frame.)
+The honest picture of a bulk solution between a metal electrode and vacuum: everything is flat except tiny double-layer blips of $V^\circ_i$ within a few Debye lengths of each surface. The $V_i$ ride flat straight over them — which is why, for the most part, we won't bother drawing the blips at all. The lower panel shows where the charge actually sits: two wall-hugging double layers, zero everywhere else — quasi-neutrality, drawn literally. (The step down to $\phi_{\mathrm{vac}}$ is compressed, like the rung spacing (⌇), to keep everything in one frame.)
 {% endfigcaption %}
 </figure>
 
@@ -104,7 +104,7 @@ The useful part is what happens when the two sides screen very differently. A st
 <figure class="demo-container" style="max-width: 460px">
 {% include "esbd-diagrams/esbd-es-hetero.njk" %}
 {% figcaption %}
-A heterojunction between two n-type semiconductors, at equilibrium. The edge gap right at the contact (the ↕ marker) is a fixed property of the atomic interface: no doping moves it. The far bulks, meanwhile, settle wherever their dopings put them relative to the shared flat $V_{\mathrm{e}^-}$, and band bending absorbs the mismatch — split toward whichever side screens more weakly. Crank one doping to the maximum and that side goes rigid, metal-like, right up to the contact: the Schottky picture emerges as the limiting case.
+A heterojunction between two n-type semiconductors, at equilibrium. The edge gap right at the contact (the ↕ marker) is a fixed property of the atomic interface: no doping moves it. The far bulks, meanwhile, settle wherever their dopings put them relative to the shared flat $V_{\mathrm{e}^-}$, and band bending absorbs the mismatch — split toward whichever side screens more weakly. Crank one doping to the maximum and that side goes rigid, metal-like, right up to the contact: the Schottky picture emerges as the limiting case. Below, the contact's double layer: the strongly doped side answers with a thin dense sheet, the weak screener with a long shallow tail — equal and opposite areas, however the sliders sit.
 {% endfigcaption %}
 </figure>
 

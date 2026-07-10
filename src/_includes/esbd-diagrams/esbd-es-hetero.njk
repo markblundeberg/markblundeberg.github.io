@@ -1,6 +1,7 @@
 {% set idprefix = "esbd-es-hetero" %}
 {% import "macros/controls.njk" as controls %}
 <div class="bd-container" id="{{idprefix}}-container" style="height: 280px"></div>
+<div class="bd-container" id="{{idprefix}}-rho" style="height: 110px"></div>
 <div style="display: grid; grid-template-columns: max-content minmax(0, 180px); gap: 2px 10px; justify-content: center; align-items: center; margin-top: 0.4em">
 {{ controls.slider(idprefix + "-na", "doping A ($\\log_{10} n$)", { min: 12, max: 18, step: "any", value: 17, inline: true, readout: true }) }}
 {{ controls.slider(idprefix + "-nb", "doping B ($\\log_{10} n$)", { min: 12, max: 18, step: "any", value: 14, inline: true, readout: true }) }}
@@ -8,6 +9,7 @@
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
     import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
 
@@ -39,8 +41,25 @@
     ]);
     diagram.setVRange(-0.05, 0.82); // floor sized for both-dopings-min (contact dip reaches -0.016)
 
+    // charge panel: the contact's double layer. Each side's screening
+    // charge is rho = -chi·(its bending), chi ∝ 1/λ², so the two lobes'
+    // areas cancel exactly (each = total/(λA+λB)) whatever the dopings;
+    // drawn normalized to the taller lobe. A metal-like side answers with
+    // a near-sheet, the weak screener with a long tail.
+    const rho = new XYPlot('{{idprefix}}-rho', {
+        xLabel: '',
+        yLabel: 'Charge density',
+        xRange: [0, 1],
+        yRange: [-1.15, 1.15],
+        xMode: 'abstract',
+        yMode: 'abstract',
+        // left/right match the band diagram above so the contact lines up
+        margins: { top: 4, bottom: 12, left: 60, right: 64 },
+    });
+
     const xA = linspace(0, 0.5, 61);
     const xB = linspace(0.5, 1, 61);
+    const xr = linspace(0, 1, 241);
 
     function update() {
         const lognA = parseFloat(naEl.value);
@@ -54,6 +73,33 @@
         const total = eBb - eAb - DALIGN;
         const dA = (total * lA) / (lA + lB);
         const dB = (total * lB) / (lA + lB);
+
+        const ampA = dA / (lA * lA),
+            ampB = dB / (lB * lB);
+        const s = Math.max(Math.abs(ampA), Math.abs(ampB)) || 1;
+        rho.updateTraceData([
+            {
+                id: 'zero',
+                x: [0, 1],
+                y: [0, 0],
+                color: '#bbb',
+                style: { lineWidth: 1 },
+                showLabel: false,
+            },
+            {
+                id: 'dl',
+                x: [...xr],
+                y: xr.map((x) =>
+                    x < 0.5
+                        ? (-ampA / s) * Math.exp(-(0.5 - x) / lA)
+                        : (ampB / s) * Math.exp(-(x - 0.5) / lB)
+                ),
+                color: '#7a5fb5',
+                style: { lineWidth: 2 },
+                label: '\\text{contact double layer}',
+                labelFrac: 0.7,
+            },
+        ]);
 
         diagram.updateTraceData([
             {

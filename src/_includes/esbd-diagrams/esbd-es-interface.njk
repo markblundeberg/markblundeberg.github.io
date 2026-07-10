@@ -1,6 +1,7 @@
 {% set idprefix = "esbd-es-interface" %}
 {% import "macros/controls.njk" as controls %}
 <div class="bd-container" id="{{idprefix}}-container" style="height: 260px"></div>
+<div class="bd-container" id="{{idprefix}}-rho" style="height: 110px"></div>
 {# default nudge is negative: depletion, the namesake case for "band bending"
    (a positive default drew an uncaptioned degenerate accumulation layer —
    the carrier line sat deep inside the band-edge hatch) #}
@@ -8,6 +9,7 @@
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
     import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
 
@@ -32,12 +34,57 @@
     ]);
     diagram.setVRange(-0.55, 1.45);
 
+    // charge panel: whatever nudges phi at the interface IS a surface
+    // charge; the screened tail in the semiconductor is its equal-and-
+    // opposite answer. Areas match: spike 1.35·|dphi|·0.035·sqrt(pi) ≈
+    // tail 0.6·|dphi|·LAM.
+    const rho = new XYPlot('{{idprefix}}-rho', {
+        xLabel: '',
+        yLabel: 'Charge density',
+        xRange: [0, 1],
+        yRange: [-0.85, 0.85],
+        xMode: 'abstract',
+        yMode: 'abstract',
+        // left/right match the band diagram above so the interface lines up
+        margins: { top: 4, bottom: 12, left: 60, right: 56 },
+    });
+
     const xs = linspace(0.12, 1, 101);
+    const xr = linspace(0, 1, 201);
 
     function update(dphi) {
         document.getElementById('{{idprefix}}-dphi-readout').textContent =
             dphi.toFixed(2);
         const bend = (x) => dphi * Math.exp(-(x - 0.12) / LAM);
+
+        rho.updateTraceData([
+            {
+                id: 'zero',
+                x: [0, 1],
+                y: [0, 0],
+                color: '#bbb',
+                style: { lineWidth: 1 },
+                showLabel: false,
+            },
+            {
+                id: 'surf',
+                x: [...xr],
+                y: xr.map((x) => 1.35 * dphi * Math.exp(-(((x - 0.1) / 0.035) ** 2))), // hugging the interface
+                color: '#555',
+                style: { lineWidth: 1.5 },
+                label: '\\text{surface charge}',
+                labelFrac: 0.02,
+            },
+            {
+                id: 'screen',
+                x: [...xr],
+                y: xr.map((x) => (x < 0.12 ? 0 : -0.6 * bend(x))),
+                color: '#7a5fb5',
+                style: { lineWidth: 2 },
+                label: '\\text{screening charge}',
+                labelFrac: 0.45,
+            },
+        ]);
 
         diagram.updateTraceData([
             {
