@@ -11,7 +11,9 @@
     // flat, but through the graded zone the two standard-state levels slope
     // at different rates — here in OPPOSITE directions, a trick no single
     // electrostatic field could play on two like-signed carriers — and the
-    // (convention-pinned) phi is a third, separate slope. Values schematic.
+    // (convention-pinned) phi is a third, separate slope. Values schematic;
+    // hence the abstract y axis, since the rung-carrier gaps here would read
+    // as absurd concentrations if the volt scale were literal.
     const XA = 0.3, XB = 0.7; // graded zone
     const ramp = (x, y0, y1) =>
         x <= XA ? y0 : x >= XB ? y1 : y0 + ((y1 - y0) * (x - XA)) / (XB - XA);
@@ -20,7 +22,7 @@
     const diagram = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-container',
         { electron: SPECIES.electron, oxide: SPECIES.oxide },
-        { margins: { right: 60 } }
+        { margins: { right: 60 }, yMode: 'abstract' }
     );
     diagram.setSpatialLayout([0, XA, XB, 1], [
         { ...REGION.solid, name: 'MIEC A', color: '#ece5d3' },
