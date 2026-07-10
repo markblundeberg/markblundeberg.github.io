@@ -43,7 +43,7 @@ There is a subtlety hiding in the drift term. We assumed $\nabla V^\circ_i = \na
 <figure class="demo-container" style="max-width: 440px">
 {% include "esbd-diagrams/esbd-tb-driftdiff.njk" %}
 {% figcaption %}
-One current, split two ways. The slope of $V_i$ is held fixed (fixed current) while the slider reapportions it between drift — the shared slope of $V^\circ_i$ and $\phi$ — and diffusion, the changing concentration gap. The split is bookkeeping; the total slope is what drives the current.
+One current, split two ways. The slope of $V_i$ is held fixed (fixed current) while the slider reapportions it between drift — the shared slope of $V^\circ_i$ and $\phi$ — and diffusion, the changing concentration gap. The split is bookkeeping; the total slope is what drives the current. The axis is schematic: at fixed current a heavily diffusive profile would in truth steepen toward its dilute end, since conductivity falls with concentration, and the next figure computes exactly that bending.
 {% endfigcaption %}
 </figure>
 

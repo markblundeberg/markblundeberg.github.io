@@ -14,6 +14,10 @@
     // (drift) versus from the changing concentration gap (diffusion).
     // frac = 1: uniform concentration, all drift. frac = 0: flat phi,
     // pure diffusion down a concentration gradient.
+    // Abstract y axis: the straight V_i is the decomposition CARTOON. At
+    // fixed current with sigma ∝ c, a heavy diffusion share (gap growing
+    // by decades) would really steepen V_i toward the dilute end; the
+    // concpol figure computes that bending honestly.
     const SLOPE = -0.3; // total V_i drop, left to right
     const GAP0 = 0.14; // V°−V gap at x = 0 (dilute cation: V below V°)
     const V0L = 0.78; // V°_i at x = 0
@@ -21,7 +25,7 @@
     const diagram = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-container',
         { cation: SPECIES.sodium },
-        { margins: { right: 56 } }
+        { margins: { right: 56 }, yMode: 'abstract' }
     );
     diagram.setSpatialLayout([0, 1], [REGION.solution]);
     diagram.setVRange(0.05, 1.0);
