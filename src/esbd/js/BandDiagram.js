@@ -5,6 +5,20 @@ import renderMathInElement from 'katex/contrib/auto-render';
 import ResponsivePlot from './ResponsivePlot.js';
 import { interpAtFrac, rejectUnexpectedFields } from './utils.js';
 
+// Hatch shading: marks one side of a trace (e.g. the concentrated/degenerate
+// side of a standard-state rung, like band-edge hatching in semiconductor
+// diagrams). All lengths in screen px; `side` is in diagram y ('up' = +y).
+const HATCH_DEFAULTS = {
+    side: 'down',
+    type: 'lines', // 'lines' (diagonal strokes) | 'tint' (solid fill)
+    height: 14, // band extent from the trace, px
+    spacing: 3.5, // stripe pitch, px ('lines' only)
+    lineWidth: 1, // stripe width, px ('lines' only)
+    angle: 45, // stripe angle, deg ('lines' only); 45 = '/'
+    opacity: 0.35,
+    fade: true, // dissolve toward the band's far edge instead of a hard stop
+};
+
 // Default styling constants
 const STYLE_DEFAULTS = {
     line: { lineWidth: 3, dasharray: null },
@@ -129,6 +143,7 @@ class BandDiagram extends ResponsivePlot {
                     labelHAlign = 'left',
                     refShift = null,
                     refShiftFrac = 0.28,
+                    hatch = null,
                     ...extraFields
                 } = traceDef;
                 rejectUnexpectedFields(extraFields);
@@ -179,6 +194,8 @@ class BandDiagram extends ResponsivePlot {
                 }
                 if (!hasRefShift) refShift = null;
 
+                if (hatch) hatch = { ...HATCH_DEFAULTS, ...hatch };
+
                 const processedTrace = {
                     id,
                     points,
@@ -190,6 +207,7 @@ class BandDiagram extends ResponsivePlot {
                     refShiftPos,
                     labelHAlign,
                     toolTip,
+                    hatch,
                     extraData,
                 };
                 this.traceData.push(processedTrace);
@@ -411,6 +429,7 @@ class BandDiagram extends ResponsivePlot {
         this._drawRegionLabels();
 
         // 5. Draw Data Elements
+        this._drawHatches();
         this._drawTraces();
         this._drawRefShiftGlyphs();
         this._drawVerticalMarkers();
@@ -441,6 +460,11 @@ class BandDiagram extends ResponsivePlot {
         this.regionLabelsGroup = this.plotArea
             .append('g')
             .attr('class', 'bd-region-labels')
+            .style('pointer-events', 'none');
+        this.hatchDefs = this.plotArea.append('defs');
+        this.hatchGroup = this.plotArea
+            .append('g')
+            .attr('class', 'bd-hatches')
             .style('pointer-events', 'none');
         this.linesGroup = this.plotArea.append('g').attr('class', 'bd-lines');
         // Interaction rectangle sits ON TOP of lines but BELOW markers/labels
@@ -604,6 +628,82 @@ class BandDiagram extends ResponsivePlot {
                     .attr('dy', (d) => d.dy)
                     .attr('text-anchor', 'middle')
                     .text((d) => d.label || ''),
+        });
+    }
+
+    /** Hatch/tint bands shading one side of a trace (see HATCH_DEFAULTS). */
+    _drawHatches() {
+        const FADE_SLABS = 4;
+        const hatched = this.traceData.filter((d) => d.hatch);
+        const patId = (d) => `${this.config.containerId}-hatch-pat-${d.id}`;
+
+        // Per-trace stripe pattern defs, rebuilt each redraw (cheap, and they
+        // carry no transitions of their own).
+        this.drawStaticElements({
+            parentGroups: this.hatchDefs,
+            element: 'g',
+            cssClass: 'bd-hatch-defs',
+            data: hatched.filter((d) => d.hatch.type === 'lines'),
+            dataKey: (d) => d.id,
+            onUpdateImmediate: (s) =>
+                s.html((d) => {
+                    const h = d.hatch;
+                    return `<pattern id="${patId(d)}" patternUnits="userSpaceOnUse"
+                        width="${h.spacing}" height="${h.spacing}"
+                        patternTransform="rotate(${h.angle})">
+                        <line x1="0" y1="0" x2="0" y2="${h.spacing}"
+                        stroke="${d.color}" stroke-width="${h.lineWidth}"/></pattern>`;
+                }),
+        });
+
+        // The fade is stacked slabs stepping down in opacity: a gradient mask
+        // can't follow a sloped/curved trace (a bounding-box gradient fades
+        // along the trace's own drop, not across the band).
+        const slabData = hatched.flatMap((d) => {
+            const n = d.hatch.fade ? FADE_SLABS : 1;
+            return Array.from({ length: n }, (_, j) => ({
+                id: `${d.id}~${j}`,
+                trace: d,
+                j,
+                n,
+            }));
+        });
+        this.drawElements({
+            parentGroups: this.hatchGroup,
+            element: 'path',
+            cssClass: 'bd-data-hatch',
+            data: slabData,
+            dataKey: (s) => s.id,
+            onNew: (s) => s.attr('stroke', 'none'),
+            onUpdateImmediate: (s) =>
+                s
+                    .attr('fill', ({ trace: d }) =>
+                        d.hatch.type === 'lines'
+                            ? `url(#${patId(d)})`
+                            : d.color
+                    )
+                    .attr(
+                        'fill-opacity',
+                        ({ trace: d, j, n }) => d.hatch.opacity * (1 - j / n)
+                    ),
+            onUpdateTransition: (sel) =>
+                sel.attr('d', ({ trace: d, j, n }) => {
+                    const h = d.hatch;
+                    const sgn = h.side === 'up' ? -1 : 1;
+                    // overlap slabs a hair toward the trace: no seam pixels
+                    const near = sgn * ((h.height * j) / n - (j ? 0.5 : 0));
+                    const far = sgn * (h.height * (j + 1)) / n;
+                    const gen = d3
+                        .area()
+                        .x((p) => this.xScale(p.x))
+                        .y0((p) => this.yScale(p.y) + near)
+                        .y1((p) => this.yScale(p.y) + far)
+                        .defined(
+                            (p) =>
+                                p.y !== null && !isNaN(p.y) && isFinite(p.y)
+                        );
+                    return gen(d.points);
+                }),
         });
     }
 

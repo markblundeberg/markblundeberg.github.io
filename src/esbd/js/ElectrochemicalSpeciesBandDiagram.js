@@ -113,6 +113,7 @@ class ElectrochemicalSpeciesBandDiagram {
                 labelHAlign,
                 refShift,
                 refShiftFrac,
+                hatch = null,
                 x,
                 y,
                 ...extraFields
@@ -139,6 +140,14 @@ class ElectrochemicalSpeciesBandDiagram {
                 labelHAlign: labelHAlign,
                 refShift: refShift,
                 refShiftFrac: refShiftFrac,
+                // hatch: shade the concentrated side of a rung; if the caller
+                // gives no side, infer it from the species charge (a sub-molar
+                // cation hangs below its rung, an anion above — so the >c°
+                // side is up for cations, down for anions).
+                hatch:
+                    hatch && hatch.side == null && sInfo?.z
+                        ? { ...hatch, side: sInfo.z > 0 ? 'up' : 'down' }
+                        : hatch,
                 extraData: {
                     speciesId: speciesId,
                     curveDescription: curveDescription,
