@@ -11,17 +11,29 @@
     // (no specific system settled on yet); to make it concrete, set the two
     // water-side gaps and the organic-side gaps from a real salt's transfer
     // energies. For any single 1:1 salt, electroneutrality makes the two
-    // rungs deform EQUALLY AND OPPOSITELY by (RT/2F)ln(1/(K_C·K_A)) — the
-    // PRODUCT of the ions' partition coefficients, i.e. half the salt's
-    // transfer energy per F, the measurable combination. (The RATIO
-    // combination (RT/2F)ln(K_C/K_A) is the distribution potential Δφ
-    // itself: it shifts both rungs rigidly and is gauge-invisible here.)
-    // The salt prefers water, so both organic-side gaps widen: the ladder
-    // stretches rather than stepping rigidly.
+    // rungs deform (bulk to bulk) EQUALLY AND OPPOSITELY by
+    // (RT/2F)ln(1/(K_C·K_A)) — the PRODUCT of the ions' partition
+    // coefficients, i.e. half the salt's transfer energy per F, the
+    // measurable combination. (The RATIO combination (RT/2F)ln(K_C/K_A) is
+    // the distribution potential Δφ itself: it shifts both rungs rigidly and
+    // is gauge-invisible here.) The salt prefers water, so both organic-side
+    // gaps widen: the ladder stretches rather than stepping rigidly.
+    //
+    // Drawn heterojunction-style (cf. esbd-es-hetero, 2026-07-10): within
+    // each solvent the ladder is rigid, so near the contact the two rungs
+    // bend TOGETHER (a common double-layer dip — the electrostatics), while
+    // right at the boundary each rung takes its own sharp species-specific
+    // step (the transfer chemistry). Bending amplitude/sign and the
+    // bend-vs-step split are schematic (double-layer structure is
+    // concentration-dependent and convention-laden anyway).
     const GAP_W = 0.13; // |V_i - V°_i| in water (both ions; c_w equal by neutrality)
     const GAP_O = 0.3; // |gap| in the organic phase (same for both ions)
     const V_C = 0.4,
         V_A = -0.4; // the shared ions' flat voltages (gauge arbitrary)
+    const XC = 0.5; // contact position
+    const LW = 0.04,
+        LO = 0.075; // screening lengths, water | organic (water screens harder)
+    const BEND = -0.05; // common double-layer dip of the ladder at each contact face
 
     const diagram = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-container',
@@ -37,11 +49,17 @@
     ]);
     diagram.setVRange(-0.9, 0.9);
 
-    const x = linspace(0, 1, 101);
-    const s = x.map((xi) => {
-        const t = Math.min(1, Math.max(0, (xi - 0.465) / 0.07));
-        return t * t * (3 - 2 * t);
-    });
+    // one x array with the contact doubled, so each rung draws its sharp step
+    const xw = linspace(0, XC, 101);
+    const xo = linspace(XC, 1, 101);
+    const x = [...xw, ...xo];
+    // common-mode ladder bending: exponential double-layer tails on each side
+    const bendW = xw.map((xi) => BEND * Math.exp(-(XC - xi) / LW));
+    const bendO = xo.map((xi) => BEND * Math.exp(-(xi - XC) / LO));
+    const rung = (bulkW, bulkO) => [
+        ...bendW.map((b, k) => bulkW + b),
+        ...bendO.map((b, k) => bulkO + b),
+    ];
 
     diagram.updateTraceData([
         {
@@ -50,7 +68,7 @@
             curveType: 'standardState',
             labelFrac: 0.1,
             x: x,
-            y: s.map((t) => V_C + GAP_W + t * (GAP_O - GAP_W)),
+            y: rung(V_C + GAP_W, V_C + GAP_O),
         },
         {
             id: 'vc',
@@ -72,7 +90,7 @@
             curveType: 'standardState',
             labelFrac: 0.1,
             x: x,
-            y: s.map((t) => V_A - GAP_W - t * (GAP_O - GAP_W)),
+            y: rung(V_A - GAP_W, V_A - GAP_O),
         },
     ]);
 </script>

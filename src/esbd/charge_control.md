@@ -118,10 +118,12 @@ The Donnan step assumed one solvent throughout, so the ladder shifted as a rigid
 
 Any ion free to cross still equilibrates to a flat $V_i$, just as the mobile ions did across the Donnan membrane, and pinning two such ions again leaves a charge-balanced combination independent of $\Delta\phi$, the same mass-action cancellation we saw above. Here that ladder-independent quantity is what an electrochemist calls the standard partition coefficient of the salt. The individual single-ion transfer energies, by contrast, are no more measurable than single-ion activities were, and for the same reason: they depend on the unknowable offset between the two ladders. This liquid–liquid interface is known as {% wiki "Interface between two immiscible electrolyte solutions", "ITIES" %}.
 
+A semiconductor reader will recognize this deforming ladder: a junction between two different media is a heterojunction. There too each species' edge takes its own step at the contact (the conduction and valence band offsets differ), and no single potential step aligns the two sides. How such alignments get set, and what screening does with them, is where [basic electrostatics](../basicelectrostatics/) picks the story up.
+
 <figure class="demo-container" style="max-width: 420px">
 {% include "esbd-diagrams/esbd-cc-ities.njk" %}
 {% figcaption %}
-A liquid–liquid interface (ITIES): water against an immiscible organic solvent. A shared ion runs flat across the boundary ($V_i$ continuous), but the two solvents' $V^\circ_i$ ladders step by a different amount for each ion, set by how each prefers one solvent over the other. The salt's overall partition across the interface is fixed; how that partition splits between the individual ions is not. (Schematic, for a generic salt $\mathrm{C^+A^-}$ that prefers the water.)
+A liquid–liquid interface (ITIES): water against an immiscible organic solvent. A shared ion runs flat across the boundary ($V_i$ continuous), but the two solvents' $V^\circ_i$ ladders step by a different amount for each ion, set by how each prefers one solvent over the other. The anatomy at the contact reads like a heterojunction: within each solvent the ladder is rigid, so the two rungs bend *together* through the double layer, while the species-specific part arrives as each rung's own sharp step right at the boundary. The salt's overall partition across the interface is fixed; how that partition splits between the individual ions is not. (Schematic, for a generic salt $\mathrm{C^+A^-}$ that prefers the water.)
 {% endfigcaption %}
 </figure>
 

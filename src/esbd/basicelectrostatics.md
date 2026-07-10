@@ -110,6 +110,8 @@ A heterojunction between two n-type semiconductors, at equilibrium. The edge gap
 
 Predicting the *size* of that offset from scratch is a separate and much harder problem, which we will not attempt; the popular shortcut of lining materials up by a shared vacuum level is a rule of thumb that is [notoriously unreliable](../vacuum/), since every interface carries its own dipole. But the size is just one number. The *structure* of the alignment — electrostatic, screening-mediated, anchored to the stronger screener — is the essential part, and it is what lets the rest of this book draw interfaces at all.
 
+There is one more thing to notice here, because this is precisely where $\phi$ runs out of meaning. The figure draws the conduction edges, and their step at the contact is a definite, fixed number; the valence edges would take a *different* step at the same contact (the two offsets differ by the band-gap difference). A junction between two media has band offsets, plural, one per species, and none of them is "the" electrostatic step. The liquid version of this fact already appeared at the [ITIES](../charge_control/), where each ion's rung steps by its own transfer energy; it is why no liquid junction potential can be defined between two different solvents. Within one medium the distinction never bit, since following $\phi$ just meant following the ladder; between two different media only the per-species offsets remain, and $\phi$ names nothing. The full autopsy is deferred to [$\phi$ under the microscope](../phi/).
+
 ## Beyond the simple case
 
 It's worth noting what a blessing it is to have the quasi-neutrality principle, and how complicated things can get when we can't rely on it.
