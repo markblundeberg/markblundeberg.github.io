@@ -7,7 +7,7 @@ orderESBD: 94
 
 # {{title}}
 
-If you arrive already fluent in electrochemistry, here is a Rosetta Stone: the familiar symbols and equations on the left, their species-voltage readings on the right. None of it is new physics — it is the same quantities re-expressed on one shared voltage axis (see [what this is and isn't](../about/)). Each entry points to the topic where the translation is worked out.
+If you arrive already fluent in electrochemistry, here is a Rosetta Stone: the familiar symbols and equations on the left, their species-voltage readings on the right.^[The electron half of this dictionary has been done, and done well: Steve Byrnes's [Translation guide for discussing electron energy concepts](https://sjbyrnes.com/fermiterminology.html) maps the chemist's, physicist's, and engineer's terms onto one another. This page is in the same spirit, with the ions brought along.] None of it is new physics — it is the same quantities re-expressed on one shared voltage axis (see [what this is and isn't](../about/)). Each entry points to the topic where the translation is worked out.
 
 ## Potentials and levels
 
