@@ -151,23 +151,24 @@
         }
         diagram.updateTraceData(traces);
 
-        diagram.updateVerticalMarkers(
-            merged
-                ? [
-                      {
-                          // the exchange ties the two V_e- (equal here), not
-                          // the band edge: equilibrium equates carrier
-                          // levels, never rungs
-                          id: 'te',
-                          x: XI_IF,
-                          yDefs: [{ y: 0 }, { y: vSemi }],
-                          symbol: '⇌',
-                          popupCallback: () =>
-                              '$\\mathrm{e}^-(\\text{semi}) \\rightleftharpoons \\mathrm{e}^-(\\text{metal})$',
-                      },
-                  ]
-                : []
-        );
+        // driven marker, single-species flavour (2026-07-10): thermionic
+        // exchange is an electron hop e-(semi) <-> e-(metal) — a bare
+        // current arrow, permanent, from the ghost on the metal's level
+        // (the semi electrons' equilibrium target; Δ_eq = 0) to the actual
+        // semi-side V_e-. Arrowhead = conventional current direction:
+        // forward bias lands on the semi rail, reverse on the metal's.
+        // Fades at zero bias — the levels merging is the equilibrium.
+        diagram.updateVerticalMarkers([
+            {
+                id: 'te',
+                x: XI_IF,
+                yDefs: [{ y: 0 }],
+                symbol: null,
+                driven: { y: vSemi, color: SPECIES.electron.color },
+                popupCallback: () =>
+                    '$\\mathrm{e}^-(\\text{semi}) \\rightleftharpoons \\mathrm{e}^-(\\text{metal})$ driven — the arrow is the conventional current over the barrier',
+            },
+        ]);
     }
 
     makeSlider('{{idprefix}}-bias', update);
