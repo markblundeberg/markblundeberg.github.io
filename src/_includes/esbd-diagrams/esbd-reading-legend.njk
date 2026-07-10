@@ -100,10 +100,12 @@
 
     diagram.updateVerticalMarkers([
         {
+            // the electrode reaction ties V_e- to the ION's V_i (not to the
+            // implied redox level, which is itself derived from such ties)
             id: 'electrode_step',
             symbol: '⇌',
             x: b[2],
-            yDefs: [{ y: 0.0 }, { y: 0.15 }],
+            yDefs: [{ y: 0.0 }, { y: -0.35 }],
             popupCallback: () => 'Electrode reaction / step',
         },
     ]);

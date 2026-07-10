@@ -155,9 +155,12 @@
             merged
                 ? [
                       {
+                          // the exchange ties the two V_e- (equal here), not
+                          // the band edge: equilibrium equates carrier
+                          // levels, never rungs
                           id: 'te',
                           x: XI_IF,
-                          yDefs: [{ y: 0 }, { y: -PHI_B }],
+                          yDefs: [{ y: 0 }, { y: vSemi }],
                           symbol: '⇌',
                           popupCallback: () =>
                               '$\\mathrm{e}^-(\\text{semi}) \\rightleftharpoons \\mathrm{e}^-(\\text{metal})$',
