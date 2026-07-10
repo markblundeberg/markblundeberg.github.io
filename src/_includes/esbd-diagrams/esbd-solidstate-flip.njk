@@ -16,9 +16,9 @@
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
     import { linspace } from '{{ esbdJsPath }}utils.js';
 
-    // One equilibrium situation, two views. An n-type semiconductor with graded
-    // doping (donor density rising to the right): the Fermi level is flat at
-    // equilibrium while the band edges bend. All energies/voltages schematic (a.u.).
+    // One equilibrium situation, two views. A p-n junction at equilibrium
+    // (p on the left: E_F below midgap there): the Fermi level is flat while
+    // the band edges bend. All energies/voltages schematic (a.u.).
     const boundaries = [0, 1];
     const regions = [{ ...REGION.semiconductor, name: 'Semiconductor' }];
 
@@ -43,6 +43,7 @@
             label: 'E_\\mathrm{C}',
             color: '#333',
             style: { lineWidth: 2 },
+            hatch: { side: 'up' }, // into the conduction band (energy view)
             x: x,
             y: E_C,
         },
@@ -59,6 +60,7 @@
             label: 'E_\\mathrm{V}',
             color: '#333',
             style: { lineWidth: 2 },
+            hatch: { side: 'down' }, // into the valence band (energy view)
             x: x,
             y: E_V,
         },

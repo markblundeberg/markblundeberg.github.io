@@ -8,7 +8,8 @@ import { interpAtFrac, rejectUnexpectedFields } from './utils.js';
 // Hatch shading: marks one side of a trace (e.g. the concentrated/degenerate
 // side of a standard-state rung, like band-edge hatching in semiconductor
 // diagrams). All lengths in screen px; `side` is in diagram y ('up' = +y).
-const HATCH_DEFAULTS = {
+// (Exported: EnergyLevelsDiagram shares these defaults for its level hatch.)
+export const HATCH_DEFAULTS = {
     side: 'down',
     type: 'lines', // 'lines' (diagonal strokes) | 'tint' (solid fill)
     height: 14, // band extent from the trace, px

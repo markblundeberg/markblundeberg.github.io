@@ -54,6 +54,7 @@
                 label: 'V^\\circ_{\\mathrm{H}^+}',
                 color: SPECIES.proton.color,
                 style: RUNG,
+                hatch: { z: 1 },
                 labelSide: 'left',
             },
             {
@@ -63,6 +64,7 @@
                 label: 'V^\\circ_{\\mathrm{NO_3}^-}',
                 color: SPECIES.nitrate.color,
                 style: RUNG,
+                hatch: { z: -1 },
                 labelSide: 'left',
             },
             {
@@ -72,6 +74,7 @@
                 label: 'V^\\circ_{\\mathrm{Cl}^-}',
                 color: SPECIES.chloride.color,
                 style: RUNG,
+                hatch: { z: -1 },
                 labelSide: 'left',
             },
             {
@@ -105,6 +108,7 @@
                 label: 'V^\\circ_{\\mathrm{e}^-}',
                 color: BLUE,
                 style: EDGE,
+                hatch: { z: -1 }, // into the conduction band
             },
             {
                 categoryId: 'semi',
@@ -113,6 +117,7 @@
                 label: 'V^\\circ_{\\mathrm{h}^+}',
                 color: SPECIES.hole.color,
                 style: EDGE,
+                hatch: { z: 1 }, // into the valence band
             },
             {
                 categoryId: 'semi',

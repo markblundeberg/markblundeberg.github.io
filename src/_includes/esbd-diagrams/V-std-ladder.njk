@@ -272,6 +272,7 @@
                     yValue: d.V_std + dphi,
                     label: d.label, // Raw LaTeX for component
                     color: color,
+                    hatch: { z: d.z }, // concentrated side, texture per 1/z
                 });
             });
             // Update the diagrams

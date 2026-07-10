@@ -28,7 +28,7 @@ A standard semiconductor {% wiki "energy band diagram", "band diagram" %} plots 
 <figure class="demo-container" style="max-width: 700px">
 {% include "esbd-diagrams/esbd-solidstate-flip.njk" %}
 {% figcaption %}
-Side by side: a standard semiconductor energy band diagram (energy up, conduction band on top) and the same situation as an ESBD (voltage up, conduction band on the bottom). It is a simple vertical flip. (The situation: an n-type semiconductor with graded doping, at equilibrium — the Fermi level $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$ is flat while the band edges bend.)
+Side by side: a standard semiconductor energy band diagram (energy up, conduction band on top) and the same situation as an ESBD (voltage up, conduction band on the bottom). It is a simple vertical flip. (The situation: a p–n junction at equilibrium — the Fermi level $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$ is flat while the band edges bend. Note the band-edge hatching flips along with everything else.)
 {% endfigcaption %}
 </figure>
 

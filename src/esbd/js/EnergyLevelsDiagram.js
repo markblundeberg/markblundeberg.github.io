@@ -4,6 +4,7 @@
 
 import * as d3 from 'd3';
 import ResponsivePlot from './ResponsivePlot.js';
+import { HATCH_DEFAULTS } from './BandDiagram.js';
 import { bandScale } from './utils.js';
 
 class EnergyLevelsDiagram extends ResponsivePlot {
@@ -138,6 +139,7 @@ class EnergyLevelsDiagram extends ResponsivePlot {
         const levelPositions = this._calcLevelPositions();
 
         this._drawAxes();
+        this._drawHatches(levelPositions);
         this._drawLevels(levelPositions);
         this._drawArrows(levelPositions);
     }
@@ -182,6 +184,10 @@ class EnergyLevelsDiagram extends ResponsivePlot {
             .style('stroke', 'none');
 
         // Layer groups for artists
+        this.hatchDefs = this.plotArea.append('defs');
+        this.hatchGroup = this.plotArea
+            .append('g')
+            .style('pointer-events', 'none');
         this.levelsGroup = this.plotArea.append('g');
         this.arrowsGroup = this.plotArea.append('g');
         this.levelLabelsGroup = this.plotArea.append('g');
@@ -276,6 +282,110 @@ class EnergyLevelsDiagram extends ResponsivePlot {
         yAxis.selectAll('.domain').remove(); // remove main line
 
         this.drawYAxisLabel(this.axesGroup, this.config.yAxisLabel);
+    }
+
+    /** Hatch bands shading one side of a level, matching BandDiagram's rung
+     * hatching (see HATCH_DEFAULTS there). A level opts in via a `hatch`
+     * field: `true`, `{z: ±n}` (side and yScale derived from the charge:
+     * cations up '/', anions down '\', texture compressed by 1/|z|), or
+     * explicit HATCH_DEFAULTS overrides. */
+    _drawHatches(levelPositions) {
+        const FADE_SLABS = 3;
+        const hatched = levelPositions
+            .map((p) => {
+                let h = p.level.hatch;
+                if (!h) return null;
+                h = h === true ? {} : { ...h };
+                if (h.z) {
+                    h.side ??= h.z > 0 ? 'up' : 'down';
+                    h.yScale ??= 1 / h.z;
+                    delete h.z;
+                }
+                return { ...p, h: { ...HATCH_DEFAULTS, ...h } };
+            })
+            .filter(Boolean);
+        const patId = (d) => `${this.config.containerId}-hatch-pat-${d.id}`;
+        const colorOf = (d) =>
+            d.level.color || this.config.defaultLevelStyle.color;
+
+        this.drawStaticElements({
+            parentGroups: this.hatchDefs,
+            element: 'g',
+            cssClass: 'eld-hatch-defs',
+            data: hatched.filter((d) => d.h.type === 'lines'),
+            dataKey: (d) => d.id,
+            onUpdateImmediate: (s) =>
+                s.html((d) => {
+                    const h = d.h;
+                    return `<pattern id="${patId(d)}" patternUnits="userSpaceOnUse"
+                        width="${h.spacing}" height="${h.spacing}"
+                        patternTransform="scale(1,${h.yScale}) rotate(${h.angle})">
+                        <line x1="0" y1="0" x2="0" y2="${h.spacing}"
+                        stroke="${colorOf(d)}" stroke-width="${h.lineWidth}"/></pattern>`;
+                }),
+        });
+
+        // Fade = stacked opacity slabs; geometry applied immediately and the
+        // layer hidden during motion (as in BandDiagram: tweening pattern
+        // fills re-rasterizes every frame, laggy on mobile).
+        const slabData = hatched.flatMap((d) => {
+            const n = d.h.fade ? FADE_SLABS : 1;
+            return Array.from({ length: n }, (_, j) => ({
+                id: `${d.id}~${j}`,
+                lv: d,
+                j,
+                n,
+            }));
+        });
+        let moved = false;
+        this._hatchPrevY ??= new Map();
+        this.drawElements({
+            parentGroups: this.hatchGroup,
+            element: 'rect',
+            cssClass: 'eld-hatch',
+            data: slabData,
+            dataKey: (s) => s.id,
+            onNew: (s) => s.attr('stroke', 'none'),
+            onUpdateImmediate: (s) =>
+                s
+                    .attr('fill', ({ lv }) =>
+                        lv.h.type === 'lines'
+                            ? `url(#${patId(lv)})`
+                            : colorOf(lv)
+                    )
+                    .attr(
+                        'fill-opacity',
+                        ({ lv, j, n }) => lv.h.opacity * (1 - j / n)
+                    )
+                    .attr('x', ({ lv }) => lv.xLeft)
+                    .attr('width', ({ lv }) => lv.xRight - lv.xLeft)
+                    .attr('y', ({ lv, j, n }) => {
+                        const hgt = lv.h.height * Math.abs(lv.h.yScale);
+                        // overlap slabs a hair toward the level: no seams
+                        return lv.h.side === 'up'
+                            ? lv.y - (hgt * (j + 1)) / n
+                            : lv.y + (hgt * j) / n - (j ? 0.5 : 0);
+                    })
+                    .attr('height', ({ lv, j, n }) => {
+                        const hgt = lv.h.height * Math.abs(lv.h.yScale);
+                        return hgt / n + (j ? 0.5 : 0);
+                    })
+                    .each(({ lv }) => {
+                        if (this._hatchPrevY.get(lv.id) !== lv.y) {
+                            if (this._hatchPrevY.has(lv.id)) moved = true;
+                            this._hatchPrevY.set(lv.id, lv.y);
+                        }
+                    }),
+        });
+        if (moved && this.config.transitionDuration > 0) {
+            this.hatchGroup
+                .interrupt('hatch-show')
+                .attr('opacity', 0)
+                .transition('hatch-show')
+                .delay(this.config.transitionDuration)
+                .duration(200)
+                .attr('opacity', 1);
+        }
     }
 
     /** Draws/Updates the energy/potential level lines and labels. */
