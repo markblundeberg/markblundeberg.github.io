@@ -164,6 +164,41 @@
                 y: vhp,
             },
         ]);
+
+        // Driven-reaction markers at the junctions (2026-07-10). Diode:
+        // e-/h+ annihilation has zero products — single-species flavour,
+        // a bare grey current arrow from the hole rail (the electrons'
+        // equilibrium locus) to the actual V_e-; no bubble, fades at b=0.
+        // BPM: the genuine two-species case — rigid ⇌ leg = mu_H2O
+        // (anchored on V_OH-), ghost = where V_H+ would sit at
+        // equilibrium, red residual to the actual V_H+. Forward bias
+        // (water formation): arrow departs the H+ rail into its ghost —
+        // current leaving the proton rail. Reverse (water splitting):
+        // arrow lands on the H+ rail. Always pointing down.
+        const vh05 = b, ve05 = 0; // diode carrier levels at the junction
+        diode.updateVerticalMarkers([
+            {
+                id: 'rec',
+                x: 0.5,
+                yDefs: [{ y: vh05 }],
+                symbol: null,
+                driven: { y: ve05, color: '#666' },
+                popupCallback: () =>
+                    '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightarrow \\varnothing$ (or reverse) — the arrow is the conventional current between the rails',
+            },
+        ]);
+        const voh05 = 0, vhp05 = MU_W + b; // BPM levels at the junction
+        bpm.updateVerticalMarkers([
+            {
+                id: 'wd',
+                x: 0.5,
+                yDefs: [{ y: voh05 }, { y: voh05 + MU_W }],
+                symbol: '⇌',
+                driven: { y: vhp05, color: SPECIES.proton.color },
+                popupCallback: () =>
+                    '$\\mathrm{H}^+ + \\mathrm{OH}^- \\rightleftharpoons \\mathrm{H_2O}$ — the red residual is the reaction overpotential; its arrow points with the conventional current',
+            },
+        ]);
     }
 
     makeSlider('{{idprefix}}-bias-slider', update);

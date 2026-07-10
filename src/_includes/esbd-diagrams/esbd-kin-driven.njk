@@ -102,20 +102,25 @@
             },
         ]);
 
-        diagram.updateVerticalMarkers(
-            merged
-                ? [
-                      {
-                          id: 'ct',
-                          x: XIF,
-                          yDefs: [{ y: vMetal }, { y: vRxn(XIF) }],
-                          symbol: '⇌',
-                          popupCallback: () =>
-                              '$\\mathrm{Ox} + \\mathrm{e}^- \\rightleftharpoons \\mathrm{Red}$',
-                      },
-                  ]
-                : []
-        );
+        // driven marker, single-species flavour (Mark 2026-07-10): the
+        // implied-level representation hides the chemistry, so this is
+        // just an electron hop V_e- -> V_e- — a bare current arrow, no ⇌
+        // bubble (the arrow replaces it). Fades out at j = 0: the levels
+        // merging IS the equilibrium statement. The ghost dot rides the
+        // IMPLIED line: V_e-(Ox/Red) is, logically, a whole line of ghost
+        // dots — the electron rail's equilibrium position given the ions —
+        // and the marker's ghost is just the one at the interface.
+        diagram.updateVerticalMarkers([
+            {
+                id: 'ct',
+                x: XIF,
+                yDefs: [{ y: vRxn(XIF) }],
+                symbol: null,
+                driven: { y: vMetal, color: SPECIES.electron.color },
+                popupCallback: () =>
+                    'the reaction overpotential $\\eta$: conventional current hops down, driven by $\\mathrm{Ox} + \\mathrm{e}^- \\rightleftharpoons \\mathrm{Red}$ running net-forward',
+            },
+        ]);
     }
 
     makeSlider('{{idprefix}}-j', update);

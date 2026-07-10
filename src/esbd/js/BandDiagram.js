@@ -311,6 +311,7 @@ class BandDiagram extends ResponsivePlot {
                 symbol = STYLE_DEFAULTS.verticalMarker.symbol,
                 popupCallback = null,
                 popupArgs = null,
+                driven = null,
                 ...extraFields
             } = markerDef;
             rejectUnexpectedFields(extraFields);
@@ -332,6 +333,20 @@ class BandDiagram extends ResponsivePlot {
                 });
             }
 
+            // Driven-reaction residual (the 2026-07-10 marker design): the
+            // LAST yDef is the GHOST — the arrowed rail's equilibrium
+            // position — and driven.y is that rail's actual level. The
+            // engine draws a fat species-coloured residual ghost->actual
+            // with the arrowhead at the LOWER end (which is always the
+            // conventional-current-receiving rail: arrows only point down).
+            // Degenerates to a plain marker as driven.y -> ghost.
+            if (driven) {
+                if (typeof driven.y !== 'number' || !isFinite(driven.y))
+                    throw Error('bad driven.y');
+                const ghostLeg = legData[legData.length - 1];
+                ghostLeg.ghostColor = driven.color ?? '#555';
+            }
+
             markerData.push({
                 id,
                 x,
@@ -342,6 +357,14 @@ class BandDiagram extends ResponsivePlot {
                 symbol,
                 popupCallback,
                 popupArgs,
+                driven: driven
+                    ? {
+                          y: driven.y,
+                          yGhost: legData[legData.length - 1].y,
+                          color: driven.color ?? '#555',
+                          label: driven.label ?? null,
+                      }
+                    : null,
             });
         }
         this.markerData = markerData;
@@ -860,19 +883,126 @@ class BandDiagram extends ResponsivePlot {
             dataKey: (leg) => leg.id,
             onNew: (s) =>
                 s
-                    .attr('r', markerStyle.legEndRadius)
                     .attr('stroke-width', 0)
-                    .attr('fill', markerStyle.legColor)
                     .attr('cx', 0),
+            onUpdateImmediate: (s) =>
+                s
+                    .attr('r', (leg) =>
+                        leg.ghostColor
+                            ? markerStyle.legEndRadius + 1
+                            : markerStyle.legEndRadius
+                    )
+                    .attr('fill', (leg) => leg.ghostColor ?? markerStyle.legColor),
             onUpdateTransition: (s) => s.attr('cy', (d) => this.yScale(d.y)),
         });
 
-        // Per-marker central symbol
+        // Driven-reaction residual: fat coloured segment ghost -> actual,
+        // arrowhead at the lower end. Hidden (opacity) when the residual is
+        // shorter than a few px, so it degenerates smoothly to plain ⇌.
+        const drivenGroups = this.drawElements({
+            parentGroups: markerGroups,
+            element: 'g',
+            cssClass: 'bd-marker-driven',
+            data: (d) => (d.driven ? [d] : []),
+            dataKey: () => 'driven',
+        });
+        this.drawElements({
+            parentGroups: drivenGroups,
+            element: 'line',
+            cssClass: 'bd-marker-driven-line',
+            data: (d) => [d],
+            onNew: (s) =>
+                s
+                    .attr('x1', 0)
+                    .attr('x2', 0)
+                    .attr('stroke-width', 4)
+                    .style('cursor', 'help')
+                    .on('pointerover', (event, d) =>
+                        this._handleMarkerPointerOver(event, d.id)
+                    )
+                    .on('pointerout', (event, d) =>
+                        this._handleMarkerPointerOut(event, d.id)
+                    )
+                    .on('pointermove', (event) => event.stopPropagation()),
+            onUpdateImmediate: (s) => s.attr('stroke', (d) => d.driven.color),
+            onUpdateTransition: (s) =>
+                s
+                    .attr('y1', (d) => this.yScale(d.driven.yGhost))
+                    .attr('y2', (d) => this.yScale(d.driven.y))
+                    .attr('opacity', (d) =>
+                        Math.abs(
+                            this.yScale(d.driven.yGhost) -
+                                this.yScale(d.driven.y)
+                        ) > 4
+                            ? 1
+                            : 0
+                    ),
+        });
+        this.drawElements({
+            parentGroups: drivenGroups,
+            element: 'path',
+            cssClass: 'bd-marker-driven-arrow',
+            data: (d) => [d],
+            onNew: (s) => s.attr('stroke-width', 0),
+            onUpdateImmediate: (s) => s.attr('fill', (d) => d.driven.color),
+            onUpdateTransition: (s) =>
+                s
+                    .attr('transform', (d) => {
+                        // head at the LOWER (larger pixel-y) end
+                        const yHead = Math.max(
+                            this.yScale(d.driven.yGhost),
+                            this.yScale(d.driven.y)
+                        );
+                        return `translate(0, ${yHead})`;
+                    })
+                    .attr('d', 'M -5 -8 L 0 0 L 5 -8 L 0 -4.5 Z')
+                    .attr('opacity', (d) =>
+                        Math.abs(
+                            this.yScale(d.driven.yGhost) -
+                                this.yScale(d.driven.y)
+                        ) > 4
+                            ? 1
+                            : 0
+                    ),
+        });
+        this.drawElements({
+            parentGroups: drivenGroups,
+            element: 'text',
+            cssClass: 'bd-marker-driven-label',
+            data: (d) => (d.driven.label ? [d] : []),
+            onNew: (s) =>
+                s
+                    .attr('font-size', 12)
+                    .attr('font-style', 'italic')
+                    .attr('text-anchor', 'start')
+                    .attr('dominant-baseline', 'middle')
+                    .attr('x', 7),
+            onUpdateImmediate: (s) =>
+                s.attr('fill', (d) => d.driven.color).text((d) => d.driven.label),
+            onUpdateTransition: (s) =>
+                s
+                    .attr('y', (d) =>
+                        0.5 *
+                        (this.yScale(d.driven.yGhost) + this.yScale(d.driven.y))
+                    )
+                    .attr('opacity', (d) =>
+                        Math.abs(
+                            this.yScale(d.driven.yGhost) -
+                                this.yScale(d.driven.y)
+                        ) > 12
+                            ? 1
+                            : 0
+                    ),
+        });
+
+        // Per-marker central symbol (symbol: null -> no bubble; used by
+        // bare single-species current arrows, where the arrow IS the marker)
         this.drawElements({
             parentGroups: markerGroups,
             element: 'g',
             cssClass: 'bd-marker-symbol',
-            data: (d) => [d],
+            data: (d) => (d.symbol ? [d] : []),
+            dataKey: () => 'symbol',
             onNew: (symbolGroup) => {
                 symbolGroup
                     .append('circle')

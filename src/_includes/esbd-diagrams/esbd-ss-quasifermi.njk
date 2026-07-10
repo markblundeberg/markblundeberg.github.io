@@ -43,9 +43,6 @@
         document.getElementById('{{idprefix}}-drive-readout').textContent =
             b.toFixed(2);
         const merged = b < 0.05; // label-merge threshold (display only)
-        // the physics glyph swaps at ~zero: a 0.04 V split is a genuinely
-        // driven state and must not wear the equilibrium mark
-        const atEq = b < 0.005;
 
         const vh = (x) => MID + (b / 2) * Math.exp(-(x - XL) / L);
         const ve = (x) =>
@@ -82,22 +79,22 @@
             },
         ]);
 
-        // recombination "leakage" bridging the rails along the bar (driven Ω),
-        // plus the always-equilibrated ⇌ at the left ohmic contact, where the
-        // metal's electrons pin to the hole rail (a zero-height marker: the two
-        // levels coincide there — that coincidence is the equilibrium)
+        // recombination "leakage" bridging the rails along the bar — bare
+        // current arrows (2026-07-10, retiring the provisional Ω glyph):
+        // e-/h+ annihilation has zero products, so the arrow IS the mark;
+        // it fades as the drive switches off. The always-equilibrated ⇌
+        // stays at the left ohmic contact, where the metal's electrons pin
+        // to the hole rail (a zero-height marker: the two levels coincide
+        // there — that coincidence is the equilibrium).
         diagram.updateVerticalMarkers([
             ...[0.35, 0.5, 0.65].map((x, i) => ({
                 id: 'recomb' + i,
                 x,
-                yDefs: [{ y: vh(x) }, { y: ve(x) }],
-                // driven glyph Ω (net-forward recombination); collapses to the
-                // equilibrium ⇌ once the drive is switched off
-                symbol: atEq ? '⇌' : 'Ω',
+                yDefs: [{ y: vh(x) }],
+                symbol: null,
+                driven: { y: ve(x), color: '#666' },
                 popupCallback: () =>
-                    atEq
-                        ? '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightleftharpoons \\varnothing$'
-                        : '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightarrow \\varnothing$',
+                    '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightarrow \\varnothing$ — net recombination; the arrow is the conventional current between the rails',
             })),
             {
                 id: 'contact',

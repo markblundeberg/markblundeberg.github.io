@@ -37,7 +37,6 @@
     function update(delta) {
         document.getElementById('{{idprefix}}-bias-readout').textContent =
             delta.toFixed(2);
-        const eq = Math.abs(delta) < 0.03;
 
         diagram.updateTraceData([
             {
@@ -67,21 +66,24 @@
             },
         ]);
 
-        // the ⇌ marker only belongs on an equilibrated reaction
-        diagram.updateVerticalMarkers(
-            eq
-                ? [
-                      {
-                          id: 'ag-cl-',
-                          x: b[1],
-                          yDefs: [{ y: V_IMPLIED + delta }, { y: V_CL }],
-                          symbol: '⇌',
-                          popupCallback: () =>
-                              '$\\mathrm{AgCl} + \\mathrm{e}^- \\rightleftharpoons \\mathrm{Ag} + \\mathrm{Cl}^-$',
-                      },
-                  ]
-                : []
-        );
+        // driven-reaction marker (2026-07-10): the rigid ⇌ leg spans
+        // V_Cl- down to the GHOST — the electrons' equilibrium position,
+        // which IS the implied line (an implied level is a whole line of
+        // ghost dots). The blue residual from the ghost to the metal's
+        // actual V_e- is the reaction overpotential; its arrowhead (always
+        // at the lower end) is the conventional current direction. Fades
+        // to the plain ⇌ at zero bias.
+        diagram.updateVerticalMarkers([
+            {
+                id: 'ag-cl-',
+                x: b[1],
+                yDefs: [{ y: V_CL }, { y: V_IMPLIED }],
+                symbol: '⇌',
+                driven: { y: V_IMPLIED + delta, color: SPECIES.electron.color },
+                popupCallback: () =>
+                    '$\\mathrm{AgCl} + \\mathrm{e}^- \\rightleftharpoons \\mathrm{Ag} + \\mathrm{Cl}^-$ — the blue residual is the reaction overpotential; its arrow points with the conventional current',
+            },
+        ]);
     }
 
     makeSlider('{{idprefix}}-bias', update);
