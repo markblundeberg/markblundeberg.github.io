@@ -22,7 +22,7 @@
     const productSpan = document.getElementById('{{idprefix}}-product');
 
     const diagram = new EnergyLevelsDiagram('{{idprefix}}-container', {
-        yAxisLabel: 'Voltage (V)',
+        yAxisLabel: 'Voltage (V) — arbitrary offset',
         yRange: [-0.32, 0.32],
         categories: [{ id: 'soln', label: 'Solution' }],
         // pixel room for the side labels; band stretches with the figure
@@ -79,7 +79,7 @@
             arrowId: 'gapA',
             fromLevelId: 'v0a',
             toLevelId: 'va',
-            label: `c_A = 10^{${logcA.toFixed(1)}}c^\\circ`,
+            label: `c_A = 10^{${logcA.toFixed(2)}}c^\\circ`,
             arrowStyle: '<->',
             dxFrac: +0.22,
             labelHAlign: 'right',
@@ -88,7 +88,7 @@
             arrowId: 'gapB',
             fromLevelId: 'v0b',
             toLevelId: 'vb',
-            label: `c_B = 10^{${logcB.toFixed(1)}}c^\\circ`,
+            label: `c_B = 10^{${logcB.toFixed(2)}}c^\\circ`,
             arrowStyle: '<->',
             dxFrac: -0.22,
         });

@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-07-09T16:23:33.254461</dc:date>
+    <dc:date>2026-07-10T07:39:58.913563</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -917,8 +917,8 @@ L 413.953182 270.315882
 " clip-path="url(#p27d0bc6377)" style="fill: none; stroke: #d87e37; stroke-width: 1.1"/>
    </g>
    <g id="line2d_7">
-    <path d="M 53.626818 322.824706 
-L 413.953182 322.824706 
+    <path d="M 53.626818 320.915294 
+L 413.953182 320.915294 
 " clip-path="url(#p27d0bc6377)" style="fill: none; stroke: #80b030; stroke-width: 1.1"/>
    </g>
    <g id="patch_10">
@@ -1212,7 +1212,7 @@ z
    </g>
    <g id="text_8">
     <!-- $V^\circ_{\mathrm{Cl}^-}$ -->
-    <g style="fill: #80b030" transform="translate(373.210606 318.528529) scale(0.09 -0.09)">
+    <g style="fill: #80b030" transform="translate(373.210606 316.905529) scale(0.09 -0.09)">
      <use xlink:href="#DejaVuSans-Oblique-56" transform="translate(0 0.09375)"/>
      <use xlink:href="#DejaVuSans-2218" transform="translate(89.062669 38.439062) scale(0.7)"/>
      <use xlink:href="#DejaVuSans-43" transform="translate(68.408203 -27.25) scale(0.7)"/>

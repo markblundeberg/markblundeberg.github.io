@@ -28,7 +28,7 @@ One of the beautiful things about band diagrams is the perspective they give on 
 <figure class="demo-container" style="max-width: 460px">
 {% include "esbd-diagrams/esbd-es-defect.njk" %}
 {% figcaption %}
-A sharp charged defect introduced inside a conductor (here a salt solution), and the mobile carriers moving in to cancel it: the whole $V^\circ_i$ ladder bulges with $\phi$ over a screening length while the $V_i$ ride flat. Below, the defect's own charge and the equal-and-opposite screening cloud it gathers.
+A sharp charged defect introduced inside a conductor (here a salt solution), and the mobile carriers moving in to cancel it: the whole $V^\circ_i$ ladder bulges with $\phi$ over a screening length while the $V_i$ ride flat (the bulge is exaggerated for visibility). Below, the defect's own charge and the equal-and-opposite screening cloud it gathers.
 {% endfigcaption %}
 </figure>
 

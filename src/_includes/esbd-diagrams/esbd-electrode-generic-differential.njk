@@ -1,6 +1,8 @@
+{% set idprefix = "esbd-electrode-generic-differential" %}
 <div
     class="bd-container"
-    id="electrode-generic-differential-container"
+    id="{{idprefix}}-container"
+    style="height: 250px"
 ></div>
 
 <script type="module">
@@ -16,7 +18,7 @@
     };
 
     const diagram = new ElectrochemicalSpeciesBandDiagram(
-        'electrode-generic-differential-container',
+        '{{idprefix}}-container',
         speciesInfo,
         { margins: { right: 56 } } // room for the V_ion label at the right edge
     );

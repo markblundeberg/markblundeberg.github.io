@@ -52,9 +52,14 @@
         document.getElementById('{{idprefix}}-j-readout').textContent =
             j.toFixed(1);
 
-        // c/c_bulk: linear across the layer, uniform (stirred) beyond
+        // c/c_bulk: linear across the layer, uniform (stirred) beyond.
+        // Same-current comparison (round-2 D3): in the binary case migration
+        // carries half the cation flux, so diffusion needs only half the
+        // gradient; with support, diffusion alone carries j and the layer
+        // depletes twice as deep.
+        const dep = sup ? 0.9 : 0.45;
         const c = (x) =>
-            x >= XB ? 1 : 1 - 0.9 * j * (1 - (x - XIF) / (XB - XIF));
+            x >= XB ? 1 : 1 - dep * j * (1 - (x - XIF) / (XB - XIF));
         const bend = (x) => DEC * Math.log10(c(x));
         // ohmic tilt of everything in the stirred bulk (suppressed by support)
         const ohm = (x) => (sup ? 0 : ROHM * j * Math.max(0, x - XB));

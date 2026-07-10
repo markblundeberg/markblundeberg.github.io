@@ -1,4 +1,4 @@
-<div class="bd-container" id="nacl-saturation-container"></div>
+<div class="bd-container" id="nacl-saturation-container" style="height: 250px"></div>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
@@ -8,6 +8,7 @@
         cation: SPECIES.sodium,
         anion: SPECIES.chloride,
     });
+    diagram.diagram.setYLabel('Species Voltage (V) — arbitrary offset');
 
     const boundaries = [0, 0.5, 1];
     diagram.setSpatialLayout(boundaries, [
@@ -15,10 +16,11 @@
         { ...REGION.solution, name: 'Brine' },
     ]);
 
-    const Delta = -3.9813; // V
-    const V_cat = -0.789; //random
+    const Delta = -3.9813; // V (real: V_Na+ - V_Cl- pinned by saturated NaCl)
+    const V_cat = -0.789; // arbitrary float (nothing grounds the pair) — disclosed in the axis label
     const V_an = V_cat - Delta;
-    diagram.setVRange(Math.min(V_cat, V_an) - 0.2, Math.max(V_cat, V_an) + 0.2);
+    // extra top headroom keeps the upper trace's label clear of the corner ?-chip
+    diagram.setVRange(Math.min(V_cat, V_an) - 0.2, Math.max(V_cat, V_an) + 0.45);
 
     const b = boundaries;
     diagram.updateTraceData([

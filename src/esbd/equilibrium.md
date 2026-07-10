@@ -121,7 +121,7 @@ Electrons are not present as free constituents in a solution, however their ther
 <figure class="demo-container" style="max-width: 340px">
 {% include "esbd-diagrams/esbd-ag-agcl-implied.njk" %}
 {% figcaption %}
-The silver chloride electrode again, now with the reaction's implied $V_{\mathrm{e}^-}$ drawn in the solution (thick dashed). At zero bias the metal's electrons line up with it and we recover the earlier diagram. Move the bias and the metal's $V_{\mathrm{e}^-}$ departs, while the solution — its composition held fixed here — still "wants" the same level; the gap between the two is the disequilibrium available to drive the reaction.
+The silver chloride electrode again, now with the reaction's implied $V_{\mathrm{e}^-}$ drawn across the coating and solution (thick dashed). At zero bias the metal's electrons line up with it and we recover the earlier diagram. Move the bias and the metal's $V_{\mathrm{e}^-}$ departs, while the solution — its composition held fixed here — still "wants" the same level; the gap between the two is the disequilibrium available to drive the reaction.
 {% endfigcaption %}
 </figure>
 

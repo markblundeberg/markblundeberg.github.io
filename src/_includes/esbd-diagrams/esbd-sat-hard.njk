@@ -106,7 +106,9 @@
                 curveType: 'bandEdge_C',
                 refShift: E_SHIFT,
                 labelFrac: 0.35,
-                x: [XL, 1],
+                // base only: continuing the flat edge into the emitter would
+                // assert its minority-level n (~10^11 cm^-3) there (round-2 D4)
+                x: [XL, XR],
                 y: [0.18, 0.18],
             },
             {

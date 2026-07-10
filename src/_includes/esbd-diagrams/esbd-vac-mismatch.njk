@@ -27,6 +27,8 @@
     ]);
     diagram.setVRange(-5.65, 0.55);
 
+    const guideStyle = { lineWidth: 1, dasharray: '1.5,3' };
+
     diagram.updateTraceData([
         {
             id: 'veAu',
@@ -52,6 +54,27 @@
             labelFrac: 0.55,
             x: [0.34, 0.66],
             y: [VF - WAU, VF - WAL],
+        },
+        // dotted guides carrying each surface value to its inset marker
+        // (the markers sit inside the gap; without guides their lower dots
+        // float off the sloping phi_vac — vac-rungs idiom)
+        {
+            id: 'guideAu',
+            speciesId: 'electron',
+            curveType: 'phi',
+            style: guideStyle,
+            showLabel: false,
+            x: [0.34, 0.385],
+            y: [VF - WAU, VF - WAU],
+        },
+        {
+            id: 'guideAl',
+            speciesId: 'electron',
+            curveType: 'phi',
+            style: guideStyle,
+            showLabel: false,
+            x: [0.615, 0.66],
+            y: [VF - WAL, VF - WAL],
         },
     ]);
 

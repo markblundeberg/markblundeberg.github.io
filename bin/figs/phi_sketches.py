@@ -180,7 +180,9 @@ def fig_hillium():
     ax2.plot(x, mean, color=BLUE, lw=2.2, ls=(0, (5, 3)), zorder=3)
     # plateaus computed above sit at ~0.9 (hillium) and ~9.2 (mountainium);
     # thread the ladder so the left plateau clears every rail by >= 1 V
-    for y, c, lw in ((1.9, NA, 2.6), (-1.0, CL, 2.6), (3.1, NA, 1.1), (-2.4, CL, 1.1)):
+    # equal rung-carrier gaps (1.2) for both ions: one dissolved 1:1 salt,
+    # electroneutrality makes the two concentrations (hence gaps) identical
+    for y, c, lw in ((1.9, NA, 2.6), (-1.0, CL, 2.6), (3.1, NA, 1.1), (-2.2, CL, 1.1)):
         ax2.plot([0.3, 11.7], [y, y], color=c, lw=lw, solid_capstyle='butt', zorder=2)
     ax2.set_ylim(-4.0, 13)
     ax2.set_yticks([])
@@ -198,7 +200,7 @@ def fig_hillium():
         r'$V_{\mathrm{Cl}^-}$', xy=(1.15, -0.5), color=CL, fontsize=10, ha='center'
     )
     ax2.annotate(
-        r'$V^\circ_{\mathrm{Cl}^-}$', xy=(10.7, -1.95), color=CL, fontsize=9, ha='center'
+        r'$V^\circ_{\mathrm{Cl}^-}$', xy=(10.7, -1.78), color=CL, fontsize=9, ha='center'
     )
 
     fig.tight_layout(pad=0.4, h_pad=0.6)

@@ -30,7 +30,7 @@
         { margins: { right: 56 } }
     );
     band.setSpatialLayout([0, 1], [REGION.solution]);
-    band.setVRange(0.05, 0.95);
+    band.setVRange(0.02, 0.98); // rung tips at q = ±1 reach 0.96/0.04
 
     const rho = new XYPlot('{{idprefix}}-rho', {
         xLabel: '',
@@ -106,11 +106,14 @@
             {
                 id: 'cloud',
                 x: [...xs],
-                y: xs.map((x) => (-0.55 * q * Math.exp(-Math.abs(x - 0.5) / LAM))),
+                // amplitude matched so the cloud's integral equals the
+                // spike's (0.012*sqrt(pi)/(2*LAM) ~ 0.152): the caption's
+                // "equal-and-opposite" is drawn true, not just gestured
+                y: xs.map((x) => (-0.152 * q * Math.exp(-Math.abs(x - 0.5) / LAM))),
                 color: '#7a5fb5',
                 style: { lineWidth: 2 },
                 label: '\\text{screening cloud}',
-                labelFrac: 0.78,
+                labelFrac: 0.62, // on the dip, clear of the flat tail (label used to strike through the line)
             },
         ]);
     }

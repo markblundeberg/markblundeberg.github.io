@@ -45,7 +45,7 @@
     const mu_Ag = 0; // chem potential of Ag
     const mu_H2_1bar = 0; // chemical potential of H2 at 1 bar fugacity
 
-    diagram.setVRange(-0.17, 1.75);
+    diagram.setVRange(-0.17, 1.85); // sized for joint slider extremes (V_Cl- tops out ~1.79)
 
     function updateDiagrams() {
         const a_hcl = Math.pow(10, parseFloat(hSlider.value));
@@ -83,7 +83,8 @@
                 speciesId: 'hplus',
                 curveType: 'voltage',
                 showLabel: true,
-                x: [b[1], b[3]],
+                // H+ lives in the solution only — stop at the AgCl boundary
+                x: [b[1], b[2]],
                 y: [V_H, V_H],
             },
             {
@@ -91,7 +92,7 @@
                 speciesId: 'hplus',
                 curveType: 'standardState',
                 showLabel: true,
-                x: [b[1], b[3]],
+                x: [b[1], b[2]],
                 y: [V_H_std, V_H_std],
             },
             {

@@ -33,6 +33,7 @@
 
 <script type="module">
     import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
+    import { SPECIES } from '{{ esbdJsPath }}figureDefs.js';
     import { makeSlider } from '{{ esbdJsPath }}utils.js';
 
     // DOM identifiers - must match above HTML!
@@ -40,7 +41,7 @@
     const muBarContainerId = '{{ idprefix }}-mu-container';
     const vContainerId = '{{ idprefix }}-v-container';
 
-    const ion = { z: -1, color: '#377eb8', latex: '\\mathrm{e}^{-}' };
+    const ion = { z: SPECIES.electron.z, color: SPECIES.electron.color, latex: SPECIES.electron.mathLabel };
 
     // Configuration for the Diagrams
     const commonConfig = {
@@ -51,8 +52,6 @@
         ],
         bandMinPaddingOuter: { left: 8, right: 34 },
     };
-    const throttleDuration = 100; // should be 1/5 or less of transitionDuration
-
     const muBarConfig = {
         ...commonConfig,
         yAxisLabel: 'Electrochemical potential $\\bar{\\mu}_i$',

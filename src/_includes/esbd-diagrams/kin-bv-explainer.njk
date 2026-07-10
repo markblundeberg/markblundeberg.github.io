@@ -224,7 +224,7 @@
                 {
                     id: 'cathodic',
                     ...trim(Jc, -JMAX, JMAX),
-                    color: '#E4571A',
+                    color: SPECIES.hole.color,
                     style: FAINT,
                     label: '-J_{\\mathrm{c}}',
                     labelFrac: 0.07,
@@ -265,7 +265,7 @@
                 {
                     id: 'cathodic',
                     ...trim(logAbs(Jc), LO, HI),
-                    color: '#E4571A',
+                    color: SPECIES.hole.color,
                     style: FAINT,
                     label: '|J_{\\mathrm{c}}|',
                     labelFrac: 0.07,

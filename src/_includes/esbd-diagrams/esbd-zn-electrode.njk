@@ -1,10 +1,11 @@
-<div class="bd-container" id="zn-electrode-container"></div>
+{% set idprefix = "esbd-zn-electrode" %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 250px"></div>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
 
-    const diagram = new ElectrochemicalSpeciesBandDiagram('zn-electrode-container', {
+    const diagram = new ElectrochemicalSpeciesBandDiagram('{{idprefix}}-container', {
         cation: SPECIES.zinc,
         electron: SPECIES.electron,
     });
@@ -46,7 +47,7 @@
             x: b[1],
             yDefs: [{ y: V_el }, { y: V_Zn }],
             popupCallback: () =>
-                '$\\mathrm{Zn} \\rightleftharpoons \\mathrm{Zn}^{2+} + 2\\mathrm{e}^-$',
+                '$\\mathrm{Zn}^{2+} + 2\\mathrm{e}^- \\rightleftharpoons \\mathrm{Zn}$',
         },
     ]);
 </script>

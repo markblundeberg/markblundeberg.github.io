@@ -44,6 +44,17 @@
             x: [0.55, 1],
             y: [VSHE - WSHE, VSHE - WSHE],
         },
+        // dotted guide carrying the SHE rung to the marker's x, so the
+        // marker's top dot doesn't hang in empty vacuum (vac-rungs idiom)
+        {
+            id: 'guideShe',
+            speciesId: 'electron',
+            curveType: 'standardStateImplied',
+            style: { lineWidth: 1, dasharray: '1.5,3' },
+            showLabel: false,
+            x: [0.55, 0.65],
+            y: [VSHE, VSHE],
+        },
     ]);
 
     diagram.updateVerticalMarkers([

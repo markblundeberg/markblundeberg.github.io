@@ -1,4 +1,4 @@
-<div class="bd-container" id="reaction-generic-container"></div>
+<div class="bd-container" id="reaction-generic-container" style="height: 250px"></div>
 
 <script type="module">
     const plotContainerId = 'reaction-generic-container';
@@ -21,8 +21,11 @@
 
     const diagram = new ElectrochemicalSpeciesBandDiagram(
         plotContainerId,
-        speciesInfo
+        speciesInfo,
+        // placeholder Delta/base values, so no numeric ticks (round-2 B1)
+        { yMode: 'abstract' }
     );
+    diagram.diagram.setYLabel('Species voltage (a.u.)');
 
     // Set layout
     const boundaries = [0, 1];

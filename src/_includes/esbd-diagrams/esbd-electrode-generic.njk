@@ -1,4 +1,5 @@
-<div class="bd-container" id="electrode-generic-container"></div>
+{% set idprefix = "esbd-electrode-generic" %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 250px"></div>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
@@ -13,7 +14,7 @@
     };
 
     const diagram = new ElectrochemicalSpeciesBandDiagram(
-        'electrode-generic-container',
+        '{{idprefix}}-container',
         speciesInfo,
         { margins: { right: 56 } } // room for the GND label at the right edge
     );

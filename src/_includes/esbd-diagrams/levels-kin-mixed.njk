@@ -34,7 +34,7 @@
     });
 
     function update(r) {
-        const Vm = (V_O2 + V_FE) / 2 + (DEC / 2) * r; // Tafel-limit balance
+        const Vm = (V_O2 + V_FE) / 2 + DEC * r; // Tafel-limit balance (59.2 mV per decade of J0 ratio at alpha = 0.5, z = 1)
 
         diagram.setLevels([
             {

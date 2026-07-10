@@ -15,6 +15,12 @@
         { ...REGION.graphite },
         { ...REGION.sei },
         { ...REGION.solution, name: 'Electrolyte' },
+    ], [
+        // explicit label spots: the thin SEI strip's centered label collides
+        // with its long Electrolyte neighbour, so raise SEI to the top edge
+        { label: 'Graphite', x: 0.35 },
+        { label: 'SEI', x: 0.75, y: 'top' },
+        { label: 'Electrolyte', x: 0.9 },
     ]);
 
     const V_el = -0.02;

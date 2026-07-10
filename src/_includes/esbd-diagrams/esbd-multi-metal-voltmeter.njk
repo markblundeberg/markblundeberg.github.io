@@ -1,11 +1,12 @@
-<div style="height: 150px" id="multi-metal-voltmeter-container"></div>
+{% set idprefix = "esbd-multi-metal-voltmeter" %}
+<div style="height: 150px" id="{{idprefix}}-container"></div>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
 
     const diagram = new ElectrochemicalSpeciesBandDiagram(
-        'multi-metal-voltmeter-container',
+        '{{idprefix}}-container',
         { electron: SPECIES.electron },
         { margins: { right: 56 } } // room for the GND label at the right edge
     );

@@ -45,7 +45,8 @@
     const mu_Ag = 0; // chem potential of Ag
     const mu_H2_1bar = 0; // chemical potential of H2 at 1 bar fugacity
 
-    const E0_SSCE_SHE =
+    // E° of the Ag/AgCl electrode vs SHE (0.2221 V)
+    const E0_AGCL_SHE =
         mu_H2_1bar / (2 * F) - dV_HCl_std - (mu_Ag - mu_AgCl) / F;
 
     diagram.setVRange(-0.35, 0.55);
@@ -62,8 +63,8 @@
 
         const V0_SHE = 0;
         const V_el = V0_SHE + RT_F * Math.log(a_hplus / Math.sqrt(a_h2));
-        const V0_SSCE = V0_SHE + E0_SSCE_SHE;
-        const V_el_Ag = V0_SSCE - RT_F * Math.log(a_clminus);
+        const V0_AGCL = V0_SHE + E0_AGCL_SHE;
+        const V_el_Ag = V0_AGCL - RT_F * Math.log(a_clminus);
 
         const V_cell = V_el_Ag - V_el;
         voltsSpan.textContent = V_cell.toPrecision(3);
@@ -84,17 +85,19 @@
                 curveType: 'standardStateImplied',
                 label: String.raw`V^\circ_{\mathrm{e}^-}(\mathrm{SHE})`,
                 showLabel: true,
-                x: [b[1], b[3]],
+                // a solution property: stop at the AgCl boundary (the
+                // Ag/AgCl implied line below runs on to reach its marker)
+                x: [b[1], b[2]],
                 y: [V0_SHE, V0_SHE],
             },
             {
-                id: `electron_ssce`,
+                id: `electron_agcl`,
                 speciesId: 'electron',
                 curveType: 'standardStateImplied',
-                label: String.raw`V^\circ_{\mathrm{e}^-}(\mathrm{SSCE})`,
+                label: String.raw`V^\circ_{\mathrm{e}^-}(\mathrm{Ag/AgCl})`,
                 showLabel: true,
                 x: [b[1], b[3]],
-                y: [V0_SSCE, V0_SSCE],
+                y: [V0_AGCL, V0_AGCL],
             },
             {
                 id: `electron_trace2`,
@@ -109,19 +112,19 @@
         diagram.updateVerticalMarkers([
             {
                 id: 'she',
-                symbol: 'a',
+                symbol: '↕',
                 x: b[1],
                 yDefs: [{ y: V_el }, { y: V0_SHE }],
                 popupCallback: () =>
-                    String.raw`$\mathrm{H}^+ + \mathrm{e}^- \rightleftharpoons \tfrac{1}{2}\mathrm{H}_2$`,
+                    String.raw`the Nernst activity term $\tfrac{RT}{F}\ln\tfrac{a_{\mathrm{H}^+}}{\sqrt{a_{\mathrm{H_2}}}}$`,
             },
             {
                 id: 'agcl',
-                symbol: 'a',
+                symbol: '↕',
                 x: b[3],
-                yDefs: [{ y: V_el_Ag }, { y: V0_SSCE }],
+                yDefs: [{ y: V_el_Ag }, { y: V0_AGCL }],
                 popupCallback: () =>
-                    String.raw`$\mathrm{AgCl} + \mathrm{e}^- \rightleftharpoons \mathrm{Ag} + \mathrm{Cl}^-$`,
+                    String.raw`the Nernst activity term $-\tfrac{RT}{F}\ln a_{\mathrm{Cl}^-}$`,
             },
         ]);
     }

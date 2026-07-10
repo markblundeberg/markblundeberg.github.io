@@ -51,7 +51,7 @@ The equation holds locally: every level is read off at the same spot in the solu
 <figure class="demo-container" style="max-width: 420px">
 {% include "esbd-diagrams/levels-e-nernst.njk" %}
 {% figcaption %}
-The Nernst equation as a three-level partition. $E$ is the gap from the reaction level to the reference; $E^\circ$ is the gap from the reaction's standard level to the reference; and the activity term is the gap between the reaction level and its own standard level. A slider on the $\mathrm{Ox}/\mathrm{Red}$ activities slides the top level.
+The Nernst equation as a three-level partition. $E$ is the gap from the reaction level to the reference; $E^\circ$ is the gap from the reaction's standard level to the reference; and the activity term is the gap between the reaction level and its own standard level. A slider on the $\mathrm{Ox}/\mathrm{Red}$ activities slides the reaction level.
 {% endfigcaption %}
 </figure>
 

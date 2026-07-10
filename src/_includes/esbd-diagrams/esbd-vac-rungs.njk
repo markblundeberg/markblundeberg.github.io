@@ -16,7 +16,7 @@
     // (schematic surface value). Each species' work function = the gap from
     // its in-material V_i to ITS OWN rung; the resulting spans land at
     // realistic hydration-energy magnitudes (~4.5, ~3.4 V).
-    const PHIVAC = -4.3;
+    const PHIVAC = -4.3; // schematic surface height (a Trasatti-style electrode work function ~4.3 V; disclosed in the electron marker's popup)
     const RUNG_NA = PHIVAC + 5.95;
     const RUNG_CL = PHIVAC + 2.49;
     const VE = 0.0;
@@ -149,7 +149,7 @@
             yDefs: [{ y: VE }, { y: PHIVAC }],
             symbol: '↕',
             popupCallback: () =>
-                "the electron's gap: from the electrode's V<sub>e−</sub> down to the electron's own rung, φ<sub>vac</sub> itself (the E = −eφ<sub>vac</sub> weld). With solution in between, this is an electrode work function of the Trasatti kind, not the bare metal's Φ",
+                "the electron's gap: from the electrode's V<sub>e−</sub> down to the electron's own rung, φ<sub>vac</sub> itself (the E = −eφ<sub>vac</sub> weld). With solution in between, this is an electrode work function of the Trasatti kind, not the bare metal's Φ — its drawn 4.3 V height is schematic, and the ion spans quoted below inherit it",
         },
         {
             id: 'wcl',

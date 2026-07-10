@@ -126,7 +126,7 @@
         // binary electrolyte: flat blocked anion, ladder bends 1×, Ag+ 2×,
         // diving DOWN at the cathode; the cathode's electrons ride the
         // interface Ag+ level (reversible electrode).
-        const vag = (x) => 0.62 + 2 * DEC * lg(x);
+        const vag = (x) => 0.623 + 2 * DEC * lg(x); // base = 0.7 - 0.077: same gap as NO3- (neutrality: c_Ag = c_NO3)
         const vagIf = Math.max(VLO, vag(XL));
         bin.updateTraceData([
             {

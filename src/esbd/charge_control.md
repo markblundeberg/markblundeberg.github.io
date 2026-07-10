@@ -96,6 +96,9 @@ The same reasoning recovers a classic result of solution chemistry. Consider a s
 
 <figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/esbd-agcl-kcl-common-ion.njk" %}
+{% figcaption %}
+The common-ion effect, live: the solid pins the $V_{\mathrm{Ag}^+}$–$V_{\mathrm{Cl}^-}$ gap while added KCl doses in a mobile-dopant $\mathrm{K}^+$, shifting the whole ladder — chloride enriched, silver depleted, product locked (readouts below). The $V^\circ_{\mathrm{H}^+}$ rung rides along as a bystander to show the shift is shared by every rung. The checkbox runs the counter-experiment, dosing $\mathrm{AgNO_3}$ instead: the same ladder shift in reverse, now suppressing chloride.
+{% endfigcaption %}
 </figure>
 
 ## Trapped charge and the Donnan potential

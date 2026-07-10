@@ -54,7 +54,7 @@
     const base = [
         // Region 1 — aqueous HCl
         { id: 'h1',     species: 'proton',    curveType: 'voltage',        kind: 'Vi',  region: 1, nH: 1,  v:  V0_Hplus-0.15, x: x1 },
-        { id: 'h1_0',   species: 'proton',    curveType: 'standardState',  kind: 'V0',  region: 1, nH: 1,  v:  V0_Hplus, x: x1 },
+        { id: 'h1_0',   species: 'proton',    curveType: 'standardState',  kind: 'V0',  region: 1, nH: 1,  v:  V0_Hplus, x: x1, showLabel: false }, // coincides with her0; one label serves the shared line
         { id: 'oh1',    species: 'hydroxide', curveType: 'voltage',        kind: 'Vi',  region: 1, nH: 1,  v:  V0_Hplus-0.15-dVH2O, x: x1 },
         { id: 'oh1_0',  species: 'hydroxide', curveType: 'standardState',  kind: 'V0',  region: 1, nH: 1,  v:  V0_OHminus, x: x1 },
         { id: 'li1_0',  species: 'lithium',   curveType: 'standardState',  kind: 'V0',  region: 1, nLi: 1, v:  V0_Liplus, x: x1 },
@@ -76,7 +76,7 @@
         { id: 'phivac',                       curveType: 'phi',            kind: 'phi', region: 4,         v: [-1.2,-1.6], x: xVac, label: '\\phi_{\\mathrm{vac}}', color: '#377EB8' },
         // Region 5 — LiPF₆ in EC (a different solvent)
         { id: 'li5',    species: 'lithium',   curveType: 'voltage',        kind: 'Vi',  region: 5, nLi: 1, v: -0.18, x: x5 },
-        { id: 'li5_0',  species: 'lithium',   curveType: 'standardState',  kind: 'V0',  region: 5, nLi: 1, v:  0.12, x: x5 },
+        { id: 'li5_0',  species: 'lithium',   curveType: 'standardState',  kind: 'V0',  region: 5, nLi: 1, v:  0.12, x: x5, showLabel: false }, // coincides with plate0; one label serves the shared line
         { id: 'phi5',                         curveType: 'phi',            kind: 'phi', region: 5,         v: -0.30, x: x5 },
         // the Li⁺/Li⁰ plating level. Like the HER above, under the usual convention
         // (Li metal as the Li standard state, μ*_Li(metal)=0) it overlaps V_Li+, and its
@@ -93,7 +93,7 @@
         electron: SPECIES.electron,
     }, { yMode: 'abstract' });
     esbd.setSpatialLayout(boundaries, regions);
-    esbd.setVRange(-1.8, 1.7);
+    esbd.setVRange(-2.2, 2.4); // sized for worst-case slider sums (V0_OH- rung + float + acts = 2.3; V0_Li+ - float - mu*Li = -2.1)
 
     const val = (name) => parseFloat(document.getElementById('{{idprefix}}-' + name).value);
 
@@ -135,7 +135,7 @@
                 speciesId: t.species ?? null,
                 curveType: t.curveType,
                 color: t.color ?? null,
-                showLabel: true,
+                showLabel: t.showLabel ?? true,
                 label: t.label ?? null,
                 x: t.x,
                 y: vList,

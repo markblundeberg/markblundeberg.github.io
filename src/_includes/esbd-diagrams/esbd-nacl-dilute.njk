@@ -37,7 +37,7 @@
 
     const boundaries = [0.0, 1.0];
     diagram.setSpatialLayout(boundaries, [REGION.solution]);
-    diagram.setVRange(-4.8, +2.4);
+    diagram.setVRange(-5.0, +2.6); // sized for slider extremes (10 mol/L pushes traces + hatch past the old bounds)
 
     // --- Calculation Function ---
     function doUpdate() {

@@ -42,7 +42,10 @@
     function update(b) {
         document.getElementById('{{idprefix}}-drive-readout').textContent =
             b.toFixed(2);
-        const merged = b < 0.05;
+        const merged = b < 0.05; // label-merge threshold (display only)
+        // the physics glyph swaps at ~zero: a 0.04 V split is a genuinely
+        // driven state and must not wear the equilibrium mark
+        const atEq = b < 0.005;
 
         const vh = (x) => MID + (b / 2) * Math.exp(-(x - XL) / L);
         const ve = (x) =>
@@ -90,9 +93,9 @@
                 yDefs: [{ y: vh(x) }, { y: ve(x) }],
                 // driven glyph Ω (net-forward recombination); collapses to the
                 // equilibrium ⇌ once the drive is switched off
-                symbol: merged ? '⇌' : 'Ω',
+                symbol: atEq ? '⇌' : 'Ω',
                 popupCallback: () =>
-                    merged
+                    atEq
                         ? '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightleftharpoons \\varnothing$'
                         : '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightarrow \\varnothing$',
             })),

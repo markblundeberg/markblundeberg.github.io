@@ -5,11 +5,12 @@
     const plotContainerId = '{{idprefix}}-container';
 
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES } from '{{ esbdJsPath }}figureDefs.js';
 
     const speciesInfo = {
         electron: {
             z: -1,
-            color: '#377EB8',
+            color: SPECIES.electron.color,
             mathLabel: '\\mathrm{e}^{-}',
         },
         ion: {
@@ -20,7 +21,7 @@
         vac: {
             // phi_vac wears the electron's colour: it IS the electron's
             // vacuum rest level, by the E = -e*phi_vac weld
-            color: '#377EB8',
+            color: SPECIES.electron.color,
             mathLabel: '\\phi',
         },
     };

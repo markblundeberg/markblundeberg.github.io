@@ -30,7 +30,7 @@
     const rho = (s) => IONS.reduce((acc, ion) => acc + ion.z * conc(ion, s), rho_bg);
 
     const levels = new EnergyLevelsDiagram('{{idprefix}}-levels', {
-        yAxisLabel: 'Voltage (V)',
+        yAxisLabel: 'Voltage (V) — arbitrary offset',
         yRange: [-0.17, 0.21],
         categories: [{ id: 'soln', label: 'Solution' }],
         bandMinPaddingOuter: { left: 48, right: 40 },
@@ -79,7 +79,7 @@
         },
         {
             id: 'rho',
-            label: '\\textstyle \\rho_{\\mathrm{bg}} + \\sum_i q_i c_i',
+            label: '\\textstyle \\rho_{\\mathrm{bg}} + \\sum_i z_i F c_i',
             labelFrac: 0.1,
             labelHAlign: 'left',
             color: '#444',

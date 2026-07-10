@@ -21,7 +21,7 @@
     );
 
     const diagram = new EnergyLevelsDiagram('{{idprefix}}-container', {
-        yAxisLabel: 'Voltage $V_{\\mathrm{e}^-}$ (V)',
+        yAxisLabel: 'Voltage $V_{\\mathrm{e}^-}$ (V) — arbitrary offset',
         yRange: [floatV - 0.12, floatV + 1.12],
         categories: [{ id: 'soln', label: 'Solution' }],
         bandMinPaddingOuter: { left: 8, right: 108 }, // V°(Ox/Red)-length labels

@@ -1,4 +1,4 @@
-<div class="bd-container" id="h2o-autoionization-container"></div>
+<div class="bd-container" id="h2o-autoionization-container" style="height: 250px"></div>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
@@ -15,7 +15,8 @@
     const Delta = -2.457; // V
     const V_cat = -0.4567; //random
     const V_an = V_cat - Delta;
-    diagram.setVRange(Math.min(V_cat, V_an) - 0.2, Math.max(V_cat, V_an) + 0.2);
+    // extra top headroom keeps the upper trace's label clear of the corner ?-chip
+    diagram.setVRange(Math.min(V_cat, V_an) - 0.2, Math.max(V_cat, V_an) + 0.45);
 
     const b = boundaries;
     diagram.updateTraceData([
