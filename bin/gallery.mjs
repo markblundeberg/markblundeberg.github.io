@@ -92,7 +92,13 @@ try {
             `<script>for(let t=200;t<=6000;t+=200)setTimeout(()=>{document.title=String(Math.ceil(document.body.scrollHeight))},t)</script></body>`);
         writeFileSync(pagePath, html);
         const url = `http://127.0.0.1:${PORT}/figtest/${name}/?static`;
-        const winW = w + 40; // figure width + main padding, so the canvas fits it
+        // Window must fit: main padding (2×14) + .demo-container padding/border
+        // (2×8+2×1) + the figure at its true width + slack for trace-end labels
+        // that legitimately overhang the plot edge by a few px. The old +40
+        // squeezed the plot ~6px below its real-page width, which shifted the
+        // SVG clip edge into end-of-trace labels ("V_Zr" artifacts) that render
+        // fine on the real pages.
+        const winW = w + 64;
         // pass 1: read the rendered content height from <title>
         const dom = execFileSync('chromium',
             ['--headless', '--no-sandbox', `--window-size=${winW},1200`, '--virtual-time-budget=6000', '--dump-dom', url],
