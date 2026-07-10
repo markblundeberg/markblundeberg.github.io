@@ -76,7 +76,7 @@
             style: thinDash,
             labelSide: 'left',
         });
-        const ion = (levelId, yValue, label, color, labelSide) => ({
+        const ion = (levelId, yValue, label, color, labelSide, z) => ({
             categoryId: 'ion',
             levelId,
             yValue,
@@ -84,6 +84,7 @@
             color,
             style: thin,
             labelSide,
+            hatch: { z },
         });
 
         diagram.setLevels([
@@ -93,11 +94,11 @@
             rx('o2h', R_O2H, '\\mathrm{O_2},\\mathrm{H}^+\\!/\\mathrm{H_2O}'),
             rx('fe32', R_FE32, '\\mathrm{Fe}^{3+}\\!/\\mathrm{Fe}^{2+}'),
             rx('fe2fe', R_FE2FE, '\\mathrm{Fe}^{2+}\\!/\\mathrm{Fe}'),
-            ion('h', VH, 'V^\\circ_{\\mathrm{H}^+}', SPECIES.proton.color),
-            ion('oh', VOH, 'V^\\circ_{\\mathrm{OH}^-}', SPECIES.hydroxide.color),
-            ion('cl', VCL, 'V^\\circ_{\\mathrm{Cl}^-}', SPECIES.chloride.color, 'left'),
-            ion('fe2', VFE2, 'V^\\circ_{\\mathrm{Fe}^{2+}}', SPECIES.ferrous.color, 'left'),
-            ion('fe3', VFE3, 'V^\\circ_{\\mathrm{Fe}^{3+}}', SPECIES.ferric.color, 'left'),
+            ion('h', VH, 'V^\\circ_{\\mathrm{H}^+}', SPECIES.proton.color, undefined, 1),
+            ion('oh', VOH, 'V^\\circ_{\\mathrm{OH}^-}', SPECIES.hydroxide.color, undefined, -1),
+            ion('cl', VCL, 'V^\\circ_{\\mathrm{Cl}^-}', SPECIES.chloride.color, 'left', -1),
+            ion('fe2', VFE2, 'V^\\circ_{\\mathrm{Fe}^{2+}}', SPECIES.ferrous.color, 'left', 2),
+            ion('fe3', VFE3, 'V^\\circ_{\\mathrm{Fe}^{3+}}', SPECIES.ferric.color, 'left', 3),
         ]);
 
         document.getElementById('{{idprefix}}-off-readout').textContent =
