@@ -22,12 +22,28 @@
 
     // Soft pinning, side by side, one shared drive slider. No spectator sea:
     // the pinning rail (gate / counter-anion) holds the ladder only softly,
-    // so V°_i slopes along with the active V_i. Same linear c(x) as the
-    // hard-pinned case, but now the ladder bends by 1× the log term and the
-    // active carrier by 2× (ambipolar factor for the 1:1 binary; the FET
-    // drawn as its mirror twin — the footnote's stiffening subtleties are
-    // deliberately not modeled). At a = 1 both dive at the boundary.
+    // so V°_i slopes along with the active V_i. Electrolyte: linear c(x),
+    // ladder bends 1×, active carrier 2× (ambipolar factor for the 1:1
+    // binary). FET: honest long-channel charge-control model (constants
+    // below) — its strip and steepening now genuinely differ from the twin.
+    // At a = 1 the active carrier dives at the boundary in both panels; the
+    // electrolyte's ladder dives too, but the FET's lands on a gate ceiling.
     const DEC = 0.05916;
+    const VT = DEC / Math.LN10; // kT/e = 25.7 mV
+    // FET model (charge-sheet + Boltzmann, gradual channel — the EKV/ACM
+    // compact-model core). q ≡ en/(C_gate·V_T) is the normalized sheet
+    // charge AND the local C_chem/C_gate ratio; charge control reads
+    // (local gate overdrive) = V_T·(q + ln q). Current: I ∝ F(q_s) − F(q_d)
+    // with F(q) = q²/2 + q (drift + diffusion), so I_sat ∝ F(QS) and the
+    // drive fraction a inverts in closed form; the profile too:
+    // F(q(ξ)) = F(QS) − ξ·[F(QS) − F(q_d)], ξ = channel fraction walked
+    // from the source. Local steepening dV_e/dV° = 1 + 1/q = 1 +
+    // C_gate/C_chem: ≈1 at the drift-dominated source, exactly 2 where
+    // q = 1 (≈ classical pinch-off), diverging in the subthreshold tail.
+    // The band edge never dives: at a = 1 it lands V_T·QS above its source
+    // value, pinned to the gate once the channel is too dilute to screen.
+    const QS = 8; // source-end C_chem/C_gate ≈ overdrive/V_T (≈ 0.26 V here)
+    const FF = (q) => (q * q) / 2 + q;
     const XL = 0.12,
         XR = 0.88;
     const VLO = 0.05,
@@ -65,8 +81,8 @@
     ]);
     bin.setVRange(VLO, VHI);
 
-    // concentration strips (transport_basic pattern): identical ramps —
-    // soft pinning changes who bends above, not the concentration law below
+    // concentration strips (transport_basic pattern): linear ramp for the
+    // electrolyte (exact); the FET's honest profile bows √-like above it
     const concPanel = (id) =>
         new XYPlot(id, {
             xLabel: '',
@@ -102,11 +118,45 @@
         const c = conc(a);
         const lg = (x) => Math.log10(c(x));
 
+        // FET honest profile, parameterized by ξ (source→drain) with points
+        // packed quadratically toward the drain, where all the action is
+        const qd = Math.sqrt(1 + 2 * (1 - a) * FF(QS)) - 1;
+        const fetX = [],
+            fetQ = [];
+        for (let i = 120; i >= 0; i--) {
+            const t = i / 120;
+            const xi = 1 - (1 - t) * (1 - t);
+            fetX.push(XR - xi * (XR - XL));
+            fetQ.push(
+                Math.sqrt(1 + 2 * (FF(QS) - xi * (FF(QS) - FF(qd)))) - 1
+            );
+        }
+        fetX.push(1); // source region: flat at the bulk charge
+        fetQ.push(QS);
+        const v0eF = (q) => 0.38 + VT * (QS - q);
+        const veF = (q) =>
+            v0eF(q) + 0.12 + DEC * Math.log10(QS / Math.max(q, 1e-300));
+        const fetSeg = (fn) => {
+            const x = [],
+                y = [];
+            for (let i = 0; i < fetX.length; i++) {
+                const v = fn(fetQ[i]);
+                if (v >= VLO && v <= VHI) {
+                    x.push(fetX[i]);
+                    y.push(v);
+                }
+            }
+            return { x, y };
+        };
+
         fetConc.updateTraceData([
             {
+                // not the electrolyte's linear ramp: the strip bows up
+                // (√-like) — thick channel needs little gradient, so the
+                // slope steepens only toward the drain
                 id: 'c',
-                x: [...xs],
-                y: xs.map(c),
+                x: [...fetX],
+                y: fetQ.map((q) => q / QS),
                 color: SPECIES.electron.color,
                 style: { lineWidth: 2 },
                 label: 'c_{\\mathrm{e}^-}',
@@ -126,9 +176,11 @@
             },
         ]);
 
-        // FET: the gate rail is flat; the channel edge (V°_e-) bends 1×, the
-        // electrons 2×, diverging UP at the drain (z = −1). Pinch-off = the
-        // dive at a = 1.
+        // FET: the gate rail is flat; the channel edge (V°_e-) bends by the
+        // oxide drop V_T·(QS − q), curving hardest at the drain, and the
+        // electrons pull away by the extra log term — diverging UP at the
+        // drain (z = −1) while the edge lands on the gate-pinned ceiling.
+        const ved = Math.min(VHI, veF(qd));
         fet.updateTraceData([
             {
                 id: 'gate',
@@ -144,13 +196,13 @@
                 speciesId: 'electron',
                 curveType: 'bandEdge_C',
                 labelFrac: 0.3,
-                ...trim((x) => 0.38 - DEC * lg(x)),
+                ...fetSeg(v0eF),
             },
             {
                 id: 've',
                 speciesId: 'electron',
                 curveType: 'voltage',
-                ...trim((x) => 0.5 - 2 * DEC * lg(x)),
+                ...fetSeg(veF),
             },
             {
                 id: 've_d',
@@ -158,10 +210,7 @@
                 curveType: 'voltage',
                 showLabel: false,
                 x: [0, XL],
-                y: [
-                    Math.min(VHI, 0.5 - 2 * DEC * lg(XL)),
-                    Math.min(VHI, 0.5 - 2 * DEC * lg(XL)),
-                ],
+                y: [ved, ved],
             },
         ]);
 
