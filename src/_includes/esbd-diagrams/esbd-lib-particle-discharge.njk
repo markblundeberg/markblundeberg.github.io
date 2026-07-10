@@ -12,8 +12,8 @@
 
     const boundaries = [0.0, 0.7, 0.8, 1.0];
     diagram.setSpatialLayout(boundaries, [
-        { name: 'Graphite', color: '#DDDDDD' },
-        { name: 'SEI', color: '#E0E0F0' },
+        { ...REGION.graphite },
+        { ...REGION.sei },
         { ...REGION.solution, name: 'Electrolyte' },
     ]);
 

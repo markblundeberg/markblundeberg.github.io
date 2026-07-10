@@ -19,11 +19,11 @@
     diagram.setSpatialLayout(
         boundaries,
         [
-            { name: 'Anode', color: '#AAAAAA' },
-            { name: 'Anode-active', color: '#bbb' },
+            { ...REGION.collector, name: 'Anode' },
+            { ...REGION.activeMaterial, name: 'Anode-active' },
             { ...REGION.solution, name: 'Electrolyte' },
-            { name: 'Cathode-active', color: '#bbb' },
-            { name: 'Cathode', color: '#AAAAAA' },
+            { ...REGION.activeMaterial, name: 'Cathode-active' },
+            { ...REGION.collector, name: 'Cathode' },
         ],
         [
             { label: 'Anode', x: 0.15 },

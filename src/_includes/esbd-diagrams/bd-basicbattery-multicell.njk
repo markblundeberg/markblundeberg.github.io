@@ -14,11 +14,11 @@
     const diagram = new BandDiagram('{{ idprefix }}');
 
     const cellregions = [
-        [0.15, { name: 'Anode', color: '#AAAAAA' }],
-        [0.3, { name: 'Anode-active', color: '#bbb' }],
+        [0.15, { ...REGION.collector, name: 'Anode' }],
+        [0.3, { ...REGION.activeMaterial, name: 'Anode-active' }],
         [0.7, { ...REGION.solution, name: 'Electrolyte' }],
-        [0.85, { name: 'Cathode-active', color: '#bbb' }],
-        [1.0, { name: 'Cathode', color: '#AAAAAA' }],
+        [0.85, { ...REGION.activeMaterial, name: 'Cathode-active' }],
+        [1.0, { ...REGION.collector, name: 'Cathode' }],
     ];
 
     const boundaries = [0.0];

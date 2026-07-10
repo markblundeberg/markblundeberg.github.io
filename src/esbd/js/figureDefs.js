@@ -47,4 +47,15 @@ export const REGION = {
     semiconductor: { name: 'Semiconductor', color: '#d2d8e0' },
     semi2: { name: 'Semiconductor', color: '#dcd6c8' },
     solid: { name: 'Solid', color: '#eeeeee' },
+
+    // Device-family shades (blessed 2026-07-10, review round-2 Cluster 2):
+    // the intro-battery and lithium-cell figures deliberately run greyer than
+    // the topic palette above. Centralized so shades revise book-wide.
+    collector: { name: 'Collector', color: '#AAAAAA' },
+    activeMaterial: { name: 'Active material', color: '#bbb' },
+    graphite: { name: 'Graphite', color: '#DDDDDD' },
+    sei: { name: 'SEI', color: '#E0E0F0' },
+    separator: { name: 'Separator', color: '#FFFFE0' },
+    oxideCathode: { name: 'Cathode (oxide)', color: '#FFDDDD' },
+    agcl: { name: 'AgCl', color: '#ffe' },
 };

@@ -8,9 +8,9 @@
 
     const boundaries = [0.0, 0.3, 0.7, 1.0];
     diagram.setSpatialLayout(boundaries, [
-        { name: 'Anode', color: '#AAAAAA' },
+        { ...REGION.collector, name: 'Anode' },
         { ...REGION.solution, name: 'Electrolyte' },
-        { name: 'Cathode', color: '#AAAAAA' },
+        { ...REGION.collector, name: 'Cathode' },
     ]);
 
     diagram.setYLabel('Electron energy (eV)');

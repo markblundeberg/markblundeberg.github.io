@@ -26,7 +26,7 @@
     const b = [0.0, 0.3, 0.7, 1.0];
     diagram.setSpatialLayout(b, [
         { ...REGION.metal, name: 'Silver wire' },
-        { name: 'AgCl coating', color: '#cccccc' },
+        { ...REGION.agcl, name: 'AgCl coating' },
         REGION.solution,
     ]);
 

@@ -31,7 +31,7 @@
     diagram.setSpatialLayout(boundaries, [
         { ...REGION.metal, name: 'Pt' },
         REGION.solution,
-        { name: 'AgCl', color: '#ffe' },
+        { ...REGION.agcl },
         { ...REGION.metal, name: 'Ag' },
     ]);
 

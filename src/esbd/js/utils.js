@@ -456,12 +456,28 @@ export function drawCapacitors(plot, caps, opts = {}) {
         wireColor = '#666',
         wireWidth = 1.5,
         dotRadius = 2.6,
+        minSpanPx = 24,
     } = opts;
 
     const px = (d) => plot.xScale(d.x);
-    const yHi = (d) => plot.yScale(d.hi);
-    const yLo = (d) => plot.yScale(d.lo);
-    const yMid = (d) => plot.yScale(d.hi + (d.pcf ?? 0.5) * (d.lo - d.hi));
+    // Legibility floor: when the two rails run closer than minSpanPx the true
+    // glyph degenerates (plates+wires collapse onto the dots), so expand it
+    // symmetrically about the rails' pixel midpoint. The end dots then sit
+    // slightly off their rails — the glyph keeps reading "capacitor between
+    // these two rails" the same way merged labels keep reading as two.
+    const ends = (d) => {
+        const hi = plot.yScale(d.hi);
+        const lo = plot.yScale(d.lo);
+        const half = Math.max(minSpanPx, lo - hi) / 2;
+        const c = (hi + lo) / 2;
+        return [c - half, c + half];
+    };
+    const yHi = (d) => ends(d)[0];
+    const yLo = (d) => ends(d)[1];
+    const yMid = (d) => {
+        const [hi, lo] = ends(d);
+        return hi + (d.pcf ?? 0.5) * (lo - hi);
+    };
     const yTop = (d) => yMid(d) - plateGap / 2;
     const yBot = (d) => yMid(d) + plateGap / 2;
 

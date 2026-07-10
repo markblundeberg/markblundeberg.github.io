@@ -31,12 +31,14 @@ const CURVE_TYPES = {
     bandEdge_C: {
         name: 'conduction band edge',
         style: { lineWidth: 1, dasharray: null },
-        labelGen: (species) => `V_{${species}}^{\\text{band}}`,
+        // bare V° on a band-carrier species is *reserved* for its band edge
+        // (the solid's effective standard state, N_C/N_V in the c° role)
+        labelGen: (species) => `V_{${species}}^\\circ`,
     },
     bandEdge_V: {
         name: 'valence band edge',
         style: { lineWidth: 1, dasharray: null },
-        labelGen: (species) => `V_{${species}}^{\\text{band}}`,
+        labelGen: (species) => `V_{${species}}^\\circ`,
     },
     phi: {
         name: 'electrostatic potential',
