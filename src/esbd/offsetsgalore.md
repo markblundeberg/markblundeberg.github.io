@@ -59,10 +59,13 @@ The knobs above are not equally guilty. The float and the elemental references a
 | $V^\circ_i$ | float + elemental refs | **1**: activity convention |
 | $a_i$ | none | **1**: activity convention |
 | $V_i$ (an ion) | float + elemental refs | **0** |
-| $V_{\mathrm{e}^-}$ | float | **0** |
-| same-ion $V_i(x) - V_i(y)$, mean activities | none | **0** |
+| $V_{\mathrm{e}^-}$, $\phi_{\mathrm{vac}}$ | float | **0** |
+| same-place mean activities, $\prod_i a_i(x)^{w_i/z_i}$ | none | **0** |
+| same-ion differences, $V_i(x) - V_i(y)$ | none | **0** |
 
 Read down the local column first: it counts the arbitrary choices that can differ between here and there, and that is the count that matters. By this measure the real rival of $V_i$ is not $\phi$ ($\phi$ simply loses) but the activity $a_i$: a pure dimensionless number, immune to the float, the elemental references, and the $\phi$-seat alike. That global cleanliness is the traditional framework's genuine pride, and it was bought at a price: one local convention, of the severe per-composition kind. The species voltage makes precisely the opposite trade. It accepts the global covariance (a band diagram was never embarrassed to float) and carries no local convention at all. $\phi$ makes both sacrifices and collects neither prize.
+
+Each rival then perfects itself in the table's last two rows, reaching (none, **0**) from opposite ends. A mean activity is $a_i$ with its one local convention cancelled by charge-balancing *different species at the same place*; a same-ion difference is $V_i$ with its global frame shed by comparing *the same species at two places*. Cross-species at one spot, or same-species across spots — the two honest routes to a number with no conventions in it at all.
 
 The $V_{\mathrm{e}^-}$ row is the Fermi level's quiet privilege: by the bolted-down electron convention above, it drags no elemental reference, which threatens to demote the ionic $V_i$ to second-class citizens. It shouldn't: there is enough freedom in the elemental references to crown any species you like,^[The NIST gas-phase electron conventions mentioned above are a move of exactly this kind, re-seating the electron itself.] and the electron wears the crown only because its convention is the one everybody happens to share.
 
