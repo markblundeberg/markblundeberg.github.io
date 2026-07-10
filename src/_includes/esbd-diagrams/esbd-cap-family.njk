@@ -28,13 +28,18 @@
     // work function (0.25 V here, schematic).
     const WF = 0.25;
     const LAM = 0.03; // EDL skin
-    const common = { margins: { right: 48, left: 42 } };
+    // abstract y (Mark, 2026-07-10): the three repeated numeric axes were
+    // clutter, and the only number worth reading — the applied voltage —
+    // lives in the slider readout. Also stops the compressed work-function
+    // step from being read off as Phi/e = 0.25 V.
+    const common = { yMode: 'abstract', margins: { right: 48, left: 42 } };
 
     const mim = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-mim',
         { electron: SPECIES.electron },
         common
     );
+    mim.diagram.setYLabel('Species voltage');
     mim.setSpatialLayout([0, 0.3, 0.7, 1], [
         { ...REGION.metal, name: '' },
         { ...REGION.vacuum, name: 'dielectric' },
@@ -47,6 +52,7 @@
         { electron: SPECIES.electron, ion: SPECIES.sodium },
         common
     );
+    lytic.diagram.setYLabel(''); // one axis label (left panel) serves all three
     lytic.setSpatialLayout([0, 0.32, 0.44, 1], [
         REGION.metal,
         { ...REGION.vacuum, name: '' }, // (the thin oxide; labeled in caption)
@@ -59,6 +65,7 @@
         { electron: SPECIES.electron, ion: SPECIES.sodium },
         common
     );
+    edl.diagram.setYLabel('');
     edl.setSpatialLayout([0, 0.4, 1], [REGION.metal, REGION.solution]);
     edl.setVRange(-1.05, 1.05);
 

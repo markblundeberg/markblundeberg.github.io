@@ -1,8 +1,13 @@
 {% set idprefix = "esbd-cap-reps" %}
-{% import "macros/controls.njk" as controls %}
-<div class="bd-container" id="{{idprefix}}" style="height: 240px; max-width: 320px"></div>
-<div style="text-align: center; margin-top: 0.4em">
-{{ controls.checkbox(idprefix + "-ambi", "Ambipolar view", { checked: false }) }}
+<div style="display: flex; flex-wrap: wrap; justify-content: space-evenly; gap: 6px">
+<div style="flex: 1; min-width: 200px; max-width: 280px">
+<div style="text-align: center; font-size: 0.85em">per-carrier</div>
+<div class="bd-container" id="{{idprefix}}-int" style="height: 240px; border: 1px solid #eee"></div>
+</div>
+<div style="flex: 1; min-width: 200px; max-width: 280px">
+<div style="text-align: center; font-size: 0.85em">ambipolar</div>
+<div class="bd-container" id="{{idprefix}}-amb" style="height: 240px; border: 1px solid #eee"></div>
+</div>
 </div>
 
 <script type="module">
@@ -11,24 +16,16 @@
     import { drawCapacitors } from '{{ esbdJsPath }}utils.js';
 
     // Two representations of the SAME chemical capacitance in an intercalation
-    // host (electrons + Li+ co-located). Per-carrier: one capacitor from each
-    // rail to its own standard state (V_i -||- V°_i, and V°_i tracks φ). Ambipolar:
-    // the two in series with the standard-state (φ) node eliminated, a single
-    // rail-to-rail capacitor V_e- -||- V_Li+. Checking the box drops the V°
-    // levels too, dramatising that the standard-state node is gone. A switch
-    // between two views, NOT two parallel couplings, so we only show one at a time.
+    // host (electrons + Li+ co-located), drawn side by side as two static
+    // panels (Mark 2026-07-10; this was a checkbox toggle, but nothing here
+    // needs interactivity). Per-carrier: one capacitor from each rail to its
+    // own standard state (V_i -||- V°_i, and V°_i tracks φ). Ambipolar: the
+    // two in series with the standard-state (φ) node eliminated, a single
+    // rail-to-rail capacitor V_e- -||- V_Li+ — the V° levels are gone with it,
+    // dramatising that the standard-state node has been eliminated.
     const ELE = SPECIES.electron.color, LI = SPECIES.lithium.color;
     const VE = 0.45, VE0 = 0.15, VLI0 = -0.15, VLI = -0.45;
     const X = 0.5;
-
-    const esbd = new ElectrochemicalSpeciesBandDiagram(
-        '{{idprefix}}',
-        { electron: SPECIES.electron, lithium: SPECIES.lithium },
-        { yMode: 'abstract', margins: { right: 62, left: 26 } }
-    );
-    esbd.setSpatialLayout([0, 1], [{ ...REGION.solid, name: 'intercalation host' }]);
-    esbd.diagram.setYLabel('Species voltage');
-    esbd.setVRange(-0.8, 0.8);
 
     const T = {
         ve: { id: 've', speciesId: 'electron', curveType: 'voltage', label: 'V_{\\mathrm{e}^-}', x: [0, 1], y: [VE, VE] },
@@ -37,25 +34,29 @@
         vli: { id: 'vli', speciesId: 'lithium', curveType: 'voltage', label: 'V_{\\mathrm{Li}^+}', x: [0, 1], y: [VLI, VLI] },
     };
 
-    // Per-carrier view: a capacitor from each rail to its standard state.
-    // Ambipolar view: the single series-combined rail-to-rail capacitor.
-    const internal = [
-        { id: 'e-int', x: X, hi: VE, lo: VE0, cHi: ELE, cLo: ELE },
-        { id: 'li-int', x: X, hi: VLI0, lo: VLI, cHi: LI, cLo: LI },
-    ];
-    const ambipolar = [{ id: 'amb', x: X, hi: VE, lo: VLI, cHi: ELE, cLo: LI }];
-
-    let ambi = false;
-    esbd.setCustomDrawCallback((bd) => drawCapacitors(bd, ambi ? ambipolar : internal));
-
-    function update(isAmbi) {
-        ambi = isAmbi;
-        // Drop the V° levels in the ambipolar view: the standard-state node is
-        // eliminated. Removed traces fade out (and fade back in) on their own.
-        esbd.updateTraceData(isAmbi ? [T.ve, T.vli] : [T.ve, T.ve0, T.vli0, T.vli]);
+    function makePanel(containerId, yLabel) {
+        const esbd = new ElectrochemicalSpeciesBandDiagram(
+            containerId,
+            { electron: SPECIES.electron, lithium: SPECIES.lithium },
+            { yMode: 'abstract', margins: { right: 62, left: 26 } }
+        );
+        esbd.setSpatialLayout([0, 1], [{ ...REGION.solid, name: 'intercalation host' }]);
+        esbd.diagram.setYLabel(yLabel);
+        esbd.setVRange(-0.8, 0.8);
+        return esbd;
     }
 
-    const box = document.getElementById('{{idprefix}}-ambi');
-    box.addEventListener('change', (e) => update(e.target.checked));
-    update(box.checked);
+    const int = makePanel('{{idprefix}}-int', 'Species voltage');
+    const amb = makePanel('{{idprefix}}-amb', ''); // one axis label serves both
+
+    int.setCustomDrawCallback((bd) => drawCapacitors(bd, [
+        { id: 'e-int', x: X, hi: VE, lo: VE0, cHi: ELE, cLo: ELE },
+        { id: 'li-int', x: X, hi: VLI0, lo: VLI, cHi: LI, cLo: LI },
+    ]));
+    int.updateTraceData([T.ve, T.ve0, T.vli0, T.vli]);
+
+    amb.setCustomDrawCallback((bd) => drawCapacitors(bd, [
+        { id: 'amb', x: X, hi: VE, lo: VLI, cHi: ELE, cLo: LI },
+    ]));
+    amb.updateTraceData([T.ve, T.vli]);
 </script>

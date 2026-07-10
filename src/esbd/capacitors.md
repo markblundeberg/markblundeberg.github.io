@@ -18,7 +18,7 @@ How far the charge spreads is set, once again, by the screening length. In a pla
 <figure class="demo-container" style="max-width: 760px">
 {% include "esbd-diagrams/esbd-cap-family.njk" %}
 {% figcaption %}
-Dielectric capacitance, sorted by screening length, one applied voltage across all three: a metal–dielectric–metal capacitor (the drop spans the full gap), an electrolytic capacitor (the drop across a thin oxide between $V_{\mathrm{e}^-}$ and $V_{\mathrm{ion}}$), and an EDL supercapacitor (no insulator at all — the ladder soaks up the whole drop within a Debye-length skin). The effective plate spacing shrinks left to right, and the capacitance grows accordingly. Two vertical gaps are not to scale: the work-function step down to $\phi$ is compressed (a real $\Phi/e$ is 4–5 V), and the supercapacitor's rung-to-carrier gap is widened — a truly concentrated electrolyte would put $V^\circ_{\mathrm{ion}}$ right on $V_{\mathrm{ion}}$.
+Dielectric capacitance, sorted by screening length, one applied voltage across all three: a metal–dielectric–metal capacitor (the drop spans the full gap), an electrolytic capacitor (the drop across a thin oxide between $V_{\mathrm{e}^-}$ and $V_{\mathrm{ion}}$), and an EDL supercapacitor (no insulator at all — the ladder soaks up the whole drop within a Debye-length skin). The effective plate spacing shrinks left to right, and the capacitance grows accordingly. The vertical scale is schematic; in particular the work-function step down to $\phi$ is compressed (a real $\Phi/e$ is 4–5 V), and the supercapacitor's rung-to-carrier gap is widened — a truly concentrated electrolyte would put $V^\circ_{\mathrm{ion}}$ right on $V_{\mathrm{ion}}$.
 {% endfigcaption %}
 </figure>
 
@@ -43,10 +43,10 @@ Chemical capacitance in an intercalation host: adding charge raises the lithium 
 
 We have already met the other face of this same capacitance. In [species voltage](../v_i/) two co-located carriers made a capacitor directly between their rails, and in [lithium-ion batteries](../lib/) each electrode *was* that capacitor. It reads as a different device, the **ambipolar chemical capacitance** relating $V_i$ to $V_j$ rather than a carrier to its own standard state,^[Our term, and not yet standard: beware that "ambipolar capacitance" already means something else in the literature, a capacitance measured at both bias polarities across a voltage sweep. We mean here the chemical-capacitance coupling between two carriers. In the mixed-conductor impedance literature this two-carrier series combination is itself called *the* chemical capacitance: J. Jamnik and J. Maier, [Treatment of the impedance of mixed conductors](https://doi.org/10.1149/1.1392611), *J. Electrochem. Soc.* **146**, 4183 (1999).] but it is the chemical capacitance above, rewritten. Because $V^\circ_i$ tracks $\phi$ with a fixed offset ($\mathrm{d}V^\circ_i = \mathrm{d}\phi$), each carrier's capacitor runs from its rail to a shared reference; set two in series, eliminate that shared node, and one capacitor is left straight between the two rails. Two pictures of one storage, not two couplings.
 
-<figure class="demo-container" style="max-width: 320px">
+<figure class="demo-container" style="max-width: 600px">
 {% include "esbd-diagrams/esbd-cap-reps.njk" %}
 {% figcaption %}
-The same chemical capacitance, two ways, for electrons and $\mathrm{Li}^+$ in an intercalation host. In the *per-carrier* view each rail hangs a capacitor to its own standard state $V^\circ_i$; switch to *ambipolar* and those two combine in series (the shared $V^\circ$/$\phi$ node drops out) into a single capacitor straight between $V_{\mathrm{e}^-}$ and $V_{\mathrm{Li}^+}$. One is not a second coupling alongside the other; it is the same storage rewritten.
+The same chemical capacitance, two ways, for electrons and $\mathrm{Li}^+$ in an intercalation host. In the *per-carrier* view each rail hangs a capacitor to its own standard state $V^\circ_i$; in the *ambipolar* view those two combine in series (the shared $V^\circ$/$\phi$ node drops out) into a single capacitor straight between $V_{\mathrm{e}^-}$ and $V_{\mathrm{Li}^+}$. One is not a second coupling alongside the other; it is the same storage rewritten.
 {% endfigcaption %}
 </figure>
 
