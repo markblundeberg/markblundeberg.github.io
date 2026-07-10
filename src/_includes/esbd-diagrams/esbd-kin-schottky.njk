@@ -204,6 +204,10 @@
                 diagram.diagram.linesGroup
                     .selectAll('.bd-data-line')
                     .filter((d) => d.id === 'eball')
+                    // kill any freshly-scheduled data transition each frame:
+                    // otherwise a slider update tweens the ball in from a
+                    // degenerate path (the warp-from-origin, Block-A #19)
+                    .interrupt()
                     .attr('d', `M ${X} ${Y} l 0.01 0`);
             }
             requestAnimationFrame(hop);

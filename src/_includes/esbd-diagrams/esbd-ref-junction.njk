@@ -115,7 +115,7 @@
                 speciesId: 'hplus',
                 curveType: 'voltage',
                 showLabel: true,
-                labelFrac: 0.1,
+                labelFrac: 0.34, // to the right of the SHE label (Block-A #17)
                 x: [...xsAll],
                 y: xsAll.map((x) => lad(x) + RT_F * Math.log(cH(x))),
             },
@@ -150,7 +150,8 @@
                 speciesId: 'electron',
                 curveType: 'standardStateImplied',
                 showLabel: true,
-                labelFrac: 0.3,
+                labelFrac: 0.02, // far left, riding above the line (Block-A #17: V_H+ lands on this line at 1 M)
+                labelVAlign: 'bottom',
                 label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{SHE})\\,{=}\\,V^\\circ_{\\mathrm{H}^+}',
                 x: [...xsAll],
                 y: xsAll.map(lad),

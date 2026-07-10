@@ -69,8 +69,7 @@
                 id: 'metal',
                 speciesId: 'electron',
                 curveType: 'voltage',
-                showLabel: !merged,
-                labelFrac: 0.35,
+                labelFrac: 0.35, // label stays at equilibrium too (Block-A #16); mid-metal, clear of the rxn label
                 x: [0, XIF],
                 y: [vMetal, vMetal],
             },

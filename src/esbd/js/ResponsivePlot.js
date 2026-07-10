@@ -501,7 +501,8 @@ class ResponsivePlot {
                 ...d,
                 mathMode: true,
                 hAlign: d.labelHAlign || 'left',
-                vAlign: 'center',
+                // 'bottom' = label rides above the line, 'top' = below
+                vAlign: d.labelVAlign || 'center',
             }));
 
         this.drawLabelsFancy({

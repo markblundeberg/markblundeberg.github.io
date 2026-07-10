@@ -207,6 +207,22 @@
         };
         const Ja = (e) => Math.exp(alpha * z * f * e);
         const Jc = (e) => -Math.exp(-(1 - alpha) * z * f * e);
+        // Label anchors: the outermost grid point still INSIDE the window.
+        // The curves themselves are clamped past the frame and cut by the
+        // clip-path, but labels are not clipped — anchoring on the clamped
+        // overshoot let them escape the frame at high z (Block-A #18).
+        const labelAnchor = (fn, fromRight) => {
+            const lim = 0.9 * JMAX;
+            const idx = fromRight
+                ? [...xs.keys()].reverse()
+                : [...xs.keys()];
+            for (const i of idx) {
+                const v = fn(xs[i]);
+                if (Math.abs(v) <= lim)
+                    return { x: [xs[i], xs[i] + 1e-6], y: [v, v] };
+            }
+            return { x: [0, 1e-6], y: [0, 0] };
+        };
 
         if (!logView) {
             iv.setYLabel('Current $J/J_0$');
@@ -217,17 +233,29 @@
                     ...trim(Ja, -JMAX, JMAX),
                     color: BLUE,
                     style: FAINT,
-                    label: 'J_{\\mathrm{a}}',
-                    labelFrac: 0.93,
-                    labelHAlign: 'right',
                 },
                 {
                     id: 'cathodic',
                     ...trim(Jc, -JMAX, JMAX),
                     color: SPECIES.hole.color,
                     style: FAINT,
+                },
+                {
+                    id: 'lbl_ja',
+                    ...labelAnchor(Ja, true),
+                    color: BLUE,
+                    style: { lineWidth: 0, opacity: 0 },
+                    label: 'J_{\\mathrm{a}}',
+                    labelFrac: 1,
+                    labelHAlign: 'right',
+                },
+                {
+                    id: 'lbl_jc',
+                    ...labelAnchor(Jc, false),
+                    color: SPECIES.hole.color,
+                    style: { lineWidth: 0, opacity: 0 },
                     label: '-J_{\\mathrm{c}}',
-                    labelFrac: 0.07,
+                    labelFrac: 0,
                 },
                 {
                     id: 'J',

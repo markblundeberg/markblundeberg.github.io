@@ -94,6 +94,7 @@ class XYPlot extends ResponsivePlot {
                     showLabel = true,
                     labelFrac = 1,
                     labelHAlign = 'left',
+                    labelVAlign = 'center',
                     ...extraFields
                 } = def;
                 rejectUnexpectedFields(extraFields);
@@ -120,6 +121,7 @@ class XYPlot extends ResponsivePlot {
                     label,
                     labelPos,
                     labelHAlign,
+                    labelVAlign,
                 });
                 seenIds.add(id);
             } catch (e) {

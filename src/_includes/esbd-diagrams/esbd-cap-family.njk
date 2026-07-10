@@ -158,6 +158,7 @@
                 speciesId: 'ion',
                 curveType: 'standardState',
                 labelFrac: 0.45,
+                labelVAlign: 'bottom', // above the trace (Block-A #12)
                 x: [...xe],
                 y: xe.map(
                     (x) => vm + 0.06 + v * Math.exp(-(x - 0.4) / LAM)
