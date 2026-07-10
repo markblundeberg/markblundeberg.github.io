@@ -55,6 +55,10 @@
             {
                 id: 'phi',
                 speciesId: 'cation',
+                // φ colour rule (unified 2026-07-10): in-material φ wears
+                // the same dashed electron blue as φ_vac, even here where
+                // no electron is drawn
+                color: SPECIES.electron.color,
                 curveType: 'phi',
                 label: '\\phi',
                 x: x,

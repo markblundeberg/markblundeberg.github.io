@@ -1,7 +1,10 @@
 {% set idprefix = "esbd-es-interface" %}
 {% import "macros/controls.njk" as controls %}
 <div class="bd-container" id="{{idprefix}}-container" style="height: 260px"></div>
-{{ controls.slider(idprefix + "-dphi", "$\\phi$ nudge at the interface", { min: -0.4, max: 0.4, step: "any", value: 0.25, snap: 0, readout: true, unit: "V" }) }}
+{# default nudge is negative: depletion, the namesake case for "band bending"
+   (a positive default drew an uncaptioned degenerate accumulation layer —
+   the carrier line sat deep inside the band-edge hatch) #}
+{{ controls.slider(idprefix + "-dphi", "$\\phi$ nudge at the interface", { min: -0.4, max: 0.4, step: "any", value: -0.25, snap: 0, readout: true, unit: "V" }) }}
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';

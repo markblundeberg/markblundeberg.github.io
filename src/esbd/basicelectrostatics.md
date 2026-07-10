@@ -35,7 +35,7 @@ A sharp charged defect introduced inside a conductor (here a salt solution), and
 <figure class="demo-container" style="max-width: 440px">
 {% include "esbd-diagrams/esbd-es-interface.njk" %}
 {% figcaption %}
-Band bending: something at an interface nudges $\phi$ away from its bulk neutral value, and the deviation is screened away into the bulk. Drawn for an n-type semiconductor, where the effect got its name — the band edges bend together while $V_{\mathrm{e}^-}$ stays perfectly flat, this being still an equilibrium.
+Band bending: something at an interface nudges $\phi$ away from its bulk neutral value, and the deviation is screened away into the bulk. Drawn for a generic n-type semiconductor, where the effect got its name — the band edges bend together while $V_{\mathrm{e}^-}$ stays perfectly flat, this being still an equilibrium.
 {% endfigcaption %}
 </figure>
 
@@ -64,7 +64,7 @@ Many interfaces in our devices are explicitly *not* of interest, yet each interf
 <figure class="demo-container" style="max-width: 460px">
 {% include "esbd-diagrams/esbd-es-blips.njk" %}
 {% figcaption %}
-The honest picture of a bulk solution between a metal electrode and vacuum: everything is flat except tiny double-layer blips of $V^\circ_i$ within a few Debye lengths of each surface. The $V_i$ ride flat straight over them — which is why, for the most part, we won't bother drawing the blips at all.
+The honest picture of a bulk solution between a metal electrode and vacuum: everything is flat except tiny double-layer blips of $V^\circ_i$ within a few Debye lengths of each surface. The $V_i$ ride flat straight over them — which is why, for the most part, we won't bother drawing the blips at all. (The step down to $\phi_{\mathrm{vac}}$ is compressed, like the rung spacing (⌇), to keep everything in one frame.)
 {% endfigcaption %}
 </figure>
 

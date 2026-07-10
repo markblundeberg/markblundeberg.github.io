@@ -20,23 +20,30 @@
     // Slope-ratio invariant: dV+/dx : dV−/dx = −t−/t+ everywhere in the
     // zone (flux check: c·D+·2t−·c'/c = const, and D+t− = D−t+). Curvature
     // hugs the dilute end. Slider = mobility ratio; at D+ = D− the LJP
-    // vanishes; default +0.9 is HCl-like (t+ ≈ 0.89). Rungs compressed.
-    // Both V°_i rungs drawn, honest per species: V°_+ = V_+ + gap(x),
-    // V°_− = V_− − gap(x) with gap(x) = −DEC·log10 c(x) (c_L = 0.1 M);
+    // vanishes; default +0.9 (t+ ≈ 0.89) makes a strong cation-led
+    // junction. Ions are a GENERIC M+/X− salt (round-2 X-8: this used to
+    // wear an NaCl costume while drawing D+ > D−, but real NaCl has the
+    // ANION faster — every asymmetry was backwards for the named salt).
+    // Rungs compressed. Both V°_i rungs drawn, honest per species:
+    // V°_+ = V_+ + gap(x), V°_− = V_− − gap(x) with
+    // gap(x) = −DEC·log10 c(x) (c_L = 0.1 M);
     // both reduce to anchor − (t+−t−)·DEC·ln-c ramp = the rigid ladder.
     const DEC = 0.05916;
     const DLOGC = -2; // log10(c_R/c_L)
     const LOGCL = -1; // log10(c_L): 0.1 M on the concentrated side
     const MID = 0.5;
     const GAP_R = 0.15; // V+/V− splitting at the dilute end (compressed)
-    // refShift: anchoring Na+ as drawn-true, the Cl- traces sit
-    // 0.15 - (-4.43) = -4.58 V from their IUPAC-referenced position (the
+    // refShift: any real salt's rungs sit volts apart; anchoring M+ as
+    // drawn-true, the X− traces carry a generic NaCl-scale shift (the
     // x-dependence of the splitting is honest; only the base is shifted).
-    const CL_SHIFT = -4.58;
+    const X_SHIFT = -4.58;
 
     const diagram = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-container',
-        { cation: SPECIES.sodium, anion: SPECIES.chloride },
+        {
+            cation: { ...SPECIES.sodium, mathLabel: '\\mathrm{M}^{+}' },
+            anion: { ...SPECIES.chloride, mathLabel: '\\mathrm{X}^{-}' },
+        },
         { margins: { right: 56 } }
     );
     diagram.setSpatialLayout([0, 0.35, 0.65, 1], [
@@ -84,7 +91,7 @@
             {
                 id: 'vm',
                 speciesId: 'anion',
-                refShift: CL_SHIFT,
+                refShift: X_SHIFT,
                 curveType: 'voltage',
                 x: [...xs],
                 y: xs.map((x) => VML - 2 * tp * DEC * lgrel(x)),
@@ -92,7 +99,7 @@
             {
                 id: 'v0m',
                 speciesId: 'anion',
-                refShift: CL_SHIFT,
+                refShift: X_SHIFT,
                 curveType: 'standardState',
                 x: [...xs],
                 y: xs.map(

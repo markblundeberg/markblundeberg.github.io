@@ -47,6 +47,8 @@
             const phi = phiBase[i] + dphi[i];
             data.push({
                 id: 'phi_' + i,
+                // φ colour rule (unified 2026-07-10): dashed electron blue
+                color: SPECIES.electron.color,
                 curveType: 'phi',
                 showLabel: true,
                 x: [boundaries[i], boundaries[i + 1]],

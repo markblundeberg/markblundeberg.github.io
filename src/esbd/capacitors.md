@@ -18,7 +18,7 @@ How far the charge spreads is set, once again, by the screening length. In a pla
 <figure class="demo-container" style="max-width: 760px">
 {% include "esbd-diagrams/esbd-cap-family.njk" %}
 {% figcaption %}
-Dielectric capacitance, sorted by screening length, one applied voltage across all three: a metal–dielectric–metal capacitor (the drop spans the full gap), an electrolytic capacitor (the drop across a thin oxide between $V_{\mathrm{e}^-}$ and $V_{\mathrm{ion}}$), and an EDL supercapacitor (no insulator at all — the ladder soaks up the whole drop within a Debye-length skin). The effective plate spacing shrinks left to right, and the capacitance grows accordingly.
+Dielectric capacitance, sorted by screening length, one applied voltage across all three: a metal–dielectric–metal capacitor (the drop spans the full gap), an electrolytic capacitor (the drop across a thin oxide between $V_{\mathrm{e}^-}$ and $V_{\mathrm{ion}}$), and an EDL supercapacitor (no insulator at all — the ladder soaks up the whole drop within a Debye-length skin). The effective plate spacing shrinks left to right, and the capacitance grows accordingly. Two vertical gaps are not to scale: the work-function step down to $\phi$ is compressed (a real $\Phi/e$ is 4–5 V), and the supercapacitor's rung-to-carrier gap is widened — a truly concentrated electrolyte would put $V^\circ_{\mathrm{ion}}$ right on $V_{\mathrm{ion}}$.
 {% endfigcaption %}
 </figure>
 
@@ -35,7 +35,7 @@ The devices that lean on it store charge in a material's chemical state rather t
 <figure class="demo-container" style="max-width: 620px">
 {% include "esbd-diagrams/cap-chem.njk" %}
 {% figcaption %}
-Chemical capacitance in an intercalation host: adding charge raises the lithium content and slides $V_{\mathrm{Li}^+}$ away from its standard state, with no electrostatic gap involved. The right panel is the same statement read as charge against voltage — the lattice-gas isotherm $V = V^\circ + \tfrac{RT}{F}\ln\tfrac{x}{1-x}$, plotted as filling (hence charge) against $V$, so the slope of the plotted curve is the (nonlinear) chemical capacitance; here $V^\circ$ sits at half-filling, the natural lattice-gas reference.
+Chemical capacitance in an intercalation host: adding charge raises the lithium content and slides $V_{\mathrm{Li}^+}$ away from its standard state, with no electrostatic gap involved. The right panel is the same statement read as a charge–voltage relation — the lattice-gas isotherm $V = V^\circ + \tfrac{RT}{F}\ln\tfrac{x}{1-x}$, plotted as $V$ against filling (hence charge), so the (nonlinear) chemical capacitance — charge banked per volt — is the *inverse* slope, largest where the curve runs flattest; here $V^\circ$ sits at half-filling, the natural lattice-gas reference.
 {% endfigcaption %}
 </figure>
 

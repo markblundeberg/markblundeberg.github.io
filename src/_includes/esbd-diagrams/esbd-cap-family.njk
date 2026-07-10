@@ -143,15 +143,17 @@
             },
             {
                 // the ladder soaks up the whole drop within a Debye skin.
-                // Bulk anchor +0.18 ABOVE V_ion: a dilute cation hangs below
-                // its rung (the old -0.18 implied ~1000 mol/L; hatch-exposed)
+                // Bulk anchor +0.06 ABOVE V_ion (cation below its rung):
+                // hatch-reads ~0.1 M — as close to the caption's concentrated
+                // electrolyte as legibility allows (a true >=1 M gap would
+                // merge the lines); gap widening disclosed in the caption.
                 id: 'v0ion',
                 speciesId: 'ion',
                 curveType: 'standardState',
                 labelFrac: 0.45,
                 x: [...xe],
                 y: xe.map(
-                    (x) => vm + 0.18 + v * Math.exp(-(x - 0.4) / LAM)
+                    (x) => vm + 0.06 + v * Math.exp(-(x - 0.4) / LAM)
                 ),
             },
         ]);

@@ -132,6 +132,18 @@
                 ),
             },
             {
+                // the H+ identity of the dual line, drawn as a true red
+                // rung BEHIND the dashed SHE overlay: it carries the
+                // cation hatching (up, z = +1), while the SHE line itself
+                // stays bare per the Gerischer rule (ruling 2026-07-10)
+                id: 'v0h',
+                speciesId: 'hplus',
+                curveType: 'standardState',
+                showLabel: false, // named by the shared dual-identity label
+                x: [...xsAll],
+                y: xsAll.map(lad),
+            },
+            {
                 // one line, two names: V°_e-(SHE) coincides with V°_H+
                 // under the μ°_H2 = 0 convention
                 id: 'vshe',
