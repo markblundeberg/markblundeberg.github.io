@@ -19,15 +19,18 @@
     // liquid-junction step off the reference side, rigidly. LJP from the
     // Henderson equation (univalent form; checked against the classic
     // HCl(0.1)|KCl(0.1) = -26.8 mV). Against 3 M KCl the LJP is only a few
-    // mV, invisible at scale: the DRAWN step is a fixed schematic size
-    // (sign from Henderson), honest on the abstract axis; the readout
-    // carries the number.
+    // mV, invisible at scale — and no refShift trick can help: the step
+    // rides every test-side line equally, so per-species constant offsets
+    // cannot magnify it. The DRAWN step is therefore the Henderson value
+    // scaled up ×EXAG (declared in the ↕ popup), so the ladder responds
+    // to the slider with the real relative physics; the readout carries
+    // the true number.
     // Gauge: the reference wire is ground, V_e-(Ag) = 0. At the slider max
     // (1 M ~ pH 0) the H+ trace lands exactly on the dashed SHE line.
     // Bonus read: in the 3 M filling solution both K+ and Cl- sit INSIDE
     // their rungs' hatching — past 1 mol/L, as the legend promises.
     const RT_F = 0.025693; // V at 25 °C
-    const DSTEP = 0.14; // drawn junction step (schematic magnitude)
+    const EXAG = 25; // drawn-step magnification (declared in the ↕ popup)
     const C_KCL = 3.0;
     // mobilities, 1e-8 m^2/(V s); only ratios x concentrations matter
     const U_H = 36.23,
@@ -81,7 +84,7 @@
         const num = UL - VL - (UR - VR);
         const den = UL + VL - (UR + VR);
         const ljp = RT_F * (num / den) * Math.log((UR + VR) / (UL + VL));
-        const ljpD = DSTEP * Math.sign(ljp); // drawn step: schematic size, real sign
+        const ljpD = EXAG * ljp; // drawn step: magnified, real relative physics
 
         const lad = (x) => V0_SHE_R + ljpD * (1 - S(x)); // local SHE / ladder anchor
         const cCl = (x) => c1 + (C_KCL - c1) * S(x);
@@ -176,9 +179,8 @@
                 symbol: '↕',
                 x: (b[1] + b[2]) / 2,
                 yDefs: [{ y: V0_SHE_R + ljpD }, { y: V0_SHE_R }],
-                // (drawn step is schematic; the readout has the mV)
                 popupCallback: () =>
-                    String.raw`the liquid junction step (value in the readout below)`,
+                    String.raw`the liquid junction step (drawn ×${EXAG}; true value in the readout below)`,
             },
         ]);
 
