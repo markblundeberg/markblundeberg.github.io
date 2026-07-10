@@ -76,6 +76,7 @@
                 speciesId: 'cl_ion',
                 curveType: 'standardState',
                 showLabel: true,
+                hatch: true, // mark the >1 mol/L side (down for anions)
                 x: [b[0], b[1]],
                 y: sloped(V_Cl_std),
             },
@@ -92,6 +93,7 @@
                 speciesId: 'na_ion',
                 curveType: 'standardState',
                 showLabel: true,
+                hatch: true, // mark the >1 mol/L side (up for cations)
                 x: [b[0], b[1]],
                 y: sloped(V_Na_std),
             },
