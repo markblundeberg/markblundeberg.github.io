@@ -4,16 +4,19 @@
 <div style="flex: 1; min-width: 250px; max-width: 330px">
 <div style="text-align: center; font-size: 0.85em">BJT base</div>
 <div class="bd-container" id="{{idprefix}}-bjt" style="height: 250px; border: 1px solid #eee"></div>
+<div class="bd-container" id="{{idprefix}}-bjt-conc" style="height: 100px; border: 1px solid #eee; border-top: none"></div>
 </div>
 <div style="flex: 1; min-width: 250px; max-width: 330px">
 <div style="text-align: center; font-size: 0.85em">plating bath, supported</div>
 <div class="bd-container" id="{{idprefix}}-bath" style="height: 250px; border: 1px solid #eee"></div>
+<div class="bd-container" id="{{idprefix}}-bath-conc" style="height: 100px; border: 1px solid #eee; border-top: none"></div>
 </div>
 </div>
 {{ controls.slider(idprefix + "-a", "Drive $j/j_{\\mathrm{lim}}$", { min: 0, max: 1, step: "any", value: 0.5, snap: 1, readout: true }) }}
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
     import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
 
@@ -67,6 +70,22 @@
     ]);
     bath.setVRange(VLO, VHI);
 
+    // concentration strips (transport_basic pattern): the SAME linear ramp
+    // under both panels — that identity is the figure's point — touching
+    // zero exactly at the limit
+    const concPanel = (id) =>
+        new XYPlot(id, {
+            xLabel: '',
+            yLabel: 'conc.',
+            xRange: [0, 1],
+            yRange: [0, 1.15],
+            xMode: 'abstract',
+            yMode: 'abstract',
+            margins: { top: 4, bottom: 12, left: 60, right: 60 },
+        });
+    const bjtConc = concPanel('{{idprefix}}-bjt-conc');
+    const bathConc = concPanel('{{idprefix}}-bath-conc');
+
     const xs = linspace(XL, 1, 121);
     // linear diffusion profile: c/c_b = 1 − a·(1 − x̃) inside the layer, 1 in bulk
     const conc = (a) => (x) =>
@@ -88,6 +107,29 @@
         document.getElementById('{{idprefix}}-a-readout').textContent =
             a.toFixed(2);
         const c = conc(a);
+
+        bjtConc.updateTraceData([
+            {
+                id: 'c',
+                x: [...xs],
+                y: xs.map(c),
+                color: SPECIES.electron.color,
+                style: { lineWidth: 2 },
+                label: 'c_{\\mathrm{e}^-}',
+                labelFrac: 0.97,
+            },
+        ]);
+        bathConc.updateTraceData([
+            {
+                id: 'c',
+                x: [...xs],
+                y: xs.map(c),
+                color: SPECIES.silver.color,
+                style: { lineWidth: 2 },
+                label: 'c_{\\mathrm{Ag}^+}',
+                labelFrac: 0.97,
+            },
+        ]);
 
         // BJT: minority electrons injected from the emitter (right), swept
         // out at the collector; z = −1 so depletion sends V_e- UP.

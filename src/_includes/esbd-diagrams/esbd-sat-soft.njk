@@ -4,16 +4,19 @@
 <div style="flex: 1; min-width: 250px; max-width: 330px">
 <div style="text-align: center; font-size: 0.85em">FET channel</div>
 <div class="bd-container" id="{{idprefix}}-fet" style="height: 250px; border: 1px solid #eee"></div>
+<div class="bd-container" id="{{idprefix}}-fet-conc" style="height: 100px; border: 1px solid #eee; border-top: none"></div>
 </div>
 <div style="flex: 1; min-width: 250px; max-width: 330px">
 <div style="text-align: center; font-size: 0.85em">binary electrolyte</div>
 <div class="bd-container" id="{{idprefix}}-bin" style="height: 250px; border: 1px solid #eee"></div>
+<div class="bd-container" id="{{idprefix}}-bin-conc" style="height: 100px; border: 1px solid #eee; border-top: none"></div>
 </div>
 </div>
 {{ controls.slider(idprefix + "-a", "Drive $j/j_{\\mathrm{lim}}$", { min: 0, max: 1, step: "any", value: 0.5, snap: 1, readout: true }) }}
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
     import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
 
@@ -62,6 +65,21 @@
     ]);
     bin.setVRange(VLO, VHI);
 
+    // concentration strips (transport_basic pattern): identical ramps —
+    // soft pinning changes who bends above, not the concentration law below
+    const concPanel = (id) =>
+        new XYPlot(id, {
+            xLabel: '',
+            yLabel: 'conc.',
+            xRange: [0, 1],
+            yRange: [0, 1.15],
+            xMode: 'abstract',
+            yMode: 'abstract',
+            margins: { top: 4, bottom: 12, left: 60, right: 60 },
+        });
+    const fetConc = concPanel('{{idprefix}}-fet-conc');
+    const binConc = concPanel('{{idprefix}}-bin-conc');
+
     const xs = linspace(XL, 1, 121);
     const conc = (a) => (x) =>
         x >= XR ? 1 : Math.max(1e-12, 1 - a * (1 - (x - XL) / (XR - XL)));
@@ -83,6 +101,30 @@
             a.toFixed(2);
         const c = conc(a);
         const lg = (x) => Math.log10(c(x));
+
+        fetConc.updateTraceData([
+            {
+                id: 'c',
+                x: [...xs],
+                y: xs.map(c),
+                color: SPECIES.electron.color,
+                style: { lineWidth: 2 },
+                label: 'c_{\\mathrm{e}^-}',
+                labelFrac: 0.97,
+            },
+        ]);
+        binConc.updateTraceData([
+            {
+                // binary: neutrality marches the two together
+                id: 'c',
+                x: [...xs],
+                y: xs.map(c),
+                color: SPECIES.silver.color,
+                style: { lineWidth: 2 },
+                label: 'c_{\\mathrm{Ag}^+}{=}c_{\\mathrm{NO_3}^-}',
+                labelFrac: 0.97,
+            },
+        ]);
 
         // FET: the gate rail is flat; the channel edge (V°_e-) bends 1×, the
         // electrons 2×, diverging UP at the drain (z = −1). Pinch-off = the

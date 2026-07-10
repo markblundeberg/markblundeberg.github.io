@@ -46,7 +46,7 @@ The electrochemical twin is a plating bath run with a large excess of inert **su
 <figure class="demo-container" style="max-width: 700px">
 {% include "esbd-diagrams/esbd-sat-hard.njk" %}
 {% figcaption %}
-Hard pinning, side by side, one drive slider for both. Left: a BJT base — majority holes hold everything flat while injected electrons diffuse toward the collector. Right: a silver-plating cathode in excess $\mathrm{KNO_3}$ — the supporting ions hold the ladder flat while $\mathrm{Ag}^+$ diffuses across the Nernst layer (the reversible cathode's $V_{\mathrm{e}^-}$ rides the surface $V_{\mathrm{Ag}^+}$). In both, only the active carrier's $V_i$ bends, and at $j = j_{\mathrm{lim}}$ it dives off the plot at the draining boundary: the logarithmic divergence is the ceiling.
+Hard pinning, side by side, one drive slider for both. Left: a BJT base — majority holes hold everything flat while injected electrons diffuse toward the collector. Right: a silver-plating cathode in excess $\mathrm{KNO_3}$ — the supporting ions hold the ladder flat while $\mathrm{Ag}^+$ diffuses across the Nernst layer (the reversible cathode's $V_{\mathrm{e}^-}$ rides the surface $V_{\mathrm{Ag}^+}$). In both, only the active carrier's $V_i$ bends, and at $j = j_{\mathrm{lim}}$ it dives off the plot at the draining boundary: the logarithmic divergence is the ceiling. The strips below track the active carrier's concentration — one identical linear ramp in both devices, touching zero exactly at the limit.
 {% endfigcaption %}
 </figure>
 
@@ -61,7 +61,7 @@ The semiconductor twin is the **FET channel**. There is no majority-carrier sea 
 <figure class="demo-container" style="max-width: 700px">
 {% include "esbd-diagrams/esbd-sat-soft.njk" %}
 {% figcaption %}
-Soft pinning, side by side, one drive slider for both. Left: a FET channel, where the gate pins $V^\circ_{\mathrm{e}^-}$ only through a capacitance, so the edge slopes and $V_{\mathrm{e}^-}$ pinches off at the drain. Right: a binary electrolyte, where the blocked anion stays flat but the ladder bends with the salt concentration and $V_{\mathrm{Ag}^+}$ bends by twice that, the ambipolar factor. Same dive at $j_{\mathrm{lim}}$, and now the ladder dives too. For expediency the FET panel is just drawn as this electrolyte's mirror twin, so it borrows the same two-to-one steepening; a real FET's roughly fixed gate capacitance makes the true factor drift, as the footnote details.
+Soft pinning, side by side, one drive slider for both. Left: a FET channel, where the gate pins $V^\circ_{\mathrm{e}^-}$ only through a capacitance, so the edge slopes and $V_{\mathrm{e}^-}$ pinches off at the drain. Right: a binary electrolyte, where the blocked anion stays flat but the ladder bends with the salt concentration and $V_{\mathrm{Ag}^+}$ bends by twice that, the ambipolar factor. Same dive at $j_{\mathrm{lim}}$, and now the ladder dives too — yet the concentration strips below are unchanged from the hard-pinned figure: pinning decides who bends above, not the ramp below. For expediency the FET panel is just drawn as this electrolyte's mirror twin, so it borrows the same two-to-one steepening; a real FET's roughly fixed gate capacitance makes the true factor drift, as the footnote details.
 {% endfigcaption %}
 </figure>
 
