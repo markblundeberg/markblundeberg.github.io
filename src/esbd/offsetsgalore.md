@@ -49,6 +49,23 @@ $\phi(x) - \phi(y)$: this is the famous **{% wiki "Galvani_potential", "Galvani 
 
 $V_{\mathrm{e}^-}$ and $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ and $\phi_{\mathrm{vac}}$: curiously, these are unaffected by anything but the global offset. So, for example at a metal surface, $V_{\mathrm{e}^-} - \phi_{\mathrm{vac}}$ is well defined (relating to work function). But why are electrons and the vacuum special? Why no electron chemical offset or 'vacuum solvent' offset? In fact, there is a convention here too, but it is an extremely universal and innocent one: declaring the energy of an electron at rest in vacuum to be $E_{\mathrm{e^-}}(x) = -e\phi_{\mathrm{vac}}(x)$.^[Deviating from this electron energy convention would alter the value of all {% wiki "Work function", "work functions" %}, and alter the law of thermal electron emission, and probably many other things too. But it would be self-consistent. Interestingly in the field of gas-phase ionization, some folk do effectively adopt an alternative convention here (see [NIST Chemistry WebBook "Gas-Phase Ion Thermochemistry", § Thermochemical Conventions for the Electron](https://webbook.nist.gov/chemistry/ion/#TC)), which I suspect amounts to defining a $V^\circ_{\mathrm{e}^-}$ and $V^\circ_i$ in vacuum, as if ions and electrons can be ideal-dilute 'vacuum solutes' that can be extrapolated up to concentration $c^\circ = 1~\mathrm{mol/L}$. Also note: we can't similarly demand that $E_{\mathrm{ion}} = z_{\mathrm{ion}} e\phi_{\mathrm{vac}}$ because it would conflict with our elemental chemical potential conventions, and anyway you couldn't really make this true for all ions because of molecular ion binding energies. The per-ion vacuum rungs drawn in [Vacuum levels](../vacuum/) are exactly such gas-phase standard-state levels.] So, no slider for this convention (vacuum levels get [a topic of their own](../vacuum/)).
 
+## The tally
+
+The knobs above are not equally guilty. The float and the elemental references are *global*: chosen once, applied consistently across the whole diagram, cancelling out of every same-species comparison — a reference frame, not an ambiguity. The knobs that actually poison comparisons are the *local* ones, the ones that proliferate: the activity convention (one per solution; per composition, even) and the $\phi$ convention (one per solvent). The scoreboard:
+
+| Quantity | Global frame | Local conventions |
+| --- | --- | --- |
+| $\phi$ | float | **2**: activity convention + $\phi$-seat |
+| $V^\circ_i$ | float + elemental refs | **1**: activity convention |
+| $a_i$ | none | **1**: activity convention |
+| $V_i$ (an ion) | float + elemental refs | **0** |
+| $V_{\mathrm{e}^-}$ | float | **0** |
+| same-ion $V_i(x) - V_i(y)$, mean activities | none | **0** |
+
+Read down the local column first: it counts the arbitrary choices that can differ between here and there, and that is the count that matters. By this measure the real rival of $V_i$ is not $\phi$ ($\phi$ simply loses) but the activity $a_i$: a pure dimensionless number, immune to the float, the elemental references, and the $\phi$-seat alike. That global cleanliness is the traditional framework's genuine pride, and it was bought at a price: one local convention, of the severe per-composition kind. The species voltage makes precisely the opposite trade. It accepts the global covariance (a band diagram was never embarrassed to float) and carries no local convention at all. $\phi$ makes both sacrifices and collects neither prize.
+
+The $V_{\mathrm{e}^-}$ row is the Fermi level's quiet privilege: by the bolted-down electron convention above, it drags no elemental reference, which threatens to demote the ionic $V_i$ to second-class citizens. It shouldn't: there is enough freedom in the elemental references to crown any species you like,^[The NIST gas-phase electron conventions mentioned above are a move of exactly this kind, re-seating the electron itself.] and the electron wears the crown only because its convention is the one everybody happens to share.
+
 ## Takeaways
 
 Choices, choices! It's complicated, but that is just how electrochemical thermodynamics is. In the pure mathematical thermodynamics, we don't have to make these choices, and we can keep everything expressed in covariant/convention-free terms. But when we do visualizations, we do have to decide.
