@@ -28,6 +28,12 @@
     // work function (0.25 V here, schematic).
     const WF = 0.25;
     const LAM = 0.03; // EDL skin
+    // The wet panels apply the bias between two METALS (we control V_e-
+    // differences, not V_e- vs V_Na+ directly — Mark 2026-07-10): a sliver
+    // of counter-electrode on the right, whose ion couples to it at a
+    // fixed offset BELOW its V_e- (V_Na+ = V_e- would mean sodium-plating
+    // levels of reduction — not in water).
+    const OFF = 0.35;
     // abstract y (Mark, 2026-07-10): the three repeated numeric axes were
     // clutter, and the only number worth reading — the applied voltage —
     // lives in the slider readout. Also stops the compressed work-function
@@ -53,10 +59,11 @@
         common
     );
     lytic.diagram.setYLabel(''); // one axis label (left panel) serves all three
-    lytic.setSpatialLayout([0, 0.32, 0.44, 1], [
+    lytic.setSpatialLayout([0, 0.32, 0.44, 0.88, 1], [
         REGION.metal,
         { ...REGION.vacuum, name: '' }, // (the thin oxide; labeled in caption)
         REGION.solution,
+        { ...REGION.metal, name: '' }, // counter-electrode sliver
     ]);
     lytic.setVRange(-1.05, 1.05);
 
@@ -66,10 +73,14 @@
         common
     );
     edl.diagram.setYLabel('');
-    edl.setSpatialLayout([0, 0.4, 1], [REGION.metal, REGION.solution]);
+    edl.setSpatialLayout([0, 0.4, 0.88, 1], [
+        REGION.metal,
+        REGION.solution,
+        { ...REGION.metal, name: '' }, // counter-electrode sliver
+    ]);
     edl.setVRange(-1.05, 1.05);
 
-    const xe = linspace(0.4, 1, 61);
+    const xe = linspace(0.4, 0.88, 61);
 
     function update(v) {
         document.getElementById('{{idprefix}}-v-readout').textContent =
@@ -127,7 +138,16 @@
                 id: 'vion',
                 speciesId: 'ion',
                 curveType: 'voltage',
-                x: [0.44, 1],
+                labelFrac: 0.5,
+                x: [0.44, 0.88],
+                y: [vm - OFF, vm - OFF],
+            },
+            {
+                id: 'vel_r',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: false,
+                x: [0.88, 1],
                 y: [vm, vm],
             },
         ]);
@@ -145,7 +165,16 @@
                 id: 'vion',
                 speciesId: 'ion',
                 curveType: 'voltage',
-                x: [0.4, 1],
+                labelFrac: 0.5,
+                x: [0.4, 0.88],
+                y: [vm - OFF, vm - OFF],
+            },
+            {
+                id: 'vel_r',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: false,
+                x: [0.88, 1],
                 y: [vm, vm],
             },
             {
@@ -161,7 +190,7 @@
                 labelVAlign: 'bottom', // above the trace (Block-A #12)
                 x: [...xe],
                 y: xe.map(
-                    (x) => vm + 0.06 + v * Math.exp(-(x - 0.4) / LAM)
+                    (x) => vm - OFF + 0.06 + v * Math.exp(-(x - 0.4) / LAM)
                 ),
             },
         ]);

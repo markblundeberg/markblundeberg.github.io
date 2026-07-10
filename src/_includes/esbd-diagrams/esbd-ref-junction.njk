@@ -1,11 +1,13 @@
 {% set idprefix = "esbd-ref-junction" %}
 {% import "macros/controls.njk" as controls %}
 <div class="bd-container" id="{{idprefix}}-container" style="height: 300px"></div>
+<div class="bd-container" id="{{idprefix}}-concpanel" style="height: 110px"></div>
 {{ controls.slider(idprefix + "-conc", "test $\\mathrm{HCl}$ concentration", { min: -3, max: 0, step: "any", value: -1, readout: true, unit: "mol/L" }) }}
 <div style="text-align: center; font-size: 0.85em; margin-top: 0.2em"><span id="{{idprefix}}-ljp"></span></div>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
     import { makeSlider, renderSpanMath, linspace } from '{{ esbdJsPath }}utils.js';
 
@@ -67,6 +69,21 @@
     ]);
     diagram.setVRange(-0.68, 1.45);
 
+    // concentration panel (linear): the 3 M swamp vs the dilute test side —
+    // Cl- ramps up 30x across the frit, K+ appears from nothing, H+ (0.1 M
+    // at default) hugs the floor and vanishes; its dive lives in the band
+    // panel above (log-scale by nature)
+    const conc = new XYPlot('{{idprefix}}-concpanel', {
+        xLabel: '',
+        yLabel: 'Concentration',
+        xRange: [0, 1],
+        yRange: [0, 3.4],
+        xMode: 'abstract',
+        yMode: 'abstract',
+        // left/right match the band diagram above so the frit lines up
+        margins: { top: 4, bottom: 12, left: 28, right: 35 },
+    });
+
     const S = (x) => {
         // smoothstep across the junction zone, clamped flat outside it
         const t = Math.min(1, Math.max(0, (x - b[1]) / (b[2] - b[1])));
@@ -91,6 +108,38 @@
         const cH = (x) => c1 * (1 - S(x)) + 1e-7; // pH 7 floor in the filling sol.
         const cK = (x) => C_KCL * S(x);
         const kPts = xsAll.filter((x) => cK(x) > 3e-4); // truncate the dive tail
+
+        conc.updateTraceData([
+            {
+                id: 'cCl',
+                x: [...xsAll],
+                y: xsAll.map(cCl),
+                color: SPECIES.chloride.color,
+                style: { lineWidth: 2 },
+                label: 'c_{\\mathrm{Cl}^-}',
+                labelFrac: 0.97,
+            },
+            {
+                id: 'cK',
+                x: [...xsAll],
+                y: xsAll.map(cK),
+                color: SPECIES.potassium.color,
+                style: { lineWidth: 2 },
+                label: 'c_{\\mathrm{K}^+}',
+                labelFrac: 0.66,
+                labelVAlign: 'top', // below its line, clear of the Cl- curve above
+            },
+            {
+                id: 'cH',
+                x: [...xsAll],
+                y: xsAll.map((x) => cH(x)),
+                color: SPECIES.proton.color,
+                style: { lineWidth: 2 },
+                label: 'c_{\\mathrm{H}^+}',
+                labelFrac: 0.1,
+                labelVAlign: 'bottom',
+            },
+        ]);
 
         diagram.updateTraceData([
             {
@@ -130,6 +179,20 @@
                 y: kPts.map(
                     (x) => lad(x) + DV_HCL - DV_KCL + K_SHIFT + RT_F * Math.log(cK(x))
                 ),
+            },
+            {
+                // what the AgCl reaction 'wants' for the electrons, drawn
+                // where the filling solution's Cl- sets it: flat at the
+                // electrode's own V_e- (= 0). Not drawn across the junction
+                // (V_Cl- varies there and the level would just mirror it).
+                id: 've_agcl_implied',
+                speciesId: 'electron',
+                curveType: 'voltageImplied',
+                label: 'V_{\\mathrm{e}^-}(\\mathrm{Ag/AgCl})',
+                labelFrac: 0.45,
+                labelVAlign: 'bottom',
+                x: [b[2], b[3]],
+                y: [0, 0],
             },
             {
                 // the H+ identity of the dual line, drawn as a true red
