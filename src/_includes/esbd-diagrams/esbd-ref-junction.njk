@@ -136,7 +136,19 @@
                 color: SPECIES.proton.color,
                 style: { lineWidth: 2 },
                 label: 'c_{\\mathrm{H}^+}',
-                labelFrac: 0.1,
+                labelFrac: 0.2,
+                labelVAlign: 'bottom',
+            },
+            {
+                // second Cl- label for the left (test) side: the curve is
+                // labelled at its 3 M end, but it starts way down here too
+                id: 'cCl_left',
+                x: [0, 0.001],
+                y: [c1, c1],
+                color: SPECIES.chloride.color,
+                style: { lineWidth: 0, opacity: 0 },
+                label: 'c_{\\mathrm{Cl}^-}',
+                labelFrac: 1,
                 labelVAlign: 'bottom',
             },
         ]);
