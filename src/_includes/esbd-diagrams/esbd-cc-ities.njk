@@ -10,10 +10,14 @@
     // and an immiscible organic solvent. Chemistry deliberately left generic
     // (no specific system settled on yet); to make it concrete, set the two
     // water-side gaps and the organic-side gaps from a real salt's transfer
-    // energies. For any single 1:1 salt, the electroneutral distribution
-    // potential makes the two rungs deform EQUALLY AND OPPOSITELY by
-    // (RT/2F)ln(K_C/K_A); here the salt prefers water, so both organic-side
-    // gaps widen: the ladder stretches rather than stepping rigidly.
+    // energies. For any single 1:1 salt, electroneutrality makes the two
+    // rungs deform EQUALLY AND OPPOSITELY by (RT/2F)ln(1/(K_C·K_A)) — the
+    // PRODUCT of the ions' partition coefficients, i.e. half the salt's
+    // transfer energy per F, the measurable combination. (The RATIO
+    // combination (RT/2F)ln(K_C/K_A) is the distribution potential Δφ
+    // itself: it shifts both rungs rigidly and is gauge-invisible here.)
+    // The salt prefers water, so both organic-side gaps widen: the ladder
+    // stretches rather than stepping rigidly.
     const GAP_W = 0.13; // |V_i - V°_i| in water (both ions; c_w equal by neutrality)
     const GAP_O = 0.3; // |gap| in the organic phase (same for both ions)
     const V_C = 0.4,
