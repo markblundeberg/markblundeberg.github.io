@@ -1,7 +1,7 @@
 // ElectrochemicalSpeciesBandDiagram.js
 
 import { formatPopupBaseContent, rejectUnexpectedFields } from './utils.js';
-import BandDiagram from './BandDiagram.js';
+import BandDiagram, { HATCH_DEFAULTS } from './BandDiagram.js';
 
 // --- Constants ---
 const F = 96485.33212331001; // C / mol (Faraday constant)
@@ -146,10 +146,16 @@ class ElectrochemicalSpeciesBandDiagram {
             // for anions ('/' vs '\'). The >c° side is up for cations and
             // down for anions (hatch goes *into* the band for e⁻/h⁺ band
             // edges). Caller-specified fields win.
+            // (opacity boosted ~sqrt|z| for multivalents: the compressed
+            // texture otherwise reads too faint)
             if (hatchEff && sInfo?.z)
                 hatchEff = {
                     side: sInfo.z > 0 ? 'up' : 'down',
                     yScale: 1 / sInfo.z,
+                    opacity: Math.min(
+                        0.6,
+                        HATCH_DEFAULTS.opacity * Math.sqrt(Math.abs(sInfo.z))
+                    ),
                     ...(hatchEff === true ? {} : hatchEff),
                 };
 

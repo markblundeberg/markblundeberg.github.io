@@ -299,6 +299,12 @@ class EnergyLevelsDiagram extends ResponsivePlot {
                 if (h.z) {
                     h.side ??= h.z > 0 ? 'up' : 'down';
                     h.yScale ??= 1 / h.z;
+                    // opacity boosted ~sqrt|z| for multivalents: the
+                    // compressed texture otherwise reads too faint
+                    h.opacity ??= Math.min(
+                        0.6,
+                        HATCH_DEFAULTS.opacity * Math.sqrt(Math.abs(h.z))
+                    );
                     delete h.z;
                 }
                 return { ...p, h: { ...HATCH_DEFAULTS, ...h } };
