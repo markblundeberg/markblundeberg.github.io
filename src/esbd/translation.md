@@ -19,9 +19,11 @@ If you arrive already fluent in electrochemistry, here is a Rosetta Stone: the f
 | electrode potential $E$ (vs SHE) | $V_{\mathrm{e}^-}(\text{electrode}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ ([electrode potential](../e/)) |
 | standard electrode potential $E^\circ$ | $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ ([half-reactions](../half/)) |
 | redox (solution) potential $E_h$ | $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ |
-| overpotential $\eta$ | a drop in $V_{\mathrm{e}^-}$: $V_{\mathrm{e}^-}(\text{electrode}) - V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ |
+| overpotential $\eta$ | a drop in $V_{\mathrm{e}^-}$: $V_{\mathrm{e}^-}(\text{electrode}) - V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ (or any $V_i$ step at a driven interface; [kinetics](../kinetics/)) |
 | cell voltage / EMF | $V_{\mathrm{e}^-}(\text{right}) - V_{\mathrm{e}^-}(\text{left})$ ([reference electrodes & cells](../references/)) |
 | liquid junction potential | a step in the $V^\circ_{\mathrm{e}^-}$ ladder across the junction |
+| Donnan potential | a step in the $V^\circ_i$ ladder at a fixed-charge medium's boundary ([charge control](../charge_control/)) |
+| built-in potential | a step in the $V^\circ_i$ ladder across a junction at equilibrium ([bipolar](../bipolar/)) |
 
 ## Concentrations and the Nernst equation
 

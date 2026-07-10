@@ -41,6 +41,8 @@ the familiar standard potential of the silver chloride electrode against the SHE
 
 > The single-ion activities $a_{\mathrm{H}^+}$ and $a_{\mathrm{Cl}^-}$ are individually ambiguous (just like the placement of the $V^\circ_i$ ladder), but the ambiguity cancels in the charge-neutral product $a_{\mathrm{H}^+}a_{\mathrm{Cl}^-}$, so the measured voltage is unambiguous, as it must be.
 
+Two readings of this $\Delta V$ coexist happily: an engineer sees the electrodes' $V_{\mathrm{e}^-}$ as reservoirs and the reaction as a generic {% wiki "electromotive force" %} pump; a chemist sees a reversible free-energy change, $\Delta G = -zF\,\Delta V$, per formula unit ($z$ electrons passed).
+
 ## Two ways to read a cell
 
 That derivation took a peculiar route, and it is worth seeing why. We walked the chain
@@ -75,8 +77,6 @@ where the **liquid junction potential** is the step in the reference level acros
 How a reference electrode really attaches: the silver-chloride electrode sits in its own $3\ \mathrm{mol/L}$ KCl filling solution and reaches the test solution only through a porous frit. Unlike the junction-free cells above, the junction is a <em>non-equilibrium</em> object, idling at a steady interdiffusion: no species' $V_i$ runs flat across it, and the invading ions dive away as they dilute ($V_{\mathrm{H}^+}$ resurfaces at the filling solution's own pH-7 level). The dashed line is the local $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$, one and the same line as $V^\circ_{\mathrm{H}^+}$; it steps at the junction by the LJP, every $V^\circ_i$ rung stepping rigidly along with it, so the reference reads the test solution through exactly the $\mathrm{LJP}$ term above, and that step drifts with the very solution being measured (slider). Notice too that in the $3\ \mathrm{mol/L}$ filling solution both ions ride <em>inside</em> their rungs' hatching: past standard concentration — the lower panel shows the same swamp directly, chloride and potassium marching up together through the frit while the test acid hugs the floor. The dashed $V_{\mathrm{e}^-}(\mathrm{Ag/AgCl})$ line is what the filling solution's chloride sets for the electrode's electrons. The reference wire is our $0\ \mathrm{V}$. The plot is schematic — the drawn step is not to scale, and comparisons *between* the two solutions inherit the magnification (the drawn $V_{\mathrm{Cl}^-}$ even flips its true cross-junction ordering); the Henderson estimate of the LJP is in the readout.
 {% endfigcaption %}
 </figure>
-
-Two readings of this $\Delta V$ coexist happily: an engineer sees the electrodes' $V_{\mathrm{e}^-}$ as reservoirs and the reaction as a generic {% wiki "electromotive force" %} pump; a chemist sees a reversible free-energy change, $\Delta G = -zF\,\Delta V$, per formula unit ($z$ electrons passed).
 
 ## What a "standard electrode" really is
 
