@@ -38,7 +38,9 @@
     // clutter, and the only number worth reading — the applied voltage —
     // lives in the slider readout. Also stops the compressed work-function
     // step from being read off as Phi/e = 0.25 V.
-    const common = { yMode: 'abstract', margins: { right: 48, left: 42 } };
+    // slim right margin: all labels sit inside the plots (kept identical
+    // across the three panels so their plot widths match)
+    const common = { yMode: 'abstract', margins: { right: 12, left: 42 } };
 
     const mim = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-mim',
