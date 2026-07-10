@@ -50,7 +50,7 @@
         xLabel: '',
         yLabel: 'Concentration',
         xRange: [0, 1],
-        yRange: [0, 2.05],
+        yRange: [0, 3.1], // headroom for the supporting-ion crowd
         xMode: 'abstract',
         yMode: 'abstract',
         // left/right match the band diagram above so the zones line up
@@ -80,7 +80,19 @@
         const vAg = (x) => V0AG_B - GAP_AG + (sup ? 1 : 2) * bend(x) + ohm(x);
         const vAgIf = vAg(XIF);
 
-        // the panel that makes the layer's LINEAR depletion ramp obvious
+        // the panel that makes the layer's LINEAR depletion ramp obvious.
+        // In support mode a crowd of inert ions sits flat overhead — their
+        // identities don't matter, their NUMBERS do (they carry the drift
+        // and leave Ag+ to diffusion).
+        const suppIons = [2.05, 2.4, 2.75].map((y, i) => ({
+            id: 'supp' + i,
+            x: [XIF, 1],
+            y: [y, y],
+            color: '#a3a9b0',
+            style: { lineWidth: 1.5 },
+            label: i === 2 ? '\\text{supporting ions}' : null, // top line: label rides above the crowd
+            labelFrac: 0.3,
+        }));
         conc.updateTraceData([
             {
                 id: 'c',
@@ -91,9 +103,10 @@
                 label: sup ? 'c_{\\mathrm{Ag}^+}' : 'c_{\\mathrm{Ag}^+}{=}c_{\\mathrm{NO_3}^-}',
                 labelFrac: 0.97,
             },
+            ...(sup ? suppIons : []),
         ]);
 
-        band.updateTraceData([
+        const traces = [
             {
                 id: 've_m',
                 speciesId: 'electron',
@@ -116,24 +129,67 @@
                 x: xs,
                 y: xs.map(vAg),
             },
-            {
-                id: 'v0x',
-                speciesId: 'nitrate',
-                curveType: 'standardState',
-                refShift: NO3_SHIFT,
-                x: xs,
-                y: xs.map((x) => V0X_B + (sup ? 0 : bend(x)) + ohm(x)),
-            },
-            {
-                id: 'vx',
-                speciesId: 'nitrate',
-                curveType: 'voltage',
-                refShift: NO3_SHIFT,
-                labelFrac: 1,
-                x: xs,
-                y: xs.map((x) => V_X + ohm(x)), // flat in the layer - the point
-            },
-        ]);
+        ];
+        if (!sup) {
+            // binary case: the anion is an IDENTIFIED species with its own
+            // pair (and ⌇ base shift)
+            traces.push(
+                {
+                    id: 'v0x',
+                    speciesId: 'nitrate',
+                    curveType: 'standardState',
+                    refShift: NO3_SHIFT,
+                    x: xs,
+                    y: xs.map((x) => V0X_B + (sup ? 0 : bend(x)) + ohm(x)),
+                },
+                {
+                    id: 'vx',
+                    speciesId: 'nitrate',
+                    curveType: 'voltage',
+                    refShift: NO3_SHIFT,
+                    labelFrac: 1,
+                    x: xs,
+                    y: xs.map((x) => V_X + ohm(x)), // flat in the layer - the point
+                }
+            );
+        } else {
+            // supported case (Mark 2026-07-10): the anion loses its identity
+            // in the swamp — an anonymous grey crowd of V_i / V°_i pairs sits
+            // at the bottom, clearly apart from the Ag+ story. Everything
+            // flat (huge conductivity: no visible slopes), no hatching (no
+            // asserted identities/charges), one collective label.
+            const CROWD = [
+                { vi: 0.305, v0: 0.235, col: '#99a1a8' },
+                { vi: 0.255, v0: 0.18, col: '#a8aeb4' },
+                { vi: 0.195, v0: 0.145, col: '#8f979f' },
+            ];
+            CROWD.forEach((g, i) => {
+                traces.push(
+                    {
+                        id: 'crowd_vi' + i,
+                        speciesId: null,
+                        curveType: 'voltage',
+                        color: g.col,
+                        showLabel: i === 0,
+                        label: '\\text{supporting ions}',
+                        labelFrac: 0.62, // inside the plot; the full name won't fit the right margin
+                        x: [XIF, 1],
+                        y: [g.vi, g.vi],
+                    },
+                    {
+                        id: 'crowd_v0' + i,
+                        speciesId: null,
+                        curveType: 'standardState',
+                        color: g.col,
+                        hatch: false,
+                        showLabel: false,
+                        x: [XIF, 1],
+                        y: [g.v0, g.v0],
+                    }
+                );
+            });
+        }
+        band.updateTraceData(traces);
     }
 
     const jEl = makeSlider('{{idprefix}}-j', update, { fire: false });
