@@ -14,9 +14,9 @@
     // bother to draw. V_i ride flat over the blips. phi_vac drawn only in
     // the vacuum (it's screened away inside conductors).
     // Rung spacing compressed: anchoring Na+ as drawn-true, the Cl- pair
-    // sits 0.22 - (0.78 + 4.075) ≈ -4.63 V from its IUPAC-referenced
-    // position (true V°_Cl - V°_Na = +4.075 V).
-    const CL_SHIFT = -4.63;
+    // sits 0.95 - (0.46 + 4.075) ≈ -3.59 V from its IUPAC-referenced
+    // position (true V°_Cl - V°_Na = +4.075 V; drawn +0.49, right way up).
+    const CL_SHIFT = -3.59;
     const diagram = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-container',
         {
@@ -44,14 +44,14 @@
             speciesId: 'electron',
             curveType: 'voltage',
             x: [0, 0.22],
-            y: [0.55, 0.55],
+            y: [0.75, 0.75],
         },
         {
             id: 'vna',
             speciesId: 'cation',
             curveType: 'voltage',
             x: [0.22, 0.78],
-            y: [0.62, 0.62],
+            y: [0.3, 0.3],
         },
         {
             id: 'vcl',
@@ -59,14 +59,14 @@
             curveType: 'voltage',
             refShift: CL_SHIFT,
             x: [0.22, 0.78],
-            y: [0.38, 0.38],
+            y: [1.11, 1.11],
         },
         {
             id: 'vna0',
             speciesId: 'cation',
             curveType: 'standardState',
             x: xs,
-            y: xs.map((x) => 0.78 + blip(x, -0.13, 0.09)),
+            y: xs.map((x) => 0.46 + blip(x, -0.13, 0.09)),
         },
         {
             id: 'vcl0',
@@ -74,22 +74,21 @@
             curveType: 'standardState',
             refShift: CL_SHIFT,
             x: xs,
-            y: xs.map((x) => 0.22 + blip(x, -0.13, 0.09)),
+            y: xs.map((x) => 0.95 + blip(x, -0.13, 0.09)),
         },
         {
             // Work-function canon (2026-07-10): the step down from a metal's
             // V_e- to phi_vac may be compressed (real Phi/e is 4-5 V) but
-            // never reordered — phi_vac stays BELOW V_e-. Drawn 0.45 V below
-            // the metal line, in the clear zone under the ladder (0.3 sat
-            // confusingly flush with the Cl rung's wall blip);
-            // disclosed in the caption. The old y=1.15 sat ABOVE the metal's
-            // V_e-, which read as a negative work function.
+            // never reordered — phi_vac stays BELOW V_e- (the old y=1.15 sat
+            // above it: a negative work function). Compression disclosed in
+            // the caption. Gentle slope away from the surface (Mark): vacuum
+            // is not a flat place — some bound surface charge, say.
             id: 'phivac',
             speciesId: 'electron',
             curveType: 'phi',
             label: '\\phi_{\\mathrm{vac}}',
             x: [0.78, 1],
-            y: [0.1, 0.1],
+            y: [0.12, 0.04],
         },
     ]);
 
