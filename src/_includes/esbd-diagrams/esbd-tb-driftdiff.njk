@@ -1,19 +1,26 @@
 {% set idprefix = "esbd-tb-driftdiff" %}
 {% import "macros/controls.njk" as controls %}
 <div class="bd-container" id="{{idprefix}}-container" style="height: 250px"></div>
-{{ controls.slider(idprefix + "-frac", "Drift fraction", { min: 0, max: 1, step: "any", value: 1, snap: 0.5, readout: true }) }}
+<div class="bd-container" id="{{idprefix}}-conc" style="height: 110px"></div>
+{{ controls.slider(idprefix + "-frac", "Drift fraction", { min: -0.5, max: 1.5, step: "any", value: 0.5, snap: 1, readout: true }) }}
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
-    import { makeSlider } from '{{ esbdJsPath }}utils.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
 
     // One and the same current, split differently between "drift" and
     // "diffusion". The total slope of V_i is held fixed (fixed current);
     // the slider sets how much of it comes from the slope of V°_i / phi
     // (drift) versus from the changing concentration gap (diffusion).
     // frac = 1: uniform concentration, all drift. frac = 0: flat phi,
-    // pure diffusion down a concentration gradient.
+    // pure diffusion down a concentration gradient. The slider runs PAST
+    // [0,1] on both sides (Mark 2026-07-10): drift and diffusion can
+    // legitimately oppose each other, one overcompensating the other.
+    // A concentration panel below makes the diffusion share visible: the
+    // gradient is kept gentle, where the ramp is nearly linear and the
+    // straight-V_i cartoon is honest.
     // Abstract y axis: the straight V_i is the decomposition CARTOON. At
     // fixed current with sigma ∝ c, a heavy diffusion share (gap growing
     // by decades) would really steepen V_i toward the dilute end; the
@@ -30,12 +37,38 @@
     diagram.setSpatialLayout([0, 1], [REGION.solution]);
     diagram.setVRange(0.05, 1.0);
 
+    const conc = new XYPlot('{{idprefix}}-conc', {
+        xLabel: '',
+        yLabel: 'Concentration',
+        xRange: [0, 1],
+        yRange: [0, 1],
+        xMode: 'abstract',
+        yMode: 'abstract',
+        // left/right match the band diagram above so x lines up
+        margins: { top: 4, bottom: 12, left: 60, right: 56 },
+    });
+    const xc = linspace(0, 1, 61);
+
     function update(frac) {
         document.getElementById('{{idprefix}}-frac-readout').textContent =
             frac.toFixed(2);
         const x = [0, 1];
         const vi = (xx) => V0L - GAP0 + SLOPE * xx;
         const v0 = (xx) => V0L + frac * SLOPE * xx;
+
+        // gentle exponential: ln c takes up the (1-frac) share of the slope,
+        // small enough that the ramp reads as the near-linear gradient it is
+        conc.updateTraceData([
+            {
+                id: 'c',
+                x: [...xc],
+                y: xc.map((xx) => 0.55 * Math.exp(-0.5 * (1 - frac) * xx)),
+                color: SPECIES.sodium.color,
+                style: { lineWidth: 2 },
+                label: 'c_{\\mathrm{Na}^+}',
+                labelFrac: 0.97,
+            },
+        ]);
 
         diagram.updateTraceData([
             {

@@ -1,11 +1,13 @@
 {% set idprefix = "esbd-tb-ljp" %}
 {% import "macros/controls.njk" as controls %}
 <div class="bd-container" id="{{idprefix}}-container" style="height: 260px"></div>
+<div class="bd-container" id="{{idprefix}}-conc" style="height: 110px"></div>
 {{ controls.slider(idprefix + "-mob", "$\\log_{10}(D_+/D_-)$", { min: -1.5, max: 1.5, step: "any", value: 0.9, snap: 0, readout: true }) }}
 <div style="text-align: center; font-size: 0.85em; margin-top: 0.2em"><span id="{{idprefix}}-ljp"></span></div>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
     import { makeSlider, renderSpanMath, linspace } from '{{ esbdJsPath }}utils.js';
 
@@ -59,6 +61,31 @@
     const CRATIO = Math.pow(10, DLOGC); // c_R/c_L = 0.01
     const crel = (x) => 1 + (CRATIO - 1) * clamp01((x - 0.35) / 0.3); // c/c_L
     const lgrel = (x) => Math.log10(crel(x));
+
+    // concentration panel: the analytic point the derivation leans on —
+    // steady state + neutrality make c(x) exactly LINEAR across the zone.
+    // Static (the mobility slider moves potentials, not the salt profile).
+    const conc = new XYPlot('{{idprefix}}-conc', {
+        xLabel: '',
+        yLabel: 'Concentration',
+        xRange: [0, 1],
+        yRange: [0, 1.12],
+        xMode: 'abstract',
+        yMode: 'abstract',
+        // left/right match the band diagram above so the zones line up
+        margins: { top: 4, bottom: 12, left: 60, right: 56 },
+    });
+    conc.updateTraceData([
+        {
+            id: 'c',
+            x: [...xs],
+            y: xs.map(crel),
+            color: SPECIES.sodium.color,
+            style: { lineWidth: 2 },
+            label: 'c_{\\mathrm{M}^+}{=}c_{\\mathrm{X}^-}',
+            labelFrac: 0.15, // on the flat plateau, clear of the ramp shoulder
+        },
+    ]);
 
     function update(r) {
         const tp = Math.pow(10, r) / (Math.pow(10, r) + 1);

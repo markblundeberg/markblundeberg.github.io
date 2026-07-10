@@ -43,7 +43,7 @@ There is a subtlety hiding in the drift term. We assumed $\nabla V^\circ_i = \na
 <figure class="demo-container" style="max-width: 440px">
 {% include "esbd-diagrams/esbd-tb-driftdiff.njk" %}
 {% figcaption %}
-One current, split two ways. The slope of $V_i$ is held fixed (fixed current) while the slider reapportions it between drift — the shared slope of $V^\circ_i$ and $\phi$ — and diffusion, the changing concentration gap. The split is bookkeeping; the total slope is what drives the current. The axis is schematic: at fixed current a heavily diffusive profile would in truth steepen toward its dilute end, since conductivity falls with concentration, and the next figure computes exactly that bending.
+One current, split two ways. The slope of $V_i$ is held fixed (fixed current) while the slider reapportions it between drift — the shared slope of $V^\circ_i$ and $\phi$ — and diffusion, the changing concentration gap; the lower panel shows the concentration itself, a gentle and nearly linear ramp. The split is bookkeeping; the total slope is what drives the current. It is also not a tug-of-war that either side has to win: past the ends of the $[0,1]$ split, drift and diffusion oppose each other, one overcompensating the other. The axis is schematic: at fixed current a heavily diffusive profile would in truth steepen toward its dilute end, since conductivity falls with concentration, and the next figure computes exactly that bending.
 {% endfigcaption %}
 </figure>
 
@@ -67,7 +67,7 @@ Many interfaces are selective, letting one carrier through and blocking the rest
 <figure class="demo-container" style="max-width: 480px">
 {% include "esbd-diagrams/esbd-tb-concpol.njk" %}
 {% figcaption %}
-Concentration polarization at a silver plating cathode in binary $\mathrm{AgNO_3}$. The blocked $\mathrm{NO_3}^-$ carries no current, so its $V_i$ is *exactly flat* through the unstirred layer; the $V^\circ_i$ ladder bends with the depleted concentration and the conducting $\mathrm{Ag}^+$ bends by twice that. Out in the stirred bulk every level tilts together — the plain ohmic drop. Toggle the supporting electrolyte at the same current: the ladder pins flat and the bulk tilt vanishes, but the depletion digs twice as deep — diffusion alone must now carry what migration helped with. What happens when the interface is driven all the way dry is the [saturation](../saturation/) story.
+Concentration polarization at a silver plating cathode in binary $\mathrm{AgNO_3}$. The blocked $\mathrm{NO_3}^-$ carries no current, so its $V_i$ is *exactly flat* through the unstirred layer; the $V^\circ_i$ ladder bends with the depleted concentration and the conducting $\mathrm{Ag}^+$ bends by twice that. Out in the stirred bulk every level tilts together — the plain ohmic drop. The lower panel shows the concentration itself: an exactly linear ramp across the unstirred layer, uniform beyond it. Toggle the supporting electrolyte at the same current: the ladder pins flat and the bulk tilt vanishes, but the depletion digs twice as deep — diffusion alone must now carry what migration helped with. What happens when the interface is driven all the way dry is the [saturation](../saturation/) story.
 {% endfigcaption %}
 </figure>
 
@@ -78,7 +78,7 @@ Hold two different solutions in lasting contact, through a porous frit or a cons
 <figure class="demo-container" style="max-width: 460px">
 {% include "esbd-diagrams/esbd-tb-ljp.njk" %}
 {% figcaption %}
-A liquid junction between concentrated and dilute solutions of one binary salt. Unequal ion mobilities would separate charge, but the diffusion-potential field tilts both $V_i$ traces so the two species cross in step; the two $V^\circ_i$ rungs ride as one rigid ladder, and the ladder's net offset end to end is the liquid junction potential. The slider is the mobility ratio of a generic 1:1 salt (cation-led at the default); at $D_+ = D_-$ the LJP vanishes. Rung spacing compressed (⌇).
+A liquid junction between concentrated and dilute solutions of one binary salt. Unequal ion mobilities would separate charge, but the diffusion-potential field tilts both $V_i$ traces so the two species cross in step; the two $V^\circ_i$ rungs ride as one rigid ladder, and the ladder's net offset end to end is the liquid junction potential. The slider is the mobility ratio of a generic 1:1 salt (cation-led at the default); at $D_+ = D_-$ the LJP vanishes. The lower panel shows the salt profile — steady state plus neutrality force it exactly linear across the zone, whatever the mobilities. Rung spacing compressed (⌇).
 {% endfigcaption %}
 </figure>
 

@@ -1,11 +1,13 @@
 {% set idprefix = "esbd-tb-concpol" %}
 {% import "macros/controls.njk" as controls %}
 <div class="bd-container" id="{{idprefix}}-band" style="height: 260px"></div>
+<div class="bd-container" id="{{idprefix}}-conc" style="height: 110px"></div>
 {{ controls.slider(idprefix + "-j", "Current", { min: -1, max: 1, step: "any", value: 0.6, snap: 0, readout: true }) }}
 <div style="text-align: center">{{ controls.checkbox(idprefix + "-sup", "add supporting electrolyte") }}</div>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
     import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
 
@@ -44,6 +46,17 @@
     ]);
     band.setVRange(0.1, 0.95);
 
+    const conc = new XYPlot('{{idprefix}}-conc', {
+        xLabel: '',
+        yLabel: 'Concentration',
+        xRange: [0, 1],
+        yRange: [0, 2.05],
+        xMode: 'abstract',
+        yMode: 'abstract',
+        // left/right match the band diagram above so the zones line up
+        margins: { top: 4, bottom: 12, left: 60, right: 56 },
+    });
+
     const xs = linspace(XIF, 1, 91);
 
     function update() {
@@ -66,6 +79,19 @@
 
         const vAg = (x) => V0AG_B - GAP_AG + (sup ? 1 : 2) * bend(x) + ohm(x);
         const vAgIf = vAg(XIF);
+
+        // the panel that makes the layer's LINEAR depletion ramp obvious
+        conc.updateTraceData([
+            {
+                id: 'c',
+                x: [...xs],
+                y: xs.map(c),
+                color: SPECIES.silver.color,
+                style: { lineWidth: 2 },
+                label: sup ? 'c_{\\mathrm{Ag}^+}' : 'c_{\\mathrm{Ag}^+}{=}c_{\\mathrm{NO_3}^-}',
+                labelFrac: 0.97,
+            },
+        ]);
 
         band.updateTraceData([
             {
