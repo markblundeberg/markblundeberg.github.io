@@ -72,16 +72,16 @@ The standard state ladder is also analogous to the conduction and valence band e
 
 ## Spatial variations
 
-We have drawn the ladder as a static object, but in a working device it rarely sits still. A brief look ahead is worth it here, even though every mechanism shown belongs to a later topic. The contrast to hold onto is this: while $V_i$ tends to ramp smoothly and monotonically across space, tied down as it is by the pull toward thermodynamic equilibrium, the $V^\circ_i$ levels are free to vary far more wildly. They slope gently under an ohmic or diffusion field, swing sharply over a few nanometres in the diffuse layer beside an interface, and jump outright wherever the medium itself changes, since a different solvent or phase carries its own ladder.
+So far the ladder has hung in a single well-mixed solution, and it would be easy to walk away thinking of the $V^\circ_i$ as fixed properties of that solution, like its density. They are not. The ladder floats with the *local* electrical state, and nothing obliges that state to be the same everywhere. The gentlest demonstration: take the ideal-dilute salt water from above and drive a steady current through it.
 
-<figure class="demo-container" style="max-width: 480px">
-{% include "esbd-diagrams/esbd-solutions-amalgam.njk" %}
+<figure class="demo-container" style="max-width: 350px">
+{% include "esbd-diagrams/esbd-nacl-tilt.njk" %}
 {% figcaption %}
-Schematic, not to scale: a single ion, $\mathrm{Na}^+$, plated into a mercury amalgam from aqueous solution, as happens at a dropping-mercury electrode or a chlor-alkali mercury cell. Don't worry about the mechanisms yet, since each gets its own topic later; the point is only this. The species voltage $V_{\mathrm{Na}^+}$ glides smoothly across the whole system, while its standard state $V^\circ_{\mathrm{Na}^+}$ roams over three length scales at once: a gentle slope through the micron-thick diffusion layer, a sharp excursion in the nanometre diffuse layer at the surface, and an outright jump at the mercury–water boundary. The gap between the two lines, drawn in the lower panel, converts exactly to the concentration $c_{\mathrm{Na}^+}$.
+The same dilute $\mathrm{NaCl}$ solution as in the earlier figure, now a spatial slice (far from any electrode) carrying a uniform current. The composition is identical at every point, yet every level slopes: each $V_i$ tilts because current is flowing through resistance, and the $V^\circ_i$ ladder tilts right along with it. Notice what does *not* change: the rung spacing stays rigid and the concentration gaps don't budge. Positive current flows rightward, downhill.
 {% endfigcaption %}
 </figure>
 
-Each of these features has a home further on: the diffusion-layer slope in [basic transport](../transport_basic/), the diffuse-layer excursion in [basic electrostatics](../basicelectrostatics/), and the jump between two different media in [mass action and charge control](../charge_control/). For now it is enough to see that the ladder is a living thing rather than a fixed backdrop.
+This uniform tilt is the tamest move in the ladder's repertoire. In later topics it will bend where concentration gradients pile up ([basic transport](../transport_basic/)), swing sharply across the few nanometres beside a charged interface ([basic electrostatics](../basicelectrostatics/)), and step outright where the medium itself changes, since a different solvent or phase carries its own ladder ([mass action and charge control](../charge_control/)). For now the point is only that the ladder is a living thing rather than a fixed backdrop: rigid in its spacings, free in its motion.
 
 ## Activities and non-ideality
 

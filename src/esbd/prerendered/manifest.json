@@ -1,5 +1,5 @@
 {
-  "hash": "69745d17a95c53a7463405e9c8e973984057f12c3c2c2a28a702a7b579e424fa",
+  "hash": "6105dbeec0a897c0d649dac161ef511e73f90ad2b288ead7862d2bd72cc0cfe4",
   "ids": [
     "V-sd-ladder--diagram-container",
     "ag-agcl-electrode-container",
@@ -41,6 +41,7 @@
     "esbd-muintro-twin-energy",
     "esbd-muintro-twin-esbd",
     "esbd-nacl-dilute-bd-container",
+    "esbd-nacl-tilt-bd-container",
     "esbd-oc-metal-container",
     "esbd-oc-ysz-container",
     "esbd-offsets-galore-plot",
@@ -55,8 +56,6 @@
     "esbd-she-container",
     "esbd-solidstate-flip-energy",
     "esbd-solidstate-flip-esbd",
-    "esbd-solutions-amalgam-conc",
-    "esbd-solutions-amalgam-esbd",
     "esbd-ss-quasifermi-container",
     "esbd-tb-concpol-band",
     "esbd-tb-driftdiff-container",
