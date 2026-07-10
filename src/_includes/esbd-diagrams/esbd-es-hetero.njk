@@ -3,32 +3,47 @@
 <div class="bd-container" id="{{idprefix}}-container" style="height: 280px"></div>
 <div class="bd-container" id="{{idprefix}}-rho" style="height: 110px"></div>
 <div style="display: grid; grid-template-columns: max-content minmax(0, 180px); gap: 2px 10px; justify-content: center; align-items: center; margin-top: 0.4em">
-{{ controls.slider(idprefix + "-na", "doping A ($\\log_{10} n$)", { min: 12, max: 18, step: "any", value: 17, inline: true, readout: true }) }}
-{{ controls.slider(idprefix + "-nb", "doping B ($\\log_{10} n$)", { min: 12, max: 18, step: "any", value: 14, inline: true, readout: true }) }}
+{{ controls.slider(idprefix + "-na", "doping A ($\\log_{10} n$)", { min: 15, max: 17.5, step: "any", value: 16, inline: true, readout: true }) }}
+{{ controls.slider(idprefix + "-nb", "doping B ($\\log_{10} n$)", { min: 15, max: 17.5, step: "any", value: 15, inline: true, readout: true }) }}
 </div>
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
     import XYPlot from '{{ esbdJsPath }}XYPlot.js';
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
-    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
 
     // Heterojunction between two n-type semiconductors, at equilibrium.
     // The conduction-edge offset right AT the contact is a fixed property of
     // the atomic interface (DALIGN, never moves). Each bulk's edge sits
-    // xi = DEC·(logNC − logn) below the shared flat Fermi level, so the
-    // bulk-to-bulk offset follows the dopings; the mismatch between that and
-    // the fixed alignment is absorbed by band bending, split between the
-    // sides in proportion to their screening lengths λ ∝ 1/√n (equal ε).
-    // Crank one side's doping to the max and it goes metal-like: rigid to
-    // the contact, the other side does all the accommodating.
+    // xi = DEC·(logNC − logn) below the shared flat Fermi level; band
+    // bending absorbs the mismatch between that and the fixed alignment.
+    //
+    // Drawn from the real majority-carrier Poisson–Boltzmann profile, not a
+    // linearized cartoon. With u = ψ/V_T (edge shift from bulk, in thermal
+    // units), n = N·e^u and ρ = eN(1 − e^u); the first integral of Poisson
+    // gives |dψ/dx| = (V_T/λ_D)·√2·G(u), G(u) = √(e^u − u − 1), so each
+    // side is a pure quadrature — no shooting. The interface split of the
+    // total bending solves field continuity √N_A·G(u_A) = √N_B·G(u_B)
+    // (equal ε, no interface charge) by bisection; with this DALIGN sign,
+    // side A always depletes (u_A < 0) and side B accumulates (u_B > 0).
+    // Depletion emerges as the textbook boxcar: ρ flat at +eN over
+    // W ≈ λ_D·√(2|u_A|), Debye-rounded tail, parabolic edge bending.
+    // Accumulation emerges as a thin spike of pile-up electrons, peak
+    // eN_B(e^{u_B} − 1), which honestly exits the ρ frame (clipTraces):
+    // its area still cancels the boxcar's exactly. Crank one doping to the
+    // max and that side goes metal-like: rigid edge, near-sheet charge.
     const DEC = 0.05916;
+    const VT = DEC / Math.LN10;
     const VF = 0.55; // flat Fermi level
     const DALIGN = 0.25; // fixed interfacial edge offset (B above A)
     const LOGNC = 19.45;
     const xi = (logn) => DEC * (LOGNC - logn);
-    const lam = (logn) =>
-        Math.min(0.3, Math.max(0.015, 0.5 * Math.pow(10, (12 - logn) / 2)));
+    // Debye length in panel units, ∝ 1/√n, unclamped; the prefactor sizes
+    // the worst-case boxcar (weak side deeply depleted, W ≈ 3.9·λ) to fit
+    // its half-panel
+    const lam = (logn) => 0.091 * Math.pow(10, -(logn - 15) / 2);
+    const G = (u) => Math.sqrt(Math.max(0, Math.exp(Math.min(u, 40)) - u - 1));
 
     const diagram = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-container',
@@ -39,44 +54,86 @@
         { ...REGION.semi2, name: 'Semiconductor A' },
         { ...REGION.semiconductor, name: 'Semiconductor B' },
     ]);
-    diagram.setVRange(-0.05, 0.82); // floor sized for both-dopings-min (contact dip reaches -0.016)
+    diagram.setVRange(0.02, 0.75);
 
-    // charge panel: the contact's double layer. Each side's screening
-    // charge is rho = -chi·(its bending), chi ∝ 1/λ², so the two lobes'
-    // areas cancel exactly (each = total/(λA+λB)) whatever the dopings;
-    // drawn normalized to the taller lobe. A metal-like side answers with
-    // a near-sheet, the weak screener with a long tail.
+    // charge panel: the contact's double layer, true shapes and relative
+    // magnitudes, normalized to the depletion boxcar's height. The
+    // accumulation spike runs off the bottom of the frame by design.
     const rho = new XYPlot('{{idprefix}}-rho', {
         xLabel: '',
         yLabel: 'Charge density',
         xRange: [0, 1],
-        yRange: [-1.15, 1.15],
+        yRange: [-2.6, 1.3],
         xMode: 'abstract',
         yMode: 'abstract',
+        clipTraces: true,
         // left/right match the band diagram above so the contact lines up
         margins: { top: 4, bottom: 12, left: 60, right: 64 },
     });
 
-    const xA = linspace(0, 0.5, 61);
-    const xB = linspace(0.5, 1, 61);
-    const xr = linspace(0, 1, 241);
+    // march from the contact into a bulk by quadrature on the first
+    // integral, dx = λ·|du|/(√2·G); log-spaced u resolves the sharp knee
+    // and the long tail alike. dir: −1 = side A (leftward), +1 = side B.
+    // ucut: where to declare the tail settled — must scale with 1/N, since
+    // the residual CHARGE N·u is what has to be negligible, not u itself
+    // (a heavily doped side still carries visible ρ at tiny bendings).
+    const profile = (uIf, lamS, dir, ucut) => {
+        const pts = [{ x: 0.5, u: uIf }];
+        const xEnd = dir < 0 ? 0 : 1;
+        let x = 0.5;
+        let uPrev = uIf;
+        const NPT = 140;
+        for (let i = 1; i <= NPT; i++) {
+            const u = uIf * Math.pow(ucut / Math.abs(uIf), i / NPT);
+            const step =
+                (lamS * Math.abs(uPrev - u) * (1 / G(uPrev) + 1 / G(u))) /
+                (2 * Math.SQRT2);
+            if (Math.abs(xEnd - x) <= step) {
+                // frame edge arrives mid-transition: interpolate and stop
+                pts.push({
+                    x: xEnd,
+                    u: uPrev + ((u - uPrev) * Math.abs(xEnd - x)) / step,
+                });
+                return pts;
+            }
+            x += dir * step;
+            uPrev = u;
+            pts.push({ x, u });
+        }
+        pts.push({ x: xEnd, u: 0 }); // settled: flat bulk to the frame edge
+        return pts;
+    };
 
     function update() {
         const lognA = parseFloat(naEl.value);
         const lognB = parseFloat(nbEl.value);
         const eAb = VF - xi(lognA);
         const eBb = VF - xi(lognB);
+        const NA = Math.pow(10, lognA - 15);
+        const NB = Math.pow(10, lognB - 15);
         const lA = lam(lognA),
             lB = lam(lognB);
-        // bending needed to reconcile bulk offset with the fixed alignment,
-        // partitioned by screening length
-        const total = eBb - eAb - DALIGN;
-        const dA = (total * lA) / (lA + lB);
-        const dB = (total * lB) / (lA + lB);
 
-        const ampA = dA / (lA * lA),
-            ampB = dB / (lB * lB);
-        const s = Math.max(Math.abs(ampA), Math.abs(ampB)) || 1;
+        // total bending in thermal units, then the field-continuity split:
+        // h(u_A) is monotone, so bisect u_A in (−du, 0)
+        const du = -(eBb - eAb - DALIGN) / VT;
+        let lo = -du,
+            hi = 0;
+        for (let i = 0; i < 60; i++) {
+            const mid = (lo + hi) / 2;
+            if (Math.sqrt(NB) * G(mid + du) - Math.sqrt(NA) * G(mid) > 0)
+                hi = mid;
+            else lo = mid;
+        }
+        const uA = (lo + hi) / 2;
+        const uB = uA + du;
+
+        const norm = NA * (1 - Math.exp(uA)); // the boxcar's height
+        const ucut = (N) =>
+            Math.min(0.004, Math.max(1e-6, (0.002 * norm) / N));
+        const pA = profile(uA, lA, -1, ucut(NA)).reverse();
+        const pB = profile(uB, lB, +1, ucut(NB));
+
         rho.updateTraceData([
             {
                 id: 'zero',
@@ -88,12 +145,11 @@
             },
             {
                 id: 'dl',
-                x: [...xr],
-                y: xr.map((x) =>
-                    x < 0.5
-                        ? (-ampA / s) * Math.exp(-(0.5 - x) / lA)
-                        : (ampB / s) * Math.exp(-(x - 0.5) / lB)
-                ),
+                x: [...pA.map((p) => p.x), ...pB.map((p) => p.x)],
+                y: [
+                    ...pA.map((p) => (NA * (1 - Math.exp(p.u))) / norm),
+                    ...pB.map((p) => (NB * (1 - Math.exp(p.u))) / norm),
+                ],
                 color: '#7a5fb5',
                 style: { lineWidth: 2 },
                 label: '\\text{contact double layer}',
@@ -115,16 +171,16 @@
                 curveType: 'bandEdge_C',
                 label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{A})',
                 labelFrac: 0.06,
-                x: xA,
-                y: xA.map((x) => eAb + dA * Math.exp(-(0.5 - x) / lA)),
+                x: pA.map((p) => p.x),
+                y: pA.map((p) => eAb + VT * p.u),
             },
             {
                 id: 'edgeB',
                 speciesId: 'electron',
                 curveType: 'bandEdge_C',
                 label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{B})',
-                x: xB,
-                y: xB.map((x) => eBb - dB * Math.exp(-(x - 0.5) / lB)),
+                x: pB.map((p) => p.x),
+                y: pB.map((p) => eBb + VT * p.u),
             },
         ]);
 
@@ -133,7 +189,7 @@
             {
                 id: 'align',
                 x: 0.5,
-                yDefs: [{ y: eAb + dA }, { y: eBb - dB }],
+                yDefs: [{ y: eAb + VT * uA }, { y: eBb + VT * uB }],
                 symbol: '↕',
                 popupCallback: () =>
                     'the interfacial alignment: a fixed property of the atomic contact, independent of the dopings',
