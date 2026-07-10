@@ -91,7 +91,7 @@ Set $z = -1$ and the minus sign for electrons falls right out; set $z = +1$ for 
 <figure class="demo-container" style="max-width: 560px">
 {% include "esbd-diagrams/levels-ss-ladder.njk" %}
 {% figcaption %}
-The standard-state ladder, two ways. Left: a solution's $V^\circ_i$ rungs with each ion's $V_i$ floating a $\log$-concentration distance away (an acidified nitrate/chloride solution — pH 4, 10 mM each, spectator cation not drawn). Right: silicon's two-rung ladder, the band edges, with the equilibrium Fermi level sitting between them according to doping (here $n$-type). The two carriers share one line ($V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$), and $n$ and $p$ trade off about it — the mass-action law again, $np$ fixed. ([Charge control](../charge_control/) turns this into an interactive neutrality solve.) The columns' relative alignment is arbitrary — nothing here is in contact.
+The standard-state ladder, two ways: an acidified nitrate/chloride solution (spectator cation not drawn), and $n$-type silicon. In both columns each carrier floats a log-concentration distance from its rung. In silicon the two carriers share one line, so $n$ and $p$ trade off about it: mass action, $np$ fixed. The columns' relative alignment is arbitrary, as nothing here is in contact.
 {% endfigcaption %}
 </figure>
 

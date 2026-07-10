@@ -8,7 +8,8 @@
     // Left band: acidified nitrate/chloride solution. V°_i from iondata.txt
     // (H⁺ 0, NO₃⁻ +1.127, Cl⁻ +1.360 V), chosen so the rung span (~1.4 V) is
     // comparable to silicon's gap — no compressed not-to-scale rungs needed.
-    // Concentrations: pH 4, 10 mM NO₃⁻, 10 mM Cl⁻ (spectator cation not drawn).
+    // Concentrations (drawn as gap arrows, mirroring the n/p arrows): pH 4,
+    // 10 mM NO₃⁻, 10 mM Cl⁻ (spectator cation not drawn).
     // Right band: Si edges 1.12 V apart, N_C = 2.8e19, N_V = 1.04e19 cm⁻³;
     // slider sets n, and p follows from n·p = N_C·N_V·10^(−Eg/decade)
     // (log₁₀ n·p = 19.53, i.e. n_i ≈ 5.8e9 cm⁻³). The band alignment between
@@ -125,6 +126,30 @@
         ]);
 
         diagram.setArrows([
+            {
+                arrowId: 'c_h',
+                fromLevelId: 'r_h',
+                toLevelId: 'v_h',
+                label: 'c = 10^{-4}\\,\\mathrm{mol/L}',
+                arrowStyle: '<->',
+                dxFrac: -0.12,
+            },
+            {
+                arrowId: 'c_no3',
+                fromLevelId: 'r_no3',
+                toLevelId: 'v_no3',
+                label: 'c = 10^{-2}\\,\\mathrm{mol/L}',
+                arrowStyle: '<->',
+                dxFrac: -0.12,
+            },
+            {
+                arrowId: 'c_cl',
+                fromLevelId: 'r_cl',
+                toLevelId: 'v_cl',
+                label: 'c = 10^{-2}\\,\\mathrm{mol/L}',
+                arrowStyle: '<->',
+                dxFrac: -0.12,
+            },
             {
                 arrowId: 'n',
                 fromLevelId: 'edge_e',
