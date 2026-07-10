@@ -78,6 +78,12 @@
                     t.kind === 'std'
                         ? { lineWidth: 1, dasharray: '4,2' }
                         : { lineWidth: 3 },
+                // In μ̄ view the hatch is the SAME for every species: a
+                // decade is RT·ln10 for everyone, concentrated side up
+                // (μ̄ rises with concentration), one slant. The ESBD panel
+                // below shows the 1/(z_i F) map flipping the anion's band
+                // and compressing the +2 cation's to half height.
+                ...(t.kind === 'std' ? { hatch: { side: 'up' } } : {}),
                 x: t.x,
                 y: Ey,
             });

@@ -12,9 +12,13 @@ const HATCH_DEFAULTS = {
     side: 'down',
     type: 'lines', // 'lines' (diagonal strokes) | 'tint' (solid fill)
     height: 14, // band extent from the trace, px
+    yScale: 1, // signed vertical scale of the WHOLE texture (ESBD wrapper
+    //            sets 1/z_i: band height ×1/|z|, stripe slope arctan(1/z),
+    //            mirrored for anions — the μ̄° hatch pushed through the
+    //            1/(z_i F) coordinate change)
     spacing: 3.5, // stripe pitch, px ('lines' only)
     lineWidth: 1, // stripe width, px ('lines' only)
-    angle: 45, // stripe angle, deg ('lines' only); 45 = '/'
+    angle: 45, // stripe angle before yScale, deg ('lines' only); 45 = '/'
     opacity: 0.35,
     fade: true, // dissolve toward the band's far edge instead of a hard stop
 };
@@ -633,7 +637,7 @@ class BandDiagram extends ResponsivePlot {
 
     /** Hatch/tint bands shading one side of a trace (see HATCH_DEFAULTS). */
     _drawHatches() {
-        const FADE_SLABS = 4;
+        const FADE_SLABS = 3;
         const hatched = this.traceData.filter((d) => d.hatch);
         const patId = (d) => `${this.config.containerId}-hatch-pat-${d.id}`;
 
@@ -650,15 +654,35 @@ class BandDiagram extends ResponsivePlot {
                     const h = d.hatch;
                     return `<pattern id="${patId(d)}" patternUnits="userSpaceOnUse"
                         width="${h.spacing}" height="${h.spacing}"
-                        patternTransform="rotate(${h.angle})">
+                        patternTransform="scale(1,${h.yScale}) rotate(${h.angle})">
                         <line x1="0" y1="0" x2="0" y2="${h.spacing}"
                         stroke="${d.color}" stroke-width="${h.lineWidth}"/></pattern>`;
                 }),
         });
 
-        // The fade is stacked slabs stepping down in opacity: a gradient mask
-        // can't follow a sloped/curved trace (a bounding-box gradient fades
-        // along the trace's own drop, not across the band).
+        // The fade is stacked area slabs stepping down in opacity: a gradient
+        // mask can't follow a sloped/curved trace, and a thick STROKE of the
+        // trace is wrong too (stroke width is perpendicular, so a steep wall
+        // grows hatching on both of its sides — the dilute one included).
+        // Strict vertical offsets stay one-sided everywhere. Geometry is
+        // applied immediately, NOT tweened: re-rasterizing pattern fills
+        // every animation frame is too slow on mobile, so during transitions
+        // the hatches hide and rematerialize in final position (below).
+        const slabPath = (d, j, n) => {
+            const h = d.hatch;
+            const sgn = h.side === 'up' ? -1 : 1;
+            const hgt = h.height * Math.abs(h.yScale);
+            // overlap slabs a hair toward the trace: no seam pixels
+            const near = sgn * ((hgt * j) / n - (j ? 0.5 : 0));
+            const far = (sgn * hgt * (j + 1)) / n;
+            const gen = d3
+                .area()
+                .x((p) => this.xScale(p.x))
+                .y0((p) => this.yScale(p.y) + near)
+                .y1((p) => this.yScale(p.y) + far)
+                .defined((p) => p.y !== null && !isNaN(p.y) && isFinite(p.y));
+            return gen(d.points) ?? '';
+        };
         const slabData = hatched.flatMap((d) => {
             const n = d.hatch.fade ? FADE_SLABS : 1;
             return Array.from({ length: n }, (_, j) => ({
@@ -668,13 +692,17 @@ class BandDiagram extends ResponsivePlot {
                 n,
             }));
         });
+        let moved = false;
         this.drawElements({
             parentGroups: this.hatchGroup,
             element: 'path',
             cssClass: 'bd-data-hatch',
             data: slabData,
             dataKey: (s) => s.id,
-            onNew: (s) => s.attr('stroke', 'none'),
+            onNew: (s) =>
+                s
+                    .attr('stroke', 'none')
+                    .attr('d', ({ trace: d, j, n }) => slabPath(d, j, n)),
             onUpdateImmediate: (s) =>
                 s
                     .attr('fill', ({ trace: d }) =>
@@ -685,26 +713,28 @@ class BandDiagram extends ResponsivePlot {
                     .attr(
                         'fill-opacity',
                         ({ trace: d, j, n }) => d.hatch.opacity * (1 - j / n)
-                    ),
-            onUpdateTransition: (sel) =>
-                sel.attr('d', ({ trace: d, j, n }) => {
-                    const h = d.hatch;
-                    const sgn = h.side === 'up' ? -1 : 1;
-                    // overlap slabs a hair toward the trace: no seam pixels
-                    const near = sgn * ((h.height * j) / n - (j ? 0.5 : 0));
-                    const far = sgn * (h.height * (j + 1)) / n;
-                    const gen = d3
-                        .area()
-                        .x((p) => this.xScale(p.x))
-                        .y0((p) => this.yScale(p.y) + near)
-                        .y1((p) => this.yScale(p.y) + far)
-                        .defined(
-                            (p) =>
-                                p.y !== null && !isNaN(p.y) && isFinite(p.y)
-                        );
-                    return gen(d.points);
-                }),
+                    )
+                    .each(function ({ trace: d, j, n }) {
+                        const nd = slabPath(d, j, n);
+                        if (this.getAttribute('d') !== nd) {
+                            moved = true;
+                            this.setAttribute('d', nd);
+                        }
+                    }),
         });
+
+        // Hide during motion, fade back in once settled. A continuous slider
+        // drag keeps re-hiding, so the hatches stay gone until the drag ends.
+        // (?static / zero-duration mode never hides: seeds stay complete.)
+        if (moved && this.config.transitionDuration > 0) {
+            this.hatchGroup
+                .interrupt('hatch-show')
+                .attr('opacity', 0)
+                .transition('hatch-show')
+                .delay(this.config.transitionDuration)
+                .duration(200)
+                .attr('opacity', 1);
+        }
     }
 
     _drawTraces() {

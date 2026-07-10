@@ -128,6 +128,31 @@ class ElectrochemicalSpeciesBandDiagram {
             const label =
                 labelOverride ?? curveTypeInfo.labelGen(sInfo?.mathLabel);
 
+            // Rung hatching, default-on for real standard states and band
+            // edges (pass hatch: false to opt out). NOT the implied redox
+            // rungs: V°(Ox/Red) has no one-sided concentrated direction —
+            // its gap to V_e reads the Ox/Red ratio, both signs meaningful
+            // (the symmetry the Gerischer picture spreads into two humps).
+            let hatchEff = hatch;
+            if (
+                hatchEff == null &&
+                /^(standardState|bandEdge_C|bandEdge_V)$/.test(curveType)
+            )
+                hatchEff = true;
+            // The hatch texture pictures the 1/(z_i F) rescaling from μ̄°_i
+            // (where every species' decade is the same RT·ln10, same side,
+            // same slant) into V°_i: yScale = 1/z_i compresses the band and
+            // pitch by 1/|z| and tilts the stripes to arctan(1/z), mirrored
+            // for anions ('/' vs '\'). The >c° side is up for cations and
+            // down for anions (hatch goes *into* the band for e⁻/h⁺ band
+            // edges). Caller-specified fields win.
+            if (hatchEff && sInfo?.z)
+                hatchEff = {
+                    side: sInfo.z > 0 ? 'up' : 'down',
+                    yScale: 1 / sInfo.z,
+                    ...(hatchEff === true ? {} : hatchEff),
+                };
+
             outData.push({
                 id: id,
                 x: x,
@@ -140,14 +165,7 @@ class ElectrochemicalSpeciesBandDiagram {
                 labelHAlign: labelHAlign,
                 refShift: refShift,
                 refShiftFrac: refShiftFrac,
-                // hatch: shade the concentrated side of a rung; if the caller
-                // gives no side, infer it from the species charge (a sub-molar
-                // cation hangs below its rung, an anion above — so the >c°
-                // side is up for cations, down for anions).
-                hatch:
-                    hatch && hatch.side == null && sInfo?.z
-                        ? { ...hatch, side: sInfo.z > 0 ? 'up' : 'down' }
-                        : hatch,
+                hatch: hatchEff,
                 extraData: {
                     speciesId: speciesId,
                     curveDescription: curveDescription,
