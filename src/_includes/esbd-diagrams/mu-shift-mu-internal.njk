@@ -102,6 +102,7 @@
                 levelId: 'muintzero',
                 yValue: 0,
                 label: '0', // Raw LaTeX for component
+                labelSide: 'left', // right side collides with mu_int,E2+
                 color: '#000',
                 style: { lineWidth: 1 },
             });
@@ -125,7 +126,11 @@
                     categoryId: 'levels',
                     levelId: key,
                     yValue: mu_bar,
-                    label: `\\bar{\\mu}_{${ion.latex}}`, // Raw LaTeX for component
+                    // neutral species: plain mu, no bar (the bar marks the
+                    // electrical sensitivity a neutral lacks)
+                    label: z
+                        ? `\\bar{\\mu}_{${ion.latex}}`
+                        : `\\mu_{${ion.latex}}`,
                     color: ion.color,
                 });
                 phiLevelsData.push({

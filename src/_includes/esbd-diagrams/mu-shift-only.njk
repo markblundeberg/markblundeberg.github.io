@@ -45,7 +45,7 @@
     const muBarConfig = {
         ...commonConfig,
         yAxisLabel: 'Electrochemical potential $\\bar{\\mu}_i$',
-        yRange: [-2.5, 5.0], // Calculated range + padding
+        yRange: [-2.6, 5.8], // sized for slider extremes (E2+ reaches 5.6)
     };
 
     // Launcher code
@@ -89,7 +89,11 @@
                     categoryId: 'levels',
                     levelId: key,
                     yValue: mu_bar,
-                    label: `\\bar{\\mu}_{${ion.latex}}`, // Raw LaTeX for component
+                    // neutral species: plain mu, no bar (the bar marks the
+                    // electrical sensitivity a neutral lacks)
+                    label: z
+                        ? `\\bar{\\mu}_{${ion.latex}}`
+                        : `\\mu_{${ion.latex}}`,
                     color: ion.color,
                 });
             });

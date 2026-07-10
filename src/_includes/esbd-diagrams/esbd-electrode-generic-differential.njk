@@ -17,7 +17,8 @@
 
     const diagram = new ElectrochemicalSpeciesBandDiagram(
         'electrode-generic-differential-container',
-        speciesInfo
+        speciesInfo,
+        { margins: { right: 56 } } // room for the V_ion label at the right edge
     );
 
     const boundaries = [0.0, 0.2, 0.3, 0.4, 0.6, 0.7, 0.8, 1.0];
