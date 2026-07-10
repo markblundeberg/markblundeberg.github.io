@@ -142,14 +142,16 @@
                 y: [vm, vm],
             },
             {
-                // the ladder soaks up the whole drop within a Debye skin
+                // the ladder soaks up the whole drop within a Debye skin.
+                // Bulk anchor +0.18 ABOVE V_ion: a dilute cation hangs below
+                // its rung (the old -0.18 implied ~1000 mol/L; hatch-exposed)
                 id: 'v0ion',
                 speciesId: 'ion',
                 curveType: 'standardState',
                 labelFrac: 0.45,
                 x: [...xe],
                 y: xe.map(
-                    (x) => vm - 0.18 + v * Math.exp(-(x - 0.4) / LAM)
+                    (x) => vm + 0.18 + v * Math.exp(-(x - 0.4) / LAM)
                 ),
             },
         ]);
