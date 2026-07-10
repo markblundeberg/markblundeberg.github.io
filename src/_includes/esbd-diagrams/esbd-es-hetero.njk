@@ -37,7 +37,7 @@
         { ...REGION.semi2, name: 'Semiconductor A' },
         { ...REGION.semiconductor, name: 'Semiconductor B' },
     ]);
-    diagram.setVRange(0.0, 0.82);
+    diagram.setVRange(-0.05, 0.82); // floor sized for both-dopings-min (contact dip reaches -0.016)
 
     const xA = linspace(0, 0.5, 61);
     const xB = linspace(0.5, 1, 61);
