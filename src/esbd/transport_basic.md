@@ -78,7 +78,7 @@ Hold two different solutions in lasting contact, through a porous frit or a cons
 <figure class="demo-container" style="max-width: 460px">
 {% include "esbd-diagrams/esbd-tb-ljp.njk" %}
 {% figcaption %}
-A liquid junction between concentrated and dilute solutions of one binary salt. Unequal ion mobilities would separate charge, but the diffusion-potential field tilts both $V_i$ traces so the two species cross in step; the net offset of the $V^\circ_i$ ladder is the liquid junction potential. The slider is the mobility ratio (the default is HCl-like); at $D_+ = D_-$ the LJP vanishes. Rung spacing compressed.
+A liquid junction between concentrated and dilute solutions of one binary salt. Unequal ion mobilities would separate charge, but the diffusion-potential field tilts both $V_i$ traces so the two species cross in step; the two $V^\circ_i$ rungs ride as one rigid ladder, and the ladder's net offset end to end is the liquid junction potential. The slider is the mobility ratio (the default is HCl-like); at $D_+ = D_-$ the LJP vanishes. Rung spacing compressed (⌇).
 {% endfigcaption %}
 </figure>
 
@@ -95,7 +95,7 @@ The coupling reaches past the spreading salt itself. A third, dilute species dri
 <figure class="demo-container" style="max-width: 480px">
 {% include "esbd-diagrams/esbd-tb-saltblob.njk" %}
 {% figcaption %}
-A blob of salt spreading by diffusion — scrub time with the slider. The two ions spread as one Gaussian (the ambipolar $D$); on the band diagram the diffusion-potential field shows up as the two $V_i$ features, with the *slower* ion carrying the larger one (it needs the bigger push to keep up). A dilute tracer cation rides the same field — drawn *up* the salt gradient, toward the blob (its trajectory integrated from the drift equation, not sketched).
+A blob of salt spreading by diffusion — scrub time with the slider. The two ions spread as one Gaussian (the ambipolar $D$); on the band diagram the diffusion-potential field shows up as the two $V_i$ features, with the *slower* ion carrying the larger one (it needs the bigger push to keep up). The two $V^\circ_i$ rungs dip over the blob as one rigid ladder (that shared dip is the diffusion potential itself), while each rung–carrier gap narrows where the salt is dense. A dilute tracer cation rides the same field — drawn *up* the salt gradient, toward the blob (its trajectory integrated from the drift equation, not sketched). Rung spacing compressed (⌇).
 {% endfigcaption %}
 </figure>
 

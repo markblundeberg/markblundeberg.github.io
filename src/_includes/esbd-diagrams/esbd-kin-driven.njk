@@ -23,6 +23,7 @@
     const V_ELEC = 0.6; // fixed electrode level — the controlled quantity we anchor to
     const V_BULK = 0.5; // bulk reaction level, pre-shift reference for the profile
     const ACT = 0.18; // bulk activity gap V_rxn − V°_rxn
+    const V_SHE = 0.2; // local SHE reference rung, pre-shift (rides the ladder)
     const R_OHM = 0.035,
         ETA0 = 0.08;
 
@@ -88,6 +89,17 @@
                 label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{Ox}/\\mathrm{Red})',
                 x: xs,
                 y: xs.map(vStd),
+            },
+            {
+                // the local SHE reference rung rides the ladder (flat through
+                // the supported layer, ohmic tilt in the bulk): the electrode
+                // potential "vs SHE" is the V_e-(metal) ↔ this-line gap
+                id: 'she_std',
+                speciesId: 'electron',
+                curveType: 'standardStateImplied',
+                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{SHE})',
+                x: xs,
+                y: xs.map((x) => V_SHE + tilt(x) + shift),
             },
         ]);
 

@@ -151,6 +151,16 @@
                 y: [0.3, 0.3],
             },
             {
+                // blocked anion: V flat, so its rung dives with the shared
+                // depletion (gap = 0.077 + the log term; ladder stays rigid
+                // with V°_Ag+ above)
+                id: 'v0no3',
+                speciesId: 'nitrate',
+                curveType: 'standardState',
+                refShift: NO3_SHIFT,
+                ...trim((x) => 0.3 - 0.077 + DEC * lg(x)),
+            },
+            {
                 id: 've_m',
                 speciesId: 'electron',
                 curveType: 'voltage',

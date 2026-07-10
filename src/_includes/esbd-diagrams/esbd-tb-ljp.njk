@@ -21,14 +21,17 @@
     // zone (flux check: c·D+·2t−·c'/c = const, and D+t− = D−t+). Curvature
     // hugs the dilute end. Slider = mobility ratio; at D+ = D− the LJP
     // vanishes; default +0.9 is HCl-like (t+ ≈ 0.89). Rungs compressed.
+    // Both V°_i rungs drawn, honest per species: V°_+ = V_+ + gap(x),
+    // V°_− = V_− − gap(x) with gap(x) = −DEC·log10 c(x) (c_L = 0.1 M);
+    // both reduce to anchor − (t+−t−)·DEC·ln-c ramp = the rigid ladder.
     const DEC = 0.05916;
     const DLOGC = -2; // log10(c_R/c_L)
+    const LOGCL = -1; // log10(c_L): 0.1 M on the concentrated side
     const MID = 0.5;
-    const GAP_R = 0.15; // splitting at the dilute end (compressed)
-    // refShift: anchoring Na+ as drawn-true, the Cl- trace sits
-    // 0.15 - (-4.43) = -4.58 V from its IUPAC-referenced position (the
+    const GAP_R = 0.15; // V+/V− splitting at the dilute end (compressed)
+    // refShift: anchoring Na+ as drawn-true, the Cl- traces sit
+    // 0.15 - (-4.43) = -4.58 V from their IUPAC-referenced position (the
     // x-dependence of the splitting is honest; only the base is shifted).
-    // The generic V°_i rung is schematic and unflagged.
     const CL_SHIFT = -4.58;
 
     const diagram = new ElectrochemicalSpeciesBandDiagram(
@@ -58,6 +61,9 @@
         const VPL = MID + GAP_L / 2,
             VML = MID - GAP_L / 2; // left-bulk levels
 
+        // rung gap to each carrier reads the local concentration
+        const gap = (x) => -DEC * (LOGCL + lgrel(x));
+
         diagram.updateTraceData([
             {
                 id: 'vp',
@@ -67,12 +73,13 @@
                 y: xs.map((x) => VPL + 2 * tm * DEC * lgrel(x)),
             },
             {
-                id: 'v0',
+                id: 'v0p',
                 speciesId: 'cation',
                 curveType: 'standardState',
-                label: 'V^\\circ_i',
                 x: [...xs],
-                y: xs.map((x) => MID - 0.02 - (tp - tm) * DEC * lgrel(x)),
+                y: xs.map(
+                    (x) => VPL + 2 * tm * DEC * lgrel(x) + gap(x)
+                ),
             },
             {
                 id: 'vm',
@@ -81,6 +88,16 @@
                 curveType: 'voltage',
                 x: [...xs],
                 y: xs.map((x) => VML - 2 * tp * DEC * lgrel(x)),
+            },
+            {
+                id: 'v0m',
+                speciesId: 'anion',
+                refShift: CL_SHIFT,
+                curveType: 'standardState',
+                x: [...xs],
+                y: xs.map(
+                    (x) => VML - 2 * tp * DEC * lgrel(x) - gap(x)
+                ),
             },
         ]);
 

@@ -14,16 +14,20 @@
     // porous frit. The junction is a steady NON-equilibrium object: H+ and
     // K+ invade each other's sides and dive away as they dilute (no V_i
     // connects flat across it; V_H+ resurfaces at the filling solution's
-    // own pH-7 level). The whole test-side ladder - drawn via the dashed
-    // local V°_e-(SHE) - sits one liquid-junction step off the reference
-    // side. LJP from the Henderson equation (univalent form; checked
-    // against the classic HCl(0.1)|KCl(0.1) = -26.8 mV). Against 3 M KCl
-    // the LJP is only a few mV, so the DRAWN step is scaled up (EXAG) to
-    // stay visible on the abstract axis; the readout carries the number.
+    // own pH-7 level). The whole test-side ladder — every V°_i rung plus
+    // the dashed local V°_e-(SHE), which IS V°_H+ (μ°_H2 = 0) — sits one
+    // liquid-junction step off the reference side, rigidly. LJP from the
+    // Henderson equation (univalent form; checked against the classic
+    // HCl(0.1)|KCl(0.1) = -26.8 mV). Against 3 M KCl the LJP is only a few
+    // mV, invisible at scale: the DRAWN step is a fixed schematic size
+    // (sign from Henderson), honest on the abstract axis; the readout
+    // carries the number.
     // Gauge: the reference wire is ground, V_e-(Ag) = 0. At the slider max
     // (1 M ~ pH 0) the H+ trace lands exactly on the dashed SHE line.
+    // Bonus read: in the 3 M filling solution both K+ and Cl- sit INSIDE
+    // their rungs' hatching — past 1 mol/L, as the legend promises.
     const RT_F = 0.025693; // V at 25 °C
-    const EXAG = 15;
+    const DSTEP = 0.14; // drawn junction step (schematic magnitude)
     const C_KCL = 3.0;
     // mobilities, 1e-8 m^2/(V s); only ratios x concentrations matter
     const U_H = 36.23,
@@ -77,7 +81,7 @@
         const num = UL - VL - (UR - VR);
         const den = UL + VL - (UR + VR);
         const ljp = RT_F * (num / den) * Math.log((UR + VR) / (UL + VL));
-        const ljpD = EXAG * ljp; // the cartoon universe's LJP
+        const ljpD = DSTEP * Math.sign(ljp); // drawn step: schematic size, real sign
 
         const lad = (x) => V0_SHE_R + ljpD * (1 - S(x)); // local SHE / ladder anchor
         const cCl = (x) => c1 + (C_KCL - c1) * S(x);
@@ -125,14 +129,36 @@
                 ),
             },
             {
+                // one line, two names: V°_e-(SHE) coincides with V°_H+
+                // under the μ°_H2 = 0 convention
                 id: 'vshe',
                 speciesId: 'electron',
                 curveType: 'standardStateImplied',
                 showLabel: true,
                 labelFrac: 0.3,
-                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{SHE})',
+                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{SHE})\\,{=}\\,V^\\circ_{\\mathrm{H}^+}',
                 x: [...xsAll],
                 y: xsAll.map(lad),
+            },
+            {
+                // the full rigid ladder steps with the SHE line at the
+                // junction: rungs are properties of the solvent, so they run
+                // the whole aqueous span (even where their ion is absent)
+                id: 'v0cl',
+                speciesId: 'clminus',
+                curveType: 'standardState',
+                labelFrac: 0.72,
+                x: [...xsAll],
+                y: xsAll.map((x) => lad(x) + DV_HCL),
+            },
+            {
+                id: 'v0k',
+                speciesId: 'kplus',
+                curveType: 'standardState',
+                labelFrac: 0.1,
+                refShift: K_SHIFT,
+                x: [...xsAll],
+                y: xsAll.map((x) => lad(x) + DV_HCL - DV_KCL + K_SHIFT),
             },
         ]);
 
@@ -150,6 +176,7 @@
                 symbol: '↕',
                 x: (b[1] + b[2]) / 2,
                 yDefs: [{ y: V0_SHE_R + ljpD }, { y: V0_SHE_R }],
+                // (drawn step is schematic; the readout has the mV)
                 popupCallback: () =>
                     String.raw`the liquid junction step (value in the readout below)`,
             },

@@ -25,6 +25,13 @@
         CBG = 0.02;
     const RMOB = 0.5; // (D+ − D−)/(D+ + D−) with D+ = 3 D−
     const DEC = 0.05916;
+    const GAPBG = 0.14; // rung gap out in the background salt (~10^-2.4 M)
+    // Rung spacing compressed: anchoring Na+ as drawn-true, the Cl- pair
+    // sits ≈ -4.63 V from its IUPAC-referenced position (true
+    // V°_Cl - V°_Na = +4.075 V). The two rungs move as one rigid ladder,
+    // dipping together by RMOB·DEC·lg over the blob: the diffusion
+    // potential itself.
+    const CL_SHIFT = -4.63;
 
     const band = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-band',
@@ -88,11 +95,27 @@
                 y: xs.map((x) => 0.66 + (1 - RMOB) * DEC * lg(x)),
             },
             {
+                id: 'v0p',
+                speciesId: 'cation',
+                curveType: 'standardState',
+                x: [...xs],
+                y: xs.map((x) => 0.66 + GAPBG - RMOB * DEC * lg(x)),
+            },
+            {
                 id: 'vm',
                 speciesId: 'anion',
                 curveType: 'voltage',
+                refShift: CL_SHIFT,
                 x: [...xs],
                 y: xs.map((x) => 0.38 - (1 + RMOB) * DEC * lg(x)),
+            },
+            {
+                id: 'v0m',
+                speciesId: 'anion',
+                curveType: 'standardState',
+                refShift: CL_SHIFT,
+                x: [...xs],
+                y: xs.map((x) => 0.38 - GAPBG - RMOB * DEC * lg(x)),
             },
         ]);
 
