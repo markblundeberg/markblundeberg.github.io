@@ -177,6 +177,27 @@ h1 small {
     font-weight: normal;
 }
 
+/* Page front matter: epigraph and byline, tucked under the title rule. */
+.epigraph {
+    text-align: center;
+    font-style: italic;
+    font-size: 0.95em;
+    color: #555;
+    margin: 0.75em auto 0;
+    max-width: 32em;
+}
+.byline {
+    text-align: center;
+    font-size: small;
+    color: #777;
+    margin: 0.5em 0 2.5em;
+}
+
+/* Opening hook paragraph: a step between display type and body text. */
+p.lede {
+    font-weight: 600;
+}
+
 a {
     color: #0077cc;
     text-decoration: none;

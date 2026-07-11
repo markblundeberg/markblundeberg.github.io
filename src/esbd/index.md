@@ -9,9 +9,11 @@ eleventyNavigation:
 
 # Band Diagrams for Batteries<br/><small>An Electrochemical Visualization</small>
 
-<p align='right'><small><em>Mark Lundeberg // June 2026</em></small></p>
+<p class="epigraph">A semiconductor physicist wanders into electrochemistry and refuses to leave without a band diagram.</p>
 
-What is the electrical state deep inside of a battery?
+<p class="byline">Mark Lundeberg // July 2026</p>
+
+<p class="lede">What is the electrical state deep inside of a battery?</p>
 
 If we try to visualize this by plotting voltage versus position, we immediately run into a mystery. We know the voltage at the anode (negative terminal) and the cathode (positive terminal), but what about the electrolyte in between?
 
