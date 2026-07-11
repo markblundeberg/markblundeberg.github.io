@@ -86,7 +86,7 @@ In fact, what started out as a niche picture about batteries has turned into a r
 * **Charge transport is obvious**: Positively-charged species $i$ move from high to low $V_i$, and negatively charged species $j$ move from low to high $V_j$.
 * **Electrochemical reactions appear** as well-defined differences, $V_i - V_j$.
 * We will see that **ionic standard states** appear as reference levels $V_i^\circ$, functioning like semiconductor band edges.
-* We can build a complete picture without ever needing to bring up the practically inaccessible concept of an in-material electrostatic potential ($\phi$).
+* We can build a complete picture without ever needing to bring up the practically inaccessible concept of an in-material electrostatic potential ($\phi$). (And the ladder is not $\phi$ in disguise: it spends strictly fewer arbitrary conventions; [Offsets galore](offsetsgalore/) keeps score.)
 * We **directly represent the fundamental thermodynamics** of charged species: their electrochemical potentials.
 * This is not just a mere normalization trick, but rather the $V_i$ are **real voltages** — measurable directly for electrons, and indirectly (through ion-reversible electrodes) for ions.
 
@@ -96,6 +96,6 @@ In the next few topics we're going to dig a little bit more into how $V_i$ works
 
 ## Explore more
 
-Intrigued? The real power of ESBDs becomes apparent when applied to various systems. Explore these topics through interactive diagrams and detailed explanations by clicking on a topic below:
+Intrigued? The real power of ESBDs shows up in the sweep: one picture serves batteries, electrode kinetics, bipolar membranes and pn junctions, solid-state ionics, and semiconductors, and it keeps working away from equilibrium (quasi-Fermi splitting, concentration polarization, redox disequilibrium) where static textbook pictures give out. Every topic below is built on interactive diagrams — several let you drag the arbitrary conventions themselves and watch the physics not care.
 
 {% include "esbd_topic_list.md" %}
