@@ -69,7 +69,7 @@ We saw that electronic voltage is $V_{\mathrm{e}^-} = \bar\mu_{\mathrm{e}^-}/(-e
 
 $$ V_i = \frac{\bar\mu_i}{q_i}, $$
 
-where $q_i$ is the charge of the species: $-e$ for electrons, $+e$ for lithium ions, and so on for any kind of charge carrier. I call this quantity $V_i$ the **species voltage**.
+where $q_i$ is the charge of the species: $-e$ for electrons, $+e$ for lithium ions, and so on for any kind of charge carrier. I call this quantity $V_i$ the **species voltage**.^[The 'species voltage' name is my coinage, but the quantity itself has an honourable history. J. Jamnik and J. Maier ([Generalised equivalent circuits for mass and charge transport](https://doi.org/10.1039/b100180i), *Phys. Chem. Chem. Phys.* **3**, 1668 (2001)) rescale every electrochemical potential by its carrier's charge (their $\tilde\mu^*_i$ is exactly our $V_i$) and wire up equivalent circuits between an "ionic rail" and an "electronic rail" that carry these voltages, lithium-ion battery included. What they never quite do is plot the rails as curves versus position; that last small step is the launching-off point of this book. See [About](about/) for a fuller history.]
 
 > **Chemistry units**: In chemistry, we work with molar quantities, so $\bar\mu_i$ would be in joules/mol and $q_i$ in coulombs/mol. In that case, $q_i = z_i F$ where $z_i$ is the charge number (&minus;1, +1, +3, etc.) and $F$ is the {%wiki "Faraday constant" %}. Either way, the final quantity $V_i$ is a voltage measured in volts (V).
 
