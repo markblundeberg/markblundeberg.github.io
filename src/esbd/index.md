@@ -57,9 +57,11 @@ Let's draw it in:
 
 Fantastic, we have filled the gap and closed the circuit! And, we can visualize how during charging or discharge, there is a gradient in $\bar\mu_{\mathrm{Li}^+}$ showing internal resistance. Note the value of $\bar\mu_{\mathrm{Li}^+}$ does penetrate into the anode/cathode, representing the mingling of electrons and lithium ions inside the active materials: graphite (anode) and {% wiki "Lithium iron phosphate", "lithium iron phosphate" %} (cathode), which make this a ~3.3 V cell.
 
-This joint accounting of $\bar\mu_{\mathrm{e}^-}$ and $\bar\mu_{\mathrm{Li}^+}$ is, in fact, the thermodynamic backbone of the industry standard Doyle–Fuller–Newman battery modeling, and as mathematical bookkeeping it is flawless.^[Goyal and Monroe ([2017 J. Electrochem. Soc. 164 E3647 "New Foundations of Newman’s Theory for Solid Electrolytes"](https://dx.doi.org/10.1149/2.0611711jes)) provide a modern perspective on this model.] But the above naive visualization of it has a serious flaw: if we change the overall electrostatic offset of the system (try moving the slider), the energy levels for the electron and the ion move in opposite directions because of their opposite charges. This breaks a key principle of band diagrams: the absolute vertical position is arbitrary, and only the *differences* between levels should have physical meaning. Here, the energy gap between the electron and ion levels changes with the offset, making the diagram ambiguous.
+This joint accounting of $\bar\mu_{\mathrm{e}^-}$ and $\bar\mu_{\mathrm{Li}^+}$ is, in fact, the thermodynamic backbone of the industry-standard Doyle–Fuller–Newman battery modeling, and as mathematical bookkeeping it is flawless.^[Goyal and Monroe ([2017 J. Electrochem. Soc. 164 E3647 "New Foundations of Newman’s Theory for Solid Electrolytes"](https://dx.doi.org/10.1149/2.0611711jes)) provide a modern perspective on this model.]
 
-So, just one more small but crucial tweak is needed...
+But our naive visualization of it has a serious flaw: if we change the overall electrostatic offset of the system (try moving the slider), the energy levels for the electron and the ion move in opposite directions because of their opposite charges. This breaks a key principle of band diagrams: the absolute vertical position is arbitrary, and only the *differences* between levels should have physical meaning. Here, the energy gap between the electron and ion levels changes with the offset, making the diagram ambiguous.
+
+Just one more small but crucial tweak is needed...
 
 ## The $V_i$ solution
 
