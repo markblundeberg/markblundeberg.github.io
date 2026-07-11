@@ -83,7 +83,7 @@ Try the offset slider again: now everything shifts together as one rigid ladder,
 
 Here we can finally see how the battery works, and our opening question has its answer: the electrical state deep inside a battery is a landscape of ionic voltages! Two features deserve a closer look. First, the step $V_{\mathrm{e}^-} - V_{\mathrm{Li}^+}$ on each side has a very specific meaning: it measures how tightly that electrode binds (neutral) lithium atoms, and the cathode binds them far more tightly. Second, slide the current away from equilibrium and the internal resistance appears beautifully as a 'lithium voltage drop'; the plain linear ramp is a simplification, but it gets at the heart of the matter. We dig into lithium-ion internals properly [later on](lib/).
 
-If we look at a multi-cell battery, the electron and lithium-ion voltages climb together nicely (right), while in the raw energy picture (left) they move oppositely and splay apart:
+A multi-cell battery makes the contrast stark. In the raw energy picture (left), the electron and ion levels splay farther apart with every added cell; as species voltages (right), they climb the stack together, rung by rung:
 
 <figure class="demo-container" style="max-width: 700px">
 {% include "esbd-diagrams/bd-basicbattery-multicell.njk" %}
