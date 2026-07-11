@@ -13,12 +13,12 @@ We have been framing our electrochemical problems as 'voltage-controlled', and i
 * explaining "chemical capacitance"
 
 We are going to define two key kinds of chemical capacitance here:
-* **ambipolar chemical capacitance** (describing bulk charge storage),
+* **mutual chemical capacitance** (describing bulk charge storage),
 * **internal chemical capacitance** (for describing space charge regions),
 
 and the relation between them.
 
-## Ambipolar chemical capacitance (bulk charge storage)
+## Mutual chemical capacitance (bulk charge storage)
 
 ### Thermodynamic setting
 
@@ -36,35 +36,35 @@ Each one of these $Q_i$ is a function of all the $V_i$ values. This has to be th
 
 (And again, to remind, this is usually expressed in terms of electrochemical potential $\bar\mu_i = q_i V_i$ and particle number $N_i = Q_i / q_i$ but the voltage and charge units are more familiar in our context.)
 
-### Ambipolar chemical capacitance defined
+### Mutual chemical capacitance defined
 
 Capacitance is a change in charge due to a change in some voltage difference $\mathrm{d}Q/\mathrm{d}V$. Beginners learn about linear plate capacitors with nice constant capacitance values ($Q/V$), but we are going to talk about capacitance in the generic differential sense: a change in some charge due to a change in some voltage.
 
 In the case of charge storage in materials, we must be aware of these complications: we have 1) multiple control voltages, not just two, 2) multiple *charge types*, 3) nonlinearity, and 4) no parallel-plate geometry at all, it is simply a bulk (volumetric or gravimetric) capacitance.
 
-We can define capacitance as a matrix, which I call the **ambipolar chemical capacitance matrix**:
+We can define capacitance as a matrix, which I call the **mutual chemical capacitance matrix**:
 
 $$\begin{aligned}
-\mathbf{C}^{\mathrm{amb}}_{ij}
+\mathbf{C}^{\mathrm{mut}}_{ij}
 & = \left(\frac{\partial Q_i}{\partial V_j}\right)_{\{V_k\}_{k \neq j},\, Q=0} & (V_i~\text{definition}) \\
 & = q_i q_j \left(\frac{\partial N_i}{\partial \bar\mu_j}\right)_{\{\bar\mu_k\}_{k \neq j},\, Q=0} & (\text{usual definition})
 ,
 \end{aligned}$$
 
-where we added the subscript $Q=0$ to emphasize that this is for a charge-neutral (ambipolar) bulk. As we'll see below, removing that $Q=0$ makes a huge difference.
+where we added the subscript $Q=0$ to emphasize that this is for a charge-neutral bulk. As we'll see below, removing that $Q=0$ makes a huge difference.
 
-This matrix $ \mathbf{C}^{\mathrm{amb}}$ is truly a {% wiki "capacitance matrix" %} in the mathematical sense: its units are farads, its rows and columns sum to zero, it is symmetric, and it is positive semi-definite. Normally we would use a capacitance matrix to describe the self- and mutual capacitance of a collection of conductors, but in this case the "conductors" are actually all overlapping in space. A regular geometrical capacitance matrix is highly sensitive to arrangement, shapes, and distances, while the ambipolar chemical capacitance is simply proportional to volume of solvent/medium (or mass, depending on what else we are holding fixed).
+This matrix $ \mathbf{C}^{\mathrm{mut}}$ is truly a {% wiki "capacitance matrix" %} in the mathematical sense: its units are farads, its rows and columns sum to zero, it is symmetric, and it is positive semi-definite. Normally we would use a capacitance matrix to describe the self- and mutual capacitance of a collection of conductors, but in this case the "conductors" are actually all overlapping in space. A regular geometrical capacitance matrix is highly sensitive to arrangement, shapes, and distances, while the mutual chemical capacitance is simply proportional to volume of solvent/medium (or mass, depending on what else we are holding fixed).
 
-In general the ambipolar chemical capacitance is a dense matrix (all entries nonzero) and can be thought of in terms of a fully connected equivalent circuit:
+In general the mutual chemical capacitance is a dense matrix (all entries nonzero) and can be thought of in terms of a fully connected equivalent circuit:
 
 <figure class="demo-container" style="max-width: 320px">
 {% circuit "cap-ambipolar-mesh" %}
 {% figcaption %}
-The ambipolar chemical capacitance matrix as a circuit: one node per carrier, a capacitor between every pair (a fully connected mesh; e.g. five carriers).
+The mutual chemical capacitance matrix as a circuit: one node per carrier, a capacitor between every pair (a fully connected mesh; e.g. five carriers).
 {% endfigcaption %}
 </figure>
 
-A special case of ambipolar chemical capacitance is the two-carrier case, as found in battery electrodes. This results in $\mathbf{C}^{\mathrm{amb}}$ being a $2 \times 2$ matrix of the form $\big[\begin{smallmatrix} C & -C \\ -C & C \end{smallmatrix}\big]$ for some $C > 0$, which is just a single capacitor in the equivalent circuit:
+A special case of mutual chemical capacitance is the two-carrier case, as found in battery electrodes. This results in $\mathbf{C}^{\mathrm{mut}}$ being a $2 \times 2$ matrix of the form $\big[\begin{smallmatrix} C & -C \\ -C & C \end{smallmatrix}\big]$ for some $C > 0$, which is just a single capacitor in the equivalent circuit:
 
 <figure class="demo-container" style="max-width: 300px">
 {% circuit "cap-two-carrier" %}
@@ -75,41 +75,41 @@ The two-carrier special case: a single capacitor between the electron and ion no
 
 (Often this two-species coupling $C$ value is called 'chemical capacitance' but that term is ambiguous. In other contexts it instead refers to the *internal* chemical capacitance defined below.)
 
-If you only cared about two carriers, then the $\mathbf{C}^{\mathrm{amb}}$ matrix looks like overkill (why not just use $C$) but it is absolutely necessary in the case of more than two carriers. Note that some other multicarrier generalizations of chemical capacitance seen in the literature are not correct.^[E.g. Jamnik and Maier (2001, cited below) defined a 'component chemical capacitance', which only works for the two-ion case and is not meaningful beyond that.]
+If you only cared about two carriers, then the $\mathbf{C}^{\mathrm{mut}}$ matrix looks like overkill (why not just use $C$) but it is absolutely necessary in the case of more than two carriers. Note that some other multicarrier generalizations of chemical capacitance seen in the literature are not correct.^[E.g. Jamnik and Maier (2001, cited below) defined a 'component chemical capacitance', which only works for the two-ion case and is not meaningful beyond that.]
 
-Ambipolar chemical capacitances can be very large, e.g. for a typical $1~\mathrm{mol/L}$ solution of $+e$ and $-e$ carriers, you'll have a $V_{\mathrm{cation}}$-$V_{\mathrm{anion}}$ mutual capacitance of order $2~\mathrm{kF}$ per $\mathrm{cm}^3$ of volume, far beyond {% wiki "supercapacitor" %} levels of volumetric capacitance. The ambipolar charge storage capacity is a key factor for both lithium ion batteries (in the electrodes) and lead-acid batteries (in solution). The ambipolar diffusion associated with ambipolar chemical capacitance is often too slow for capacitor use cases, though finely ground mixtures of charge storage materials can alleviate this and so some supercapacitors can be described in terms of ambipolar chemical capacitance (ambipolar chemical capacitance can be equally well used to describe mixtures of materials as long as they are reasonably homogeneous on the large scale).
+Mutual chemical capacitances can be very large, e.g. for a typical $1~\mathrm{mol/L}$ solution of $+e$ and $-e$ carriers, you'll have a $V_{\mathrm{cation}}$-$V_{\mathrm{anion}}$ mutual capacitance of order $2~\mathrm{kF}$ per $\mathrm{cm}^3$ of volume, far beyond {% wiki "supercapacitor" %} levels of volumetric capacitance. This charge storage capacity is a key factor for both lithium ion batteries (in the electrodes) and lead-acid batteries (in solution). The ambipolar diffusion associated with mutual chemical capacitance is often too slow for capacitor use cases, though finely ground mixtures of charge storage materials can alleviate this and so some supercapacitors can be described in terms of mutual chemical capacitance (mutual chemical capacitance can be equally well used to describe mixtures of materials as long as they are reasonably homogeneous on the large scale).
 
-We'll see below how ambipolar chemical capacitance naturally comes about even in ideal systems, and how the ambipolar chemical capacitance can be expressed in terms of ideal quantities.
+We'll see below how mutual chemical capacitance naturally comes about even in ideal systems, and how the mutual chemical capacitance can be expressed in terms of ideal quantities.
 
-### Why ambipolar chemical capacitance matters
+### Why mutual chemical capacitance matters
 
 #### Charge storage
 
-Integrated ambipolar chemical capacitance *is* the charge storage of a bulk material such as a battery electrode. Note that for $N$ independent charged species, the charge storage 'space' is $(N-1)$-dimensional. For all practical charge storage materials $N=2$ so the charging is one dimensional.
+Integrated mutual chemical capacitance *is* the charge storage of a bulk material such as a battery electrode. Note that for $N$ independent charged species, the charge storage 'space' is $(N-1)$-dimensional. For all practical charge storage materials $N=2$ so the charging is one dimensional.
 
 #### Rigour in nonideal solutions
 
-Ambipolar chemical capacitance is a thermodynamic observable and directly relates to mean activities. E.g. Debye-Huckel or Pitzer models predict a specific ambipolar chemical capacitance matrix.
+Mutual chemical capacitance is a thermodynamic observable and directly relates to mean activities. E.g. Debye-Huckel or Pitzer models predict a specific mutual chemical capacitance matrix.
 
 (In contrast, descriptions of electrolytes in terms of single-ion activities correspond to a description in terms of internal chemical capacitance $\mathcal{C}$ (see below). In nonideal solutions, $\mathcal{C}$ will be a dense matrix and also generally regarded as unmeasurable; different activity conventions will have different $\mathcal{C}$ matrices.)
 
 #### Ambipolar diffusion
 
-The volumetric ambipolar chemical capacitance, $\mathbf{c}^{\mathrm{amb}} = \mathbf{C}^{\mathrm{amb}}/V$ directly appears in the continuity equation in the quasi-charge-neutral regime, together with the regular conductivity equation:
+The volumetric mutual chemical capacitance, $\mathbf{c}^{\mathrm{mut}} = \mathbf{C}^{\mathrm{mut}}/V$ directly appears in the continuity equation in the quasi-charge-neutral regime, together with the regular conductivity equation:
 
 $$\begin{aligned}
-\mathbf{c}^{\mathrm{amb}} \frac{\partial \mathbf{V}}{\partial t} & = -\nabla \cdot \mathbf{\vec{J}}, & \quad \text{(continuity)},\\
+\mathbf{c}^{\mathrm{mut}} \frac{\partial \mathbf{V}}{\partial t} & = -\nabla \cdot \mathbf{\vec{J}}, & \quad \text{(continuity)},\\
 \mathbf{\vec{J}} & = -\boldsymbol{\sigma} \nabla \mathbf{V} & \quad \text{(conductivity)},
 \end{aligned}$$
 
-where conductivity $\boldsymbol{\sigma}$ is also possibly a dense matrix (for simplicity we'll assume scalar matrix entries, though it could be interesting to consider tensorial e.g. for magnetic field effects); cross-terms can represent e.g. 'ion drag'. You can't simply convert this into a diffusion equation because $\mathbf{c}^{\mathrm{amb}}$ can't be inverted (because of charge neutrality), so we have to proceed with a bit of care.
+where conductivity $\boldsymbol{\sigma}$ is also possibly a dense matrix (for simplicity we'll assume scalar matrix entries, though it could be interesting to consider tensorial e.g. for magnetic field effects); cross-terms can represent e.g. 'ion drag'. You can't simply convert this into a diffusion equation because $\mathbf{c}^{\mathrm{mut}}$ can't be inverted (because of charge neutrality), so we have to proceed with a bit of care.
 
-First, let's look at a homogeneous material, small-signal case. In this case both $\boldsymbol{\sigma}$ and $\mathbf{c}^{\mathrm{amb}}$ are constant in space, then this simplifies to $\mathbf{c}^{\mathrm{amb}} \partial_t \mathbf{V} = \boldsymbol{\sigma} \nabla^2 \mathbf{V}$, which reveals there are two distinct classes of modes:
+First, let's look at a homogeneous material, small-signal case. In this case both $\boldsymbol{\sigma}$ and $\mathbf{c}^{\mathrm{mut}}$ are constant in space, then this simplifies to $\mathbf{c}^{\mathrm{mut}} \partial_t \mathbf{V} = \boldsymbol{\sigma} \nabla^2 \mathbf{V}$, which reveals there are two distinct classes of modes:
 
 * One charge mode of the form $\mathbf{V}(x,t) = v(x,t) \mathbf{1}_N$, which follows $0 = \nabla^2 v$. The charge mode is representative of the naive form of electricity: all $V_i$ values (and $\phi$ too) vary in unison, and so all ions conduct together as if they have a single common conductivity $\sigma_{\mathrm{tot}} = \sum_{ij} \sigma_{ij}$, i.e. a total current $\vec{J}_{\mathrm{tot}} = -\sigma_{\mathrm{tot}} \nabla v$ driven by the common gradient. And each ion has $\nabla \cdot \vec{J}_i = 0$ so there is no piling up (but see below about material boundaries).
-* $N-1$ ambipolar modes of the form $\mathbf{V}(x,t) = v(x,t) \mathbf{a}$, where $\mathbf{a}$ is a {% wiki "generalized eigenvalue problem", "generalized eigenvector" %} satisfying $\mathbf{c}^{\mathrm{amb}} \mathbf{a} = D^{-1} \boldsymbol{\sigma} \mathbf{a}$ (often easy to solve^[Often the matrix $\boldsymbol{\sigma}$ is invertible and so we can get all the modes by eigendecomposing $\boldsymbol{\sigma}^{-1} \mathbf{c}^{\mathrm{amb}}$.]) for eigenvalue $D^{-1}$. Each of these modes evolves with a diffusion equation: $\partial_t v = D \nabla^2 v$ with diffusion coefficient $D$, and there may be $N-1$ distinct ambipolar diffusion constants. These are neutral current modes: $\sum_i \vec{J}_i = 0$.
+* $N-1$ ambipolar modes of the form $\mathbf{V}(x,t) = v(x,t) \mathbf{a}$, where $\mathbf{a}$ is a {% wiki "generalized eigenvalue problem", "generalized eigenvector" %} satisfying $\mathbf{c}^{\mathrm{mut}} \mathbf{a} = D^{-1} \boldsymbol{\sigma} \mathbf{a}$ (often easy to solve^[Often the matrix $\boldsymbol{\sigma}$ is invertible and so we can get all the modes by eigendecomposing $\boldsymbol{\sigma}^{-1} \mathbf{c}^{\mathrm{mut}}$.]) for eigenvalue $D^{-1}$. Each of these modes evolves with a diffusion equation: $\partial_t v = D \nabla^2 v$ with diffusion coefficient $D$, and there may be $N-1$ distinct ambipolar diffusion constants. These are neutral current modes: $\sum_i \vec{J}_i = 0$.
 
-For example in the binary (two-ion) case of cation $\mathrm{M}$ and anion $\mathrm{X}$, assuming a diagonal conductivity then the diffusion mode has $D^{-1} = (\sigma_{\mathrm{M}}^{-1} + \sigma_{\mathrm{X}}^{-1})c^{\mathrm{amb}}$, where $c^{\mathrm{amb}}$ is the single degree of freedom in the $\mathbf{c}^{\mathrm{amb}}$ matrix. This is the most simple kind of ambipolar diffusion as usually considered in the literature, in fact one usually sees a further ideality assumption that $(c^{\mathrm{amb}})^{-1} = ((z_{\mathrm{M}} F)^2 c_{\mathrm{M}} / (RT))^{-1} + ((z_{\mathrm{X}} F)^2 c_{\mathrm{X}} / (RT))^{-1}$ for ion molarities $c_{\mathrm{M}}$ and $c_{\mathrm{X}}$.
+For example in the binary (two-ion) case of cation $\mathrm{M}$ and anion $\mathrm{X}$, assuming a diagonal conductivity then the diffusion mode has $D^{-1} = (\sigma_{\mathrm{M}}^{-1} + \sigma_{\mathrm{X}}^{-1})c^{\mathrm{mut}}$, where $c^{\mathrm{mut}}$ is the single degree of freedom in the $\mathbf{c}^{\mathrm{mut}}$ matrix. This is the most simple kind of ambipolar diffusion as usually considered in the literature, in fact one usually sees a further ideality assumption that $(c^{\mathrm{mut}})^{-1} = ((z_{\mathrm{M}} F)^2 c_{\mathrm{M}} / (RT))^{-1} + ((z_{\mathrm{X}} F)^2 c_{\mathrm{X}} / (RT))^{-1}$ for ion molarities $c_{\mathrm{M}}$ and $c_{\mathrm{X}}$.
 
 It's worth noting however that when there are material boundaries (or any other reason for the matrices to vary, such as most nonlinearities), then there are no such simple modes overall: what is ambipolar in one region is not ambipolar in the next, and even the charge modes don't match up (the ions *do* pile up: $\nabla \cdot \vec{J}_i \neq 0$). Moreover, very close to the interfaces the charge neutrality assumption is often violated as well (within the screening length scale, see below), though often times this can be neglected.
 Besides that, even with a single material, the boundary conditions (e.g. one ion connected to electrodes but the other ion blocked) may mean that steady-state conduction need not follow the charge mode at all (however, when the bias is applied, the system will at first conduct according to the charge mode).
@@ -133,9 +133,9 @@ $$\begin{aligned}
 &= q_i q_j \frac{\partial N_i}{\partial \mu^{\mathrm{int}}_j} \\
 \end{aligned}$$
 
-This is quite similar to ambipolar chemical capacitance above, but note we are fixing $\phi$ instead of fixing $Q=0$.
+This is quite similar to mutual chemical capacitance above, but note we are fixing $\phi$ instead of fixing $Q=0$.
 
-> Note that "chemical capacitance" is ambiguous. Sometimes that refers to internal chemical capacitance as just defined,^[J. Jamnik and J. Maier, [Generalised equivalent circuits for mass and charge transport](https://doi.org/10.1039/b100180i), *Phys. Chem. Chem. Phys.* **3**, 1668 (2001). They trace the term itself to A. D. Pelton, [The chemical capacitance — a thermodynamic solution property.](https://doi.org/10.1051/jcp/1992891931) *J. Chim. Phys.* **89**, 1931 (1992).] but often in ionics the term "chemical capacitance" refers to the 2-carrier ambipolar chemical capacitance described above.^[J. Jamnik and J. Maier, [Treatment of the impedance of mixed conductors](https://doi.org/10.1149/1.1392611), *J. Electrochem. Soc.* **146**, 4183 (1999).]
+> Note that "chemical capacitance" is ambiguous. Sometimes that refers to internal chemical capacitance as just defined,^[J. Jamnik and J. Maier, [Generalised equivalent circuits for mass and charge transport](https://doi.org/10.1039/b100180i), *Phys. Chem. Chem. Phys.* **3**, 1668 (2001). They trace the term itself to A. D. Pelton, [The chemical capacitance — a thermodynamic solution property.](https://doi.org/10.1051/jcp/1992891931) *J. Chim. Phys.* **89**, 1931 (1992).] but often in ionics the term "chemical capacitance" refers to the 2-carrier mutual chemical capacitance described above.^[J. Jamnik and J. Maier, [Treatment of the impedance of mixed conductors](https://doi.org/10.1149/1.1392611), *J. Electrochem. Soc.* **146**, 4183 (1999).]
 
 Internal chemical capacitance is usually invoked in systems with a well defined mean field $\phi$, such as ideal-dilute solutes, ideal Fermi gases, and such. Consequently, it tends to be the case that $\mathcal{C}$ is diagonal:
 
@@ -201,24 +201,24 @@ Where $\mathcal{C}_{\mathrm{tot}} = \sum_i s_i = \sum_{ij} \mathcal{C}_{ij}$ is 
 >
 > The Poisson equation then leads exactly to the linear screening equation, $$\varepsilon \nabla^2 \delta \phi = \chi \delta \phi - \rho_{\mathrm{imp}},$$ where $\varepsilon$ is the medium's absolute permittivity and $\rho_{\mathrm{imp}}$ is the impurity charge density. This means $\sqrt{\varepsilon/\chi}$ is precisely the screening length in the general case of mixed charge carriers with any statistics (the {% wiki "Debye length" %} and {% wiki "Thomas–Fermi screening length" %} are both special cases of this).
 
-### Ambipolar and internal chemical capacitance related
+### Mutual and internal chemical capacitance related
 
 If we take our internal chemical capacitance and force the volume to be charge neutral ($\delta Q_{\mathrm{free}} = 0$), then $\phi$ must float to whatever value is necessary to get neutrality. We then get:
 
 $$ 0 = - \mathbf{s}^T \delta \mathbf{V} + \mathcal{C}_{\mathrm{tot}} \delta\phi $$
 $$ \delta\mathbf{Q} = \mathcal{C} \delta \mathbf{V} - \mathbf{s} \delta \phi $$
 
-and so we see that the ambipolar and internal chemical capacitance matrices are precisely related:
+and so we see that the mutual and internal chemical capacitance matrices are precisely related:
 
 $$\begin{aligned}
-\mathbf{C}^{\mathrm{amb}}
+\mathbf{C}^{\mathrm{mut}}
 & = \mathcal{C} - \frac{\mathbf{s} \mathbf{s}^T}{\mathcal{C}_{\mathrm{tot}}} \\
-\mathbf{C}^{\mathrm{amb}}_{ij} & = \mathcal{C}_{ij} - \frac{\sum_{kl}\mathcal{C}_{ik}\mathcal{C}_{jl}}{\sum_{kl}\mathcal{C}_{kl}} \\
+\mathbf{C}^{\mathrm{mut}}_{ij} & = \mathcal{C}_{ij} - \frac{\sum_{kl}\mathcal{C}_{ik}\mathcal{C}_{jl}}{\sum_{kl}\mathcal{C}_{kl}} \\
 \end{aligned}$$
 
-So, $\mathbf{C}^{\mathrm{amb}}$ has strictly less information than $\mathcal{C}$. On the other hand, $\mathbf{C}^{\mathrm{amb}}$ is a general thermodynamic property that does not make any microscopic assumptions as are usually needed for $\mathcal{C}$, but only the latter can be used to model continuum space charges.
+So, $\mathbf{C}^{\mathrm{mut}}$ has strictly less information than $\mathcal{C}$. On the other hand, $\mathbf{C}^{\mathrm{mut}}$ is a general thermodynamic property that does not make any microscopic assumptions as are usually needed for $\mathcal{C}$, but only the latter can be used to model continuum space charges.
 
-As for where each description applies: the ambipolar $\mathbf{C}^{\mathrm{amb}}$ alone works for microscopically messy materials, since it is $\phi$-agnostic; either description serves for long-range conduction, ambipolar diffusion, and ideal bulk charge storage; and only the internal $\mathcal{C}$ can describe interfaces, screening, and depletion/enhancement regions.
+As for where each description applies: the mutual $\mathbf{C}^{\mathrm{mut}}$ alone works for microscopically messy materials, since it is $\phi$-agnostic; either description serves for long-range conduction, ambipolar diffusion, and ideal bulk charge storage; and only the internal $\mathcal{C}$ can describe interfaces, screening, and depletion/enhancement regions.
 
 ### Extended chemical capacitance matrix (the Jamnik-Maier trick)
 
@@ -265,14 +265,14 @@ The extended matrix as a circuit: every carrier node capacitor-coupled to a cent
 {% endfigcaption %}
 </figure>
 
-In relation to this, the ambipolar chemical capacitance can be seen as elimination of the $\phi$ node from the $\mathbf{C}^{\mathrm{ext}}$ capacitance matrix (a {% wiki "Schur complement" %} operation), which when viewing both $\mathbf{C}^{\mathrm{ext}}$ and $\mathbf{C}^{\mathrm{amb}}$ as capacitor networks is known as a {% wiki "Kron reduction" %} or a {% wiki "star-mesh transform" %}.
+In relation to this, the mutual chemical capacitance can be seen as elimination of the $\phi$ node from the $\mathbf{C}^{\mathrm{ext}}$ capacitance matrix (a {% wiki "Schur complement" %} operation), which when viewing both $\mathbf{C}^{\mathrm{ext}}$ and $\mathbf{C}^{\mathrm{mut}}$ as capacitor networks is known as a {% wiki "Kron reduction" %} or a {% wiki "star-mesh transform" %}.
 
-This makes $\mathbf{C}^{\mathrm{amb}}$ to be a dense matrix ('fully connected'), even when $\mathcal{C}$ is ideal and diagonal (so $\mathbf{C}^{\mathrm{ext}}$ is a 'star' topology).
+This makes $\mathbf{C}^{\mathrm{mut}}$ to be a dense matrix ('fully connected'), even when $\mathcal{C}$ is ideal and diagonal (so $\mathbf{C}^{\mathrm{ext}}$ is a 'star' topology).
 
 <figure class="demo-container" style="max-width: 520px">
 {% circuit "cap-kron-reduction" %}
 {% figcaption %}
-Eliminating the $\phi$ node (star-mesh / Kron reduction) turns the ideal star into the fully connected ambipolar mesh.
+Eliminating the $\phi$ node (star-mesh / Kron reduction) turns the ideal star into the fully connected mutual mesh.
 {% endfigcaption %}
 </figure>
 
@@ -290,8 +290,8 @@ where $\mathbf{J}_{\mathrm{d}} = \partial \mathbf{D} / \partial t$ is the {% wik
 
 ## Takeaways
 
-This whole appendix is one object, the chemical capacitance, seen through two matrices. The **ambipolar** $\mathbf{C}^{\mathrm{amb}}$ is the thermodynamic, $\phi$-agnostic one: a true capacitance matrix (its rows sum to zero) that lives in the charge-neutral bulk, sets the volumetric charge storage of a battery electrode, and carries the ambipolar diffusion modes. Because it asks nothing of a mean field, it survives into microscopically messy, nonideal materials. The **internal** $\mathcal{C}$ is the extrathermodynamic partner: it needs a well-defined $\phi$, and its rows do *not* sum to zero, but it is the only one that can speak about interfaces, screening (the total $\chi = \mathcal{C}_{\mathrm{tot}}/\text{vol}$), and depletion.
+This whole appendix is one object, the chemical capacitance, seen through two matrices. The **mutual** $\mathbf{C}^{\mathrm{mut}}$ is the thermodynamic, $\phi$-agnostic one: a true capacitance matrix (its rows sum to zero) that lives in the charge-neutral bulk, sets the volumetric charge storage of a battery electrode, and carries the ambipolar diffusion modes. Because it asks nothing of a mean field, it survives into microscopically messy, nonideal materials. The **internal** $\mathcal{C}$ is the extrathermodynamic partner: it needs a well-defined $\phi$, and its rows do *not* sum to zero, but it is the only one that can speak about interfaces, screening (the total $\chi = \mathcal{C}_{\mathrm{tot}}/\text{vol}$), and depletion.
 
-The two are not rivals but the same information at different resolutions. Eliminate the $\phi$ node from $\mathcal{C}$ (a Schur complement, or a Kron reduction of the equivalent circuit) and $\mathbf{C}^{\mathrm{amb}}$ drops out: strictly less detailed, yet more robust. Push the construction one step further, with Jamnik and Maier's displacement node, and the matrix becomes a full equivalent circuit: a finite-volume restatement of the Poisson-Nernst-Planck equations, with one capacitor hung from every carrier's $V_i$ rail. The interfaces that only $\mathcal{C}$ can see are exactly where the [inhomogeneities topic](../inhomog/) picks up, at the far end of a chapter that first puts $\phi$ itself [under the microscope](../phi/).
+The two are not rivals but the same information at different resolutions. Eliminate the $\phi$ node from $\mathcal{C}$ (a Schur complement, or a Kron reduction of the equivalent circuit) and $\mathbf{C}^{\mathrm{mut}}$ drops out: strictly less detailed, yet more robust. Push the construction one step further, with Jamnik and Maier's displacement node, and the matrix becomes a full equivalent circuit: a finite-volume restatement of the Poisson-Nernst-Planck equations, with one capacitor hung from every carrier's $V_i$ rail. The interfaces that only $\mathcal{C}$ can see are exactly where the [inhomogeneities topic](../inhomog/) picks up, at the far end of a chapter that first puts $\phi$ itself [under the microscope](../phi/).
 
 [**NEXT TOPIC: $\phi$ under the microscope**](../phi/)
