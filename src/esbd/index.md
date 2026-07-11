@@ -73,15 +73,15 @@ where $q_i$ is the charge of the species: $-e$ for electrons, $+e$ for lithium i
 
 > **Chemistry units**: In chemistry, we work with molar quantities, so $\bar\mu_i$ would be in joules/mol and $q_i$ in coulombs/mol. In that case, $q_i = z_i F$ where $z_i$ is the charge number (&minus;1, +1, +3, etc.) and $F$ is the {%wiki "Faraday constant" %}. Either way, the final quantity $V_i$ is a voltage measured in volts (V).
 
-Let's re-plot our battery with this new representation. I call these diagrams **electrochemical species band diagrams (ESBDs)**.
+Let's re-plot our battery with this new representation. These diagrams deserve a name: **electrochemical species band diagrams (ESBDs)**.
 
 <figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/bd-basicbattery-voltage-esbd.njk" %}
 </figure>
 
-(You can try moving the offset slider again to see vertical invariance is fixed: everything shifts together nicely now.)
+Try the offset slider again: now everything shifts together as one rigid ladder, and nothing the eye can measure changes.
 
-Here we can finally see how the battery works, and we have a satisfying answer to 'what is in the middle of a battery' — it's the landscape of ionic voltages! I just want to emphasize a couple of points: 1) the step $V_{\mathrm{e}^-} - V_{\mathrm{Li}^+}$ on each side has a very specific meaning, relating to how tightly bound the (neutral) lithium atoms are in each electrode, much more tightly bound in the cathode material. And 2) the internal resistance appears beautifully as a 'lithium voltage drop'; the plain linear ramp is a simplification, but gets at the heart of the matter. We will return to investigating the internals of lithium-ion batteries in more detail [later on](lib/).
+Here we can finally see how the battery works, and our opening question has its answer: the electrical state deep inside a battery is a landscape of ionic voltages! Two features deserve a closer look. First, the step $V_{\mathrm{e}^-} - V_{\mathrm{Li}^+}$ on each side has a very specific meaning: it measures how tightly that electrode binds (neutral) lithium atoms, and the cathode binds them far more tightly. Second, slide the current away from equilibrium and the internal resistance appears beautifully as a 'lithium voltage drop'; the plain linear ramp is a simplification, but it gets at the heart of the matter. We dig into lithium-ion internals properly [later on](lib/).
 
 If we look at a multi-cell battery, the electron and lithium-ion voltages climb together nicely (right), while in the raw energy picture (left) they move oppositely and splay apart:
 
