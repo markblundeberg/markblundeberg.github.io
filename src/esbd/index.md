@@ -99,6 +99,6 @@ In the next few topics we dig a little deeper into how $V_i$ works.
 
 ## Explore more
 
-Intrigued? The real power of ESBDs shows up in the sweep: one picture serves batteries, electrode kinetics, bipolar membranes and pn junctions, solid-state ionics, and semiconductors, and it keeps working away from equilibrium (quasi-Fermi splitting, concentration polarization, redox disequilibrium) where static textbook pictures give out. Every topic below is built on interactive diagrams — several let you drag the arbitrary conventions themselves and watch the physics not care.
+Intrigued? The battery was only the first example. The same picture serves electrode kinetics, bipolar membranes and pn junctions, solid-state ionics, and semiconductors, and it keeps working away from equilibrium (quasi-Fermi splitting, concentration polarization, redox disequilibrium) where static textbook pictures give out. Every topic below is built on interactive diagrams.
 
 {% include "esbd_topic_list.md" %}
