@@ -21,7 +21,7 @@ If we try to visualize this by plotting voltage versus position, we immediately 
 {% include "esbd-diagrams/bd-basicbattery-voltage-missing.njk" %}
 </figure>
 
-What are we supposed to draw in place of the '???'? A straight line? A sudden jump? The mystery deepens when we try to understand more complex situations: how can we visualize the voltage drops from internal resistance during battery discharge?
+What are we supposed to draw in place of the '???'? A straight line? A sudden jump? Why doesn't the current just flow backwards?^[Ed Fontes (2015), COMSOL Blog: ["Does the Current Flow Backwards Inside a Battery?"](https://www.comsol.com/blogs/does-the-current-flow-backwards-inside-a-battery). Fontes opens with this same puzzle, and makes the conventional move of drawing the inner electrostatic potential $\phi$. We are going to explore an alternative answer that is (in my opinion) far more thermodynamically satisfying.] The mystery deepens when we try to understand more complex situations: how can we visualize the voltage drops from internal resistance during battery discharge?
 
 While the equations of electrochemistry are precise, the visual tools for building intuition are often lacking. There is a head-smackingly simple solution to this, which generalizes to visualize all of electrochemistry, but until now it seems to have gone unused. None of it is new physics, to be clear: the thermodynamics of electrochemical potentials is textbook material, and what has been missing is only a good way to *picture* it.
 
