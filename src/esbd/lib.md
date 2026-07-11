@@ -72,7 +72,7 @@ What's important is that this detailed landscape reveals all sorts of local diss
 
 ## Takeaways
 
-As we saw, the ESBD diagram is quite simple in a lithium-ion battery at equilibrium, where the main operation involves only $V_{\mathrm{Li}^+}$ and $V_{\mathrm{e}^-}$ levels, and we can visually see the per-electrode OCV value (each electrode's [electrode potential](../e/) against a $\mathrm{Li}/\mathrm{Li}^+$ reference).
+As we saw, the ESBD is quite simple in a lithium-ion battery at equilibrium, where the main operation involves only $V_{\mathrm{Li}^+}$ and $V_{\mathrm{e}^-}$ levels, and we can visually see the per-electrode OCV value (each electrode's [electrode potential](../e/) against a $\mathrm{Li}/\mathrm{Li}^+$ reference).
 
 During charge and discharge, the $V_i$ voltages form a direct visualization of how various electronic and ionic resistances are responsible for the total "internal resistance".
 

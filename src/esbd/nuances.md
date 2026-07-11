@@ -17,7 +17,7 @@ $$ V_{\mathrm{Zn}^{2+}} - V_{\mathrm{Cl}^-} = V_{\mathrm{e}^-}(\text{Zn}) - V_{\
 
 ## The one convention behind the constant
 
-That $\text{const}$ depends on our convention for chemical potentials. Our choice has been $\mu = 0$ for elements in their most stable state at reference conditions; another choice is fine, provided we stay consistent and remember it shifts the offsets in our ESBD diagrams. In that sense we do not truly reach absolute $V_i$ *levels* until we fix a convention.
+That $\text{const}$ depends on our convention for chemical potentials. Our choice has been $\mu = 0$ for elements in their most stable state at reference conditions; another choice is fine, provided we stay consistent and remember it shifts the offsets in our ESBDs. In that sense we do not truly reach absolute $V_i$ *levels* until we fix a convention.
 
 Differences in $V_i$ at different places, for the *same* species, escape this entirely: they are well defined no matter the convention. In a discharging lithium-ion battery the gradients in $V_{\mathrm{e}^-}$ and in $V_{\mathrm{Li}^+}$ are each perfectly meaningful, and the convention only sets the overall offset between the electron and lithium-ion ladders.
 
