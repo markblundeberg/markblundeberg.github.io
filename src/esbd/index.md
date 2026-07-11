@@ -89,18 +89,11 @@ A multi-cell battery makes the contrast stark. In the raw energy picture (left),
 {% include "esbd-diagrams/bd-basicbattery-multicell.njk" %}
 </figure>
 
-In fact, what started out as a niche picture about batteries has turned into a refreshing alternative mental framework for all electrochemical phenomena. With the $V_i$ picture and ESBDs,
+So what have we gained? In the $V_i$ picture, electrons and ions enter as equals: one line per charge carrier, all on a single voltage axis. Charge transport reads off the slopes, with positive carriers sliding from high $V_i$ to low and negative carriers from low to high. Electrochemical reactions read off the vertical gaps, as well-defined differences like $V_{\mathrm{e}^-} - V_{\mathrm{Li}^+}$. And the whole construction speaks the hands-on language of electronics: volts.
 
-* We **represent electrons and ions equally** as first-class charge carriers.
-* We take energy diagrams back into the **hands-on** realm of electronics (voltages).
-* **Charge transport is obvious**: Positively-charged species $i$ move from high to low $V_i$, and negatively charged species $j$ move from low to high $V_j$.
-* **Electrochemical reactions appear** as well-defined differences, $V_i - V_j$.
-* We will see that **ionic standard states** appear as reference levels $V_i^\circ$, functioning like semiconductor band edges.
-* We can build a complete picture without ever needing to bring up the practically inaccessible concept of an in-material electrostatic potential ($\phi$). (And the ladder is not $\phi$ in disguise: it spends strictly fewer arbitrary conventions; [Offsets galore](offsetsgalore/) keeps score.)
-* We **directly represent the fundamental thermodynamics** of charged species: their electrochemical potentials.
-* This is not just a mere normalization trick, but rather the $V_i$ are **real voltages** — measurable directly for electrons, and indirectly (through ion-reversible electrodes) for ions.
+Nor is any of this a bookkeeping fiction. The $V_i$ are real voltages: directly measurable for electrons, and measurable through ion-reversible electrodes for ions. Each level *is* an electrochemical potential, rescaled, so the diagram directly displays the fundamental thermodynamics of every charged species. Notice too that we built the complete picture without once invoking the practically inaccessible in-material electrostatic potential $\phi$; nor is the ladder just $\phi$ in disguise, since it spends strictly fewer arbitrary conventions ([Offsets galore](offsetsgalore/) keeps score). And there is more where this came from: we will see ionic standard states appear as reference levels $V_i^\circ$, playing the part of semiconductor band edges.
 
-In the next few topics we're going to dig a little bit more into how $V_i$ works.
+In the next few topics we dig a little deeper into how $V_i$ works.
 
 [**NEXT TOPIC: Species voltage**](v_i/)
 
