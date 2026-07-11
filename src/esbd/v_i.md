@@ -11,7 +11,7 @@ Our key player is the **species voltage** $V_i$, a potential defined for every t
 
 $$ V_i = \frac{\bar\mu_i}{q_i}. $$
 
-This may look intimidating for those not versed in the fundamentals of thermodynamics and the meaning of chemical potential. But you do not have to deeply understand electrochemical potential^[If you want to, an optional later topic, [Understanding electrochemical potential](../muintro/), makes the case that $\bar\mu_i$ is the *real*, indivisible chemical potential, which is exactly what makes $V_i$ so natural. That depth is genuinely not needed here, though.] to understand $V_i$, because you likely already know how $V_i$ works:
+The electrochemical potential $\bar\mu_i$ is a deep subject in its own right, and a later topic, [Understanding electrochemical potential](../muintro/), explores it properly (making the case that $\bar\mu_i$ is the *real*, indivisible chemical potential). But none of that depth is needed here, because you likely already know how $V_i$ works:
 
 **The electronic quantity $V_{\mathrm{e}^-}$ is precisely the voltage seen in basic electronic circuits.**
 
