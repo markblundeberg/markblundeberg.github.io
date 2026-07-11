@@ -1,5 +1,5 @@
 {
-  "hash": "a01dfefeb709fd4a03b2011a044dbcfdaef22dd101230c3356f65c035c121ad7",
+  "hash": "a4f4f059f5df995c198ecd8a5e39934af738938fd03384498e78e143cda7a21f",
   "ids": [
     "V-std-ladder--diagram-container",
     "ag-agcl-electrode-container",
@@ -14,7 +14,6 @@
     "cap-chem-qv",
     "esbd-ag-agcl-implied-container",
     "esbd-agcl-kcl-common-ion-bd-container",
-    "esbd-ambipolar-cap",
     "esbd-bipolar-bias-bpm",
     "esbd-bipolar-bias-diode",
     "esbd-bipolar-twin-bpm",
@@ -47,6 +46,7 @@
     "esbd-muintro-twin-energy",
     "esbd-muintro-twin-esbd",
     "esbd-multi-metal-voltmeter-container",
+    "esbd-mutual-cap",
     "esbd-nacl-dilute-bd-container",
     "esbd-nacl-tilt-bd-container",
     "esbd-oc-metal-container",

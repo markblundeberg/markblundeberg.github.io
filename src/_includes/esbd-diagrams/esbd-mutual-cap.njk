@@ -1,0 +1,31 @@
+<div class="bd-container" id="esbd-mutual-cap" style="height: 240px"></div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { drawCapacitors } from '{{ esbdJsPath }}utils.js';
+
+    // Standalone copy of the "mutual" (right) panel of esbd-cap-reps.njk:
+    // two co-located carriers (electrons + Li+ in an intercalation host)
+    // joined by a single rail-to-rail chemical capacitor V_e- -||- V_Li+.
+    const ELE = SPECIES.electron.color, LI = SPECIES.lithium.color;
+    const VE = 0.45, VLI = -0.45;
+    const X = 0.5;
+
+    const esbd = new ElectrochemicalSpeciesBandDiagram(
+        'esbd-mutual-cap',
+        { electron: SPECIES.electron, lithium: SPECIES.lithium },
+        { yMode: 'abstract', margins: { right: 62, left: 26 } }
+    );
+    esbd.setSpatialLayout([0, 1], [{ ...REGION.solid, name: 'intercalation host' }]);
+    esbd.diagram.setYLabel('Species voltage');
+    esbd.setVRange(-0.8, 0.8);
+
+    esbd.setCustomDrawCallback((bd) => drawCapacitors(bd, [
+        { id: 'amb', x: X, hi: VE, lo: VLI, cHi: ELE, cLo: LI },
+    ]));
+    esbd.updateTraceData([
+        { id: 've', speciesId: 'electron', curveType: 'voltage', label: 'V_{\\mathrm{e}^-}', x: [0, 1], y: [VE, VE] },
+        { id: 'vli', speciesId: 'lithium', curveType: 'voltage', label: 'V_{\\mathrm{Li}^+}', x: [0, 1], y: [VLI, VLI] },
+    ]);
+</script>
