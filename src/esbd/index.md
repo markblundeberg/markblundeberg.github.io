@@ -83,9 +83,9 @@ Let's re-plot our battery with this new representation. I call these diagrams **
 
 Here we can finally see how the battery works, and we have a satisfying answer to 'what is in the middle of a battery' — it's the landscape of ionic voltages! I just want to emphasize a couple of points: 1) the step $V_{\mathrm{e}^-} - V_{\mathrm{Li}^+}$ on each side has a very specific meaning, relating to how tightly bound the (neutral) lithium atoms are in each electrode, much more tightly bound in the cathode material. And 2) the internal resistance appears beautifully as a 'lithium voltage drop'; the plain linear ramp is a simplification, but gets at the heart of the matter. We will return to investigating the internals of lithium-ion batteries in more detail [later on](lib/).
 
-If we look at a multi-cell battery, the electron and lithium-ion voltages climb together nicely (while they would have moved oppositely in the raw energy picture):
+If we look at a multi-cell battery, the electron and lithium-ion voltages climb together nicely (right), while in the raw energy picture (left) they move oppositely and splay apart:
 
-<figure class="demo-container" style="max-width: 300px">
+<figure class="demo-container" style="max-width: 700px">
 {% include "esbd-diagrams/bd-basicbattery-multicell.njk" %}
 </figure>
 

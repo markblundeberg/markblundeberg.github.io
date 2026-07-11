@@ -1,6 +1,13 @@
 {% set idprefix = ["bd-basicbattery-multicell-", idsuffix] | join %}
 {% import "macros/controls.njk" as controls %}
-<div class="bd-container" id="{{ idprefix }}"></div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-evenly; gap: 8px">
+<div style="flex: 1; min-width: 250px; max-width: 330px">
+<div class="bd-container" id="{{ idprefix }}-energy" style="height: 260px"></div>
+</div>
+<div style="flex: 1; min-width: 250px; max-width: 330px">
+<div class="bd-container" id="{{ idprefix }}-volts" style="height: 260px"></div>
+</div>
+</div>
 {{ controls.slider(idprefix + "-current-slider", "Current", { min: -1, max: 1, step: "any", value: 0, readout: true, readoutInit: "equilibrium", snap: 0 }) }}
 
 <script type="module">
@@ -10,8 +17,6 @@
 
     const currentSlider = document.getElementById('{{ idprefix }}-current-slider');
     const currentText = document.getElementById('{{ idprefix }}-current-slider-readout');
-
-    const diagram = new BandDiagram('{{ idprefix }}');
 
     const cellregions = [
         [0.15, { ...REGION.collector, name: 'Anode' }],
@@ -32,10 +37,17 @@
         });
         labels.push({ label: `Cell ${cellidx + 1}`, x: 0.5 + cellidx });
     }
-    diagram.setSpatialLayout(boundaries, regions, labels);
 
-    diagram.setYLabel('Species voltage (V)');
-    diagram.setYRange(-1.5, +11.2);
+    // Left: the raw energy picture (mu-bar view); right: species voltages.
+    const energyDiagram = new BandDiagram('{{ idprefix }}-energy');
+    energyDiagram.setSpatialLayout(boundaries, regions, labels);
+    energyDiagram.setYLabel('Electron/ion energy (eV)');
+    energyDiagram.setYRange(-11.0, +7.7);
+
+    const voltsDiagram = new BandDiagram('{{ idprefix }}-volts');
+    voltsDiagram.setSpatialLayout(boundaries, regions, labels);
+    voltsDiagram.setYLabel('Species voltage (V)');
+    voltsDiagram.setYRange(-1.5, +11.2);
 
     const R_anode = 0.03;
     const R_cathode = R_anode;
@@ -62,11 +74,11 @@
         const V_cell = V_right - V_left;
 
         const b = boundaries;
-        const data = [];
+        const voltsData = [];
         for (let cellidx = 0; cellidx < 3; cellidx++) {
             const b0 = cellregions.length * cellidx;
             const V0 = V_cell * cellidx;
-            data.push({
+            voltsData.push({
                 id: 'anode_trace_' + cellidx,
                 label: 'V_{\\mathrm{e}^-}',
                 showLabel: false,
@@ -74,7 +86,7 @@
                 x: [b[b0 + 0], b[b0 + 1], b[b0 + 2]],
                 y: [V0 + V_left, V0 + V_left, V0 + V_anode],
             });
-            data.push({
+            voltsData.push({
                 id: 'li_trace_' + cellidx,
                 label: 'V_{\\mathrm{Li}^+}',
                 showLabel: true,
@@ -82,7 +94,7 @@
                 x: [b[b0 + 1], b[b0 + 4]],
                 y: [V0 + V_Li_left, V0 + V_Li_right],
             });
-            data.push({
+            voltsData.push({
                 id: 'cathode_trace_' + cellidx,
                 label: 'V_{\\mathrm{e}^-}',
                 showLabel: cellidx == 2,
@@ -91,7 +103,18 @@
                 y: [V0 + V_cathode, V0 + V_right, V0 + V_right],
             });
         }
-        diagram.updateTraceData(data);
+        voltsDiagram.updateTraceData(voltsData);
+
+        // Same physics, mapped back to energies: mu-bar_i = z_i V_i, so the
+        // electron traces flip sign while the Li+ traces don't.
+        const energyData = voltsData.map((trace) => ({
+            ...trace,
+            label: trace.id.startsWith('li_')
+                ? '\\bar\\mu_{\\mathrm{Li}^+}'
+                : '\\bar\\mu_{\\mathrm{e}^-}',
+            y: trace.y.map((v) => (trace.id.startsWith('li_') ? v : -v)),
+        }));
+        energyDiagram.updateTraceData(energyData);
     }
 
     makeSlider('{{ idprefix }}-current-slider', () => updateDiagrams(), { fire: false });

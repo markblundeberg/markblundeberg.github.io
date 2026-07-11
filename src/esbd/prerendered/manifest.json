@@ -1,13 +1,15 @@
 {
-  "hash": "d257de5630fa71ab2af7d59597356971a8ddd4eb149a94a76cf1564bc99b7329",
+  "hash": "a01dfefeb709fd4a03b2011a044dbcfdaef22dd101230c3356f65c035c121ad7",
   "ids": [
     "V-std-ladder--diagram-container",
     "ag-agcl-electrode-container",
     "bd-basicbattery-energy-ion-too-",
     "bd-basicbattery-energy-missing",
-    "bd-basicbattery-multicell-",
+    "bd-basicbattery-multicell--energy",
+    "bd-basicbattery-multicell--volts",
     "bd-basicbattery-voltage-esbd-",
     "bd-basicbattery-voltage-missing",
+    "bd-basicbattery-voltage-missing-clarified",
     "cap-chem-levels",
     "cap-chem-qv",
     "esbd-ag-agcl-implied-container",
