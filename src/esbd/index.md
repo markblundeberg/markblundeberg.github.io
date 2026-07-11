@@ -7,7 +7,7 @@ eleventyNavigation:
     key: ESBD
 ---
 
-# Band Diagrams for Batteries: An Electrochemical Visualization
+# Band Diagrams for Batteries<br/><small>An Electrochemical Visualization</small>
 
 <p align='right'><small><em>Mark Lundeberg // June 2026</em></small></p>
 

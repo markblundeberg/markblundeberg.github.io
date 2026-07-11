@@ -171,6 +171,12 @@ h1 {
     padding-bottom: 0.5em;
 }
 
+/* Subtitle line inside a page title (h1 ... <br/><small>subtitle</small>) */
+h1 small {
+    font-size: 0.55em;
+    font-weight: normal;
+}
+
 a {
     color: #0077cc;
     text-decoration: none;
