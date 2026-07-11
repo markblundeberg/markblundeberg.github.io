@@ -47,9 +47,9 @@ Nobody is happy to stop here, of course. To paraphrase Herbert Kroemer: "if you 
 
 ## Including the ions: awkward energies
 
-In a lithium-ion battery, the other mobile charge carriers are of course the $\mathrm{Li}^+$ ions. Why should we expect to get away with only talking about electronic energies? Why shouldn't we treat the lithium ions on equal footing? After all, ions have their own well-defined electrochemical potential, such as $\bar\mu_{\mathrm{Li}^+}$.
+In a lithium-ion battery, the other mobile charge carriers are of course the $\mathrm{Li}^+$ ions. Why shouldn't we treat the lithium ions on equal footing? After all, the lithium ion has a perfectly well-defined electrochemical potential of its own: $\bar\mu_{\mathrm{Li}^+}$.
 
-Let's try generalizing our energy plot to include ionic energies:
+Let's draw it in:
 
 <figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/bd-basicbattery-energy-ion-too.njk" %}
