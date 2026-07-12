@@ -7,7 +7,7 @@ orderESBD: 11
 
 # {{title}}
 
-One of the key questions with these $V_i$ is how different species' $V_i$ values relate to each other. Charge cannot move between charged species without a chemical reaction taking place, where we count even the humblest identity change, like electron-hole recombination, as a reaction. As a result, we will see different species' $V_i$ connect with offsets depending on the nature of the reaction (and the nature of the neutral species in the reaction). We will quite commonly see equations like:
+One of the key questions with these $V_i$ is how different species' $V_i$ values relate to each other. Charge cannot move between charged species without a chemical reaction taking place, where we count even the humblest identity change, like electron-hole recombination, as a reaction. As a result, we will see different species' $V_i$ connect with offsets depending on the nature of the reaction (and of the neutral species involved). We will quite commonly see equations like:
 
 $$ V_i - V_j = \Delta, $$
 
@@ -43,9 +43,7 @@ Thus, auto-ionization in water directly sets up an offset between $V_{\mathrm{H}
 {% include "esbd-diagrams/esbd-h2o-autoionization.njk" %}
 </figure>
 
-How large is this offset? The chemical potential $\mu_{\mathrm{H_2O}}$ is the partial molar Gibbs energy for $\mathrm{H_2O}$. We can look up Gibbs *formation* energies for neutral chemicals like $\mathrm{H_2O}$ in chemical data tables, and by the convention noted above these directly give the chemical potentials.
-
-For pure water at standard conditions we know from chemical data tables that the Gibbs formation energy of $\mathrm{H_2O}$ is $-237.1~\mathrm{kJ/mol}$. This means for pure water we have $\mu_{\mathrm{H_2O}} = -237.1~\mathrm{kJ/mol}$, and as a reminder the Faraday constant is $F = 96.485~\mathrm{kJ/mol/V}$. Thus $\mu_{\mathrm{H_2O}}/F = -2.457~\mathrm{V}$. So,
+How large is this offset? The chemical potential $\mu_{\mathrm{H_2O}}$ is the partial molar Gibbs energy of $\mathrm{H_2O}$, and by the convention noted above, the tabulated Gibbs *formation* energies of neutral chemicals directly give their chemical potentials. For pure water at standard conditions the tables give $\mu_{\mathrm{H_2O}} = -237.1~\mathrm{kJ/mol}$; dividing by the Faraday constant, $F = 96.485~\mathrm{kJ/mol/V}$, we get $\mu_{\mathrm{H_2O}}/F = -2.457~\mathrm{V}$. So,
 
 $$ V_{\mathrm{H}^+} - V_{\mathrm{OH}^-} = -2.457~\mathrm{V} $$
 
@@ -116,7 +114,7 @@ By the way, don't confuse this with the [electrode potential](../e/) $E = V_{\ma
 Electrons are not present as free constituents in a solution; however, their thermodynamic availability (and $V_{\mathrm{e}^-}$) can be well defined in specific contexts, particularly with half-reactions.
 
 * Some half-reactions are actually 'redox-active' in solution, and can swap electrons directly with other half-reactions. It's useful to plot their distinct $V_{\mathrm{e}^-}$ values to show disequilibrium. (→ [half-reactions](../half/))
-* Some half-reactions like the AgCl reaction are only happening at electrodes. It is helpful to show the $V_{\mathrm{e}^-}$ that the solution "wants" especially when it is out of equilibrium with the electrode.
+* Some half-reactions like the AgCl reaction are only happening at electrodes. It's useful to show the $V_{\mathrm{e}^-}$ that the solution "wants", especially when it is out of equilibrium with the electrode.
 
 <figure class="demo-container" style="max-width: 340px">
 {% include "esbd-diagrams/esbd-ag-agcl-implied.njk" %}
