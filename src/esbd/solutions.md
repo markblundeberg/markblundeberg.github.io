@@ -7,9 +7,9 @@ orderESBD: 21
 
 # {{title}}
 
-In the earlier [topic about equilibrium](../equilibrium/), we talked about how solid $\mathrm{NaCl}$ in equilibrium with a solvent (such as water) would set a fixed $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = \tfrac{1}{F} \mu_{\mathrm{NaCl}} = -3.9813~\mathrm{V}$. But that is for a *fully saturated* solution. What happens when we only have a tiny amount dissolved? How does $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ depend on the concentration of dissolved $\mathrm{NaCl}$?
+In the earlier [topic about equilibrium](../equilibrium/), we saw that solid $\mathrm{NaCl}$ in equilibrium with a solvent (such as water) sets a fixed $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = \tfrac{1}{F} \mu_{\mathrm{NaCl}} = -3.9813~\mathrm{V}$. But that is for a *fully saturated* solution. What happens when we only have a tiny amount dissolved? How does $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ depend on the concentration of dissolved $\mathrm{NaCl}$?
 
-To start our discussion, here are some fairly accurate modelled curves:
+To anchor the discussion, here are some fairly accurate modelled curves:
 
 <figure class="demo-container" style="max-width: 350px">
 <img src="/esbd/img/nacl_solvent_comparison.svg" style="max-width:100%"/>
@@ -18,11 +18,11 @@ $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ value for salt dissolved at varying conc
 {% endfigcaption %}
 </figure>
 
-Note the roughly linear dependence on the logarithm of concentration (the "ideal slope" in the figure). This is actually guaranteed in the dilute limit, for a fundamental entropic reason: each solute particle's position becomes independent of other solute particles.
+Note the roughly linear dependence on the logarithm of concentration (the "ideal slope" in the figure). This is guaranteed in the dilute limit, for a fundamental entropic reason: each solute particle's position becomes independent of the others.
 
-Although the dilute limit is only approximate, it gives us a starting point to answer more complex questions without first laboriously measuring thermodynamic data over a range of concentrations. For example, what happens when there are many species of ion present?
+The saturation behaviour is worth noticing too. As more salt dissolves, $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ climbs, and a solution pushed above the solid's fixed value is supersaturated: it has become favourable for the excess $\mathrm{NaCl}$ to precipitate back out. Saturation is precisely where the solution's value meets the solid's.
 
-(The saturation behaviour is interesting too: When $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ in the solution rises above the value for solid $\mathrm{NaCl}$, then the solution is supersaturated, that is, it is favourable for the excess $\mathrm{NaCl}$ to precipitate. At saturation, the values of $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ will be the same in solution and solid salt.)
+Although the dilute limit is only approximate, it gives us a starting point for more complex questions (what happens when many species of ion are present?) without first laboriously measuring thermodynamic data over every composition.
 
 ## Ideal ionic voltage in dilute solutions
 
@@ -30,7 +30,7 @@ Statistical mechanics tells us that a dilute solute's electrochemical potential 
 
 $$ \bar\mu_i = \underbrace{z_i F \phi}_{\text{electrostatic}} + \underbrace{\mu^\circ_{\mathrm{int},i}}_{\text{offset}} + \underbrace{RT \ln(c_i/c^\circ)}_{\text{entropic}}. $$
 
-The first term is written as the electrostatic energy of the ion's charge at a local potential $\phi$. The second, the **standard internal chemical potential** $\mu^\circ_{\mathrm{int},i}$, is fixed by the ion's chemical identity and the way it disturbs its solvent (its solvation shell); it does not depend on concentration.^[I label this term the *offset* rather than "chemical," because neither word quite fits. It is not purely chemical: $\mu^\circ_{\mathrm{int},i}$ quietly absorbs the ion's solvation electrostatics (the Born energy and more) and local entropy alongside any chemical binding. Nor is it the full "chemical part," which a chemist would take to include the activity term as well. It is really just the fixed, ion-specific piece left once the bath potential and the dilution entropy are set aside, and even its boundary with $z_i F \phi$ is a convention rather than a physical fact. I make this case in [$\phi$ under the microscope](../phi/).] Only the third, entropic term does, growing logarithmically as the solute is diluted. Here $c_i$ is the {% wiki "molar concentration" %} (moles per litre, also called molarity) and $c^\circ = 1~\mathrm{mol/L}$ is a fixed reference.
+The first term is written as the electrostatic energy of the ion's charge at a local potential $\phi$. The second, the **standard internal chemical potential** $\mu^\circ_{\mathrm{int},i}$, is fixed by the ion's chemical identity and the way it disturbs its solvent (its solvation shell); it does not depend on concentration.^[I label this term the *offset* rather than "chemical," because neither word quite fits. It is not purely chemical: $\mu^\circ_{\mathrm{int},i}$ quietly absorbs the ion's solvation electrostatics (the Born energy and more) and local entropy alongside any chemical binding. Nor is it the full "chemical part," which a chemist would take to include the activity term as well. It is really just the fixed, ion-specific piece left once the bath potential and the dilution entropy are set aside, and even its boundary with $z_i F \phi$ is a convention rather than a physical fact. I make this case in [$\phi$ under the microscope](../phi/).] Only the third, entropic term does, sinking logarithmically as the solute is diluted. Here $c_i$ is the {% wiki "molar concentration" %} (moles per litre, also called molarity) and $c^\circ = 1~\mathrm{mol/L}$ is a fixed reference.
 
 The split between the first two terms is partly conventional, since it turns on how one defines the ambiguous $\phi$, so rather than carry them separately we fold them together. Dividing through by the molar charge $z_i F$ to cast everything in volts, and gathering the two concentration-independent terms into one, gives
 
@@ -44,9 +44,9 @@ The new quantity $V^\circ_i$ is the **standard species voltage**, the voltage an
 
 ### Ideal-dilute salt water
 
-Returning to our saltwater example, we have then:
+Returning to our saltwater example, we then have:
 $$V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = (V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-}) + 2\frac{RT}{F} \ln(c/c^\circ), $$
-where $c = c_{\mathrm{Na}^+} = c_{\mathrm{Cl}^-}$ is the concentration of either ion. This gives that characteristic $2\tfrac{RT}{F}\ln(\mathrm{concentration})$ slope we saw in the plot above. Also note that $V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-} = -4.0746~\mathrm{V}$ is a constant for water in our conditions; since $\phi$ cancels out, this difference does not depend on the ambiguous $\phi$. When discussing solutions we can draw these $V^\circ_i$ as distinct lines from the $V_i$.
+where $c = c_{\mathrm{Na}^+} = c_{\mathrm{Cl}^-}$ is the concentration of either ion. This gives that characteristic $2\tfrac{RT}{F}\ln(\mathrm{concentration})$ slope we saw in the plot above. Also note that $V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-} = -4.0746~\mathrm{V}$ is a constant for water in our conditions; $\phi$ cancels out of the difference, so it does not depend on that ambiguous quantity. When discussing solutions we can draw each $V^\circ_i$ as its own line alongside the $V_i$:
 
 <figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/esbd-nacl-dilute.njk" %}
@@ -54,21 +54,15 @@ where $c = c_{\mathrm{Na}^+} = c_{\mathrm{Cl}^-}$ is the concentration of either
 
 ## Ionic standard states are a floating ladder
 
-Although the $V^\circ_i$ values float, crucially all the differences $V^\circ_i - V^\circ_j$ are invariant properties of the pure solvent. These differences also vary with temperature and pressure but that won't be too important for our purposes.
-
-A selection of $V^\circ_i$ values for water at standard conditions (25&nbsp;°C, 1 bar) is [tabulated on the data page](../data/).
+Although the individual $V^\circ_i$ float, the differences $V^\circ_i - V^\circ_j$ are invariant properties of the pure solvent (they also vary with temperature and pressure, but that won't matter for our purposes). Here is a selection of values for water at standard conditions (25&nbsp;°C, 1 bar):
 
 <figure class="demo-container" style="max-width: 200px">
 {% include "esbd-diagrams/V-std-ladder.njk" %}
 </figure>
 
-I call this the **standard state ladder** for water. The standard state ladder is a rigid ladder: as we change the electrical state or solute composition of the solution, the $V^\circ_i$ values may move up and down but they have to all stay rigidly locked to one another.^[Within one solvent, that is: a different solvent has its own ladder, and where two solutions meet or a medium grades between them the ladders can step. See [inhomogeneities](../inhomog/).] In contrast, $V_i$ values are not rigid and their relative positions will change with composition.
+I call this the **standard state ladder** for water. As the electrical state or solute composition of the solution changes, the $V^\circ_i$ may ride up and down, but only all together, every rung locked to the others.^[Within one solvent, that is: a different solvent has its own ladder, and where two solutions meet or a medium grades between them the ladders can step. See [inhomogeneities](../inhomog/).] The $V_i$ are the mobile part: each carrier hangs its own logarithmic, concentration-set distance off its own rung, so their relative positions shift freely with composition. That is also the answer to the many-ion question above: however crowded the solution, there is one rigid ladder underneath and one floating carrier level per ion. The [data page](../data/) tabulates the rung values used here, along with the procedure for obtaining them from standard ionic Gibbs energies of formation ($\Delta_{\mathrm{f}} G^\circ_i$ values).
 
-The [Data table](../data/) topic in the appendix contains the numerical values used above, as well as the procedure used to obtain them from standard ionic Gibbs energies of formation ($\Delta_{\mathrm{f}} G^\circ_i$ values).
-
-In effect, the standard state ladder of $V^\circ_i$ is a stand-in for the notion of electrostatic potential $\phi$, but one that also folds in the average differences in the local electrostatic potentials that each ion 'feels', as well as the ion's chemical structure, and the way it disturbs its solvent environment with solvation shells.
-
-The standard state ladder is also analogous to the conduction and valence band edges in semiconductors. We'll talk more about this analogy to semiconductors in the next topic.
+In effect, the standard state ladder is a stand-in for the electrostatic potential $\phi$, with each rung also absorbing the ion-specific parts: the local electrostatic environment that particular ion feels, its chemical structure, the way it disturbs the solvent around itself. And the ladder is the promised analogue of a semiconductor's band edges, which likewise float rigidly with the local electrical state while the carriers hang logarithmic distances off them; we take that analogy up properly in the next topic.
 
 ## Spatial variations
 
@@ -85,28 +79,22 @@ This uniform tilt is the tamest move in the ladder's repertoire. In later topics
 
 ## Activities and non-ideality
 
-The dilute law leaned on that logarithmic term being exact, which holds only when the solute is dilute enough that each ion ignores the others. Beyond that, chemistry keeps the form but folds every deviation into an effective concentration, the {% wiki "activity" %} $a_i$, defined precisely so that
+The ideal-dilute law holds only while each ion can ignore the others. Beyond that, chemistry keeps the logarithmic form and folds every deviation into an effective concentration, the {% wiki "activity" %} $a_i$, defined precisely so that
 
 $$ \bar\mu_i = z_i F \phi + \mu^\circ_{\mathrm{int},i} + RT \ln(a_i) $$
 
-holds exactly, with the very same standard $\mu^\circ_{\mathrm{int},i}$ we met above. In $V_i$ terms this is just our earlier equation with $c_i/c^\circ$ replaced by the activity:
+holds exactly, with the very same standard $\mu^\circ_{\mathrm{int},i}$ we met above. In $V_i$ terms,
 
-$$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(a_i). $$
+$$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(a_i), $$
 
-The standard state is fixed by the convention that $a_i \to c_i/c^\circ$ in the dilute limit, which is exactly what made the ideal form exact there. The activity is then the single bookkeeping device carrying every departure from ideal-dilute behaviour.
+with the standard state pinned by requiring $a_i \to c_i/c^\circ$ in the dilute limit.^[The concentration measure itself hides a convention here: switch from molarity to molality, or change the reference values, and the $V^\circ_i$ and every $a_i$ shift in compensating ways. A classic source of confusion; see Adam Přáda's blog (2019), ["On chemical activities"](https://adamprada.net/blog/on-chemical-activities/). Chemistry also likes to repackage the activity as concentration times a dimensionless *activity coefficient*, which inherits all of these troubles and adds a few of its own; I'll keep coefficients out of sight until [non-ideality](../nonideal/) needs them.]
 
-There are a number of big gotchas when it comes to nonideality. I talk about this a lot more in the [appendix Topic on non-ideality](../nonideal/), but the key points are:
+There is a catch, and it is a big one. We can measure $V_i$; we cannot directly measure $\phi$ or $V^\circ_i$. In the ideal-dilute regime this didn't matter, since the concentrations pinned every gap. In a non-ideal solution, nothing any longer fixes where the $V^\circ_i$ ladder sits relative to the carriers: its rung spacings are still rigid solvent properties, but its overall position against the $V_i$ becomes a pure convention, settled afresh by every solution of every composition. This is what chemists mean by the dictum that only {% wiki "Activity_coefficient#Ionic_solutions", "*mean* ion activities" %} are measurable: the measurable combinations are differences like $(V_i - V^\circ_i) - (V_j - V^\circ_j)$, from which the ladder's position cancels out. The [appendix topic on non-ideality](../nonideal/) works through the consequences.
 
-* **Single-ion activities are ambiguous**: we can access $V_i$ but we cannot directly access $\phi$ nor $V^\circ_i$. Consequently in nonideal solutions we have no basis for fixing the reference point for activities. In chemistry it is said "we can only measure {% wiki "Activity_coefficient#Ionic_solutions", "*mean* ion activities" %}"; those [exactly correspond](../nonideal/) to measurable differences like $(V_i - V^\circ_i) - (V_j - V^\circ_j)$, where the 'ladder offset' or $\phi$ cancels out. This ambiguity is very severe: it adds infinite degrees of freedom as every solution of every composition can settle the ambiguity independently.
-* **Activities depend on concentration reference**: depending on our choice of concentration reference (either switching from molarity $c^\circ$ to molality $b^\circ$, or changing their values), we will have different $V^\circ_i$ values. This choice doesn't change the $V_i$, rather it changes activity $a_i$. This can get confusing!^[See Adam Přáda's blog (2019), ["On chemical activities"](https://adamprada.net/blog/on-chemical-activities/)]
-* **Activity coefficients are trickier**: it is common in chemistry to introduce a dimensionless activity coefficient as a sort of fudge factor on the concentration. These become especially tricky when trying to convert between different concentration measures.
-
-Again, see the [appendix Topic on non-ideality](../nonideal/) for more information.
-
-Importantly, what all of these different approaches using various concentration measures, electrostatic potentials, activities, and activity coefficients *must* agree on is the actual thermodynamic observable: electrochemical potential $\bar\mu_i$ (and thus $V_i$).
+What none of these choices can reach is $V_i$ itself. Concentration measure, reference value, single-ion activity convention: each merely shuffles bookkeeping between $V^\circ_i$ and $a_i$, while the physical total $V_i$ (that is, the observable $\bar\mu_i$) stays fixed. [Offsets galore](../offsetsgalore/) keeps the full scoreboard of such conventions, where the activity emerges as the traditional framework's true rival to $V_i$: the dimensionless $a_i$ buys immunity from every global convention at the price of that severe per-composition local one, while $V_i$ makes exactly the opposite trade.
 
 ## Takeaways
 
-A dilute ion's species voltage sits a logarithmic distance from its standard species voltage $V^\circ_i$, the distance set by concentration through $V_i = V^\circ_i + \tfrac{RT}{z_i F}\ln(c_i/c^\circ)$. The $V^\circ_i$ float with the electrical state of the solution, yet their differences form a rigid ladder fixed by the solvent, and once the solution is no longer dilute the concentration term generalizes to an activity. This same structure, a carrier floating logarithmically above a standard-state level, turns out to describe the electronic carriers in a semiconductor every bit as well, and that is where we go next.
+A dilute ion's species voltage sits a logarithmic distance from its standard species voltage $V^\circ_i$, the distance set by concentration through $V_i = V^\circ_i + \tfrac{RT}{z_i F}\ln(c_i/c^\circ)$. The $V^\circ_i$ float with the electrical state of the solution, yet their differences form a rigid ladder fixed by the solvent; once the solution is no longer dilute, the concentration generalizes to an activity, at the price of a convention that unmoors the ladder from the carriers while leaving every $V_i$ untouched. This same structure, a carrier floating logarithmically above a standard-state level, turns out to describe the electronic carriers in a semiconductor every bit as well, and that is where we go next.
 
 [**NEXT TOPIC: Semiconductors**](../solidstate/)
