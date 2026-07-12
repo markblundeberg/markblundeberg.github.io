@@ -158,7 +158,9 @@ The main point is that with reactions (including electrode reactions),
 * In the diagrams, we will mark these reactions with a ⇌ symbol.
 * At electrodes we get a relative step up or down going from $V_{\mathrm{e}^-}$ to $V_{\mathrm{ion}}$. This step should not be confused with the electrode potential of standard electrochemistry.
 * The quantitative value of that step at equilibrium depends on the chemical potentials of neutral species involved in the reaction.
-* Our convention that chemical potentials are equal to Gibbs formation energy is a choice that influences the quantitative $V_i - V_j$ and in turn the visual appearance of our band diagrams. This is however a fairly universal choice.
+* A reaction can also *imply* a level for a species that is not actually present, drawn dashed: as a stub at the interface for an interface-bound reaction, or across the whole solution for a bulk redox couple.
+* When a reaction involves three or more charged species, it no longer sets a rigid gap; a concentration-dependent degree of freedom remains.
+* Our convention that chemical potentials equal Gibbs formation energies influences the quantitative $V_i - V_j$, and in turn the visual appearance of our band diagrams; happily, this particular choice is nearly universal.
 
 Alright, we're ready now to tackle a real application!
 
