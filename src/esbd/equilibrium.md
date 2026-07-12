@@ -29,7 +29,7 @@ Consider the auto-ionization of water,
 
 $$ \mathrm{H}^+ + \mathrm{OH}^- \rightleftharpoons \mathrm{H_2O}. $$
 
-We can write the equilibrium in terms of the (electro-) chemical potentials:
+We can write the equilibrium in terms of the (electro-) chemical potentials:^[The direct translation of reaction to $\mu$ equation might seem to jump out of nowhere, but (electro)-chemical potentials are defined as partial molar free energy, so this kind of equilibrium equation falls out naturally. This is one of the pleasing fundamentals of chemical potentials that makes them nice to work with. See e.g. Newman & Balsara (2021), *Electrochemical Systems*, or Baierlein's ["The elusive chemical potential"](https://doi.org/10.1119/1.1336839) (Am. J. Phys. 69, 423 (2001)).]
 
 $$ \bar\mu_{\mathrm{H}^+} + \bar\mu_{\mathrm{OH}^-} = \mu_{\mathrm{H_2O}}. $$
 
