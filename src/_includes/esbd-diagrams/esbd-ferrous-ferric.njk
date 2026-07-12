@@ -68,11 +68,15 @@
             },
         ]);
 
+        // Marker stands mid-solution, NOT at the electrode interface: this
+        // is a homogeneous reaction that runs everywhere in the bulk, and
+        // the in-solution position asserts exactly that (the couple defines
+        // an in-solution electron availability, with or without the metal).
         diagram.updateVerticalMarkers([
             {
                 id: 'x',
                 symbol: '⇌',
-                x: b[1],
+                x: (b[1] + b[2]) / 2,
                 yDefs: [{ y: V_el }, { y: V_Fe2 }, { y: V_Fe3 }],
                 popupCallback: () =>
                     '$\\mathrm{Fe}^{3+} + \\mathrm{e}^- \\rightleftharpoons \\mathrm{Fe}^{2+}$',

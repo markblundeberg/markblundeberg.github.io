@@ -9,11 +9,14 @@
     import { makeSlider } from '{{ esbdJsPath }}utils.js';
 
     // Same electrode as the figure above (V_Cl- − V_e- = 1.138 V from
-    // mu_AgCl = −109.8 kJ/mol), plus the implied V_e- drawn in the
-    // solution+coating. The slider moves the metal's electrons away from
-    // equilibrium while the solution composition (hence V_Cl- and the
-    // implied level) is held fixed — the dashed level is what the solution
-    // "wants" the electrode to be.
+    // mu_AgCl = −109.8 kJ/mol), plus the implied V_e- drawn as a short
+    // dashed stub anchored at the reaction interface: the level is implied
+    // by an interface-bound reaction, so it extends no further than the
+    // reaction that implies it (contrast the full-width implied level in
+    // the redox-couple figure below). The slider moves the metal's
+    // electrons away from equilibrium while the solution composition
+    // (hence V_Cl- and the implied level) is held fixed — the stub is what
+    // the solution "wants" the electrode to be.
     const diagram = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-container',
         {
@@ -32,6 +35,7 @@
 
     const V_IMPLIED = 0;
     const V_CL = V_IMPLIED + 1.138;
+    const STUB_W = 0.18; // stub length; needs >= ~0.15 to show enough dashes
     diagram.setVRange(-0.63, V_CL + 0.23);
 
     function update(delta) {
@@ -53,7 +57,7 @@
                 speciesId: 'electron',
                 curveType: 'voltageImplied',
                 label: 'V_{\\mathrm{e}^-}\\,(\\text{implied})',
-                x: [b[1], b[3]],
+                x: [b[1], b[1] + STUB_W],
                 y: [V_IMPLIED, V_IMPLIED],
             },
             {

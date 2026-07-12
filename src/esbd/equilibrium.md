@@ -121,7 +121,7 @@ Electrons are not present as free constituents in a solution; however, their the
 <figure class="demo-container" style="max-width: 340px">
 {% include "esbd-diagrams/esbd-ag-agcl-implied.njk" %}
 {% figcaption %}
-The silver chloride electrode again, now with the reaction's implied $V_{\mathrm{e}^-}$ drawn across the coating and solution (thick dashed). At zero bias the metal's electrons line up with it and we recover the earlier diagram. Move the bias and the metal's $V_{\mathrm{e}^-}$ departs, while the solution (its composition held fixed here) still "wants" the same level; the gap between the two is the disequilibrium available to drive the reaction.
+The silver chloride electrode again, now with the reaction's implied $V_{\mathrm{e}^-}$ drawn as a dashed stub anchored at the interface; the stub extends no further than the reaction that implies it. At zero bias the metal's electrons line up with it and we recover the earlier diagram. Move the bias and the metal's $V_{\mathrm{e}^-}$ departs, while the solution (its composition held fixed here) still "wants" the same level; the gap between the two is the disequilibrium available to drive the reaction.
 {% endfigcaption %}
 </figure>
 
@@ -142,11 +142,14 @@ Such a reaction no longer sets a rigid gap, and now a degree of freedom remains:
 
 <figure class="demo-container" style="max-width: 230px">
 {% include "esbd-diagrams/esbd-ferrous-ferric.njk" %}
+{% figcaption %}
+Note the ⇌ marker stands in the open solution: this reaction is homogeneous, running everywhere in the bulk, unlike the interface-bound electrode reactions above.
+{% endfigcaption %}
 </figure>
 
 Much like the $ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ spacing earlier, differences like $V_{\mathrm{Fe}^{2+}} - V_{\mathrm{Fe}^{3+}}$ track the ion concentrations, a story that comes a few topics later.
 
-Note that the $\mathrm{Fe}^{2+}$/$\mathrm{Fe}^{3+}$ combination acts as an in-solution redox couple: it can supply or remove electrons to other reactions, not just to inert metals. For this reason, I am plotting an implied $V_{\mathrm{e}^-}$ in solution, which corresponds to the notion that a redox-active solution can have a meaningful Fermi level.^[Reiss, H. (1985). [The Fermi level and the redox potential.](https://doi.org/10.1021/j100264a005) The Journal of Physical Chemistry, 89(18), 3783–3791 (no relation to the Riess cited elsewhere in this book). See also Peljo, P., Villevieille, C., & Girault, H. H. (2025). [The redox aspects of lithium-ion batteries.](https://doi.org/10.1039/d4ee04560b) Energy &amp; Environmental Science, 18(4), 1658–1672.]
+Note that the $\mathrm{Fe}^{2+}$/$\mathrm{Fe}^{3+}$ combination acts as an in-solution redox couple: it can supply or remove electrons to other reactions, not just to inert metals. For this reason, the implied $V_{\mathrm{e}^-}$ now earns a line across the whole solution (in contrast to the interface-bound stub of the previous section), corresponding to the notion that a redox-active solution can have a meaningful Fermi level.^[Reiss, H. (1985). [The Fermi level and the redox potential.](https://doi.org/10.1021/j100264a005) The Journal of Physical Chemistry, 89(18), 3783–3791 (no relation to the Riess cited elsewhere in this book). See also Peljo, P., Villevieille, C., & Girault, H. H. (2025). [The redox aspects of lithium-ion batteries.](https://doi.org/10.1039/d4ee04560b) Energy &amp; Environmental Science, 18(4), 1658–1672.]
 
 ## Takeaways
 
