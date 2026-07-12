@@ -26,16 +26,14 @@ That is,
 * $V_{\mathrm{e}^-}$ equalizes when we short metal wires together,
 * $V_{\mathrm{e}^-}$ drops across a resistor according to $\Delta V = IR$,
 * $V_{\mathrm{e}^-}$ is thermodynamically analogous to an electronic 'pressure',
-* $V_{\mathrm{e}^-}$ differences are what we measure with voltmeters,^[Riess, I. (1997). [What does a voltmeter measure?](https://doi.org/10.1016/s0167-2738(96)00542-5) Solid State Ionics, 95(3–4), 327–328.]^[Kittel & Kroemer (1980), *Thermal Physics*]
+* $V_{\mathrm{e}^-}$ differences are what we measure with voltmeters,^[Riess, I. (1997). [What does a voltmeter measure?](https://doi.org/10.1016/s0167-2738(96)00542-5) Solid State Ionics, 95(3–4), 327–328. See also Kittel & Kroemer (1980), *Thermal Physics*.]
 * it is a $V_{\mathrm{e}^-}$ difference that you measure across a battery's terminals,
 * $V_{\mathrm{e}^-}$ is conventionally assigned to $0$ for the electrical ground,
 * and so on, you get the idea.
 
 We only have to make a couple more conceptual leaps to arrive at a voltage for ions too:
-* It's not only electrons and $V_{\mathrm{e}^-}$, but by extension $V_i$ for any charged species that ought to satisfy the meaning of 'voltage', and consequently,
-* There can be *multiple* voltages in the same place. Semiconductor physicists are already comfortable with this possibility, by the name "{% wiki "quasi Fermi level" %}", but we are extending this to ions at equilibrium.
-
-Below I'll highlight the key principles of what makes $V_i$ a voltage.
+* Any charged species deserves a quantity that plays the role 'voltage' plays for electrons, and consequently,
+* there can be *multiple* voltages in the same place. Semiconductor physicists already accept coexisting voltages in *non-equilibrium* situations, under the name "{% wiki "quasi Fermi level", "quasi-Fermi levels" %}"; for ions, coexisting voltages are everyday reality even at equilibrium.
 
 > **Voltage or potential?** Some may object to labelling $V_i$ as a "voltage" rather than "potential"; technically a voltage should be a potential difference. However, there are [way too many things called "potential" in electrochemistry](../about/#whyvoltage), most of which are potential differences; if voltages are so heavily conflated with potentials then we might as well go with it. Moreover, in electronic circuits, an unreferenced single-point voltage simply means a potential difference versus a common electronic ground point, a convention which we will tend to adopt. More technically: $V_i$ are all unreferenced (gauge covariant) quantities, and we are free to spend our one global gauge freedom to assign 0 to electronic ground (just the one: we do not get a separate ground per species).
 
@@ -54,19 +52,24 @@ Worse, the in-material $\phi$ is not accessible to any measurement made with the
 
 So we will simply not use an in-material $\phi$. We stick to $V_i$, and later to $V^\circ_i$, which does $\phi$'s job with far less ambiguity; you will see as we go that we never actually need it, a $\phi$-less philosophy that semiconductor device physics already lives by.^[The "Fermi levels and band edges only" philosophy is articulated in [H. Kroemer's Nobel Lecture](https://www.nobelprize.org/uploads/2018/06/kroemer-lecture.pdf); our $V_i$ and $V^\circ_i$ generalize it beyond semiconductors. It is also what lets us speak of ["quasi-electric fields"](../inhomog/), far more useful than any single $-\nabla\phi$.] The full case against $\phi$ has [its own topic](../phi/), and the [Offsets galore](../offsetsgalore/) topic lets you see for yourself just how arbitrary it is.
 
+With $\phi$ set aside, let's take stock of the key principles that make $V_i$ a genuine voltage.
+
 ## Differences in $V_i$ are available work
 
-The fundamental rule of thermodynamics is that particles flow from high to low chemical potential ($\bar\mu_i$) to release free energy. The difference, $\Delta \bar\mu_i$, is the maximum work that can be extracted from this flow. (To be precise, this is only true when both bodies have equal temperatures,^[The equal-temperature requirement means we can transfer any amount of energy between the bodies along with the particle transfer, and the amount of energy transfer does not affect the available work. But where bodies also differ in temperature, we can also extract available work from the thermal difference.] but we will generally assume isothermal conditions).
+The fundamental rule of thermodynamics is that particles flow from high to low electrochemical potential ($\bar\mu_i$) to release free energy. The difference, $\Delta \bar\mu_i$, is the maximum work that can be extracted from this flow. (To be precise, this is only true when both bodies have equal temperatures,^[The equal-temperature requirement means we can transfer any amount of energy between the bodies along with the particle transfer, and the amount of energy transfer does not affect the available work. But where bodies also differ in temperature, we can also extract available work from the thermal difference.] but we will generally assume isothermal conditions).
 
-The available work $\Delta\bar\mu_i$ is free energy per unit of particle count (e.g. kJ/mol or eV/particle). By normalizing $V_i = \bar\mu_i / q_i$, the corresponding $\Delta V_i$ is **available work per unit charge** (volts). But, it's not just the work for *any* charge, rather it is specific to charge transferred via that specific species.
+The available work $\Delta\bar\mu_i$ is free energy per unit of particle count (e.g. kJ/mol or eV/particle). By normalizing $V_i = \bar\mu_i / q_i$, the corresponding $\Delta V_i$ is **available work per unit charge** (volts). Mind that this is the work for charge transferred via that particular species, and no other route.
 
 <figure class="demo-container" style="max-width: 400px">
 {% include "esbd-diagrams/levels-mu-V-work.njk" %}
+{% figcaption %}
+Two bodies out of equilibrium in electrons, drawn in energy terms (left) and in voltage terms (right); the electron's negative charge flips one picture relative to the other. Particles flow from high to low $\bar\mu_{\mathrm{e}^-}$, and the gap is the available work: per particle on the left, per charge on the right.
+{% endfigcaption %}
 </figure>
 
 ## Differences in $V_i$ drive currents
 
-Since $V_i$ is available work, then currents from high to low $V_i$ will occur spontaneously (such flows increase entropy). The simplest form of this is Ohm's law:
+Since differences in $V_i$ are available work, currents from high to low $V_i$ occur spontaneously (such flows increase entropy). The simplest form of this is Ohm's law:
 
 $$J_i = -\sigma_i \nabla V_i$$
 
@@ -76,7 +79,7 @@ Not all currents are so simple as Ohm's law, of course. Interfaces often have a 
 
 ## Differences in $V_i$ are measurable
 
-The previous two sections were about what a difference $\Delta V_i$ *does* in nature (it drives currents and delivers work), and those hold for every species alike. Being *measurable* is a claim of a different kind: it is about what we can **reach**, and reach depends on the instrument. A difference $\Delta V_i$ is physically defined for any species; but only for electrons is it *easy* to get at.
+The previous two sections were about what a difference $\Delta V_i$ *does* in nature (it drives currents and delivers work), and those hold for every species alike. Being *measurable* is a claim of a different kind: it is about what we can *reach*, and reach depends on the instrument. A difference $\Delta V_i$ is physically defined for any species; but only for electrons is it *easy* to get at.
 
 A common voltmeter has metal probes and reads differences in $V_{\mathrm{e}^-}$, letting a tiny, ideally negligible electron current flow in. It works so cleanly because so many of our conductors are purely electronic: join wires of any assortment of metals and, since electrons are the only mobile carrier, $V_{\mathrm{e}^-}$ carries across all of them perfectly.
 
@@ -138,7 +141,7 @@ Comparing *different* species, $V_i - V_j$, inherits a chemical-potential conven
 
 ## Takeaways
 
-So, we've seen that this electrochemical species voltage $V_i$ is no stranger to us, and in fact it just rigorously generalizes the familiar notion of electronic circuit voltage. What we are going to see going forward is that $V_i$ has a simultaneous triple function: 1) it is a hands-on voltage, 2) it is a visual tool, and 3) it is a deeply thermodynamically and chemically meaningful quantity.
+So, we've seen that this electrochemical species voltage $V_i$ is no stranger to us, and in fact it just rigorously generalizes the familiar notion of electronic circuit voltage. Going forward, we will see $V_i$ do triple duty: a hands-on voltage, a visual tool, and a quantity with deep thermodynamic and chemical meaning.
 
 As we go along through the next topics, we're going to follow a 'top-down' approach, starting with pure thermodynamics ($V_i$ only), and keeping $V_i$ as our reliable lifeline as we later dive down into microscopic concepts. This is the opposite of the usual 'bottom-up' solid-state and electrochemistry teaching, which starts with idealized microscopic concepts like independent electrons and infinite crystalline solids, or ideal solutes and homogeneous solutions, and gradually adds on complications like nonideality, inhomogeneity, and junctions. In the bottom-up pedagogy, when we finally arrive at the full thermodynamic picture, we are often left clinging to strained and bandaged microscopic concepts, and the unifying power of $\bar\mu_i$ is left unappreciated.
 
