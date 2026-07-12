@@ -61,7 +61,7 @@ If the solution is fully saturated with salt (meaning it is in equilibrium with 
 
 This is an example of heterogeneous equilibrium (the salt is a separate solid phase), whereas the previous autoionization example is a form of homogeneous equilibrium. Note that this $3.981~\mathrm{V}$ spacing from $\mathrm{NaCl}$ applies to any solvent, not just water; the only assumption we made was that of saturation.
 
-(This still leaves a question: salt water has both $\mathrm{Na}^+$ and $\mathrm{H}^+$ ions. So, where does $V_{\mathrm{Na}^+}$ sit relative to $V_{\mathrm{H}^+}$? As we'll see in later topics, this difference is well-defined, but is going to depend on the solvent and on pH. Likewise for unsaturated salt water, we will see how $ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ varies with concentration.)
+(This still leaves a question: salt water has all four ions depicted above: $\mathrm{H}^+$, $\mathrm{OH}^-$, $\mathrm{Na}^+$, and $\mathrm{Cl}^-$. So how do the two figures combine — where does $V_{\mathrm{Na}^+}$ sit relative to $V_{\mathrm{H}^+}$ in salt water? As we'll see in later topics, this difference is well-defined, but is going to depend on the solvent and on pH. Likewise for unsaturated salt water, we will see how $ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ varies with concentration.)
 
 ## Electrodes
 
