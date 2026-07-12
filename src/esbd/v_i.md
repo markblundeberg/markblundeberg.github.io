@@ -74,17 +74,6 @@ Note this is simpler than the common split seen in electrochemistry and solid st
 
 Not all currents are so simple as Ohm's law, of course. Interfaces often have a nonlinear current-voltage relationship; there may be cross coupling where electrochemical potential gradients in one species drive another species (including neutral species); there may be other driving forces like magnetic induction or thermoelectricity; there may be convection/advection.
 
-## Differences in $V_i$ store charge
-
-Two carriers sharing one pocket of material behave like the two plates of a capacitor. Lay $+Q$ on the $i$ population and $-Q$ on the $j$, so the pocket stays neutral, and the rails answer: the gap $V_i - V_j$ opens in proportion to the charge laid down. That is a capacitance, $C = \mathrm{d}Q / \mathrm{d}(V_i - V_j)$, wired straight between the two $V_i$ rails, referring to the species voltages alone and never to a standard state or an electrostatic $\phi$; it is known as the **mutual chemical capacitance**.^[Jamnik and Maier, and in a recent transmission-line treatment Bumberger and coworkers, call it simply "chemical capacitance"; it is the same object. J. Jamnik and J. Maier, [Treatment of the impedance of mixed conductors](https://doi.org/10.1149/1.1392611), *J. Electrochem. Soc.* **146**, 4183 (1999); A. E. Bumberger, A. Nenning, and J. Fleig, [Transmission line revisited](https://doi.org/10.1039/d4cp00975d), *Phys. Chem. Chem. Phys.* **26**, 15068 (2024).] The storage can be large (a dilute salt solution banks kilofarads per cubic centimetre) but, like most things chemical, it is also nonlinear: $C$ depends on the concentrations themselves, so it drifts as charge accumulates. Indeed, an intercalation electrode is exactly such a capacitor charged deep into the nonlinear regime: the flatter its charging curve, the larger its capacitance. (With three or more carriers the bookkeeping grows into a [matrix](../chemical_capacitance_matrices/).)
-
-<figure class="demo-container" style="max-width: 340px">
-{% include "esbd-diagrams/esbd-mutual-cap.njk" %}
-{% figcaption %}
-Two co-located carriers (electrons and $\mathrm{Li}^+$ in an intercalation host), each on its own $V_i$ rail, joined by one mutual chemical capacitor. Shifting charge from one rail to the other (the whole staying neutral) opens the gap and banks the charge. No plate, no dielectric gap, no $\phi$ enters; the capacitor sits between the species voltages themselves. [Capacitance](../capacitors/) develops this properly, alongside its $\phi$-referenced cousin.
-{% endfigcaption %}
-</figure>
-
 ## Differences in $V_i$ are measurable
 
 The previous two sections were about what a difference $\Delta V_i$ *does* in nature (it drives currents and delivers work), and those hold for every species alike. Being *measurable* is a claim of a different kind: it is about what we can **reach**, and reach depends on the instrument. A difference $\Delta V_i$ is physically defined for any species; but only for electrons is it *easy* to get at.
@@ -113,6 +102,17 @@ But $\Delta$ is a gap between *different* species (an electron and an ion), so, 
 </figure>
 
 So an ionic $V_i$ is no less *real* than the electronic $V_{\mathrm{e}^-}$: it is defined the same way and carries the same physical difference. It is only less *reachable*: what an ordinary instrument hands you is its same-ion difference, not its absolute value. This is all I mean by saying we can **access** a $V_i$: that we can measure some voltage difference involving it. (A more general recipe, using ion-selective membranes, comes [later](../nuances/); it reaches every ion in principle, at the cost of being far less practical.)
+
+## Gaps $V_i - V_j$ store charge
+
+The electrode's fixed step $\Delta$ was our first meeting with a gap between *different* species, though there it reached across an interface. Cross-species gaps have a physics of their own even at a single spot: they store charge. Two carriers sharing one pocket of material behave like the two plates of a capacitor. Lay $+Q$ on the $i$ population and $-Q$ on the $j$, so the pocket stays neutral, and the rails answer: the gap $V_i - V_j$ opens in proportion to the charge laid down. That is a capacitance, $C = \mathrm{d}Q / \mathrm{d}(V_i - V_j)$, wired straight between the two $V_i$ rails, referring to the species voltages alone and never to a standard state or an electrostatic $\phi$; it is known as the **mutual chemical capacitance**.^[Jamnik and Maier, and in a recent transmission-line treatment Bumberger and coworkers, call it simply "chemical capacitance"; it is the same object. J. Jamnik and J. Maier, [Treatment of the impedance of mixed conductors](https://doi.org/10.1149/1.1392611), *J. Electrochem. Soc.* **146**, 4183 (1999); A. E. Bumberger, A. Nenning, and J. Fleig, [Transmission line revisited](https://doi.org/10.1039/d4cp00975d), *Phys. Chem. Chem. Phys.* **26**, 15068 (2024).] The storage can be large (a dilute salt solution banks kilofarads per cubic centimetre) but, like most things chemical, it is also nonlinear: $C$ depends on the concentrations themselves, so it drifts as charge accumulates. Indeed, an intercalation electrode is exactly such a capacitor charged deep into the nonlinear regime: the flatter its charging curve, the larger its capacitance. (With three or more carriers the bookkeeping grows into a [matrix](../chemical_capacitance_matrices/).)
+
+<figure class="demo-container" style="max-width: 340px">
+{% include "esbd-diagrams/esbd-mutual-cap.njk" %}
+{% figcaption %}
+Two co-located carriers (electrons and $\mathrm{Li}^+$ in an intercalation host), each on its own $V_i$ rail, joined by one mutual chemical capacitor. Shifting charge from one rail to the other (the whole staying neutral) opens the gap and banks the charge. No plate, no dielectric gap, no $\phi$ enters; the capacitor sits between the species voltages themselves. [Capacitance](../capacitors/) develops this properly, alongside its $\phi$-referenced cousin.
+{% endfigcaption %}
+</figure>
 
 ## $V_i$ are thermodynamic state variables
 
