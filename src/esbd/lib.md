@@ -34,7 +34,7 @@ In the lithium-ion battery field, the step size is known as the electrode's OCV 
 
 During discharge, the output voltage always sags below the equilibrium value for the current state of charge, and for rapid discharges (draining the full capacity in under an hour) the sag becomes substantial. With the $V_i$ picture, we can attribute this external voltage drop, piece by piece, to a sum of internal $V_i$ drops.
 
-First, a look at the actual structure inside a lithium-ion battery: both electrodes are porous, sort of resembling a compressed powder soaked in electrolyte:
+First, a look at the actual structure inside a lithium-ion battery. Both electrodes are porous, sort of resembling a compressed powder soaked in electrolyte:
 
 <figure class="demo-container" style="max-width: 200px">
 <img src="/esbd/img/chen2020_fig1_schematic.jpg" style="max-width:100%"/>
@@ -109,7 +109,7 @@ Another aspect (not very visible here) is a concentration gradient in the electr
 
 ### Cathode
 
-Unlike the anode, no part of the cathode is 'untouched'. Instead there is a vast difference in $V_{\mathrm{Li}^+}$ between surface and core throughout, the signature of very slow diffusion inside each particle. As a consequence, the near-separator particles have had their surfaces essentially saturate with lithium, and incoming lithium passes them by for particles deeper in.
+Unlike the anode, no part of the cathode is 'untouched'. Instead there is a vast difference in $V_{\mathrm{Li}^+}$ between surface and core throughout, the signature of very slow diffusion inside each particle. As a consequence, the surfaces of the near-separator particles have essentially saturated with lithium, and incoming lithium passes them by for particles deeper in.
 
 ### Charging
 
