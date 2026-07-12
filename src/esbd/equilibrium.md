@@ -143,7 +143,7 @@ Such a reaction no longer sets a rigid gap, and now a degree of freedom remains:
 <figure class="demo-container" style="max-width: 230px">
 {% include "esbd-diagrams/esbd-ferrous-ferric.njk" %}
 {% figcaption %}
-Note the ⇌ marker stands in the open solution: this reaction is homogeneous, running everywhere in the bulk, unlike the interface-bound electrode reactions above.
+Note the ⇌ marker stands in the open solution: this half-reaction is homogeneous, available everywhere in the bulk, unlike the interface-bound electrode reactions above.
 {% endfigcaption %}
 </figure>
 
