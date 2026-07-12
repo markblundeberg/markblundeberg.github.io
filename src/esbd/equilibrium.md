@@ -113,17 +113,19 @@ By the way, don't confuse this with the [electrode potential](../e/) $E = V_{\ma
 
 Electrons are not present as free constituents in a solution; however, their thermodynamic availability (and $V_{\mathrm{e}^-}$) can be well defined in specific contexts, particularly with half-reactions.
 
-* Some half-reactions are actually 'redox-active' in solution, and can swap electrons directly with other half-reactions. It's useful to plot their distinct $V_{\mathrm{e}^-}$ values to show disequilibrium. (→ [half-reactions](../half/))
-* Some half-reactions like the AgCl reaction are only happening at electrodes. It's useful to show the $V_{\mathrm{e}^-}$ that the solution "wants", especially when it is out of equilibrium with the electrode.
+* Some half-reactions are actually 'redox-active' in solution, and can swap electrons directly with other half-reactions. It's useful to plot their distinct $V_{\mathrm{e}^-}$ values to show disequilibrium. (An iron-ion example is shown in the next section.)
+* Some half-reactions like the AgCl reaction only happen at electrodes. It can still be useful to show the $V_{\mathrm{e}^-}$ that the solution "wants", especially when it is out of equilibrium with the electrode; the disequilibrium is then directly readable as an *overpotential*:
 
 <figure class="demo-container" style="max-width: 340px">
 {% include "esbd-diagrams/esbd-ag-agcl-implied.njk" %}
 {% figcaption %}
-The silver chloride electrode again, now with the reaction's implied $V_{\mathrm{e}^-}$ drawn as a dashed stub anchored at the interface; the stub extends no further than the reaction that implies it. At zero bias the metal's electrons line up with it and we recover the earlier diagram. Move the bias and the metal's $V_{\mathrm{e}^-}$ departs, while the solution (its composition held fixed here) still "wants" the same level; the gap between the two is the disequilibrium available to drive the reaction.
+The silver chloride electrode again, now with the reaction's implied $V_{\mathrm{e}^-}$ drawn as a dashed stub anchored at the interface. At zero bias the metal's electrons line up with it and we recover the earlier diagram. Move the bias and the metal's $V_{\mathrm{e}^-}$ departs, while the solution (its composition held fixed here) still "wants" the same level; the gap between the two is the overpotential, the disequilibrium available to drive the reaction.
 {% endfigcaption %}
 </figure>
 
 In principle other species can have implied levels. For example $\mathrm{H}^-$ (hydride) ions are not present in solution, but half-reactions may exchange $\mathrm{H}^-$; we can draw $V_{\mathrm{H}^-}$ implied levels. Similarly, reactions may output $\mathrm{O}^{2-}$ into certain ceramic solid electrolytes (like YSZ) that can transport $\mathrm{O}^{2-}$.
+
+(For the next several topics we won't be talking about these implied levels much, but we will return to them later in the redox topics, starting with [Half-reactions](../half/).)
 
 ## Three or more charged species
 
