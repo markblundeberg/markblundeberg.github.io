@@ -7,7 +7,7 @@ orderESBD: 11
 
 # {{title}}
 
-One of the key questions with these $V_i$ is how different species' $V_i$ values relate to each other. Charge cannot move between charged species without an accompanying chemical reaction taking place. As a result, we will see different species' $V_i$ connect with offsets depending on the nature of the reaction (and the nature of the neutral species in the reaction). We will quite commonly see equations like:
+One of the key questions with these $V_i$ is how different species' $V_i$ values relate to each other. Charge cannot move between charged species without a chemical reaction taking place, where we count even the humblest identity change, like electron-hole recombination, as a reaction. As a result, we will see different species' $V_i$ connect with offsets depending on the nature of the reaction (and the nature of the neutral species in the reaction). We will quite commonly see equations like:
 
 $$ V_i - V_j = \Delta, $$
 
@@ -17,11 +17,11 @@ where $\Delta$ is some nonzero offset (usually depending on neutral reactants or
 {% include "esbd-diagrams/esbd-reaction-generic.njk" %}
 </figure>
 
-And of course, at equilibrium every species equilibrates with itself (which can be understood as a trivial reaction $ V_i - V_i = 0 $), and so we see $V_i$ being perfectly flat throughout each domain where the species $i$ can move freely.
+And of course, at equilibrium every species equilibrates with itself, and so we see $V_i$ being perfectly flat throughout each domain where the species $i$ can move freely.
 
 A few classic examples below will demonstrate how this can appear.
 
-> **Important technical note**: For these ESBDs, I adopt the common convention that $\mu=0$ for elements in their most stable form (such as $\mathrm{H_2}$, or $\mathrm{O_2}$, or $\mathrm{Zn}$ metal), at the usual reference conditions (25&nbsp;°C and 1 bar). This is convenient since it means tabulated Gibbs formation energies of neutral species (such as $\mathrm{H_2O}$) directly give their chemical potentials. This convention is a free bookkeeping choice, not a physical input: adopting a different one slides the $V_i - V_j$ offsets around but moves nothing measurable, as [Offsets galore](../offsetsgalore/) makes concrete.
+> **Chemical potential convention**: For these ESBDs, I adopt the common convention that $\mu=0$ for elements in their most stable form (such as $\mathrm{H_2}$, or $\mathrm{O_2}$, or $\mathrm{Zn}$ metal), at the usual reference conditions (25&nbsp;°C and 1 bar). This is convenient since it means tabulated Gibbs formation energies of neutral species (such as $\mathrm{H_2O}$) directly give their chemical potentials. This convention is a free bookkeeping choice, not a physical input: adopting a different one slides the $V_i - V_j$ offsets around but moves nothing measurable, as [Offsets galore](../offsetsgalore/) makes concrete.
 
 ## Reactions
 
@@ -53,13 +53,13 @@ is the precise offset we draw in pure water. Note that $V_{\mathrm{H}^+}$ and $V
 
 Similarly, we might consider a reaction for the dissociation of sodium chloride salt:
 $$ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = \frac{\mu_{\mathrm{NaCl}}}{F} . $$
-If the solution is fully saturated with salt (meaning it is in equilibrium with solid salt), then we get $\mu_{\mathrm{NaCl}}/ F = -3.9813~\mathrm{V}$, so:
+If the solution is fully saturated with salt (meaning it is in equilibrium with solid salt), then we get $\mu_{\mathrm{NaCl}}/ F = -3.981~\mathrm{V}$, so:
 
 <figure class="demo-container" style="max-width: 230px">
 {% include "esbd-diagrams/esbd-nacl-saturation.njk" %}
 </figure>
 
-This is an example of heterogeneous equilibrium (the salt is a separate solid phase), whereas the previous autoionization example is a form of homogeneous equilibrium. Note that this $3.9813~\mathrm{V}$ spacing from $\mathrm{NaCl}$ applies to any solvent, not just water; the only assumption we made was that of saturation.
+This is an example of heterogeneous equilibrium (the salt is a separate solid phase), whereas the previous autoionization example is a form of homogeneous equilibrium. Note that this $3.981~\mathrm{V}$ spacing from $\mathrm{NaCl}$ applies to any solvent, not just water; the only assumption we made was that of saturation.
 
 (This still leaves a question: salt water has both $\mathrm{Na}^+$ and $\mathrm{H}^+$ ions. So, where does $V_{\mathrm{Na}^+}$ sit relative to $V_{\mathrm{H}^+}$? As we'll see in later topics, this difference is well-defined, but is going to depend on the solvent and on pH. Likewise for unsaturated salt water, we will see how $ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ varies with concentration.)
 
@@ -75,7 +75,7 @@ which becomes:
 
 $$ V_{\mathrm{Zn}^{2+}} - V_{\mathrm{e}^-} =  \frac{1}{2F} \mu_{\mathrm{Zn}} $$
 
-Note there is a factor of $1/2$, a consequence of the two charges transferred per ion, but we still see a balanced $V_i - V_j$ on the left hand side. We will *always* see balanced differences like this (and never something like $V_i - 2V_j$), as a consequence of the reactions being charge-neutral overall.
+Note there is a factor of $1/2$, a consequence of the two charges transferred per ion, but we still see a balanced $V_i - V_j$ on the left hand side. We will *always* see balanced differences like this (and never something like $V_i - 2V_j$), because reactions are charge-neutral overall.
 
 Plotting the ESBD now,
 
@@ -85,17 +85,17 @@ Plotting the ESBD now,
 
 It's a flat line with $V_{\mathrm{Zn}^{2+}} = V_{\mathrm{e}^-}$.
 
-> **Note**: Don't mistake this flat connection as being required for equilibrium in general, as it's only an 'accidental' consequence of $\mu_{\mathrm{Zn}}$ being zero under our conditions and conventions. Similarly we would see $V_{\mathrm{M}^{n+}} - V_{\mathrm{e}^-} = \mu_{\mathrm{M}}/(nF) = 0$ for *all* elemental electrodes of metal $M$. But if we change the temperature or pressure, or adopt a different chemical potential convention, then we would see $V_{\mathrm{M}^{n+}} \neq V_{\mathrm{e}^-}$ at equilibrium. 
+> **Note**: Don't mistake this flat connection for a requirement of equilibrium in general; it's only an 'accidental' consequence of $\mu_{\mathrm{Zn}}$ being zero under our conditions and conventions. Similarly we would see $V_{\mathrm{M}^{n+}} - V_{\mathrm{e}^-} = \mu_{\mathrm{M}}/(nF) = 0$ for *all* elemental electrodes of metal $M$. But if we change the temperature or pressure, or adopt a different chemical potential convention, then we would see $V_{\mathrm{M}^{n+}} \neq V_{\mathrm{e}^-}$ at equilibrium. 
 
 Another classic example, used as a standard reference for electrochemical studies, is the silver chloride electrode:
 
 > $\mathrm{Ag}$ metal | $\mathrm{AgCl}$ coating | Solution containing $\mathrm{Cl}^-$ ions
 
-The characteristic and reversible reaction here is that (in effect) the $\mathrm{AgCl}$ can take an electron from the metal, and release a $\mathrm{Cl}^-$ ion. In the process this leaves behind some $\mathrm{Ag}$ that deposits on the metal (and the silver chloride is in fact porous, so this happens in direct contact). Let's write down that reaction:
+The characteristic and reversible reaction here is that (in effect) the $\mathrm{AgCl}$ can take an electron from the metal and release a $\mathrm{Cl}^-$ ion into the solution, leaving behind fresh $\mathrm{Ag}$ that deposits onto the metal. (The coating is porous, so the solution soaks through it; metal, coating, and solution all meet, and the reaction runs where the three phases touch.) Let's write down that reaction:
 
 $$ \mathrm{AgCl} + \mathrm{e}^- \rightleftharpoons \mathrm{Ag} + \mathrm{Cl}^-$$
 
-which results:
+which gives:
 
 $$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} =  \frac{1}{F} ( \mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}} ). $$
 
@@ -113,7 +113,7 @@ By the way, don't confuse this with the [electrode potential](../e/) $E = V_{\ma
 
 ## Implied levels and half-reactions
 
-Electrons are not present as free constituents in a solution, however their thermodynamic availability (and $V_{\mathrm{e}^-}$) can be well defined in specific contexts, particularly with half-reactions.
+Electrons are not present as free constituents in a solution; however, their thermodynamic availability (and $V_{\mathrm{e}^-}$) can be well defined in specific contexts, particularly with half-reactions.
 
 * Some half-reactions are actually 'redox-active' in solution, and can swap electrons directly with other half-reactions. It's useful to plot their distinct $V_{\mathrm{e}^-}$ values to show disequilibrium. (→ [half-reactions](../half/))
 * Some half-reactions like the AgCl reaction are only happening at electrodes. It is helpful to show the $V_{\mathrm{e}^-}$ that the solution "wants" especially when it is out of equilibrium with the electrode.
@@ -121,7 +121,7 @@ Electrons are not present as free constituents in a solution, however their ther
 <figure class="demo-container" style="max-width: 340px">
 {% include "esbd-diagrams/esbd-ag-agcl-implied.njk" %}
 {% figcaption %}
-The silver chloride electrode again, now with the reaction's implied $V_{\mathrm{e}^-}$ drawn across the coating and solution (thick dashed). At zero bias the metal's electrons line up with it and we recover the earlier diagram. Move the bias and the metal's $V_{\mathrm{e}^-}$ departs, while the solution — its composition held fixed here — still "wants" the same level; the gap between the two is the disequilibrium available to drive the reaction.
+The silver chloride electrode again, now with the reaction's implied $V_{\mathrm{e}^-}$ drawn across the coating and solution (thick dashed). At zero bias the metal's electrons line up with it and we recover the earlier diagram. Move the bias and the metal's $V_{\mathrm{e}^-}$ departs, while the solution (its composition held fixed here) still "wants" the same level; the gap between the two is the disequilibrium available to drive the reaction.
 {% endfigcaption %}
 </figure>
 
@@ -144,9 +144,9 @@ Such a reaction no longer sets a rigid gap, and now a degree of freedom remains:
 {% include "esbd-diagrams/esbd-ferrous-ferric.njk" %}
 </figure>
 
-Much like we discussed with $ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ earlier, the difference like $V_{\mathrm{Fe}^{2+}} - V_{\mathrm{Fe}^{3+}}$ relates to ion concentrations, but we will elaborate this later in a few topics.
+Much like the $ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ spacing earlier, differences like $V_{\mathrm{Fe}^{2+}} - V_{\mathrm{Fe}^{3+}}$ track the ion concentrations, a story that comes a few topics later.
 
-Note that the $\mathrm{Fe}^{2+}$/$\mathrm{Fe}^{3+}$ combination acts as an in-solution redox couple: it can supply or remove electrons to other reactions, not just to inert metals. For this reason, I am plotting an implied $V_{\mathrm{e}^-}$ in solution, which corresponds to the notion that a redox-active solution can have a meaningful Fermi level.^[Reiss, H. (1985). [The Fermi level and the redox potential.](https://doi.org/10.1021/j100264a005) The Journal of Physical Chemistry, 89(18), 3783–3791.]^[Peljo, P., Villevieille, C., & Girault, H. H. (2025). [The redox aspects of lithium-ion batteries.](https://doi.org/10.1039/d4ee04560b) Energy &amp; Environmental Science, 18(4), 1658–1672.  ]
+Note that the $\mathrm{Fe}^{2+}$/$\mathrm{Fe}^{3+}$ combination acts as an in-solution redox couple: it can supply or remove electrons to other reactions, not just to inert metals. For this reason, I am plotting an implied $V_{\mathrm{e}^-}$ in solution, which corresponds to the notion that a redox-active solution can have a meaningful Fermi level.^[Reiss, H. (1985). [The Fermi level and the redox potential.](https://doi.org/10.1021/j100264a005) The Journal of Physical Chemistry, 89(18), 3783–3791 (no relation to the Riess cited elsewhere in this book). See also Peljo, P., Villevieille, C., & Girault, H. H. (2025). [The redox aspects of lithium-ion batteries.](https://doi.org/10.1039/d4ee04560b) Energy &amp; Environmental Science, 18(4), 1658–1672.]
 
 ## Takeaways
 
