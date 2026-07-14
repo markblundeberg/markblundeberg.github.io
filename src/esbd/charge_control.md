@@ -117,16 +117,16 @@ Gibbs–Donnan equilibrium. The mobile-ion traces $V_{\mathrm{Na}^+}$ and $V_{\m
 
 ### A different solvent on each side
 Let the two sides instead be genuinely different solvents, water against an immiscible organic phase such as nitrobenzene. The flat-$V_i$ equilibrium remains the same, but now each side has a distinct internal $V^\circ_i$ ladder structure.
-This liquid–liquid interface is known as {% wiki "ITIES" %}. While we can describe each ion's total energy shift (electrostatic + solvation shift) as $\Delta V^\circ_i$, it is not possible to parse this into its components. A uniform Donnan potential shift $\Delta \phi$ here is neither well defined nor pertinent to the thermodynamics,^[Thermodynamically, each solvent gets a free choice on how to anchor $\phi$ on its $\Delta V^\circ_i$ ladder, as illustrated in the [Offsets galore](../offsetsgalore/) topic.] yet the $\Delta V^\circ_i$ do carry meaning.
+This liquid–liquid interface is known by the acronym {% wiki "ITIES" %}, interface between two immiscible electrolyte solutions. The step in each ion's rung, $\Delta V^\circ_i$, folds together an electrostatic and a solvation contribution; a uniform Donnan shift $\Delta \phi$, which would parse the two apart, is neither well defined here nor pertinent to the thermodynamics.^[The electrochemical literature does parse the step, as $\Delta V^\circ_i = \Delta\phi + \Delta G^\circ_{\mathrm{tr},i}/(z_i F)$ with the ion's standard Gibbs energy of transfer $\Delta G^\circ_{\mathrm{tr},i}$ carrying the solvation part. This requires an extrathermodynamic $\phi$ convention fixed for both solvents; chemists have generally adopted TATB, which (in effect) anchors each solvent's $\phi$ midway between the $V^\circ_i$ rungs of two bulky ions built to be twins. The TATB twins get their audit in [$\phi$ under the microscope](../phi/), and the per-solvent $\phi$ choice is illustrated in [Offsets galore](../offsetsgalore/).] The total steps do carry meaning, measurable in charge-neutral combinations, subject beyond that to the same single-ion ambiguity as the activities of the [nonideality topic](../nonideal/).
 
 <figure class="demo-container" style="max-width: 420px">
 {% include "esbd-diagrams/esbd-cc-ities.njk" %}
 {% figcaption %}
-A liquid–liquid interface (ITIES): water against an immiscible organic solvent. A shared ion runs flat across the boundary ($V_i$ continuous), but the two solvents' $V^\circ_i$ ladders step by a different amount for each ion, set by how each prefers one solvent over the other. The anatomy at the contact reads like a semiconductor heterojunction, including the (schematically drawn) electric double layers as bends near the junction, a topic we will cover more in [basic electrostatics](../basicelectrostatics/) topic.
+A liquid–liquid interface (ITIES): water against an immiscible organic solvent. A shared ion runs flat across the boundary ($V_i$ continuous), but the two solvents' $V^\circ_i$ ladders step by a different amount for each ion, set by how each prefers one solvent over the other. The (schematically drawn) electric double layers appear as bends near the junction, which we will cover more in the [basic electrostatics](../basicelectrostatics/) topic.
 {% endfigcaption %}
 </figure>
 
-A semiconductor reader will recognize this deforming ladder: a junction between two different media is a heterojunction. There too each species' edge moves in different ways at the contact (the conduction and valence band offsets differ), and no single potential step can describe what is happening.
+A semiconductor reader will recognize this deforming ladder: a junction between two different media is a heterojunction. There too each species' edge moves by a different amount at the contact (the conduction and valence band offsets differ), and no single potential step can describe what is happening.
 
 ## Takeaways
 
