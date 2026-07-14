@@ -91,7 +91,7 @@ The standard-state ladder, two ways: an acidified nitrate/chloride solution (spe
 {% endfigcaption %}
 </figure>
 
-This logarithmic (Boltzmann) form is the *dilute* form in both worlds: it assumes a non-degenerate semiconductor, the direct analog of an ideal-dilute solution. Push the carrier density high (heavy doping, or a metal) and the carriers go degenerate and Fermi–Dirac, exactly as a concentrated electrolyte goes non-ideal; on the diagram, that is the carrier line entering the band-edge hatching, the very visual the ionic $V^\circ_i$ borrowed. We'll meet that limit again with [metals and other dense conductors](../other_conductors/).
+This logarithmic (Boltzmann) form is the *dilute* form in both worlds: it assumes a non-degenerate semiconductor, the direct analog of an ideal-dilute solution. Push the carrier density high (heavy doping, or a metal) and the carriers go degenerate, switching to Fermi–Dirac statistics (more on that below); on the diagram, that is the carrier line entering the band-edge hatching, the very visual the ionic $V^\circ_i$ borrowed. We'll meet the degenerate limit properly with [metals and other dense conductors](../other_conductors/).
 
 ## Where semiconductors and solutions differ
 
@@ -101,6 +101,7 @@ The two systems obey one set of rules, but quantitatively they emphasize differe
 * **Screening.** Semiconductor "band bending" near a junction and the electrochemical "electric double layer" near an electrode are the *same* phenomenon: $V^\circ_i$ curving over a {% wiki "Debye length" %} to screen charge while $V_i$ rides flat. Practically the semiconductor version reaches further (longer Debye lengths, smaller devices), but it's one physics, treated in [basic electrostatics](../basicelectrostatics/).
 * **Transport.** Solutions carry more carriers and add complications semiconductors rarely face: advection, several mobile ions at once, coupling to neutral solute flows.
 * **Non-ideality.** The two fields allocate their deviations differently. Condensed-matter physicists like to fold them into the carriers themselves, as quasiparticle renormalizations (effective masses, gap shifts, screening); chemists prefer to fold them into a quantity that ought to be a thermodynamic observable, the effective concentration i.e. activity (the single-ion ambiguity notwithstanding). Same deviations, different bookkeeping.
+* **Quantum statistics.** Fill a band far enough and the Boltzmann form gives way to {% wiki "Fermi–Dirac statistics" %}. This could be filed under non-ideality, but it is non-ideality of a special kind: the carriers still ignore one another, forming an ideal *Fermi* gas rather than an ideal Boltzmann gas. It sounds exotically quantum, yet chemistry keeps a functionally identical statistic on hand: the {% wiki "Langmuir adsorption model", "Langmuir isotherm" %} of a lattice gas, where each binding site holds at most one occupant. Pauli exclusion or steric exclusion, the result is the same occupancy law, $1/(1 + e^{(E - \bar\mu)/k_{\mathrm{B}}T})$ per state or per site.
 
 ## Takeaways
 
