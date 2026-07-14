@@ -71,26 +71,27 @@ This pair of tools, neutrality to place the ladder and the invariants that survi
 
 ## Dopants
 
-The simplest disturbance is a fixed charge that has no $V_i$ of its own, because it cannot move: the ionized donors ($N_{\mathrm{D}}^+$) and acceptors ($N_{\mathrm{A}}^-$) of a semiconductor, or the fixed charged groups built into an ion-exchange membrane. Such charges enter the balance only through $\rho_{\mathrm{bg}}$, and the ladder shifts until the mobile carriers compensate them: upward for $n$-type material, lifting the conduction edge toward the pinned rail, and downward for $p$-type, bringing the valence edge down to it. This is the doping story the [previous topic](../solidstate/) promised, now read directly as a question of where the ladder sits.
+The semiconductor case is the same pair of statements in the physicist's notation, and it's a simple case: fixed charge that has no $V_i$ of its own, because it cannot move: the ionized donors ($N_{\mathrm{D}}^+$) and acceptors ($N_{\mathrm{A}}^-$). Such charges enter the balance only through creating a background charge:
+$$ \rho_{\mathrm{bg}} = +eN_{\mathrm{D}}^+ -eN_{\mathrm{A}}^- , $$
+which the mobile charges must compensate for:
+$$ -e\, n_{\mathrm{e}^-} + e\, n_{\mathrm{h}^+} + \rho_{\mathrm{bg}} = 0. $$
 
-The semiconductor case is the same pair of statements in the physicist's notation. Electrons and holes are the two mobile carriers, and the recombination reaction $\mathrm{e}^- + \mathrm{h}^+ \rightleftharpoons \varnothing$ has just one job here: at equilibrium it pins the two rails together, $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$ (the Fermi level), leaving the band-edge ladder to float. With that difference pinned, the electrostatic law above locks the product,
+Equilibrium pins the electron and hole rails together, $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$ (the Fermi level), leaving the band-edge ladder to float to seek neutrality. For the two-carrier case, the electrostatic mass-action law above gives us a shortcut to help find neutrality:
 
-$$ n_{\mathrm{e}}\, n_{\mathrm{h}} = K = n_i^2, $$
+$$ n_{\mathrm{e}^-}\, n_{\mathrm{h}^+} = K,$$
 
-the squared intrinsic carrier density, a material constant set by the band gap and the band-edge densities. Neutrality then selects where the ladder rests,
+which one usually sees as the {% wiki "Mass_action_law_(electronics)", "semiconductor mass action law" %}, $np = {n_i}^2$, with essentially the same meaning.^[Actually, the way we have defined $K$ means it would vary out of equilibrium, i.e. in the case of split quasi-fermi levels $V_{\mathrm{e}^-} \neq V_{\mathrm{h}^+}$ as on the previous page. The value ${n_i}^2$ is strictly the equilibrium value of $K$.]
 
-$$ -e\, n_{\mathrm{e}} + e\, n_{\mathrm{h}} + \rho_{\mathrm{bg}} = 0, $$
-
-with $\rho_{\mathrm{bg}}$ the ionized dopants ($+eN_{\mathrm{D}}^+$ for donors, $-eN_{\mathrm{A}}^-$ for acceptors). The two equations close the system just as before: mass action fixes the product, neutrality picks the offset, and together they place $n_{\mathrm{e}}$ and $n_{\mathrm{h}}$.
+The two equations with two unknowns close the system: together they combine into a quadratic equation that places $n_{\mathrm{e}^-}$ and $n_{\mathrm{h}^+}$.
 
 <figure class="demo-container" style="max-width: 320px">
 {% include "esbd-diagrams/levels-cc-dopant.njk" %}
 {% figcaption %}
-
-The same solve in the physicist's notation. **Top**: the two carriers share a single pinned rail $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$ (the Fermi level), and it is the band-edge ladder $V^\circ_{\mathrm{e}^-}$, $V^\circ_{\mathrm{h}^+}$ that floats. **Bottom**: net charge versus ladder offset. This time the slider sets the fixed dopant charge $\rho_{\mathrm{bg}}$, not the offset: raising it lifts the $\rho$ curve bodily, sliding its zero-crossing (the neutral offset) to a new place, and the ladder follows. Donors ($\rho_{\mathrm{bg}} > 0$) drive it $n$-type, lifting the conduction edge toward the rail; acceptors do the reverse. (The two $V_i$ coincide, so the rail looks single, but neutrality is found the same way whether there is one mobile carrier or twenty.)
-
+The same solve in the physicist's notation. **Top**: the two carriers share a single pinned rail $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$ (the Fermi level), and it is the band-edge ladder $V^\circ_{\mathrm{e}^-}$, $V^\circ_{\mathrm{h}^+}$ that floats. **Bottom**: net charge versus ladder offset. This time the slider sets the fixed dopant charge $\rho_{\mathrm{bg}}$, not the offset: raising it lifts the $\rho$ curve bodily, sliding its zero-crossing (the neutral offset) to a new place, and the ladder follows. Donors ($\rho_{\mathrm{bg}} > 0$) drive it $n$-type, lifting the conduction edge toward the rail; acceptors do the reverse.
 {% endfigcaption %}
 </figure>
+
+(More detailed treatments model model the dopants as incompletely-ionized sites that, while immobile, are thermodynamically active concentrations that equilibrate with $V_{\mathrm{e}^-}$. Finding neutrality in this case no longer reduces to a simple quadratic equation, yet the 'ladder sweep' concept remains the correct way to find neutrality.)
 
 ## The common-ion effect
 
