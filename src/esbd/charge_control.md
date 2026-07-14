@@ -1,6 +1,6 @@
 ---
 layout: layouts/esbd_topic.njk
-title: 'Mass action and charge control'
+title: '"Charge neutrality and mass action"'
 tags: [page, esbd_topic]
 orderESBD: 23
 ---
@@ -17,42 +17,15 @@ $$ c_i = c^\circ \exp\!\left(\frac{z_i F\,(V_i - V^\circ_i)}{RT}\right). $$
 
 A carrier's concentration is fixed entirely by how far its $V_i$ floats away from its own rung on the ladder, or as we will see it here: where the $V^\circ_i$ moves relative to the fixed $V_i$.
 
-## Pinned carriers: an electrostatic mass-action law
+## Neutrality sets the ladder
 
-Suppose we fix a single carrier's voltage and then slide the ladder. Because only the gap $V_i - V^\circ_i$ enters the formula, moving the ladder down widens the gap and enriches a pinned cation, while moving it up depletes it; for an anion the directions reverse. A single pinned carrier, together with a definite ladder position, is therefore enough to fix that carrier's concentration. What finally sets the ladder is a question we return to shortly.
+Suppose we fix a single carrier's voltage and then slide the ladder. Because only the gap $V_i - V^\circ_i$ enters the formula, moving the ladder down widens the gap and enriches a pinned cation, while moving it up depletes it; for an anion the directions reverse. Every mobile carrier responds to the slide this way at once, exponentially, each with the sign of its own charge.
 
-Now pin two carriers, a species $A$ ($V_{\mathrm{A}}$) and a species $B$ ($V_{\mathrm{B}}$), and again slide the ladder. Both concentrations shift, yet one particular combination of them stays fixed. If we take each carrier's log-concentration $RT\ln(c_i/c^\circ)$, divide by its molar charge $z_i F$, and subtract, the arbitrary offset of the ladder drops out, since it enters both terms equally. What survives is the rung spacing $V^\circ_A - V^\circ_B$, which the rigid ladder fixes as a property of the medium:
-
-$$ \left(\frac{c_A}{c^\circ}\right)^{1/z_A}\!\left(\frac{c_B}{c^\circ}\right)^{-1/z_B} = K, $$
-
-with
-
-$$ K = \exp\!\left(\frac{F\big[(V_A - V_B) - (V^\circ_A - V^\circ_B)\big]}{RT}\right). $$
-
-$K$ depends only on the pinned difference $V_A - V_B$ and a material constant, and so it holds fixed no matter where the ladder happens to float. (More rigorously, activities can be used^[In a nonideal solution, replace each $c_i/c^\circ$ with the activity $a_i$. The left-hand combination $(a_A)^{1/z_A}(a_B)^{-1/z_B}$ is then a {% wiki "Activity coefficient#Ionic_solutions", "mean-activity" %}-type product, which is exactly the charge-balanced, ladder-independent quantity that remains measurable even when single-ion activities are not. In fact this ladder-shifting is exactly the source of the ion-activity ambiguity; see the [nonideality topic](../nonideal/).].)
-
-This is a {% wiki "mass action law" %}, though with one important difference from its chemical namesake: nothing here is actually reacting. The two concentrations are tied together purely electrostatically, both responding to the same shift of the ladder, with no reaction converting one species into the other. For a $+1$ cation paired with a $-1$ anion both exponents reduce to $+1$, and the law takes the familiar product form,
-
-$$ c_A\, c_B = \text{const}, $$
-
-so the cation can be enriched only at the anion's expense, and the reverse.
-
-Note the same combination holds just as well for two carriers of the same sign. Pairing $\mathrm{Na}^+$ with $\mathrm{Al}^{3+}$, for instance, gives $c_{\mathrm{Na}^+}\big/c_{\mathrm{Al}^{3+}}^{1/3} = \text{const}$. The fractional power^[In chemistry one usually clears the fractional exponents by raising the relation to the power $z_A z_B$, giving the tidy integer form $c_{\mathrm{Na}^+}^{3}\big/c_{\mathrm{Al}^{3+}} = \text{const}$. It is the same law; the fractional version is just the one written per unit of charge, which is the normalization the $V_i$ picture invites.] records that a slide of the ladder moves each log-concentration in proportion to $z_i$, three times as far for the $\mathrm{Al}^{3+}$ as for the $\mathrm{Na}^+$: the combination above is locked, yet the plain ratio between the two ions remains free to range widely.
-
-<figure class="demo-container" style="max-width: 420px">
-{% include "esbd-diagrams/levels-cc-massaction.njk" %}
-{% figcaption %}
-Two carriers pinned ($V_A$, $V_B$ fixed), with a slider for the $V^\circ_i$ ladder offset. As the ladder slides, $c_A$ and $c_B$ trade off against each other, but their mass-action product holds constant. Other ions are not shown.
-{% endfigcaption %}
-</figure>
-
-## What fixes the ladder? Neutrality
-
-The mass-action law tells us what remains invariant as the ladder slides, but it does not tell us where the ladder finally comes to rest. That position is set by **bulk charge neutrality**. Away from interfaces, a conductor carries essentially no net charge, so
+This is exactly the handle that **bulk charge neutrality** needs. Away from interfaces, a conductor carries essentially no net charge, so
 
 $$ \sum_i z_i F c_i + \rho_{\mathrm{bg}} = 0, $$
 
-where $\rho_{\mathrm{bg}}$ is any fixed, immobile background charge. Each mobile $c_i$ in this sum is an exponential function of the ladder offset, so as the ladder slides the net charge passes monotonically through zero at exactly one position. Once the $V_i$ are given, the ladder floats to precisely the offset that neutrality requires, and to no other.
+where $\rho_{\mathrm{bg}}$ is any fixed, immobile background charge. As the ladder slides down, every cation in this sum enriches and every anion depletes, so the net charge climbs monotonically and passes through zero at exactly one position. Once the $V_i$ are given, the ladder floats to precisely the offset that neutrality requires, and to no other.
 
 <figure class="demo-container" style="max-width: 420px">
 {% include "esbd-diagrams/levels-cc-neutrality.njk" %}
@@ -63,7 +36,38 @@ A multi-ion solution with three $V_i$ fixed, and some fixed negative background 
 {% endfigcaption %}
 </figure>
 
-This one principle accounts for a whole family of effects that, in their conventional presentations, appear quite unrelated. Each is simply a disturbance to the neutrality balance, met by a shift of the ladder.
+## Electrostatic mass action: a pair invariant
+
+Neutrality moves the ladder around: dissolve something new, or change the background charge, and the ladder must slide to a new neutral offset, carrying every concentration with it. Certain combinations of concentration, however, come through untouched. Pin two carriers, a species $A$ ($V_{\mathrm{A}}$) and a species $B$ ($V_{\mathrm{B}}$), and let the ladder go wherever neutrality sends it: one particular combination of the two concentrations stays fixed. To find it, expand the pinned difference $V_A - V_B$ with the ideal-dilute relation:
+
+$$ V_A - V_B = \left(V^\circ_A - V^\circ_B\right) + \frac{RT}{z_A F}\ln\frac{c_A}{c^\circ} - \frac{RT}{z_B F}\ln\frac{c_B}{c^\circ}. $$
+
+The left side is pinned, and the rung spacing $V^\circ_A - V^\circ_B$ is a rigid property of the medium, blind to the ladder's offset. The two concentration terms are therefore left holding a constant between them, and exponentiating turns that into
+
+$$ \left(\frac{c_A}{c^\circ}\right)^{1/z_A}\!\left(\frac{c_B}{c^\circ}\right)^{-1/z_B} = K, $$
+
+with
+
+$$ K = \exp\!\left(\frac{F\big[(V_A - V_B) - (V^\circ_A - V^\circ_B)\big]}{RT}\right). $$
+
+$K$ depends only on the pinned difference $V_A - V_B$ and a material constant, and so it holds fixed no matter where the ladder happens to float. (More rigorously, activities can be used^[In a nonideal solution, replace each $c_i/c^\circ$ with the activity $a_i$. The left-hand combination $(a_A)^{1/z_A}(a_B)^{-1/z_B}$ is then a {% wiki "Activity coefficient#Ionic_solutions", "mean-activity" %}-type product, which is exactly the charge-balanced, ladder-independent quantity that remains measurable even when single-ion activities are not. In fact this ladder-shifting is exactly the source of the ion-activity ambiguity; see the [nonideality topic](../nonideal/).].)
+
+This is a {% wiki "mass action law" %}, though with one important difference from its chemical namesake: nothing here is actually reacting.^[The concentrations do change as the ladder slides, so ions must be coming and going somewhere: to and from whatever reservoirs pin the $V_i$. Those exchanges may themselves be reactions (an ion plating onto an electrode, a salt precipitating out), but each ties a carrier to its own reservoir; nothing converts $A$ into $B$.] The two concentrations are tied together purely electrostatically, both responding to the same shift of the ladder. For a $+1$ cation paired with a $-1$ anion both exponents reduce to $+1$, and the law takes the familiar product form,
+
+$$ c_A\, c_B = \text{const}, $$
+
+so the cation can be enriched only at the anion's expense, and the reverse.
+
+Note the same combination holds just as well for two carriers of the same sign. Pairing $\mathrm{Na}^+$ with $\mathrm{Al}^{3+}$, for instance, gives $c_{\mathrm{Na}^+}\big/c_{\mathrm{Al}^{3+}}^{1/3} = \text{const}$. The fractional power^[In chemistry one usually clears the fractional exponents by raising the relation to the power $z_A z_B$, giving the tidy integer form $c_{\mathrm{Na}^+}^{3}\big/c_{\mathrm{Al}^{3+}} = \text{const}$. It is the same law; the fractional version is just the one written per unit of charge, which is the normalization the $V_i$ picture invites.] records that a slide of the ladder moves each log-concentration in proportion to $z_i$, three times as far for the $\mathrm{Al}^{3+}$ as for the $\mathrm{Na}^+$: the combination above is locked, yet the plain ratio between the two ions remains free to range widely.
+
+<figure class="demo-container" style="max-width: 420px">
+{% include "esbd-diagrams/levels-cc-massaction.njk" %}
+{% figcaption %}
+Two carriers pinned ($V_A$, $V_B$ fixed), with a slider for the $V^\circ_i$ ladder offset. As the ladder slides, $c_A$ and $c_B$ trade off against each other, but their mass-action product holds constant. Other ions are not shown; the slider stands in for whatever unseen charges the ladder is neutralizing.
+{% endfigcaption %}
+</figure>
+
+This pair of tools, neutrality to place the ladder and the invariants that survive its motion, accounts for a whole family of effects that, in their conventional presentations, appear quite unrelated. Each is a disturbance to the neutrality balance, met by a shift of the ladder.
 
 ## Dopants
 
