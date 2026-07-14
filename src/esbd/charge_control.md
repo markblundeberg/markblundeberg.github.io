@@ -116,19 +116,18 @@ Gibbs–Donnan equilibrium. The mobile-ion traces $V_{\mathrm{Na}^+}$ and $V_{\m
 </figure>
 
 ### A different solvent on each side
+Let the two sides instead be genuinely different solvents, water against an immiscible organic phase such as nitrobenzene. The flat-$V_i$ equilibrium remains the same, but now each side has a distinct internal $V^\circ_i$ ladder structure.
+This liquid–liquid interface is known as {% wiki "ITIES" %}. While we can describe the total electrostatic+solvation energy shift as $\Delta V^\circ_i$ separately for each ion, it is not possible to attribute this to a $\Delta \phi$ as we did in the single-solvent Donnan potential case above.
 
-The Donnan step assumed one solvent throughout, so the ladder shifted as a rigid unit: every $V^\circ_i$ jumped by the single electrostatic step $\Delta\phi$. Let the two sides instead be genuinely different solvents, water against an immiscible organic phase such as nitrobenzene, and the construction barely changes, except that the ladder no longer steps rigidly. Each rung now jumps by its own amount: the shared electrostatic step plus an ion-specific solvation term, the standard Gibbs energy of transfer between the solvents. Where the Donnan ladder shifted rigidly, this one deforms.
-
-Any ion free to cross still equilibrates to a flat $V_i$, just as the mobile ions did across the Donnan membrane, and pinning two such ions again leaves a charge-balanced combination independent of $\Delta\phi$, the same mass-action cancellation we saw above. Here that ladder-independent quantity is what an electrochemist calls the standard partition coefficient of the salt. The individual single-ion transfer energies, by contrast, are no more measurable than single-ion activities were, and for the same reason: they depend on the unknowable offset between the two ladders. This liquid–liquid interface is known as {% wiki "Interface between two immiscible electrolyte solutions", "ITIES" %}.
-
-A semiconductor reader will recognize this deforming ladder: a junction between two different media is a heterojunction. There too each species' edge takes its own step at the contact (the conduction and valence band offsets differ), and no single potential step aligns the two sides. How such alignments get set, and what screening does with them, is where [basic electrostatics](../basicelectrostatics/) picks the story up.
 
 <figure class="demo-container" style="max-width: 420px">
 {% include "esbd-diagrams/esbd-cc-ities.njk" %}
 {% figcaption %}
-A liquid–liquid interface (ITIES): water against an immiscible organic solvent. A shared ion runs flat across the boundary ($V_i$ continuous), but the two solvents' $V^\circ_i$ ladders step by a different amount for each ion, set by how each prefers one solvent over the other. The anatomy at the contact reads like a heterojunction: within each solvent the ladder is rigid, so the two rungs bend *together* through the double layer, while the species-specific part arrives as each rung's own sharp step right at the boundary. The salt's overall partition across the interface is fixed; how that partition splits between the individual ions is not. (Schematic, for a generic salt $\mathrm{C^+A^-}$ that prefers the water.)
+A liquid–liquid interface (ITIES): water against an immiscible organic solvent. A shared ion runs flat across the boundary ($V_i$ continuous), but the two solvents' $V^\circ_i$ ladders step by a different amount for each ion, set by how each prefers one solvent over the other. The anatomy at the contact reads like a semiconductor heterojunction, including the (schematically drawn) electric double layers as bends near the junction.
 {% endfigcaption %}
 </figure>
+
+A semiconductor reader will recognize this deforming ladder: a junction between two different media is a heterojunction. There too each species' edge takes its own step at the contact (the conduction and valence band offsets differ), and no single potential step can describe what is happening. How such alignments get set, and what screening does with them, is where [basic electrostatics](../basicelectrostatics/) picks the story up.
 
 ## Takeaways
 
