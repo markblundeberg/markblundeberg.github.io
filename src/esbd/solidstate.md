@@ -18,23 +18,21 @@ With that identification, everything we built for ions carries over verbatim.
 
 ## Flipping the band diagram upside-down
 
-There is one cosmetic price to pay first, and it is worth naming clearly because it will jar any physicist.
+There is one cosmetic matter to get out of the way first, for readers arriving from semiconductor physics.
 
 A standard semiconductor {% wiki "energy band diagram", "band diagram" %} plots **electron energy** increasing **upwards**. But electrons carry negative charge, so higher electron energy means *lower* voltage: $V_{\mathrm{e}^-} = \bar\mu_{\mathrm{e}^-}/(-e)$. Our axis is voltage, increasing upwards, to match electronic circuit schematics and the chemical scales we used for ions. The consequence is that **an ESBD is a standard band diagram flipped vertically**:
 
-* the conduction band edge ($V^\circ_{\mathrm{e}^-}$) sits at the **bottom**,
-* the valence band edge ($V^\circ_{\mathrm{h}^+}$) sits at the **top**.
+* the conduction band edge sits at the **bottom**,
+* the valence band edge sits at the **top**.
 
 <figure class="demo-container" style="max-width: 700px">
 {% include "esbd-diagrams/esbd-solidstate-flip.njk" %}
 {% figcaption %}
-Side by side: a standard semiconductor energy band diagram (energy up, conduction band on top) and the same situation as an ESBD (voltage up, conduction band on the bottom). It is a simple vertical flip. (The situation: a p–n junction at equilibrium, where the Fermi level $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$ is flat while the band edges bend. Note the band-edge hatching flips along with everything else.)
+Side by side: a standard semiconductor energy band diagram (energy up, conduction band on top) and the same situation as an ESBD (voltage up, conduction band on the bottom). We'll discuss the notation differences below.
 {% endfigcaption %}
 </figure>
 
-I won't pretend the flip sits easily (it cost me some getting used to as well), but it is forced on us: the moment we want electrons and ions on *one* axis, that axis has to be charge-normalized (volts), and a charge-normalized axis turns electron energies upside down. The reward is that the diagram now reads in the same direction as a voltmeter and a circuit schematic, and lines up rung-for-rung with the ionic ladders of the previous topic.
-
-> **This isn't even new to semiconductors.** Voltage-scaled Fermi levels appear right at the origin of the field: in his founding p–n junction paper, Shockley wrote the quasi-Fermi levels as voltages; his $\phi_n$ and $\phi_p$ are exactly our $V_{\mathrm{e}^-}$ and $V_{\mathrm{h}^+}$.^[Shockley, W. (1949). [The Theory of p-n Junctions in Semiconductors and p-n Junction Transistors](https://doi.org/10.1002/j.1538-7305.1949.tb03645.x). Bell System Technical Journal, 28(3), 435–489. The energy-based convention won out in the community, and until now, it seems, nobody thought to plot $\mathrm{H}^+$ the way Shockley had plotted $\mathrm{h}^+$.]
+The flip is not strictly forced: putting electrons and positive ions on *one* axis forces a normalization by charge, but the sign is ours to pick. In the end it's just better with volts: a voltage axis reads in the same direction as every voltmeter, circuit schematic, and electrode-potential scale. This isn't even the first time this has been done with semiconductor devices.^[In his founding p–n junction paper, Shockley wrote the quasi-Fermi levels as voltages; his $\phi_n$ and $\phi_p$ are exactly our $V_{\mathrm{e}^-}$ and $V_{\mathrm{h}^+}$. Shockley, W. (1949). [The Theory of p-n Junctions in Semiconductors and p-n Junction Transistors](https://doi.org/10.1002/j.1538-7305.1949.tb03645.x). Bell System Technical Journal, 28(3), 435–489. The energy-based convention won out in the community. Curiously though, it seems, nobody thought to plot $\mathrm{H}^+$ the way Shockley had plotted $\mathrm{h}^+$.] You'll get used to it.
 
 ## Carriers driven by their own voltage
 
