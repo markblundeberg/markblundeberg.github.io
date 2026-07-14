@@ -29,6 +29,7 @@
 
 *Application highlights*: (Planned, coming soon! Follow [my twitter](https://x.com/MarkLundeberg) for updates.)
 - Redox-flow batteries: one redox couple per tank, exchanging $\mathrm{H}^+$ across a membrane.
+- Acid–base flow batteries: a bipolar-membrane stack whose interior runs entirely on ions; tanks in series as mutual chemical capacitors.
 - Solid oxide fuel cells: $V_{\mathrm{O}^{2-}}$ landscape.
 - Cell biology: The proton motive force as a $V_{\mathrm{H}^+}$ drop; the electron transport chain as a $V_{\mathrm{e}^-}$ cascade.
 - Lead-Acid Batteries: A system where the electrolyte is a reactant.
