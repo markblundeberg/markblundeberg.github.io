@@ -58,14 +58,14 @@ $$ c_A\, c_B = \text{const}, $$
 
 so the cation can be enriched only at the anion's expense, and the reverse.
 
-Note the same combination holds just as well for two carriers of the same sign. Pairing $\mathrm{Na}^+$ with $\mathrm{Al}^{3+}$, for instance, gives $c_{\mathrm{Na}^+}\big/c_{\mathrm{Al}^{3+}}^{1/3} = \text{const}$. The fractional power^[In chemistry one usually clears the fractional exponents by raising the relation to the power $z_A z_B$, giving the tidy integer form $c_{\mathrm{Na}^+}^{3}\big/c_{\mathrm{Al}^{3+}} = \text{const}$. It is the same law; the fractional version is just the one written per unit of charge, which is the normalization the $V_i$ picture invites.] records that a slide of the ladder moves each log-concentration in proportion to $z_i$, three times as far for the $\mathrm{Al}^{3+}$ as for the $\mathrm{Na}^+$: the combination above is locked, yet the plain ratio between the two ions remains free to range widely.
-
 <figure class="demo-container" style="max-width: 420px">
 {% include "esbd-diagrams/levels-cc-massaction.njk" %}
 {% figcaption %}
 Two carriers pinned ($V_A$, $V_B$ fixed), with a slider for the $V^\circ_i$ ladder offset. As the ladder slides, $c_A$ and $c_B$ trade off against each other, but their mass-action product holds constant. Other ions are not shown; the slider stands in for whatever unseen charges the ladder is neutralizing.
 {% endfigcaption %}
 </figure>
+
+Note the same combination holds just as well for two carriers of the same sign. Pairing $\mathrm{Na}^+$ with $\mathrm{Al}^{3+}$, for instance, gives $c_{\mathrm{Na}^+}\big/c_{\mathrm{Al}^{3+}}^{1/3} = \text{const}$. The fractional power^[In chemistry one usually clears the fractional exponents by raising the relation to the power $z_A z_B$, giving the tidy integer form $c_{\mathrm{Na}^+}^{3}\big/c_{\mathrm{Al}^{3+}} = \text{const}$. It is the same law; the fractional version is just the one written per unit of charge, which is the normalization the $V_i$ picture invites.] records that a slide of the ladder moves each log-concentration in proportion to $z_i$, three times as far for the $\mathrm{Al}^{3+}$ as for the $\mathrm{Na}^+$: the combination above is locked, yet the plain ratio between the two ions remains free to range widely.
 
 This pair of tools, neutrality to place the ladder and the invariants that survive its motion, accounts for a whole family of effects that, in their conventional presentations, appear quite unrelated. Each is a disturbance to the neutrality balance, met by a shift of the ladder.
 
