@@ -76,13 +76,15 @@ V_{\mathrm{h}^+} &= V^\circ_{\mathrm{h}^+} + \frac{k_{\mathrm{B}}T}{e} \ln\!\lef
 \end{aligned}
 $$
 
-where $n$, $p$ are the electron and hole concentrations and $N_{\mathrm{C}}$, $N_{\mathrm{V}}$ are the effective {% wiki "Density of states", "densities of states" %}, playing precisely the part of the reference concentration $c^\circ$, give or take a convention.^[The "give or take": the chemist's $c^\circ$ is a round, agreed-upon $1~\mathrm{mol/L}$, while $N_{\mathrm{C}}$ and $N_{\mathrm{V}}$ are whatever the band supplies (for silicon's conduction band, $2.8\times10^{19}~\mathrm{cm^{-3}} \approx 0.05~\mathrm{mol/L}$). The two kinds of standard state are thus pinned to different reference densities. The discrepancy is worth $\tfrac{RT}{F}\ln(20) \approx 80~\mathrm{mV}$ at room temperature, small on the volts-wide scale of these diagrams, and not worth a third symbol.]
+where $n$, $p$ are the electron and hole concentrations and $N_{\mathrm{C}}$, $N_{\mathrm{V}}$ are the effective {% wiki "Density of states", "densities of states" %}, playing precisely the part of the reference concentration $c^\circ$.
 
 Lay these next to the dilute-ion formula from the last topic and the unification is complete:
 
 $$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln\!\left(\frac{c_i}{c^\circ}\right). $$
 
 Set $z = -1$ and the minus sign for electrons falls right out; set $z = +1$ for holes. (The semiconductor convention writes $k_{\mathrm{B}}T/e$ where chemistry writes $RT/F$: the same quantity, counted per particle or per mole.) The band edges *are* a standard-state ladder; the carriers float above or below them by a logarithmic concentration term. A semiconductor is, in this light, just a peculiar two-ion solution whose "solvent" is the crystal.
+
+> **One honest asterisk on the shared symbol.** The band-edge $V^\circ_{\mathrm{h}^+}$ marks a hole at rest, whereas the ionic standard state $V^\circ_{\mathrm{H}^+}$ marks only an extrapolated standard concentration of $\mathrm{H}^+$ ions. Though ontologically different, the two are thermodynamically the same thing, as the equations above show, so I've chosen to put them under one symbol.^[Where would the hole's standard state sit if we referenced it to the chemist's $c^\circ$ instead? For silicon's valence band, $N_{\mathrm{V}} \approx 1\times10^{19}~\mathrm{cm^{-3}} \approx 0.02~\mathrm{mol/L}$, so a $c^\circ$-referenced $V^\circ_{\mathrm{h}^+}$ would sit about $0.1~\mathrm{V}$ up into the band: it is the convention of taking $N_{\mathrm{V}}$ itself as the reference concentration that parks the standard state exactly on the at-rest level. Note that $N_{\mathrm{V}}$ varies with temperature, pressure, and material (graded band gaps included, see [inhomogeneities](../inhomog/)), so the $c^\circ$-referenced level would not keep a constant offset from the at-rest level.]
 
 <figure class="demo-container" style="max-width: 560px">
 {% include "esbd-diagrams/levels-ss-ladder.njk" %}
