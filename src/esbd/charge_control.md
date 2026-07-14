@@ -117,17 +117,16 @@ Gibbs–Donnan equilibrium. The mobile-ion traces $V_{\mathrm{Na}^+}$ and $V_{\m
 
 ### A different solvent on each side
 Let the two sides instead be genuinely different solvents, water against an immiscible organic phase such as nitrobenzene. The flat-$V_i$ equilibrium remains the same, but now each side has a distinct internal $V^\circ_i$ ladder structure.
-This liquid–liquid interface is known as {% wiki "ITIES" %}. While we can describe the total electrostatic+solvation energy shift as $\Delta V^\circ_i$ separately for each ion, it is not possible to attribute this to a $\Delta \phi$ as we did in the single-solvent Donnan potential case above.
-
+This liquid–liquid interface is known as {% wiki "ITIES" %}. While we can describe each ion's total energy shift (electrostatic + solvation shift) as $\Delta V^\circ_i$, it is not possible to parse this into its components. A uniform Donnan potential shift $\Delta \phi$ here is neither well defined nor pertinent to the thermodynamics,^[Thermodynamically, each solvent gets a free choice on how to anchor $\phi$ on its $\Delta V^\circ_i$ ladder, as illustrated in the [Offsets galore](../offsetsgalore/) topic.] yet the $\Delta V^\circ_i$ do carry meaning.
 
 <figure class="demo-container" style="max-width: 420px">
 {% include "esbd-diagrams/esbd-cc-ities.njk" %}
 {% figcaption %}
-A liquid–liquid interface (ITIES): water against an immiscible organic solvent. A shared ion runs flat across the boundary ($V_i$ continuous), but the two solvents' $V^\circ_i$ ladders step by a different amount for each ion, set by how each prefers one solvent over the other. The anatomy at the contact reads like a semiconductor heterojunction, including the (schematically drawn) electric double layers as bends near the junction.
+A liquid–liquid interface (ITIES): water against an immiscible organic solvent. A shared ion runs flat across the boundary ($V_i$ continuous), but the two solvents' $V^\circ_i$ ladders step by a different amount for each ion, set by how each prefers one solvent over the other. The anatomy at the contact reads like a semiconductor heterojunction, including the (schematically drawn) electric double layers as bends near the junction, a topic we will cover more in [basic electrostatics](../basicelectrostatics/) topic.
 {% endfigcaption %}
 </figure>
 
-A semiconductor reader will recognize this deforming ladder: a junction between two different media is a heterojunction. There too each species' edge takes its own step at the contact (the conduction and valence band offsets differ), and no single potential step can describe what is happening. How such alignments get set, and what screening does with them, is where [basic electrostatics](../basicelectrostatics/) picks the story up.
+A semiconductor reader will recognize this deforming ladder: a junction between two different media is a heterojunction. There too each species' edge moves in different ways at the contact (the conduction and valence band offsets differ), and no single potential step can describe what is happening.
 
 ## Takeaways
 
