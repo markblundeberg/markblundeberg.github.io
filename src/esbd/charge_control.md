@@ -65,33 +65,33 @@ Two carriers pinned ($V_A$, $V_B$ fixed), with a slider for the $V^\circ_i$ ladd
 {% endfigcaption %}
 </figure>
 
-Note the same combination holds just as well for two carriers of the same sign. Pairing $\mathrm{Na}^+$ with $\mathrm{Al}^{3+}$, for instance, gives $c_{\mathrm{Na}^+}/(c_{\mathrm{Al}^{3+}})^{1/3} = \text{const}$. The fractional power^[In chemistry one usually clears the fractional exponents by raising the relation to the power $z_A z_B$, giving the tidy integer form $c_{\mathrm{Na}^+}^{3}/c_{\mathrm{Al}^{3+}} = \text{const}$. It is the same law; the fractional version is just the one written per unit of charge, which is the normalization the $V_i$ picture invites.] records that a slide of the ladder moves each log-concentration in proportion to $z_i$, three times as far for the $\mathrm{Al}^{3+}$ as for the $\mathrm{Na}^+$: the combination above is locked, yet the plain ratio between the two ions remains free to range widely. This goes for every pair: if the solution fixed all three $V_{\mathrm{Na}^+}$, $V_{\mathrm{Al}^{3+}}$, $V_{\mathrm{Cl}^-}$, then we would have a mass-action law pinning all three pairwise products: $c_{\mathrm{Na}^+}/(c_{\mathrm{Al}^{3+}})^{1/3}$ and $(c_{\mathrm{Al}^{3+}})^{1/3}c_{\mathrm{Cl}^-}$ and $c_{\mathrm{Na}^+}c_{\mathrm{Cl}^-}$.
+Note the same combination holds just as well for two carriers of the same sign. Pairing $\mathrm{Na}^+$ with $\mathrm{Al}^{3+}$, for instance, gives $c_{\mathrm{Na}^+}/(c_{\mathrm{Al}^{3+}})^{1/3} = \text{const}$. The fractional power^[In chemistry one usually clears the fractional exponents by raising the relation to the power $z_A z_B$, giving the tidy integer form $c_{\mathrm{Na}^+}^{3}/c_{\mathrm{Al}^{3+}} = \text{const}$. It is the same law; the fractional version is just the one written per unit of charge, which is the normalization the $V_i$ picture invites.] records that a slide of the ladder moves each log-concentration in proportion to $z_i$, three times as far for the $\mathrm{Al}^{3+}$ as for the $\mathrm{Na}^+$: the combination above is locked, yet the plain ratio between the two ions remains free to range widely. This goes for every pair: if all three of $V_{\mathrm{Na}^+}$, $V_{\mathrm{Al}^{3+}}$, $V_{\mathrm{Cl}^-}$ were fixed, then we would have a mass-action law pinning all three pairwise products: $c_{\mathrm{Na}^+}/(c_{\mathrm{Al}^{3+}})^{1/3}$ and $(c_{\mathrm{Al}^{3+}})^{1/3}c_{\mathrm{Cl}^-}$ and $c_{\mathrm{Na}^+}c_{\mathrm{Cl}^-}$.
 
 This pair of tools, neutrality to place the ladder and the invariants that survive its motion, accounts for a whole family of effects that, in their conventional presentations, appear quite unrelated. Each is a disturbance to the neutrality balance, met by a shift of the ladder.
 
 ## Dopants
 
-The semiconductor case is the same pair of statements in the physicist's notation, and it's a simple case: fixed charge that has no $V_i$ of its own, because it cannot move: the ionized donors ($N_{\mathrm{D}}^+$) and acceptors ($N_{\mathrm{A}}^-$). Such charges enter the balance only through creating a background charge:
+The semiconductor case is the same pair of statements in the physicist's notation, and a simple one. The ionized donors ($N_{\mathrm{D}}^+$) and acceptors ($N_{\mathrm{A}}^-$) cannot move, so they have no $V_i$ of their own; they enter the balance only as background charge:
 $$ \rho_{\mathrm{bg}} = +eN_{\mathrm{D}}^+ -eN_{\mathrm{A}}^- , $$
 which the mobile charges must compensate for:
 $$ -e\, n_{\mathrm{e}^-} + e\, n_{\mathrm{h}^+} + \rho_{\mathrm{bg}} = 0. $$
 
-Equilibrium pins the electron and hole rails together, $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$ (the Fermi level), leaving the band-edge ladder to float to seek neutrality. For the two-carrier case, the electrostatic mass-action law above gives us a shortcut to help find neutrality:
+Equilibrium pins the electron and hole rails together, $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$ (the Fermi level), leaving the band-edge ladder free to seek neutrality. For the two-carrier case, the electrostatic mass-action law above gives us a shortcut to help find neutrality:
 
 $$ n_{\mathrm{e}^-}\, n_{\mathrm{h}^+} = K,$$
 
-which one usually sees as the {% wiki "Mass_action_law_(electronics)", "semiconductor mass action law" %}, $np = {n_i}^2$, with essentially the same meaning.^[Actually, the way we have defined $K$ means it would vary out of equilibrium, i.e. in the case of split quasi-fermi levels $V_{\mathrm{e}^-} \neq V_{\mathrm{h}^+}$ as on the previous page. The value ${n_i}^2$ is strictly the equilibrium value of $K$.]
+which one usually sees as the {% wiki "Mass_action_law_(electronics)", "semiconductor mass action law" %}, $np = {n_i}^2$, with essentially the same meaning.^[Actually, the way we have defined $K$ means it would vary out of equilibrium, i.e. in the case of split quasi-Fermi levels $V_{\mathrm{e}^-} \neq V_{\mathrm{h}^+}$ as on the previous page. The value ${n_i}^2$ is strictly the equilibrium value of $K$.]
 
 The two equations with two unknowns close the system: together they combine into a quadratic equation that places $n_{\mathrm{e}^-}$ and $n_{\mathrm{h}^+}$.
 
 <figure class="demo-container" style="max-width: 320px">
 {% include "esbd-diagrams/levels-cc-dopant.njk" %}
 {% figcaption %}
-The same solve in the physicist's notation. **Top**: the two carriers share a single pinned rail $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$ (the Fermi level), and it is the band-edge ladder $V^\circ_{\mathrm{e}^-}$, $V^\circ_{\mathrm{h}^+}$ that floats. **Bottom**: net charge versus ladder offset. This time the slider sets the fixed dopant charge $\rho_{\mathrm{bg}}$, not the offset: raising it lifts the $\rho$ curve bodily, sliding its zero-crossing (the neutral offset) to a new place, and the ladder follows. Donors ($\rho_{\mathrm{bg}} > 0$) drive it $n$-type, lifting the conduction edge toward the rail; acceptors do the reverse.
+The same solve for a doped semiconductor. **Top**: the two carriers share a single pinned rail $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$ (the Fermi level), and it is the band-edge ladder $V^\circ_{\mathrm{e}^-}$, $V^\circ_{\mathrm{h}^+}$ that floats. **Bottom**: net charge versus ladder offset. This time the slider sets the fixed dopant charge $\rho_{\mathrm{bg}}$, not the offset: raising it lifts the $\rho$ curve bodily, sliding its zero-crossing (the neutral offset) to a new place, and the ladder follows. Donors ($\rho_{\mathrm{bg}} > 0$) drive it $n$-type, lifting the conduction edge toward the rail; acceptors do the reverse.
 {% endfigcaption %}
 </figure>
 
-(More detailed treatments model model the dopants as incompletely-ionized sites that, while immobile, are thermodynamically active concentrations that equilibrate with $V_{\mathrm{e}^-}$. Finding neutrality in this case no longer reduces to a simple quadratic equation, yet the 'ladder sweep' concept remains the correct way to find neutrality.)
+(More detailed treatments model the dopants as incompletely ionized sites which, while immobile, are thermodynamically active, their occupation equilibrating with $V_{\mathrm{e}^-}$. Finding neutrality in this case no longer reduces to a simple quadratic equation, yet the ladder slide remains the correct way to find it.)
 
 ## The common-ion effect
 
