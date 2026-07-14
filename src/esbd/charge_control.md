@@ -1,6 +1,6 @@
 ---
 layout: layouts/esbd_topic.njk
-title: '"Charge neutrality and mass action"'
+title: 'Charge neutrality and mass action'
 tags: [page, esbd_topic]
 orderESBD: 23
 ---
