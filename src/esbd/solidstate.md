@@ -51,8 +51,6 @@ A slope in $V_{\mathrm{e}^-}$ or $V_{\mathrm{h}^+}$ means current and dissipatio
 
 We already insisted, back in the [species voltage topic](../v_i/), that there can be several distinct $V_i$ in the same place. Semiconductor physicists have long been comfortable with exactly this, under the name {% wiki "quasi Fermi level", "quasi-Fermi levels" %}: when a device is driven out of equilibrium, the electron and hole populations stop sharing a single Fermi level and we write $V_{\mathrm{e}^-} \neq V_{\mathrm{h}^+}$. This is the everyday state of affairs in the depletion region of a diode, a solar cell, or a bipolar transistor; the photovoltaic literature takes it the most seriously of all.^[P. Würfel, *Physics of Solar Cells: From Principles to New Concepts* (Wiley-VCH, 2005): a solar cell runs on the electrochemical potentials of its carriers, with the currents driven by their gradients rather than by the electric field. It is the photovoltaic community's closest counterpart to the viewpoint of this book.]
 
-At equilibrium the two collapse onto a single Fermi level, $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$: just our familiar statement that the electron/hole recombination reaction $\mathrm{e}^- + \mathrm{h}^+ \rightleftharpoons \varnothing$ has equilibrated, pinning the two species' voltages together.
-
 <figure class="demo-container" style="max-width: 460px">
 {% include "esbd-diagrams/esbd-ss-quasifermi.njk" %}
 {% figcaption %}
@@ -60,7 +58,7 @@ Out of equilibrium, the electron rail $V_{\mathrm{e}^-}$ and hole rail $V_{\math
 {% endfigcaption %}
 </figure>
 
-This kind of pinning between two carriers, fixing the step $V_i - V_j$, has direct parallels throughout electrochemistry; we pick up its consequences in the next topic.
+At equilibrium the two collapse onto a single Fermi level, $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$, and this is really a reaction equilibrium of the kind we met in the [equilibrium topic](../equilibrium/): there, chemical reactions pinned ionic differences $V_i - V_j$ with an offset $\Delta$ set by the neutral species involved. The electron/hole recombination reaction $\mathrm{e}^- + \mathrm{h}^+ \rightleftharpoons \varnothing$ involves no neutral species at all, and yields $-V_{\mathrm{e}^-} + V_{\mathrm{h}^+} = 0$.
 
 ## Band edges are standard states ($V^\circ_i$)
 
