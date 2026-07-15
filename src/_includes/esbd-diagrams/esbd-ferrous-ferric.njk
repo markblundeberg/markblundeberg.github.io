@@ -77,7 +77,12 @@
                 id: 'x',
                 symbol: '⇌',
                 x: (b[1] + b[2]) / 2,
-                yDefs: [{ y: V_el }, { y: V_Fe2 }, { y: V_Fe3 }],
+                yDefs: [
+                    // node dot: the couple's implied electron level connects here
+                    { y: V_el, color: SPECIES.electron.color },
+                    { y: V_Fe2 },
+                    { y: V_Fe3 },
+                ],
                 popupCallback: () =>
                     '$\\mathrm{Fe}^{3+} + \\mathrm{e}^- \\rightleftharpoons \\mathrm{Fe}^{2+}$',
             },

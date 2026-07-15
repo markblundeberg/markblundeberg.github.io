@@ -324,13 +324,18 @@ class BandDiagram extends ResponsivePlot {
             let yMin = yDefs[0].y;
             let yMax = yDefs[0].y;
             for (let i = 0; i < yDefs.length; i++) {
-                const { id: yid, y } = yDefs[i];
+                // Optional per-leg color: a species-coloured "node dot" (the
+                // circuit-schematic 'this connects' dot) for equilibrium-only
+                // markers; driven markers get theirs via `driven` below.
+                const { id: yid, y, color = null } = yDefs[i];
                 if (y < yMin) yMin = y;
                 if (y > yMax) yMax = y;
-                legData.push({
+                const leg = {
                     id: yid ?? 'leg-' + i,
                     y: y,
-                });
+                };
+                if (color) leg.ghostColor = color;
+                legData.push(leg);
             }
 
             // Driven-reaction residual (the 2026-07-10 marker design): the
@@ -895,6 +900,12 @@ class BandDiagram extends ResponsivePlot {
                     .attr('fill', (leg) => leg.ghostColor ?? markerStyle.legColor),
             onUpdateTransition: (s) => s.attr('cy', (d) => this.yScale(d.y)),
         });
+        // Coloured node dots must land on top of plain black dots when levels
+        // coincide (e.g. a driven marker relaxed back to equilibrium).
+        markerLegGroups
+            .selectAll('circle.bd-marker-leg-dot')
+            .filter((leg) => !!leg.ghostColor)
+            .raise();
 
         // Driven-reaction residual: fat coloured segment ghost -> actual,
         // arrowhead at the lower end. Hidden (opacity) when the residual is
@@ -1420,13 +1431,18 @@ class BandDiagram extends ResponsivePlot {
                     .attr('stroke-width', myLegWidth)
                     .attr('stroke', myLegColor);
 
+                // Species-coloured node dots keep their color and size bump —
+                // repainting them to the leg color made them vanish against
+                // the black dot whenever any trace was hovered.
                 group
                     .selectAll('circle.bd-marker-leg-dot')
                     .interrupt()
                     .transition()
                     .duration(50)
-                    .attr('r', myLegRadius)
-                    .attr('fill', myLegColor);
+                    .attr('r', (leg) =>
+                        leg.ghostColor ? myLegRadius + 1 : myLegRadius
+                    )
+                    .attr('fill', (leg) => leg.ghostColor ?? myLegColor);
             });
     }
 
