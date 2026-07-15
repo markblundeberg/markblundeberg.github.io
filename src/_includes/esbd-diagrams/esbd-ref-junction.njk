@@ -258,7 +258,8 @@
                 id: 'agcl',
                 symbol: '⇌',
                 x: b[3],
-                yDefs: [{ y: 0 }, { y: V_CL_R }],
+                // node dot: the implied V_e-(Ag/AgCl) stub connects here
+                yDefs: [{ y: 0, color: SPECIES.electron.color }, { y: V_CL_R }],
                 popupCallback: () =>
                     String.raw`$\mathrm{AgCl} + \mathrm{e}^- \rightleftharpoons \mathrm{Ag} + \mathrm{Cl}^-$`,
             },
