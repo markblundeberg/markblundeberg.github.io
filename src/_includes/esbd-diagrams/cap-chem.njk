@@ -12,19 +12,23 @@
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
     import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
 
-    // Chemical capacitance in an intercalation host: stored charge IS the
-    // lithium content x, and V_Li+ rides the lattice-gas isotherm
-    // V = V° + (RT/F) ln(x/(1−x)) away from its standard state (drawn at
-    // half-filling, the natural lattice-gas reference). No field gap
-    // anywhere; the right panel is that exponential read as Q vs V.
+    // Mutual chemical capacitance at an intercalation host's terminals:
+    // stored charge IS the lithium content x, and V_Li+ rides the lattice-gas
+    // isotherm V = V° + (RT/F) ln(x/(1−x)) away from its standard state
+    // (drawn at half-filling, the natural lattice-gas reference), while the
+    // metallic host's V_e- stays pinned at 0 (its huge c_chem hides in the
+    // series pair). The right panel plots the terminal-visible gap
+    // V_Li+ − V_e- (OCV-type) against x. No field gap anywhere.
     const DEC = 0.05916;
     const V0 = 0.5;
+    const VE = 0.0; // metallic host: V_e- pinned (giant internal capacitance)
     const LI = SPECIES.lithium.color;
+    const EL = SPECIES.electron.color;
     const vOf = (x) => V0 + DEC * Math.log10(x / (1 - x));
 
     const levels = new EnergyLevelsDiagram('{{idprefix}}-levels', {
         yAxisLabel: 'Voltage (V)',
-        yRange: [0.3, 0.7],
+        yRange: [-0.08, 0.72],
         categories: [{ id: 'host', label: 'Liₓ host' }],
         showYTicks: false,
         bandPaddingOuter: 0.5,
@@ -33,7 +37,7 @@
 
     const qv = new XYPlot('{{idprefix}}-qv', {
         xLabel: 'Stored charge $\\propto x$',
-        yLabel: '$V_{\\mathrm{Li}^+}$ (V)',
+        yLabel: '$V_{\\mathrm{Li}^+} - V_{\\mathrm{e}^-}$ (V)',
         xRange: [0, 1],
         yRange: [0.3, 0.7],
         margins: { bottom: 34, left: 46, right: 12 },
@@ -47,6 +51,14 @@
         const v = vOf(x);
 
         levels.setLevels([
+            {
+                categoryId: 'host',
+                levelId: 've',
+                yValue: VE,
+                label: 'V_{\\mathrm{e}^-}',
+                color: EL,
+                style: { lineWidth: 3 },
+            },
             {
                 categoryId: 'host',
                 levelId: 'v0',

@@ -1,0 +1,105 @@
+{% set idprefix = "esbd-cap-edl" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 240px"></div>
+{{ controls.slider(idprefix + "-v", "Applied voltage", { min: -1, max: 1, step: "any", value: 0.7, snap: 0, readout: true, unit: "V" }) }}
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
+
+    // The double layer as a capacitor (split out of esbd-cap-family): a bare
+    // metal-electrolyte interface, with a compact (Stern) layer sliver taking
+    // a fixed fraction of the applied drop as a dielectric step, and the
+    // diffuse tail soaking up the rest within a Debye skin -- the series pair
+    // read as the page's first capacitive divider. Same conventions as the
+    // family figure: bias applied between two metals via a counter-electrode
+    // sliver, phi drawn only in the unscreened gap, work function 0.25 V
+    // (schematic, compressed).
+    const WF = 0.25;
+    const LAM = 0.03; // diffuse skin
+    const F_DIFF = 0.4; // fraction of the drop taken by the diffuse layer
+    // ion couples to the counter-electrode at a fixed offset below its V_e-;
+    // 0.31 = WF + 0.06 makes phi run flat at zero bias.
+    const OFF = 0.31;
+
+    const edl = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        { electron: SPECIES.electron, ion: SPECIES.sodium },
+        { yMode: 'abstract', margins: { right: 12, left: 42 } }
+    );
+    edl.diagram.setYLabel('Species voltage');
+    edl.setSpatialLayout([0, 0.34, 0.42, 0.88, 1], [
+        REGION.metal,
+        { ...REGION.vacuum, name: '' }, // Stern layer sliver; labeled in caption
+        REGION.solution,
+        { ...REGION.metal, name: '' }, // counter-electrode sliver
+    ]);
+    edl.setVRange(-1.05, 1.05);
+
+    const xe = linspace(0.42, 0.88, 61);
+
+    function update(v) {
+        document.getElementById('{{idprefix}}-v-readout').textContent =
+            v.toFixed(2);
+        const vp = v / 2,
+            vm = -v / 2;
+
+        edl.updateTraceData([
+            {
+                id: 'vel',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                labelFrac: 0.4,
+                x: [0, 0.34],
+                y: [vp, vp],
+            },
+            {
+                // the compact-layer drop: phi steps across the Stern sliver
+                // from the metal surface down to the elevated solution surface
+                id: 'phi',
+                speciesId: 'electron',
+                curveType: 'phi',
+                label: '\\phi',
+                labelFrac: 0.5,
+                x: [0.34, 0.42],
+                y: [vp - WF, vm - OFF + 0.06 + F_DIFF * v],
+            },
+            {
+                id: 'vion',
+                speciesId: 'ion',
+                curveType: 'voltage',
+                labelFrac: 0.5,
+                x: [0.42, 0.88],
+                y: [vm - OFF, vm - OFF],
+            },
+            {
+                id: 'vel_r',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: false,
+                x: [0.88, 1],
+                y: [vm, vm],
+            },
+            {
+                // the diffuse tail: the ladder soaks up its share of the drop
+                // within a Debye skin. Bulk anchor +0.06 ABOVE V_ion (cation
+                // below its rung): hatch-reads ~0.1 M, as close to the
+                // caption's concentrated electrolyte as legibility allows (a
+                // true >=1 M gap would merge the lines); gap widening
+                // disclosed in the caption.
+                id: 'v0ion',
+                speciesId: 'ion',
+                curveType: 'standardState',
+                labelFrac: 0.45,
+                labelVAlign: 'bottom',
+                x: [...xe],
+                y: xe.map(
+                    (x) =>
+                        vm - OFF + 0.06 + F_DIFF * v * Math.exp(-(x - 0.42) / LAM)
+                ),
+            },
+        ]);
+    }
+    makeSlider('{{idprefix}}-v', update);
+</script>

@@ -1,5 +1,5 @@
 {
-  "hash": "a8b82ab204f3a342e9c40b0ad0fd6033fdecdbca54976d321fbebe4f8bdfd009",
+  "hash": "16c5f8c741e685eb5ce98ad80bb430839c9873449b120e59af531e97e052cb11",
   "ids": [
     "V-std-ladder--diagram-container",
     "ag-agcl-electrode-container",
@@ -18,7 +18,7 @@
     "esbd-bipolar-bias-diode",
     "esbd-bipolar-twin-bpm",
     "esbd-bipolar-twin-diode",
-    "esbd-cap-family-edl",
+    "esbd-cap-edl-container",
     "esbd-cap-family-lytic",
     "esbd-cap-family-mim",
     "esbd-cap-reps-amb",

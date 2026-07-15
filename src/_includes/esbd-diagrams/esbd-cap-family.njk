@@ -9,10 +9,6 @@
 <div style="text-align: center; font-size: 0.85em">electrolytic</div>
 <div class="bd-container" id="{{idprefix}}-lytic" style="height: 230px; border: 1px solid #eee"></div>
 </div>
-<div style="flex: 1; min-width: 180px; max-width: 240px">
-<div style="text-align: center; font-size: 0.85em">double layer</div>
-<div class="bd-container" id="{{idprefix}}-edl" style="height: 230px; border: 1px solid #eee"></div>
-</div>
 </div>
 {{ controls.slider(idprefix + "-v", "Applied voltage", { min: -1, max: 1, step: "any", value: 0.7, snap: 0, readout: true, unit: "V" }) }}
 
@@ -21,13 +17,12 @@
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
     import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
 
-    // One kind of storage drawn three ways, sorted by screening length: the
-    // full applied voltage falls across the gap (MIM), a thin oxide film
-    // (electrolytic), or a Debye-length skin (double layer). phi drawn only
-    // where nothing screens, stepping down from each metal's V_e- by a
-    // work function (0.25 V here, schematic).
+    // Dielectric capacitance two ways: the full applied voltage falls across
+    // the gap (MIM) or a thin oxide film (electrolytic; one plate is an ion
+    // rail). The bare-interface double layer got its own figure,
+    // esbd-cap-edl.njk. phi drawn only where nothing screens, stepping down
+    // from each metal's V_e- by a work function (0.25 V here, schematic).
     const WF = 0.25;
-    const LAM = 0.03; // EDL skin
     // The wet panels apply the bias between two METALS (we control V_e-
     // differences, not V_e- vs V_Na+ directly — Mark 2026-07-10): a sliver
     // of counter-electrode on the right, whose ion couples to it at a
@@ -68,21 +63,6 @@
         { ...REGION.metal, name: '' }, // counter-electrode sliver
     ]);
     lytic.setVRange(-1.05, 1.05);
-
-    const edl = new ElectrochemicalSpeciesBandDiagram(
-        '{{idprefix}}-edl',
-        { electron: SPECIES.electron, ion: SPECIES.sodium },
-        common
-    );
-    edl.diagram.setYLabel('');
-    edl.setSpatialLayout([0, 0.4, 0.88, 1], [
-        REGION.metal,
-        REGION.solution,
-        { ...REGION.metal, name: '' }, // counter-electrode sliver
-    ]);
-    edl.setVRange(-1.05, 1.05);
-
-    const xe = linspace(0.4, 0.88, 61);
 
     function update(v) {
         document.getElementById('{{idprefix}}-v-readout').textContent =
@@ -151,49 +131,6 @@
                 showLabel: false,
                 x: [0.88, 1],
                 y: [vm, vm],
-            },
-        ]);
-
-        edl.updateTraceData([
-            {
-                id: 'vel',
-                speciesId: 'electron',
-                curveType: 'voltage',
-                labelFrac: 0.4,
-                x: [0, 0.4],
-                y: [vp, vp],
-            },
-            {
-                id: 'vion',
-                speciesId: 'ion',
-                curveType: 'voltage',
-                labelFrac: 0.5,
-                x: [0.4, 0.88],
-                y: [vm - OFF, vm - OFF],
-            },
-            {
-                id: 'vel_r',
-                speciesId: 'electron',
-                curveType: 'voltage',
-                showLabel: false,
-                x: [0.88, 1],
-                y: [vm, vm],
-            },
-            {
-                // the ladder soaks up the whole drop within a Debye skin.
-                // Bulk anchor +0.06 ABOVE V_ion (cation below its rung):
-                // hatch-reads ~0.1 M — as close to the caption's concentrated
-                // electrolyte as legibility allows (a true >=1 M gap would
-                // merge the lines); gap widening disclosed in the caption.
-                id: 'v0ion',
-                speciesId: 'ion',
-                curveType: 'standardState',
-                labelFrac: 0.45,
-                labelVAlign: 'bottom', // above the trace (Block-A #12)
-                x: [...xe],
-                y: xe.map(
-                    (x) => vm - OFF + 0.06 + v * Math.exp(-(x - 0.4) / LAM)
-                ),
             },
         ]);
     }
