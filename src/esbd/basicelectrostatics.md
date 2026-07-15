@@ -7,17 +7,17 @@ orderESBD: 25
 
 # {{title}}
 
-The [previous topic](../bipolar/) left a question hanging: what sets the width and shape of the depletion zone at a pn junction or bipolar membrane, that sliver where the $V^\circ_i$ ladder bends and neutrality briefly breaks?
+The [previous topic](../bipolar/) left a question hanging: what sets the width and shape of the depletion zone at a pn junction or bipolar membrane, that sliver where the $V^\circ_i$ ladder bends and neutrality locally breaks?
 
 While the $V_i$ values want to flatten out for thermodynamic reasons, the same is not necessarily true of the $V^\circ_i$. To explain why $V^\circ_i$ might be flat (or not) at equilibrium, we finally have to open up the actual mechanics of electricity, kept offstage until now. The crucial point is that the $V^\circ_i$ ladder's spatial variations are (usually) equal to variations in the electrostatic potential $\phi$, and electrostatics ties variations in $\phi$ to charge. Bends in the ladder are therefore statements about charge.
 
 ## $V^\circ_i$ as an agent of electrostatic screening
 
-We have mentioned a few times that $\phi$ is generally ambiguous, but in the special case where we are inside an ideal material it does at least perfectly follow along with $V^\circ_i$. So we can confidently discuss electrostatics in this special case at least. Specifically, within each material, $V^\circ_i$ variations are also variations in $\phi$, so their gradients are equal (and equal the negative of electric field):
+We have mentioned a few times that $\phi$ is generally ambiguous, but in the special case where we are inside an ideal material it does perfectly follow along with $V^\circ_i$. So there, at least, we can confidently discuss electrostatics. Specifically, within each material, $V^\circ_i$ variations are also variations in $\phi$, so their gradients are equal (and equal the negative of electric field):
 
 $$ \vec E = -\nabla\phi = -\nabla V^\circ_i. $$
 
-Accordingly, inside each material, the $V^\circ_i$ ladder follows a {% wiki "Poisson equation" %}, Gauss's law combined with the constitutive response of the background dielectric medium:^[This form of the Poisson equation only applies inside a reasonably well behaved medium. As we'll see [later on](../inhomog), it necessarily breaks in non-ideal solutions, at interfaces, in graded media, and in strong electric fields.]
+Accordingly, inside each material, the $V^\circ_i$ ladder follows a {% wiki "Poisson equation" %}, Gauss's law combined with the constitutive response of the background dielectric medium:^[This form of the Poisson equation only applies inside a reasonably well behaved medium. As we'll see [later on](../inhomog/), it necessarily breaks in non-ideal solutions, at interfaces, in graded media, and in strong electric fields.]
 
 $$ - \varepsilon \nabla^2 V^\circ_i = - \varepsilon \nabla^2 \phi = \rho_{\mathrm{free}}, $$
 
@@ -39,7 +39,7 @@ Band bending: something at an interface nudges $\phi$ away from its bulk neutral
 {% endfigcaption %}
 </figure>
 
-The **screening length** $\lambda$ sets how far the screening's exponential tail reaches into the neutral bulk:
+The **screening length** $\lambda$ sets how far its exponential tail reaches into the neutral bulk:
 
 $$\lambda = \sqrt{\varepsilon/\chi},$$
 
@@ -91,7 +91,7 @@ $$
 
 that is, there is no longer any constraint on the derivatives of $\phi$, and so $\phi$ at every point can independently 'float' to produce $0 = \rho_{\mathrm{free}}$.^[Note that we do not set $0 = \rho_{\mathrm{free}}$ outright (with $\varepsilon \neq 0$), which would imply $\nabla^2 \phi = 0$, which is in general not true in conductors and is only true in insulators. Somewhat confusingly though $\nabla^2 \phi = 0$ *can* occur in conductors for a totally unrelated reason within regions of homogeneous bulk transport, i.e. due to $\phi$ following $V_i$ and $\nabla \cdot \vec J_i = - \sigma \nabla^2 V_i = 0$, which has nothing to do with the Poisson equation! See also Newman *Electrochemical Systems* section 11.8 "Electroneutrality and Laplace's equation".]
 
-So, our $V^\circ_i$ ladder floats to whatever value neutrality demands. In a homogeneous medium where $V_i$ are flat (as they must be at equilibrium) then that means $V^\circ_i$ must be flat too, except at its surfaces (within a few Debye lengths). This is the footing under the neutrality we assumed in the [charge neutrality topic](../charge_neutrality/).
+So, our $V^\circ_i$ ladder floats to whatever value neutrality demands. In a homogeneous medium where the $V_i$ are flat (as they must be at equilibrium), $V^\circ_i$ must be flat too, except at its surfaces (within a few Debye lengths). This is the footing under the neutrality we assumed in the [charge neutrality topic](../charge_neutrality/).
 
 ## Interfaces: aligning two materials
 
@@ -110,7 +110,7 @@ A heterojunction between two n-type semiconductors, at equilibrium. The edge gap
 
 Predicting the *size* of that offset from scratch is a separate and much harder problem, which we will not attempt; the popular shortcut of lining materials up by a shared vacuum level is a rule of thumb that is [notoriously unreliable](../vacuum/), since every interface carries its own dipole. But the size is just one number. The *structure* of the alignment (electrostatic, screening-mediated, anchored to the stronger screener) is the essential part, and it is what lets the rest of this book draw interfaces at all.
 
-There is one more thing to notice here, because this is precisely where $\phi$ runs out of meaning. The figure draws the conduction edges, and their step at the contact is a definite, fixed number; the valence edges would take a *different* step at the same contact (the two offsets differ by the band-gap difference). A junction between two media has band offsets, plural, one per species, and none of them is "the" electrostatic step. The liquid version of this fact already appeared at the [ITIES](../charge_neutrality/), where each ion's rung steps by its own transfer energy; it is why no liquid junction potential can be defined between two different solvents. Within one medium the distinction never bit, since following $\phi$ just meant following the ladder; between two different media only the per-species offsets remain, and $\phi$ names nothing. The full autopsy is deferred to [$\phi$ under the microscope](../phi/).
+There is one more thing to notice here: this is precisely where $\phi$ runs out of meaning. The figure draws the conduction edges, and their step at the contact is a definite, fixed number; the valence edges would take a *different* step at the same contact (the two offsets differ by the band-gap difference). A junction between two media has band offsets, plural, one per species, and none of them is "the" electrostatic step. The liquid version of this fact already appeared at the [ITIES](../charge_neutrality/), where each ion's rung steps by its own transfer energy; it is why no liquid junction potential can be defined between two different solvents. Within one medium the distinction never bit, since following $\phi$ just meant following the ladder; between two different media only the per-species offsets remain, and $\phi$ names nothing. The full autopsy is deferred to [$\phi$ under the microscope](../phi/).
 
 ## Beyond the simple case
 
