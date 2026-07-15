@@ -106,7 +106,7 @@ Plotting the ESBD now,
 
 It's a flat line with $V_{\mathrm{Zn}^{2+}} = V_{\mathrm{e}^-}$.
 
-> **Note**: Don't mistake this flat connection for a requirement of equilibrium in general; it's only an 'accidental' consequence of $\mu_{\mathrm{Zn}}$ being zero under our conditions and conventions. Similarly we would see $V_{\mathrm{M}^{n+}} - V_{\mathrm{e}^-} = \mu_{\mathrm{M}}/(nF) = 0$ for *all* elemental electrodes of metal $M$. This accident is also why the electron level implied by the $\mathrm{Li}^+/\mathrm{Li}$ couple plots exactly on top of $V_{\mathrm{Li}^+}$, as promised back on the front page ([Half-reactions](../half/) has the full story). But if we change the temperature or pressure, or adopt a different chemical potential convention, then we would see $V_{\mathrm{M}^{n+}} \neq V_{\mathrm{e}^-}$ at equilibrium. 
+> **Note**: Don't mistake this flat connection for a requirement of equilibrium in general; it's only an 'accidental' consequence of $\mu_{\mathrm{Zn}}$ being zero under our conditions and conventions. Similarly we would see $V_{\mathrm{M}^{n+}} - V_{\mathrm{e}^-} = \mu_{\mathrm{M}}/(nF) = 0$ for *all* elemental electrodes of metal $M$. But if we change the temperature or pressure, or adopt a different chemical potential convention, then we would see $V_{\mathrm{M}^{n+}} \neq V_{\mathrm{e}^-}$ at equilibrium. 
 
 Another classic example, used as a standard reference for electrochemical studies, is the silver chloride electrode:
 
