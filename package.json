@@ -10,6 +10,7 @@
     "unit": "node bin/unit.mjs",
     "newfig": "node bin/newfig.mjs",
     "voicelint": "node bin/voicelint.mjs",
+    "spellvariants": "node bin/spellvariants.mjs",
     "test": "node bin/check.mjs",
     "circuits": "node bin/render-circuits.mjs",
     "prerender": "node bin/prerender.mjs",

@@ -118,7 +118,7 @@ Here, $\sum_i w_i V^\circ_i$ is also insensitive to the overall offset (includin
 
 ### Activity-fixing conventions
 
-Now, let's touch on some various conventions that are used to set ionic activities. In general these conventions are all regarded as "extra-thermodynamic", based on some approximate microscopic argument about what the real activity ought to be, or something equivalent to that. The Debye–Hückel theory is a good start but it only gets you so far.
+Now, let's touch on some various conventions that are used to set ionic activities. In general these conventions are all regarded as "extrathermodynamic", based on some approximate microscopic argument about what the real activity ought to be, or something equivalent to that. The Debye–Hückel theory is a good start but it only gets you so far.
 
 **{% wiki "Bates–Guggenheim Convention" %}**: this assigns a specific activity function for $\mathrm{Cl}^-$ ions as a function of their concentration. It is used in the analysis of a primary pH standard (the Harned cell) where fixing $\gamma_{\mathrm{Cl}^-}$ leads to fixing $a_{\mathrm{H}^+}$.
 
