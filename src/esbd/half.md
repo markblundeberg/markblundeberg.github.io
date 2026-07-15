@@ -103,6 +103,20 @@ $$V^\circ_{\mathrm{e}^-}(\mathrm{rxn}) = \frac{az_{\mathrm{A}}}{z}V^\circ_{\math
 This provides a general recipe and it's easy to see how to extend it to more ionic or more neutral reactants.
 (Note that the weighting of $V^\circ_i$ levels is always balanced to a total of 1, since the original reaction is charge-balanced: $az_{\mathrm{A}} - z = cz_{\mathrm{C}}$ in this case.)
 
+### Plating couples
+
+The simplest case is a metal plating couple, where the reduced species is the pure metal itself. The front page quietly relied on this one:
+
+$$ \mathrm{Li}^+ + \mathrm{e}^- \rightleftharpoons \mathrm{Li(s)}, $$
+
+for which the implied level needs no Nernst machinery at all:
+
+$$ V_{\mathrm{e}^-}(\mathrm{Li}^+/\mathrm{Li}) = \frac{\bar\mu_{\mathrm{Li}^+} - \mu_{\mathrm{Li}}}{F} = V_{\mathrm{Li}^+} - \frac{\mu_{\mathrm{Li}}}{F}. $$
+
+Under our convention (and at the reference temperature and pressure) $\mu_{\mathrm{Li}} = 0$, so $V_{\mathrm{e}^-}(\mathrm{Li}^+/\mathrm{Li}) = V_{\mathrm{Li}^+}$: the couple's implied electron level plots exactly on top of the ion's own level, at every concentration, since $\bar\mu_{\mathrm{Li}^+}$ carries the whole activity dependence. This cashes the promise made in the front page's footnote: the line we drew there as $V_{\mathrm{Li}^+}$ doubles as the electrolyte's redox Fermi level, in the manner of Gerischer. The same holds for every metal plating couple $\mathrm{M}^{n+}/\mathrm{M}$ (compare the $\mathrm{Fe}^{2+}/\mathrm{Fe(s)}$ row in the table below), and it is the same accident that put $V_{\mathrm{e}^-} = V_{\mathrm{Zn}^{2+}}$ at the [zinc electrode](../equilibrium/): the elemental $\mu = 0$ convention wearing another hat.
+
+Keep in mind what kind of coincidence this is. The two lines are different objects, $V_{\mathrm{Li}^+}$ being the level of ions really present in the electrolyte while $V_{\mathrm{e}^-}(\mathrm{Li}^+/\mathrm{Li})$ is an implied electron level. They separate the moment $\mu_{\mathrm{Li}} \neq 0$: pick a different convention and the implied level shifts away; or, more physically, put a temperature gradient across the cell and $\mu_{\mathrm{Li}}(T)$ varies from place to place, peeling the implied level off of $V_{\mathrm{Li}^+}$ by a real, position-dependent amount.
+
 ## Standard redox levels in water
 
 Also known as the standard electrode potential, the standard reduction potential $E^\circ$ is the reduction potential for a reaction that involves species in their standard states. In particular this means that dissolved ions are at a hypothetical ideally-dilute concentration of $c^\circ = 1~\mathrm{mol/L}$; practically this means that these standard reduction potentials are best extrapolated from dilute solutions.
