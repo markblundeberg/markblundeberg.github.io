@@ -1,7 +1,7 @@
 {% set idprefix = "esbd-struvite" %}
 {% import "macros/controls.njk" as controls %}
 <div class="bd-container" id="{{idprefix}}-container" style="height: 260px"></div>
-{{ controls.slider(idprefix + "-comp-slider", "Composition", { min: -0.1, max: 0.1, value: 0, snap: 0 }) }}
+{{ controls.slider(idprefix + "-comp-slider", "Composition", { min: -0.1, max: 0.1, value: 0.04, snap: 0 }) }}
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
@@ -17,9 +17,9 @@
     const diagram = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-container',
         speciesInfo,
-        { margins: { right: 48 } }
+        { yMode: 'abstract', margins: { right: 48 } }
     );
-    diagram.diagram.setYLabel('Species Voltage (V) — arbitrary offset');
+    diagram.diagram.setYLabel('Species Voltage');
 
     const boundaries = [0, 0.4, 1];
     diagram.setSpatialLayout(boundaries, [
@@ -31,11 +31,14 @@
         // Saturation pins 2 V_Mg + V_NH4 - 3 V_PO4; the slider walks the one
         // remaining composition freedom. NH4 moves 2x as far as Mg (opposite
         // way) so the pinned combination stays put: the 2:1 lever arms.
-        const V_PO4 = -0.6;
-        const V_Mg = 0.05 - g;
-        const V_NH4 = -0.35 + 2 * g;
+        // Stacking order matches reality (V_PO4 on top: z = -3 flips its big
+        // negative mu to +3.5 V) but the axis is abstract: true spacings span
+        // ~6 V, which would dwarf the slider's motion.
+        const V_PO4 = 0.25;
+        const V_Mg = -0.65 - g;
+        const V_NH4 = -0.2 + 2 * g;
 
-        diagram.setVRange(-0.8, 0.4);
+        diagram.setVRange(-0.95, 0.55);
 
         const b = boundaries;
         diagram.updateTraceData([
