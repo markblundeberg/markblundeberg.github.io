@@ -73,7 +73,7 @@ Since differences in $V_i$ are available work, currents from high to low $V_i$ o
 
 $$J_i = -\sigma_i \nabla V_i$$
 
-Note this is simpler than the common split seen in electrochemistry and solid state physics, where the driving force $-\nabla V_i$ is split into drift (from $-\nabla\phi$) and diffusion (from $-\nabla c_i$), then reunited by the {% wiki "Einstein relation" %} because both are really the one $-\nabla V_i$ (worked out in [basic transport](../transport_basic/)).
+Note this is simpler than the common split seen in electrochemistry and solid state physics, where the driving force $-\nabla V_i$ is split into drift (from $-\nabla\phi$) and diffusion (from $-\nabla c_i$), then reunited by the {% wiki "Einstein relation" %} because both are really the one $-\nabla V_i$ (worked out in [basic transport](../basictransport/)).
 
 Not all currents are so simple as Ohm's law, of course. Interfaces often have a nonlinear current-voltage relationship; there may be cross coupling where electrochemical potential gradients in one species drive another species (including neutral species); there may be other driving forces like magnetic induction or thermoelectricity; there may be convection/advection.
 

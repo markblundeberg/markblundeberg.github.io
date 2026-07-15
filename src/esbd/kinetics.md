@@ -11,7 +11,7 @@ Throughout this book, interfaces have been where the interesting steps happen: D
 
 $$ \eta = V_{\mathrm{e}^-}(\text{electrode}) - V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}). $$
 
-What we deferred is the question a device designer actually cares about: *how much current* does a given $\eta$ buy? Within a material, we answered this with a conductivity, $J_i = -\sigma_i \nabla V_i$ ([Basic transport](../transport_basic/)). At an interface, the answer is not a slope but a step, and the current is generally *exponential* in the step. That exponential element is the last circuit ingredient the $V_i$ picture needs.
+What we deferred is the question a device designer actually cares about: *how much current* does a given $\eta$ buy? Within a material, we answered this with a conductivity, $J_i = -\sigma_i \nabla V_i$ ([Basic transport](../basictransport/)). At an interface, the answer is not a slope but a step, and the current is generally *exponential* in the step. That exponential element is the last circuit ingredient the $V_i$ picture needs.
 
 ## The Butler–Volmer element
 
@@ -75,7 +75,7 @@ A corroding metal, coupled to two half-reactions at once. The electrode floats t
 
 ## Takeaways
 
-An interface passing current carries a step in $V_i$, and the current is exponential in that step: Butler–Volmer for electrodes, Shockley for diodes. Exchange current sets how stiff the interface is, $\alpha$ how the step splits between the two barriers, and Marcus–Gerischer supplies the microscopic picture — one that lives natively on these diagrams. With transport ([slopes](../transport_basic/)) and kinetics (steps) both priced in $V_i$, a driven electrochemical device really can be read end to end like a circuit.
+An interface passing current carries a step in $V_i$, and the current is exponential in that step: Butler–Volmer for electrodes, Shockley for diodes. Exchange current sets how stiff the interface is, $\alpha$ how the step splits between the two barriers, and Marcus–Gerischer supplies the microscopic picture — one that lives natively on these diagrams. With transport ([slopes](../basictransport/)) and kinetics (steps) both priced in $V_i$, a driven electrochemical device really can be read end to end like a circuit.
 
 That closes the main sequence. The appendices dig into the foundations underneath, starting with the one this whole framework rests on:
 

@@ -22,7 +22,7 @@ If you arrive already fluent in electrochemistry, here is a Rosetta Stone: the f
 | overpotential $\eta$ | a drop in $V_{\mathrm{e}^-}$: $V_{\mathrm{e}^-}(\text{electrode}) - V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ (or any $V_i$ step at a driven interface; [kinetics](../kinetics/)) |
 | cell voltage / EMF | $V_{\mathrm{e}^-}(\text{right}) - V_{\mathrm{e}^-}(\text{left})$ ([reference electrodes & cells](../references/)) |
 | liquid junction potential | a step in the $V^\circ_{\mathrm{e}^-}$ ladder across the junction |
-| Donnan potential | a step in the $V^\circ_i$ ladder at a fixed-charge medium's boundary ([charge control](../charge_control/)) |
+| Donnan potential | a step in the $V^\circ_i$ ladder at a fixed-charge medium's boundary ([charge neutrality](../charge_neutrality/)) |
 | built-in potential | a step in the $V^\circ_i$ ladder across a junction at equilibrium ([bipolar](../bipolar/)) |
 
 ## Concentrations and the Nernst equation
@@ -32,14 +32,14 @@ If you arrive already fluent in electrochemistry, here is a Rosetta Stone: the f
 | activity $a_i$ | defined by $V_i = V^\circ_i + \tfrac{RT}{z_i F}\ln a_i$ ([solutions](../solutions/)) |
 | standard internal chemical potential $\mu^\circ_{\mathrm{int},i}$ | $z_i F\,(V^\circ_i - \phi)$ |
 | Nernst, $E = E^\circ + \tfrac{RT}{zF}\ln\tfrac{a_{\mathrm{Ox}}}{a_{\mathrm{Red}}}$ | the floating Nernst on $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ ([half-reactions](../half/)) |
-| mass-action / solubility constant $K$ | a fixed $V_i - V_j$ gap ([mass action](../charge_control/)) |
+| mass-action / solubility constant $K$ | a fixed $V_i - V_j$ gap ([mass action](../charge_neutrality/)) |
 | $\mathrm{pH} = -\log_{10} a_{\mathrm{H}^+}$ | $(V^\circ_{\mathrm{H}^+} - V_{\mathrm{H}^+})\big/(2.303\,RT/F)$ |
 
 ## Transport and storage
 
 | Traditional | In $V_i$ terms |
 | --- | --- |
-| Nernst–Planck (drift + diffusion) flux | $J_i = -\sigma_i \nabla V_i$ (charge-current form; number flux $N_i = J_i/z_i F$) ([transport](../transport_basic/)) |
+| Nernst–Planck (drift + diffusion) flux | $J_i = -\sigma_i \nabla V_i$ (charge-current form; number flux $N_i = J_i/z_i F$) ([transport](../basictransport/)) |
 | ionic conductivity $\sigma_i$ | $z_i^2 F^2 D_i\, c_i / RT$ |
 | "ohmic" electrolyte current $-\sigma\nabla\phi$ | the uniform-concentration limit of $\textstyle\sum_i -\sigma_i\nabla V_i$ |
 | chemical capacitance | $z_i^2 F^2 c_i / RT$ ([capacitance](../capacitors/)) |

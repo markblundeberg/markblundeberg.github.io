@@ -77,7 +77,7 @@ The same dilute $\mathrm{NaCl}$ solution as in the earlier figure, now a spatial
 {% endfigcaption %}
 </figure>
 
-This uniform tilt is the tamest move in the ladder's repertoire. In later topics it will bend where concentration gradients pile up ([basic transport](../transport_basic/)), swing sharply across the few nanometres beside a charged interface ([basic electrostatics](../basicelectrostatics/)), and step outright where the medium itself changes, since a different solvent or phase carries its own ladder ([mass action and charge control](../charge_control/)). For now the point is only that the ladder is a living thing rather than a fixed backdrop: rigid in its spacings, free in its motion.
+This uniform tilt is the tamest move in the ladder's repertoire. In later topics it will bend where concentration gradients pile up ([basic transport](../basictransport/)), swing sharply across the few nanometres beside a charged interface ([basic electrostatics](../basicelectrostatics/)), and step outright where the medium itself changes, since a different solvent or phase carries its own ladder ([charge neutrality and mass action](../charge_neutrality/)). For now the point is only that the ladder is a living thing rather than a fixed backdrop: rigid in its spacings, free in its motion.
 
 ## Activities and non-ideality
 

@@ -7,7 +7,7 @@ orderESBD: 26
 
 # {{title}}
 
-In the [last topic](../basicelectrostatics/) the screening length arrived with a companion quantity, $\chi$, the "total chemical capacitance," measuring how much charge a conductor banks when its potential is nudged. That was our first taste of capacitance, the storage-side response of a conductor: charge held in proportion to a voltage *difference*, as against conductance, the flow-side response (current in proportion to a voltage *gradient*) we take up [next](../transport_basic/). It is also the elastic counterpart to a reaction: a [reaction](../equilibrium/) couples two species' voltages *rigidly*, fixing the difference $V_i - V_j$, whereas a capacitance lets that difference flex, banking charge as it moves. What makes capacitance richer in the $V_i$ picture than in an ordinary circuit is that "two voltages held apart" can mean two quite different things: two electronic plates across a gap, or a carrier crowding against a reference level. The first is the familiar dielectric capacitance; the second is chemical capacitance, and here it matters just as much.
+In the [last topic](../basicelectrostatics/) the screening length arrived with a companion quantity, $\chi$, the "total chemical capacitance," measuring how much charge a conductor banks when its potential is nudged. That was our first taste of capacitance, the storage-side response of a conductor: charge held in proportion to a voltage *difference*, as against conductance, the flow-side response (current in proportion to a voltage *gradient*) we take up [next](../basictransport/). It is also the elastic counterpart to a reaction: a [reaction](../equilibrium/) couples two species' voltages *rigidly*, fixing the difference $V_i - V_j$, whereas a capacitance lets that difference flex, banking charge as it moves. What makes capacitance richer in the $V_i$ picture than in an ordinary circuit is that "two voltages held apart" can mean two quite different things: two electronic plates across a gap, or a carrier crowding against a reference level. The first is the familiar dielectric capacitance; the second is chemical capacitance, and here it matters just as much.
 
 ## Dielectric capacitance
 
@@ -24,7 +24,7 @@ Dielectric capacitance, sorted by screening length, one applied voltage across a
 
 ## Chemical capacitance
 
-A carrier can also store charge with no dielectric gap at all, simply by growing more or less concentrated. Because its stored charge density $Q_i = z_i F c_i$ rides the concentration, and that concentration depends *exponentially* on $V_i - V^\circ_i$, this is a thoroughly **nonlinear** capacitor: it is the very exponential response to a shifting ladder that we charted in [mass action and charge control](../charge_control/), now read as charge stored against voltage. Its small-signal value is the slope of that exponential,
+A carrier can also store charge with no dielectric gap at all, simply by growing more or less concentrated. Because its stored charge density $Q_i = z_i F c_i$ rides the concentration, and that concentration depends *exponentially* on $V_i - V^\circ_i$, this is a thoroughly **nonlinear** capacitor: it is the very exponential response to a shifting ladder that we charted in [charge neutrality and mass action](../charge_neutrality/), now read as charge stored against voltage. Its small-signal value is the slope of that exponential,
 
 $$ c^{\mathrm{chem}}_i = \frac{\mathrm{d}Q_i}{\mathrm{d}V_i} = \frac{z_i^2 F^2 c_i}{RT}, $$
 
@@ -60,4 +60,4 @@ These capacitances seldom act alone. When one carrier's $V_i$ is driven while it
 
 Capacitance is the storage twin of conductance, and the $V_i$ picture shows it wearing three forms: a dielectric field across a gap, a single carrier crowding against its own standard state, and charge traded between two carriers. The dielectric kind sorts its devices by screening length, from the full-gap capacitor to the nanometre double layer of a supercapacitor; the chemical kind, $z_i^2 F^2 c_i/RT$, grows with concentration and underlies intercalation and pseudocapacitance; and acting together as a capacitive divider, they set where the standard state sits whenever charge is stored or screened. With the storage response in hand, we turn to its flow-side twin: transport.
 
-[**NEXT TOPIC: Basic transport**](../transport_basic/)
+[**NEXT TOPIC: Basic transport**](../basictransport/)

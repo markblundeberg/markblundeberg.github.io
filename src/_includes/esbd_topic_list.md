@@ -10,14 +10,14 @@
 
 - [_Solutions_](/esbd/solutions/) - Concentrations, standard states $V^\circ_i$. Ion activities.
 - [_Semiconductors_](/esbd/solidstate/) - Conduction/valence bands as $V^\circ_i$ levels, electrons/holes as ion analogs.
-- [_Mass action and charge control_](/esbd/charge_control/) - Doping, Donnan potential, and the common-ion effect.
+- [_Charge neutrality and mass action_](/esbd/charge_neutrality/) - Doping, Donnan potential, and the common-ion effect.
 - [_Bipolar membranes and pn junctions_](/esbd/bipolar/) (application spotlight) - The visual twin of water-splitting and electron-hole pair generation.
 
 *Materials II - Electrostatics, Transport, and Complex Materials*:
 
 - [_Basic electrostatics_](/esbd/basicelectrostatics/) - Debye screening and the local charge neutrality approximation.
 - [_Capacitance_](/esbd/capacitors/) - Dielectric and chemical capacitance; the capacitive divider.
-- [_Basic transport_](/esbd/transport_basic/) - Ohm's law, concentration polarization, and liquid junction potentials.
+- [_Basic transport_](/esbd/basictransport/) - Ohm's law, concentration polarization, and liquid junction potentials.
 - [_Other conductors_](/esbd/other_conductors/) - Metals, fast ionic conductors, and mixed conductors.
 - [_Saturation_](/esbd/saturation/) (application spotlight) - The common reason why current saturates in transistors and electrochemical processes.
 
