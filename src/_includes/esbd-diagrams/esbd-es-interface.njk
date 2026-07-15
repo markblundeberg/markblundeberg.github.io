@@ -1,7 +1,15 @@
 {% set idprefix = "esbd-es-interface" %}
 {% import "macros/controls.njk" as controls %}
-<div class="bd-container" id="{{idprefix}}-container" style="height: 260px"></div>
-<div class="bd-container" id="{{idprefix}}-rho" style="height: 110px"></div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-evenly; gap: 8px">
+<div style="flex: 1; min-width: 250px; max-width: 330px">
+<div class="bd-container" id="{{idprefix}}-semi" style="height: 240px"></div>
+<div class="bd-container" id="{{idprefix}}-semi-rho" style="height: 100px"></div>
+</div>
+<div style="flex: 1; min-width: 250px; max-width: 330px">
+<div class="bd-container" id="{{idprefix}}-elec" style="height: 240px"></div>
+<div class="bd-container" id="{{idprefix}}-elec-rho" style="height: 100px"></div>
+</div>
+</div>
 {# default nudge is negative: depletion, the namesake case for "band bending"
    (a positive default drew an uncaptioned degenerate accumulation layer —
    the carrier line sat deep inside the band-edge hatch) #}
@@ -13,51 +21,134 @@
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
     import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
 
-    // Band bending at a surface, at equilibrium: something at the interface
-    // (adsorbed charge, a contact, ...) nudges phi at the surface by dphi;
-    // the deviation decays into the neutral bulk over the screening length
-    // while V_e- stays perfectly flat. Drawn for an n-type semiconductor
-    // (where "band bending" got its name) — both edges bend in parallel.
-    const LAM = 0.14;
+    // Band bending and the diffuse layer, side by side: the same phi nudge at
+    // a surface, at equilibrium, answered by an n-type semiconductor (the band
+    // edges bend: the namesake band bending) and by a salt solution (the V°_i
+    // rungs bend: the diffuse part of the double layer). One slider drives
+    // both panels; they share the same 2.0 V span so the bends are directly
+    // comparable, and each charge strip below shows the same surface-charge/
+    // screening-tail pair.
+    const X_IF = 0.12; // interface position (both panels)
+    const LAM_S = 0.14; // semiconductor screening length
+    const LAM_E = 0.09; // electrolyte Debye length (drawn a bit shorter)
     const V_F = 0.5; // flat Fermi level
     const XI = 0.12; // n-type: conduction edge XI below V_F in the bulk
     const EG = 0.75; // gap drawn compressed for space
+    const V_NA = 0.62,
+        V_CL = 0.38; // flat ion levels (rung spacing compressed)
+    // Honesty flag (as in the defect figure): anchoring Cl⁻ as drawn-true, the
+    // Na⁺ group is displayed +4.55 V above its IUPAC-referenced position (true
+    // rung gap V°_Na − V°_Cl = −4.07 V; drawn +0.48 V). Marked with break glyphs.
+    const NA_SHIFT = 4.55;
 
-    const diagram = new ElectrochemicalSpeciesBandDiagram(
-        '{{idprefix}}-container',
+    const semi = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-semi',
         { electron: SPECIES.electron, hole: SPECIES.hole },
         { margins: { right: 56 } }
     );
-    diagram.setSpatialLayout([0, 0.12, 1], [
+    semi.setSpatialLayout([0, X_IF, 1], [
         { ...REGION.solid, name: 'Surface' },
         { ...REGION.semiconductor, name: 'n-type semiconductor' },
     ]);
-    diagram.setVRange(-0.55, 1.45);
+    semi.setVRange(-0.55, 1.45);
 
-    // charge panel: whatever nudges phi at the interface IS a surface
-    // charge; the screened tail in the semiconductor is its equal-and-
-    // opposite answer. Areas match: spike 1.35·|dphi|·0.035·sqrt(pi) ≈
-    // tail 0.6·|dphi|·LAM.
-    const rho = new XYPlot('{{idprefix}}-rho', {
-        xLabel: '',
-        yLabel: 'Charge density',
-        xRange: [0, 1],
-        yRange: [-0.85, 0.85],
-        xMode: 'abstract',
-        yMode: 'abstract',
-        // left/right match the band diagram above so the interface lines up
-        margins: { top: 4, bottom: 12, left: 60, right: 56 },
-    });
+    const elec = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-elec',
+        { cation: SPECIES.sodium, anion: SPECIES.chloride },
+        { margins: { right: 56 } }
+    );
+    elec.setSpatialLayout([0, X_IF, 1], [
+        { ...REGION.solid, name: 'Surface' },
+        { ...REGION.solution, name: 'salt solution' },
+    ]);
+    elec.setVRange(-0.55, 1.45); // same 2.0 V span as the semiconductor panel
 
-    const xs = linspace(0.12, 1, 101);
+    // charge strips: whatever nudges phi at the interface IS a surface
+    // charge; the screened tail in the medium is its equal-and-opposite
+    // answer. Areas match: spike 1.35·|dphi|·0.035·sqrt(pi) ≈ 0.084·|dphi|
+    // = tail amp·|dphi|·lam, so amp = 0.60 (semi) / 0.93 (elec).
+    const makeRho = (container) =>
+        new XYPlot(container, {
+            xLabel: '',
+            yLabel: 'Charge density',
+            xRange: [0, 1],
+            yRange: [-0.85, 0.85],
+            xMode: 'abstract',
+            yMode: 'abstract',
+            // left/right match the band diagram above so the interface lines up
+            margins: { top: 4, bottom: 12, left: 60, right: 56 },
+        });
+    const semiRho = makeRho('{{idprefix}}-semi-rho');
+    const elecRho = makeRho('{{idprefix}}-elec-rho');
+
+    const xs = linspace(X_IF, 1, 101);
     const xr = linspace(0, 1, 201);
 
     function update(dphi) {
         document.getElementById('{{idprefix}}-dphi-readout').textContent =
             dphi.toFixed(2);
-        const bend = (x) => dphi * Math.exp(-(x - 0.12) / LAM);
+        const bendS = (x) => dphi * Math.exp(-(x - X_IF) / LAM_S);
+        const bendE = (x) => dphi * Math.exp(-(x - X_IF) / LAM_E);
 
-        rho.updateTraceData([
+        semi.updateTraceData([
+            {
+                id: 've',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                label: 'V_{\\mathrm{e}^-}{=}V_{\\mathrm{h}^+}', // equilibrium: one shared line
+                x: [X_IF, 1],
+                y: [V_F, V_F],
+            },
+            {
+                id: 've0',
+                speciesId: 'electron',
+                curveType: 'bandEdge_C',
+                x: xs,
+                y: xs.map((x) => V_F - XI + bendS(x)),
+            },
+            {
+                id: 'vh0',
+                speciesId: 'hole',
+                curveType: 'bandEdge_V',
+                x: xs,
+                y: xs.map((x) => V_F - XI + EG + bendS(x)),
+            },
+        ]);
+
+        elec.updateTraceData([
+            {
+                id: 'vna',
+                speciesId: 'cation',
+                curveType: 'voltage',
+                refShift: NA_SHIFT,
+                x: [X_IF, 1],
+                y: [V_NA, V_NA],
+            },
+            {
+                id: 'vna0',
+                speciesId: 'cation',
+                curveType: 'standardState',
+                refShift: NA_SHIFT,
+                x: xs,
+                y: xs.map((x) => V_NA + 0.12 + bendE(x)),
+            },
+            {
+                id: 'vcl0',
+                speciesId: 'anion',
+                curveType: 'standardState',
+                x: xs,
+                y: xs.map((x) => V_CL - 0.12 + bendE(x)),
+            },
+            {
+                id: 'vcl',
+                speciesId: 'anion',
+                curveType: 'voltage',
+                x: [X_IF, 1],
+                y: [V_CL, V_CL],
+            },
+        ]);
+
+        const stripData = (tailAmp, lam) => [
             {
                 id: 'zero',
                 x: [0, 1],
@@ -72,44 +163,21 @@
                 y: xr.map((x) => 1.35 * dphi * Math.exp(-(((x - 0.1) / 0.035) ** 2))), // hugging the interface
                 color: '#555',
                 style: { lineWidth: 1.5 },
-                label: '\\text{surface charge}',
+                label: '\\text{surface}',
                 labelFrac: 0.02,
             },
             {
                 id: 'screen',
                 x: [...xr],
-                y: xr.map((x) => (x < 0.12 ? 0 : -0.6 * bend(x))),
+                y: xr.map((x) => (x < X_IF ? 0 : -tailAmp * dphi * Math.exp(-(x - X_IF) / lam))),
                 color: '#7a5fb5',
                 style: { lineWidth: 2 },
-                label: '\\text{screening charge}',
+                label: '\\text{screening}',
                 labelFrac: 0.45,
             },
-        ]);
-
-        diagram.updateTraceData([
-            {
-                id: 've',
-                speciesId: 'electron',
-                curveType: 'voltage',
-                label: 'V_{\\mathrm{e}^-}{=}V_{\\mathrm{h}^+}', // equilibrium: one shared line
-                x: [0.12, 1],
-                y: [V_F, V_F],
-            },
-            {
-                id: 've0',
-                speciesId: 'electron',
-                curveType: 'bandEdge_C',
-                x: xs,
-                y: xs.map((x) => V_F - XI + bend(x)),
-            },
-            {
-                id: 'vh0',
-                speciesId: 'hole',
-                curveType: 'bandEdge_V',
-                x: xs,
-                y: xs.map((x) => V_F - XI + EG + bend(x)),
-            },
-        ]);
+        ];
+        semiRho.updateTraceData(stripData(0.6, LAM_S));
+        elecRho.updateTraceData(stripData(0.93, LAM_E));
     }
 
     makeSlider('{{idprefix}}-dphi', update);

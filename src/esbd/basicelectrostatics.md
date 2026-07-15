@@ -23,7 +23,7 @@ $$ - \varepsilon \nabla^2 V^\circ_i = - \varepsilon \nabla^2 \phi = \rho_{\mathr
 
 where $\varepsilon$ is the material's background permittivity and $\rho_{\mathrm{free}}$ is the space charge density of the mobile carriers (plus any fixed charges). But as we saw in the [charge neutrality topic](../charge_neutrality/), $\rho_{\mathrm{free}}$ is itself a function of the $V^\circ_i$ offset. This closes a feedback loop: any deviation of $\phi$ from its neutral point summons a charge that pushes it back, which is {% wiki "electrostatic screening" %}.
 
-One of the beautiful things about band diagrams is the perspective they give on screening: the $V_i$ are flat, and all the action sits in the ladder, where charge appears exactly as curvature of $\phi$ or $V^\circ_i$, known as **band bending** in semiconductors:
+One of the beautiful things about band diagrams is the perspective they give on screening: the $V_i$ are flat, and all the action sits in the ladder, where charge appears exactly as curvature of $\phi$ or $V^\circ_i$:
 
 <figure class="demo-container" style="max-width: 460px">
 {% include "esbd-diagrams/esbd-es-defect.njk" %}
@@ -32,20 +32,33 @@ A sharp charged defect introduced inside a conductor (here a salt solution), and
 {% endfigcaption %}
 </figure>
 
-<figure class="demo-container" style="max-width: 440px">
-{% include "esbd-diagrams/esbd-es-interface.njk" %}
+In fact, we already plotted the engine of this feedback loop back in [charge neutrality](../charge_neutrality/); here is its central figure again, now carrying a second meaning:
+
+<figure class="demo-container" style="max-width: 420px">
+{% include "esbd-diagrams/levels-cc-neutrality.njk" %}
 {% figcaption %}
-Band bending: something at an interface nudges $\phi$ away from its bulk neutral value, and the deviation is screened away into the bulk. Drawn for a generic n-type semiconductor, where the effect got its name: the band edges bend together while $V_{\mathrm{e}^-}$ stays perfectly flat, this being still an equilibrium. Below, the charge pair responsible: the surface charge doing the nudging and the equal-and-opposite screening tail answering it.
+A multi-ion solution with every $V_i$ pinned, and below, the net charge as a function of the $V^\circ_i$ ladder offset. Note that unlike this topic's other charge plots, the horizontal axis here is not position but the offset itself. Last time, the ladder slid along this curve to find its zero; read it now as the feedback loop's spring, handing back a countering charge whenever $\phi$ strays from the neutral crossing. Its slope at the crossing is precisely the screening capacitance $\chi$ defined next.
 {% endfigcaption %}
 </figure>
 
-The **screening length** $\lambda$ sets how far its exponential tail reaches into the neutral bulk:
+The **screening length** $\lambda$ sets how far the screening tail reaches into the neutral bulk:
 
 $$\lambda = \sqrt{\varepsilon/\chi},$$
 
-where $\chi = -\mathrm{d}\rho_{\mathrm{free}}/\mathrm{d}\phi$ is a "screening capacitance"^[The per-species pieces of $\chi$ are the "chemical capacitances" of Jamnik and Maier's transport circuits: J. Jamnik and J. Maier, [Generalised equivalent circuits for mass and charge transport](https://doi.org/10.1039/b100180i), *Phys. Chem. Chem. Phys.* **3**, 1668 (2001). They get a proper introduction in the [next topic](../capacitors/).] measuring how strongly the space charge pushes back as $\phi$ deviates from the neutral point. For ideal-dilute ions, electrons, or holes, $\chi$ is a sum of contributions from each species: $\chi = \sum_i z_i^2 F^2 c_i/(RT) $, which is exactly proportional to the {% wiki "ionic strength" %} and the resulting $\lambda$ is known as the {% wiki "Debye length" %}.
+where $\chi = -\mathrm{d}\rho_{\mathrm{free}}/\mathrm{d}\phi$ is a "screening capacitance"^[The per-species pieces of $\chi$ are the "chemical capacitances" of Jamnik and Maier's transport circuits: J. Jamnik and J. Maier, [Generalised equivalent circuits for mass and charge transport](https://doi.org/10.1039/b100180i), *Phys. Chem. Chem. Phys.* **3**, 1668 (2001). They get a proper introduction in the [next topic](../capacitors/).] measuring how strongly the space charge pushes back as $\phi$ deviates from the neutral point (the slope at the neutral crossing just plotted). For ideal-dilute ions, electrons, or holes, $\chi$ is a sum of contributions from each species: $\chi = \sum_i z_i^2 F^2 c_i/(RT) $, which is exactly proportional to the {% wiki "ionic strength" %} and the resulting $\lambda$ is known as the {% wiki "Debye length" %}.
 
 (Mathematically, this screening with flat $V_i$ and ideal-dilute ions or electrons is known as the {% wiki "Poisson–Boltzmann equation" %}. The approach here of flat $V_i$ (flat-$\bar\mu_i$) is a very intuitive and direct yet underappreciated way of deriving said equation. In ideal Fermi gases this is known as {% wiki "Thomas–Fermi screening" %} and the exact expressions differ slightly but the concepts are largely the same.^[For a Fermi gas, the $\rho_{\mathrm{free}}(\phi)$ curve is no longer a sum of exponentials. The screening length is still $\lambda = \sqrt{\varepsilon/\chi}$ but $\chi = -\mathrm{d}\rho_{\mathrm{free}}/\mathrm{d}\phi$ now relates to density of states and is called {% wiki "quantum capacitance" %}. In the case of a zero temperature Fermi gas, $\lambda$ is called the {% wiki "Thomas–Fermi screening", "Thomas–Fermi length" %}.])
+
+## Diffuse layers are band bending
+
+So far our screening charge has answered a defect buried in the bulk. The far more common provocation is an interface: nearly every real surface or contact nudges $\phi$ somehow (adsorbed charges, surface states, or simply contact with a different material), and the medium answers with the same screened response, a charge tail reaching a screening length into its interior. Electrochemists know this tail as the diffuse (Gouy–Chapman) part of the {% wiki "electric double layer" %}. Semiconductor physicists know the very same object as **band bending**: near a contact the band edges bend together while $V_{\mathrm{e}^-}$ runs flat. Two vocabularies, one picture:
+
+<figure class="demo-container" style="max-width: 700px">
+{% include "esbd-diagrams/esbd-es-interface.njk" %}
+{% figcaption %}
+The same event in two media: something at the surface nudges $\phi$ away from its bulk neutral value, and the deviation is screened away into the interior. In the semiconductor the band edges bend together, the namesake band bending; in the salt solution the $V^\circ_i$ rungs do exactly the same, the electrochemist's diffuse layer. The carrier voltages ride flat in both, these being equilibria still. Below each panel, the same charge pair: the nudging surface charge and the equal-and-opposite screening tail answering it.
+{% endfigcaption %}
+</figure>
 
 ## Quasi-neutrality: a simplification of electrostatics
 
@@ -59,7 +72,7 @@ That is the heart of the electrostatics, and the good news is that we can mostly
 
 There are exceptions to this: capacitors, field-effect transistors, and nano-devices all rely on electrostatics. But even for those devices, the bulk majority of the conducting system is neutral and only a tiny region deviates from neutrality.
 
-Many interfaces in our devices are explicitly *not* of interest, yet each interface has one of these electrostatic screening regions (known as the "diffuse" part of the {% wiki "electric double layer" %}). One of the advantages of using electrochemical potentials like $V_i$ is that they 'ride flat' over this local craziness in $V^\circ_i$, so we can skip right over interfaces that are equilibrated.
+Many interfaces in our devices are explicitly *not* of interest, yet each one carries its diffuse double layer all the same. One of the advantages of using electrochemical potentials like $V_i$ is that they 'ride flat' over this local craziness in $V^\circ_i$, so we can skip right over interfaces that are equilibrated.
 
 <figure class="demo-container" style="max-width: 460px">
 {% include "esbd-diagrams/esbd-es-blips.njk" %}
