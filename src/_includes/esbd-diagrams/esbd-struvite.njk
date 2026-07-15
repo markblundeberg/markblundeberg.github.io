@@ -1,0 +1,81 @@
+{% set idprefix = "esbd-struvite" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 260px"></div>
+{{ controls.slider(idprefix + "-comp-slider", "Composition", { min: -0.1, max: 0.1, value: 0, snap: 0 }) }}
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
+
+    const speciesInfo = {
+        magnesium: SPECIES.magnesium,
+        ammonium: SPECIES.ammonium,
+        phosphate: SPECIES.phosphate,
+    };
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        speciesInfo,
+        { margins: { right: 48 } }
+    );
+    diagram.diagram.setYLabel('Species Voltage (V) — arbitrary offset');
+
+    const boundaries = [0, 0.4, 1];
+    diagram.setSpatialLayout(boundaries, [
+        { ...REGION.solid, name: 'Struvite solid' },
+        REGION.solution,
+    ]);
+
+    function update(g) {
+        // Saturation pins 2 V_Mg + V_NH4 - 3 V_PO4; the slider walks the one
+        // remaining composition freedom. NH4 moves 2x as far as Mg (opposite
+        // way) so the pinned combination stays put: the 2:1 lever arms.
+        const V_PO4 = -0.6;
+        const V_Mg = 0.05 - g;
+        const V_NH4 = -0.35 + 2 * g;
+
+        diagram.setVRange(-0.8, 0.4);
+
+        const b = boundaries;
+        diagram.updateTraceData([
+            {
+                id: 'mg_trace',
+                speciesId: 'magnesium',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [b[1], b[2]],
+                y: [V_Mg, V_Mg],
+            },
+            {
+                id: 'nh4_trace',
+                speciesId: 'ammonium',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [b[1], b[2]],
+                y: [V_NH4, V_NH4],
+            },
+            {
+                id: 'po4_trace',
+                speciesId: 'phosphate',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [b[1], b[2]],
+                y: [V_PO4, V_PO4],
+            },
+        ]);
+
+        diagram.updateVerticalMarkers([
+            {
+                id: 'reaction',
+                symbol: '⇌',
+                x: b[1],
+                yDefs: [{ y: V_Mg }, { y: V_NH4 }, { y: V_PO4 }],
+                popupCallback: () =>
+                    '$ \\mathrm{Mg}^{2+} + \\mathrm{NH_4}^+ + \\mathrm{PO_4}^{3-} + 6\\,\\mathrm{H_2O} \\rightleftharpoons \\mathrm{MgNH_4PO_4}\\cdot 6\\mathrm{H_2O}. $',
+            },
+        ]);
+    }
+
+    makeSlider('{{idprefix}}-comp-slider', update);
+</script>

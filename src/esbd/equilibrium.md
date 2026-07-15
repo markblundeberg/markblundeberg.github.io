@@ -59,7 +59,30 @@ If the solution is fully saturated with salt (meaning it is in equilibrium with 
 
 This is an example of heterogeneous equilibrium (the salt is a separate solid phase), whereas the previous autoionization example is a form of homogeneous equilibrium. Note that this $3.981~\mathrm{V}$ spacing from $\mathrm{NaCl}$ applies to any solvent, not just water; the only assumption we made was that of saturation.
 
-(This still leaves a question: salt water has all four ions depicted above: $\mathrm{H}^+$, $\mathrm{OH}^-$, $\mathrm{Na}^+$, and $\mathrm{Cl}^-$. So how do the two figures combine — where does $V_{\mathrm{Na}^+}$ sit relative to $V_{\mathrm{H}^+}$ in salt water? As we'll see in later topics, this difference is well-defined, but is going to depend on the solvent and on pH. Likewise for unsaturated salt water, we will see how $ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ varies with concentration.)
+(This still leaves a question: salt water has all four ions depicted above: $\mathrm{H}^+$, $\mathrm{OH}^-$, $\mathrm{Na}^+$, and $\mathrm{Cl}^-$. So how do the two figures combine — where does $V_{\mathrm{Na}^+}$ sit relative to $V_{\mathrm{H}^+}$ in salt water? As we'll see in later topics, this difference is well-defined; the only further input it needs is the ion concentrations.^[Amusingly, equilibria alone could in principle anchor all four ions at once: saturate the same solution with NaOH solid as well, so that NaCl pins $\mathrm{Na}^+$–$\mathrm{Cl}^-$, NaOH pins $\mathrm{Na}^+$–$\mathrm{OH}^-$, and auto-ionization pins $\mathrm{H}^+$–$\mathrm{OH}^-$. A strange brew, mind: the common-ion effect crowds nearly all the $\mathrm{Cl}^-$ out of solution, and the water activity is pulled down to that of saturated lye ($a_{\mathrm{H_2O}} \approx 0.07$), so the $\mathrm{H}^+$/$\mathrm{OH}^-$ spacing itself shifts down by about 70 mV ($\frac{RT}{F}\ln a_{\mathrm{H_2O}}$) from the pure-water figure above.] Likewise for unsaturated salt water, we will see how $ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ varies with concentration.)
+
+## Three or more charged species
+
+It can happen sometimes that a reaction involves more than just two $V_i$'s. Consider the precipitation of struvite ($\mathrm{MgNH_4PO_4}\cdot 6\mathrm{H_2O}$), a mineral familiar from kidney stones and from phosphorus recovery at wastewater plants:
+
+$$ \mathrm{Mg}^{2+} + \mathrm{NH_4}^+ + \mathrm{PO_4}^{3-} + 6\,\mathrm{H_2O} \rightleftharpoons \mathrm{MgNH_4PO_4}\cdot 6\mathrm{H_2O}. $$
+
+Writing the equilibrium in chemical potentials and substituting $\bar{\mu}_i = z_i F V_i$ as before:
+
+$$ \bar\mu_{\mathrm{Mg}^{2+}} + \bar\mu_{\mathrm{NH_4}^+} + \bar\mu_{\mathrm{PO_4}^{3-}} = \mu_{\mathrm{struvite}} - 6 \mu_{\mathrm{H_2O}} $$
+
+$$ 2 V_{\mathrm{Mg}^{2+}} + V_{\mathrm{NH_4}^+} - 3 V_{\mathrm{PO_4}^{3-}} = \frac{\mu_{\mathrm{struvite}} - 6 \mu_{\mathrm{H_2O}}}{F}. $$
+
+The coefficients on the left are just the ionic charges, and they sum to zero because the reaction is charge-neutral overall; the combination can accordingly still be grouped into balanced differences, say $2(V_{\mathrm{Mg}^{2+}} - V_{\mathrm{PO_4}^{3-}}) + (V_{\mathrm{NH_4}^+} - V_{\mathrm{PO_4}^{3-}})$. But one equation cannot pin two independent gaps. Unlike the two-species equilibria above, saturation with struvite fixes only this weighted sum, and a degree of freedom remains:
+
+<figure class="demo-container" style="max-width: 300px">
+{% include "esbd-diagrams/esbd-struvite.njk" %}
+{% figcaption %}
+A solution saturated with struvite. The reaction holds $2 V_{\mathrm{Mg}^{2+}} + V_{\mathrm{NH_4}^+} - 3 V_{\mathrm{PO_4}^{3-}}$ fixed while the individual gaps trade off against each other. Note the lever arms as the slider moves the levels: $V_{\mathrm{NH_4}^+}$ swings twice as far as $V_{\mathrm{Mg}^{2+}}$, because the doubly charged ion carries double weight in the pinned sum.
+{% endfigcaption %}
+</figure>
+
+Much like the $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ spacing earlier, how the levels settle within this remaining freedom is a matter of ion concentrations, a story that comes a few topics later.
 
 ## Electrodes
 
@@ -83,7 +106,7 @@ Plotting the ESBD now,
 
 It's a flat line with $V_{\mathrm{Zn}^{2+}} = V_{\mathrm{e}^-}$.
 
-> **Note**: Don't mistake this flat connection for a requirement of equilibrium in general; it's only an 'accidental' consequence of $\mu_{\mathrm{Zn}}$ being zero under our conditions and conventions. Similarly we would see $V_{\mathrm{M}^{n+}} - V_{\mathrm{e}^-} = \mu_{\mathrm{M}}/(nF) = 0$ for *all* elemental electrodes of metal $M$. But if we change the temperature or pressure, or adopt a different chemical potential convention, then we would see $V_{\mathrm{M}^{n+}} \neq V_{\mathrm{e}^-}$ at equilibrium. 
+> **Note**: Don't mistake this flat connection for a requirement of equilibrium in general; it's only an 'accidental' consequence of $\mu_{\mathrm{Zn}}$ being zero under our conditions and conventions. Similarly we would see $V_{\mathrm{M}^{n+}} - V_{\mathrm{e}^-} = \mu_{\mathrm{M}}/(nF) = 0$ for *all* elemental electrodes of metal $M$. This accident is also why the electron level implied by the $\mathrm{Li}^+/\mathrm{Li}$ couple plots exactly on top of $V_{\mathrm{Li}^+}$, as promised back on the front page ([Half-reactions](../half/) has the full story). But if we change the temperature or pressure, or adopt a different chemical potential convention, then we would see $V_{\mathrm{M}^{n+}} \neq V_{\mathrm{e}^-}$ at equilibrium. 
 
 Another classic example, used as a standard reference for electrochemical studies, is the silver chloride electrode:
 
@@ -113,7 +136,7 @@ By the way, don't confuse this with the [electrode potential](../e/) $E = V_{\ma
 
 Electrons are not present as free constituents in a solution; however, their thermodynamic availability (and $V_{\mathrm{e}^-}$) can be well defined in specific contexts, particularly with half-reactions.
 
-* Some half-reactions are actually 'redox-active' in solution, and can swap electrons directly with other half-reactions. It's useful to plot their distinct $V_{\mathrm{e}^-}$ values to show disequilibrium. (An iron-ion example is shown in the next section.)
+* Some half-reactions are actually 'redox-active' in solution, and can swap electrons directly with other half-reactions. It's useful to plot their distinct $V_{\mathrm{e}^-}$ values to show disequilibrium. (An iron-ion example follows below.)
 * Some half-reactions like the AgCl reaction only happen at electrodes. It can still be useful to show the $V_{\mathrm{e}^-}$ that the solution "wants", especially when it is out of equilibrium with the electrode; the disequilibrium is then directly readable as an *overpotential*:
 
 <figure class="demo-container" style="max-width: 340px">
@@ -123,22 +146,15 @@ The silver chloride electrode again, now with the reaction's implied $V_{\mathrm
 {% endfigcaption %}
 </figure>
 
-In principle other species can have implied levels. For example $\mathrm{H}^-$ (hydride) ions are not present in solution, but half-reactions may exchange $\mathrm{H}^-$; we can draw $V_{\mathrm{H}^-}$ implied levels. Similarly, reactions may output $\mathrm{O}^{2-}$ into certain ceramic solid electrolytes (like YSZ) that can transport $\mathrm{O}^{2-}$.
+One remark on notation: the ⇌ marker stays in the biased figure, even though electrode and solution are plainly out of equilibrium. The marker belongs to the half-reaction, which still holds, pinning its implied level to $V_{\mathrm{Cl}^-}$ at the reaction's fixed offset; a half-reaction drawn this way amounts to a half-equilibrium. The disequilibrium lives entirely in the remaining gap between the implied level and the metal's actual $V_{\mathrm{e}^-}$.
 
-(For the next several topics we won't be talking about these implied levels much, but we will return to them later in the redox topics, starting with [Half-reactions](../half/).)
-
-## Three or more charged species
-
-It can happen sometimes that a reaction involves more than just two $V_i$'s. For example, the case of a solution containing both ferrous ($\mathrm{Fe}^{2+}$) and ferric ($\mathrm{Fe}^{3+}$) ions, in equilibrium with an inert platinum electrode that provides electrons ($\mathrm{e}^-$):
+For the redox-active case, consider a solution containing both ferrous ($\mathrm{Fe}^{2+}$) and ferric ($\mathrm{Fe}^{3+}$) ions, in equilibrium with an inert platinum electrode that provides electrons ($\mathrm{e}^-$):
 
 $$ \mathrm{Fe}^{2+} \rightleftharpoons \mathrm{Fe}^{3+} + \mathrm{e}^{-} $$
 $$ \bar\mu_{\mathrm{Fe}^{2+}} = \bar\mu_{\mathrm{Fe}^{3+}} + \bar\mu_{\mathrm{e}^{-}} $$
-$$ 2 V_{\mathrm{Fe}^{2+}} = 3 V_{\mathrm{Fe}^{3+}} - V_{\mathrm{e}^-} $$
+$$ V_{\mathrm{e}^-} = 3 V_{\mathrm{Fe}^{3+}} - 2 V_{\mathrm{Fe}^{2+}} $$
 
-Note this can still be represented in terms of $V_i - V_j$ differences:
-$$2 (V_{\mathrm{Fe}^{2+}} - V_{\mathrm{Fe}^{3+}}) = V_{\mathrm{Fe}^{3+}} - V_{\mathrm{e}^-}.$$
-
-Such a reaction no longer sets a rigid gap, and now a degree of freedom remains:
+This is another reaction with three charged species, so no rigid pairwise gap is set; where the couple's $V_{\mathrm{e}^-}$ sits depends on both iron concentrations.
 
 <figure class="demo-container" style="max-width: 230px">
 {% include "esbd-diagrams/esbd-ferrous-ferric.njk" %}
@@ -147,19 +163,21 @@ Note the ⇌ marker stands in the open solution: this half-reaction is homogeneo
 {% endfigcaption %}
 </figure>
 
-Much like the $ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ spacing earlier, differences like $V_{\mathrm{Fe}^{2+}} - V_{\mathrm{Fe}^{3+}}$ track the ion concentrations, a story that comes a few topics later.
+Note that the $\mathrm{Fe}^{2+}$/$\mathrm{Fe}^{3+}$ combination acts as an in-solution redox couple: it can supply or remove electrons to other reactions, not just to inert metals. For this reason, the implied $V_{\mathrm{e}^-}$ now earns a line across the whole solution (in contrast to the interface-bound stub of the AgCl example), corresponding to the notion that a redox-active solution can have a meaningful Fermi level.^[Reiss, H. (1985). [The Fermi level and the redox potential.](https://doi.org/10.1021/j100264a005) The Journal of Physical Chemistry, 89(18), 3783–3791 (no relation to the Riess cited elsewhere in this book). See also Peljo, P., Villevieille, C., & Girault, H. H. (2025). [The redox aspects of lithium-ion batteries.](https://doi.org/10.1039/d4ee04560b) Energy &amp; Environmental Science, 18(4), 1658–1672.]
 
-Note that the $\mathrm{Fe}^{2+}$/$\mathrm{Fe}^{3+}$ combination acts as an in-solution redox couple: it can supply or remove electrons to other reactions, not just to inert metals. For this reason, the implied $V_{\mathrm{e}^-}$ now earns a line across the whole solution (in contrast to the interface-bound stub of the previous section), corresponding to the notion that a redox-active solution can have a meaningful Fermi level.^[Reiss, H. (1985). [The Fermi level and the redox potential.](https://doi.org/10.1021/j100264a005) The Journal of Physical Chemistry, 89(18), 3783–3791 (no relation to the Riess cited elsewhere in this book). See also Peljo, P., Villevieille, C., & Girault, H. H. (2025). [The redox aspects of lithium-ion batteries.](https://doi.org/10.1039/d4ee04560b) Energy &amp; Environmental Science, 18(4), 1658–1672.]
+In principle other species can have implied levels. For example $\mathrm{H}^-$ (hydride) ions are not present in solution, but half-reactions may exchange $\mathrm{H}^-$; we can draw $V_{\mathrm{H}^-}$ implied levels. Similarly, reactions may output $\mathrm{O}^{2-}$ into certain ceramic solid electrolytes (like YSZ) that can transport $\mathrm{O}^{2-}$.
+
+(For the next several topics we won't be talking about these implied levels much, but we will return to them later in the redox topics, starting with [Half-reactions](../half/).)
 
 ## Takeaways
 
 The main point is that with reactions (including electrode reactions),
 * We establish a difference $V_i - V_j$, connecting charged species $i$ and $j$.
 * In the diagrams, we will mark these reactions with a ⇌ symbol.
+* When a reaction involves three or more charged species, it no longer sets a rigid gap; a concentration-dependent degree of freedom remains.
 * At electrodes we get a relative step up or down going from $V_{\mathrm{e}^-}$ to $V_{\mathrm{ion}}$. This step should not be confused with the electrode potential of standard electrochemistry.
 * The quantitative value of that step at equilibrium depends on the chemical potentials of neutral species involved in the reaction.
 * A reaction can also *imply* a level for a species that is not actually present, drawn dashed: as a stub at the interface for an interface-bound reaction, or across the whole solution for a bulk redox couple.
-* When a reaction involves three or more charged species, it no longer sets a rigid gap; a concentration-dependent degree of freedom remains.
 * Our convention that chemical potentials equal Gibbs formation energies influences the quantitative $V_i - V_j$, and in turn the visual appearance of our band diagrams; happily, this particular choice is nearly universal.
 
 Alright, we're ready now to tackle a real application!
