@@ -22,7 +22,16 @@
     // rail). The bare-interface double layer got its own figure,
     // esbd-cap-edl.njk. phi drawn only where nothing screens, stepping down
     // from each metal's V_e- by a work function (0.25 V here, schematic).
-    const WF = 0.25;
+    // The MIM panel's phi runs flat at zero bias (symmetric metals,
+    // deliberate); the electrolytic panel keeps a small built-in step DPHI0
+    // even at v = 0, since its two sides are different materials and their
+    // surfaces have no reason to line up (Mark's pet peeve, 2026-07-15).
+    // phi sits at an arbitrary display height and must MEET NOTHING: WFD is
+    // drawn big and the V levels are lifted so phi's endpoints stay visibly
+    // clear of every V_i and rung while everything fits the shared range.
+    const WFD = 0.55; // schematic phi offset below its metal's V_e- (arbitrary; real WF is 4-5 V)
+    const LIFT = 0.2; // lift all V levels to keep the dropped phi in range
+    const DPHI0 = 0.12; // electrolytic: built-in phi step at zero bias
     // The wet panels apply the bias between two METALS (we control V_e-
     // differences, not V_e- vs V_Na+ directly — Mark 2026-07-10): a sliver
     // of counter-electrode on the right, whose ion couples to it at a
@@ -77,7 +86,7 @@
                 curveType: 'voltage',
                 labelFrac: 0.4,
                 x: [0, 0.3],
-                y: [vp, vp],
+                y: [vp + LIFT, vp + LIFT],
             },
             {
                 id: 'phi',
@@ -86,7 +95,7 @@
                 label: '\\phi',
                 labelFrac: 0.5,
                 x: [0.3, 0.7],
-                y: [vp - WF, vm - WF],
+                y: [vp + LIFT - WFD, vm + LIFT - WFD],
             },
             {
                 id: 'ver',
@@ -94,7 +103,7 @@
                 curveType: 'voltage',
                 showLabel: false,
                 x: [0.7, 1],
-                y: [vm, vm],
+                y: [vm + LIFT, vm + LIFT],
             },
         ]);
 
@@ -105,7 +114,7 @@
                 curveType: 'voltage',
                 labelFrac: 0.4,
                 x: [0, 0.32],
-                y: [vp, vp],
+                y: [vp + LIFT, vp + LIFT],
             },
             {
                 id: 'phi',
@@ -114,7 +123,7 @@
                 label: '\\phi',
                 labelFrac: 0.5,
                 x: [0.32, 0.44],
-                y: [vp - WF, vm - WF],
+                y: [vp + LIFT - WFD, vm + LIFT - WFD - DPHI0],
             },
             {
                 id: 'vion',
@@ -122,7 +131,7 @@
                 curveType: 'voltage',
                 labelFrac: 0.5,
                 x: [0.44, 0.88],
-                y: [vm - OFF, vm - OFF],
+                y: [vm + LIFT - OFF, vm + LIFT - OFF],
             },
             {
                 id: 'vel_r',
@@ -130,7 +139,7 @@
                 curveType: 'voltage',
                 showLabel: false,
                 x: [0.88, 1],
-                y: [vm, vm],
+                y: [vm + LIFT, vm + LIFT],
             },
         ]);
     }

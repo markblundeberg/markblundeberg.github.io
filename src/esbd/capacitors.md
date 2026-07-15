@@ -20,7 +20,7 @@ Nothing in that construction demands metal on both sides; any conductor's rail c
 <figure class="demo-container" style="max-width: 520px">
 {% include "esbd-diagrams/esbd-cap-family.njk" %}
 {% figcaption %}
-A dielectric capacitor two ways, one applied voltage across both (always between two metals, since that is what we actually control): metal–dielectric–metal, where the drop spans the full gap, and electrolytic, where it falls across a thin oxide between $V_{\mathrm{e}^-}$ and $V_{\mathrm{ion}}$. In the wet panel a counter-electrode sliver on the right couples to the ion at a fixed offset and passes the bias along. The vertical scale is schematic; in particular the work-function step down to $\phi$ is compressed (a real $\Phi/e$ is 4–5 V).
+A dielectric capacitor two ways, one applied voltage across both (always between two metals, since that is what we actually control): metal–dielectric–metal, where the drop spans the full gap, and electrolytic, where it falls across a thin oxide between $V_{\mathrm{e}^-}$ and $V_{\mathrm{ion}}$. In the wet panel a counter-electrode sliver on the right couples to the ion at a fixed offset and passes the bias along. The vertical scale is schematic; in particular the work-function step down to $\phi$ is compressed (a real $\Phi/e$ is 4–5 V). Note the electrolytic panel's $\phi$ keeps a small step even at zero bias: its two sides are different materials, and their surfaces have no reason to line up.
 {% endfigcaption %}
 </figure>
 
@@ -35,7 +35,7 @@ The {% wiki "supercapacitor" %} is this interface pushed to its engineering limi
 <figure class="demo-container" style="max-width: 340px">
 {% include "esbd-diagrams/esbd-cap-edl.njk" %}
 {% figcaption %}
-A bare metal–electrolyte interface under bias: the ladder soaks up the diffuse part of the drop within a Debye-length skin, while the compact (Stern) layer, the thin sliver between metal and solution, takes the rest as one more dielectric step. A counter-electrode sliver on the right passes the bias along, as before. The rung-to-carrier gap is widened for legibility; a truly concentrated electrolyte would put $V^\circ_{\mathrm{ion}}$ right on $V_{\mathrm{ion}}$.
+A bare metal–electrolyte interface under bias: the ladder soaks up the diffuse part of the drop within a Debye-length skin, while the compact (Stern) layer, the thin sliver between metal and solution, takes the rest as one more dielectric step. A counter-electrode sliver on the right passes the bias along, as before. The rung-to-carrier gap is widened for legibility; a truly concentrated electrolyte would put $V^\circ_{\mathrm{ion}}$ right on $V_{\mathrm{ion}}$. Even at zero bias a step survives across the compact layer: a real contact carries a built-in dipole.
 {% endfigcaption %}
 </figure>
 

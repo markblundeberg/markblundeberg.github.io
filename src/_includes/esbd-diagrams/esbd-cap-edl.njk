@@ -16,12 +16,22 @@
     // family figure: bias applied between two metals via a counter-electrode
     // sliver, phi drawn only in the unscreened gap, work function 0.25 V
     // (schematic, compressed).
-    const WF = 0.25;
+    // phi sits at an arbitrary display height and must MEET NOTHING: WFD is
+    // drawn big and the V levels are lifted so phi's endpoints stay visibly
+    // clear of every V_i and rung. Its right end tracks the ladder's surface
+    // point (the diffuse share of the drop) from PHI_GAP below; the constants
+    // combine to leave a 0.12 V built-in step across the compact layer at
+    // zero bias, since metal and solution are different materials and phi
+    // has no business running flat with nothing applied.
+    const WFD = 0.55; // schematic phi offset below the metal's V_e- (arbitrary; real WF is 4-5 V)
+    const LIFT = 0.2; // lift all V levels to keep the dropped phi in range
+    // PHI_GAP must exceed 0.06 + F_DIFF*v_max = 0.46, else phi's endpoint
+    // (which swings with the ladder, slope 0.4v) crosses V_ion (which rides
+    // the counter-metal, slope 0.5v) somewhere in the slider sweep.
+    const PHI_GAP = 0.55; // phi's clearance below the ladder's surface point
     const LAM = 0.03; // diffuse skin
     const F_DIFF = 0.4; // fraction of the drop taken by the diffuse layer
-    // ion couples to the counter-electrode at a fixed offset below its V_e-;
-    // 0.31 = WF + 0.06 makes phi run flat at zero bias.
-    const OFF = 0.31;
+    const OFF = 0.43; // ion couples to the counter-electrode this far below its V_e-
 
     const edl = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-container',
@@ -52,18 +62,22 @@
                 curveType: 'voltage',
                 labelFrac: 0.4,
                 x: [0, 0.34],
-                y: [vp, vp],
+                y: [vp + LIFT, vp + LIFT],
             },
             {
-                // the compact-layer drop: phi steps across the Stern sliver
-                // from the metal surface down to the elevated solution surface
+                // the compact-layer drop: phi steps across the Stern sliver,
+                // its right end shadowing the solution's elevated surface
+                // point from PHI_GAP below
                 id: 'phi',
                 speciesId: 'electron',
                 curveType: 'phi',
                 label: '\\phi',
                 labelFrac: 0.5,
                 x: [0.34, 0.42],
-                y: [vp - WF, vm - OFF + 0.06 + F_DIFF * v],
+                y: [
+                    vp + LIFT - WFD,
+                    vm + LIFT - OFF + 0.06 + F_DIFF * v - PHI_GAP,
+                ],
             },
             {
                 id: 'vion',
@@ -71,7 +85,7 @@
                 curveType: 'voltage',
                 labelFrac: 0.5,
                 x: [0.42, 0.88],
-                y: [vm - OFF, vm - OFF],
+                y: [vm + LIFT - OFF, vm + LIFT - OFF],
             },
             {
                 id: 'vel_r',
@@ -79,7 +93,7 @@
                 curveType: 'voltage',
                 showLabel: false,
                 x: [0.88, 1],
-                y: [vm, vm],
+                y: [vm + LIFT, vm + LIFT],
             },
             {
                 // the diffuse tail: the ladder soaks up its share of the drop
@@ -96,7 +110,11 @@
                 x: [...xe],
                 y: xe.map(
                     (x) =>
-                        vm - OFF + 0.06 + F_DIFF * v * Math.exp(-(x - 0.42) / LAM)
+                        vm +
+                        LIFT -
+                        OFF +
+                        0.06 +
+                        F_DIFF * v * Math.exp(-(x - 0.42) / LAM)
                 ),
             },
         ]);
