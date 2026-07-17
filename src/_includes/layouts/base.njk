@@ -12,7 +12,7 @@
         <link rel="canonical" href="{{ site.url }}{{ page.url }}" />
 
         {# Social cards (Open Graph + Twitter) #}
-        <meta property="og:type" content="{% if 'esbd_topic' in tags %}article{% else %}website{% endif %}" />
+        <meta property="og:type" content="{% if tags and 'esbd_topic' in tags %}article{% else %}website{% endif %}" />
         <meta property="og:title" content="{{ pageTitle | escape }}" />
         <meta property="og:description" content="{{ pageDesc | escape }}" />
         <meta property="og:url" content="{{ site.url }}{{ page.url }}" />

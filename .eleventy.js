@@ -12,6 +12,7 @@ export default async function myConfig(eleventyConfig) {
     // --- Passthrough Copy ---
     // Copy static assets directly to the output directory (_site)
     // Adjust paths if your structure differs or you add more static folders
+    eleventyConfig.addPassthroughCopy({ 'src/robots.txt': 'robots.txt' });
     eleventyConfig.addPassthroughCopy('src/css');
     eleventyConfig.addPassthroughCopy('src/js');
     eleventyConfig.addPassthroughCopy('src/img');
