@@ -20,31 +20,23 @@ body {
     padding: 0 0.2em; /* Side padding for mobile */
 }
 
-/* Sidebar Navigation Styling */
+/* Sidebar Navigation Styling (chapter tree) */
 .site-nav {
-    /* Mobile: Stacks above main content by default */
-    padding: 0.5em 0;
-    margin-bottom: 1.5em;
-    border-bottom: 1px solid #eee; /* Separator on mobile */
-}
-.site-nav h3 {
-    margin-top: 0;
-    font-size: 1.1em;
+    /* Mobile: hidden — the prev/Topics/next bars handle navigation there. */
+    display: none;
 }
 .site-nav ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
-.site-nav li {
-    margin-bottom: 0.25em;
-}
 .site-nav a {
     text-decoration: none;
-    color: #333;
-    font-size: 0.95em;
+    color: #444;
+    font-size: 0.85em;
+    line-height: 1.3;
     display: block;
-    padding: 0.2em 0;
+    padding: 0.15em 0;
 }
 .site-nav a:hover {
     color: #0077cc;
@@ -52,6 +44,38 @@ body {
 .site-nav a[aria-current='page'] {
     font-weight: bold;
     color: #005599;
+}
+.site-nav .site-nav-home {
+    font-size: 0.8em;
+    color: #888;
+}
+.site-nav .site-nav-book {
+    font-weight: bold;
+    font-size: 0.95em;
+    color: #333;
+    margin-bottom: 0.5em;
+}
+.site-nav .site-nav-section {
+    font-size: 0.72em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #999;
+    margin: 0.9em 0 0.2em;
+}
+.site-nav .site-nav-tier {
+    font-size: 0.8em;
+    font-style: italic;
+    color: #999;
+    margin-top: 1.2em;
+    padding-top: 0.6em;
+    border-top: 1px solid #eee;
+}
+.site-nav .site-nav-contents {
+    margin-top: 0.9em;
+}
+.site-nav .site-nav-contents a {
+    color: #888;
 }
 
 /* Styling for the Previous/Next Navigation */
@@ -126,13 +150,15 @@ main {
     }
 
     .site-nav {
-        flex: 0 0 200px; /* Sidebar: Don't grow, don't shrink, base width 200px */
+        display: block;
+        flex: 0 0 210px; /* Sidebar: Don't grow, don't shrink, fixed width */
         order: -1; /* Ensure nav appears first (left side) */
-        border-bottom: none; /* Remove mobile separator */
-        padding-top: 1em; /* Align top with main content padding */
-        /* Optional: Make sidebar sticky */
-        /* position: sticky; */
-        /* top: 2em; */
+        padding: 1.5em 0 1em; /* Align top with main content padding */
+        /* Sticky, with its own scrollbar if the tree outgrows the viewport */
+        position: sticky;
+        top: 0;
+        max-height: 100vh;
+        overflow-y: auto;
     }
 
     main {

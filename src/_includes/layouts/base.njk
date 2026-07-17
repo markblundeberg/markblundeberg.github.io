@@ -31,25 +31,40 @@
     </head>
     <body>
         <div class="layout-wrapper">
-            {# Sidebar Navigation #}
-            <nav class="site-nav">
-                <h3>Navigation</h3>
-                {# Optional heading #}
-                {# Render the Eleventy Navigation menu here #}
-                {# Example using a simple list #}
+            {# Sidebar: the book's chapter tree (desktop only; on mobile the
+               prev/Topics/next bars do the navigating). Order comes from the
+               esbd_topic collection (orderESBD); section headings + tier
+               break come from _data/esbdMeta.js. #}
+            <nav class="site-nav" aria-label="Chapters">
+                <a class="site-nav-home" href="/">{{ site.author }}</a>
+                <a
+                    class="site-nav-book"
+                    href="/esbd/"
+                    {% if page.url == '/esbd/' %}aria-current="page"{% endif %}
+                    >{{ site.title }}</a
+                >
                 <ul>
-                    {%- for entry in collections.all | eleventyNavigation %}
-                        <li>
-                            <a
-                                href="{{ entry.url | url }}"
-                                {% if entry.url == page.url %}aria-current="page"{% endif %}
-                                >{{ entry.title }}</a
-                            >
-                        </li>
+                    {%- for topic in collections.esbd_topic %}
+                        {%- if topic.url != '/esbd/' %}
+                            {%- if topic.fileSlug == esbdMeta.rabbitHolesStart %}
+                                <li class="site-nav-tier">The rabbit holes</li>
+                            {%- endif %}
+                            {%- if esbdMeta.sectionStarts[topic.fileSlug] %}
+                                <li class="site-nav-section">{{ esbdMeta.sectionStarts[topic.fileSlug] }}</li>
+                            {%- endif %}
+                            <li>
+                                <a
+                                    href="{{ topic.url | url }}"
+                                    {% if topic.url == page.url %}aria-current="page"{% endif %}
+                                    >{{ topic.data.title }}</a
+                                >
+                            </li>
+                        {%- endif %}
                     {%- endfor %}
+                    <li class="site-nav-contents">
+                        <a href="/esbd/topics/">Full contents &rarr;</a>
+                    </li>
                 </ul>
-                {# Or use the filter for nested lists if you have hierarchy: #}
-                {# {{ collections.all | eleventyNavigation | eleventyNavigationToHtml | safe }} #}
             </nav>
 
             {# Main content block - child layouts will insert content here #}
