@@ -3,8 +3,22 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        {# Use front matter title or a default #}
-        <title>{{ title | default("My Site") }}</title>
+        {# Title/description from front matter, falling back to the per-topic
+           table in _data/esbdMeta.js, then the site defaults (_data/site.js). #}
+        {% set pageTitle = title | default(site.title) %}
+        {% set pageDesc = description | default(esbdMeta.descriptions[page.fileSlug]) | default(site.description) %}
+        <title>{{ pageTitle }}</title>
+        <meta name="description" content="{{ pageDesc | escape }}" />
+
+        {# Social cards (Open Graph + Twitter) #}
+        <meta property="og:type" content="{% if 'esbd_topic' in tags %}article{% else %}website{% endif %}" />
+        <meta property="og:title" content="{{ pageTitle | escape }}" />
+        <meta property="og:description" content="{{ pageDesc | escape }}" />
+        <meta property="og:url" content="{{ site.url }}{{ page.url }}" />
+        <meta property="og:image" content="{{ site.url }}{{ site.ogImage }}" />
+        <meta property="og:site_name" content="{{ site.title }}" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="{{ site.twitter }}" />
 
         <link rel="icon" href="/img/favicon.ico" />
 
