@@ -4,6 +4,7 @@ import eleventyNavigationPlugin from '@11ty/eleventy-navigation';
 import markdownItKatex from '@vscode/markdown-it-katex';
 import katex from 'katex';
 import markdownItFootnote from 'markdown-it-footnote';
+import markdownItAnchor from 'markdown-it-anchor';
 import fs from 'node:fs';
 
 // `export default` is used for ESM
@@ -41,6 +42,23 @@ export default async function myConfig(eleventyConfig) {
     // The markdown-it-footnote package is a CJS module without a default export.
     // The actual plugin function is on the .default property of the imported object.
     md.use(markdownItFootnote);
+
+    // Heading ids, so sections are deep-linkable (/esbd/lib/#some-section).
+    // Slugs come from the raw heading text with any $TeX$ stripped, so KaTeX
+    // markup never leaks into URLs.
+    md.use(markdownItAnchor, {
+        level: [2, 3], // h1 is the page itself; leave it bare
+        slugify: (s) =>
+            encodeURIComponent(
+                s
+                    .trim()
+                    .replace(/\$[^$]*\$/g, '') // drop inline math
+                    .toLowerCase()
+                    .replace(/[^a-z0-9 -]/g, '')
+                    .trim()
+                    .replace(/\s+/g, '-')
+            ),
+    });
 
     // --- Debug: dump the post-Nunjucks, pre-markdown-it intermediate ---
     // Markdown pages are run through Nunjucks first (includes/macros expanded),
