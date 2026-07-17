@@ -18,8 +18,8 @@
 - [_Basic electrostatics_](/esbd/basicelectrostatics/) - Debye screening and the local charge neutrality approximation.
 - [_Capacitance_](/esbd/capacitors/) - Dielectric and chemical capacitance; the capacitive divider.
 - [_Basic transport_](/esbd/basictransport/) - Ohm's law, concentration polarization, and liquid junction potentials.
-- [_Other conductors_](/esbd/other_conductors/) - Metals, fast ionic conductors, and mixed conductors.
 - [_Saturation_](/esbd/saturation/) (application spotlight) - The common reason why current saturates in transistors and electrochemical processes.
+- [_Other conductors_](/esbd/other_conductors/) - Metals, fast ionic conductors, and mixed conductors.
 
 *Redox and electrode potentials*:
 - [_Half-reactions_](/esbd/half/) - Electrons "in solution": redox and the Nernst equation in $V_i$ land. Standard electrode potentials as floating levels $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$.

@@ -107,4 +107,4 @@ Concentration polarization and the liquid junction are, in the end, the same ste
 
 Giving each species its own Ohm's law, $J_i = -\sigma_i\nabla V_i$, folds drift and diffusion back into the single quantity that actually drives them, and turns every transport resistance into a visible slope. The lumped "ohmic" law is just the special case of uniform concentration, while concentration polarization and diffusion potentials are what the per-species picture captures and the lumped one misses.
 
-[**NEXT TOPIC: Other conductors**](../other_conductors/)
+[**NEXT TOPIC: Saturation**](../saturation/)

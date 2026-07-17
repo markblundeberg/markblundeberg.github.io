@@ -2,12 +2,12 @@
 layout: layouts/esbd_topic.njk
 title: 'Other conductors'
 tags: [page, esbd_topic]
-orderESBD: 28
+orderESBD: 29
 ---
 
 # {{title}}
 
-In the dilute solutions and semiconductors of the previous topics, the standard-state ladder did real work: $V^\circ_i$ set the concentration scale and bent to enforce neutrality. Many conductors are not like that. In a metal, a fast ionic conductor, or a concentrated electrolyte, the carriers are so dense that the standard states and band structure either grow hopelessly complicated or stop mattering at all, and the diagram simplifies to the $V_i$ themselves.
+In the dilute solutions and semiconductors of the previous topics, the standard-state ladder did real work: $V^\circ_i$ set the concentration scale, bent to enforce neutrality, and, in the [saturation](../saturation/) drama just past, its pinning set the very ceiling on current. Many conductors are not like that. In a metal, a fast ionic conductor, or a concentrated electrolyte, the carriers are so dense that the standard states and band structure either grow hopelessly complicated or stop mattering at all, and the diagram simplifies to the $V_i$ themselves.
 
 ## Metals: the transport-only limit
 
@@ -49,4 +49,6 @@ The same "just plot the $V_i$" attitude carries the messier cases. In a **concen
 
 For dilute solutions and semiconductors, the standard states and band edges are indispensable coordinates. For metals, fast ionic conductors, and the other dense conductors here, those references fade and only the species voltages remain. One transport law spans the whole range, $J_i = -\sum_j \sigma_{ij}\nabla V_j$, from the $1\times1$ metal to the fully cross-coupled mixed conductor, and in every case it is the $V_i$, never a $V^\circ_i$, that the diagram needs.
 
-[**NEXT TOPIC: Saturation**](../saturation/)
+With this, our survey of conduction is complete, and the mixed conductors have already posed the next question: where the electronic and the ionic circuit meet, something must hand the charge from one to the other. That handoff is a redox reaction, and the coming topics take up this "electrons in solution" story: half-reactions, electrode potentials, and what they really mean on a $V_i$ diagram.
+
+[**NEXT TOPIC: Half-reactions**](../half/)

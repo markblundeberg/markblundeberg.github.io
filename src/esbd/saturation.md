@@ -2,15 +2,14 @@
 layout: layouts/esbd_topic.njk
 title: 'Saturation'
 tags: [page, esbd_topic]
-orderESBD: 29
+orderESBD: 28
 ---
 
 # {{title}}
 
 Drive a current through a uniform block of a single conductor and the rule is the comfortable one: raise the voltage across the terminals and the current rises in step. Real devices keep breaking that rule. Past a certain point the current stops responding to voltage at all, flattening into a ceiling it refuses to cross. It **saturates**.
 
-What makes saturation worth its own topic is that the same mechanism turns up in places that look unrelated: the "mass-transfer limit" of electroplating, the "pinch-off" of a field-effect transistor, the minority-carrier sweep-out of a bipolar transistor, the "salt depletion" of a battery electrolyte. In each, a *spectator* (an abundant blocked species, or a gate) screens the field and forces the active carrier into a depleted choke point, and on a $V_i$ diagram they all look the same. It is the point the [transport topic](../basictransport/) left hanging: we set the voltage, but the current that flows has a ceiling, fixed by where the active carrier runs out. We also step back from the dense conductors of the [previous topic](../other_conductors/), which could shrug off their standard states entirely; saturation happens in dilute media, and its whole mechanism turns on where neutrality lets $V^\circ_i$ sit.
-
+What makes saturation worth its own topic is that the same mechanism turns up in places that look unrelated: the "mass-transfer limit" of electroplating, the "pinch-off" of a field-effect transistor, the minority-carrier sweep-out of a bipolar transistor, the "salt depletion" of a battery electrolyte. In each, a *spectator* (an abundant blocked species, or a gate) screens the field and forces the active carrier into a depleted choke point, and on a $V_i$ diagram they all look the same. It is the point the [transport topic](../basictransport/) left hanging: we set the voltage, but the current that flows has a ceiling, fixed by where the active carrier runs out.
 ## The choke point
 
 Apply a voltage and, for the first instant before anything moves, an electric field appears and every carrier drifts in unison, but that does not last: within a moment one species takes over the job of carrying current while the others, the spectators, find themselves blocked. (In a transistor the new steady state arrives in well under a nanosecond; in an electrochemical cell it can take minutes or hours.) Let us look at that steady state, where a single active species $i$ carries all the current.
@@ -69,6 +68,6 @@ Soft pinning, side by side, one drive slider for both. Left: a FET channel, wher
 
 A silicon transistor and a plating bath choke off their current for one and the same reason. A flat-voltage rail, whether the FET's gate, the BJT base's majority sea, or the electrolyte's blocked spectator, couples capacitively to the active carrier's standard state and holds it in place. Drive the carrier and its voltage slides away from that pinned level, thinning the concentration toward zero at the draining boundary, where the conductivity collapses and the current can grow no more. Hard pinning leaves the carrier diffusing alone; soft pinning leaves a field to push it; either way the ceiling is the same.
 
-This closes our long comparison between electrons in semiconductors and ions in solution. The next several topics change tack, turning to "electrons in solution": redox reactions, and what electrode potential really means on a $V_i$ diagram.
+This closes our long comparison between electrons in semiconductors and ions in solution. It also leaned throughout on dilute media, where neutrality speaks through the standard-state ladder; the conductors where that ladder never mattered are next.
 
-[**NEXT TOPIC: Half-reactions**](../half/)
+[**NEXT TOPIC: Other conductors**](../other_conductors/)
