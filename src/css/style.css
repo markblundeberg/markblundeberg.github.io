@@ -627,3 +627,11 @@ figure {
 }
 
 /* ====== End XYPlot Styles ====== */
+
+/* ====== Print ====== */
+@media print {
+    .site-nav,
+    .pagination-nav {
+        display: none;
+    }
+}
