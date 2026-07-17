@@ -1,6 +1,6 @@
 // Site-wide metadata (canonical URL, social-card defaults).
 export default {
-    url: 'https://markblundeberg.github.io',
+    url: 'https://marklundeberg.com',
     title: 'Band Diagrams for Batteries',
     author: 'Mark Lundeberg',
     twitter: '@MarkLundeberg',

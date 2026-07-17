@@ -9,6 +9,7 @@
         {% set pageDesc = description | default(esbdMeta.descriptions[page.fileSlug]) | default(site.description) %}
         <title>{{ pageTitle }}</title>
         <meta name="description" content="{{ pageDesc | escape }}" />
+        <link rel="canonical" href="{{ site.url }}{{ page.url }}" />
 
         {# Social cards (Open Graph + Twitter) #}
         <meta property="og:type" content="{% if 'esbd_topic' in tags %}article{% else %}website{% endif %}" />
