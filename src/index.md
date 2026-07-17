@@ -1,6 +1,6 @@
 ---
 layout: layouts/base.njk
-title: 'Homepage'
+title: 'Mark Lundeberg'
 tags: page
 eleventyNavigation:
     key: Home
