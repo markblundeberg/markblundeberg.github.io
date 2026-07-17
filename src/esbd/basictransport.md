@@ -9,36 +9,19 @@ orderESBD: 27
 
 $V_i$ hands us transport almost for free: back in [species voltage](../v_i/) we saw that a carrier simply flows down its own $V_i$ slope, one of the quiet beauties of the picture, and we have even glimpsed it in action already, in [a battery's discharge](../lib/) and a [driven double layer](../basicelectrostatics/). A working device is never quite at equilibrium; the moment current flows the $V_i$ lines tilt, and the appeal of the picture is that those tilts are precisely the dissipation. Where the [previous topic](../capacitors/) treated the storage-side response, charge banked against a voltage difference, this one takes up its flow-side twin: current in proportion to a voltage gradient, and everything that one simple law implies once the lines are free to slope.
 
-## One driving force per species
-
-The thermodynamic force on a carrier is the gradient of its electrochemical potential, $-\nabla\bar\mu_i$. Dividing by charge, as we always do, the force per unit charge is just
-
-$$ -\nabla V_i. $$
-
-That is the whole of what drives a current: each species is pushed down its own $V_i$ slope. On the band diagram the reading could not be more direct. A flat $V_i$ ordinarily carries no net current, the species sitting at equilibrium; a sloping $V_i$ marks a driving force, and the steeper the slope, the harder the dissipation. Resistance is visible as gradient.^[The exception is a perfect conductor: as $\sigma_i \to \infty$ the slope needed to carry a given current shrinks to zero, so a superconductor keeps $V_i$ flat *while* carrying current, the finite product $J_i = -\sigma_i\nabla V_i$ surviving the $0\times\infty$. It is that well-defined flat $V_{\mathrm{e}^-}$ that lets it connect sensibly to ordinary conductors; see [other conductors](../other_conductors/).]
-
 ## Drift and diffusion are one law
 
-Because the force is $-\nabla V_i$, the current of species $i$ obeys a per-species Ohm's law,
+The thermodynamic force on a carrier is the gradient of its electrochemical potential, $-\nabla\bar\mu_i$; dividing by charge, as we always do, the force per unit charge is just $-\nabla V_i$, and the current it drives obeys a per-species Ohm's law,
 
 $$ J_i = -\sigma_i \nabla V_i, $$
 
-with $J_i$ the charge current density and $\sigma_i$ the species conductivity.^[Driving transport one species at a time by its own electrochemical potential is the core of the Jamnik–Maier equivalent-circuit treatment of mixed conductors, in which each carrier rides a "rail" at $\bar\mu_i/(z_i e)$, exactly our $V_i$. J. Jamnik and J. Maier, [Generalised equivalent circuits for mass and charge transport](https://doi.org/10.1039/b100180i), *Phys. Chem. Chem. Phys.* **3**, 1668 (2001).] This one equation already holds the drift-diffusion machinery that electrochemistry and semiconductor physics usually present as two separate mechanisms. Dividing through by the molar charge $z_i F$ recasts it as the {% wiki "Nernst–Planck equation" %} in its familiar form, a number-current density carrying a drift term and a diffusion term:
+with $J_i$ the charge current density and $\sigma_i$ the species conductivity.^[Driving transport one species at a time by its own electrochemical potential is the core of the Jamnik–Maier equivalent-circuit treatment of mixed conductors, in which each carrier rides a "rail" at $\bar\mu_i/(z_i e)$, exactly our $V_i$. J. Jamnik and J. Maier, [Generalised equivalent circuits for mass and charge transport](https://doi.org/10.1039/b100180i), *Phys. Chem. Chem. Phys.* **3**, 1668 (2001).] On the band diagram the reading could not be more direct: a flat $V_i$ ordinarily carries no net current, the species sitting at equilibrium, while a sloping $V_i$ marks a driving force, and the steeper the slope, the harder the dissipation. Resistance is visible as gradient.^[The exception is a perfect conductor: as $\sigma_i \to \infty$ the slope needed to carry a given current shrinks to zero, so a superconductor keeps $V_i$ flat *while* carrying current, the finite product $J_i = -\sigma_i\nabla V_i$ surviving the $0\times\infty$. It is that well-defined flat $V_{\mathrm{e}^-}$ that lets it connect sensibly to ordinary conductors; see [other conductors](../other_conductors/).]
 
-$$
-\begin{aligned}
-N_i &= \frac{J_i}{z_i F} = -\frac{\sigma_i}{z_i F}\,\nabla V_i \\
-&= \underbrace{-\,u_i\, c_i\, \nabla\phi}_{\text{drift}} \;\underbrace{-\;D_i\, \nabla c_i}_{\text{diffusion}},
-\end{aligned}
-$$
+This one equation already holds the drift-diffusion machinery that electrochemistry and semiconductor physics usually present as two separate mechanisms. In an ideal solution the gap formula $V_i = V^\circ_i + \tfrac{RT}{z_i F}\ln(c_i/c^\circ)$ differentiates to $\nabla V_i = \nabla V^\circ_i + \tfrac{RT}{z_i F}\tfrac{\nabla c_i}{c_i}$, and the current splits with it:
 
-where the split uses $\nabla V_i = \nabla\phi + \tfrac{RT}{z_i F}\tfrac{\nabla c_i}{c_i}$ in an ideal homogeneous medium. The two coefficients are the ion's diffusion coefficient $D_i$ and its (signed) electrical mobility $u_i$, and because both descend from the single conductivity they are not independent:
+$$ J_i = \underbrace{-\,\sigma_i\, \nabla V^\circ_i}_{\text{drift current}}\; \underbrace{-\;\frac{RT}{z_i F}\,\sigma_i\, \frac{\nabla c_i}{c_i}}_{\text{diffusion current}}, $$
 
-$$ \sigma_i = z_i F\, u_i\, c_i = \frac{z_i^2 F^2 D_i\, c_i}{RT}. $$
-
-Reading off the last equality, $u_i$ and $D_i$ are tied by the {% wiki "Einstein relation" %}, $u_i = z_i F D_i/RT$. The Einstein relation is therefore automatic here, a consequence of drift and diffusion being two faces of the one $\sigma_i\nabla V_i$.^[The same construction gives the generalized Einstein relation for carriers that stray from ideal-dilute behaviour, such as the degenerate electron gas, by replacing $z_i^2F^2c_i/RT$ with the true [internal chemical capacitance](../capacitors/). In strongly non-ideal, concentrated solutions the species also stop moving independently, and the transport coefficients become a coupled matrix, the territory of the Maxwell–Stefan or Onsager equations.]
-
-There is a subtlety hiding in the drift term. We assumed $\nabla V^\circ_i = \nabla\phi$, but that holds only inside a uniform medium. Where the medium itself changes, at an interface or through a graded material, the standard state carries its own gradient, and that extra piece is a real driving force with no electrostatic origin: a "quasi-electric field," the reason the textbook drift-diffusion split quietly fails across interfaces.^[This is the transport face of the band-offset story from the [semiconductors](../solidstate/) and [bipolar](../bipolar/) topics: a step or grade in $V^\circ_i$ pushes carriers even where $\phi$ is flat. Kroemer's "quasi-electric fields" in graded heterojunctions are exactly this.] The [inhomogeneities](../inhomog/) topic takes this up properly, graded densities of states and all. Beyond conduction, currents can also be driven by advection, thermoelectric gradients, and magnetic induction, but plain $-\nabla V_i$ conduction is our concern here.
+a drift current driven down the sloping ladder and a diffusion current driven down the concentration gradient. Notice both terms wear the same $\sigma_i$: the two mechanisms are two pieces of the one slope $-\nabla V_i$, free to trade against each other, and the figure below plays with exactly that freedom.
 
 <figure class="demo-container" style="max-width: 440px">
 {% include "esbd-diagrams/esbd-tb-driftdiff.njk" %}
@@ -46,6 +29,18 @@ There is a subtlety hiding in the drift term. We assumed $\nabla V^\circ_i = \na
 One current, split two ways. The slope of $V_i$ is held fixed (fixed current) while the slider reapportions it between drift (the shared slope of $V^\circ_i$ and $\phi$) and diffusion (the changing concentration gap); the lower panel shows the concentration itself, a gentle and nearly linear ramp. The split is bookkeeping; the total slope is what drives the current. It is also not a tug-of-war that either side has to win: past the ends of the $[0,1]$ split, drift and diffusion oppose each other, one overcompensating the other. The axis is schematic: at fixed current a heavily diffusive profile would in truth steepen toward its dilute end, since conductivity falls with concentration, and the next figure computes exactly that bending.
 {% endfigcaption %}
 </figure>
+
+These are precisely the terms of the {% wiki "Nernst–Planck equation" %}: divide through by the molar charge $z_i F$, trade $\nabla V^\circ_i$ for $\nabla\phi$, and the same expansion reappears as a number-current density,
+
+$$ N_i = \frac{J_i}{z_i F} = \underbrace{-\,u_i\, c_i\, \nabla\phi}_{\text{drift}} \;\underbrace{-\;D_i\, \nabla c_i}_{\text{diffusion}}, $$
+
+now dressed in its textbook coefficients, the ion's (signed) electrical mobility $u_i$ and its diffusion coefficient $D_i$. Because both descend from the single conductivity they are not independent:
+
+$$ \sigma_i = z_i F\, u_i\, c_i = \frac{z_i^2 F^2 D_i\, c_i}{RT}. $$
+
+Reading off the last equality, $u_i$ and $D_i$ are tied by the {% wiki "Einstein relation" %}, $u_i = z_i F D_i/RT$. The Einstein relation is therefore automatic here, a consequence of drift and diffusion being two faces of the one $\sigma_i\nabla V_i$.^[The same construction gives the generalized Einstein relation for carriers that stray from ideal-dilute behaviour, such as the degenerate electron gas, by replacing $z_i^2F^2c_i/RT$ with the true [internal chemical capacitance](../capacitors/). In strongly non-ideal, concentrated solutions the species also stop moving independently, and the transport coefficients become a coupled matrix, the territory of the Maxwell–Stefan or Onsager equations.]
+
+And that swap deserves a closer look: besides renaming the coefficients, the Nernst–Planck form quietly replaced $\nabla V^\circ_i$ with $\nabla\phi$. Inside a uniform medium the two gradients are equal and the trade costs nothing. But where the medium itself changes, at an interface or through a graded material, the standard state carries its own gradient, and that extra piece is a real driving force with no electrostatic origin: a "quasi-electric field," the reason the textbook drift-diffusion split quietly fails across interfaces.^[This is the transport face of the band-offset story from the [semiconductors](../solidstate/) and [bipolar](../bipolar/) topics: a step or grade in $V^\circ_i$ pushes carriers even where $\phi$ is flat. Kroemer's "quasi-electric fields" in graded heterojunctions are exactly this.] The [inhomogeneities](../inhomog/) topic takes this up properly, graded densities of states and all. Beyond conduction, currents can also be driven by advection, thermoelectric gradients, and magnetic induction, but plain $-\nabla V_i$ conduction is our concern here.
 
 ## The "ohmic current" shortcut
 
