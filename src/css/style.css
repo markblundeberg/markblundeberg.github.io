@@ -584,13 +584,6 @@ figure {
     /* Styles applied dynamically */
 }
 
-.level-line {
-    /* Default stroke/width set dynamically, but could add defaults */
-    /* stroke: black; */
-    /* stroke-width: 2; */
-    shape-rendering: crispEdges;
-}
-
 .level-label > span.rp-label-span {
     font-size: 10px;
     padding: 1px 3px;
