@@ -36,7 +36,7 @@ Set the redundant metal level aside and three remain: the reaction's actual leve
 
 $$ E = E^\circ + \frac{RT}{zF}\ln\!\frac{a_{\mathrm{Ox}}}{a_{\mathrm{Red}}}, $$
 
-and the three quantities in it are the three gaps among those levels:
+in other words the [floating Nernst equation](../half/) of the previous topic with the reference level subtracted from both sides. The three quantities in it are the three gaps among those levels:
 
 $$
 \begin{aligned}
@@ -70,11 +70,11 @@ Even this has slippery edges, and the diagram helps by making them concrete: $V_
 <figure class="demo-container" style="max-width: 460px">
 {% include "esbd-diagrams/esbd-kin-driven.njk" %}
 {% figcaption %}
-One electrode under load, in space. The step at the interface is the surface overpotential; through the unstirred layer the reaction's implied level bends as the couple's concentrations polarize (the supported ladder stays put), and out in the stirred bulk every level tilts together ohmically: $E_{\mathrm{eq}}$ has become a field, the spatially varying equilibrium level of this section made literal. Magnitudes are cartoon-sized.
+One electrode under load, in space. The step at the interface is the surface overpotential; through the unstirred layer the reaction's implied level bends as the couple's concentrations polarize, and out in the stirred bulk every level tilts together ohmically: $E_{\mathrm{eq}}$ has become a field, the spatially varying equilibrium level of this section made literal. Note that the supporting electrolyte pins the ladder only [softly](../saturation/), so the $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ rung riding it keeps bending all the way to the interface: no flat "true SHE" level waits in there to be sampled. Magnitudes are cartoon-sized.
 {% endfigcaption %}
 </figure>
 
-**Where is the reference?** The deeper gotcha is then *where* the reference sits, more than what it is. An actual reference electrode samples $V^\circ$ at the point where its tip sits, and the reading then carries the ohmic drop between that point and the working electrode, so it depends on where you place the tip. The usual escape is to flatten the bulk — subtract the $iR$ drop, reach in with a Luggin capillary, or swamp the cell with supporting electrolyte — so the reference samples a position-independent bulk. That works in a roomy, stirred analytical cell; it fails in a battery polarized wall to wall, where there is no flat bulk at all and "the electrode potential" quietly loses its referent. This is exactly where reading $V_{\mathrm{e}^-}(x)$ and $V^\circ(x)$ off the diagram beats clinging to a single number $E$.^[This whole knot is the subject of Boettcher, S. W., et al. (2021). [Potentially Confusing: Potentials in Electrochemistry.](https://doi.org/10.1021/acsenergylett.0c02443) ACS Energy Letters, 6(1), 261–266. The $V_i$ diagram is, in effect, their clarification drawn out.]
+**Where is the reference?** The deeper gotcha is then *where* the reference sits, more than what it is. An actual reference electrode samples $V^\circ$ at the point where its tip sits, and the reading then carries the ohmic drop between that point and the working electrode, so it depends on where you place the tip. The usual escape is to flatten the bulk — subtract the $iR$ drop, reach in with a Luggin capillary, or swamp the cell with supporting electrolyte — so the reference samples a position-independent bulk. That works in a roomy, stirred analytical cell, at least down to the unstirred layer's own creeping gradients (figure above); it fails outright in a battery polarized wall to wall, where there is no flat bulk at all and "the electrode potential" quietly loses its referent. This is exactly where reading $V_{\mathrm{e}^-}(x)$ and $V^\circ(x)$ off the diagram beats clinging to a single number $E$.^[This whole knot is the subject of Boettcher, S. W., et al. (2021). [Potentially Confusing: Potentials in Electrochemistry.](https://doi.org/10.1021/acsenergylett.0c02443) ACS Energy Letters, 6(1), 261–266. The $V_i$ diagram is, in effect, their clarification drawn out.]
 
 **Mixed potentials.** Finally, a real electrode may couple to several half-reactions at once, each with its own $E_{\mathrm{eq}}$; the electrode settles at a compromise mixed potential that matches none of them: one $V_{\mathrm{e}^-}$ line sitting among several dashed reaction levels.
 

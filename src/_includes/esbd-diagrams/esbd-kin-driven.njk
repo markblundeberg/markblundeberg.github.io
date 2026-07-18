@@ -12,8 +12,9 @@
     // using the same spatial vocabulary as the concpol/saturation figures:
     // - charge-transfer step at the interface: eta = 0.08·asinh(j) (BV-ish)
     // - unstirred layer: linear c(x), so the activity term bends the
-    //   reaction level logarithmically while the (supported) ladder stays
-    //   flat there
+    //   reaction level logarithmically; the supporting electrolyte pins
+    //   the ladder only SOFTLY (finite support), leaving it a residual
+    //   slope ∝ j there instead of dead flat
     // - stirred bulk: uniform c, everything tilts together ohmically.
     // At j = 0 all of it flattens back to equilibrium. Magnitudes are
     // cartoon-sized for legibility, not computed from a real cell.
@@ -25,6 +26,7 @@
     const ACT = 0.18; // bulk activity gap V_rxn − V°_rxn
     const V_SHE = 0.2; // local SHE reference rung, pre-shift (rides the ladder)
     const R_OHM = 0.035,
+        SOFT = 0.012, // residual ladder bend across the unstirred layer, per unit j (soft pinning)
         ETA0 = 0.08;
 
     const diagram = new ElectrochemicalSpeciesBandDiagram(
@@ -53,15 +55,17 @@
             x >= XB ? 1 : 1 + 0.3 * j * (1 - (x - XIF) / (XB - XIF));
         const conc = (x) => DEC * Math.log10(c(x) / (2 - c(x)));
         const tilt = (x) => R_OHM * j * (1 - Math.max(x, XB));
+        const soft = (x) =>
+            x >= XB ? 0 : SOFT * j * (1 - (x - XIF) / (XB - XIF));
         const eta = ETA0 * Math.asinh(j);
         // Anchor the ELECTRODE level (the quantity you actually set), not the
         // arbitrary right edge of the plot: the metal sits at a fixed V_ELEC,
         // the interface reaction level is eta away from it, and the whole
         // solution profile floats off that — so V°_e- at the right limit
         // moves with the current instead of being pinned there.
-        const shift = V_ELEC - eta - (V_BULK + conc(XIF) + tilt(XIF));
-        const vRxn = (x) => V_BULK + conc(x) + tilt(x) + shift;
-        const vStd = (x) => V_BULK - ACT + tilt(x) + shift;
+        const shift = V_ELEC - eta - (V_BULK + conc(XIF) + tilt(XIF) + soft(XIF));
+        const vRxn = (x) => V_BULK + conc(x) + tilt(x) + soft(x) + shift;
+        const vStd = (x) => V_BULK - ACT + tilt(x) + soft(x) + shift;
         const vMetal = V_ELEC;
 
         diagram.updateTraceData([
@@ -90,15 +94,16 @@
                 y: xs.map(vStd),
             },
             {
-                // the local SHE reference rung rides the ladder (flat through
-                // the supported layer, ohmic tilt in the bulk): the electrode
-                // potential "vs SHE" is the V_e-(metal) ↔ this-line gap
+                // the local SHE reference rung rides the ladder (soft-pinned
+                // slope through the unstirred layer, ohmic tilt in the bulk):
+                // the electrode potential "vs SHE" is the V_e-(metal) ↔
+                // this-line gap, and it varies with position all the way in
                 id: 'she_std',
                 speciesId: 'electron',
                 curveType: 'standardStateImplied',
                 label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{SHE})',
                 x: xs,
-                y: xs.map((x) => V_SHE + tilt(x) + shift),
+                y: xs.map((x) => V_SHE + tilt(x) + soft(x) + shift),
             },
         ]);
 
