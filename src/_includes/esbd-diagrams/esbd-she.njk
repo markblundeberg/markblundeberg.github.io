@@ -66,12 +66,42 @@
                 y: [V_H, V_H],
             },
             {
+                // the H+ identity of the dual line, drawn as a true red rung
+                // BEHIND the dashed SHE overlay: it carries the cation
+                // hatching, while the SHE line stays bare (Gerischer rule)
                 id: `h_std_trace`,
                 speciesId: 'hplus',
                 curveType: 'standardState',
-                showLabel: true,
+                showLabel: false, // named by the shared dual-identity label
                 x: [b[1], b[2]],
                 y: [V_H_std, V_H_std],
+            },
+            {
+                // one line, two names: V°_e-(SHE) coincides with V°_H+
+                // under the μ°_H2 = 0 convention (same as ref-junction fig)
+                id: `she_std_trace`,
+                speciesId: 'electron',
+                curveType: 'standardStateImplied',
+                showLabel: true,
+                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{SHE})\\,{=}\\,V^\\circ_{\\mathrm{H}^+}',
+                labelFrac: 0.05,
+                labelVAlign: 'bottom',
+                x: [b[1], b[2]],
+                y: [V_H_std, V_H_std],
+            },
+            {
+                // the couple's implied electron level: the metal's V_e-
+                // carried into the solution by the equilibrated reaction
+                id: `implied_trace`,
+                speciesId: 'electron',
+                curveType: 'voltageImplied',
+                showLabel: true,
+                label: 'V_{\\mathrm{e}^-}(\\mathrm{H}^+/\\mathrm{H_2})',
+                labelFrac: 0.97,
+                labelHAlign: 'right',
+                labelVAlign: 'bottom',
+                x: [b[1], b[2]],
+                y: [V_el, V_el],
             },
         ]);
 

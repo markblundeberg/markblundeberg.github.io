@@ -39,6 +39,19 @@
             x: [b[1], b[3]],
             y: [V_Cl, V_Cl],
         },
+        {
+            // the couple's implied electron level: the wire's V_e- carried
+            // through the coating and out into the solution by the reaction
+            id: `implied_trace`,
+            speciesId: 'electron',
+            curveType: 'voltageImplied',
+            showLabel: true,
+            label: 'V_{\\mathrm{e}^-}(\\mathrm{Ag/AgCl})',
+            labelFrac: 0.6,
+            labelVAlign: 'bottom',
+            x: [b[1], b[3]],
+            y: [V_el, V_el],
+        },
     ]);
 
     diagram.updateVerticalMarkers([

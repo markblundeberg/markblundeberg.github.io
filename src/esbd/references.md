@@ -17,6 +17,9 @@ The **silver/silver chloride electrode** couples chloride to electrons, as we sa
 $$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} = \frac{1}{F}(\mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}}). $$
 <figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/esbd-ag-agcl-electrode.njk" %}
+{% figcaption %}
+The Ag/AgCl electrode. The dashed line is the couple's implied electron level $V_{\mathrm{e}^-}(\mathrm{Ag/AgCl})$: the wire's own $V_{\mathrm{e}^-}$, carried out into the solution by the equilibrated reaction.
+{% endfigcaption %}
 </figure>
 
 The **hydrogen electrode** interconverts hydrogen ions and hydrogen gas, $\mathrm{H}^+ + \mathrm{e}^- \rightleftharpoons \tfrac{1}{2}\mathrm{H_2}$, giving
@@ -24,6 +27,9 @@ $$ V_{\mathrm{e}^-} = V_{\mathrm{H}^+} - \frac{\mu_{\mathrm{H_2}}}{2F}, $$
 with $\mu_{\mathrm{H_2}} = \mu^\circ_{\mathrm{H_2}} + RT\ln a_{\mathrm{H_2}}$ depending on the gas pressure. Its standard form is the reference the whole $E$ scale is built on.
 <figure class="demo-container" style="max-width: 230px">
 {% include "esbd-diagrams/esbd-she.njk" %}
+{% figcaption %}
+The hydrogen electrode. The metal's level continues into the solution as the implied $V_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2})$, and its gap to the dashed standard rung is this electrode's own potential vs SHE, here purely the Nernst activity term (try both sliders). That rung wears two names: $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ lands exactly on $V^\circ_{\mathrm{H}^+}$, the two differing only by $\mu^\circ_{\mathrm{H_2}}/2F$, zero by convention ([half-reactions](../half/)).
+{% endfigcaption %}
 </figure>
 
 ## A reference cell
