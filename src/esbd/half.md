@@ -7,43 +7,43 @@ orderESBD: 31
 
 # {{title}}
 
-In this topic and the next few topics we're going to explore how concepts like "electrode potential", "redox potential", and "standard hydrogen electrode" look in the $V_i$ world. These are all built around electron transfer, aka "redox".
+Wherever an electronic conductor meets an ionic one, something must hand the charge from one circuit to the other; the survey of [conductors](../other_conductors/) ended on exactly that threshold. The hand-off is electron transfer, and chemistry accounts for it one **half-reaction** at a time:
 
-The general idea of redox chemistry is considering **half-reactions** of the following generic form:
-$$ \mathrm{Ox} + z\mathrm{e}^- \rightleftharpoons \mathrm{Red} $$
+$$ \mathrm{Ox} + z\mathrm{e}^- \rightleftharpoons \mathrm{Red}. $$
 
-I.e. we consider $z$ electrons transferred onto an oxidized species $\mathrm{Ox}$ to become a reduced species $\mathrm{Red}$ (note the charges satisfy $z_{\mathrm{Ox}} - z = z_{\mathrm{Red}}$). 
+Here $z$ electrons land on an oxidized species $\mathrm{Ox}$ and turn it into a reduced species $\mathrm{Red}$, the charges balancing as $z_{\mathrm{Ox}} - z = z_{\mathrm{Red}}$. This topic and the next few work out how the ideas built on this form, "electrode potential", "redox potential", the "standard hydrogen electrode", look in the $V_i$ world.
 
-A half-reaction can't happen on its own since the solvent generally doesn't contain a population of free electrons: for a half-reaction to move forward, the electron has to be taken from an electrode or another half-reaction, and likewise for the reaction to move backward it needs to find somewhere to give away its electron.
+A half-reaction cannot run on its own, since the solvent holds no population of free electrons. To move forward it must take its electrons from an electrode or from another half-reaction, and to move backward it needs somewhere to put them.
 
-In terms of electrochemical potentials, this defines an electrochemical potential of electrons by equilibrium:
+Even so, the reaction defines an electron level all by itself. Its equilibrium condition,
 
 $$ \bar\mu_{\mathrm{Ox}} + z \bar\mu_{\mathrm{e}^-} = \bar\mu_{\mathrm{Red}}, $$
 
-which in our $V_i$ terms becomes
+pins down an electrochemical potential of electrons, which in our terms is a voltage:
 
 $$ V_{\mathrm{e}^-} = \frac{\bar\mu_{\mathrm{Ox}} - \bar\mu_{\mathrm{Red}}}{zF}. $$
 
-(we're describing $\mathrm{Ox}$ and $\mathrm{Red}$ with electrochemical potentials for now, instead of converting them to $V_i$, because one of them might be an uncharged species)
+(We describe $\mathrm{Ox}$ and $\mathrm{Red}$ by their electrochemical potentials rather than converting them to $V_i$, since either one might be an uncharged species.)
 
-Previously (in the [Equilibrium](../equilibrium/) topic), we associated this $V_{\mathrm{e}^-}$ with an electrode. That is, we talked about what happens when such a half-reaction is exchanging its electrons with an electrode, and so at equilibrium this reaction $V_{\mathrm{e}^-}$ equalizes with the  $V_{\mathrm{e}^-}$ in the electrode. But now we'll take a different point of view: The central premise of redox chemistry is that yes, it is useful to talk about the reaction $V_{\mathrm{e}^-}$ even when there is no equilibrated electrode nearby.
+In [equilibrium](../equilibrium/) we met this $V_{\mathrm{e}^-}$ attached to an electrode: the half-reaction exchanged its electrons with a metal, and at equilibrium the reaction's level and the metal's agreed. Now comes the different point of view, and the central premise of redox chemistry: the reaction's $V_{\mathrm{e}^-}$ is worth talking about even when no equilibrated electrode is anywhere nearby.
 
 ## Implied $V_{\mathrm{e}^-}$ of a reaction
 
-In the absence of an equilibrated electrode, it is indeed useful to calculate this $V_{\mathrm{e}^-}$ as an "implied" voltage, representing a real thermodynamic availability of electrons even though no electrons roam freely in solution. For clarity, we write these implied values as $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ since they are specific to a certain reaction. This implied $V_{\mathrm{e}^-}$ value is useful in the following ways:
+With no electrode in sight, the formula above still evaluates to a perfectly good voltage: an "implied" $V_{\mathrm{e}^-}$, a real thermodynamic availability of electrons in a solution where none roam free. Since the value belongs to a particular reaction, we write it $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$. It earns its keep in two situations.
 
-1. *In-solution coupling between different half-reactions*
-   $$V_{\mathrm{e}^-}(\mathrm{\mathrm{Ox1}/\mathrm{Red1}}) \rightleftharpoons V_{\mathrm{e}^-}(\mathrm{\mathrm{Ox2}/\mathrm{Red2}})$$
-    * A solution may have multiple available half-reactions.
-    * All half-reactions are thermodynamically driven to equalize their $V_{\mathrm{e}^-}$ values by directly exchanging electrons with each other ('electron transfer reactions'), even in the absence of an electrode. But, electron transfer can be kinetically slow, in which case it is valuable to distinguish multiple $V_{\mathrm{e}^-}$. (for example, natural ground water is notoriously redox disequilibrated^[Lindberg, R. D., & Runnells, D. D. (1984). [Ground Water Redox Reactions: An Analysis of Equilibrium State Applied to Eh Measurements and Geochemical Modeling](https://doi.org/10.1126/science.225.4665.925). Science, 225(4665), 925–927.])
-    * Where there is no electrode, electron transfer between two species can be described in terms of a mismatch in their half-reactions' $V_{\mathrm{e}^-}$ values.
+The first is coupling between half-reactions inside the solution,
 
-2. *Coupling between half-reactions and an electrode*
-    $$V_{\mathrm{e}^-}(\mathrm{metal}) \rightleftharpoons V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$$
-    * A simple electrode should couple to one half-reaction, but equalization of $V_{\mathrm{e}^-}$ only occurs when the electrode has no current. At driven electrodes (with nonzero current) we can describe overpotentials at the interface as a step between $V_{\mathrm{e}^-}$ in the electrode and the equilibrium $V_{\mathrm{e}^-}$ implied by its ideal reaction.
-    * Real electrodes may couple to more than one half-reaction, giving 'mixed potentials'.^[IUPAC Gold Book ["mixed potential"](https://goldbook.iupac.org/terms/view/M03944.html)]
+$$V_{\mathrm{e}^-}(\mathrm{Ox_1}/\mathrm{Red_1}) \rightleftharpoons V_{\mathrm{e}^-}(\mathrm{Ox_2}/\mathrm{Red_2}).$$
 
-On our diagrams we will depict these implied levels as dashed lines, inside the solution.
+A solution may host several half-reactions at once, and thermodynamics drives them all toward a common $V_{\mathrm{e}^-}$, the species trading electrons directly ('electron transfer reactions') with no electrode involved; the driving force for any such transfer is precisely the mismatch between the two implied levels. But electron transfer is often kinetically slow, and then the levels simply stay split. Natural ground water is notorious for this.^[Lindberg, R. D., & Runnells, D. D. (1984). [Ground Water Redox Reactions: An Analysis of Equilibrium State Applied to Eh Measurements and Geochemical Modeling](https://doi.org/10.1126/science.225.4665.925). Science, 225(4665), 925–927.]
+
+The second is coupling between a half-reaction and an electrode,
+
+$$V_{\mathrm{e}^-}(\mathrm{metal}) \rightleftharpoons V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}).$$
+
+A simple electrode couples to one half-reaction, and the two levels equalize only at zero current; at a driven electrode, the interface's overpotential appears as the step between the electrode's $V_{\mathrm{e}^-}$ and the level implied by its reaction. Real electrodes may couple to more than one half-reaction at once, giving 'mixed potentials'.^[IUPAC Gold Book ["mixed potential"](https://goldbook.iupac.org/terms/view/M03944.html)]
+
+On our diagrams these implied levels are drawn as dashed lines, inside the solution.
 
 <figure class="demo-container" style="max-width: 420px">
 {% include "esbd-diagrams/levels-half-implied.njk" %}
@@ -52,20 +52,18 @@ How implied levels look: the metal has one actual $V_{\mathrm{e}^-}$, while the 
 {% endfigcaption %}
 </figure>
 
-The idea that a solution can have an implied electronic $V_{\mathrm{e}^-}$ (or $\bar\mu_{\mathrm{e}^-}$) is not at all new. This is often called a 'redox Fermi level'^[A careful modern discussion of how the Fermi level and the redox potential relate is given by J. Bisquert, D. Cahen, G. Hodes, S. Rühle, and A. Zaban, [Physical Chemical Principles of Photovoltaic Conversion with Nanoparticulate, Mesoporous Dye-Sensitized Solar Cells](https://doi.org/10.1021/jp0359283), *J. Phys. Chem. B* **108**, 8106 (2004).] and what's attractive about it is that $\bar\mu_{\mathrm{e}^-}$ can be directly plotted on a traditional electronic energy band diagram. However, I've found that past visualizations can be a bit confusing,^[Redox band diagrams are often special-cased to equilibrium situations, in a way that degrades intuition in terms of understanding out-of-equilibrium. My goal is to 1) discourage the casual referencing to 'the vacuum' or 'the SHE' since in real devices these references vary from place to place, i.e. to 2) promote proper covariant/"reference-free" style band diagrams, and 3) emphasize that disequilibrated solutions have multiple redox Fermi levels.] so I hope to present these diagrams in a fresh light.
-
-I emphasize though that not all solutions have a meaningful redox Fermi level, and some disequilibrated solutions have multiple redox Fermi levels.
+The idea that a solution can carry an implied electronic level (a $V_{\mathrm{e}^-}$ or $\bar\mu_{\mathrm{e}^-}$) is not at all new. It is often called a 'redox Fermi level',^[A careful modern discussion of how the Fermi level and the redox potential relate is given by J. Bisquert, D. Cahen, G. Hodes, S. Rühle, and A. Zaban, [Physical Chemical Principles of Photovoltaic Conversion with Nanoparticulate, Mesoporous Dye-Sensitized Solar Cells](https://doi.org/10.1021/jp0359283), *J. Phys. Chem. B* **108**, 8106 (2004).] and its attraction is that $\bar\mu_{\mathrm{e}^-}$ plots directly onto a traditional electronic energy band diagram. I've found past visualizations to be confusing in some specific ways,^[Redox band diagrams are often special-cased to equilibrium, in a way that degrades out-of-equilibrium intuition. My aims here: to discourage the casual referencing of 'the vacuum' or 'the SHE', since in real devices these references vary from place to place; to promote reference-free band diagrams instead; and to emphasize that disequilibrated solutions carry multiple redox Fermi levels.] so I hope to present these diagrams in a fresh light. One caution worth stating up front: not every solution has a meaningful redox Fermi level, and a disequilibrated solution has several at once.
 
 ## Nernst equation
 
-We are interested in the case where the reactants have activities $a_{\mathrm{Ox}}$ and $a_{\mathrm{Red}}$. We can then formally break this down using standard states of the reactants (noting that $\bar\mu^\circ_i$ are also 'floating' for the charged reactants):
+Now bring in the concentrations. Give the reactants activities $a_{\mathrm{Ox}}$ and $a_{\mathrm{Red}}$ and split each electrochemical potential against its standard state (for the charged reactants, the $\bar\mu^\circ_i$ are 'floating' like every ionic standard state):
 
 $$ \bar\mu_{\mathrm{Ox}} = \bar\mu^\circ_{\mathrm{Ox}} + RT\ln(a_{\mathrm{Ox}}) $$
 $$ \bar\mu_{\mathrm{Red}} = \bar\mu^\circ_{\mathrm{Red}} + RT\ln(a_{\mathrm{Red}}). $$
 
-Note that not all reactants need to be solutes, so activity (and standard state) can be defined in various ways.
+Not every reactant need be a solute, so activity and standard state may each be defined in whatever way suits the species.
 
-Substituting these in, we arrive at the following equation which I call the "**floating Nernst equation**":
+Substituting these in, we arrive at what I call the "**floating Nernst equation**":
 
 $$ V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) = V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) + \frac{RT}{zF} \ln\bigg(\frac{a_{\mathrm{Ox}}}{a_{\mathrm{Red}}}\bigg) , $$
 
@@ -73,11 +71,11 @@ where we define the **standard redox level for the $\mathrm{Ox}/\mathrm{Red}$ re
 
 $$ V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) = \frac{\bar\mu^\circ_{\mathrm{Ox}} - \bar\mu^\circ_{\mathrm{Red}}}{zF} .$$
 
-These levels float alongside our $V^\circ_i$ ionic standard states. Note that we can substitute $z_i F V^\circ_i$ for $\bar\mu^\circ_i$ for the ion reactants, to get formulae involving $V^\circ_i$ (see below for a more general formula).
+These levels float alongside our ionic standard states $V^\circ_i$. For the ion reactants we can substitute $\bar\mu^\circ_i = z_i F V^\circ_i$ to get formulae directly in terms of $V^\circ_i$ (a general recipe follows below).
 
-The above equation for $V_{\mathrm{e}^-}$ looks extremely similar to the regular {%wiki "Nernst equation" %}, though it involves $V_{\mathrm{e}^-}$ instead of $E$. We'll get back to what this traditional electrochemical $E$ actually means in the next topic, but we don't need it for now.
+This looks extremely like the regular {%wiki "Nernst equation" %}, except that it delivers $V_{\mathrm{e}^-}$ rather than $E$. What that traditional electrochemical $E$ actually means, we take up in the [next topic](../e/); we do not need it yet.
 
-It's helpful to visualize an example of where these redox levels lie in relation to the ionic levels we've been discussing previously, in this case with the ferric/ferrous redox couple. Note that in order to read out $V_{\mathrm{e}^-}(\mathrm{Fe}^{3+}/\mathrm{Fe}^{2+})$ potentiometrically without influence from other reactions, a glassy carbon electrode could be used, since a platinum electrode may also pick up hydrogen or oxygen redox couples and drift toward a mixed potential.^[This is a worry for open-circuit *potentiometry*. In *voltammetry*, by contrast, platinum is a standard working electrode for the ferric/ferrous couple — its fast electron-transfer [kinetics](../kinetics/) outweigh the mixed-potential concern.]
+It helps to see where these redox levels lie among the ionic levels of the previous topics; take the ferric/ferrous couple. Note that to read out $V_{\mathrm{e}^-}(\mathrm{Fe}^{3+}/\mathrm{Fe}^{2+})$ potentiometrically without influence from other reactions, a glassy carbon electrode could be used, since a platinum electrode may also pick up hydrogen or oxygen redox couples and drift toward a mixed potential.^[This is a worry for open-circuit *potentiometry*. In *voltammetry*, by contrast, platinum is a standard working electrode for the ferric/ferrous couple — its fast electron-transfer [kinetics](../kinetics/) outweigh the mixed-potential concern.]
 
 <figure class="demo-container" style="max-width: 480px">
 {% include "esbd-diagrams/levels-half-ferric.njk" %}
@@ -88,11 +86,11 @@ The ferric/ferrous redox levels alongside the ionic levels they are built from (
 
 ### General form
 
-In general we might consider a half-reaction containing more than one species on each side, coming in more than one number:
+In general a half-reaction can involve several species on each side, each with its own stoichiometric coefficient:
 
 $$ a\mathrm{A}^{z_{\mathrm{A}}} + b\mathrm{B} + z\mathrm{e}^- \rightleftharpoons c\mathrm{C}^{z_{\mathrm{C}}} + d\mathrm{D} $$
 
-where $A$, $C$ are generic charged species (ions), and $B$, $D$ are generic neutral species ($z_{\mathrm{B}} = z_{\mathrm{D}} = 0$). The Nernst equation is then (writing just "rxn" for short instead of "$\mathrm{A},\mathrm{B}/\mathrm{C},\mathrm{D}$"):
+where $\mathrm{A}$, $\mathrm{C}$ are generic charged species (ions), and $\mathrm{B}$, $\mathrm{D}$ are generic neutral species ($z_{\mathrm{B}} = z_{\mathrm{D}} = 0$). The Nernst equation is then (writing just "rxn" for short instead of "$\mathrm{A},\mathrm{B}/\mathrm{C},\mathrm{D}$"):
 
 $$ V_{\mathrm{e}^-}(\mathrm{rxn}) = V^\circ_{\mathrm{e}^-}(\mathrm{rxn}) + \frac{RT}{zF} \ln\bigg(\frac{(a_{\mathrm{A}})^a (a_{\mathrm{B}})^b }{(a_{\mathrm{C}})^c (a_{\mathrm{D}})^d }\bigg) , $$
 
@@ -100,12 +98,11 @@ and for the standard redox level we can use $V^\circ_i$ for the charged species:
 
 $$V^\circ_{\mathrm{e}^-}(\mathrm{rxn}) = \frac{az_{\mathrm{A}}}{z}V^\circ_{\mathrm{A}} - \frac{cz_{\mathrm{C}}}{z}V^\circ_{\mathrm{C}} + \frac{b\mu^\circ_{\mathrm{B}} - d\mu^\circ_{\mathrm{D}}}{zF} . $$
 
-This provides a general recipe and it's easy to see how to extend it to more ionic or more neutral reactants.
-(Note that the weighting of $V^\circ_i$ levels is always balanced to a total of 1, since the original reaction is charge-balanced: $az_{\mathrm{A}} - z = cz_{\mathrm{C}}$ in this case.)
+The recipe extends in the obvious way to more ionic or more neutral reactants. Note that the $V^\circ_i$ weights on the right hand side always total 1, since the original reaction is charge-balanced ($az_{\mathrm{A}} - z = cz_{\mathrm{C}}$ in this case).
 
 ### Plating couples
 
-The simplest case is a metal plating couple, where the reduced species is the pure metal itself. The front page quietly relied on this one:
+The simplest case is a metal plating couple, where the reduced species is the pure metal itself. A footnote on the [front page](../) hinted at this one:
 
 $$ \mathrm{Li}^+ + \mathrm{e}^- \rightleftharpoons \mathrm{Li(s)}, $$
 
@@ -113,19 +110,15 @@ for which the implied level needs no Nernst machinery at all:
 
 $$ V_{\mathrm{e}^-}(\mathrm{Li}^+/\mathrm{Li}) = \frac{\bar\mu_{\mathrm{Li}^+} - \mu_{\mathrm{Li}}}{F} = V_{\mathrm{Li}^+} - \frac{\mu_{\mathrm{Li}}}{F}. $$
 
-Under our convention (and at the reference temperature and pressure) $\mu_{\mathrm{Li}} = 0$, so $V_{\mathrm{e}^-}(\mathrm{Li}^+/\mathrm{Li}) = V_{\mathrm{Li}^+}$: the couple's implied electron level plots exactly on top of the ion's own level, at every concentration, since $\bar\mu_{\mathrm{Li}^+}$ carries the whole activity dependence. This cashes the promise made in the front page's footnote: the line we drew there as $V_{\mathrm{Li}^+}$ doubles as the electrolyte's redox Fermi level, in the manner of Gerischer. The same holds for every metal plating couple $\mathrm{M}^{n+}/\mathrm{M}$ (compare the $\mathrm{Fe}^{2+}/\mathrm{Fe(s)}$ row in the table below), and it is the same accident that put $V_{\mathrm{e}^-} = V_{\mathrm{Zn}^{2+}}$ at the [zinc electrode](../equilibrium/): the elemental $\mu = 0$ convention wearing another hat.
+Under our convention (and at the reference temperature and pressure) $\mu_{\mathrm{Li}} = 0$, so $V_{\mathrm{e}^-}(\mathrm{Li}^+/\mathrm{Li}) = V_{\mathrm{Li}^+}$: the couple's implied electron level plots exactly on top of the ion's own level, at every concentration, since $\bar\mu_{\mathrm{Li}^+}$ carries the whole activity dependence. This cashes that footnote's promise: the line we drew there as $V_{\mathrm{Li}^+}$ doubles as the electrolyte's redox Fermi level, in the manner of Gerischer. The same holds for every metal plating couple $\mathrm{M}^{n+}/\mathrm{M}$ (compare the $\mathrm{Fe}^{2+}/\mathrm{Fe(s)}$ row in the table below), and it is the same accident that put $V_{\mathrm{e}^-} = V_{\mathrm{Zn}^{2+}}$ at the [zinc electrode](../equilibrium/): the elemental $\mu = 0$ convention wearing another hat.
 
-Keep in mind what kind of coincidence this is. The two lines are different objects, $V_{\mathrm{Li}^+}$ being the level of ions really present in the electrolyte while $V_{\mathrm{e}^-}(\mathrm{Li}^+/\mathrm{Li})$ is an implied electron level. They separate the moment $\mu_{\mathrm{Li}} \neq 0$: pick a different convention and the implied level shifts away; or, more physically, put a temperature gradient across the cell and $\mu_{\mathrm{Li}}(T)$ varies from place to place, peeling the implied level off of $V_{\mathrm{Li}^+}$ by a real, position-dependent amount.
+Keep in mind what kind of coincidence this is. The two lines are different objects, $V_{\mathrm{Li}^+}$ being the level of ions really present in the electrolyte while $V_{\mathrm{e}^-}(\mathrm{Li}^+/\mathrm{Li})$ is an implied electron level. They separate the moment $\mu_{\mathrm{Li}} \neq 0$: pick a different convention and the implied level shifts away; or, more physically, put a temperature gradient across the cell and $\mu_{\mathrm{Li}}(T)$ varies from place to place, peeling the $V_{\mathrm{e}^-}(\mathrm{Li}^+/\mathrm{Li})$ level off of $V_{\mathrm{Li}^+}$ by a real, position-dependent amount.
 
 ## Standard redox levels in water
 
-Also known as the standard electrode potential, the standard reduction potential $E^\circ$ is the reduction potential for a reaction that involves species in their standard states. In particular this means that dissolved ions are at a hypothetical ideally-dilute concentration of $c^\circ = 1~\mathrm{mol/L}$; practically this means that these standard reduction potentials are best extrapolated from dilute solutions.
+The standard reduction potential $E^\circ$, also known as the standard electrode potential, refers to a half-reaction with every species in its standard state. For dissolved ions that means the hypothetical ideally-dilute concentration $c^\circ = 1~\mathrm{mol/L}$, so in practice these values are best extrapolated from dilute solutions; the temperature is 25&nbsp;°C and the pressure 1 bar.^[Actually, 1 atm is commonly used, which tweaks $\mu_{\mathrm{H}_2} / 2F$ by a sub-millivolt correction ($\approx 0.2~\mathrm{mV}$); we'll ignore that.] The effect of the unit-activity condition is simply that every dissolved ion's $V_i$ is replaced by its $V^\circ_i$, and each implied level lands on its standard redox level.
 
-It is also assumed that the temperature is 25&nbsp;°C and the pressure is 1 bar. (Actually, 1 atm is commonly used, which tweaks $\mu_{\mathrm{H}_2} / 2F$ by a sub-millivolt correction ($\approx 0.2~\mathrm{mV}$), but we'll ignore that.)
-
-The consequence of the standard-ideal-concentration (or unit activity) condition is that all $V_i$ for dissolved ions are replaced by $V^\circ_i$.
-
-As with our ionic standard states, we can tabulate all the relative positions of the $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ ladder, by defining one half-reaction (usually $\mathrm{H}^+/\mathrm{H_2}$) as a reference level.^[Note that we have used the $\mathrm{H}^+$ ion as a convenient reference 'ladder rung' for both redox potentials ($V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2})$) and the ionic standard states ($V^\circ_{\mathrm{H}^+}$). But, these two choices don't need to be related and it's not necessary to use the same ion. Even though they seem related they are in fact performing two different tasks (and they differ by $\tfrac{1}{2F} \mu^\circ_{\mathrm{H_2}}$, which we only assign to be 0 by convention).] We'll call this $E^\circ$, because this is in fact the {% wiki "standard electrode potential" %} (we'll discuss the meaning of "electrode potential" more in the next topic):
+As with our ionic standard states, we can tabulate all the relative positions of the $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ ladder, by defining one half-reaction (usually $\mathrm{H}^+/\mathrm{H_2}$) as a reference level.^[Note that we have used the $\mathrm{H}^+$ ion as a convenient reference 'ladder rung' for both redox potentials ($V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2})$) and the ionic standard states ($V^\circ_{\mathrm{H}^+}$). But these two choices don't need to be related, and it's not necessary to use the same ion: they are in fact performing two different tasks (and they differ by $\tfrac{1}{2F} \mu^\circ_{\mathrm{H_2}}$, which we only assign to be 0 by convention).] We'll call the gap from that reference $E^\circ$, because this is in fact the {% wiki "standard electrode potential" %} (the meaning of "electrode potential" gets its due in the next topic):
 
 $$ E^\circ = V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2}) $$
 
@@ -138,9 +131,9 @@ $$ E^\circ = V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm
 | $\mathrm{Fe}^{3+}$ | / | $\mathrm{Fe}^{2+}$ | $3V^\circ_{\mathrm{Fe}^{3+}} - 2V^\circ_{\mathrm{Fe}^{2+}}$ | +0.769 |
 | $\mathrm{Fe}^{2+}$ | / | $\mathrm{Fe(s)}$ | $V^\circ_{\mathrm{Fe}^{2+}} - \tfrac{1}{2F} \mu^\circ_{\mathrm{Fe}} $ | −0.409 |
 
-Wikipedia's {% wiki "Standard_electrode_potential_(data_page)", "standard electrode potential data page" %} is a fantastic resource to find more of these.
+Wikipedia's {% wiki "Standard_electrode_potential_(data_page)", "standard electrode potential data page" %} is a fantastic resource to find more of these. The middle column has a venerable precedent, too: Newman's classic textbook carries an extremely similar table, each $E^\circ$ resolved into the chemical potentials of its reactants, with the hydrogen reference written out in every row.^[Newman & Balsara (2021), *Electrochemical Systems*, Table 2.2 (p. 53).]
 
-It's worth visualizing the $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ levels alongside the ionic levels $V^\circ_i$. We plot the standard redox levels as dashed (representing that they are 'implied' levels), and as thin lines (representing that they are only standard states):
+It's worth visualizing the $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ levels alongside the ionic levels $V^\circ_i$. We plot the standard redox levels dashed (they are 'implied' levels) and thin (they are only standard states):
 
 <figure class="demo-container" style="max-width: 520px">
 {% include "esbd-diagrams/levels-half-ladder.njk" %}
@@ -149,12 +142,12 @@ Standard redox levels $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ (left) 
 {% endfigcaption %}
 </figure>
 
-As can be seen, when we change the electrical offset, both 'ladders' move in lockstep. However, the ionic standard states are sensitive to our choice of zero of neutral elements' chemical potentials, whereas the standard redox levels are totally immune to that (since they really are electronic in nature).
+Move the electrical offset and both 'ladders' slide in lockstep. But the ionic standard states are sensitive to our arbitrary zeros for the neutral elements' chemical potentials, whereas the standard redox levels sit totally immune: they really are electronic in nature.
 
 ## Takeaways
 
-And so we've arrived at a description of redox half-reactions in terms of a virtual or implied value $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$, and in relating this to reactant activities, we've identified a new ladder of "standard redox levels" $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$. 
+Every half-reaction defines its own electron level, the implied $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$: a real thermodynamic availability of electrons in a solution that holds no free electrons at all. Reactant activities move that level according to the floating Nernst equation, anchored to a new ladder of standard redox levels $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ that floats alongside the ionic one and is tabulated in every $E^\circ$ table. An equilibrated solution carries one implied level; a disequilibrated solution carries several; an electrode brings a level of its own, which may or may not agree with them.
 
-In the next topic, we'll talk about how we can explain traditional electrochemical variables in terms of these redox levels.
+The traditional variables of electrochemistry, electrode potential first among them, are gaps between these levels, and reading them off the diagram is the next topic's job.
 
 [**NEXT TOPIC: Electrode potential**](../e/)
