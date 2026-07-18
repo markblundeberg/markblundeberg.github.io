@@ -142,7 +142,7 @@ Standard redox levels $V^\circ_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ (left) 
 {% endfigcaption %}
 </figure>
 
-Move the electrical offset and both 'ladders' slide in lockstep. But the ionic standard states are sensitive to our arbitrary zeros for the neutral elements' chemical potentials, whereas the standard redox levels sit totally immune: they really are electronic in nature.
+Move the electrical offset and both 'ladders' slide in lockstep. But the ionic standard states are sensitive to our arbitrary zeros for the neutral elements' chemical potentials, whereas the standard redox levels sit totally immune: they really are electronic in nature, as promised by the $V^\circ_{\mathrm{e}^-}$ label.
 
 ## Takeaways
 
