@@ -68,6 +68,8 @@
             symbol: '↕',
             x: b[1],
             yDefs: [{ y: V_L }, { y: V0_SHE }],
+            label: 'E_{\\text{left}}',
+            labelHAlign: 'right', // extends leftward, over the metal
             popupCallback: () =>
                 String.raw`$E_{\text{left}} = V_{\mathrm{e}^-}(\text{left}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$`,
         },
@@ -76,6 +78,8 @@
             symbol: '↕',
             x: b[2],
             yDefs: [{ y: V_R }, { y: V0_SHE }],
+            label: 'E_{\\text{right}}',
+            labelHAlign: 'left', // extends rightward, over the metal
             popupCallback: () =>
                 String.raw`$E_{\text{right}} = V_{\mathrm{e}^-}(\text{right}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$`,
         },

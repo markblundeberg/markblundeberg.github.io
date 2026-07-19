@@ -523,6 +523,14 @@ figure {
     border-radius: 2px;
 }
 
+/* Vertical-marker gap labels (e.g. an electrode potential E) */
+.bd-marker-label > span.rp-label-span {
+    font-size: 11px;
+    padding: 1px 3px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 2px;
+}
+
 /* popup */
 .bd-popup {
     max-width: 250px;

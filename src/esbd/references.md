@@ -12,7 +12,7 @@ In electrochemistry, a single electrode potential can never be measured on its o
 <figure class="demo-container" style="max-width: 460px">
 {% include "esbd-diagrams/esbd-cell-e.njk" %}
 {% figcaption %}
-The basic cell picture. Each electrode potential is its wire's gap down to the same reference rung, $E = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ (the ↕ markers), and a voltmeter across the cell reads the wire-to-wire gap $E_{\text{right}} - E_{\text{left}}$: single levels float, only gaps get measured.
+The basic cell picture. Each electrode potential is its wire's gap down to the same reference rung, $E = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ (the marked gaps), and a voltmeter across the cell reads the wire-to-wire gap $E_{\text{right}} - E_{\text{left}}$: single levels float, only gaps get measured.
 {% endfigcaption %}
 </figure>
 
