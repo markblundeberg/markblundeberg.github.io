@@ -7,7 +7,7 @@ orderESBD: 33
 
 # {{title}}
 
-In electrochemistry, a single electrode potential can never be measured on its own; you always need a second electrode potential to complete the picture. Together two electrodes form a **cell**. But why is this? With the [electrode potential machinery just discussed on the previous page](../e/), we have a clean visual of a cell to start our discussion.
+In electrochemistry, a single electrode potential can never be measured on its own; you always need a second electrode potential to complete the picture. Together two electrodes form a **cell**. With the [electrode potential machinery just discussed on the previous page](../e/), we have a clean visual of a cell to start our discussion.
 
 <figure class="demo-container" style="max-width: 460px">
 {% include "esbd-diagrams/esbd-cell-e.njk" %}
