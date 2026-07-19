@@ -7,7 +7,16 @@ orderESBD: 33
 
 # {{title}}
 
-A single electrode's potential can never be measured on its own; you always need a second electrode to close the circuit. That second electrode is the **reference**, and the pair of them is a **cell**. For two topics now the reference has appeared only as a level on the page, the $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ that the [electrode potential](../e/) measured everything against; this topic supplies the hardware, and puts the redox machinery to work on it. The reward is a picture that traditional electrochemistry never quite had of its own logic, with $E$ and $E^\circ$ as distances between drawn levels and no $\phi$ in sight. There is also a price, which falls due late in the page: once $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ is one visible level among many, it stops being a self-evident zero.
+In electrochemistry, a single electrode potential can never be measured on its own; you always need a second electrode potential to complete the picture. Together two electrodes form a **cell**. But why is this? With the [electrode potential machinery just discussed on the previous page](../e/), we have a clean visual of a cell to start our discussion.
+
+<figure class="demo-container" style="max-width: 460px">
+<!-- TODO(figure): cell-two-e — basic cell as electronic levels only (she-agcl-e style, or a levels-style schematic like levels-e-fourlevel): V_e-(left) and V_e-(right) wire levels flanking the solution, dashed V°_e-(SHE) rung in the middle; E_left and E_right marked as vertical gap arrows, cell voltage ΔV = E_right − E_left as the wire-to-wire gap. Draft caption below. -->
+<p><em>[Figure placeholder: a cell as levels. Each electrode potential is its wire's gap down to the same $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ rung, and the voltmeter reads the wire-to-wire gap $E_{\text{right}} - E_{\text{left}}$: single levels float, only gaps get measured.]</em></p>
+</figure>
+
+A **reference electrode** is ostensibly a way to access (or infer) the standard reference levels (such as $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$) inside the cell. But is this actually possible? And, is the standard hydrogen electrode (SHE), the "zero level" of electrochemistry, actually a firm reference, or is the electrical ground ($V_{\mathrm{e}^-}=0$) of circuits more appropriate, or does the distinction really not matter in the end? What about the vacuum as a reference? A **liquid junction potential** complicates things further; what does that look like?
+
+While I can't answer all the philosophical questions, what I can do is provide a rigorous visual picture where every quantity is perfectly represented.
 
 ## Reference electrodes
 
@@ -62,7 +71,7 @@ Two interpretations of this $\Delta V$ coexist happily: an engineer sees the ele
 
 ## Solution-centered vs. circuit-centered
 
-That subtraction was a **solution-centered** derivation: each electrode described by its own gap down to a standard rung (an $E$ against an $E^\circ$, in the [previous topic's](../e/) terms), and the two descriptions compared. Traditional electrochemistry has always read cells this way, but narrated with $\phi$: start in the middle, at the solution's inner potential, and work outward to each electrode,
+That subtraction was a **solution-centered** derivation: each electrode described by its own gap down to a standard rung (an $E$ against an $E^\circ$, in the [previous topic's](../e/) terms), and the two descriptions compared. Traditional electrochemistry has always read cells this way, narrated (when it is narrated at all) with $\phi$: start in the middle, at the solution's inner potential, and work outward to each electrode,
 $$
 \begin{aligned}
 \phi(\text{soln}) &\to V^\circ_{\mathrm{H}^+} \to V_{\mathrm{H}^+} \to V_{\mathrm{e}^-}(\text{left}), \\
@@ -126,7 +135,7 @@ The unsettling half is the split. Divide that same nonideality between $\mathrm{
 <p><em>[Figure placeholder: two solutions, one voltmeter reading; a convention toggle slides each solution's ladder and SHE rung while the wires and $\Delta V$ stay put.]</em></p>
 </figure>
 
-So, which is moving? With two solutions there is only one tenable reading: the wires' $V_{\mathrm{e}^-}$ are the invariants, drawn before any convention is chosen, and "the SHE" is a rung that slides per solution at the whim of bookkeeping. The circuit wins. The solution-centered view survives in a more modest role, as a local convention: perfectly serviceable inside any one solution, with every cross-solution comparison quietly routed through an equally conventional LJP. The machinery of these conventions, and how far apart they land in practice, is the [nonideal appendix](../nonideal/)'s business.
+So, which is moving? With two solutions there is only one tenable reading: the wires' $V_{\mathrm{e}^-}$ are the invariants, drawn before any convention is chosen, and "the SHE" is a rung that slides per solution at the whim of bookkeeping. The circuit wins; of the two candidate zeros in the introduction, it is the humble electrical ground that holds firm. The solution-centered view survives in a more modest role, as a local convention: perfectly serviceable inside any one solution, with every cross-solution comparison quietly routed through an equally conventional LJP. The machinery of these conventions, and how far apart they land in practice, is the [nonideal appendix](../nonideal/)'s business.
 
 ## The "absolute" electrode potential
 
