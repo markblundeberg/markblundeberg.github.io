@@ -1,0 +1,83 @@
+{% set idprefix = "esbd-cell-e" %} {# generic cell: two wires, one reference rung #}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 250px"></div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram('{{idprefix}}-container', {
+        electron: SPECIES.electron,
+    });
+
+    const boundaries = [0.0, 0.3, 0.7, 1.0];
+    diagram.setSpatialLayout(boundaries, [
+        { ...REGION.metal, name: 'Left electrode' },
+        REGION.solution,
+        { ...REGION.metal, name: 'Right electrode' },
+    ]);
+
+    // Generic cell, no particular chemistry: two wires and the SHE rung they
+    // are both measured against. Drawn in the traditional frame V°(SHE) = 0.
+    const V_L = -0.35;
+    const V_R = +0.45;
+    const V0_SHE = 0;
+
+    diagram.setVRange(-0.55, 0.65);
+
+    const b = boundaries;
+    diagram.updateTraceData([
+        {
+            id: `electron_left`,
+            speciesId: 'electron',
+            curveType: 'voltage',
+            showLabel: true,
+            label: 'V_{\\mathrm{e}^-}(\\text{left})',
+            labelFrac: 0.5,
+            labelHAlign: 'center',
+            x: [b[0], b[1]],
+            y: [V_L, V_L],
+        },
+        {
+            id: `electron_right`,
+            speciesId: 'electron',
+            curveType: 'voltage',
+            showLabel: true,
+            label: 'V_{\\mathrm{e}^-}(\\text{right})',
+            labelFrac: 0.5,
+            labelHAlign: 'center',
+            x: [b[2], b[3]],
+            y: [V_R, V_R],
+        },
+        {
+            id: `she_std`,
+            speciesId: 'electron',
+            curveType: 'standardStateImplied',
+            showLabel: true,
+            label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{SHE})',
+            labelFrac: 0.5,
+            labelHAlign: 'center',
+            labelVAlign: 'bottom',
+            x: [b[1], b[2]],
+            y: [V0_SHE, V0_SHE],
+        },
+    ]);
+
+    diagram.updateVerticalMarkers([
+        {
+            id: 'e_left',
+            symbol: '↕',
+            x: b[1],
+            yDefs: [{ y: V_L }, { y: V0_SHE }],
+            popupCallback: () =>
+                String.raw`$E_{\text{left}} = V_{\mathrm{e}^-}(\text{left}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$`,
+        },
+        {
+            id: 'e_right',
+            symbol: '↕',
+            x: b[2],
+            yDefs: [{ y: V_R }, { y: V0_SHE }],
+            popupCallback: () =>
+                String.raw`$E_{\text{right}} = V_{\mathrm{e}^-}(\text{right}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$`,
+        },
+    ]);
+</script>

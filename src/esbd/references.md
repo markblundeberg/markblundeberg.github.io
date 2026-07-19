@@ -10,8 +10,10 @@ orderESBD: 33
 In electrochemistry, a single electrode potential can never be measured on its own; you always need a second electrode potential to complete the picture. Together two electrodes form a **cell**. But why is this? With the [electrode potential machinery just discussed on the previous page](../e/), we have a clean visual of a cell to start our discussion.
 
 <figure class="demo-container" style="max-width: 460px">
-<!-- TODO(figure): cell-two-e — basic cell as electronic levels only (she-agcl-e style, or a levels-style schematic like levels-e-fourlevel): V_e-(left) and V_e-(right) wire levels flanking the solution, dashed V°_e-(SHE) rung in the middle; E_left and E_right marked as vertical gap arrows, cell voltage ΔV = E_right − E_left as the wire-to-wire gap. Draft caption below. -->
-<p><em>[Figure placeholder: a cell as levels. Each electrode potential is its wire's gap down to the same $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ rung, and the voltmeter reads the wire-to-wire gap $E_{\text{right}} - E_{\text{left}}$: single levels float, only gaps get measured.]</em></p>
+{% include "esbd-diagrams/esbd-cell-e.njk" %}
+{% figcaption %}
+The basic cell picture. Each electrode potential is its wire's gap down to the same reference rung, $E = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ (the ↕ markers), and a voltmeter across the cell reads the wire-to-wire gap $E_{\text{right}} - E_{\text{left}}$: single levels float, only gaps get measured.
+{% endfigcaption %}
 </figure>
 
 A **reference electrode** is ostensibly a way to access (or infer) the standard reference levels (such as $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$) inside the cell. But is this actually possible? And, is the standard hydrogen electrode (SHE), the "zero level" of electrochemistry, actually a firm reference, or is the electrical ground ($V_{\mathrm{e}^-}=0$) of circuits more appropriate, or does the distinction really not matter in the end? What about the vacuum as a reference? A **liquid junction potential** complicates things further; what does that look like?
