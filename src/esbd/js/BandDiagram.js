@@ -309,6 +309,8 @@ class BandDiagram extends ResponsivePlot {
                 x,
                 yDefs,
                 symbol = STYLE_DEFAULTS.verticalMarker.symbol,
+                label = null,
+                labelHAlign = 'left',
                 popupCallback = null,
                 popupArgs = null,
                 driven = null,
@@ -360,6 +362,8 @@ class BandDiagram extends ResponsivePlot {
                 yMin,
                 yMax,
                 symbol,
+                label,
+                labelHAlign,
                 popupCallback,
                 popupArgs,
                 driven: driven
@@ -1055,6 +1059,38 @@ class BandDiagram extends ResponsivePlot {
                 // symbol text can change between updates (e.g. +/− markers)
                 s.select('text').text((d) => d.symbol);
             },
+        });
+
+        // Optional KaTeX label beside the symbol bubble, naming the marked
+        // gap (e.g. an electrode potential E). labelHAlign 'left' extends
+        // rightward from the marker line, 'right' extends leftward.
+        this.drawLabelsFancy({
+            parentGroups: markerGroups,
+            cssClass: 'bd-marker-label',
+            labelData: (d) =>
+                d.label
+                    ? [
+                          {
+                              ...d,
+                              mathMode: true,
+                              hAlign: d.labelHAlign,
+                              vAlign: 'center',
+                          },
+                      ]
+                    : [],
+            dataKey: () => 'label',
+            onUpdateTransition: (s) =>
+                s
+                    .attr('transform', (d) => {
+                        const standoff =
+                            markerStyle.backgroundRadius +
+                            (d.symbol ? 4 : 2);
+                        const dx =
+                            d.labelHAlign === 'right' ? -standoff : standoff;
+                        return `translate(${dx}, ${this.yScale(d.ySymbol)})`;
+                    })
+                    .select('span.rp-label-span')
+                    .style('color', markerStyle.color),
         });
     }
 
