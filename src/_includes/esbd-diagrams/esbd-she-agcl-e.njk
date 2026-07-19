@@ -76,8 +76,36 @@
                 speciesId: 'electron',
                 curveType: 'voltage',
                 showLabel: true,
+                labelFrac: 0.5,
+                labelHAlign: 'center',
                 x: [b[0], b[1]],
                 y: [V_el, V_el],
+            },
+            {
+                // left couple's implied electron level: the Pt wire's V_e-
+                // carried into the solution by the equilibrated H+/H2 reaction
+                id: `implied_left`,
+                speciesId: 'electron',
+                curveType: 'voltageImplied',
+                showLabel: true,
+                label: 'V_{\\mathrm{e}^-}(\\mathrm{H}^+/\\mathrm{H_2})',
+                labelFrac: 0.35,
+                labelVAlign: 'top',
+                x: [b[1], b[2]],
+                y: [V_el, V_el],
+            },
+            {
+                // right couple's implied electron level: the Ag wire's V_e-
+                // carried through the coating and solution by the AgCl reaction
+                id: `implied_right`,
+                speciesId: 'electron',
+                curveType: 'voltageImplied',
+                showLabel: true,
+                label: 'V_{\\mathrm{e}^-}(\\mathrm{Ag/AgCl})',
+                labelFrac: 0.35,
+                labelVAlign: 'bottom',
+                x: [b[1], b[3]],
+                y: [V_el_Ag, V_el_Ag],
             },
             {
                 id: `electron_she`,
@@ -104,6 +132,8 @@
                 speciesId: 'electron',
                 curveType: 'voltage',
                 showLabel: true,
+                labelFrac: 0.5,
+                labelHAlign: 'center',
                 x: [b[3], b[4]],
                 y: [V_el_Ag, V_el_Ag],
             },

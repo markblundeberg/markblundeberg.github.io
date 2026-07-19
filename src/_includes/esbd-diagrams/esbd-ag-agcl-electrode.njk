@@ -1,10 +1,17 @@
-<div class="bd-container" id="ag-agcl-electrode-container" style="height: 250px"></div>
+{% set idprefix = "ag-agcl-electrode" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 250px"></div>
+{{ controls.slider(idprefix + "-cl-slider", "$\\mathrm{Cl}^-$ concentration", { min: -3.1, max: 1.1, step: "any", value: -1.3, readout: true, unit: "mol/kg", snap: 0 }) }}
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
 
-    const diagram = new ElectrochemicalSpeciesBandDiagram('ag-agcl-electrode-container', {
+    const clSlider = document.getElementById('{{ idprefix }}-cl-slider');
+    const clConcSpan = document.getElementById('{{ idprefix }}-cl-slider-readout');
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram('{{idprefix}}-container', {
         cation: SPECIES.silver,
         anion: SPECIES.chloride,
         electron: SPECIES.electron,
@@ -17,51 +24,85 @@
         REGION.solution,
     ]);
 
+    const R = 8.31446261815324; // Gas constant (J/mol·K)
+    const F = 96485.3321233100184; // Faraday constant (C/mol)
+    const T = 298.15; // Temperature (K, 25°C)
+    const RT_F = (R * T) / F;
+
     const V_el = +0;
     const V_Cl = V_el + 1.138;
     diagram.setVRange(V_el - 0.23, V_Cl + 0.23);
 
-    const b = boundaries;
-    diagram.updateTraceData([
-        {
-            id: `electron_trace`,
-            speciesId: 'electron',
-            curveType: 'voltage',
-            showLabel: true,
-            x: [b[0], b[1]],
-            y: [V_el, V_el],
-        },
-        {
-            id: `anion_trace`,
-            speciesId: 'anion',
-            curveType: 'voltage',
-            showLabel: true,
-            x: [b[1], b[3]],
-            y: [V_Cl, V_Cl],
-        },
-        {
-            // the couple's implied electron level: the wire's V_e- carried
-            // through the coating and out into the solution by the reaction
-            id: `implied_trace`,
-            speciesId: 'electron',
-            curveType: 'voltageImplied',
-            showLabel: true,
-            label: 'V_{\\mathrm{e}^-}(\\mathrm{Ag/AgCl})',
-            labelFrac: 0.6,
-            labelVAlign: 'bottom',
-            x: [b[1], b[3]],
-            y: [V_el, V_el],
-        },
-    ]);
+    function updateDiagrams() {
+        const a_cl = Math.pow(10, parseFloat(clSlider.value));
+        clConcSpan.textContent = a_cl.toExponential(2);
 
-    diagram.updateVerticalMarkers([
-        {
-            id: 'ag-cl-',
-            x: b[1],
-            yDefs: [{ y: V_el }, { y: V_Cl }],
-            symbol: '⇌',
-            popupCallback: () =>
-                '$\\mathrm{AgCl} + \\mathrm{e}^- \\rightleftharpoons \\mathrm{Ag} + \\mathrm{Cl}^-$',
-        },
-    ]);
+        // readout form: V_e- = V°_e-(Ag/AgCl) - (RT/F) ln a_Cl-; the wire and
+        // V_Cl- stay put, only the standard rung rides the concentration
+        const V_std_agcl = V_el + RT_F * Math.log(a_cl);
+
+        const b = boundaries;
+        diagram.updateTraceData([
+            {
+                id: `electron_trace`,
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                labelFrac: 0.5,
+                labelHAlign: 'center',
+                x: [b[0], b[1]],
+                y: [V_el, V_el],
+            },
+            {
+                id: `anion_trace`,
+                speciesId: 'anion',
+                curveType: 'voltage',
+                showLabel: true,
+                x: [b[1], b[3]],
+                y: [V_Cl, V_Cl],
+            },
+            {
+                // the couple's implied electron level: the wire's V_e- carried
+                // through the coating and out into the solution by the reaction
+                id: `implied_trace`,
+                speciesId: 'electron',
+                curveType: 'voltageImplied',
+                showLabel: true,
+                label: 'V_{\\mathrm{e}^-}(\\mathrm{Ag/AgCl})',
+                labelFrac: 0.35,
+                labelVAlign: 'bottom',
+                x: [b[1], b[3]],
+                y: [V_el, V_el],
+            },
+            {
+                // the couple's standard level, a rung riding the aqueous V°_i
+                // ladder (solution only — the coating has its own standard
+                // states); its gap to the implied line is the Nernst offset
+                id: `agcl_std_trace`,
+                speciesId: 'electron',
+                curveType: 'standardStateImplied',
+                showLabel: true,
+                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{Ag/AgCl})',
+                labelFrac: 0.97,
+                labelHAlign: 'right',
+                labelVAlign: 'top',
+                x: [b[2], b[3]],
+                y: [V_std_agcl, V_std_agcl],
+            },
+        ]);
+
+        diagram.updateVerticalMarkers([
+            {
+                id: 'ag-cl-',
+                x: b[1],
+                yDefs: [{ y: V_el }, { y: V_Cl }],
+                symbol: '⇌',
+                popupCallback: () =>
+                    '$\\mathrm{AgCl} + \\mathrm{e}^- \\rightleftharpoons \\mathrm{Ag} + \\mathrm{Cl}^-$',
+            },
+        ]);
+    }
+
+    makeSlider('{{idprefix}}-cl-slider', () => updateDiagrams(), { fire: false });
+    updateDiagrams();
 </script>

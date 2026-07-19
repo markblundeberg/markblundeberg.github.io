@@ -33,7 +33,7 @@ The first line is the equilibrium condition; the second is the [floating Nernst 
 <figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/esbd-ag-agcl-electrode.njk" %}
 {% figcaption %}
-The Ag/AgCl electrode. The dashed line is the couple's implied electron level $V_{\mathrm{e}^-}(\mathrm{Ag/AgCl})$: the wire's own $V_{\mathrm{e}^-}$, carried out into the solution by the equilibrated reaction.
+The Ag/AgCl electrode. The dashed line is the couple's implied electron level $V_{\mathrm{e}^-}(\mathrm{Ag/AgCl})$: the wire's own $V_{\mathrm{e}^-}$, carried out into the solution by the equilibrated reaction. Its Nernst offset from the standard rung $V^\circ_{\mathrm{e}^-}(\mathrm{Ag/AgCl})$ follows the chloride concentration (slider); the wire holds still while the rung rides the ladder.
 {% endfigcaption %}
 </figure>
 
@@ -44,7 +44,7 @@ V_{\mathrm{e}^-} &= V_{\mathrm{H}^+} - \frac{\mu_{\mathrm{H_2}}}{2F} \\
 &= V^\circ_{\mathrm{e}^-}(\mathrm{SHE}) + \frac{RT}{F}\ln\frac{a_{\mathrm{H}^+}}{\sqrt{a_{\mathrm{H_2}}}},
 \end{aligned}
 $$
-with $V^\circ_{\mathrm{e}^-}(\mathrm{SHE}) = V^\circ_{\mathrm{H}^+} - \mu^\circ_{\mathrm{H_2}}/2F$. This is the electrode behind the [previous topic's](../e/) reference level: at standard activities the wire lands on $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ itself, the rung the whole $E$ scale hangs from.
+with $V^\circ_{\mathrm{e}^-}(\mathrm{SHE}) = V^\circ_{\mathrm{H}^+} - \mu^\circ_{\mathrm{H_2}}/2F$. This is the electrode behind the [previous topic's](../e/) reference level: at standard activities the wire lands on $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ itself, the rung the whole $E$ scale hangs from. In practice that standard form is finicky to realize, its nominal $a_{\mathrm{H}^+}=1$ implying an awkward pH of 0 and its "1 bar" of $\mathrm{H_2}$ competing with water vapour, so the *standard* hydrogen electrode is more idealization than instrument.
 <figure class="demo-container" style="max-width: 230px">
 {% include "esbd-diagrams/esbd-she.njk" %}
 {% figcaption %}
@@ -56,7 +56,10 @@ The hydrogen electrode. The metal's level continues into the solution as the imp
 
 Now stick the two together: a hydrogen electrode on the left, a silver chloride electrode on the right, both dipping into the same dissolved $\mathrm{HCl}$. Each wire is pinned by its own couple, and the two standard rungs ride the same ladder at a fixed, tabulated spacing, so the cell voltage follows by subtracting the two readout forms.
 <figure class="demo-container" style="max-width: 300px">
-{% include "esbd-diagrams/esbd-she-agcl.njk" %}
+{% include "esbd-diagrams/esbd-she-agcl-e.njk" %}
+{% figcaption %}
+The reference cell, electronic levels only (the ionic levels look as in the single-electrode figures above). Each wire rides its couple's implied dashed level, a Nernst activity gap (↕ markers) away from the couple's standard rung, and the cell voltage readout is the wire-to-wire gap. Try the sliders: the wires move while the rungs stay put, their $0.222~\mathrm{V}$ spacing fixed.
+{% endfigcaption %}
 </figure>
 
 The measured cell voltage comes out as
@@ -71,7 +74,7 @@ Two interpretations of this $\Delta V$ coexist happily: an engineer sees the ele
 
 ## Solution-centered vs. circuit-centered
 
-That subtraction was a **solution-centered** derivation: each electrode described by its own gap down to a standard rung (an $E$ against an $E^\circ$, in the [previous topic's](../e/) terms), and the two descriptions compared. Traditional electrochemistry has always read cells this way, narrated (when it is narrated at all) with $\phi$: start in the middle, at the solution's inner potential, and work outward to each electrode,
+That subtraction was a **solution-centered** derivation, and the cell figure draws it literally: two wires sitting against two standard rungs, each electrode described by its own gap down to a rung (an $E$ against an $E^\circ$, in the [previous topic's](../e/) terms), the two descriptions then compared. Traditional electrochemistry has always read cells this way, narrated (when it is narrated at all) with $\phi$: start in the middle, at the solution's inner potential, and work outward to each electrode,
 $$
 \begin{aligned}
 \phi(\text{soln}) &\to V^\circ_{\mathrm{H}^+} \to V_{\mathrm{H}^+} \to V_{\mathrm{e}^-}(\text{left}), \\
@@ -82,22 +85,13 @@ with $\phi$ cancelling in the difference. The floating levels tell the same stor
 
 This is also the distinction Boettcher et al. draw between the **electrode potential** (the electrode's own electronic level, our $V_{\mathrm{e}^-}(\text{electrode})$) and the **solution potential** (the solution's level, our $V^\circ_{\mathrm{e}^-}(\mathrm{rxn})$): two different "potentials" that the bare word runs together.
 
+A "standard electrode" is the hypothetical electrode that would sit exactly on its rung (set the activities to one in the readout forms above), and anchoring $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ to "0 V" recovers the usual reference frame of electrochemistry: an arbitrary choice, and one that will stop making sense the moment $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ varies in space. In fact the cell figure quietly made this choice already, holding its rungs still while the sliders move the wires.
+
 The diagram equally invites a **circuit-centered** reading: walk the chain
 $$ V_{\mathrm{e}^-}(\text{left}) \to V_{\mathrm{H}^+} \to V^\circ_{\mathrm{H}^+} \to V^\circ_{\mathrm{Cl}^-} \to V_{\mathrm{Cl}^-} \to V_{\mathrm{e}^-}(\text{right}), $$
 stepping from one real species voltage to the next, and dipping into single-ion activities only for the two $V_i \to V^\circ_i$ excursions (whose sum, the mean activity, is unambiguous).
 
 In a single well-mixed solution the two readings agree about everything observable, and choosing between them looks like taste. One question already separates them, though. The single-ion ambiguity of [nonideal solutions](../nonideal/) lets a solution's whole ladder slide by a convention-dependent offset, every rung riding along, while the real $V_i$ hold still. Read circuit-centered, the slide is invisible bookkeeping; read solution-centered, with $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ as the zero of the axis, the very same slide moves every wire in the frame instead. So which is moving, the wires or the SHE? Within one solution no measurement can tell, and the question sounds academic. Hold it; it stops being academic when a second solution arrives.
-
-## What a "standard electrode" really is
-
-A "standard electrode" is the hypothetical electrode that would sit exactly on its reaction's standard rung: set the activities to one in the readout forms above and the wire lands on $V^\circ_{\mathrm{e}^-}(\mathrm{rxn})$, one of the floating standard-redox levels we tabulated in the [half-reactions topic](../half/). Re-drawn with only the electronic levels, our cell is just two $V_{\mathrm{e}^-}$ values sitting against two standard rungs:
-<figure class="demo-container" style="max-width: 300px">
-{% include "esbd-diagrams/esbd-she-agcl-e.njk" %}
-</figure>
-
-Anchoring $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ to "0 V" recovers the usual reference frame of electrochemistry, an arbitrary choice that stops making sense the moment $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ varies in space.
-
-In practice the SHE is finicky to pin down: its nominal $a_{\mathrm{H}^+}=1$ implies an awkward pH of 0, its "1 bar" of $\mathrm{H_2}$ competes with water vapour, and like every standard level it must be reached by extrapolation from dilute cells, the one regime where the single-ion ambiguity dies away (the junction-free Harned cell being the classic).^[Harned, H. S., & Ehlers, R. W. (1932). J. Am. Chem. Soc., 54, 1350, and Harned, H. S., & Ehlers, R. W. (1933). J. Am. Chem. Soc., 55, 2179 — the classic extrapolation; redone definitively in Bates, R. G., & Bower, V. E. (1954). [Standard potential of the silver-silver-chloride electrode from 0° to 95° C.](https://nvlpubs.nist.gov/nistpubs/jres/53/jresv53n5p283_A1b.pdf) J. Res. Natl. Bur. Stand., 53(5), 283–290.] Any "$V_{\mathrm{e}^-}(\mathrm{SHE})$" is, in the end, a theoretical extrapolated level tied to the standard state of the aqueous proton, $V^\circ_{\mathrm{H}^+}$.
 
 ## The liquid junction potential
 
@@ -121,7 +115,7 @@ How a reference electrode really attaches: the silver-chloride electrode sits in
 
 The held question comes due as soon as we take activities seriously, and it splits into a reassuring half and an unsettling half.
 
-The reassuring half belongs to the junction-free cell. Its voltage touches the ions only through the charge-neutral product $a_{\mathrm{H}^+}a_{\mathrm{Cl}^-}$, so nonideality enters as real, measurable physics with no convention in sight: run our reference cell across a range of $\mathrm{HCl}$ concentrations (this is precisely the Harned cell of the extrapolation above) and the measured voltage peels away from the ideal-dilute prediction, the gap being exactly $\tfrac{2RT}{F}\ln\gamma_\pm$. A mean activity coefficient, read straight off a voltmeter.
+The reassuring half belongs to the junction-free cell. Its voltage touches the ions only through the charge-neutral product $a_{\mathrm{H}^+}a_{\mathrm{Cl}^-}$, so nonideality enters as real, measurable physics with no convention in sight: run our reference cell across a range of $\mathrm{HCl}$ concentrations (this arrangement is the classic **Harned cell**) and the measured voltage peels away from the ideal-dilute prediction, the gap being exactly $\tfrac{2RT}{F}\ln\gamma_\pm$. A mean activity coefficient, read straight off a voltmeter. The same cell, extrapolated to the dilute limit where the single-ion ambiguity dies away, is how the standard levels get pinned down in the first place;^[Harned, H. S., & Ehlers, R. W. (1932). J. Am. Chem. Soc., 54, 1350, and Harned, H. S., & Ehlers, R. W. (1933). J. Am. Chem. Soc., 55, 2179 — the classic extrapolation; redone definitively in Bates, R. G., & Bower, V. E. (1954). [Standard potential of the silver-silver-chloride electrode from 0° to 95° C.](https://nvlpubs.nist.gov/nistpubs/jres/53/jresv53n5p283_A1b.pdf) J. Res. Natl. Bur. Stand., 53(5), 283–290.] any tabulated $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ is, in the end, a theoretical extrapolated level tied to the standard state of the aqueous proton.
 
 <figure class="demo-container" style="max-width: 460px">
 <!-- TODO(figure): harned-nonideal — measured Harned-cell voltage vs HCl molality: tabulated data points (Harned & Ehlers / Bates & Bower) or 1-1 Pitzer curve (port from AI codes/nonideal/, HCl params from Mark; exaggerated params fine for now), plus the ideal-dilute Nernst curve; shaded gap = (2RT/F) ln γ±. Optionally companion extrapolation view (intercept = E°). Static x-y plot. -->
