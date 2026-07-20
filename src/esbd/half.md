@@ -75,7 +75,7 @@ These levels float alongside our ionic standard states $V^\circ_i$. For the ion 
 
 This looks extremely like the regular {%wiki "Nernst equation" %}, except that it delivers $V_{\mathrm{e}^-}$ rather than $E$. What that traditional electrochemical $E$ actually means, we take up in the [next topic](../e/); we do not need it yet.
 
-It helps to see where these redox levels lie among the ionic levels of the previous topics; take the ferric/ferrous couple. Note that to read out $V_{\mathrm{e}^-}(\mathrm{Fe}^{3+}/\mathrm{Fe}^{2+})$ potentiometrically without influence from other reactions, a glassy carbon electrode could be used, since a platinum electrode may also pick up hydrogen or oxygen redox couples and drift toward a mixed potential.^[This is a worry for open-circuit *potentiometry*. In *voltammetry*, by contrast, platinum is a standard working electrode for the ferric/ferrous couple — its fast electron-transfer [kinetics](../kinetics/) outweigh the mixed-potential concern.]
+It helps to see where these redox levels lie among the ionic levels of the previous topics; take the ferric/ferrous couple, measurable in practice with an inert electrode.^[On the choice of that electrode: glassy carbon reads $V_{\mathrm{e}^-}(\mathrm{Fe}^{3+}/\mathrm{Fe}^{2+})$ potentiometrically without influence from other reactions, whereas platinum may also pick up hydrogen or oxygen redox couples and drift toward a mixed potential. That is a worry for open-circuit *potentiometry*; in *voltammetry*, platinum is a standard working electrode for this couple, its fast electron-transfer [kinetics](../kinetics/) outweighing the mixed-potential concern.]
 
 <figure class="demo-container" style="max-width: 480px">
 {% include "esbd-diagrams/levels-half-ferric.njk" %}
