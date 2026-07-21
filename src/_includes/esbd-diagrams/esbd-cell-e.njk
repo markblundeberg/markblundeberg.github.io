@@ -18,11 +18,13 @@
 
     // Generic cell, no particular chemistry: two wires and the SHE rung they
     // are both measured against. Drawn in the traditional frame V°(SHE) = 0.
-    const V_L = -0.35;
-    const V_R = +0.45;
+    // Both wires kept ABOVE the rung so the drawn ↕ heights are the E values
+    // themselves, with no negative-height awkwardness (schematic anyway).
+    const V_L = +0.2;
+    const V_R = +0.5;
     const V0_SHE = 0;
 
-    diagram.setVRange(-0.55, 0.65);
+    diagram.setVRange(-0.15, 0.68);
 
     const b = boundaries;
     diagram.updateTraceData([
