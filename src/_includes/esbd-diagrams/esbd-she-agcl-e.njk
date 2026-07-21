@@ -49,7 +49,7 @@
     const E0_AGCL_SHE =
         mu_H2_1bar / (2 * F) - dV_HCl_std - (mu_Ag - mu_AgCl) / F;
 
-    diagram.setVRange(-0.35, 0.55);
+    diagram.setVRange(-0.19, 0.71);
 
     function updateDiagrams() {
         const a_hcl = Math.pow(10, parseFloat(hSlider.value));
@@ -61,8 +61,12 @@
         const a_hplus = a_hcl;
         const a_clminus = a_hcl;
 
-        const V0_SHE = 0;
-        const V_el = V0_SHE + RT_F * Math.log(a_hplus / Math.sqrt(a_h2));
+        // Gauge: the Pt wire is ground (circuit-centered, matching the
+        // single-electrode figures): the sliders move the rungs and the
+        // other wire. The traditional-frame twin (esbd-she-agcl-trad)
+        // draws the same cell rung-pinned instead.
+        const V_el = 0; // GND
+        const V0_SHE = V_el - RT_F * Math.log(a_hplus / Math.sqrt(a_h2));
         const V0_AGCL = V0_SHE + E0_AGCL_SHE;
         const V_el_Ag = V0_AGCL - RT_F * Math.log(a_clminus);
 

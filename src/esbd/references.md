@@ -73,7 +73,7 @@ Now stick the two together: a hydrogen electrode on the left, a silver chloride 
 <figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/esbd-she-agcl-e.njk" %}
 {% figcaption %}
-The reference cell, electronic levels only (the ionic levels look as in the single-electrode figures above). Each wire rides its couple's implied dashed level, a Nernst concentration gap (↕ markers) away from the couple's standard rung, and the cell voltage readout is the wire-to-wire gap. Try the sliders: the wires move while the rungs stay put, their $0.222~\mathrm{V}$ spacing fixed.
+The reference cell, electronic levels only (the ionic levels look as in the single-electrode figures above). Each wire rides its couple's implied dashed level, a Nernst concentration gap (↕ markers) away from the couple's standard rung, and the cell voltage readout is the wire-to-wire gap. Try the sliders: the left wire is our ground and holds still while the rungs (and the other wire) do the moving, the rungs' $0.222~\mathrm{V}$ spacing fixed.
 {% endfigcaption %}
 </figure>
 
@@ -97,7 +97,7 @@ The usual practice in electrochemistry is to put the standard hydrogen electrode
 {% include "esbd-diagrams/esbd-she-agcl-trad.njk" %}
 {% figcaption %}
 
-The reference cell redrawn the traditional way: the axis reads electrode potential, $E^\circ(\mathrm{SHE})$ is pinned at $0$, the tabulated $E^\circ(\mathrm{Ag/AgCl})$ hangs at its fixed height, and each electrode reads off as its own $E$, a Nernst term (↕) from its couple's standard line. Same sliders, same heights as the figure above; only the names have changed, and the implied-level clutter is gone.
+The reference cell redrawn the traditional way: the axis reads electrode potential, $E^\circ(\mathrm{SHE})$ is pinned at $0$, the tabulated $E^\circ(\mathrm{Ag/AgCl})$ hangs at its fixed height, and each electrode reads off as its own $E$, a Nernst term (↕) from its couple's standard line. Same cell and sliders as the figure above, but the opposite answer to who moves when you drag them: there the grounded wire held still and the rungs rode; here the rungs are pinned and the $E$ levels ride. (The implied-level clutter is gone, too.)
 
 {% endfigcaption %}
 </figure>
