@@ -1,0 +1,226 @@
+{% set idprefix = "esbd-harned-nonideal" %} {# the Harned cell run nonideal, with a single-ion split slider #}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 300px"></div>
+<div class="bd-container" id="{{idprefix}}-cellpanel" style="height: 170px"></div>
+{{ controls.slider(idprefix + "-conc", "$\\mathrm{HCl}$ concentration", { min: -3, max: 0.602, step: "any", value: -1, readout: true, unit: "mol/kg", snap: 0 }) }}
+{{ controls.slider(idprefix + "-split", "single-ion split (exaggerated)", { min: -0.15, max: 0.15, step: "any", value: 0, readout: true, unit: "mV", snap: 0 }) }}
+<div class="bd-readout" style="text-align: center; font-size: 0.85em; color: #444; margin-top: 0.3em">
+<span id="{{idprefix}}-es"></span><br /><span id="{{idprefix}}-dv"></span>
+</div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import XYPlot from '{{ esbdJsPath }}XYPlot.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, renderSpanMath, linspace } from '{{ esbdJsPath }}utils.js';
+
+    // The Harned cell — the reference cell above — run with the REAL γ± of
+    // HCl (simplified 1-1 Pitzer, PHREEQC pitzer.dat params; H2 held at
+    // 1 bar). Gauge: the Pt wire is ground, so the Ag wire's height IS the
+    // cell voltage, the same number the lower panel plots vs concentration.
+    // The split slider re-divides the measured γ± between H+ and Cl-:
+    //   ln γ_H+ = ln γ± + sF/RT,  ln γ_Cl- = ln γ± − sF/RT,
+    // which slides the whole rung ladder (V°_H+/SHE and V°_Cl-/AgCl
+    // together) DOWN by s while every wire, implied level, and the ΔV
+    // readout hold still. Range ±150 mV is deliberately exaggerated: real
+    // named conventions (MacInnes, Bates–Guggenheim, symmetric) huddle
+    // within ~±30 mV of center even at 4 mol/kg. In traditional language
+    // the slider moves E(left) and E(right) — the readout shows both
+    // shifting while their difference stays put.
+    const RT_F = 0.025693; // V at 25 °C
+    const DV_HCL = 1.3601; // V°_Cl- − V°_H+ in water (iondata)
+    const V_AGCL = 1.138; // V_Cl- − V_e- at the Ag/AgCl electrode
+    const E0 = DV_HCL - V_AGCL; // 0.2221 V, Ag/AgCl vs SHE
+
+    // simplified Pitzer, 1-1 electrolyte (25 °C); same code as the AI
+    // codes/nonideal KCl demo
+    const A_PHI = 0.3915, B_P = 1.2, ALPHA = 2.0;
+    const HCL = { b0: 0.1775, b1: 0.2945, cphi: 0.0008 };
+    function lnGammaPm(m) {
+        const s = Math.sqrt(m);
+        const f = -A_PHI * (s / (1 + B_P * s) + (2 / B_P) * Math.log(1 + B_P * s));
+        const Bg = 2 * HCL.b0 + ((2 * HCL.b1) / (ALPHA * ALPHA * m)) *
+            (1 - (1 + ALPHA * s) * Math.exp(-ALPHA * s));
+        return f + m * Bg + m * m * 1.5 * HCL.cphi;
+    }
+    const dVcell = (m) => E0 - 2 * RT_F * (Math.log(m) + lnGammaPm(m));
+
+    const boundaries = [0.0, 0.25, 0.65, 0.75, 1.0];
+    const diagram = new ElectrochemicalSpeciesBandDiagram('{{idprefix}}-container', {
+        electron: SPECIES.electron,
+    });
+    diagram.setSpatialLayout(boundaries, [
+        { ...REGION.metal, name: 'Pt' },
+        { ...REGION.solution, name: 'HCl' },
+        { ...REGION.agcl },
+        { ...REGION.metal, name: 'Ag' },
+    ]);
+    diagram.setVRange(-0.3, 0.66);
+
+    // lower panel: cell voltage vs concentration (log axis), measured
+    // (Pitzer) vs ideal-dilute Nernst; the dot rides at the slider's m
+    const cell = new XYPlot('{{idprefix}}-cellpanel', {
+        xLabel: '$m_{\\mathrm{HCl}}$ (log scale, $10^{-3}$ to $4$ mol/kg)',
+        yLabel: 'cell voltage (V)',
+        xRange: [-3, 0.602],
+        yRange: [0.08, 0.63],
+        xMode: 'abstract',
+        margins: { bottom: 30 },
+    });
+    {
+        const lg = linspace(-3, 0.602, 200);
+        const meas = lg.map((r) => dVcell(Math.pow(10, r)));
+        const ideal = lg.map((r) => E0 - 2 * RT_F * Math.LN10 * r);
+        cell.updateTraceData([
+            {
+                // shaded gap between the curves: the 2(RT/F) ln γ± term
+                id: 'gap',
+                x: [...lg, ...[...lg].reverse()],
+                y: [...meas, ...[...ideal].reverse()],
+                color: SPECIES.electron.color,
+                style: { lineWidth: 0, opacity: 0, fillOpacity: 0.13 },
+            },
+            {
+                id: 'ideal',
+                x: lg,
+                y: ideal,
+                color: '#909090',
+                style: { lineWidth: 1.5, dasharray: '5,3' },
+                label: '\\text{ideal-dilute}',
+                labelFrac: 0.98,
+                labelHAlign: 'right',
+                labelVAlign: 'bottom',
+            },
+            {
+                id: 'meas',
+                x: lg,
+                y: meas,
+                color: SPECIES.electron.color,
+                label: '\\text{measured}',
+                labelFrac: 0.98,
+                labelHAlign: 'right',
+                labelVAlign: 'top',
+            },
+        ]);
+    }
+
+    const b = boundaries;
+    function update() {
+        const r = parseFloat(document.getElementById('{{idprefix}}-conc').value);
+        const s = parseFloat(document.getElementById('{{idprefix}}-split').value);
+        const m = Math.pow(10, r);
+        document.getElementById('{{idprefix}}-conc-readout').textContent =
+            m.toPrecision(2);
+        document.getElementById('{{idprefix}}-split-readout').textContent =
+            (1e3 * s).toFixed(0);
+
+        const lnApm = Math.log(m) + lnGammaPm(m); // ln(m γ±)
+        const dV = E0 - 2 * RT_F * lnApm; // Ag wire (Pt wire = ground)
+        // rungs: ln a_H+ = lnApm + sF/RT, so V°_H+ (= SHE rung) sits at
+        // −RT/F·lnApm − s; the AgCl rung rides rigidly E0 above it
+        const V0_SHE = -RT_F * lnApm - s;
+        const V0_AGCL = V0_SHE + E0;
+        const E_L = 0 - V0_SHE;
+        const E_R = dV - V0_SHE;
+
+        diagram.updateTraceData([
+            {
+                id: 'electron_trace',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                labelFrac: 0.5,
+                labelHAlign: 'center',
+                x: [b[0], b[1]],
+                y: [0, 0],
+            },
+            {
+                id: 'implied_left',
+                speciesId: 'electron',
+                curveType: 'voltageImplied',
+                showLabel: true,
+                label: 'V_{\\mathrm{e}^-}(\\mathrm{H}^+/\\mathrm{H_2})',
+                labelFrac: 0.35,
+                labelVAlign: 'top',
+                x: [b[1], b[2]],
+                y: [0, 0],
+            },
+            {
+                id: 'implied_right',
+                speciesId: 'electron',
+                curveType: 'voltageImplied',
+                showLabel: true,
+                label: 'V_{\\mathrm{e}^-}(\\mathrm{Ag/AgCl})',
+                labelFrac: 0.35,
+                labelVAlign: 'bottom',
+                x: [b[1], b[3]],
+                y: [dV, dV],
+            },
+            {
+                id: 'electron_she',
+                speciesId: 'electron',
+                curveType: 'standardStateImplied',
+                label: String.raw`V^\circ_{\mathrm{e}^-}(\mathrm{SHE})`,
+                showLabel: true,
+                x: [b[1], b[2]],
+                y: [V0_SHE, V0_SHE],
+            },
+            {
+                id: 'electron_agcl',
+                speciesId: 'electron',
+                curveType: 'standardStateImplied',
+                label: String.raw`V^\circ_{\mathrm{e}^-}(\mathrm{Ag/AgCl})`,
+                showLabel: true,
+                x: [b[1], b[3]],
+                y: [V0_AGCL, V0_AGCL],
+            },
+            {
+                id: 'electron_trace2',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                labelFrac: 0.5,
+                labelHAlign: 'center',
+                x: [b[3], b[4]],
+                y: [dV, dV],
+            },
+        ]);
+
+        diagram.updateVerticalMarkers([
+            {
+                id: 'she',
+                symbol: '↕',
+                x: b[1],
+                yDefs: [{ y: 0 }, { y: V0_SHE }],
+                popupCallback: () =>
+                    String.raw`the Nernst gap $\tfrac{RT}{F}\ln a_{\mathrm{H}^+}$, alias $E(\text{left})$: the split slider moves it with no physical change`,
+            },
+            {
+                id: 'agcl',
+                symbol: '↕',
+                x: b[3],
+                yDefs: [{ y: dV }, { y: V0_AGCL }],
+                popupCallback: () =>
+                    String.raw`the Nernst gap $-\tfrac{RT}{F}\ln a_{\mathrm{Cl}^-}$: the split slider moves it the opposite way`,
+            },
+        ]);
+
+        cell.updateMarkers([
+            { id: 'here', x: r, y: dV, color: SPECIES.electron.color },
+        ]);
+
+        renderSpanMath(
+            document.getElementById('{{idprefix}}-es'),
+            String.raw`E(\text{left}) = ${E_L.toFixed(3)}\,\mathrm{V},\quad ` +
+            String.raw`E(\text{right}) = ${E_R.toFixed(3)}\,\mathrm{V}`
+        );
+        renderSpanMath(
+            document.getElementById('{{idprefix}}-dv'),
+            String.raw`\Delta V = E(\text{right}) - E(\text{left}) = ${dV.toFixed(3)}\,\mathrm{V}\ \text{(split-proof)}`
+        );
+    }
+
+    makeSlider('{{idprefix}}-conc', update, { fire: false });
+    makeSlider('{{idprefix}}-split', update, { fire: false });
+    update();
+</script>

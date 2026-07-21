@@ -1,0 +1,219 @@
+{% set idprefix = "esbd-two-splits" %} {# two compartments, two free single-ion splits, choosable zero #}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 300px"></div>
+{{ controls.slider(idprefix + "-splitL", "single-ion split, left", { min: -0.15, max: 0.15, step: "any", value: 0, readout: true, unit: "mV", snap: 0 }) }}
+{{ controls.slider(idprefix + "-splitR", "single-ion split, right", { min: -0.15, max: 0.15, step: "any", value: 0, readout: true, unit: "mV", snap: 0 }) }}
+<div class="bd-control" style="text-align: center; font-size: 0.85em; margin-top: 0.3em">zero level:
+<label style="white-space: nowrap; margin-left: 0.5em"><input type="radio" name="{{idprefix}}-zero" value="wL" style="vertical-align: middle" /> {{ "$V_{\\mathrm{e}^-}(\\text{left})$" | katex | safe }}</label>
+<label style="white-space: nowrap; margin-left: 0.5em"><input type="radio" name="{{idprefix}}-zero" value="sheL" checked style="vertical-align: middle" /> SHE (left)</label>
+<label style="white-space: nowrap; margin-left: 0.5em"><input type="radio" name="{{idprefix}}-zero" value="sheR" style="vertical-align: middle" /> SHE (right)</label>
+<label style="white-space: nowrap; margin-left: 0.5em"><input type="radio" name="{{idprefix}}-zero" value="wR" style="vertical-align: middle" /> {{ "$V_{\\mathrm{e}^-}(\\text{right})$" | katex | safe }}</label>
+</div>
+<div class="bd-readout" style="text-align: center; font-size: 0.85em; color: #444; margin-top: 0.3em">
+<span id="{{idprefix}}-split"></span><br /><span id="{{idprefix}}-dv"></span>
+</div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, renderSpanMath } from '{{ esbdJsPath }}utils.js';
+
+    // The junction figure stripped to its skeleton: hydrogen electrode in
+    // 0.1 mol/kg HCl (left), our Ag/AgCl-in-3-mol/kg-KCl reference (right),
+    // meeting at a bare frit. All REAL levels are fixed physical inputs:
+    // γ± from the simplified 1-1 Pitzer model, the junction from an
+    // ideal-dilute Henderson estimate (an estimate, but convention-free).
+    // Each compartment then carries its own FREE single-ion split slider
+    // (ln γ_H+ = ln γ± + sF/RT on the left, ln γ_K+ = ln γ± + sF/RT on
+    // the right): each slides only its own compartment's rungs, so the
+    // local SHE levels are independently movable and the LJP — the rung
+    // step at the frit — is contaminated by BOTH choices. E(left),
+    // E(right), and LJP all shuffle in the readout while ΔV holds still.
+    // The zero radio then re-pins the whole drawing to any one level:
+    // pinned to a wire, the sliders move only rungs; pinned to one
+    // compartment's SHE, that compartment's slider moves everything else
+    // in the universe instead. Defaults to SHE (left) — the traditional
+    // choice — so the absurdity shows first.
+    const RT_F = 0.025693; // V at 25 °C
+    const M_HCL = 0.1; // mol/kg, left compartment
+    const M_KCL = 3.0; // mol/kg, right compartment
+    const DV_HCL = 1.3601; // V°_Cl- − V°_H+ in water (iondata)
+    const V_AGCL = 1.138; // V_Cl- − V_e- at the Ag/AgCl electrode
+    const U_H = 36.23, U_K = 7.62, U_CL = 7.91; // mobilities (ratios only)
+
+    // simplified Pitzer, 1-1 electrolyte (25 °C); PHREEQC pitzer.dat params
+    const A_PHI = 0.3915, B_P = 1.2, ALPHA = 2.0;
+    const HCL = { b0: 0.1775, b1: 0.2945, cphi: 0.0008 };
+    const KCL = { b0: 0.04835, b1: 0.2122, cphi: -0.00084 };
+    function lnGammaPm(m, p) {
+        const s = Math.sqrt(m);
+        const f = -A_PHI * (s / (1 + B_P * s) + (2 / B_P) * Math.log(1 + B_P * s));
+        const Bg = 2 * p.b0 + ((2 * p.b1) / (ALPHA * ALPHA * m)) *
+            (1 - (1 + ALPHA * s) * Math.exp(-ALPHA * s));
+        return f + m * Bg + m * m * 1.5 * p.cphi;
+    }
+
+    // ---- fixed real levels, working gauge V_e-(left) = 0 ----------------
+    const lnApmL = Math.log(M_HCL) + lnGammaPm(M_HCL, HCL); // ln(m γ±), HCl
+    const lnApmR = Math.log(M_KCL) + lnGammaPm(M_KCL, KCL); // ln(m γ±), KCl
+    // hydrogen electrode at 1 bar: V_H+(left) = V_e-(left) = 0
+    const V_H_L = 0;
+    // convention-free pair gap: V_Cl- − V_H+ = DV_HCL − 2(RT/F) ln(m γ±)
+    const V_CL_L = V_H_L + DV_HCL - 2 * RT_F * lnApmL;
+    // junction: ideal-dilute Henderson estimate, HCl(0.1) | KCl(3)
+    const UL = U_H * M_HCL, VL = U_CL * M_HCL;
+    const UR = U_K * M_KCL, VR = U_CL * M_KCL;
+    const dPhi = -RT_F * ((UL - VL - (UR - VR)) / (UL + VL - (UR + VR))) *
+        Math.log((UR + VR) / (UL + VL)); // φ_right − φ_left
+    const V_CL_R = V_CL_L + dPhi - RT_F * Math.log(M_KCL / M_HCL);
+    const V_E_R = V_CL_R - V_AGCL; // = ΔV, wire to wire
+    const DV = V_E_R - 0;
+
+    const b = [0, 0.14, 0.44, 0.56, 0.86, 1.0];
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        {
+            hplus: SPECIES.proton,
+            electron: SPECIES.electron,
+        }
+    );
+    diagram.setSpatialLayout(b, [
+        { ...REGION.metal, name: 'Pt' },
+        { ...REGION.solution, name: 'HCl' },
+        { name: '', color: '#f0f5ec' },
+        { ...REGION.solution2, name: 'KCl' },
+        { ...REGION.metal, name: 'Ag/AgCl' },
+    ]);
+    diagram.setVRange(-0.43, 0.44);
+
+    const zeroRadios = Array.from(document.getElementsByName('{{idprefix}}-zero'));
+
+    function update() {
+        const sL = parseFloat(document.getElementById('{{idprefix}}-splitL').value);
+        const sR = parseFloat(document.getElementById('{{idprefix}}-splitR').value);
+        document.getElementById('{{idprefix}}-splitL-readout').textContent =
+            (1e3 * sL).toFixed(0);
+        document.getElementById('{{idprefix}}-splitR-readout').textContent =
+            (1e3 * sR).toFixed(0);
+
+        // rungs (working gauge): each split slides its own ladder down by s
+        const V0_H_L = V_H_L - RT_F * lnApmL - sL; // = SHE rung, left
+        const V0_CL_R = V_CL_R + RT_F * lnApmR - sR;
+        const V0_H_R = V0_CL_R - DV_HCL; // = SHE rung, right
+
+        // re-pin the drawing to the chosen zero (gaps are unaffected)
+        const zeroChoice = zeroRadios.find((r) => r.checked).value;
+        const z = { wL: 0, sheL: V0_H_L, sheR: V0_H_R, wR: V_E_R }[zeroChoice];
+
+        const E_L = 0 - V0_H_L;
+        const E_R = V_E_R - V0_H_R;
+        const LJP = V0_H_R - V0_H_L;
+
+        diagram.updateTraceData([
+            {
+                id: 've_left',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                labelFrac: 0.5,
+                labelHAlign: 'center',
+                x: [b[0], b[1]],
+                y: [0 - z, 0 - z],
+            },
+            {
+                id: 've_right',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                labelFrac: 0.5,
+                labelHAlign: 'center',
+                x: [b[4], b[5]],
+                y: [V_E_R - z, V_E_R - z],
+            },
+            {
+                // true rung behind the dashed SHE overlay (dual identity)
+                id: 'v0h_left',
+                speciesId: 'hplus',
+                curveType: 'standardState',
+                showLabel: false,
+                x: [b[1], b[2]],
+                y: [V0_H_L - z, V0_H_L - z],
+            },
+            {
+                id: 'vshe_left',
+                speciesId: 'electron',
+                curveType: 'standardStateImplied',
+                showLabel: true,
+                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{SHE})\\,{=}\\,V^\\circ_{\\mathrm{H}^+}',
+                labelFrac: 0.04,
+                labelVAlign: 'bottom',
+                x: [b[1], b[2]],
+                y: [V0_H_L - z, V0_H_L - z],
+            },
+            {
+                id: 'v0h_right',
+                speciesId: 'hplus',
+                curveType: 'standardState',
+                showLabel: false,
+                x: [b[3], b[4]],
+                y: [V0_H_R - z, V0_H_R - z],
+            },
+            {
+                id: 'vshe_right',
+                speciesId: 'electron',
+                curveType: 'standardStateImplied',
+                showLabel: true,
+                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{SHE})',
+                labelFrac: 0.96,
+                labelHAlign: 'right',
+                labelVAlign: 'bottom',
+                x: [b[3], b[4]],
+                y: [V0_H_R - z, V0_H_R - z],
+            },
+        ]);
+
+        diagram.updateVerticalMarkers([
+            {
+                id: 'e_left',
+                symbol: '↕',
+                x: b[1],
+                yDefs: [{ y: 0 - z }, { y: V0_H_L - z }],
+                popupCallback: () =>
+                    String.raw`$E(\text{left}) = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\mathrm{SHE},\text{left}) = ${E_L.toFixed(3)}\,\mathrm{V}$`,
+            },
+            {
+                id: 'e_right',
+                symbol: '↕',
+                x: b[4],
+                yDefs: [{ y: V_E_R - z }, { y: V0_H_R - z }],
+                popupCallback: () =>
+                    String.raw`$E(\text{right}) = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\mathrm{SHE},\text{right}) = ${E_R.toFixed(3)}\,\mathrm{V}$`,
+            },
+            {
+                id: 'ljp',
+                symbol: '↕',
+                x: (b[2] + b[3]) / 2,
+                yDefs: [{ y: V0_H_R - z }, { y: V0_H_L - z }],
+                popupCallback: () =>
+                    String.raw`$\mathrm{LJP} = ${(1e3 * LJP).toFixed(1)}\,\mathrm{mV}$ — the rung step at the frit, contaminated by both splits`,
+            },
+        ]);
+
+        renderSpanMath(
+            document.getElementById('{{idprefix}}-split'),
+            String.raw`E(\text{left}) = ${E_L.toFixed(3)}\,\mathrm{V},\quad ` +
+            String.raw`E(\text{right}) = ${E_R.toFixed(3)}\,\mathrm{V},\quad ` +
+            String.raw`\mathrm{LJP} = ${(1e3 * LJP).toFixed(1)}\,\mathrm{mV}`
+        );
+        renderSpanMath(
+            document.getElementById('{{idprefix}}-dv'),
+            String.raw`\Delta V = E(\text{right}) - E(\text{left}) + \mathrm{LJP} = ` +
+            String.raw`${(1e3 * DV).toFixed(1)}\,\mathrm{mV}\ \text{(fixed)}`
+        );
+    }
+
+    makeSlider('{{idprefix}}-splitL', update, { fire: false });
+    makeSlider('{{idprefix}}-splitR', update, { fire: false });
+    zeroRadios.forEach((r) => r.addEventListener('change', update));
+    update();
+</script>
