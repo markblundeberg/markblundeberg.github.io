@@ -164,7 +164,7 @@ Could we sidestep all this by referencing to the vacuum instead, an "absolute" e
 {% include "esbd-diagrams/esbd-vac-she.njk" %}
 {% figcaption %}
 
-The "absolute" electrode potential on a $V_i$ diagram: $\phi_{\mathrm{vac}}$ just outside the cell sits $4.44~\mathrm{V}$ below the SHE rung, exactly as a work function sits below a metal's $V_{\mathrm{e}^-}$. One more floating level to line things up with, not a universal zero.
+The "absolute" electrode potential on a $V_i$ diagram: $\phi_{\mathrm{vac}}$ just outside the cell sits $4.44~\mathrm{V}$ below the SHE rung, exactly as a work function sits below a metal's $V_{\mathrm{e}^-}$. One more floating level to line things up with, not a universal zero. (Drawn tilted because that is its natural state: stray fields and patchy surfaces bend a real vacuum level, and only careful compensation experiments iron it flat.)
 
 {% endfigcaption %}
 </figure>

@@ -11,8 +11,16 @@
     // McTigue via Trasatti), exactly as a work function sits below a metal's
     // V_e-. Deliberately NOT drawn at V°_e-(SHE) = 0: the global float is
     // free, and the vacuum is one more floating level, not a universal zero.
+    // And deliberately NOT drawn flat: real vacuum levels tilt (stray fields,
+    // patchy contaminated surfaces); only careful compensation experiments
+    // iron them out. The 4.44 V gap is read just outside the surface.
     const VSHE = 0.15; // floated off zero on purpose
     const WSHE = 4.44;
+    const phiVac = (x) => {
+        const t = (x - 0.55) / 0.45; // 0 at the surface, 1 at the far edge
+        return VSHE - WSHE - 0.18 * t - 0.17 * t * t;
+    };
+    const vacXs = [0.55, 0.66, 0.77, 0.89, 1.0];
 
     const diagram = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-container',
@@ -41,8 +49,8 @@
             curveType: 'phi',
             label: '\\phi_{\\mathrm{vac}}',
             labelFrac: 0.6,
-            x: [0.55, 1],
-            y: [VSHE - WSHE, VSHE - WSHE],
+            x: [...vacXs],
+            y: vacXs.map(phiVac),
         },
         // dotted guide carrying the SHE rung to the marker's x, so the
         // marker's top dot doesn't hang in empty vacuum (vac-rungs idiom)
@@ -61,7 +69,7 @@
         {
             id: 'wshe',
             x: 0.62,
-            yDefs: [{ y: VSHE }, { y: VSHE - WSHE }],
+            yDefs: [{ y: VSHE }, { y: phiVac(0.62) }],
             symbol: '↕',
             popupCallback: () =>
                 'the widely-quoted "absolute" SHE potential, ≈ 4.44 V: an electrode work function — a per-surface quantity, not a universal zero',
