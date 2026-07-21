@@ -12,3 +12,4 @@
 Thumbs.db
 # Diagram-review PNG gallery — local review artifact, regenerable (npm run gallery)
 gallery/
+*.pyc
