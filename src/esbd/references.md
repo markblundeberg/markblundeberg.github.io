@@ -56,21 +56,19 @@ The hydrogen electrode. The metal's level continues into the solution as the imp
 
 ## A reference cell
 
-Now stick the two together: a hydrogen electrode on the left, a silver chloride electrode on the right, both dipping into the same dissolved $\mathrm{HCl}$. Each wire is pinned by its own couple, and the two standard rungs ride the same ladder at a fixed, tabulated spacing, so the cell voltage follows by subtracting the two readout forms.
+Now stick the two together: a hydrogen electrode on the left, a silver chloride electrode on the right, both dipping into the same dissolved $\mathrm{HCl}$. Each wire is pinned by its own couple, and the two standard rungs ride the same ladder at a fixed, tabulated spacing, so the cell voltage follows by subtracting the two readout forms. (For now we run everything ideal-dilute, each activity read as a plain concentration, $a_i = m_i/m^\circ$ and $a_{\mathrm{H_2}} = p_{\mathrm{H_2}}/p^\circ$; the real activities get their turn below.)
 <figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/esbd-she-agcl-e.njk" %}
 {% figcaption %}
-The reference cell, electronic levels only (the ionic levels look as in the single-electrode figures above). Each wire rides its couple's implied dashed level, a Nernst activity gap (↕ markers) away from the couple's standard rung, and the cell voltage readout is the wire-to-wire gap. Try the sliders: the wires move while the rungs stay put, their $0.222~\mathrm{V}$ spacing fixed.
+The reference cell, electronic levels only (the ionic levels look as in the single-electrode figures above). Each wire rides its couple's implied dashed level, a Nernst concentration gap (↕ markers) away from the couple's standard rung, and the cell voltage readout is the wire-to-wire gap. Try the sliders: the wires move while the rungs stay put, their $0.222~\mathrm{V}$ spacing fixed.
 {% endfigcaption %}
 </figure>
 
 The measured cell voltage comes out as
-$$ V_{\mathrm{e}^-}(\text{right}) - V_{\mathrm{e}^-}(\text{left}) = E^\circ_{\mathrm{cell}} + \frac{RT}{F}\ln\!\bigg(\frac{\sqrt{a_{\mathrm{H_2}}}}{a_{\mathrm{H}^+}a_{\mathrm{Cl}^-}}\bigg), $$
+$$ V_{\mathrm{e}^-}(\text{right}) - V_{\mathrm{e}^-}(\text{left}) = E^\circ_{\mathrm{cell}} + \frac{RT}{F}\ln\!\bigg(\frac{\sqrt{p_{\mathrm{H_2}}/p^\circ}}{(m_{\mathrm{H}^+}/m^\circ)\,(m_{\mathrm{Cl}^-}/m^\circ)}\bigg), $$
 with
 $$ E^\circ_{\mathrm{cell}} = V^\circ_{\mathrm{e}^-}(\mathrm{Ag/AgCl}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE}) = 0.222~\mathrm{V}: $$
 the familiar standard potential of the silver chloride electrode against the SHE, now visibly a gap between two standard rungs. (Unpacking the definitions, $E^\circ_{\mathrm{cell}} = (V^\circ_{\mathrm{Cl}^-} - V^\circ_{\mathrm{H}^+}) + \mu^\circ_{\mathrm{H_2}}/2F - (\mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}})/F$, with the ladder spacing $V^\circ_{\mathrm{Cl}^-} - V^\circ_{\mathrm{H}^+} = 1.3601~\mathrm{V}$ from the [standard-state data](../data/).)^[Two interpretations of this $\Delta V$ coexist happily: an engineer sees the electrodes' $V_{\mathrm{e}^-}$ as reservoirs and the reaction as a generic [electromotive force](https://en.wikipedia.org/wiki/Electromotive_force) pump; a chemist sees a reversible free-energy change, $\Delta G = -zF\,\Delta V$, per formula unit ($z$ electrons passed).]
-
-> The single-ion activities $a_{\mathrm{H}^+}$ and $a_{\mathrm{Cl}^-}$ are individually ambiguous (just like the placement of the $V^\circ_i$ ladder), but the ambiguity cancels in the charge-neutral product $a_{\mathrm{H}^+}a_{\mathrm{Cl}^-}$, so the measured voltage is unambiguous, as it must be.
 
 ## Solution-centered vs. circuit-centered
 

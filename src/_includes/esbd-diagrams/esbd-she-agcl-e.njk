@@ -146,7 +146,7 @@
                 x: b[1],
                 yDefs: [{ y: V_el }, { y: V0_SHE }],
                 popupCallback: () =>
-                    String.raw`the Nernst activity term $\tfrac{RT}{F}\ln\tfrac{a_{\mathrm{H}^+}}{\sqrt{a_{\mathrm{H_2}}}}$`,
+                    String.raw`the Nernst concentration term $\tfrac{RT}{F}\ln\tfrac{m_{\mathrm{H}^+}/m^\circ}{\sqrt{p_{\mathrm{H_2}}/p^\circ}}$`,
             },
             {
                 id: 'agcl',
@@ -154,7 +154,7 @@
                 x: b[3],
                 yDefs: [{ y: V_el_Ag }, { y: V0_AGCL }],
                 popupCallback: () =>
-                    String.raw`the Nernst activity term $-\tfrac{RT}{F}\ln a_{\mathrm{Cl}^-}$`,
+                    String.raw`the Nernst concentration term $-\tfrac{RT}{F}\ln (m_{\mathrm{Cl}^-}/m^\circ)$`,
             },
         ]);
     }
