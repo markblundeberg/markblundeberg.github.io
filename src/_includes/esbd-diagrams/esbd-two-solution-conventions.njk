@@ -1,0 +1,249 @@
+{% set idprefix = "esbd-two-solution-conventions" %}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 300px"></div>
+{{ controls.slider(idprefix + "-conc", "right-side $\\mathrm{HCl}$ concentration", { min: -1.3, max: 0.6, step: "any", value: 0, readout: true, unit: "mol/kg", snap: 0 }) }}
+<div class="bd-control" style="text-align: center; font-size: 0.85em; margin-top: 0.3em">single-ion convention:
+<label style="white-space: nowrap; margin-left: 0.5em"><input type="radio" name="{{idprefix}}-conv" value="mi" checked style="vertical-align: middle" /> MacInnes</label>
+<label style="white-space: nowrap; margin-left: 0.5em"><input type="radio" name="{{idprefix}}-conv" value="bg" style="vertical-align: middle" /> Bates&ndash;Guggenheim</label>
+<label style="white-space: nowrap; margin-left: 0.5em"><input type="radio" name="{{idprefix}}-conv" value="sym" style="vertical-align: middle" /> {{ "$\\gamma_+ = \\gamma_-$" | katex | safe }}</label>
+</div>
+<div class="bd-readout" style="text-align: center; font-size: 0.85em; color: #444; margin-top: 0.3em">
+<span id="{{idprefix}}-split"></span><br /><span id="{{idprefix}}-dv"></span>
+</div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, renderSpanMath } from '{{ esbdJsPath }}utils.js';
+
+    // Two HCl solutions, Ag/AgCl electrode dipped in each, meeting at a bare
+    // junction (no internals drawn — the frit figure above has those). The
+    // REAL levels — both wires' V_e- and each solution's V_H+ — are computed
+    // from measurable combinations only (γ± from the simplified 1-1 Pitzer
+    // model, same code as AI codes/nonideal; wire-to-wire ΔV from an
+    // ideal-dilute Henderson estimate on the same-salt junction) and do NOT
+    // respond to the convention radio. Each solution's ladder — the true
+    // V°_H+ rung with its dashed V°_e-(SHE) overlay — sits at
+    // V°_H+ = V_H+ − (RT/F) ln(m γ_H+), and γ_H+ = γ±²/γ_Cl- DOES depend on
+    // the convention: MacInnes (γ_Cl- = γ±(KCl) at same I), Bates–Guggenheim
+    // (log10 γ_Cl- = −A√I/(1+1.5√I)), or the symmetric split γ+ = γ- = γ±.
+    // At 0.01 mol/kg (left) the three agree to ~0.1 mV, so the left ladder
+    // barely breathes; the right ladder jumps by up to ~30 mV at 4 mol/kg
+    // (γ_Cl-: MacInnes 0.568 vs symmetric 1.723). The E / LJP decomposition
+    // in the readout reshuffles by exactly that jump while ΔV holds still.
+    // Gauge: the left wire is ground, V_e-(left) = 0.
+    const RT_F = 0.025693; // V at 25 °C
+    const M_LEFT = 0.01; // mol/kg, fixed
+    const DV_HCL = 1.3601; // V°_Cl- − V°_H+ in water (iondata)
+    const V_AGCL = 1.138; // V_Cl- − V_e- at the Ag/AgCl electrode
+    const U_H = 36.23, U_CL = 7.91; // mobilities (ratios only matter)
+
+    // simplified Pitzer, 1-1 electrolyte (25 °C); PHREEQC pitzer.dat params
+    const A_PHI = 0.3915, B_P = 1.2, ALPHA = 2.0;
+    const HCL = { b0: 0.1775, b1: 0.2945, cphi: 0.0008 };
+    const KCL = { b0: 0.04835, b1: 0.2122, cphi: -0.00084 };
+    function lnGammaPm(m, p) {
+        const s = Math.sqrt(m);
+        const f = -A_PHI * (s / (1 + B_P * s) + (2 / B_P) * Math.log(1 + B_P * s));
+        const Bg = 2 * p.b0 + ((2 * p.b1) / (ALPHA * ALPHA * m)) *
+            (1 - (1 + ALPHA * s) * Math.exp(-ALPHA * s));
+        return f + m * Bg + m * m * 1.5 * p.cphi;
+    }
+    function lnGammaCl(m, conv) {
+        if (conv === 'mi') return lnGammaPm(m, KCL);
+        if (conv === 'bg') return Math.LN10 * (-0.509 * Math.sqrt(m) / (1 + 1.5 * Math.sqrt(m)));
+        return lnGammaPm(m, HCL); // symmetric: γ_Cl- = γ±(HCl)
+    }
+
+    const b = [0, 0.14, 0.47, 0.53, 0.86, 1.0];
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        {
+            hplus: SPECIES.proton,
+            electron: SPECIES.electron,
+        }
+    );
+    diagram.setSpatialLayout(b, [
+        { ...REGION.metal, name: 'Ag/AgCl' },
+        { ...REGION.solution, name: 'HCl (fixed)' },
+        { name: '', color: '#f0f5ec' },
+        { ...REGION.solution2, name: 'HCl (slider)' },
+        { ...REGION.metal, name: 'Ag/AgCl' },
+    ]);
+    diagram.setVRange(-0.60, 0.14);
+
+    function solution(m, conv) {
+        // real, convention-free:  V_Cl- − V_H+ = DV_HCL − 2(RT/F) ln(m γ±)
+        const lnApm = Math.log(m) + lnGammaPm(m, HCL); // ln(m γ±)
+        // conventional split:
+        const lnGCl = lnGammaCl(m, conv);
+        const lnACl = Math.log(m) + lnGCl;
+        const lnAH = 2 * lnApm - lnACl; // ln a_H+ = ln(a±²/a_Cl-)
+        return { lnApm, lnACl, lnAH };
+    }
+
+    const convRadios = Array.from(
+        document.getElementsByName('{{idprefix}}-conv')
+    );
+
+    function update() {
+        const mR = Math.pow(10, parseFloat(
+            document.getElementById('{{idprefix}}-conc').value));
+        const conv = convRadios.find((r) => r.checked).value;
+        document.getElementById('{{idprefix}}-conc-readout').textContent =
+            mR.toPrecision(2);
+
+        const L = solution(M_LEFT, conv);
+        const Rs = solution(mR, conv);
+
+        // real wire levels (left wire = ground). Junction: ideal-dilute
+        // Henderson estimate for the same-salt junction (an estimate, but a
+        // FIXED physical input: it does not respond to the convention radio)
+        const t = (U_H - U_CL) / (U_H + U_CL);
+        const dPhi = -t * RT_F * Math.log(mR / M_LEFT);
+        const dVCl = dPhi - RT_F * Math.log(mR / M_LEFT);
+        const V_e_L = 0;
+        const V_e_R = dVCl; // both electrodes sit V_AGCL below their V_Cl-
+        const V_Cl_L = V_AGCL;
+        const V_Cl_R = V_AGCL + dVCl;
+
+        // real proton levels
+        const V_H_L = V_Cl_L - DV_HCL + 2 * RT_F * L.lnApm;
+        const V_H_R = V_Cl_R - DV_HCL + 2 * RT_F * Rs.lnApm;
+        // conventional ladders (V°_H+ = SHE rung, μ°_H2 = 0)
+        const V0_H_L = V_H_L - RT_F * L.lnAH;
+        const V0_H_R = V_H_R - RT_F * Rs.lnAH;
+
+        const E_L = V_e_L - V0_H_L;
+        const E_R = V_e_R - V0_H_R;
+        const LJP = V0_H_R - V0_H_L;
+
+        diagram.updateTraceData([
+            {
+                id: 've_left',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                labelFrac: 0.5,
+                labelHAlign: 'center',
+                x: [b[0], b[1]],
+                y: [V_e_L, V_e_L],
+            },
+            {
+                id: 've_right',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                labelFrac: 0.5,
+                labelHAlign: 'center',
+                x: [b[4], b[5]],
+                y: [V_e_R, V_e_R],
+            },
+            {
+                id: 'vh_left',
+                speciesId: 'hplus',
+                curveType: 'voltage',
+                showLabel: true,
+                labelFrac: 0.45,
+                x: [b[1], b[2]],
+                y: [V_H_L, V_H_L],
+            },
+            {
+                id: 'vh_right',
+                speciesId: 'hplus',
+                curveType: 'voltage',
+                showLabel: true,
+                labelFrac: 0.12,
+                labelVAlign: 'top', // below its line: near 1 mol/kg the level
+                // sits almost ON its rung (a_H+ ≈ 1), so keep clear of the
+                // SHE label riding above the rung at the right end
+                x: [b[3], b[4]],
+                y: [V_H_R, V_H_R],
+            },
+            {
+                // true rung behind the dashed SHE overlay (dual identity,
+                // as in the frit figure): carries the cation hatching
+                id: 'v0h_left',
+                speciesId: 'hplus',
+                curveType: 'standardState',
+                showLabel: false,
+                x: [b[1], b[2]],
+                y: [V0_H_L, V0_H_L],
+            },
+            {
+                id: 'vshe_left',
+                speciesId: 'electron',
+                curveType: 'standardStateImplied',
+                showLabel: true,
+                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{SHE})\\,{=}\\,V^\\circ_{\\mathrm{H}^+}',
+                labelFrac: 0.04,
+                labelVAlign: 'bottom',
+                x: [b[1], b[2]],
+                y: [V0_H_L, V0_H_L],
+            },
+            {
+                id: 'v0h_right',
+                speciesId: 'hplus',
+                curveType: 'standardState',
+                showLabel: false,
+                x: [b[3], b[4]],
+                y: [V0_H_R, V0_H_R],
+            },
+            {
+                id: 'vshe_right',
+                speciesId: 'electron',
+                curveType: 'standardStateImplied',
+                showLabel: true,
+                label: 'V^\\circ_{\\mathrm{e}^-}(\\mathrm{SHE})',
+                labelFrac: 0.96,
+                labelHAlign: 'right',
+                labelVAlign: 'bottom',
+                x: [b[3], b[4]],
+                y: [V0_H_R, V0_H_R],
+            },
+        ]);
+
+        diagram.updateVerticalMarkers([
+            {
+                id: 'e_left',
+                symbol: '↕',
+                x: b[1],
+                yDefs: [{ y: V_e_L }, { y: V0_H_L }],
+                popupCallback: () =>
+                    String.raw`$E(\text{left}) = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\mathrm{SHE}) = ${E_L.toFixed(3)}\,\mathrm{V}$`,
+            },
+            {
+                id: 'e_right',
+                symbol: '↕',
+                x: b[4],
+                yDefs: [{ y: V_e_R }, { y: V0_H_R }],
+                popupCallback: () =>
+                    String.raw`$E(\text{right}) = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\mathrm{SHE}) = ${E_R.toFixed(3)}\,\mathrm{V}$`,
+            },
+            {
+                id: 'ljp',
+                symbol: '↕',
+                x: (b[2] + b[3]) / 2,
+                yDefs: [{ y: V0_H_R }, { y: V0_H_L }],
+                popupCallback: () =>
+                    String.raw`$\mathrm{LJP} = ${(1e3 * LJP).toFixed(1)}\,\mathrm{mV}$ — the step in the reference level, as split by this convention`,
+            },
+        ]);
+
+        renderSpanMath(
+            document.getElementById('{{idprefix}}-split'),
+            String.raw`E(\text{left}) = ${E_L.toFixed(3)}\,\mathrm{V},\quad ` +
+            String.raw`E(\text{right}) = ${E_R.toFixed(3)}\,\mathrm{V},\quad ` +
+            String.raw`\mathrm{LJP} = ${(1e3 * LJP).toFixed(1)}\,\mathrm{mV}`
+        );
+        renderSpanMath(
+            document.getElementById('{{idprefix}}-dv'),
+            String.raw`\Delta V = E(\text{right}) - E(\text{left}) + \mathrm{LJP} = ` +
+            String.raw`${(1e3 * (E_R - E_L + LJP)).toFixed(1)}\,\mathrm{mV}\ \text{(fixed)}`
+        );
+    }
+
+    makeSlider('{{idprefix}}-conc', update, { fire: false });
+    convRadios.forEach((r) => r.addEventListener('change', update));
+    update();
+</script>
