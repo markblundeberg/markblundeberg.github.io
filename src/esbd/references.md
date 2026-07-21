@@ -89,17 +89,19 @@ E^\circ_{\mathrm{cell}} = V^\circ_{\mathrm{e}^-}(\mathrm{Ag/AgCl}) - V^\circ_{\m
 $$
 the familiar standard potential of the silver chloride electrode against the SHE, now visibly a gap between two standard rungs.
 
-## Solution-centered vs. circuit-centered
+## The traditional picture and its limitations
 
-Notice what the cell figure quietly did with its zero: the sliders move the wires while the standard rungs hold still, and the basic cell picture at the top of the page likewise described each electrode by its gap down to the same reference rung. This is the traditional frame of electrochemistry, which anchors $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ at $0~\mathrm{V}$ and measures everything from there; call it **solution-centered**, its zero a rung in the solution. Within one solution it is a genuinely comfortable frame. Each electrode is summarized by its own [electrode potential](../e/) $E$, a "standard electrode" is the hypothetical one sitting exactly on its rung (activities set to one in the readout forms above), tabulated $E^\circ$ values hang at fixed heights on the axis, and the cell simply outputs the difference of two such numbers, $E_{\text{right}} - E_{\text{left}}$: no floating levels in sight.
+The usual practice in electrochemistry is to put the standard hydrogen electrode (or some other standard reference) at 0 V, making the picture **solution-centered**:
 
-Electronics makes the opposite choice. There the zero is a wire, the circuit's designated ground, and every level is measured from it; call this frame **circuit-centered**. On the cell figure it amounts to holding one wire's $V_{\mathrm{e}^-}$ still and letting the rungs move instead, and the standard rungs become the derived quantities, each sitting a known Nernst gap from a measurable wire. On a static diagram, a choice of zero looks like mere labeling; the sliders make it a commitment. Choose a frame and you have chosen who holds still, and who has to move, when the chemistry changes.
+<figure class="diagram-placeholder">
+Previous figure but now everything is E^0 and E. Y axis reads "electrode potential". SHE at 0.
+</figure>
 
-The solution-centered frame is the one tradition works in, narrated (when it is narrated at all) with $\phi$: start at the solution's inner potential, step to a couple's standard rung (a fixed property of solvent and couple), then across the Nernst gap to the wire. The floating levels tell that story minus the metaphysics: $\phi$ is a level nothing can measure and the diagram declines to draw, and the standard rungs do $\phi$'s job better. (This is also the separation urged by Boettcher et al., between the **electrode potential**, the wire's own $V_{\mathrm{e}^-}$, and the **solution potential**, the couple's implied $V_{\mathrm{e}^-}(\mathrm{rxn})$: two "potentials" that the bare word runs together, and two separate lines on the diagram.^[Boettcher, S. W., et al. (2021). [Potentially Confusing: Potentials in Electrochemistry.](https://doi.org/10.1021/acsenergylett.0c02443) ACS Energy Letters, 6(1), 261–266.])
+It's such a simpler picture than all the floating $V_{\mathrm{e}^-}$ and $V^\circ_{\mathrm{e}^-}$ levels, so why am I overcomplicating things? Why do I keep choosing one of the $V_{\mathrm{e}^-}$ levels as zero instead?
 
-In a single well-mixed solution the two frames agree about everything observable, and choosing between them looks like taste. One question already separates them, though. The single-ion ambiguity of [nonideal solutions](../nonideal/) lets a solution's whole ladder slide by a convention-dependent offset, both electron rungs riding along, while the real levels, the wires and the implied dashes alike, hold still. Read circuit-centered, the slide is invisible bookkeeping; read solution-centered, with $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ as the zero of the axis, the very same slide moves every wire in the frame instead. So which is moving, the wires or the SHE? Within one solution no measurement can tell, and the question sounds academic. Hold it; it stops being academic when a second solution arrives.
+In short, zeroing $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ only makes sense when you're talking about a single idealized cell. When you go add complications, $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ loses its firm grounding. We already saw one issue for cells under bias (in the [previous topic](../e/), the SHE had a gradient), but in the next two sections I want to show two of the complications that appear even in quiescent electrochemical cells: junctions (the SHE in every compartment is different) and nonideality (the SHE is only virtual anyway).
 
-## The liquid junction potential
+### The liquid junction potential
 
 Real reference electrodes are usually kept in their own clean compartment and wired to the test solution through a porous frit or salt bridge; that means a junction, and a junction means a step. For a cell whose two half-cells are different solutions, the measured voltage splits as
 $$
@@ -119,7 +121,7 @@ How a reference electrode really attaches. The dashed line is the local $V^\circ
 {% endfigcaption %}
 </figure>
 
-## Activities: who is moving?
+### Activities: who is moving?
 
 The held question comes due as soon as we take activities seriously, and it splits into a reassuring half and an unsettling half.
 
