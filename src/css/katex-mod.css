@@ -9,3 +9,7 @@
     font-family: var(--body-font);
     font-size: 0.909090909em; /* Undo the 1.1em size above */
 }
+
+p.katex-block {
+    overflow: auto;
+}
