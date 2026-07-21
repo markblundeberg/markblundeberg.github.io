@@ -1,0 +1,129 @@
+{% set idprefix = "esbd-she-agcl-trad" %} {# the reference cell in the traditional E / E° frame #}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container"></div>
+{{ controls.slider(idprefix + "-hcl-slider", "$\\mathrm{HCl}$ concentration", { min: -3.1, max: 1.1, step: "any", value: -1.7, readout: true, unit: "mol/kg", snap: 0 }) }}
+{{ controls.slider(idprefix + "-h2-slider", "$\\mathrm{H}_2$ pressure", { min: -2, max: 2, step: "any", value: -0.8, readout: true, unit: "bar", snap: 0 }) }}
+<div
+    class="bd-readout"
+    style="text-align: center; font-size: 0.85em; color: #444; margin-top: 0.3em"
+>
+    Cell voltage {{ "$E_{\\mathrm{cell}} = E(\\text{right}) - E(\\text{left})$" | katex | safe }}: <span id="{{idprefix}}-voltage"></span> V
+</div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
+
+    // The reference cell (esbd-she-agcl-e) redrawn the TRADITIONAL way:
+    // same cell, same sliders, same defaults, same gauge (SHE rung at 0),
+    // and therefore the exact same heights — but the axis now reads
+    // "Electrode potential", every level is named E or E°, and the implied
+    // dashed V_e-(rxn) levels are dropped. This is the simple picture the
+    // section's argument starts from.
+    const hSlider = document.getElementById('{{ idprefix }}-hcl-slider');
+    const hConcSpan = document.getElementById('{{ idprefix }}-hcl-slider-readout');
+    const h2Slider = document.getElementById('{{ idprefix }}-h2-slider');
+    const h2PressSpan = document.getElementById('{{ idprefix }}-h2-slider-readout');
+    const voltsSpan = document.getElementById('{{ idprefix }}-voltage');
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram('{{idprefix}}-container', {
+        electron: SPECIES.electron,
+    });
+    diagram.diagram.setYLabel('Electrode potential (V)');
+
+    const boundaries = [0.0, 0.25, 0.65, 0.75, 1.0];
+    diagram.setSpatialLayout(boundaries, [
+        { ...REGION.metal, name: 'Pt' },
+        REGION.solution,
+        { ...REGION.agcl },
+        { ...REGION.metal, name: 'Ag' },
+    ]);
+
+    const RT_F = 0.025693; // V at 25 °C
+    const E0_AGCL_SHE = 1.3601 - 1.138; // 0.2221 V (see esbd-she-agcl-e)
+
+    diagram.setVRange(-0.35, 0.55);
+
+    function updateDiagrams() {
+        const m_hcl = Math.pow(10, parseFloat(hSlider.value));
+        const p_h2 = Math.pow(10, parseFloat(h2Slider.value));
+
+        hConcSpan.textContent = m_hcl.toExponential(2);
+        h2PressSpan.textContent = p_h2.toPrecision(3);
+
+        const E0_SHE = 0;
+        const E_left = E0_SHE + RT_F * Math.log(m_hcl / Math.sqrt(p_h2));
+        const E0_AGCL = E0_SHE + E0_AGCL_SHE;
+        const E_right = E0_AGCL - RT_F * Math.log(m_hcl);
+
+        voltsSpan.textContent = (E_right - E_left).toPrecision(3);
+
+        const b = boundaries;
+        diagram.updateTraceData([
+            {
+                id: `e_left`,
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                label: 'E(\\text{left})',
+                labelFrac: 0.5,
+                labelHAlign: 'center',
+                x: [b[0], b[1]],
+                y: [E_left, E_left],
+            },
+            {
+                id: `e0_she`,
+                speciesId: 'electron',
+                curveType: 'standardStateImplied',
+                label: String.raw`E^\circ(\mathrm{SHE})\,{=}\,0`,
+                showLabel: true,
+                x: [b[1], b[2]],
+                y: [E0_SHE, E0_SHE],
+            },
+            {
+                id: `e0_agcl`,
+                speciesId: 'electron',
+                curveType: 'standardStateImplied',
+                label: String.raw`E^\circ(\mathrm{Ag/AgCl})`,
+                showLabel: true,
+                x: [b[1], b[3]],
+                y: [E0_AGCL, E0_AGCL],
+            },
+            {
+                id: `e_right`,
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                label: 'E(\\text{right})',
+                labelFrac: 0.5,
+                labelHAlign: 'center',
+                x: [b[3], b[4]],
+                y: [E_right, E_right],
+            },
+        ]);
+
+        diagram.updateVerticalMarkers([
+            {
+                id: 'she',
+                symbol: '↕',
+                x: b[1],
+                yDefs: [{ y: E_left }, { y: E0_SHE }],
+                popupCallback: () =>
+                    String.raw`the Nernst concentration term $\tfrac{RT}{F}\ln\tfrac{m_{\mathrm{H}^+}/m^\circ}{\sqrt{p_{\mathrm{H_2}}/p^\circ}}$ (equal to $E(\text{left})$ itself, since $E^\circ(\mathrm{SHE}) = 0$)`,
+            },
+            {
+                id: 'agcl',
+                symbol: '↕',
+                x: b[3],
+                yDefs: [{ y: E_right }, { y: E0_AGCL }],
+                popupCallback: () =>
+                    String.raw`the Nernst concentration term $-\tfrac{RT}{F}\ln (m_{\mathrm{Cl}^-}/m^\circ)$`,
+            },
+        ]);
+    }
+
+    makeSlider('{{idprefix}}-hcl-slider', () => updateDiagrams(), { fire: false });
+    makeSlider('{{idprefix}}-h2-slider', () => updateDiagrams(), { fire: false });
+    updateDiagrams();
+</script>

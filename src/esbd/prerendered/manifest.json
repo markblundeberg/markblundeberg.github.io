@@ -1,5 +1,5 @@
 {
-  "hash": "3d558f18c090fdef3dde7858c1c748984a9cdf17780b48d656239a463c9cfc39",
+  "hash": "7fc905840a4ec9ee5133cce83cedadb50dd8ca29ba7dc7c81c1ea33bc6faa6eb",
   "ids": [
     "V-std-ladder--diagram-container",
     "ag-agcl-electrode-container",
@@ -69,6 +69,7 @@
     "esbd-sat-soft-fet",
     "esbd-sat-soft-fet-conc",
     "esbd-she-agcl-e-container",
+    "esbd-she-agcl-trad-container",
     "esbd-she-container",
     "esbd-solidstate-flip-energy",
     "esbd-solidstate-flip-esbd",

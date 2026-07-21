@@ -93,8 +93,13 @@ the familiar standard potential of the silver chloride electrode against the SHE
 
 The usual practice in electrochemistry is to put the standard hydrogen electrode (or some other standard reference) at 0 V, making the picture **solution-centered**:
 
-<figure class="diagram-placeholder">
-Previous figure but now everything is E^0 and E. Y axis reads "electrode potential". SHE at 0.
+<figure class="demo-container" style="max-width: 300px">
+{% include "esbd-diagrams/esbd-she-agcl-trad.njk" %}
+{% figcaption %}
+
+The reference cell redrawn the traditional way: the axis reads electrode potential, $E^\circ(\mathrm{SHE})$ is pinned at $0$, the tabulated $E^\circ(\mathrm{Ag/AgCl})$ hangs at its fixed height, and each electrode reads off as its own $E$, a Nernst term (↕) from its couple's standard line. Same sliders, same heights as the figure above; only the names have changed, and the implied-level clutter is gone.
+
+{% endfigcaption %}
 </figure>
 
 It's such a simpler picture than all the floating $V_{\mathrm{e}^-}$ and $V^\circ_{\mathrm{e}^-}$ levels, so why am I overcomplicating things? Why do I keep choosing one of the $V_{\mathrm{e}^-}$ levels as zero instead?
