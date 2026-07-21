@@ -12,7 +12,9 @@ In electrochemistry, a single electrode potential can never be measured on its o
 <figure class="demo-container" style="max-width: 460px">
 {% include "esbd-diagrams/esbd-cell-e.njk" %}
 {% figcaption %}
-The basic cell picture. Each electrode potential is its wire's gap down to the same reference rung, $E = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ (the marked gaps), and a voltmeter across the cell reads the wire-to-wire gap $E_{\text{right}} - E_{\text{left}}$: single levels float, only gaps get measured.
+
+The basic cell picture. Each electrode potential is its wire's gap down to the same reference rung, $E = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ (the marked gaps), and a voltmeter across the cell reads the wire-to-wire gap $E_{\text{cell}} = E_{\text{right}} - E_{\text{left}}$: single levels float, only gaps get measured.
+
 {% endfigcaption %}
 </figure>
 
@@ -32,10 +34,13 @@ V_{\mathrm{e}^-} &= V_{\mathrm{Cl}^-} - \frac{\mu_{\mathrm{Ag}} - \mu_{\mathrm{A
 \end{aligned}
 $$
 The first line is the equilibrium condition; the second is the [floating Nernst equation](../half/), with the solids' fixed chemical potentials absorbed into the couple's standard level, $V^\circ_{\mathrm{e}^-}(\mathrm{Ag/AgCl}) = V^\circ_{\mathrm{Cl}^-} - (\mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}})/F$, a rung riding the ladder at a fixed distance below $V^\circ_{\mathrm{Cl}^-}$.
+
 <figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/esbd-ag-agcl-electrode.njk" %}
 {% figcaption %}
+
 The Ag/AgCl electrode. The dashed line is the couple's implied electron level $V_{\mathrm{e}^-}(\mathrm{Ag/AgCl})$: the wire's own $V_{\mathrm{e}^-}$, carried out into the solution by the equilibrated reaction. Try the slider: the wire holds still while the standard rung rides the ladder.
+
 {% endfigcaption %}
 </figure>
 
@@ -47,16 +52,20 @@ V_{\mathrm{e}^-} &= V_{\mathrm{H}^+} - \frac{\mu_{\mathrm{H_2}}}{2F} \\
 \end{aligned}
 $$
 with $V^\circ_{\mathrm{e}^-}(\mathrm{SHE}) = V^\circ_{\mathrm{H}^+} - \mu^\circ_{\mathrm{H_2}}/2F$. This is the electrode behind the [previous topic's](../e/) reference level: at standard activities the wire lands on $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ itself, the rung the whole $E$ scale hangs from. In practice that standard form is finicky to realize, its nominal $a_{\mathrm{H}^+}=1$ implying an awkward pH of 0 and its "1 bar" of $\mathrm{H_2}$ competing with water vapour, so the *standard* hydrogen electrode is more idealization than instrument.
+
 <figure class="demo-container" style="max-width: 230px">
 {% include "esbd-diagrams/esbd-she.njk" %}
 {% figcaption %}
+
 The hydrogen electrode. The metal's level continues into the solution as the implied $V_{\mathrm{e}^-}(\mathrm{H}^+/\mathrm{H_2})$; its gap to the dashed standard rung is the Nernst activity term (try both sliders). That rung wears two names: $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ lands exactly on $V^\circ_{\mathrm{H}^+}$, the two differing only by $\mu^\circ_{\mathrm{H_2}}/2F$, zero by convention ([half-reactions](../half/)).
+
 {% endfigcaption %}
 </figure>
 
 ## A reference cell
 
 Now stick the two together: a hydrogen electrode on the left, a silver chloride electrode on the right, both dipping into the same dissolved $\mathrm{HCl}$. Each wire is pinned by its own couple, and the two standard rungs ride the same ladder at a fixed, tabulated spacing, so the cell voltage follows by subtracting the two readout forms. (For now we run everything ideal-dilute, each activity read as a plain concentration, $a_i = m_i/m^\circ$ and $a_{\mathrm{H_2}} = p_{\mathrm{H_2}}/p^\circ$; the real activities get their turn below.)
+
 <figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/esbd-she-agcl-e.njk" %}
 {% figcaption %}
@@ -107,10 +116,12 @@ The held question comes due as soon as we take activities seriously, and it spli
 The reassuring half belongs to the junction-free cell. Its voltage touches the ions only through the charge-neutral product $a_{\mathrm{H}^+}a_{\mathrm{Cl}^-}$, so nonideality enters as real, measurable physics with no convention in sight: run our reference cell across a range of $\mathrm{HCl}$ concentrations (this is the classic **Harned cell**, and it is exactly the cell drawn in the figure above, there in its ideal-dilute version) and the measured voltage peels away from the ideal-dilute prediction, the gap being exactly $\tfrac{2RT}{F}\ln\gamma_\pm$. A mean activity coefficient, read straight off a voltmeter. The same cell, extrapolated to the dilute limit where the single-ion ambiguity dies away, is how the standard levels get pinned down in the first place;^[Harned, H. S., & Ehlers, R. W. (1932). J. Am. Chem. Soc., 54, 1350, and Harned, H. S., & Ehlers, R. W. (1933). J. Am. Chem. Soc., 55, 2179 — the classic extrapolation; redone definitively in Bates, R. G., & Bower, V. E. (1954). [Standard potential of the silver-silver-chloride electrode from 0° to 95° C.](https://nvlpubs.nist.gov/nistpubs/jres/53/jresv53n5p283_A1b.pdf) J. Res. Natl. Bur. Stand., 53(5), 283–290.] any tabulated $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ is, in the end, a theoretical extrapolated level tied to the standard state of the aqueous proton.
 
 <figure class="demo-container" style="max-width: 460px">
-<!-- generated by bin/figs/harned_cell.py (Pitzer 1-1 fit for HCl) -->
+{# generated by bin/figs/harned_cell.py (Pitzer 1-1 fit for HCl) #}
 <img src="/esbd/img/harned-nonideal.svg" style="max-width:100%"/>
 {% figcaption %}
+
 The Harned cell, our reference cell from above, run across concentration; the Pitzer fit for $\mathrm{HCl}$ stands in for the measured points. Top: the measured voltage against the ideal-dilute Nernst prediction. Bottom: the same data with the Nernst slope subtracted, plotted against $\sqrt{m}$ as Harned did: the ideal prediction is now the flat dashed line, the shaded gap is the mean-activity term ($\gamma_\pm$ dips below 1 in dilute acid, then climbs past it in concentrated), and chasing the curve down to zero concentration is the extrapolation that pins $E^\circ$.
+
 {% endfigcaption %}
 </figure>
 
@@ -119,7 +130,9 @@ The unsettling half is the split. Divide that same nonideality between $\mathrm{
 <figure class="demo-container" style="max-width: 480px">
 {% include "esbd-diagrams/esbd-two-solution-conventions.njk" %}
 {% figcaption %}
+
 Two $\mathrm{HCl}$ solutions, one voltmeter reading; the left is held at $0.01~\mathrm{mol/kg}$ and the right rides the slider. Every solid level is real: the wires (left wire is ground) and each solution's $V_{\mathrm{H}^+}$ are computed from measurable combinations alone and ignore the convention buttons entirely. Each solution's rung is not: pick a convention and the $V^\circ_{\mathrm{H}^+}$/SHE rung lands somewhere else, the readout's $E$/LJP split reshuffling underneath the fixed $\Delta V$. On the dilute left side the three conventions agree to a tenth of a millivolt; slide the right side concentrated and watch them part ways.
+
 {% endfigcaption %}
 </figure>
 
@@ -132,7 +145,9 @@ Could we sidestep all this by referencing to the vacuum instead, an "absolute" e
 <figure class="demo-container" style="max-width: 480px">
 {% include "esbd-diagrams/esbd-vac-she.njk" %}
 {% figcaption %}
+
 The "absolute" electrode potential on a $V_i$ diagram: $\phi_{\mathrm{vac}}$ just outside the cell sits $4.44~\mathrm{V}$ below the SHE rung, exactly as a work function sits below a metal's $V_{\mathrm{e}^-}$. One more floating level to line things up with, not a universal zero.
+
 {% endfigcaption %}
 </figure>
 
