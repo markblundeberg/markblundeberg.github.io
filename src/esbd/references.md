@@ -13,7 +13,7 @@ In electrochemistry, a single electrode potential can never be measured on its o
 {% include "esbd-diagrams/esbd-cell-e.njk" %}
 {% figcaption %}
 
-The basic cell picture. Each electrode potential is its wire's gap down to the same reference rung, $E = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ (the marked gaps), and a voltmeter across the cell reads the wire-to-wire gap $E_{\text{cell}} = E_{\text{right}} - E_{\text{left}}$: single levels float, only gaps get measured.
+The basic cell picture. Each electrode potential is its wire's gap down to the same reference rung, $E = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ (the marked gaps), and a voltmeter across the cell reads the wire-to-wire gap $\Delta V = E_{\text{right}} - E_{\text{left}}$: single levels float, only gaps get measured.
 
 {% endfigcaption %}
 </figure>
@@ -27,13 +27,17 @@ While I can't answer all the philosophical questions, what I can do is provide a
 In the language of [half-reactions](../half/), a reference electrode is built on a couple chosen for fast, reproducible equilibration: the reaction pins the wire's $V_{\mathrm{e}^-}$ to the couple's implied level in the solution, a definite Nernst offset from the local $V^\circ_i$ ladder. Know the activities and you know exactly where the wire sits relative to that ladder. Two couples do most of this work in practice.
 
 The **silver/silver chloride electrode** hangs off the chloride rung. Its reaction swaps an electron for a chloride ion, and equilibrium locks the wire to the solution, as we saw back in the [equilibrium topic](../equilibrium/):
+$$ V_{\mathrm{e}^-} = V_{\mathrm{Cl}^-} - \frac{\mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}}}{F}, $$
+which the redox [floating Nernst equation](../half/) is equivalently:
 $$
 \begin{aligned}
-V_{\mathrm{e}^-} &= V_{\mathrm{Cl}^-} - \frac{\mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}}}{F} \\
-&= V^\circ_{\mathrm{e}^-}(\mathrm{Ag/AgCl}) - \frac{RT}{F}\ln a_{\mathrm{Cl}^-}.
+V_{\mathrm{e}^-}
+&= V_{\mathrm{e}^-}(\mathrm{Ag/AgCl}) \\
+&= V^\circ_{\mathrm{e}^-}(\mathrm{Ag/AgCl}) - \frac{RT}{F}\ln a_{\mathrm{Cl}^-}
+,
 \end{aligned}
 $$
-The first line is the equilibrium condition; the second is the [floating Nernst equation](../half/), with the solids' fixed chemical potentials absorbed into the couple's standard level, $V^\circ_{\mathrm{e}^-}(\mathrm{Ag/AgCl}) = V^\circ_{\mathrm{Cl}^-} - (\mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}})/F$, a rung riding the ladder at a fixed distance below $V^\circ_{\mathrm{Cl}^-}$.
+with the solids' fixed chemical potentials absorbed into the couple's standard level, $V^\circ_{\mathrm{e}^-}(\mathrm{Ag/AgCl}) = V^\circ_{\mathrm{Cl}^-} - (\mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}})/F$, a rung riding the ladder at a fixed distance below $V^\circ_{\mathrm{Cl}^-}$.
 
 <figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/esbd-ag-agcl-electrode.njk" %}
@@ -74,9 +78,15 @@ The reference cell, electronic levels only (the ionic levels look as in the sing
 </figure>
 
 The measured cell voltage comes out as
-$$ V_{\mathrm{e}^-}(\text{right}) - V_{\mathrm{e}^-}(\text{left}) = E^\circ_{\mathrm{cell}} + \frac{RT}{F}\ln\!\bigg(\frac{\sqrt{p_{\mathrm{H_2}}/p^\circ}}{(m_{\mathrm{H}^+}/m^\circ)\,(m_{\mathrm{Cl}^-}/m^\circ)}\bigg), $$
+$$\begin{aligned}
+\Delta V
+& = V_{\mathrm{e}^-}(\text{right}) - V_{\mathrm{e}^-}(\text{left}) \\
+& = E^\circ_{\mathrm{cell}} + \frac{RT}{F}\ln\!\bigg(\frac{\sqrt{p_{\mathrm{H_2}}/p^\circ}}{(m_{\mathrm{H}^+}/m^\circ)\,(m_{\mathrm{Cl}^-}/m^\circ)}\bigg),
+\end{aligned}$$
 with
-$$ E^\circ_{\mathrm{cell}} = V^\circ_{\mathrm{e}^-}(\mathrm{Ag/AgCl}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE}) = 0.222~\mathrm{V}: $$
+$$
+E^\circ_{\mathrm{cell}} = V^\circ_{\mathrm{e}^-}(\mathrm{Ag/AgCl}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE}) = 0.222~\mathrm{V},
+$$
 the familiar standard potential of the silver chloride electrode against the SHE, now visibly a gap between two standard rungs. (Unpacking the definitions, $E^\circ_{\mathrm{cell}} = (V^\circ_{\mathrm{Cl}^-} - V^\circ_{\mathrm{H}^+}) + \mu^\circ_{\mathrm{H_2}}/2F - (\mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}})/F$, with the ladder spacing $V^\circ_{\mathrm{Cl}^-} - V^\circ_{\mathrm{H}^+} = 1.3601~\mathrm{V}$ from the [standard-state data](../data/).)^[Two interpretations of this $\Delta V$ coexist happily: an engineer sees the electrodes' $V_{\mathrm{e}^-}$ as reservoirs and the reaction as a generic [electromotive force](https://en.wikipedia.org/wiki/Electromotive_force) pump; a chemist sees a reversible free-energy change, $\Delta G = -zF\,\Delta V$, per formula unit ($z$ electrons passed).]
 
 ## Solution-centered vs. circuit-centered
