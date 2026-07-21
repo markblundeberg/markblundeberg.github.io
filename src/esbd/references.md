@@ -87,7 +87,7 @@ with
 $$
 E^\circ_{\mathrm{cell}} = V^\circ_{\mathrm{e}^-}(\mathrm{Ag/AgCl}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE}) = 0.222~\mathrm{V},
 $$
-the familiar standard potential of the silver chloride electrode against the SHE, now visibly a gap between two standard rungs. (Unpacking the definitions, $E^\circ_{\mathrm{cell}} = (V^\circ_{\mathrm{Cl}^-} - V^\circ_{\mathrm{H}^+}) + \mu^\circ_{\mathrm{H_2}}/2F - (\mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}})/F$, with the ladder spacing $V^\circ_{\mathrm{Cl}^-} - V^\circ_{\mathrm{H}^+} = 1.3601~\mathrm{V}$ from the [standard-state data](../data/).)^[Two interpretations of this $\Delta V$ coexist happily: an engineer sees the electrodes' $V_{\mathrm{e}^-}$ as reservoirs and the reaction as a generic [electromotive force](https://en.wikipedia.org/wiki/Electromotive_force) pump; a chemist sees a reversible free-energy change, $\Delta G = -zF\,\Delta V$, per formula unit ($z$ electrons passed).]
+the familiar standard potential of the silver chloride electrode against the SHE, now visibly a gap between two standard rungs.
 
 ## Solution-centered vs. circuit-centered
 
