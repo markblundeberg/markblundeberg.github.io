@@ -20,6 +20,7 @@
         const t = (x - 0.55) / 0.45; // 0 at the surface, 1 at the far edge
         return VSHE - WSHE - 0.18 * t - 0.17 * t * t;
     };
+    const phiVacSurf = phiVac(0.55);
     const vacXs = [0.55, 0.66, 0.77, 0.89, 1.0];
 
     const diagram = new ElectrochemicalSpeciesBandDiagram(
@@ -69,7 +70,7 @@
         {
             id: 'wshe',
             x: 0.62,
-            yDefs: [{ y: VSHE }, { y: phiVac(0.62) }],
+            yDefs: [{ y: VSHE }, { y: phiVacSurf }],
             symbol: '↕',
             label: '4.44\\ \\mathrm{V}',
             labelHAlign: 'left', // extends rightward, into open vacuum
