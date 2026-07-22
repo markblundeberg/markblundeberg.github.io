@@ -20,7 +20,9 @@
         "
     ></div>
 </div>
-{{ controls.slider(idprefix + "-dphi-slider", "Electrostatic change $\\Delta\\phi$", { min: -1.5, max: 1.5, step: "any", value: 0 }) }}
+{# slider spans ±phi_init so the minimum lands exactly on phi = 0, where the
+   right panel's zFφ ladder collapses to nothing #}
+{{ controls.slider(idprefix + "-dphi-slider", "Electrostatic change $\\Delta\\phi$", { min: -1.38, max: 1.38, step: "any", value: 0 }) }}
 
 <script type="module">
     import EnergyLevelsDiagram from '{{ esbdJsPath }}EnergyLevelsDiagram.js';
@@ -55,7 +57,7 @@
         ...commonConfig,
         categories: [{ id: 'levels', label: '' }],
         yAxisLabel: 'Electrochemical potential',
-        yRange: [-2.5, 5.0], // Calculated range + padding
+        yRange: [-2.6, 5.8], // match mu-shift-only; holds E2+ at slider max (5.36)
     };
 
     const muIntConfig = {
@@ -65,7 +67,9 @@
             { id: 'levels', label: '' },
         ],
         yAxisLabel: 'Partitioned energy',
-        yRange: [-2.5, 5.0], // Calculated range + padding
+        // same scale as left panel; the ±2Fφ rungs still escape at slider max
+        // (they span ±5.5 there; containing them would squash the levels)
+        yRange: [-2.6, 5.8],
     };
 
     // Launcher code
