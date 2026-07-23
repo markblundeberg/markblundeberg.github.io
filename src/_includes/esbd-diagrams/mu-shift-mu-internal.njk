@@ -49,7 +49,6 @@
     // Configuration for the Diagrams
     const commonConfig = {
         showYTicks: false,
-        bandMinPaddingOuter: { left: 8, right: 52 }, // mu_int labels
     };
     const throttleDuration = 100; // should be 1/5 or less of transitionDuration
 
@@ -58,6 +57,7 @@
         categories: [{ id: 'levels', label: '' }],
         yAxisLabel: 'Electrochemical potential',
         yRange: [-2.6, 5.8], // match mu-shift-only; holds E2+ at slider max (5.36)
+        bandMinPaddingOuter: { left: 8, right: 20 },
     };
 
     const muIntConfig = {
@@ -70,6 +70,7 @@
         // same scale as left panel; the ±2Fφ rungs still escape at slider max
         // (they span ±5.5 there; containing them would squash the levels)
         yRange: [-2.6, 5.8],
+        bandMinPaddingOuter: { left: 8, right: 32 },
     };
 
     // Launcher code
