@@ -1,25 +1,29 @@
 {% set idprefix = "esbd-ss-quasifermi" %}
 {% import "macros/controls.njk" as controls %}
 <div class="bd-container" id="{{idprefix}}-container" style="height: 280px"></div>
-{{ controls.slider(idprefix + "-drive", "Drive", { min: 0, max: 0.8, step: "any", value: 0.4, snap: 0, readout: true, unit: "V" }) }}
+{{ controls.slider(idprefix + "-light", "Illumination (peak splitting)", { min: 0, max: 0.8, step: "any", value: 0.4, snap: 0, readout: true, unit: "V" }) }}
 
 <script type="module">
     import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
     import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
     import { makeSlider, linspace } from '{{ esbdJsPath }}utils.js';
 
-    // Schematic LED-like bar: hole contact on the left (its metal electrons
-    // hand off to the hole rail), electron contact on the right. Under drive b
-    // the rails enter split by b at the contacts and relax toward each other
-    // over a recombination length L (~ sqrt(D·tau), drawn as a fraction of the
-    // bar). Recombination bridges the rails all along the bar — the Ω markers
-    // (driven; they revert to the equilibrium ⇌ when the drive is off).
-    // Band edges and contact band-bending deliberately omitted (see the flip
-    // and band-bending figures for those); this figure is about the rails.
-    const L = 0.25;
+    // Uniformly illuminated bar between two plain metal contacts, no bias.
+    // Photogeneration runs recombination in reverse (∅ → e⁻ + h⁺), splitting
+    // the rails; each metal face is a perfect recombination surface that pins
+    // V_e- = V_h+ there, so the split is a lens: the classic cosh profile for
+    // uniform generation with diffusion length L and absorbing boundaries.
+    // Drawn symmetric (equal split, equal conductivities), which makes the two
+    // species currents cancel exactly at every x: zero net charge current,
+    // two closed conventional-current loops (pumped up mid-bar, falling back
+    // down at the contacts). Band edges deliberately omitted; this figure is
+    // about the rails.
+    const L = 0.18; // diffusion length, in x units
     const MID = 0.5; // equilibrium Fermi level (arbitrary height)
     const XL = 0.15,
         XR = 0.85; // semiconductor extent
+    const XM = (XL + XR) / 2;
+    const CH = Math.cosh((XR - XL) / 2 / L);
 
     const diagram = new ElectrochemicalSpeciesBandDiagram(
         '{{idprefix}}-container',
@@ -37,33 +41,28 @@
     diagram.setVRange(0.0, 1.0);
 
     const xh = linspace(XL, XR, 61);
-    const xe = linspace(XL, 1, 73); // electron trace continues into the right metal
+    const xe = linspace(0, 1, 121); // electron trace runs into both metals
 
     function update(b) {
-        document.getElementById('{{idprefix}}-drive-readout').textContent =
+        document.getElementById('{{idprefix}}-light-readout').textContent =
             b.toFixed(2);
         const merged = b < 0.05; // label-merge threshold (display only)
 
-        const vh = (x) => MID + (b / 2) * Math.exp(-(x - XL) / L);
-        const ve = (x) =>
-            x >= XR ? MID - b / 2 : MID - (b / 2) * Math.exp(-(XR - x) / L);
+        // rail splitting: peak b at mid-bar, zero at the metal faces
+        const split = (x) =>
+            x <= XL || x >= XR
+                ? 0
+                : (b * (1 - Math.cosh((x - XM) / L) / CH)) / (1 - 1 / CH);
+        const vh = (x) => MID + split(x) / 2;
+        const ve = (x) => MID - split(x) / 2;
 
         diagram.updateTraceData([
-            {
-                id: 'metal_left',
-                speciesId: 'electron',
-                curveType: 'voltage',
-                showLabel: !merged, // the contact's electrons sit AT the hole rail
-                labelFrac: 0.35,
-                x: [0, XL],
-                y: [MID + b / 2, MID + b / 2],
-            },
             {
                 id: 'vh',
                 speciesId: 'hole',
                 curveType: 'voltage',
                 showLabel: !merged,
-                labelFrac: 0.12,
+                labelFrac: 0.18,
                 x: xh,
                 y: xh.map(vh),
             },
@@ -79,33 +78,31 @@
             },
         ]);
 
-        // recombination "leakage" bridging the rails along the bar — bare
-        // current arrows (2026-07-10, retiring the provisional Ω glyph):
-        // e-/h+ annihilation has zero products, so the arrow IS the mark;
-        // it fades as the drive switches off. The always-equilibrated ⇌
-        // stays at the left ohmic contact, where the metal's electrons pin
-        // to the hole rail (a zero-height marker: the two levels coincide
-        // there — that coincidence is the equilibrium).
+        // photogeneration pumps: bare current arrows pointing UP, low rail to
+        // high rail (recombination run backwards, so the reverse of the LED
+        // figure convention); they collapse with the split as the light dims.
+        // The metal faces keep an always-equilibrated ⇌ (zero-height marker:
+        // the rails coincide there, and that coincidence is the equilibrium).
         diagram.updateVerticalMarkers([
             ...[0.35, 0.5, 0.65].map((x, i) => ({
-                id: 'recomb' + i,
+                id: 'gen' + i,
                 x,
-                yDefs: [{ y: vh(x) }],
+                yDefs: [{ y: ve(x) }],
                 symbol: null,
-                driven: { y: ve(x), color: '#666' },
+                driven: { y: vh(x), color: '#666', pump: true },
                 popupCallback: () =>
-                    '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightarrow \\varnothing$ — net recombination; the arrow is the conventional current between the rails',
+                    '$\\varnothing \\rightarrow \\mathrm{e}^- + \\mathrm{h}^+$ — net photogeneration; the arrow is the conventional current pumped between the rails',
             })),
-            {
-                id: 'contact',
-                x: XL,
-                yDefs: [{ y: vh(XL) }],
+            ...[XL, XR].map((x, i) => ({
+                id: 'contact' + i,
+                x,
+                yDefs: [{ y: MID }],
                 symbol: '⇌',
                 popupCallback: () =>
-                    '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightleftharpoons \\varnothing$',
-            },
+                    '$\\mathrm{e}^- + \\mathrm{h}^+ \\rightleftharpoons \\varnothing$ — the metal face is a perfect recombination surface, pinning the rails together',
+            })),
         ]);
     }
 
-    makeSlider('{{idprefix}}-drive', update);
+    makeSlider('{{idprefix}}-light', update);
 </script>

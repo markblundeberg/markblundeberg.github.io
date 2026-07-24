@@ -344,8 +344,11 @@ class BandDiagram extends ResponsivePlot {
             // LAST yDef is the GHOST — the arrowed rail's equilibrium
             // position — and driven.y is that rail's actual level. The
             // engine draws a fat species-coloured residual ghost->actual
-            // with the arrowhead at the LOWER end (which is always the
-            // conventional-current-receiving rail: arrows only point down).
+            // with the arrowhead at the LOWER end (which for a dissipative
+            // reaction is always the conventional-current-receiving rail,
+            // under either sign of bias: current falls downhill). Set
+            // driven.pump = true for a pumped reaction (e.g. photogeneration)
+            // to put the arrowhead at the UPPER end instead.
             // Degenerates to a plain marker as driven.y -> ghost.
             if (driven) {
                 if (typeof driven.y !== 'number' || !isFinite(driven.y))
@@ -372,6 +375,7 @@ class BandDiagram extends ResponsivePlot {
                           yGhost: legData[legData.length - 1].y,
                           color: driven.color ?? '#555',
                           label: driven.label ?? null,
+                          pump: !!driven.pump,
                       }
                     : null,
             });
@@ -963,12 +967,14 @@ class BandDiagram extends ResponsivePlot {
             onUpdateTransition: (s) =>
                 s
                     .attr('transform', (d) => {
-                        // head at the LOWER (larger pixel-y) end
-                        const yHead = Math.max(
-                            this.yScale(d.driven.yGhost),
-                            this.yScale(d.driven.y)
-                        );
-                        return `translate(0, ${yHead})`;
+                        // head at the LOWER (larger pixel-y) end; a pump
+                        // instead points at the UPPER end, glyph flipped
+                        const y0 = this.yScale(d.driven.yGhost);
+                        const y1 = this.yScale(d.driven.y);
+                        const yHead = d.driven.pump
+                            ? Math.min(y0, y1)
+                            : Math.max(y0, y1);
+                        return `translate(0, ${yHead})${d.driven.pump ? ' scale(1,-1)' : ''}`;
                     })
                     .attr('d', 'M -5 -8 L 0 0 L 5 -8 L 0 -4.5 Z')
                     .attr('opacity', (d) =>
