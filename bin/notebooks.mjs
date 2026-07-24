@@ -58,10 +58,12 @@ if (process.argv[1] && process.argv[1].endsWith('notebooks.mjs')) {
              '--ExecutePreprocessor.timeout=900', f],
             { cwd: NB_DIR, stdio: 'inherit' }
         );
-        // 3. strip the <dc:date> stamps from inline SVG outputs
+        // 3. strip nondeterministic bits: per-cell execution timestamps, and
+        //    the <dc:date> stamps inside inline SVG outputs
         const p = join(NB_DIR, f);
         const nb = JSON.parse(readFileSync(p, 'utf8'));
         for (const cell of nb.cells) {
+            if (cell.metadata) delete cell.metadata.execution;
             for (const out of cell.outputs || []) {
                 const svg = out.data?.['image/svg+xml'];
                 if (svg) {
