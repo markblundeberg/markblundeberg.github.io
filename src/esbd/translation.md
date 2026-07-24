@@ -21,9 +21,10 @@ If you arrive already fluent in electrochemistry, here is a Rosetta Stone: the f
 | redox (solution) potential $E_h$ | $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red}) - V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ |
 | overpotential $\eta$ | a drop in $V_{\mathrm{e}^-}$: $V_{\mathrm{e}^-}(\text{electrode}) - V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$ (or any $V_i$ step at a driven interface; [kinetics](../kinetics/)) |
 | cell voltage / EMF | $V_{\mathrm{e}^-}(\text{right}) - V_{\mathrm{e}^-}(\text{left})$ ([reference electrodes & cells](../references/)) |
-| liquid junction potential | a step in the $V^\circ_{\mathrm{e}^-}$ ladder across the junction |
+| liquid junction potential | a step in the $V^\circ_i$ ladder across the junction ([references & cells](../references/)) |
 | Donnan potential | a step in the $V^\circ_i$ ladder at a fixed-charge medium's boundary ([charge neutrality](../charge_neutrality/)) |
 | built-in potential | a step in the $V^\circ_i$ ladder across a junction at equilibrium ([bipolar](../bipolar/)) |
+| "absolute" electrode potential ($4.44$ V) | an electrode's work function: the $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$-to-$\psi$ gap ([vacuum levels](../vacuum/)) |
 
 ## Concentrations and the Nernst equation
 
@@ -42,10 +43,10 @@ If you arrive already fluent in electrochemistry, here is a Rosetta Stone: the f
 | Nernst–Planck (drift + diffusion) flux | $J_i = -\sigma_i \nabla V_i$ (charge-current form; number flux $N_i = J_i/z_i F$) ([transport](../basictransport/)) |
 | ionic conductivity $\sigma_i$ | $z_i^2 F^2 D_i\, c_i / RT$ |
 | "ohmic" electrolyte current $-\sigma\nabla\phi$ | the uniform-concentration limit of $\textstyle\sum_i -\sigma_i\nabla V_i$ |
-| chemical capacitance | $z_i^2 F^2 c_i / RT$ ([capacitance](../capacitors/)) |
+| chemical capacitance | $z_i^2 F^2 c_i / RT$, one name for two things ([chemical capacitance matrices](../chemical_capacitance_matrices/)) |
 
 ## What does *not* translate cleanly
 
 A few traditional quantities have no clean $V_i$ counterpart, and that is the point rather than a gap. The inner potential $\phi$, single-ion activities $a_i$, and single-ion activity coefficients $\gamma_i$ are each individually ambiguous; only charge-balanced combinations, and differences sampled within one solution, are well defined. The $V_i$ picture keeps exactly the unambiguous part and leaves the rest floating, which is why it never needs to commit to a value of $\phi$. (See [non-ideal solutions](../nonideal/).)
 
-(and if you're curious about this project, [the next topic](../about/) is about how this project came to be.)
+(And if you're curious how this project came to be: [About](../about/).)
