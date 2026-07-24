@@ -9,7 +9,7 @@ orderESBD: 83
 
 When I came up with these $V_i$ band diagrams, it quickly became apparent that it is possible to entirely avoid invoking the electrostatic potential $\phi$. This was not surprising given my semiconductor physics background, yet this is so dissonant with $\phi$ being so fundamental in the usual electrochemistry analysis. Digging a little bit deeper, however, we find that the theoretical electrochemists are already uncomfortable with the unmeasurable $\phi$, and sometimes have argued to abolish $\phi$ entirely. This dates back to Guggenheim's [1929](https://doi.org/10.1021/j150300a003) and [1930](https://doi.org/10.1021/j150313a014) papers, and even earlier to Taylor and perhaps Gibbs.^[For a modern defence and sharpening of that thesis, see B. A. Pethica, [Are electrostatic potentials between regions of different chemical composition measurable? The Gibbs–Guggenheim principle reconsidered, extended and its consequences revisited](https://doi.org/10.1039/b706153f), *Phys. Chem. Chem. Phys.* **9**, 6253 (2007).]
 
-I reaffirm Guggenheim's thesis, and I would modernize it further that it is not even necessary to reference $\phi$ in electrodes: voltmeters measure $V_{\mathrm{e}^-}$!
+I reaffirm Guggenheim's thesis, and I would modernize it further: it is not even necessary to reference $\phi$ in electrodes: voltmeters measure $V_{\mathrm{e}^-}$!
 
 Let me be clear from the start about what is being questioned here. The microscopic electric potential inside a material is perfectly real, and so are the microscopic fields; they are what hold the material together, and nobody is taking them from you. My complaint is with the macroscopic $\phi$ that claims to represent them inside a material. On this page I want to pin down what that in-material $\phi$ actually is, where it genuinely earns its keep, and where it quietly stops referring to anything physical. While $\phi$-based approaches have been made to work, they complicate matters and create a minefield of misconceptions; none of this is new, I just want to collect the argument in one place. The vacuum level $\psi$ gets [the next topic](../vacuum/) to itself, and what becomes of the electric field is [the topic after that](../inhomog/).
 
@@ -71,7 +71,7 @@ $$ \bar\mu_i = \mu_{\mathrm{int},i} + z_i F \langle\phi\rangle. $$
 
 As discussed on the [electrochemical potential tutorial](../muintro/), this does get rid of some annoying aspects of electricity like general arbitrary offsets. But since $z_i F \langle\phi\rangle$ is a bad estimate of the electrostatic energy felt by an ion, that means $\mu_{\mathrm{int},i}$ must include all the necessary electrostatic corrections to $z_i F \langle\phi\rangle$. And that is in addition to any 'chemical-only' $\mu$ that might behave like an uncharged solute.
 
-In principle this is fine, we can just say $\mu_{\mathrm{int},i}$ is an artificial number that shall compensate for all deficiencies in $z_i F \langle\phi\rangle$. But then, $\mu_{\mathrm{int},i}$ has no physical meaning: it is merely an artificial difference between two energies of different nature ($\bar\mu_i$ being a thermodynamic property of ions, $z_i F \langle\phi\rangle$ being the rest energy extrapolated from imaginary test charges that unnaturally permeate the material).
+In principle this is fine, we can just say $\mu_{\mathrm{int},i}$ is an artificial number that shall compensate for all deficiencies in $z_i F \langle\phi\rangle$. But then, $\mu_{\mathrm{int},i}$ has no physical meaning: it is merely an artificial difference between two energies of different nature ($\bar\mu_i$ being a thermodynamic property of ions, $z_i F \langle\phi\rangle$ being the electrostatic energy extrapolated from imaginary test charges that unnaturally permeate the material).
 
 Really, $\mu_{\mathrm{int},i}$ does not deserve the name "chemical potential" since:
 * it doesn't describe equilibrium between bodies (unless they perchance happen to have the same $\langle\phi\rangle$).
@@ -85,7 +85,7 @@ $$ \bar\mu_{\mathrm{H}^+} + \bar\mu_{\mathrm{OH}^-} = \mu_{\mathrm{H_2O}} $$
 looks the same in terms of the internal chemical potentials (since $\phi$ is the same for both ions):
 $$ \mu_{\mathrm{int},\mathrm{H}^+} + \mu_{\mathrm{int},\mathrm{OH}^-} = \mu_{\mathrm{H_2O}} $$
 
-But this would be satisfied by any random number in place of $\phi$ -- the $\mu_{\mathrm{int},i}$ values would fully adjust to compensate for that too!
+But this would be satisfied by any random number in place of $\phi$: the $\mu_{\mathrm{int},i}$ values would fully adjust to compensate for that too!
 As we saw [in the case of non-ideal solutions](../nonideal/), that is precisely what happens when ion activity conventions are adopted: the practically used $\phi'$ no longer corresponds to any physically-based electrostatic potential.
 
 ## Galvani potentials and double layers
@@ -96,7 +96,7 @@ Let's be clear, the charge double layer is absolutely real. Our averages $\rho$ 
 
 For example, between a metal and semiconductor, or between two distinct semiconductors (like AlGaAs and GaAs), we really care about the relative positions of Fermi levels $\bar\mu_{\mathrm{e}^-}$ and the semiconductors' conduction bands $E_{\mathrm{C}}$. Not only that, we care about the detailed structure inside of the junction (the {% wiki "band bending" %}, and the atomic jump). All of this can be addressed without ever talking about the infinitesimal test charge's $\langle\phi\rangle_2 - \langle\phi\rangle_1$.
 
-When it comes to electrolytes, we can ask what is the double layer (or $\langle\phi\rangle_2 - \langle\phi\rangle_1$) at the interface of a water-based solution and a benzene-based solution. But that is not what we care about, and indeed $\langle\phi\rangle_2 - \langle\phi\rangle_1$ is totally unmeasurable here. Instead we want to analyze equilibration of (electro-) chemical potentials, and we also care about the ionic {% wiki "diffuse layer" %} ("band bending").
+When it comes to electrolytes, we can ask what the double layer (or $\langle\phi\rangle_2 - \langle\phi\rangle_1$) is at the interface of a water-based solution and a benzene-based solution. But that is not what we care about, and indeed $\langle\phi\rangle_2 - \langle\phi\rangle_1$ is totally unmeasurable here. Instead we want to analyze equilibration of (electro-) chemical potentials, and we also care about the ionic {% wiki "diffuse layer" %} ("band bending").
 
 ### A step made of nothing
 
@@ -152,6 +152,6 @@ Before that, a closing word to the theoretical and computational electrochemists
 
 Where $\phi$ seems to work (band bending, built-in potentials, salt bridges between like solutions), it is because within one medium the step in $\phi$ mimics the step in the $V^\circ_i$ ladder, and the ladder is the part that matters. The electrochemical potentials $\bar\mu_i$ are the quantities thermodynamics actually provides, and voltmeters measure $V_{\mathrm{e}^-}$.
 
-I hope that the species voltage $V_i = \bar\mu_i/(z_i F)$ and its associated visual band diagrams will help promote this $\phi$-less approach and help bring together the semiconductor and electrochemical communities into a unified viewpoint.
+I hope that the species voltage $V_i = \bar\mu_i/(z_i F)$ and its associated visual band diagrams will help promote this $\phi$-less approach and bring together the semiconductor and electrochemical communities into a unified viewpoint.
 
 [**NEXT TOPIC: Vacuum levels**](../vacuum/)
