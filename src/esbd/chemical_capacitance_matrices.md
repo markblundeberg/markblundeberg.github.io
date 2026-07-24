@@ -95,24 +95,7 @@ Mutual chemical capacitance is a thermodynamic observable and directly relates t
 
 #### Ambipolar diffusion
 
-The volumetric mutual chemical capacitance, $\mathbf{c}^{\mathrm{mut}} = \mathbf{C}^{\mathrm{mut}}/V$ directly appears in the continuity equation in the quasi-charge-neutral regime, together with the regular conductivity equation:
-
-$$\begin{aligned}
-\mathbf{c}^{\mathrm{mut}} \frac{\partial \mathbf{V}}{\partial t} & = -\nabla \cdot \mathbf{\vec{J}}, & \quad \text{(continuity)},\\
-\mathbf{\vec{J}} & = -\boldsymbol{\sigma} \nabla \mathbf{V} & \quad \text{(conductivity)},
-\end{aligned}$$
-
-where conductivity $\boldsymbol{\sigma}$ is also possibly a dense matrix (for simplicity we'll assume scalar matrix entries, though it could be interesting to consider tensorial e.g. for magnetic field effects); cross-terms can represent e.g. 'ion drag'. You can't simply convert this into a diffusion equation because $\mathbf{c}^{\mathrm{mut}}$ can't be inverted (because of charge neutrality), so we have to proceed with a bit of care.
-
-First, let's look at a homogeneous material, small-signal case. In this case both $\boldsymbol{\sigma}$ and $\mathbf{c}^{\mathrm{mut}}$ are constant in space, then this simplifies to $\mathbf{c}^{\mathrm{mut}} \partial_t \mathbf{V} = \boldsymbol{\sigma} \nabla^2 \mathbf{V}$, which reveals there are two distinct classes of modes:
-
-* One charge mode of the form $\mathbf{V}(x,t) = v(x,t) \mathbf{1}_N$, which follows $0 = \nabla^2 v$. The charge mode is representative of the naive form of electricity: all $V_i$ values (and $\phi$ too) vary in unison, and so all ions conduct together as if they have a single common conductivity $\sigma_{\mathrm{tot}} = \sum_{ij} \sigma_{ij}$, i.e. a total current $\vec{J}_{\mathrm{tot}} = -\sigma_{\mathrm{tot}} \nabla v$ driven by the common gradient. And each ion has $\nabla \cdot \vec{J}_i = 0$ so there is no piling up (but see below about material boundaries).
-* $N-1$ ambipolar modes of the form $\mathbf{V}(x,t) = v(x,t) \mathbf{a}$, where $\mathbf{a}$ is a {% wiki "generalized eigenvalue problem", "generalized eigenvector" %} satisfying $\mathbf{c}^{\mathrm{mut}} \mathbf{a} = D^{-1} \boldsymbol{\sigma} \mathbf{a}$ (often easy to solve^[Often the matrix $\boldsymbol{\sigma}$ is invertible and so we can get all the modes by eigendecomposing $\boldsymbol{\sigma}^{-1} \mathbf{c}^{\mathrm{mut}}$.]) for eigenvalue $D^{-1}$. Each of these modes evolves with a diffusion equation: $\partial_t v = D \nabla^2 v$ with diffusion coefficient $D$, and there may be $N-1$ distinct ambipolar diffusion constants. These are neutral current modes: $\sum_i \vec{J}_i = 0$.
-
-For example in the binary (two-ion) case of cation $\mathrm{M}$ and anion $\mathrm{X}$, assuming a diagonal conductivity, the diffusion mode has $D^{-1} = (\sigma_{\mathrm{M}}^{-1} + \sigma_{\mathrm{X}}^{-1})c^{\mathrm{mut}}$, where $c^{\mathrm{mut}}$ is the single degree of freedom in the $\mathbf{c}^{\mathrm{mut}}$ matrix. This is the most simple kind of ambipolar diffusion as usually considered in the literature, in fact one usually sees a further ideality assumption that $(c^{\mathrm{mut}})^{-1} = ((z_{\mathrm{M}} F)^2 c_{\mathrm{M}} / (RT))^{-1} + ((z_{\mathrm{X}} F)^2 c_{\mathrm{X}} / (RT))^{-1}$ for ion molarities $c_{\mathrm{M}}$ and $c_{\mathrm{X}}$.
-
-It's worth noting however that when there are material boundaries (or any other reason for the matrices to vary, such as most nonlinearities), then there are no such simple modes overall: what is ambipolar in one region is not ambipolar in the next, and even the charge modes don't match up (the ions *do* pile up: $\nabla \cdot \vec{J}_i \neq 0$). Moreover, very close to the interfaces the charge neutrality assumption is often violated as well (within the screening length scale, see below), though often times this can be neglected.
-Besides that, even with a single material, the boundary conditions (e.g. one ion connected to electrodes but the other ion blocked) may mean that steady-state conduction need not follow the charge mode at all (however, when the bias is applied, the system will at first conduct according to the charge mode).
+The volumetric mutual chemical capacitance $\mathbf{c}^{\mathrm{mut}} = \mathbf{C}^{\mathrm{mut}}/V$ also sets the clock for neutral-mode transport: in a quasi-neutral bulk it plays the capacitance role in the transport time constants, and each of the $N-1$ neutral modes diffuses at a rate fixed jointly by $\mathbf{c}^{\mathrm{mut}}$ and the conductivity matrix. The mode analysis waits for the Dynamics section at the end of this topic, once both matrices are on the table.
 
 ## Internal chemical capacitance (space charge)
 
@@ -216,6 +199,12 @@ $$\begin{aligned}
 \mathbf{C}^{\mathrm{mut}}_{ij} & = \mathcal{C}_{ij} - \frac{\sum_{kl}\mathcal{C}_{ik}\mathcal{C}_{jl}}{\sum_{kl}\mathcal{C}_{kl}} \\
 \end{aligned}$$
 
+In the ideal case this reduction is nothing but a series combination through the floating $\phi$. For a binary electrolyte, with the diagonal ideal $\mathcal{C}$ from above,
+
+$$ (c^{\mathrm{mut}})^{-1} = \left(\frac{(z_{\mathrm{M}} F)^2 c_{\mathrm{M}}}{RT}\right)^{-1} + \left(\frac{(z_{\mathrm{X}} F)^2 c_{\mathrm{X}}}{RT}\right)^{-1} $$
+
+for ion molarities $c_{\mathrm{M}}$ and $c_{\mathrm{X}}$: the promised expression of the mutual chemical capacitance in terms of ideal quantities.
+
 So, $\mathbf{C}^{\mathrm{mut}}$ has strictly less information than $\mathcal{C}$. On the other hand, $\mathbf{C}^{\mathrm{mut}}$ is a general thermodynamic property that does not make any microscopic assumptions as are usually needed for $\mathcal{C}$, but only the latter can be used to model continuum space charges.
 
 As for where each description applies: the mutual $\mathbf{C}^{\mathrm{mut}}$ alone works for microscopically messy materials, since it is $\phi$-agnostic; either description serves for long-range conduction, ambipolar diffusion, and ideal bulk charge storage; and only the internal $\mathcal{C}$ can describe interfaces, screening, and depletion/enhancement regions.
@@ -276,7 +265,29 @@ Eliminating the $\phi$ node (star-mesh / Kron reduction) turns the ideal star in
 {% endfigcaption %}
 </figure>
 
-We can use this to express the Jamnik-Maier equivalent circuit picture of charge conservation in transport and electrostatics. (Assuming that the movement of ions is not causing any expansion of the medium):
+
+## Dynamics: ambipolar diffusion and the Jamnik-Maier circuit
+
+Everything above is statics. The matrices earn their keep when charge starts moving: attach a continuity equation and each capacitance becomes the inertia of a transport problem. In the quasi-charge-neutral regime it is the volumetric mutual matrix $\mathbf{c}^{\mathrm{mut}} = \mathbf{C}^{\mathrm{mut}}/V$ that appears, together with the regular conductivity equation:
+
+$$\begin{aligned}
+\mathbf{c}^{\mathrm{mut}} \frac{\partial \mathbf{V}}{\partial t} & = -\nabla \cdot \mathbf{\vec{J}}, & \quad \text{(continuity)},\\
+\mathbf{\vec{J}} & = -\boldsymbol{\sigma} \nabla \mathbf{V} & \quad \text{(conductivity)},
+\end{aligned}$$
+
+where conductivity $\boldsymbol{\sigma}$ is also possibly a dense matrix (for simplicity we'll assume scalar matrix entries, though it could be interesting to consider tensorial e.g. for magnetic field effects); cross-terms can represent e.g. 'ion drag'. You can't simply convert this into a diffusion equation because $\mathbf{c}^{\mathrm{mut}}$ can't be inverted (because of charge neutrality), so we have to proceed with a bit of care.
+
+First, let's look at a homogeneous material, small-signal case. In this case both $\boldsymbol{\sigma}$ and $\mathbf{c}^{\mathrm{mut}}$ are constant in space, then this simplifies to $\mathbf{c}^{\mathrm{mut}} \partial_t \mathbf{V} = \boldsymbol{\sigma} \nabla^2 \mathbf{V}$, which reveals there are two distinct classes of modes:
+
+* One charge mode of the form $\mathbf{V}(x,t) = v(x,t) \mathbf{1}_N$, which follows $0 = \nabla^2 v$. The charge mode is representative of the naive form of electricity: all $V_i$ values (and $\phi$ too) vary in unison, and so all ions conduct together as if they have a single common conductivity $\sigma_{\mathrm{tot}} = \sum_{ij} \sigma_{ij}$, i.e. a total current $\vec{J}_{\mathrm{tot}} = -\sigma_{\mathrm{tot}} \nabla v$ driven by the common gradient. And each ion has $\nabla \cdot \vec{J}_i = 0$ so there is no piling up (but see below about material boundaries).
+* $N-1$ ambipolar modes of the form $\mathbf{V}(x,t) = v(x,t) \mathbf{a}$, where $\mathbf{a}$ is a {% wiki "generalized eigenvalue problem", "generalized eigenvector" %} satisfying $\mathbf{c}^{\mathrm{mut}} \mathbf{a} = D^{-1} \boldsymbol{\sigma} \mathbf{a}$ (often easy to solve^[Often the matrix $\boldsymbol{\sigma}$ is invertible and so we can get all the modes by eigendecomposing $\boldsymbol{\sigma}^{-1} \mathbf{c}^{\mathrm{mut}}$.]) for eigenvalue $D^{-1}$. Each of these modes evolves with a diffusion equation: $\partial_t v = D \nabla^2 v$ with diffusion coefficient $D$, and there may be $N-1$ distinct ambipolar diffusion constants. These are neutral current modes: $\sum_i \vec{J}_i = 0$.
+
+For example in the binary (two-ion) case of cation $\mathrm{M}$ and anion $\mathrm{X}$, assuming a diagonal conductivity, the diffusion mode has $D^{-1} = (\sigma_{\mathrm{M}}^{-1} + \sigma_{\mathrm{X}}^{-1})c^{\mathrm{mut}}$, where $c^{\mathrm{mut}}$ is the single degree of freedom in the $\mathbf{c}^{\mathrm{mut}}$ matrix. This is the most simple kind of ambipolar diffusion as usually considered in the literature; insert the ideal series value of $c^{\mathrm{mut}}$ from the previous section and it becomes the textbook ambipolar diffusion constant.
+
+It's worth noting however that when there are material boundaries (or any other reason for the matrices to vary, such as most nonlinearities), then there are no such simple modes overall: what is ambipolar in one region is not ambipolar in the next, and even the charge modes don't match up (the ions *do* pile up: $\nabla \cdot \vec{J}_i \neq 0$). Moreover, very close to the interfaces the charge neutrality assumption is often violated as well (within the screening length scale of the previous section), though often times this can be neglected.
+Besides that, even with a single material, the boundary conditions (e.g. one ion connected to electrodes but the other ion blocked) may mean that steady-state conduction need not follow the charge mode at all (however, when the bias is applied, the system will at first conduct according to the charge mode).
+
+Close to interfaces charge neutrality fails, and the quasi-neutral form above gives way to the full picture: the extended matrix expresses the Jamnik-Maier equivalent circuit picture of charge conservation in transport and electrostatics. (Assuming that the movement of ions is not causing any expansion of the medium):
 
 $$
 \frac{\mathbf{C}^{\mathrm{ext}}}{\mathrm{volume}} 
