@@ -39,7 +39,7 @@
             (1 - (1 + ALPHA * s) * Math.exp(-ALPHA * s));
         return f + m * Bg + m * m * 1.5 * p.cphi;
     }
-    // V_Na+ − V_Cl- at molality m; V° pinned so that dV(M_SAT) = V_SOLID
+    // V_Na+ − V_Cl- at molality b; V° pinned so that dV(M_SAT) = V_SOLID
     const V0 = V_SOLID - 2 * RT_F * (Math.log(M_SAT) + lnGammaPm(M_SAT, NACL));
     const dV = (m) => V0 + 2 * RT_F * (Math.log(m) + lnGammaPm(m, NACL));
 
