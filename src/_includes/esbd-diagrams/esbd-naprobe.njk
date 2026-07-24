@@ -1,0 +1,149 @@
+{% set idprefix = "esbd-naprobe" %} {# the any-ion recipe, drawn for Na+ #}
+{% import "macros/controls.njk" as controls %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 300px"></div>
+{{ controls.slider(idprefix + "-conc", "$\\mathrm{NaCl}$ sample concentration", { min: -3, max: 0.789, step: "any", value: -1, readout: true, unit: "mol/kg" }) }}
+<div class="bd-readout" style="text-align: center; font-size: 0.85em; color: #444; margin-top: 0.3em">
+<span id="{{idprefix}}-gap"></span><br /><span id="{{idprefix}}-cal"></span>
+</div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider, renderSpanMath } from '{{ esbdJsPath }}utils.js';
+
+    // The V_Na+ probe: sample | Na+-selective membrane | saturated NaCl
+    // filling | Ag/AgCl. The membrane passes Na+ alone, so V_Na+ runs flat
+    // from the sample clear through to the filling solution; there the
+    // saturated composition fixes V_Na+ − V_Cl- (pinned to solid NaCl) and
+    // the AgCl electrode fixes V_Cl- − V_e-. Chain the two and the wire's
+    // V_e- sits a fixed, calibrated 2.843 V above the sample's V_Na+, with
+    // no liquid junction anywhere. Gauge: the wire is ground, so the whole
+    // probe chain holds still and the concentration slider moves only the
+    // sample's OTHER levels (here V_Cl-). Real levels from iondata + the
+    // simplified NaCl Pitzer fit (same model as bin/figs/nacl_solvent.py);
+    // V°_Na+ − V°_Cl- is derived by pinning saturation to the solid, so at
+    // the slider's top end the sample matches the filling solution and
+    // every level runs flat across.
+    const RT_F = 0.025693; // V at 25 °C
+    const V_AGCL = 1.138; // V_Cl- − V_e- at the Ag/AgCl electrode
+    const V_SOLID = -3.9813; // V_Na+ − V_Cl- for solid NaCl (iondata)
+    const M_SAT = 6.15; // mol/kg, saturated NaCl filling
+
+    // simplified Pitzer, 1-1 electrolyte (25 °C), NaCl in water
+    const A_PHI = 0.392, B_P = 1.2, ALPHA = 2.0;
+    const NACL = { b0: 0.0765, b1: 0.2664, cphi: 0.00127 };
+    function lnGammaPm(m, p) {
+        const s = Math.sqrt(m);
+        const f = -A_PHI * (s / (1 + B_P * s) + (2 / B_P) * Math.log(1 + B_P * s));
+        const Bg = 2 * p.b0 + ((2 * p.b1) / (ALPHA * ALPHA * m)) *
+            (1 - (1 + ALPHA * s) * Math.exp(-ALPHA * s));
+        return f + m * Bg + m * m * 1.5 * p.cphi;
+    }
+    // V_Na+ − V_Cl- at molality m; V° pinned so that dV(M_SAT) = V_SOLID
+    const V0 = V_SOLID - 2 * RT_F * (Math.log(M_SAT) + lnGammaPm(M_SAT, NACL));
+    const dV = (m) => V0 + 2 * RT_F * (Math.log(m) + lnGammaPm(m, NACL));
+
+    // ---- fixed probe chain, gauge V_e-(wire) = 0 -------------------------
+    const V_E = 0;
+    const V_CL_FIX = V_E + V_AGCL;
+    const V_NA = V_CL_FIX + V_SOLID; // flat sample-to-filling via membrane
+    const CAL = V_E - V_NA; // the calibration constant, 2.843 V
+
+    const b = [0, 0.36, 0.46, 0.74, 1.0];
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-container',
+        {
+            sodium: SPECIES.sodium,
+            chloride: SPECIES.chloride,
+            electron: SPECIES.electron,
+        }
+    );
+    diagram.setSpatialLayout(b, [
+        { ...REGION.solution, name: 'NaCl sample' },
+        { name: '', color: '#f5eedd' }, // the Na+-selective membrane
+        { ...REGION.solution2, name: 'sat. NaCl' },
+        { ...REGION.metal, name: 'Ag/AgCl' },
+    ]);
+    diagram.setVRange(-3.15, 1.8);
+
+    function update() {
+        const r = parseFloat(document.getElementById('{{idprefix}}-conc').value);
+        const m = Math.pow(10, r);
+        document.getElementById('{{idprefix}}-conc-readout').textContent =
+            m >= 1 ? m.toFixed(2) : m.toPrecision(2);
+        const V_CL_T = V_NA - dV(m);
+
+        diagram.updateTraceData([
+            {
+                id: 'na',
+                speciesId: 'sodium',
+                curveType: 'voltage',
+                showLabel: true,
+                labelFrac: 0.16,
+                x: [b[0], b[3]],
+                y: [V_NA, V_NA],
+            },
+            {
+                id: 'cl_sample',
+                speciesId: 'chloride',
+                curveType: 'voltage',
+                showLabel: true,
+                labelFrac: 0.5,
+                labelHAlign: 'center',
+                x: [b[0], b[1]],
+                y: [V_CL_T, V_CL_T],
+            },
+            {
+                id: 'cl_fill',
+                speciesId: 'chloride',
+                curveType: 'voltage',
+                showLabel: true,
+                labelFrac: 0.5,
+                labelHAlign: 'center',
+                x: [b[2], b[3]],
+                y: [V_CL_FIX, V_CL_FIX],
+            },
+            {
+                id: 'e_wire',
+                speciesId: 'electron',
+                curveType: 'voltage',
+                showLabel: true,
+                labelFrac: 0.5,
+                labelHAlign: 'center',
+                x: [b[3], b[4]],
+                y: [V_E, V_E],
+            },
+        ]);
+
+        diagram.updateVerticalMarkers([
+            {
+                id: 'gap',
+                symbol: '↕',
+                x: 0.27,
+                yDefs: [{ y: V_CL_T }, { y: V_NA }],
+                popupCallback: () =>
+                    String.raw`$V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = ${dV(m).toFixed(3)}\,\mathrm{V}$ in the sample — moves with composition`,
+            },
+            {
+                id: 'cal',
+                symbol: '↕',
+                x: b[3],
+                yDefs: [{ y: V_E }, { y: V_NA }],
+                popupCallback: () =>
+                    String.raw`$V_{\mathrm{e}^-}(\text{wire}) - V_{\mathrm{Na}^+} = ${CAL.toFixed(3)}\,\mathrm{V}$ — fixed by the filling solution and electrode, independent of the sample`,
+            },
+        ]);
+
+        renderSpanMath(
+            document.getElementById('{{idprefix}}-gap'),
+            String.raw`V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}(\text{sample}) = ${dV(m).toFixed(3)}\,\mathrm{V}`
+        );
+        renderSpanMath(
+            document.getElementById('{{idprefix}}-cal'),
+            String.raw`V_{\mathrm{e}^-}(\text{wire}) - V_{\mathrm{Na}^+} = ${CAL.toFixed(3)}\,\mathrm{V}\ \text{(fixed)}`
+        );
+    }
+
+    makeSlider('{{idprefix}}-conc', update, { fire: false });
+    update();
+</script>
