@@ -22,11 +22,11 @@ and the relation between them.
 
 ### Thermodynamic setting
 
-In our $V_i$ view, we work with a free energy function of the species voltages — a grand free energy we'll call $\Omega$:
+In our $V_i$ view, we work with a free energy function of the species voltages, a grand free energy we'll call $\Omega$:
 
 $$ \Omega(V_1, \ldots, V_N) $$
 
-(I'm being a bit vague about the other control variables -- is it constant-volume with fixed solvent chemical potential or constant-pressure with fixed solvent mass? Is it isothermal or adiabatic? We'll leave that undecided for now but note that the choice does affect the capacitance values.)
+(I'm being a bit vague about the other control variables: is it constant-volume with fixed solvent chemical potential or constant-pressure with fixed solvent mass? Is it isothermal or adiabatic? We'll leave that undecided for now but note that the choice does affect the capacitance values.)
 
 When we change one of these $V_i$'s, the partial derivative gives us the charge of that species:
 
@@ -34,13 +34,13 @@ $$ Q_i(V_1, \ldots, V_N) = -\frac{\partial \Omega}{\partial V_i}. $$
 
 Each one of these $Q_i$ is a function of all the $V_i$ values. This has to be the case because the bulk is charge neutral: $ 0 = Q = Q_{\mathrm{fix}} + \sum Q_i $. So if $Q_1$ increases under some change of parameters then all the other $Q_i$'s have to decrease such that the net total change is 0. Note that there could be some dopants present which modify the free energy function, including by inducing a background charge $Q_{\mathrm{fix}} \neq 0$.
 
-(And again, to remind, this is usually expressed in terms of electrochemical potential $\bar\mu_i = q_i V_i$ and particle number $N_i = Q_i / q_i$ but the voltage and charge units are more familiar in our context.)
+(As a reminder, this is usually expressed in terms of electrochemical potential $\bar\mu_i = q_i V_i$ and particle number $N_i = Q_i / q_i$ but the voltage and charge units are more familiar in our context.)
 
 ### Mutual chemical capacitance defined
 
-Capacitance is a change in charge due to a change in some voltage difference $\mathrm{d}Q/\mathrm{d}V$. Beginners learn about linear plate capacitors with nice constant capacitance values ($Q/V$), but we are going to talk about capacitance in the generic differential sense: a change in some charge due to a change in some voltage.
+Beginners learn about linear plate capacitors with nice constant capacitance values ($Q/V$), but we are going to use capacitance in the generic differential sense: a change in some charge due to a change in some voltage, $\mathrm{d}Q/\mathrm{d}V$.
 
-In the case of charge storage in materials, we must be aware of these complications: we have 1) multiple control voltages, not just two, 2) multiple *charge types*, 3) nonlinearity, and 4) no parallel-plate geometry at all, it is simply a bulk (volumetric or gravimetric) capacitance.
+In the case of charge storage in materials, we must be aware of these complications: we have 1) multiple control voltages, not just two, 2) multiple *charge types*, 3) nonlinearity, and 4) no parallel-plate geometry at all: it is simply a bulk (volumetric or gravimetric) capacitance.
 
 We can define capacitance as a matrix, which I call the **mutual chemical capacitance matrix**:
 
@@ -89,9 +89,9 @@ Integrated mutual chemical capacitance *is* the charge storage of a bulk materia
 
 #### Rigour in nonideal solutions
 
-Mutual chemical capacitance is a thermodynamic observable and directly relates to mean activities. E.g. Debye-Huckel or Pitzer models predict a specific mutual chemical capacitance matrix.
+Mutual chemical capacitance is a thermodynamic observable and directly relates to the mean activities of [Non-ideal solutions](../nonideal/). E.g. Debye-Hückel or Pitzer models predict a specific mutual chemical capacitance matrix.
 
-(In contrast, descriptions of electrolytes in terms of single-ion activities correspond to a description in terms of internal chemical capacitance $\mathcal{C}$ (see below). In nonideal solutions, $\mathcal{C}$ will be a dense matrix and also generally regarded as unmeasurable; different activity conventions will have different $\mathcal{C}$ matrices.)
+(In contrast, descriptions of electrolytes in terms of single-ion activities correspond to a description in terms of internal chemical capacitance $\mathcal{C}$ (see below). In nonideal solutions, $\mathcal{C}$ will be a dense matrix and also generally regarded as unmeasurable; different activity conventions will have different $\mathcal{C}$ matrices, the same pointwise freedom toured in [offsets galore](../offsetsgalore/).)
 
 #### Ambipolar diffusion
 
@@ -109,7 +109,7 @@ First, let's look at a homogeneous material, small-signal case. In this case bot
 * One charge mode of the form $\mathbf{V}(x,t) = v(x,t) \mathbf{1}_N$, which follows $0 = \nabla^2 v$. The charge mode is representative of the naive form of electricity: all $V_i$ values (and $\phi$ too) vary in unison, and so all ions conduct together as if they have a single common conductivity $\sigma_{\mathrm{tot}} = \sum_{ij} \sigma_{ij}$, i.e. a total current $\vec{J}_{\mathrm{tot}} = -\sigma_{\mathrm{tot}} \nabla v$ driven by the common gradient. And each ion has $\nabla \cdot \vec{J}_i = 0$ so there is no piling up (but see below about material boundaries).
 * $N-1$ ambipolar modes of the form $\mathbf{V}(x,t) = v(x,t) \mathbf{a}$, where $\mathbf{a}$ is a {% wiki "generalized eigenvalue problem", "generalized eigenvector" %} satisfying $\mathbf{c}^{\mathrm{mut}} \mathbf{a} = D^{-1} \boldsymbol{\sigma} \mathbf{a}$ (often easy to solve^[Often the matrix $\boldsymbol{\sigma}$ is invertible and so we can get all the modes by eigendecomposing $\boldsymbol{\sigma}^{-1} \mathbf{c}^{\mathrm{mut}}$.]) for eigenvalue $D^{-1}$. Each of these modes evolves with a diffusion equation: $\partial_t v = D \nabla^2 v$ with diffusion coefficient $D$, and there may be $N-1$ distinct ambipolar diffusion constants. These are neutral current modes: $\sum_i \vec{J}_i = 0$.
 
-For example in the binary (two-ion) case of cation $\mathrm{M}$ and anion $\mathrm{X}$, assuming a diagonal conductivity then the diffusion mode has $D^{-1} = (\sigma_{\mathrm{M}}^{-1} + \sigma_{\mathrm{X}}^{-1})c^{\mathrm{mut}}$, where $c^{\mathrm{mut}}$ is the single degree of freedom in the $\mathbf{c}^{\mathrm{mut}}$ matrix. This is the most simple kind of ambipolar diffusion as usually considered in the literature, in fact one usually sees a further ideality assumption that $(c^{\mathrm{mut}})^{-1} = ((z_{\mathrm{M}} F)^2 c_{\mathrm{M}} / (RT))^{-1} + ((z_{\mathrm{X}} F)^2 c_{\mathrm{X}} / (RT))^{-1}$ for ion molarities $c_{\mathrm{M}}$ and $c_{\mathrm{X}}$.
+For example in the binary (two-ion) case of cation $\mathrm{M}$ and anion $\mathrm{X}$, assuming a diagonal conductivity, the diffusion mode has $D^{-1} = (\sigma_{\mathrm{M}}^{-1} + \sigma_{\mathrm{X}}^{-1})c^{\mathrm{mut}}$, where $c^{\mathrm{mut}}$ is the single degree of freedom in the $\mathbf{c}^{\mathrm{mut}}$ matrix. This is the most simple kind of ambipolar diffusion as usually considered in the literature, in fact one usually sees a further ideality assumption that $(c^{\mathrm{mut}})^{-1} = ((z_{\mathrm{M}} F)^2 c_{\mathrm{M}} / (RT))^{-1} + ((z_{\mathrm{X}} F)^2 c_{\mathrm{X}} / (RT))^{-1}$ for ion molarities $c_{\mathrm{M}}$ and $c_{\mathrm{X}}$.
 
 It's worth noting however that when there are material boundaries (or any other reason for the matrices to vary, such as most nonlinearities), then there are no such simple modes overall: what is ambipolar in one region is not ambipolar in the next, and even the charge modes don't match up (the ions *do* pile up: $\nabla \cdot \vec{J}_i \neq 0$). Moreover, very close to the interfaces the charge neutrality assumption is often violated as well (within the screening length scale, see below), though often times this can be neglected.
 Besides that, even with a single material, the boundary conditions (e.g. one ion connected to electrodes but the other ion blocked) may mean that steady-state conduction need not follow the charge mode at all (however, when the bias is applied, the system will at first conduct according to the charge mode).
@@ -120,7 +120,7 @@ Near interfaces, impurities, and in/around depletion regions, there are variatio
 
 $$ \Omega^\phi (V_1, \ldots, V_N, \phi) \propto \mathrm{d}\tau $$
 
-It's worth reminding that we are abandoning thermodynamic rigour when asking for continuum thermodynamics to apply, especially in the case of space charge at microscopic scales. The local density approximation is justified in some idealized systems, but it is only approximately correct in reality.
+It's worth remembering that we are abandoning thermodynamic rigour when asking for continuum thermodynamics to apply, especially in the case of space charge at microscopic scales. The local density approximation is justified in some idealized systems, but it is only approximately correct in reality.
 
 We also now make the idealization that the medium is fixed, and does not expand at all due to the motion of the ionic/electronic solutes.
 
@@ -152,14 +152,14 @@ For example:
 * In a degenerate Fermi gas of electrons, $\mathcal{C}/V = e^2 g(E_F)$ for density of states $g(E_F)$ better known as {% wiki "quantum capacitance" %}. For dilute (thermal) electrons or holes in semiconductors, $\mathcal{C}/V = e^2 n / (kT)$ for carrier density $n$.
 * In ideal-dilute electrolytes, $\mathcal{C}_{ii}/V = (z_i F)^2 c_i / (RT)$ for ion molarity $c_i$, for each ion species.
 
-Going beyond the ideal case, however, correlations will cause cross terms. And in fact charged solutes are quite eager to correlate with each other even when fairly dilute, because the microscopic electrostatic interactions between ions are so long ranged (this is the essence of Debye-Huckel effect).
+Going beyond the ideal case, however, correlations will cause cross terms. And in fact charged solutes are quite eager to correlate with each other even when fairly dilute, because the microscopic electrostatic interactions between ions are so long ranged (this is the essence of the Debye-Hückel effect).
 
 Note the internal chemical capacitance matrix $\mathcal{C}$ is generally symmetric and positive definite, but it is *not* a proper capacitance matrix because it's not charge neutral: the rows do not add to zero.
 
 <figure class="demo-container" style="max-width: 300px">
 {% circuit "cap-internal-incomplete" %}
 {% figcaption %}
-The internal chemical capacitance $\mathcal{C}$ as a circuit: like the extended star, but the shared $\phi$ terminal — and every capacitor's $\phi$-half — is missing. Each carrier's capacitor is left open, its charge with nowhere to return, which is exactly why the rows do not sum to zero.
+The internal chemical capacitance $\mathcal{C}$ as a circuit: one capacitor per carrier, with every capacitor's far half missing. Each carrier's charge has nowhere to return, which is exactly why the rows do not sum to zero. (The missing terminal is $\phi$; the Jamnik-Maier trick below restores it.)
 {% endfigcaption %}
 </figure>
 
@@ -174,7 +174,7 @@ s_i
 \end{aligned}$$
 where this step works because of gauge invariance: shifting $\phi$ up is equivalent to shifting all $V_i$ down. We can write this as $\mathbf{s} = \mathcal{C} \mathbf{1}_{N}$. In the ideal case, we have simply $s_i = \mathcal{C}_{ii}$.
 
-We then have for all ion charges a full description of charge variations.
+Together these give a full description of the charge variations.
 
 $$ \delta\mathbf{Q} = \mathcal{C} \delta \mathbf{V} - \mathbf{s} \delta \phi $$
 
@@ -267,7 +267,7 @@ The extended matrix as a circuit: every carrier node capacitor-coupled to a cent
 
 In relation to this, the mutual chemical capacitance can be seen as elimination of the $\phi$ node from the $\mathbf{C}^{\mathrm{ext}}$ capacitance matrix (a {% wiki "Schur complement" %} operation), which when viewing both $\mathbf{C}^{\mathrm{ext}}$ and $\mathbf{C}^{\mathrm{mut}}$ as capacitor networks is known as a {% wiki "Kron reduction" %} or a {% wiki "star-mesh transform" %}.
 
-This makes $\mathbf{C}^{\mathrm{mut}}$ to be a dense matrix ('fully connected'), even when $\mathcal{C}$ is ideal and diagonal (so $\mathbf{C}^{\mathrm{ext}}$ is a 'star' topology).
+This makes $\mathbf{C}^{\mathrm{mut}}$ a dense matrix ('fully connected'), even when $\mathcal{C}$ is ideal and diagonal (so $\mathbf{C}^{\mathrm{ext}}$ is a 'star' topology).
 
 <figure class="demo-container" style="max-width: 520px">
 {% circuit "cap-kron-reduction" %}
