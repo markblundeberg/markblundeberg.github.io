@@ -44,17 +44,16 @@
         lithium: SPECIES.lithium,
         zinc: SPECIES.zinc,
         chloride: SPECIES.chloride,
-    });
+    }, { yMode: 'abstract' });
     esbd.setSpatialLayout(boundaries, regions);
     // Note : same volts per pixel as band diagam, to see Zn2+ compression more easily.
     esbd.setVRange(-1.8, 2.2);
-    // placeholder levels: match the energy panel's (a.u.) honesty
-    esbd.diagram.setYLabel('Species voltage (a.u.)');
 
     // Top: the energy band diagram (mu-bar view), built on the lower-level BandDiagram.
-    const energy = new BandDiagram('{{idprefix}}-energy');
+    // placeholder levels, so both panels run abstract axes (no numbers)
+    const energy = new BandDiagram('{{idprefix}}-energy', { yMode: 'abstract' });
     energy.setSpatialLayout(boundaries, regions);
-    energy.setYLabel('Electron / ion energy (a.u.)');
+    energy.setYLabel('Electron / ion energy');
     energy.setYRange(-1.7, 2.3);
 
     function update(float) {

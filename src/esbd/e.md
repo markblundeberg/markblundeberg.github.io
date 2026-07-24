@@ -7,7 +7,7 @@ orderESBD: 32
 
 # {{title}}
 
-We can now visualize the electrode potential $E$^[The IUPAC Gold Book defines the [electrode potential](https://goldbook.iupac.org/terms/view/E01956) as the EMF of a cell in which the standard hydrogen electrode is the left-hand electrode ("$E$ vs SHE"). The redox potential $E_h$ is the same idea applied to a solution's own $V_{\mathrm{e}^-}$.] on a $V_i$ diagram, along with its relatives: the 'redox potential' $E_h$, the 'equilibrium potential' $E_{\mathrm{eq}}$, and so on. They all share the form $E = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\text{ref})$, and every subtlety comes down to *which* $V_{\mathrm{e}^-}$ and *which* reference we have in mind. We take the simple case first and add the complications afterward.
+We can now visualize the electrode potential $E$^[The IUPAC Gold Book defines the [electrode potential](https://goldbook.iupac.org/terms/view/E01956) as the EMF of a cell in which the standard hydrogen electrode is the left-hand electrode ("$E$ vs SHE"), the EMF being the cell voltage at zero current. The redox potential $E_h$ is the same idea applied to a solution's own $V_{\mathrm{e}^-}$.] on a $V_i$ diagram, along with its relatives: the 'redox potential' $E_h$, the 'equilibrium potential' $E_{\mathrm{eq}}$, and so on. They all share the form $E = V_{\mathrm{e}^-} - V^\circ_{\mathrm{e}^-}(\text{ref})$, and every subtlety comes down to *which* $V_{\mathrm{e}^-}$ and *which* reference we have in mind. We take the simple case first and add the complications afterward.
 
 ## Electrode potential at equilibrium
 
@@ -28,7 +28,7 @@ Electrode potential at equilibrium, as four levels. The metal's $V_{\mathrm{e}^-
 {% endfigcaption %}
 </figure>
 
-What that reference level actually is, and how a real reference electrode pins it, we leave to the [next topic](../references/); here we just take $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ as a level on the page.^[The IUPAC definition is in this equilibrium spirit: electrode potential is the electromotive force of a cell with the standard hydrogen electrode on the left and the electrode in question on the right, the EMF being the cell voltage at zero current. That zero-current proviso is exactly what keeps the definition tidy; everything below is what happens when we let go of it.]
+What that reference level actually is, and how a real reference electrode pins it, we leave to the [next topic](../references/); here we just take $V^\circ_{\mathrm{e}^-}(\mathrm{SHE})$ as a level on the page.^[The IUPAC definition is in this same equilibrium spirit: its zero-current proviso is exactly what keeps the definition tidy, and everything below is what happens when we let go of it.]
 
 ## The Nernst equation
 

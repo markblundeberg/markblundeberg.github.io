@@ -76,7 +76,12 @@ class ElectrochemicalSpeciesBandDiagram {
         });
         try {
             this.speciesInfo = speciesInfo;
-            this.diagram.setYLabel('Species Voltage (V)');
+            // default label per the y-axis doctrine: '(V)' only on numeric axes
+            this.diagram.setYLabel(
+                this.diagram.config.yMode === 'abstract'
+                    ? 'Species voltage'
+                    : 'Species voltage (V)'
+            );
             this._tracePopupCallback = formatPopupBaseContent;
             this.diagram.setTracePopupCallback(
                 (popupInfo) => this._tracePopupCallbackIntermediary(popupInfo) // binding `this`
