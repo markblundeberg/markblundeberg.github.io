@@ -1,19 +1,19 @@
 ---
 layout: layouts/esbd_topic.njk
-title: 'Bipolar membranes and pn junctions'
+title: 'Bipolar membranes and p-n junctions'
 tags: [page, esbd_topic]
 orderESBD: 24
 ---
 
 # {{title}}
 
-The [previous topic](../charge_neutrality/) ended with a fixed background charge forcing the standard-state ladder to step across a boundary, the Donnan potential. Put two such regions back to back, with fixed charge of opposite sign on each side, and you have built one of the most satisfying objects in this subject: a device that is at once a semiconductor pn-junction diode and an electrochemical bipolar membrane. Drawn as $V_i$ diagrams, the two share one construction and one set of rules: depletion, generation, recombination.
+The [previous topic](../charge_neutrality/) ended with a fixed background charge forcing the standard-state ladder to step across a boundary, the Donnan potential. Put two such regions back to back, with fixed charge of opposite sign on each side, and you have built one of the most satisfying objects in this subject: a device that is at once a semiconductor p-n junction diode and an electrochemical bipolar membrane. Drawn as $V_i$ diagrams, the two share one construction and one set of rules: depletion, generation, recombination.
 
 ## Functional twins
 
-A pn junction joins two doped semiconductors: an $n$-type region, with fixed positive donors and mobile electrons, against a $p$-type region, with fixed negative acceptors and mobile holes. A bipolar membrane joins two fixed-charge polymer films in the very same arrangement. An anion-exchange membrane carries fixed positive groups and conducts mobile anions (here $\mathrm{OH}^-$), making it the electrochemical $n$-type; a cation-exchange membrane carries fixed negative groups and conducts mobile cations (here $\mathrm{H}^+$), the electrochemical $p$-type.^[These fixed-charge media go by many names depending on the field (ionomers and polyelectrolytes to a materials chemist, permselective or ion-exchange membranes to an engineer), but physically each is just a medium carrying a built-in static charge, the direct counterpart of a semiconductor dopant. The dopant picture is an idealization, though: a real membrane is its own medium, with its own $V^\circ_i$ ladder set by how it solvates and sterically packs each ion (the same per-medium ladder as the [ITIES](../charge_neutrality/) of the previous topic), and the counter-ions may even bind locally to the fixed groups. We treat it here as simply doped water for the sake of the analogy.]
+A p-n junction joins two doped semiconductors: an $n$-type region, with fixed positive donors and mobile electrons, against a $p$-type region, with fixed negative acceptors and mobile holes. A bipolar membrane joins two fixed-charge polymer films in the very same arrangement. An anion-exchange membrane carries fixed positive groups and conducts mobile anions (here $\mathrm{OH}^-$), making it the electrochemical $n$-type; a cation-exchange membrane carries fixed negative groups and conducts mobile cations (here $\mathrm{H}^+$), the electrochemical $p$-type.^[These fixed-charge media go by many names depending on the field (ionomers and polyelectrolytes to a materials chemist, permselective or ion-exchange membranes to an engineer), but physically each is just a medium carrying a built-in static charge, the direct counterpart of a semiconductor dopant. The dopant picture is an idealization, though: a real membrane is its own medium, with its own $V^\circ_i$ ladder set by how it solvates and sterically packs each ion (the same per-medium ladder as the [ITIES](../charge_neutrality/) of the previous topic), and the counterions may even bind locally to the fixed groups. We treat it here as simply doped water for the sake of the analogy.]
 
-| | pn junction | bipolar membrane |
+| | p-n junction | bipolar membrane |
 | --- | --- | --- |
 | mobile positive carrier | hole $\mathrm{h}^+$ | cation, e.g. $\mathrm{H}^+$ |
 | mobile negative carrier | electron $\mathrm{e}^-$ | anion, e.g. $\mathrm{OH}^-$ |
@@ -31,7 +31,7 @@ The carrier voltages stay flat, but the standard-state ladder cannot. The fixed 
 <figure class="demo-container" style="max-width: 700px">
 {% include "esbd-diagrams/esbd-bipolar-twin.njk" %}
 {% figcaption %}
-Equilibrium, side by side: a pn junction and a bipolar membrane as $V_i$ diagrams. The mobile carrier voltages run flat (held a fixed distance apart by the pairing reaction), while the $V^\circ_i$ ladder bends through the depletion zone, carrying the junction potential step. (Junction widths schematic, not to scale.) The two panels share the same voltage scale, so the twins' one visible difference stands out: the diode's carrier levels merge, the membrane's sit $2.457\ \mathrm{V}$ apart.
+Equilibrium, side by side: a p-n junction and a bipolar membrane as $V_i$ diagrams. The mobile carrier voltages run flat (held a fixed distance apart by the pairing reaction), while the $V^\circ_i$ ladder bends through the depletion zone, carrying the junction potential step. (Junction widths schematic, not to scale.) The two panels share the same voltage scale, so the twins' one visible difference stands out: the diode's carrier levels merge, the membrane's sit $2.457\ \mathrm{V}$ apart.
 {% endfigcaption %}
 </figure>
 

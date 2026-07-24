@@ -132,6 +132,6 @@ A semiconductor reader will recognize this deforming ladder: a junction between 
 
 Everything in this topic comes down to a single motion: sliding the rigid $V^\circ_i$ ladder to the one offset at which the bulk is neutral. The pinned $V_i$ values and any fixed background charge together decide where that offset falls. Mass-action products emerge independent of the ladder, since the offset cancels, and dopants, the common-ion effect, and the Donnan potential turn out to be the same neutrality-restoring shift in three different guises. A boundary between two solvents generalizes the picture one step further, to a ladder that deforms as well as shifts.
 
-The Donnan case, in which a fixed background charge on one side of a boundary forces a step in the ladder, has an exact counterpart in the solid state. The next topic sets the two side by side: the electrochemical bipolar membrane and its semiconductor twin, the pn junction.
+The Donnan case, in which a fixed background charge on one side of a boundary forces a step in the ladder, has an exact counterpart in the solid state. The next topic sets the two side by side: the electrochemical bipolar membrane and its semiconductor twin, the p-n junction.
 
-[**NEXT TOPIC: Bipolar membranes and pn junctions**](../bipolar/)
+[**NEXT TOPIC: Bipolar membranes and p-n junctions**](../bipolar/)

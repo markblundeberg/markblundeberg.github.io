@@ -1,13 +1,13 @@
 ---
 layout: layouts/esbd_topic.njk
-title: 'Non-ideal solutions'
+title: 'Nonideal solutions'
 tags: [page, esbd_topic]
 orderESBD: 81
 ---
 
 # {{title}}
 
-Earlier in the [Solutions](../solutions/) topic we touched a bit on non-ideal solutions. I'd like to touch on how there is a fundamental aspect of ambiguity in the ionic activity $a_i$ and the overall placement of the $V^\circ_i$ ladder. The "single ion activity problem" is a well-known issue for ion chemistry and I just want to re-explain how it appears with the $V_i$'s (in short, it affects $V^\circ_i$ but not $V_i$).
+Earlier in the [Solutions](../solutions/) topic we touched a bit on nonideal solutions. I'd like to touch on how there is a fundamental aspect of ambiguity in the ionic activity $a_i$ and the overall placement of the $V^\circ_i$ ladder. The "single ion activity problem" is a well-known issue for ion chemistry and I just want to re-explain how it appears with the $V_i$'s (in short, it affects $V^\circ_i$ but not $V_i$).
 
 To be specific, we are concerned with cases where solutes deviate from an ideal-dilute logarithmic dependence on concentration. This is commonly captured as an activity $a_i$, or an activity coefficient $\gamma_i$ that acts as a fudge factor on the concentration. The electrochemical potential (traditional) and equivalently species voltages are decomposed as so:
 
@@ -33,11 +33,11 @@ I'll call out a few clarifications:
 
 > **Ideal mixtures vs. ideal-dilute**: In chemistry there are two kinds of idealized solution. In an {% wiki "ideal mixture" %}, the solute and solvent chemical potential both vary exactly with the logarithm of mole fraction. This reflects a case where solute-solvent, solute-solute, and solvent-solvent interactions all have the same character, and it corresponds to {% wiki "Raoult's law" %} for both the solute and solvent. That is distinct from the *ideal-dilute* form, which we are interested in, which represents a case where solute particles may have very messy and irregular interactions with the solvent, yet all the dilute solute particles are independent from other dilute solute particles and thus behave (entropically) like an ideal gas. This leads to the solutes following {% wiki "Henry's law" %}, though interestingly it remains guaranteed that the *solvent* follows Raoult's law in this case too.^[Interestingly, Henry's law (for dilute solutes) automatically implies (via the {% wiki "Gibbs–Duhem relation" %}) an *effective* Raoult's law for the *solvent*'s chemical potential, and this why {% wiki "colligative properties" %} like osmotic pressure are guaranteed. In other words, {% wiki "Raoult's law" %} is guaranteed for the solvent provided the solutes are dilute, and that has nothing to do with ideal mixtures nor any of their associated concepts like "entropy of mixing" or "solvent dilution"; chemistry textbooks are often not clear on this point.]
 
-## It does matter: ionic non-idealities are strong
+## It does matter: ionic nonidealities are strong
 
-Should we really care about non-idealities? Yes! In fact ions depart from the ideally-dilute case already at surprisingly low concentrations (e.g., $0.001~\mathrm{mol/L}$ in water), at least compared to non-ionic solutes which might only depart after $0.1~\mathrm{mol/L}$.
+Should we really care about nonidealities? Yes! In fact ions depart from the ideally-dilute case already at surprisingly low concentrations (e.g., $0.001~\mathrm{mol/L}$ in water), at least compared to non-ionic solutes which might only depart after $0.1~\mathrm{mol/L}$.
 
-Ions show early non-ideality due to "ionic atmosphere" effects, i.e., how ions screen their fellow ions at medium range distances. This represents a form of correlation between the positions of ions, which violates our ideal-dilute assumption that the ions are moving around independently of each other. The crucial (and robust) effect of ionic atmosphere, as encountered in {% wiki "Debye–Hückel theory" %}, is that the activity coefficients of ions deviate proportionally to the square root of concentration, $\ln\gamma_i \propto -\sqrt{I}$, where $I$ is the {% wiki "ionic strength" %}, a weighted sum of all ionic concentrations. By comparison, with non-ionic solutes the leading order deviation of activity coefficient is in the first power of concentration.
+Ions show early nonideality due to "ionic atmosphere" effects, i.e., how ions screen their fellow ions at medium range distances. This represents a form of correlation between the positions of ions, which violates our ideal-dilute assumption that the ions are moving around independently of each other. The crucial (and robust) effect of ionic atmosphere, as encountered in {% wiki "Debye–Hückel theory" %}, is that the activity coefficients of ions deviate proportionally to the square root of concentration, $\ln\gamma_i \propto -\sqrt{I}$, where $I$ is the {% wiki "ionic strength" %}, a weighted sum of all ionic concentrations. By comparison, with non-ionic solutes the leading order deviation of activity coefficient is in the first power of concentration.
 
 The leading $\sqrt{I}$ order of the ionic atmospheres effect is actually simply computable, and is what causes the initial gradual bending downwards in $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ that we saw in our NaCl plot. Repeating it here:
 
@@ -49,15 +49,15 @@ $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ value for salt dissolved at varying conc
 {% endfigcaption %}
 </figure>
 
-There is a lot more that can be said about the microscopic details.^[For example, if you have an ionic solution and add a new dilute ionic solute, then it will not significantly change $I$ and its effect will be first-order too. Logically, this must apply for pure water which has a preexisting nonzero ionic strength due to spontaneous autoionization. That means that technically all dilute ions added to water have $\gamma_i$ varying to first order in concentration! But the linearity only holds for tiny concentrations up to $\sim 10^{-7}~\mathrm{mol/L}$, after which the new ion is going to significantly add to $I$.] But really, the main point is that non-idealities readily manifest with ions at the usual concentrations seen in experiments. So, we really ought to care about the non-idealities of ions!
+There is a lot more that can be said about the microscopic details.^[For example, if you have an ionic solution and add a new dilute ionic solute, then it will not significantly change $I$ and its effect will be first-order too. Logically, this must apply for pure water which has a preexisting nonzero ionic strength due to spontaneous autoionization. That means that technically all dilute ions added to water have $\gamma_i$ varying to first order in concentration! But the linearity only holds for tiny concentrations up to $\sim 10^{-7}~\mathrm{mol/L}$, after which the new ion is going to significantly add to $I$.] But really, the main point is that nonidealities readily manifest with ions at the usual concentrations seen in experiments. So, we really ought to care about the nonidealities of ions!
 
-That said, being off by a factor of 2 in the activity of an ion might only correspond to a voltage error of $RT\ln(2)/F \approx 18~\mathrm{mV}$, so for imprecise work, electrochemists can often get away with ignoring the non-ideality. And due to the ambiguities in activity (discussed next), it can be annoying to properly incorporate non-ideality.
+That said, being off by a factor of 2 in the activity of an ion might only correspond to a voltage error of $RT\ln(2)/F \approx 18~\mathrm{mV}$, so for imprecise work, electrochemists can often get away with ignoring the nonideality. And due to the ambiguities in activity (discussed next), it can be annoying to properly incorporate nonideality.
 
 ## The fundamental ambiguity of ionic activity
 
 You may have heard that single-ion activities are ill defined, or unmeasurable; or, that only mean ionic activities can be measured. Let's talk about why that is the case, first in the language of the $V_i$'s.
 
-Suppose we have solution of specific composition, with various ions and solutes, at known concentrations $c_i$. Through careful measurements and comparison to the nearly-pure solvent case, we have determined a set of activities $a_i$ and/or activity coefficients $\gamma_i$ that describe the non-ideality in our solution. All seems good, but our conclusion is non-unique, and there are other sets of $\gamma_i$ that equally well describe the non-ideality!
+Suppose we have solution of specific composition, with various ions and solutes, at known concentrations $c_i$. Through careful measurements and comparison to the nearly-pure solvent case, we have determined a set of activities $a_i$ and/or activity coefficients $\gamma_i$ that describe the nonideality in our solution. All seems good, but our conclusion is non-unique, and there are other sets of $\gamma_i$ that equally well describe the nonideality!
 
 ### Ion activity ambiguity in the language of $V_i$
 
@@ -73,7 +73,7 @@ $$ a_i ' = a_i \exp([z_i F / (RT)] \cdot \xi) , $$
 
 for any value of $\xi$. For example, with $\xi=\tfrac{RT}{F}\ln(10) = 59~\mathrm{mV}$ we can lower the entire $V^{\circ}_i$ ladder by 59 mV, and multiply $a_i$ and $\gamma_i$ for $\mathrm{[]^+}$ ions by ×10, multiply $a_i$ and $\gamma_i$ for $\mathrm{[]^{2-}}$ ions by ×0.01, and so on.
 
-This is a *severe* form of arbitrariness, not merely a simple one-time offset but instead a continuum of offsets. We can choose a different value of $\xi$ for each kind of solution in each set of conditions. If we have a curve of some ion's activity vs concentration, we can turn it into any other curve by making $\xi$ vary with concentration (and adjusting all other ions' activities accordingly). This ambiguity seems troublesome, but on the other hand, it is purely a mathematical obstacle that we have created by insisting on relating non-ideal solutions to ideal solutions. (The interactive figures in [References & cells](../references/) put exactly this freedom on sliders, one per solution: the wires and every $V_i$ hold still while the $V^\circ_i$ ladders slide.)
+This is a *severe* form of arbitrariness, not merely a simple one-time offset but instead a continuum of offsets. We can choose a different value of $\xi$ for each kind of solution in each set of conditions. If we have a curve of some ion's activity vs concentration, we can turn it into any other curve by making $\xi$ vary with concentration (and adjusting all other ions' activities accordingly). This ambiguity seems troublesome, but on the other hand, it is purely a mathematical obstacle that we have created by insisting on relating nonideal solutions to ideal solutions. (The interactive figures in [References & cells](../references/) put exactly this freedom on sliders, one per solution: the wires and every $V_i$ hold still while the $V^\circ_i$ ladders slide.)
 
 As we'll see below, this ambiguity gets addressed in practice by:
 * focussing on activity combinations that are unaffected by the ambiguity, or,
@@ -158,7 +158,7 @@ $$\bar\mu_i = z_i F\phi + \mu^\circ_{\mathrm{int},i} + RT \ln a_i . $$
 
 Here, we have:
 * $\bar\mu_i$, the fundamental thermodynamic chemical potential for an ion, which like $V_i$ can be accessed (aside from a single, global electrostatic offset).
-* $\mu^\circ_{\mathrm{int},i}$, a fixed value for solute $i$ in given solvent; it has nothing to do with non-ideality and is purely a function of the local influence of a single, solitary solute on an otherwise pure solvent.
+* $\mu^\circ_{\mathrm{int},i}$, a fixed value for solute $i$ in given solvent; it has nothing to do with nonideality and is purely a function of the local influence of a single, solitary solute on an otherwise pure solvent.
 * $\phi$, an inaccessible yet supposedly physical quantity, something independent of the thermodynamics.
 
 It seems this should leave no ambiguity at all: everything besides activity $a_i$ is determined, therefore this equation uniquely must determine physical ionic activity $a_i$. And so it is often argued that we could know the "true $a_i$" if not for the "true $\phi$" being inaccessible.
@@ -193,11 +193,11 @@ This exposes a *second* convention in the decomposition, beyond the activity cho
 
 It is worth mentioning that there is another unrelated ambiguity that affects activity coefficient $\gamma_i$ but not activity $a_i$, and this has to do with the ambiguity in how we count ionic solutes. This is not particular to ions, as it affects non-ionic solutes too.
 
-As a classic example, consider copper (ii) sulfate ($\mathrm{CuSO_4}$) dissolving into water. [If you look up data for this](https://doi.org/10.1016/j.eti.2024.103847), you will see that the mean activity coefficient $\gamma_{\mathrm{Cu}^{2+}} \gamma_{\mathrm{SO_4}^{2-}}$ plummets rapidly towards zero as the salt concentration is increased. But this is largely because we are formally counting the $\mathrm{Cu}^{2+}$ and $\mathrm{SO_4}^{2-}$ concentrations as if they are fully dissociated free ions, but in fact they are readily forming ion pairs. If we instead count the "paired" aqueous $\mathrm{CuSO_4}\cdot n\mathrm{H_2O}$ as a separate species, then it will reduce our count of $\mathrm{Cu}^{2+}$ and $\mathrm{SO_4}^{2-}$ ions. But this mental recounting cannot affect the actual $V_i$'s or activities, so the activity coefficients must increase to compensate for a reduced count of free ions. If we were to recalculate and replot $\gamma_{\mathrm{Cu}^{2+}} \gamma_{\mathrm{SO_4}^{2-}}$ based only on free ion concentrations, we'd get a curve sitting much closer to 1.
+As a classic example, consider copper (ii) sulfate ($\mathrm{CuSO_4}$) dissolving into water. [If you look up data for this](https://doi.org/10.1016/j.eti.2024.103847), you will see that the mean activity coefficient $\gamma_{\mathrm{Cu}^{2+}} \gamma_{\mathrm{SO_4}^{2-}}$ plummets rapidly towards zero as the salt concentration is increased. But this is largely because we are formally counting the $\mathrm{Cu}^{2+}$ and $\mathrm{SO_4}^{2-}$ concentrations as if they are fully dissociated free ions, but in fact they are readily forming ion pairs. If we instead count the "paired" aqueous $\mathrm{CuSO_4}\cdot n\mathrm{H_2O}$ as a separate species, then it will reduce our count of $\mathrm{Cu}^{2+}$ and $\mathrm{SO_4}^{2-}$ ions. But this mental recounting cannot affect the actual $V_i$'s or activities, so the activity coefficients must increase to compensate for a reduced count of free ions. If we were to recalculate and re-plot $\gamma_{\mathrm{Cu}^{2+}} \gamma_{\mathrm{SO_4}^{2-}}$ based only on free ion concentrations, we'd get a curve sitting much closer to 1.
 
 Similarly, in describing the activity coefficient of aqueous sulfuric acid $\mathrm{H_2SO_4}$, we might describe it as dissociating into $\mathrm{SO_4}^{2-}$ and two $\mathrm{H}^+$, which will be reasonable at dilute concentrations. At high concentrations, the 'pairing' of one $\mathrm{H}^+$ and one $\mathrm{SO_4}^{2-}$ into $\mathrm{HSO_4}^-$ becomes significant (and becomes dominant for pH of 2 and below). In the [Solutions topic](../solutions/) data table for aqueous ions, we have data for both $V^\circ_{\mathrm{SO_4}^{2-}}$ and $V^\circ_{\mathrm{HSO_4}^{-}}$; whether we included $V^\circ_{\mathrm{HSO_4}^{-}}$ or not would strongly impact the required values of both $\gamma_{\mathrm{SO_4}^{2-}}$ and $\gamma_{\mathrm{H}^{+}}$.
 
-Basically, this is the distinction between a formal/nominal solute concentration, as compared to a "real" free solute concentration. It can be advantageous to explicitly include more forms of solutes in our analysis (like the ion pairs), which can help extract out annoying behaviours from the activity coefficients. On the other hand, having the extra forms also adds more free parameters, and may not simplify matters in highly concentrated solutions that are fully non-ideal.
+Basically, this is the distinction between a formal/nominal solute concentration, as compared to a "real" free solute concentration. It can be advantageous to explicitly include more forms of solutes in our analysis (like the ion pairs), which can help extract out annoying behaviours from the activity coefficients. On the other hand, having the extra forms also adds more free parameters, and may not simplify matters in highly concentrated solutions that are fully nonideal.
 
 ### No solvation ambiguity
 
@@ -207,13 +207,13 @@ For example, when we refer to an $\mathrm{H}^+$ ion we are always referring to t
 
 Insofar as counting, there is not much point in trying to distinguish the differing hydration levels as distinct species. First, it would be hard to distinguish them. Second, we would have to actually redefine the existing standard state $V^\circ_i$ positions and add new positions. E.g., $V^\circ_{\mathrm{H}^+}$ would have to be greatly increased to reflect the rarity of naked protons, and the 'actual $\mathrm{H}^+$ activity' would be tiny (very inconsistent with the usual pH definition!).
 
-Still, as we approach more and more concentrated solutions it is important to remember that our standard states refer to ions bathed in infinite solvent. We expect non-idealities not just because solutes are interacting, but also because the solutes have less and less solvent available to them, yet we are still referencing them to a fully solvated form.
+Still, as we approach more and more concentrated solutions it is important to remember that our standard states refer to ions bathed in infinite solvent. We expect nonidealities not just because solutes are interacting, but also because the solutes have less and less solvent available to them, yet we are still referencing them to a fully solvated form.
 
 (And despite all of this, the thermodynamic quantities $V_{\mathrm{H}^+}$, $V_{\mathrm{H_3O}^+}$, etc. are all distinct and well defined (each one being incrementally offset by $\mu_{\mathrm{H_2O}}/F$), even if they don't have distinct counts / standard states. If we had a semipermeable membrane that somehow only permitted exact $\mathrm{H_7O_3}^+$ ions to pass, then $V_{\mathrm{H_7O_3}^+}$ is the voltage that would equilibrate across the membrane!)
 
 ## Takeaways
 
-Ionic solutes tend to be non-ideal, which begs for them to be treated with activities or activity coefficients. But, the concept of single-ion activity can be surprisingly subtle. There is a fundamental ambiguity which requires us to specify some kind of convention, and since there are many different slightly incompatible conventions, things can get imprecise.
+Ionic solutes tend to be nonideal, which begs for them to be treated with activities or activity coefficients. But, the concept of single-ion activity can be surprisingly subtle. There is a fundamental ambiguity which requires us to specify some kind of convention, and since there are many different slightly incompatible conventions, things can get imprecise.
 
 For activity coefficients (but not activities), there is also the issue of how we are counting solute concentrations, and in particular whether we are including dissociated / associated forms explicitly or implicitly.
 

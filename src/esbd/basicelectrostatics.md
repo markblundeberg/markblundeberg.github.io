@@ -7,7 +7,7 @@ orderESBD: 25
 
 # {{title}}
 
-The [previous topic](../bipolar/) left a question hanging: what sets the width and shape of the depletion zone at a pn junction or bipolar membrane, that sliver where the $V^\circ_i$ ladder bends and neutrality locally breaks?
+The [previous topic](../bipolar/) left a question hanging: what sets the width and shape of the depletion zone at a p-n junction or bipolar membrane, that sliver where the $V^\circ_i$ ladder bends and neutrality locally breaks?
 
 While the $V_i$ values want to flatten out for thermodynamic reasons, the same is not necessarily true of the $V^\circ_i$. To explain why $V^\circ_i$ might be flat (or not) at equilibrium, we finally have to open up the actual mechanics of electricity, kept offstage until now. The crucial point is that the $V^\circ_i$ ladder's spatial variations are (usually) equal to variations in the electrostatic potential $\phi$, and electrostatics ties variations in $\phi$ to charge. Bends in the ladder are therefore statements about charge.
 
@@ -17,7 +17,7 @@ We have mentioned a few times that $\phi$ is generally ambiguous, but in the spe
 
 $$ \vec E = -\nabla\phi = -\nabla V^\circ_i. $$
 
-Accordingly, inside each material, the $V^\circ_i$ ladder follows a {% wiki "Poisson equation" %}, Gauss's law combined with the constitutive response of the background dielectric medium:^[This form of the Poisson equation only applies inside a reasonably well behaved medium. As we'll see [later on](../inhomog/), it necessarily breaks in non-ideal solutions, at interfaces, in graded media, and in strong electric fields.]
+Accordingly, inside each material, the $V^\circ_i$ ladder follows a {% wiki "Poisson equation" %}, Gauss's law combined with the constitutive response of the background dielectric medium:^[This form of the Poisson equation only applies inside a reasonably well behaved medium. As we'll see [later on](../inhomog/), it necessarily breaks in nonideal solutions, at interfaces, in graded media, and in strong electric fields.]
 
 $$ - \varepsilon \nabla^2 V^\circ_i = - \varepsilon \nabla^2 \phi = \rho_{\mathrm{free}}, $$
 

@@ -7,7 +7,7 @@ orderESBD: 31
 
 # {{title}}
 
-Wherever an electronic conductor meets an ionic one, something must hand the charge from one circuit to the other; the survey of [conductors](../other_conductors/) ended on exactly that threshold. The hand-off is electron transfer, and chemistry accounts for it one **half-reaction** at a time:
+Wherever an electronic conductor meets an ionic one, something must hand the charge from one circuit to the other; the survey of [conductors](../other_conductors/) ended on exactly that threshold. The handoff is electron transfer, and chemistry accounts for it one **half-reaction** at a time:
 
 $$ \mathrm{Ox} + z\mathrm{e}^- \rightleftharpoons \mathrm{Red}. $$
 

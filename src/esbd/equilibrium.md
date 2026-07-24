@@ -25,7 +25,7 @@ A few classic examples below will demonstrate how this can appear.
 
 ## Reactions
 
-Consider the auto-ionization of water,
+Consider the autoionization of water,
 
 $$ \mathrm{H}^+ + \mathrm{OH}^- \rightleftharpoons \mathrm{H_2O}. $$
 
@@ -37,7 +37,7 @@ To translate this to $V_i$, we sub in our $\bar{\mu}_i = z_i F V_i$, to get:
 
 $$ V_{\mathrm{H}^+} - V_{\mathrm{OH}^-} = \frac{\mu_{\mathrm{H_2O}}}{F}. $$
 
-Thus, auto-ionization in water directly sets up an offset between $V_{\mathrm{H}^+}$ and $V_{\mathrm{OH}^-}$.
+Thus, autoionization in water directly sets up an offset between $V_{\mathrm{H}^+}$ and $V_{\mathrm{OH}^-}$.
 
 <figure class="demo-container" style="max-width: 190px">
 {% include "esbd-diagrams/esbd-h2o-autoionization.njk" %}
@@ -59,7 +59,7 @@ If the solution is fully saturated with salt (meaning it is in equilibrium with 
 
 This is an example of heterogeneous equilibrium (the salt is a separate solid phase), whereas the previous autoionization example is a form of homogeneous equilibrium. Note that this $3.981~\mathrm{V}$ spacing from $\mathrm{NaCl}$ applies to any solvent, not just water; the only assumption we made was that of saturation.
 
-(This still leaves a question: salt water has all four ions depicted above: $\mathrm{H}^+$, $\mathrm{OH}^-$, $\mathrm{Na}^+$, and $\mathrm{Cl}^-$. So how do the two figures combine — where does $V_{\mathrm{Na}^+}$ sit relative to $V_{\mathrm{H}^+}$ in salt water? As we'll see in later topics, the alignment of these two pairs would depend on further information, like the solution pH; we can also get to an answer by including more dissociation equilibria.^[Saturate the same solution with NaOH solid as well, so that NaCl pins $\mathrm{Na}^+$–$\mathrm{Cl}^-$, NaOH pins $\mathrm{Na}^+$–$\mathrm{OH}^-$, and auto-ionization pins $\mathrm{H}^+$–$\mathrm{OH}^-$. A strange brew, mind: the common-ion effect crowds nearly all the $\mathrm{Cl}^-$ out of solution. The water chemical potential also gets significantly reduced in this concentrated NaOH solution (at a hygroscopic activity of $a_{\mathrm{H_2O}} \approx 0.07$), so the $\mathrm{H}^+$–$\mathrm{OH}^-$ spacing itself reduces by about 70 mV ($\frac{RT}{F}\ln a_{\mathrm{H_2O}}$) from the pure-water figure above. The chloralkali industry sells nearly this exact brew as diaphragm-grade caustic soda: NaCl-saturated 50% caustic, the salt crowded out in the evaporators by the very common-ion effect just described.] Likewise for unsaturated salt water, we will see how $ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ varies with concentration.)
+(This still leaves a question: salt water has all four ions depicted above: $\mathrm{H}^+$, $\mathrm{OH}^-$, $\mathrm{Na}^+$, and $\mathrm{Cl}^-$. So how do the two figures combine — where does $V_{\mathrm{Na}^+}$ sit relative to $V_{\mathrm{H}^+}$ in salt water? As we'll see in later topics, the alignment of these two pairs would depend on further information, like the solution pH; we can also get to an answer by including more dissociation equilibria.^[Saturate the same solution with NaOH solid as well, so that NaCl pins $\mathrm{Na}^+$–$\mathrm{Cl}^-$, NaOH pins $\mathrm{Na}^+$–$\mathrm{OH}^-$, and autoionization pins $\mathrm{H}^+$–$\mathrm{OH}^-$. A strange brew, mind: the common-ion effect crowds nearly all the $\mathrm{Cl}^-$ out of solution. The water chemical potential also gets significantly reduced in this concentrated NaOH solution (at a hygroscopic activity of $a_{\mathrm{H_2O}} \approx 0.07$), so the $\mathrm{H}^+$–$\mathrm{OH}^-$ spacing itself reduces by about 70 mV ($\frac{RT}{F}\ln a_{\mathrm{H_2O}}$) from the pure-water figure above. The chloralkali industry sells nearly this exact brew as diaphragm-grade caustic soda: NaCl-saturated 50% caustic, the salt crowded out in the evaporators by the very common-ion effect just described.] Likewise for unsaturated salt water, we will see how $ V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ varies with concentration.)
 
 ## Three or more charged species
 

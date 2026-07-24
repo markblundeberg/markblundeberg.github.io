@@ -89,7 +89,7 @@ Integrated mutual chemical capacitance *is* the charge storage of a bulk materia
 
 #### Rigour in nonideal solutions
 
-Mutual chemical capacitance is a thermodynamic observable and directly relates to the mean activities of [Non-ideal solutions](../nonideal/). E.g. Debye-Hückel or Pitzer models predict a specific mutual chemical capacitance matrix.
+Mutual chemical capacitance is a thermodynamic observable and directly relates to the mean activities of [Nonideal solutions](../nonideal/). E.g. Debye-Hückel or Pitzer models predict a specific mutual chemical capacitance matrix.
 
 (In contrast, descriptions of electrolytes in terms of single-ion activities correspond to a description in terms of internal chemical capacitance $\mathcal{C}$ (see below). In nonideal solutions, $\mathcal{C}$ will be a dense matrix and also generally regarded as unmeasurable; different activity conventions will have different $\mathcal{C}$ matrices, the same pointwise freedom toured in [offsets galore](../offsetsgalore/).)
 

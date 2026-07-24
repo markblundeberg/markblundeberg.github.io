@@ -11,7 +11,7 @@
 - [_Solutions_](/esbd/solutions/) - Concentrations, standard states $V^\circ_i$. Ion activities.
 - [_Semiconductors_](/esbd/solidstate/) - Conduction/valence bands as $V^\circ_i$ levels, electrons/holes as ion analogs.
 - [_Charge neutrality and mass action_](/esbd/charge_neutrality/) - Doping, Donnan potential, and the common-ion effect.
-- [_Bipolar membranes and pn junctions_](/esbd/bipolar/) (application spotlight) - The visual twin of water-splitting and electron-hole pair generation.
+- [_Bipolar membranes and p-n junctions_](/esbd/bipolar/) (application spotlight) - The visual twin of water-splitting and electron-hole pair generation.
 
 *Materials II - Electrostatics, Transport, and Complex Materials*:
 
@@ -34,7 +34,7 @@
 - Cell biology: The proton motive force as a $V_{\mathrm{H}^+}$ drop; the electron transport chain as a $V_{\mathrm{e}^-}$ cascade.
 - Lead-Acid Batteries: A system where the electrolyte is a reactant.
 - Electroplating: A kinetic-driven process.
-- Corrosion: A mixed-potential, non-equilibrium system.
+- Corrosion: A mixed-potential, nonequilibrium system.
 
 ---
 
@@ -44,7 +44,7 @@ The rabbit holes -- appendices, advanced topics, notes:
 - [_Understanding electrochemical potential_](/esbd/muintro/) - Why $\bar\mu_i$ is the real, indivisible chemical potential — and why that makes $V_i$ (and band diagrams) work.
 - [_Reaching any $V_i$_](/esbd/nuances/) - Are $V_i$ "real voltages"? How to access each one in practice.
 - [_Offsets galore_](/esbd/offsetsgalore/) - An interactive tour of every arbitrary convention in the framework — and which ones actually move anything.
-- [_Non-ideal solutions_](/esbd/nonideal/) - Focussing on technical difficulties of single-ion activities.
+- [_Nonideal solutions_](/esbd/nonideal/) - Focussing on technical difficulties of single-ion activities.
 - [_Chemical capacitance matrices_](/esbd/chemical_capacitance_matrices/) - Mutual chemical capacitance (thermodynamic) vs internal chemical capacitance (extrathermodynamic), as capacitance matrices.
 
 *Messy electrostatics*:

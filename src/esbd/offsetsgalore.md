@@ -75,4 +75,4 @@ Choices, choices! It's complicated, but that is just how electrochemical thermod
 
 The next topic digs into the activity convention in detail: where the pointwise freedom comes from, how mean activities dodge it, and what the named conventions choose.
 
-[**NEXT TOPIC: Non-ideal solutions**](../nonideal/)
+[**NEXT TOPIC: Nonideal solutions**](../nonideal/)

@@ -33,7 +33,7 @@ That is,
 
 We only have to make a couple more conceptual leaps to arrive at a voltage for ions too:
 * Any charged species deserves a quantity that plays the role 'voltage' plays for electrons, and consequently,
-* there can be *multiple* voltages in the same place. Semiconductor physicists already accept coexisting voltages in *non-equilibrium* situations, under the name "{% wiki "quasi Fermi level", "quasi-Fermi levels" %}"; for ions, coexisting voltages are everyday reality even at equilibrium.
+* there can be *multiple* voltages in the same place. Semiconductor physicists already accept coexisting voltages in *nonequilibrium* situations, under the name "{% wiki "quasi Fermi level", "quasi-Fermi levels" %}"; for ions, coexisting voltages are everyday reality even at equilibrium.
 
 > **Voltage or potential?** Some may object to labelling $V_i$ as a "voltage" rather than "potential"; technically a voltage should be a potential difference. However, there are [way too many things called "potential" in electrochemistry](../about/#whyvoltage), most of which are potential differences; if voltages are so heavily conflated with potentials then we might as well go with it. Moreover, in electronic circuits, an unreferenced single-point voltage simply means a potential difference versus a common electronic ground point, a convention which we will tend to adopt. More technically: $V_i$ are all unreferenced (gauge covariant) quantities, and we are free to spend our one global gauge freedom to assign 0 to electronic ground (just the one: we do not get a separate ground per species).
 

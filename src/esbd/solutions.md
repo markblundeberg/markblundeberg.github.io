@@ -45,7 +45,7 @@ The new quantity $V^\circ_i$ is the **standard species voltage**. You can think 
 
 ### Ideal-dilute salt water
 
-Returning to our saltwater example, we then have:
+Returning to our salt-water example, we then have:
 $$V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = (V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-}) + 2\frac{RT}{F} \ln(c/c^\circ), $$
 where $c = c_{\mathrm{Na}^+} = c_{\mathrm{Cl}^-}$ is the concentration of either ion. This gives that characteristic $2\tfrac{RT}{F}\ln(\mathrm{concentration})$ slope we saw in the plot above. Also note that $V^\circ_{\mathrm{Na}^+} - V^\circ_{\mathrm{Cl}^-} = -4.0746~\mathrm{V}$ is a constant for water in our conditions; $\phi$ cancels out of the difference, so it does not depend on that ambiguous quantity. When discussing solutions we can draw each $V^\circ_i$ as its own line alongside the $V_i$:
 
@@ -80,7 +80,7 @@ The same dilute $\mathrm{NaCl}$ solution as in the earlier figure, now a spatial
 
 This uniform tilt is the tamest move in the ladder's repertoire. In later topics it will bend where concentration gradients pile up ([basic transport](../basictransport/)), swing sharply across the few nanometres beside a charged interface ([basic electrostatics](../basicelectrostatics/)), and step outright where the medium itself changes, since a different solvent or phase carries its own ladder ([charge neutrality and mass action](../charge_neutrality/)). For now the point is only that the ladder is a living thing rather than a fixed backdrop: rigid in its spacings, free in its motion.
 
-## Activities and non-ideality
+## Activities and nonideality
 
 The ideal-dilute law holds only while each ion can ignore the others. Beyond that, chemistry keeps the logarithmic form and folds every deviation into an effective concentration, the {% wiki "activity" %} $a_i$, defined precisely so that
 
@@ -90,9 +90,9 @@ holds exactly, with the very same standard $\mu^\circ_{\mathrm{int},i}$ we met a
 
 $$ V_i = V^\circ_i + \frac{RT}{z_i F} \ln(a_i), $$
 
-with the standard state pinned by requiring $a_i \to c_i/c^\circ$ in the dilute limit.^[The concentration measure itself hides a convention here: switch from molarity to molality, or change the reference values, and the $V^\circ_i$ and every $a_i$ shift in compensating ways. A classic source of confusion; see Adam Přáda's blog (2019), ["On chemical activities"](https://adamprada.net/blog/on-chemical-activities/). Chemistry also likes to repackage the activity as concentration times a dimensionless *activity coefficient*, which inherits all of these troubles and adds a few of its own; I'll keep coefficients out of sight until [non-ideality](../nonideal/) needs them.]
+with the standard state pinned by requiring $a_i \to c_i/c^\circ$ in the dilute limit.^[The concentration measure itself hides a convention here: switch from molarity to molality, or change the reference values, and the $V^\circ_i$ and every $a_i$ shift in compensating ways. A classic source of confusion; see Adam Přáda's blog (2019), ["On chemical activities"](https://adamprada.net/blog/on-chemical-activities/). Chemistry also likes to repackage the activity as concentration times a dimensionless *activity coefficient*, which inherits all of these troubles and adds a few of its own; I'll keep coefficients out of sight until [nonideality](../nonideal/) needs them.]
 
-There is a catch, and it is a big one. We can measure $V_i$; we cannot directly measure $\phi$, $V^\circ_i$, or $a_i$. In the ideal-dilute regime this didn't matter, since the concentrations pinned every gap. In a non-ideal solution, nothing any longer fixes where the $V^\circ_i$ ladder sits relative to the carriers: its rung spacings are still rigid solvent properties, but its overall position against the $V_i$ becomes a pure convention, settled afresh by every solution of every composition. This is what chemists mean by the dictum that only {% wiki "Activity_coefficient#Ionic_solutions", "*mean* ion activities" %} are measurable: the measurable combinations are differences like $(V_i - V^\circ_i) - (V_j - V^\circ_j)$, from which the ladder's position cancels out. The [appendix topic on non-ideality](../nonideal/) works through the consequences.
+There is a catch, and it is a big one. We can measure $V_i$; we cannot directly measure $\phi$, $V^\circ_i$, or $a_i$. In the ideal-dilute regime this didn't matter, since the concentrations pinned every gap. In a nonideal solution, nothing any longer fixes where the $V^\circ_i$ ladder sits relative to the carriers: its rung spacings are still rigid solvent properties, but its overall position against the $V_i$ becomes a pure convention, settled afresh by every solution of every composition. This is what chemists mean by the dictum that only {% wiki "Activity_coefficient#Ionic_solutions", "*mean* ion activities" %} are measurable: the measurable combinations are differences like $(V_i - V^\circ_i) - (V_j - V^\circ_j)$, from which the ladder's position cancels out. The [appendix topic on nonideality](../nonideal/) works through the consequences.
 
 What none of these choices can reach is $V_i$ itself. Concentration measure, reference value, single-ion activity convention: each merely shuffles bookkeeping between $V^\circ_i$ and $a_i$, while the physical total $V_i$ (that is, the observable $\bar\mu_i$) stays fixed. [Offsets galore](../offsetsgalore/) keeps the full scoreboard of such conventions, where the activity emerges as the traditional framework's true rival to $V_i$: the dimensionless $a_i$ buys immunity from every global convention at the price of that severe per-composition local one, while $V_i$ makes exactly the opposite trade.
 
