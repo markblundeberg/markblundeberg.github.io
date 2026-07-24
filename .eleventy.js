@@ -171,6 +171,9 @@ export default async function myConfig(eleventyConfig) {
     // plain <pre>, outputs as inline SVG / <img> / text. No Python at build
     // time, so CI deploys stay node-only; freshness is enforced by the
     // notebook guard in bin/check.mjs.
+    // re-render notebook pages when a committed notebook changes during
+    // `eleventy --serve` (the shortcode reads the file fresh each build)
+    eleventyConfig.addWatchTarget('notebooks/');
     const nbStr = (v) => (Array.isArray(v) ? v.join('') : String(v ?? ''));
     const nbEscape = (s) =>
         s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
