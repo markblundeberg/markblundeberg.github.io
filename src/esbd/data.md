@@ -58,7 +58,7 @@ The third column follows from the second by $V^\circ_i - V^\circ_{\mathrm{H}^+} 
 | $\mathrm{Cs}^{+}$ | -292.02&#8199; | -3.0266&#8199; |
 | $\mathrm{Li}^{+}$ | -293.31&#8199; | -3.0399&#8199; |
 
-Some readers will notice that many of these entries coincide with {% wiki "Standard electrode potential (data page)", "standard electrode potentials" %}, and that is for good reason! For elemental metals (with $\mu_{\mathrm{M}}=0$ under our convention) in equilibrium with an ideal-dilute $c^\circ$ concentration of their ion $\mathrm{M}^{n+}$, we do expect $E = V^\circ_{\mathrm{M}^{n+}} - V^\circ_{\mathrm{H}^+}$.
+Some readers will notice that many of these entries coincide with {% wiki "Standard electrode potential (data page)", "standard electrode potentials" %}, and that is for good reason! For elemental metals (with $\mu_{\mathrm{M}}=0$ under our convention) in equilibrium with an ideal-dilute $c^\circ$ concentration of their ion $\mathrm{M}^{n+}$, we do expect $E = V^\circ_{\mathrm{M}^{n+}} - V^\circ_{\mathrm{H}^+}$.^[Mostly, anyway. Iron is the classic mismatch: this table's $\Delta_{\mathrm{f}} G^\circ$ for $\mathrm{Fe}^{2+}$ gives $-0.409~\mathrm{V}$, while electrochemical series tables list $E^\circ(\mathrm{Fe}^{2+}/\mathrm{Fe}) = -0.447~\mathrm{V}$. The iron electrode is notoriously hard to equilibrate cleanly, and the thermochemical and electrochemical data traditions never quite reconciled here; the tables do not always agree with themselves.]
 
 Here is the plot again; note that a few of these values were omitted from the plot due to overlapping too tightly or being too extreme.
 
@@ -70,14 +70,14 @@ Here is the plot again; note that a few of these values were omitted from the pl
 
 Chemical tables like Atkins' commonly list standard Gibbs energy of formation, $\Delta_{\mathrm{f}} G^\circ_i$, for ionic solutes in water. But what do these values *actually* mean? We want to continue our usual convention that chemical potentials equal the molar Gibbs energy of formation but we have to be careful here.
 
-This chemical data is only for bulk homogeneous solutions, which requires charge neutrality. So suppose we add ionic species $i$ and $j$ in charge-neutral amounts, that means we add 1 mole of $i$ and $-z_i/z_j$ moles of $j$, and the *standard state of this neutral combination* is:
+This chemical data is only for bulk homogeneous solutions, which requires charge neutrality. So suppose we add ionic species $i$ and $j$ in charge-neutral amounts: 1 mole of $i$ and $-z_i/z_j$ moles of $j$, and the *standard state of this neutral combination* is:
 
 $$
 \Delta_{\mathrm{f}} G^\circ_{\text{$i$ with $j$}}
 = \Delta_{\mathrm{f}} G^\circ_i - \frac{z_i}{z_j}\Delta_{\mathrm{f}} G^\circ_j.
 $$
 
-This seems so complex but it reflects the reality that we can't measure the standard state of $\mathrm{H}^+$ alone. Rather we experimentally measure, say, the standard state of aqueous $\mathrm{HCl}$ that dissociates into $\mathrm{H}^+$ and $\mathrm{Cl}^-$, and all we really learn is that $\Delta_{\mathrm{f}} G^\circ_{\mathrm{H}^+\text{ with }\mathrm{Cl}^-} = -131.23~\mathrm{kJ/mol}$.
+This seems overly complex, but it reflects the reality that we can't measure the standard state of $\mathrm{H}^+$ alone. Rather we experimentally measure, say, the standard state of aqueous $\mathrm{HCl}$ that dissociates into $\mathrm{H}^+$ and $\mathrm{Cl}^-$, and all we really learn is that $\Delta_{\mathrm{f}} G^\circ_{\mathrm{H}^+\text{ with }\mathrm{Cl}^-} = -131.23~\mathrm{kJ/mol}$.
 
 > Note that all of these equations leave one degree of freedom unsatisfied. Accordingly, the table makers freely choose $\Delta_{\mathrm{f}} G^\circ_{\mathrm{H}^+} = 0$. In fact we even assert this to be 0 at all temperatures, so the formation entropy of $\mathrm{H}^+$ is zero, and the formation entropy for some other ions is negative!
 
@@ -99,6 +99,6 @@ And, to clarify, this means we have the following relationship:
 
 $$ \mu^\circ_{\mathrm{int},i} = \Delta_{\mathrm{f}} G^\circ_i + z_i F \xi, $$
 
-for some value of $\xi$ that we simply do not know, nor do we need to know it in order to get our $V^\circ_i$'s. The value of $\xi$ depends on solvent, temperature, and pressure, and especially it depends on how we defined $\phi$, and this broad freedom is what lets chemists keep $\Delta_{\mathrm{f}} G^\circ_{\mathrm{H}^+} = 0$ for all situations.
+for some value of $\xi$ that we simply do not know, nor do we need to know it in order to get our $V^\circ_i$'s. The value of $\xi$ depends on solvent, temperature, and pressure, and especially it depends on how we defined $\phi$, and this broad freedom is what lets chemists keep $\Delta_{\mathrm{f}} G^\circ_{\mathrm{H}^+} = 0$ for all situations. (Setting $\xi = 0$ would amount to defining $\phi$ to coincide with $V^\circ_{\mathrm{H}^+}$: a $\phi$-seat convention crowned by a tabulation accident. And this $\xi$ is not the $\xi$ of [Non-ideal solutions](../nonideal/), which slides the ladder against the physical levels; this one slides $\phi$ against the ladder. Same $z_i$-weighted family, different knobs.)
 
 [**NEXT TOPIC: Traditional electrochemistry, translated**](../translation/)
