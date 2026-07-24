@@ -18,6 +18,9 @@ export default async function myConfig(eleventyConfig) {
     eleventyConfig.addPassthroughCopy('src/img');
     eleventyConfig.addPassthroughCopy({ 'src/esbd/js': '/esbd/js/' });
     eleventyConfig.addPassthroughCopy({ 'src/esbd/img': '/esbd/img/' });
+    // Companion notebooks: downloadable .ipynb (pages render them via the
+    // `notebook` shortcode below)
+    eleventyConfig.addPassthroughCopy({ notebooks: '/notebooks/' });
     // If you have other static assets like fonts, add them here
 
     // --- Set variables ---
@@ -159,6 +162,53 @@ export default async function myConfig(eleventyConfig) {
         } catch {
             return `[missing circuit figure: ${name} — run npm run circuits]`;
         }
+    });
+
+    // --- Companion notebook rendering ---
+    // {% notebook "name" %} renders notebooks/<name>.ipynb — committed and
+    // *executed* (see bin/notebooks.mjs) — to HTML at build time: markdown
+    // cells through the site's markdown-it (KaTeX included), code cells as
+    // plain <pre>, outputs as inline SVG / <img> / text. No Python at build
+    // time, so CI deploys stay node-only; freshness is enforced by the
+    // notebook guard in bin/check.mjs.
+    const nbStr = (v) => (Array.isArray(v) ? v.join('') : String(v ?? ''));
+    const nbEscape = (s) =>
+        s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const nbStripAnsi = (s) => s.replace(/\x1b\[[0-9;]*m/g, '');
+    eleventyConfig.addShortcode('notebook', function (name) {
+        const path = `notebooks/${name}.ipynb`;
+        let nb;
+        try {
+            nb = JSON.parse(fs.readFileSync(path, 'utf8'));
+        } catch {
+            return `[missing notebook: ${name} — expected ${path}]`;
+        }
+        const parts = [];
+        for (const cell of nb.cells) {
+            const src = nbStr(cell.source);
+            if (cell.cell_type === 'markdown') {
+                parts.push(`<div class="nb-cell nb-md">${md.render(src)}</div>`);
+            } else if (cell.cell_type === 'code') {
+                const outs = [];
+                for (const o of cell.outputs || []) {
+                    if (o.output_type === 'stream') {
+                        outs.push(`<pre class="nb-stream">${nbEscape(nbStr(o.text))}</pre>`);
+                    } else if (o.output_type === 'error') {
+                        outs.push(`<pre class="nb-error">${nbEscape(nbStripAnsi((o.traceback || []).join('\n')))}</pre>`);
+                    } else if (o.data) {
+                        if (o.data['image/svg+xml']) {
+                            outs.push(`<div class="nb-svg">${nbStr(o.data['image/svg+xml'])}</div>`);
+                        } else if (o.data['image/png']) {
+                            outs.push(`<img class="nb-img" alt="notebook output" src="data:image/png;base64,${nbStr(o.data['image/png']).replace(/\n/g, '')}">`);
+                        } else if (o.data['text/plain']) {
+                            outs.push(`<pre class="nb-result">${nbEscape(nbStr(o.data['text/plain']))}</pre>`);
+                        }
+                    }
+                }
+                parts.push(`<div class="nb-cell nb-code-cell"><pre class="nb-code"><code>${nbEscape(src)}</code></pre>${outs.join('\n')}</div>`);
+            }
+        }
+        return `<div class="nb-page">${parts.join('\n')}</div>`;
     });
 
     // --- Prerendered figure seeds (nojs / no-flash) ---

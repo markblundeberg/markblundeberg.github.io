@@ -14,7 +14,8 @@
     "test": "node bin/check.mjs",
     "circuits": "node bin/render-circuits.mjs",
     "prerender": "node bin/prerender.mjs",
-    "gallery": "node bin/gallery.mjs"
+    "gallery": "node bin/gallery.mjs",
+        "notebooks": "node bin/notebooks.mjs"
   },
   "keywords": [],
   "author": "",

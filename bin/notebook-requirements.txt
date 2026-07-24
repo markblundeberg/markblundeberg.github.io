@@ -1,0 +1,6 @@
+# Python deps for `npm run notebooks` (bin/notebooks.mjs). Executed notebooks
+# are committed; these packages are only needed locally to (re)generate them.
+pybamm[plot,cite]
+nbconvert
+ipykernel
+nbformat

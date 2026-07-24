@@ -1,5 +1,8 @@
 /node_modules
 
+# Local python venv for `npm run notebooks` (bin/notebooks.mjs)
+/.cache/
+
 # SSG output directory
 /_site
 

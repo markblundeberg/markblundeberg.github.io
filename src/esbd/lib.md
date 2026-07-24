@@ -56,10 +56,10 @@ This shows $V_{\mathrm{Li}^+}$ dropping for two reasons: the slow diffusion of $
 That is still not the whole story: a full picture requires the voltage drops in the electrolyte and in the cathode too, and each particle sees different conditions depending on where it sits in the electrode. The following landscape comes out of a realistic battery simulation that captures all of this:
 
 <figure class="demo-container" style="max-width: 400px">
-<img src="/esbd/img/PyBaMM_DFN_V_Li_cathodetoo.svg" style="max-width:100%"/>
+<img src="/esbd/img/pybamm_dfn_landscape.svg" style="max-width:100%"/>
 {% figcaption %}
 Internal voltages during a 2C discharge, at around 40% remaining capacity. Simulation done with DFN model in [PyBaMM](https://pybamm.org/) and converted to $V_{\mathrm{e}^-}$, $V_{\mathrm{Li}^+}$ values.
-See [my source code here](https://gist.github.com/markblundeberg/b7dbaeb80ae5e69350701feeeb27bb91).
+The conversion recipe (which turns out to be surprisingly short) and full source code are in the [companion notebook](../notebooks/dfn-species-voltages/).
 {% endfigcaption %}
 </figure>
 
@@ -88,7 +88,7 @@ The higher the discharge rate, the more serious the various voltage drops become
 Let's zoom in on the $V_{\mathrm{Li}^+}$ variations:
 
 <figure class="demo-container" style="max-width: 400px">
-<img src="/esbd/img/PyBaMM_DFN_V_Li.svg" style="max-width:100%"/>
+<img src="/esbd/img/pybamm_dfn_landscape_zoom.svg" style="max-width:100%"/>
 </figure>
 
 Again, this is a snapshot from midway through the discharge, when about 40% of the capacity remains.

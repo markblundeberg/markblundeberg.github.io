@@ -180,6 +180,39 @@ section('prerendered seeds');
     }
 }
 
+// 8. Companion notebook freshness ------------------------------------------
+// The committed notebooks/*.ipynb are rendered into the site at build time
+// (the `notebook` shortcode), so they must be executed and match the manifest
+// stamped by `npm run notebooks`. Pure text — runs in CI.
+section('companion notebooks');
+{
+    const nbDir = 'notebooks';
+    const manPath = join(nbDir, 'manifest.json');
+    if (!existsSync(manPath)) {
+        ok('no committed notebooks yet (skipped)');
+    } else {
+        const { notebookCodeHash } = await import('./notebooks.mjs');
+        const man = JSON.parse(readFileSync(manPath, 'utf8'));
+        const files = readdirSync(nbDir).filter((f) => f.endsWith('.ipynb')).sort();
+        const drift = [];
+        for (const f of files) {
+            if (!man[f]) { drift.push(`${f}: not in manifest`); continue; }
+            if (man[f].codeHash !== notebookCodeHash(join(nbDir, f)))
+                drift.push(`${f}: code cells edited since last execution`);
+            const nb = JSON.parse(readFileSync(join(nbDir, f), 'utf8'));
+            const unexec = nb.cells.filter(
+                (c) => c.cell_type === 'code' && c.execution_count == null
+            ).length;
+            if (unexec) drift.push(`${f}: ${unexec} unexecuted code cell(s)`);
+        }
+        for (const f of Object.keys(man))
+            if (!files.includes(f)) drift.push(`${f}: manifest entry has no .ipynb`);
+        if (drift.length)
+            bad('notebooks stale (run: npm run notebooks):\n    ' + drift.join('\n    '));
+        else ok(`all ${files.length} notebook(s) executed and fresh`);
+    }
+}
+
 // ---------------------------------------------------------------------------
 console.log(
     failures ? `\n✗ ${failures} check(s) FAILED.` : '\n✓ All checks passed.'

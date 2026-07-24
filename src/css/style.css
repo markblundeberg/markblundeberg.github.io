@@ -636,3 +636,58 @@ figure {
         display: none;
     }
 }
+
+/* ====== Notebook pages (rendered .ipynb; see the `notebook` shortcode) ====== */
+.nb-page {
+    max-width: 75ch;
+}
+.nb-cell {
+    margin: 1em 0;
+}
+.nb-code {
+    background-color: #f6f8fa;
+    border: 1px solid #e0e4e8;
+    border-left: 3px solid #b8cbdd;
+    border-radius: 3px;
+    padding: 0.6em 0.9em;
+    overflow-x: auto;
+    font-size: 0.82em;
+    line-height: 1.4;
+}
+.nb-code code {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+}
+.nb-stream,
+.nb-result {
+    background-color: #fcfcf7;
+    border: 1px dashed #d5d5c8;
+    border-radius: 3px;
+    padding: 0.5em 0.9em;
+    overflow-x: auto;
+    font-size: 0.82em;
+    line-height: 1.4;
+    margin-top: 0.4em;
+}
+.nb-error {
+    background-color: #fff2f2;
+    border: 1px solid #e2b8b8;
+    border-radius: 3px;
+    padding: 0.5em 0.9em;
+    overflow-x: auto;
+    font-size: 0.82em;
+    margin-top: 0.4em;
+}
+.nb-svg {
+    margin: 0.5em 0;
+}
+.nb-svg svg,
+.nb-img {
+    max-width: 100%;
+    height: auto;
+}
+.nb-links {
+    font-size: 0.9em;
+    color: #666;
+}
