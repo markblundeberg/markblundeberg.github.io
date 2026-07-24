@@ -13,6 +13,16 @@ eleventyNavigation:
 
 <p class="byline">Mark Lundeberg // July 2026</p>
 
+<figure class="demo-container" style="max-width: 700px">
+{% set satSoftHideConc = true %}
+{% include "esbd-diagrams/esbd-sat-soft.njk" %}
+{% figcaption %}
+A taste of where this book ends up: a field-effect transistor and a silver-plating cell drawn in the same language and choking off their current by the same mechanism. This will all make sense [later](saturation/); for now, play with the slider anyway.
+{% endfigcaption %}
+</figure>
+
+---
+
 <p class="lede">What is the electrical state deep inside of a battery?</p>
 
 If we try to visualize this by plotting voltage versus position, we immediately run into a mystery. We know the voltage at the anode (negative terminal) and the cathode (positive terminal), but what about the electrolyte in between?

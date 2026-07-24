@@ -1,15 +1,17 @@
 {% set idprefix = "esbd-sat-soft" %}
 {% import "macros/controls.njk" as controls %}
+{# set satSoftHideConc = true before including to omit the concentration
+   strips (the index.md headline reuse); saturation.md shows them. #}
 <div style="display: flex; flex-wrap: wrap; justify-content: space-evenly; gap: 8px">
 <div style="flex: 1; min-width: 250px; max-width: 330px">
 <div style="text-align: center; font-size: 0.85em">FET channel</div>
 <div class="bd-container" id="{{idprefix}}-fet" style="height: 250px; border: 1px solid #eee"></div>
-<div class="bd-container" id="{{idprefix}}-fet-conc" style="height: 100px; border: 1px solid #eee; border-top: none"></div>
+{% if not satSoftHideConc %}<div class="bd-container" id="{{idprefix}}-fet-conc" style="height: 100px; border: 1px solid #eee; border-top: none"></div>{% endif %}
 </div>
 <div style="flex: 1; min-width: 250px; max-width: 330px">
 <div style="text-align: center; font-size: 0.85em">binary electrolyte</div>
 <div class="bd-container" id="{{idprefix}}-bin" style="height: 250px; border: 1px solid #eee"></div>
-<div class="bd-container" id="{{idprefix}}-bin-conc" style="height: 100px; border: 1px solid #eee; border-top: none"></div>
+{% if not satSoftHideConc %}<div class="bd-container" id="{{idprefix}}-bin-conc" style="height: 100px; border: 1px solid #eee; border-top: none"></div>{% endif %}
 </div>
 </div>
 {{ controls.slider(idprefix + "-a", "Drive $j/j_{\\mathrm{lim}}$", { min: 0, max: 1, step: "any", value: 0.5, snap: 1, readout: true }) }}
@@ -93,8 +95,9 @@
             yMode: 'abstract',
             margins: { top: 4, bottom: 12, left: 60, right: 60 },
         });
-    const fetConc = concPanel('{{idprefix}}-fet-conc');
-    const binConc = concPanel('{{idprefix}}-bin-conc');
+    const SHOW_CONC = {{ "false" if satSoftHideConc else "true" }};
+    const fetConc = SHOW_CONC ? concPanel('{{idprefix}}-fet-conc') : null;
+    const binConc = SHOW_CONC ? concPanel('{{idprefix}}-bin-conc') : null;
 
     const xs = linspace(XL, 1, 121);
     const conc = (a) => (x) =>
@@ -149,32 +152,34 @@
             return { x, y };
         };
 
-        fetConc.updateTraceData([
-            {
-                // not the electrolyte's linear ramp: the strip bows up
-                // (√-like) — thick channel needs little gradient, so the
-                // slope steepens only toward the drain
-                id: 'c',
-                x: [...fetX],
-                y: fetQ.map((q) => q / QS),
-                color: SPECIES.electron.color,
-                style: { lineWidth: 2 },
-                label: 'c_{\\mathrm{e}^-}',
-                labelFrac: 0.97,
-            },
-        ]);
-        binConc.updateTraceData([
-            {
-                // binary: neutrality marches the two together
-                id: 'c',
-                x: [...xs],
-                y: xs.map(c),
-                color: SPECIES.silver.color,
-                style: { lineWidth: 2 },
-                label: 'c_{\\mathrm{Ag}^+}{=}c_{\\mathrm{NO_3}^-}',
-                labelFrac: 0.97,
-            },
-        ]);
+        if (SHOW_CONC) {
+            fetConc.updateTraceData([
+                {
+                    // not the electrolyte's linear ramp: the strip bows up
+                    // (√-like) — thick channel needs little gradient, so the
+                    // slope steepens only toward the drain
+                    id: 'c',
+                    x: [...fetX],
+                    y: fetQ.map((q) => q / QS),
+                    color: SPECIES.electron.color,
+                    style: { lineWidth: 2 },
+                    label: 'c_{\\mathrm{e}^-}',
+                    labelFrac: 0.97,
+                },
+            ]);
+            binConc.updateTraceData([
+                {
+                    // binary: neutrality marches the two together
+                    id: 'c',
+                    x: [...xs],
+                    y: xs.map(c),
+                    color: SPECIES.silver.color,
+                    style: { lineWidth: 2 },
+                    label: 'c_{\\mathrm{Ag}^+}{=}c_{\\mathrm{NO_3}^-}',
+                    labelFrac: 0.97,
+                },
+            ]);
+        }
 
         // FET: the gate rail is flat; the channel edge (V°_e-) bends by the
         // oxide drop V_T·(QS − q), curving hardest at the drain, and the
