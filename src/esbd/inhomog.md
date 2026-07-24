@@ -7,7 +7,7 @@ orderESBD: 85
 
 # {{title}}
 
-Having seen what the in-material $\phi$ [cannot deliver](../phi/) and where the vacuum level's [writ ends](../vacuum/), we turn to what actually governs the spatial landscape inside materials. One of the main reasons these $V_i$ diagrams are powerful is in clearly visualizing devices with inhomogeneous composition and electric fields, that is, where $V^\circ_i$ is not flat. Typically all of this is conceived of as variations in $\phi$, but $V^\circ_i$ lets us dig a bit more precisely into what is actually going on. This appendix collects the fine print: what a varying ladder really involves, why $-\nabla\phi$ is not always a real electric field, and a catalog of everything that makes interfaces hard.
+Having seen what the in-material $\phi$ [cannot deliver](../phi/) and where the vacuum level's [writ ends](../vacuum/), we turn to what actually governs the spatial landscape inside materials. One of the main reasons these $V_i$ diagrams are powerful is that they clearly visualize devices with inhomogeneous composition and electric fields, that is, where $V^\circ_i$ is not flat. Typically all of this is conceived of as variations in $\phi$, but $V^\circ_i$ lets us dig a bit more precisely into what is actually going on. This appendix collects the fine print: what a varying ladder really involves, why $-\nabla\phi$ is not always a real electric field, and a catalog of everything that makes interfaces hard.
 
 ## Two kinds of inhomogeneity
 
@@ -56,7 +56,7 @@ One thing worth stating plainly: a fast solid-ion conductor is a concentrated, s
 <figure class="demo-container" style="max-width: 480px">
 {% include "esbd-diagrams/esbd-inh-miec.njk" %}
 {% figcaption %}
-Homage to Kroemer's graded-bandgap picture, in ionic form: across a compositionally graded MIEC, the electronic level $V^\circ_{\mathrm{e}^-}$ and the ionic level $V^\circ_{\mathrm{O}^{2-}}$ slope at different rates, so electrons and oxide ions feel different quasi-electric fields $-\nabla V^\circ_i$, while the electrostatic $-\nabla\phi$ is a third, separate slope. No single field describes all the carriers.
+Homage to Kroemer's graded-bandgap picture, in ionic form: across a compositionally graded MIEC, the electronic level $V^\circ_{\mathrm{e}^-}$ and the ionic level $V^\circ_{\mathrm{O}^{2-}}$ slope in opposite directions, a push no single electrostatic field could give two like-signed carriers, while the electrostatic $-\nabla\phi$ is a third, separate slope. No single field describes all the carriers.
 {% endfigcaption %}
 </figure>
 
@@ -64,7 +64,7 @@ Homage to Kroemer's graded-bandgap picture, in ionic form: across a compositiona
 
 In [basic electrostatics](../basicelectrostatics/) we described an incredibly elementary form of screening: an ideal homogeneous linear dielectric medium with a nice ideal dependence of charge carrier accumulation on $\phi$, which led to relatively trivial results like the Poisson–Boltzmann screening equation. In general, electrostatics is a far harder problem. What follows is a deliberately non-exhaustive catalog of the main complications, grouped by kind:
 
-* **Interfaces are hard to pin down.** Even for a simple interface (an electrode or heterojunction), fixing the *value* of the offset from first principles is hard; the "vacuum contact" / contact-potential-difference rule of thumb is [notoriously unreliable](../vacuum/) in semiconductors. Real interfaces are also patchy and non-planar (electrostatics is fundamentally three-dimensional, and even 'planar' interfaces are microscopically irregular), and they can carry built-in monopolar charges, whether static and dopant-like (fixed oxide charge at the Si/SiO2 interface) or interface-specific (metal-induced gap states, electronic {% wiki "surface states" %}, specific ion adsorption).
+* **Interfaces are hard to pin down.** Even for a simple interface (an electrode or heterojunction), fixing the *value* of the offset from first principles is hard; the "vacuum contact" / contact-potential-difference rule of thumb is [notoriously unreliable](../vacuum/) in semiconductors. Real interfaces are also patchy and non-planar (electrostatics is fundamentally three-dimensional, and even 'planar' interfaces are microscopically irregular), and they can carry built-in monopolar charges, whether static and dopant-like (fixed oxide charge at the $\mathrm{Si/SiO_2}$ interface) or interface-specific (metal-induced gap states, electronic {% wiki "surface states" %}, specific ion adsorption).
 
 <figure class="demo-container" style="max-width: 480px">
 <img src="/esbd/img/tung-pinchoff.svg" style="max-width:100%"/>
