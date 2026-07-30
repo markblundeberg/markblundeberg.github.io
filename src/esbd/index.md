@@ -13,16 +13,6 @@ eleventyNavigation:
 
 <p class="byline">Mark Lundeberg // July 2026</p>
 
-<figure class="demo-container" style="max-width: 700px">
-{% set satSoftHideConc = true %}
-{% include "esbd-diagrams/esbd-sat-soft.njk" %}
-{% figcaption %}
-A taste of where this book ends up: a field-effect transistor and a silver-plating cell drawn in the same language and choking off their current by the same mechanism. This will all make sense [later](saturation/); for now, play with the slider anyway.
-{% endfigcaption %}
-</figure>
-
----
-
 <p class="lede">What is the electrical state deep inside of a battery?</p>
 
 If we try to visualize this by plotting voltage versus position, we immediately run into a mystery. We know the voltage at the anode (negative terminal) and the cathode (positive terminal), but what about the electrolyte in between?
@@ -34,6 +24,14 @@ If we try to visualize this by plotting voltage versus position, we immediately 
 What are we supposed to draw in place of the '???'? A straight line? A sudden jump? Why doesn't the current just flow backwards?^[Ed Fontes (2015), COMSOL Blog: ["Does the Current Flow Backwards Inside a Battery?"](https://www.comsol.com/blogs/does-the-current-flow-backwards-inside-a-battery). Fontes opens with this same puzzle, and makes the conventional move of drawing the inner electrostatic potential $\phi$. We are going to explore an alternative answer that is (in my opinion) far more thermodynamically satisfying.] The mystery deepens when we try to understand more complex situations: how can we visualize the voltage drops from internal resistance during battery discharge?
 
 These questions turn out to have a head-smackingly simple answer. One that, oddly, nobody seems to draw, even though it requires no new physics at all. The thermodynamics involved is textbook material;^[Newman & Balsara (2021), *Electrochemical Systems*.] what's been missing is a good way to picture it. Below, we'll take a brief scenic route to the new picture: two motivating false starts, then one small trick that snaps everything into focus.
+
+<figure class="demo-container" style="max-width: 700px">
+{% set satSoftHideConc = true %}
+{% include "esbd-diagrams/esbd-sat-soft.njk" %}
+{% figcaption %}
+A taste of where this book ends up: a field-effect transistor and a silver-plating cell drawn in the same language and choking off their current by the same mechanism. This will all make sense [later](saturation/); for now, play with the slider anyway.
+{% endfigcaption %}
+</figure>
 
 ## Electrons: an incomplete picture
 
