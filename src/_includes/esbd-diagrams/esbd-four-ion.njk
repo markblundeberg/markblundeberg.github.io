@@ -1,0 +1,103 @@
+{% set idprefix = ["esbd-four-ion", idsuffix] | join %}
+{% import "macros/controls.njk" as controls %}
+<div
+    id="{{idprefix}}-bd-container"
+    class="bd-container"
+    style="height: 460px; width: 100%"
+></div>
+
+{{ controls.slider(idprefix + "-saltSlider", "Added NaCl", { min: -4, max: 0, step: "any", value: -2, readout: true, unit: "mol/L" }) }}
+{{ controls.slider(idprefix + "-titrSlider", "Titrate: HCl &#x21c4; NaOH", { min: -1, max: 1, step: "any", value: 0, snap: 0, readout: true }) }}
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+    import { makeSlider } from '{{ esbdJsPath }}utils.js';
+
+    // Four-ion salt water (Na+, Cl-, H+, OH-), one well-mixed solution.
+    // Both sliders add only NEUTRAL substances (NaCl; HCl or NaOH), so every
+    // slider position is charge-neutral by construction and pH is a readout,
+    // not a control. Ideal-dilute; autoionization always equilibrated pins
+    // the H+/OH- spacing at mu_H2O/F = -2.458 V (the ⇌ marker) while the
+    // Na+/Cl- pair floats freely with the salt (no solid present, nothing
+    // pins it). Gauge: V°_H+ = 0, same thermo data as esbd-nacl-dilute.
+    const saltSlider = document.getElementById('{{idprefix}}-saltSlider');
+    const saltReadout = document.getElementById('{{idprefix}}-saltSlider-readout');
+    const titrSlider = document.getElementById('{{idprefix}}-titrSlider');
+    const titrReadout = document.getElementById('{{idprefix}}-titrSlider-readout');
+
+    const F = 96485.3321233100184;
+    const DEC = 0.05916; // RT/F ln10, V per decade
+    const KW = 1e-14;
+    const V0_NA = -261.91e3 / F; // -2.7145
+    const V0_H = 0;
+    const V0_CL = -131.23e3 / -F; // +1.3601
+    const V0_OH = -157.24e3 / -F; // +1.6297
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram(
+        '{{idprefix}}-bd-container',
+        {
+            na_ion: SPECIES.sodium,
+            h_ion: SPECIES.proton,
+            cl_ion: SPECIES.chloride,
+            oh_ion: SPECIES.hydroxide,
+        },
+        { margins: { right: 62 } }
+    );
+    const b = [0.0, 1.0];
+    diagram.setSpatialLayout(b, [REGION.solution]);
+    diagram.setVRange(-3.35, 2.6);
+
+    function doUpdate() {
+        const salt = Math.pow(10, parseFloat(saltSlider.value));
+        const s = parseFloat(titrSlider.value);
+        // signed-log titration: up to ~3.2e-3 mol/L of HCl (s<0) or NaOH
+        // (s>0), smooth through zero, so pH runs ~2.5 to ~11.5
+        const t = Math.sign(s) * (Math.pow(10, -7 + 4.5 * Math.abs(s)) - 1e-7);
+
+        const c_Na = salt + Math.max(t, 0);
+        const c_Cl = salt + Math.max(-t, 0);
+        // neutrality + K_w: c_H - c_OH = c_Cl - c_Na = -t
+        const c_H = (-t + Math.sqrt(t * t + 4 * KW)) / 2;
+        const c_OH = KW / c_H;
+        const pH = -Math.log10(c_H);
+
+        saltReadout.textContent = salt.toExponential(1);
+        titrReadout.textContent = `pH ${pH.toFixed(1)}`;
+
+        const V_Na = V0_NA + DEC * Math.log10(c_Na);
+        const V_H = V0_H + DEC * Math.log10(c_H);
+        const V_Cl = V0_CL - DEC * Math.log10(c_Cl);
+        const V_OH = V0_OH - DEC * Math.log10(c_OH);
+
+        const flat = (y) => ({ x: [b[0], b[1]], y: [y, y] });
+        // rung labels boxed mid-plot (staggered x), carrier labels at the
+        // right edge: keeps the two label columns from colliding when a
+        // carrier closes on its rung at high concentration
+        diagram.updateTraceData([
+            { id: 'na', speciesId: 'na_ion', curveType: 'voltage', ...flat(V_Na) },
+            { id: 'na0', speciesId: 'na_ion', curveType: 'standardState', labelFrac: 0.4, ...flat(V0_NA) },
+            { id: 'h', speciesId: 'h_ion', curveType: 'voltage', ...flat(V_H) },
+            { id: 'h0', speciesId: 'h_ion', curveType: 'standardState', labelFrac: 0.4, ...flat(V0_H) },
+            { id: 'cl', speciesId: 'cl_ion', curveType: 'voltage', ...flat(V_Cl) },
+            { id: 'cl0', speciesId: 'cl_ion', curveType: 'standardState', labelFrac: 0.25, ...flat(V0_CL) },
+            { id: 'oh', speciesId: 'oh_ion', curveType: 'voltage', ...flat(V_OH) },
+            { id: 'oh0', speciesId: 'oh_ion', curveType: 'standardState', labelFrac: 0.55, ...flat(V0_OH) },
+        ]);
+
+        diagram.updateVerticalMarkers([
+            {
+                id: 'autoion',
+                x: 0.8,
+                yDefs: [{ y: V_OH }, { y: V_H }],
+                symbol: '⇌',
+                popupCallback: () =>
+                    '$\\mathrm{H_2O} \\rightleftharpoons \\mathrm{H}^+ + \\mathrm{OH}^-$ — always equilibrated: the gap is pinned at $\\mu_{\\mathrm{H_2O}}/F = -2.458\\,\\mathrm{V}$, so the pair moves only rigidly',
+            },
+        ]);
+    }
+
+    makeSlider('{{idprefix}}-saltSlider', () => doUpdate(), { fire: false });
+    makeSlider('{{idprefix}}-titrSlider', () => doUpdate(), { fire: false });
+    doUpdate();
+</script>

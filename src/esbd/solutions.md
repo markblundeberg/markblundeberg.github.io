@@ -67,6 +67,19 @@ I call this the **standard state ladder** for water. As the electrical state or 
 
 In effect, the standard state ladder is a stand-in for the electrostatic potential $\phi$, with each rung also absorbing the ion-specific parts: the local electrostatic environment that particular ion feels, its chemical structure, the way it disturbs the solvent around itself. It also stretches the band-edge analogy in a pleasing direction: where a semiconductor's two band edges frame a single band gap, a solvent offers a whole ladder of "band edges", with a fixed "band gap" between any pair of rungs (the $-4.0746~\mathrm{V}$ above being the one framed by $\mathrm{Na}^+$ and $\mathrm{Cl}^-$).
 
+## Multiple ions and pH
+
+Time to see the ladder earn its keep. Back in [Equilibrium](../equilibrium/) we drew two separate figures for water: an acid pair, $\mathrm{H}^+$ and $\mathrm{OH}^-$ tied together by autoionization, and a salt pair, $\mathrm{Na}^+$ and $\mathrm{Cl}^-$ tied by dissolving solid, and we left open how the two share one axis. Here is the answer: put all four ions in one solution, and there is one rigid ladder underneath with each carrier hanging off its own rung by its own concentration.
+
+<figure class="demo-container" style="max-width: 400px">
+{% include "esbd-diagrams/esbd-four-ion.njk" %}
+{% figcaption %}
+Dilute salt water, all four ions. The two sliders add neutral substances: table salt, and a titration between $\mathrm{HCl}$ and $\mathrm{NaOH}$, whose readout reports the resulting pH. The salt slider floats the $\mathrm{Na}^+$/$\mathrm{Cl}^-$ gap freely, while the titration slides the $\mathrm{H}^+$/$\mathrm{OH}^-$ pair rigidly (the ⇌ is water's always-equilibrated autoionization), up with acid, down with base.
+{% endfigcaption %}
+</figure>
+
+Where is the pH in this picture? It is a literal distance. In the dilute regime $\mathrm{pH} = -\log_{10}(c_{\mathrm{H}^+}/c^\circ)$,^[Strictly, pH is defined through the single-ion activity $a_{\mathrm{H}^+}$, exactly the convention-burdened object that the [nonideality appendix](../nonideal/) wrestles with; in the dilute regime the distinction evaporates.] so the $\mathrm{H}^+$ carrier hangs $(59~\mathrm{mV}) \times \mathrm{pH}$ below its rung, and likewise $\mathrm{OH}^-$ hangs $(59~\mathrm{mV}) \times \mathrm{pOH}$ above its own. Autoionization pins the carrier pair $2.458~\mathrm{V}$ apart while the ladder holds their rungs only $1.630~\mathrm{V}$ apart, leaving $0.828~\mathrm{V} = 14 \times 59~\mathrm{mV}$ of dilution that the two carriers must share between them, however the titration splits it: $\mathrm{pH} + \mathrm{pOH} = 14$, drawn as geometry.
+
 ## Spatial variations
 
 So far the ladder has hung in a single well-mixed solution, and it would be easy to walk away thinking of the $V^\circ_i$ as fixed properties of that solution, like its density. They are not. The ladder floats with the *local* electrical state, and nothing obliges that state to be the same everywhere. The gentlest demonstration: take the ideal-dilute salt water from above and drive a steady current through it.
