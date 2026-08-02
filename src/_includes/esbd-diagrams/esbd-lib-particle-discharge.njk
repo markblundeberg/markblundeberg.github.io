@@ -13,14 +13,9 @@
     const boundaries = [0.0, 0.7, 0.8, 1.0];
     diagram.setSpatialLayout(boundaries, [
         { ...REGION.graphite },
-        { ...REGION.sei },
+        { ...REGION.sei }, // default label; the declutter bumps it when the
+        // thin strip's label collides with its Electrolyte neighbour
         { ...REGION.solution, name: 'Electrolyte' },
-    ], [
-        // explicit label spots: the thin SEI strip's centered label collides
-        // with its long Electrolyte neighbour, so raise SEI to the top edge
-        { label: 'Graphite', x: 0.35 },
-        { label: 'SEI', x: 0.75, y: 'top', dy: '+0.9em' }, // inside the frame
-        { label: 'Electrolyte', x: 0.9 },
     ]);
 
     const V_el = -0.02;
