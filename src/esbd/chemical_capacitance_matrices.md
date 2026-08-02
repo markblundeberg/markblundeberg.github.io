@@ -268,7 +268,7 @@ Eliminating the $\phi$ node (star-mesh / Kron reduction) turns the ideal star in
 
 ## Dynamics: ambipolar diffusion and the Jamnik-Maier circuit
 
-Everything above is statics. The matrices earn their keep when charge starts moving: attach a continuity equation and each capacitance becomes the inertia of a transport problem. In the quasi-charge-neutral regime it is the volumetric mutual matrix $\mathbf{c}^{\mathrm{mut}} = \mathbf{C}^{\mathrm{mut}}/V$ that appears, together with the regular conductivity equation:
+Everything above is statics. The matrices come into their own when charge starts moving: attach a continuity equation and each capacitance becomes the inertia of a transport problem. In the quasi-charge-neutral regime it is the volumetric mutual matrix $\mathbf{c}^{\mathrm{mut}} = \mathbf{C}^{\mathrm{mut}}/V$ that appears, together with the regular conductivity equation:
 
 $$\begin{aligned}
 \mathbf{c}^{\mathrm{mut}} \frac{\partial \mathbf{V}}{\partial t} & = -\nabla \cdot \mathbf{\vec{J}}, & \quad \text{(continuity)},\\

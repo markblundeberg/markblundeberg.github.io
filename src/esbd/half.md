@@ -29,7 +29,7 @@ In [equilibrium](../equilibrium/) we met this $V_{\mathrm{e}^-}$ attached to an 
 
 ## Implied $V_{\mathrm{e}^-}$ of a reaction
 
-With no electrode in sight, the formula above still evaluates to a perfectly good voltage: an "implied" $V_{\mathrm{e}^-}$, a real thermodynamic availability of electrons in a solution where none roam free. Since the value belongs to a particular reaction, we write it $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$. It earns its keep in two situations.
+With no electrode in sight, the formula above still evaluates to a perfectly good voltage: an "implied" $V_{\mathrm{e}^-}$, a real thermodynamic availability of electrons in a solution where none roam free. Since the value belongs to a particular reaction, we write it $V_{\mathrm{e}^-}(\mathrm{Ox}/\mathrm{Red})$. It proves useful in two situations.
 
 The first is coupling between half-reactions inside the solution,
 

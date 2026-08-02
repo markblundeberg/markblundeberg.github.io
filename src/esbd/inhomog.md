@@ -51,7 +51,7 @@ There is a further wrinkle specific to semiconductors. Our electron standard sta
 
 The electrochemical version is a compositionally graded **mixed ionic-electronic conductor**, say a doping-graded ceria in which both oxide ions $\mathrm{O}^{2-}$ and electrons are mobile. Across the graded slab the electronic level $V^\circ_{\mathrm{e}^-}$ and the ionic level $V^\circ_{\mathrm{O}^{2-}}$ slope at different rates, so electrons and oxide ions are pushed by different quasi-fields while $-\nabla\phi$ is a third, separate slope.
 
-One thing worth stating plainly: a fast solid-ion conductor is a concentrated, strongly nonideal medium, so the placement of the $V^\circ_i$ levels themselves inherits the single-ion activity ambiguity we keep running into. That is less a defect of the example than the whole point of this topic. The graded solid is exactly where the standard-state ladder, the per-carrier quasi-fields, and the activity conventions all turn subtle at once, and where reading everything off the $V_i$ traces rather than off $\phi$ earns its keep.
+One thing worth stating plainly: a fast solid-ion conductor is a concentrated, strongly nonideal medium, so the placement of the $V^\circ_i$ levels themselves inherits the single-ion activity ambiguity we keep running into. That is less a defect of the example than the whole point of this topic. The graded solid is exactly where the standard-state ladder, the per-carrier quasi-fields, and the activity conventions all turn subtle at once, and where reading everything off the $V_i$ traces rather than off $\phi$ matters most.
 
 <figure class="demo-container" style="max-width: 480px">
 {% include "esbd-diagrams/esbd-inh-miec.njk" %}
