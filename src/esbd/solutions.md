@@ -69,16 +69,18 @@ In effect, the standard state ladder is a stand-in for the electrostatic potenti
 
 ## Multiple ions and pH
 
-Time to see the ladder earn its keep. Back in [Equilibrium](../equilibrium/) we drew two separate figures for water: an acid pair, $\mathrm{H}^+$ and $\mathrm{OH}^-$ tied together by autoionization, and a salt pair, $\mathrm{Na}^+$ and $\mathrm{Cl}^-$ tied by dissolving solid, and we left open how the two share one axis. Here is the answer: put all four ions in one solution, and there is one rigid ladder underneath with each carrier hanging off its own rung by its own concentration.
+Back in [Equilibrium](../equilibrium/) we drew two separate figures for water: an acid pair, $\mathrm{H}^+$ and $\mathrm{OH}^-$ tied together by autoionization, and a salt pair, $\mathrm{Na}^+$ and $\mathrm{Cl}^-$ tied by dissolving solid, and we left open how the two share one axis. Here is the answer: put all four ions in one solution, and there is one rigid ladder underneath with each carrier hanging off its own rung by its own concentration.
 
 <figure class="demo-container" style="max-width: 400px">
 {% include "esbd-diagrams/esbd-four-ion.njk" %}
 {% figcaption %}
-Dilute salt water, all four ions. The two sliders add neutral substances: table salt, and a titration between $\mathrm{HCl}$ and $\mathrm{NaOH}$, whose readout reports the resulting pH. The salt slider floats the $\mathrm{Na}^+$/$\mathrm{Cl}^-$ gap freely, while the titration slides the $\mathrm{H}^+$/$\mathrm{OH}^-$ pair rigidly (the ⇌ is water's always-equilibrated autoionization), up with acid, down with base.
+Dilute salt water, all four ions. The two sliders add neutral substances: table salt, and a dose of acid or base ($\mathrm{HCl}$ or $\mathrm{NaOH}$), with the resulting pH as readout. The salt slider floats the $\mathrm{Na}^+$/$\mathrm{Cl}^-$ gap freely, while the acid/base slider slides the $\mathrm{H}^+$/$\mathrm{OH}^-$ pair rigidly (the ⇌ is water's always-equilibrated autoionization), up with acid, down with base.
 {% endfigcaption %}
 </figure>
 
-Where is the pH in this picture? It is a literal distance. In the dilute regime $\mathrm{pH} = -\log_{10}(c_{\mathrm{H}^+}/c^\circ)$,^[Strictly, pH is defined through the single-ion activity $a_{\mathrm{H}^+}$, exactly the convention-burdened object that the [nonideality appendix](../nonideal/) wrestles with; in the dilute regime the distinction evaporates.] so the $\mathrm{H}^+$ carrier hangs $(59~\mathrm{mV}) \times \mathrm{pH}$ below its rung, and likewise $\mathrm{OH}^-$ hangs $(59~\mathrm{mV}) \times \mathrm{pOH}$ above its own. Autoionization pins the carrier pair $2.458~\mathrm{V}$ apart while the ladder holds their rungs only $1.630~\mathrm{V}$ apart, leaving $0.828~\mathrm{V} = 14 \times 59~\mathrm{mV}$ of dilution that the two carriers must share between them, however the titration splits it: $\mathrm{pH} + \mathrm{pOH} = 14$, drawn as geometry.
+Where is the pH in this picture? It is a literal distance. In the dilute regime $\mathrm{pH} = -\log_{10}(c_{\mathrm{H}^+}/c^\circ)$,^[Strictly, pH is defined through the single-ion activity $a_{\mathrm{H}^+}$, exactly the convention-burdened object that the [nonideality appendix](../nonideal/) wrestles with; in the dilute regime the distinction evaporates.] so the $\mathrm{H}^+$ carrier hangs $(59~\mathrm{mV}) \times \mathrm{pH}$ below its rung:
+$$ V_{\mathrm{H}^+} = V^\circ_{\mathrm{H}^+} - \tfrac{RT \ln 10}{F}\, \mathrm{pH} ,$$
+and likewise $V_{\mathrm{OH}^-}$ hangs $(59~\mathrm{mV}) \times \mathrm{pOH}$ above its own rung $V^\circ_{\mathrm{OH}^-}$. Autoionization pins the carrier pair $2.458~\mathrm{V}$ apart while the ladder holds their rungs only $1.630~\mathrm{V}$ apart, leaving $0.828~\mathrm{V} = 14 \times 59~\mathrm{mV}$ of dilution that the two carriers must share between them, however acid and base split it: $\mathrm{pH} + \mathrm{pOH} = 14$, drawn as geometry.
 
 ## Spatial variations
 
