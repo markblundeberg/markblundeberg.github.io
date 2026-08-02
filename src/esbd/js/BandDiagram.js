@@ -657,21 +657,56 @@ class BandDiagram extends ResponsivePlot {
             cssClass: 'bd-region-label',
             data: this.regionLabels,
             dataKey: undefined, // Key by index
-            onUpdateTransition: (s) =>
-                s
-                    .attr('x', (d) => this.xScale(d.x))
-                    .attr('y', (d) => {
-                        if (d.y === 'top') return -2;
-                        else if (typeof d.y === 'number')
-                            return this.yScale(d.y);
-                        // Default to 'bottom'
-                        return this.plotHeight + 2;
-                    })
-                    .attr('dx', (d) => d.dx)
-                    .attr('dy', (d) => d.dy)
-                    .attr('text-anchor', 'middle')
-                    .text((d) => d.label || ''),
+            onUpdateImmediate: (s) =>
+                s.attr('text-anchor', 'middle').text((d) => d.label || ''),
         });
+
+        // Mobile declutter: the authored x fractions overprint each other
+        // once the plot squeezes (labels keep their font size while the
+        // regions shrink). Measure each label, nudge it inside the plot
+        // edges, then greedily fill two rows for the default bottom labels:
+        // the normal below-the-axis row, and a fallback row tucked just
+        // inside the frame (the inside-the-frame move some figures already
+        // hand-apply at the top edge). A label fitting in neither row is
+        // hidden. On a wide plot everything lands in the normal row at its
+        // authored spot, so desktop output is unchanged. Author-placed
+        // y:'top'/numeric labels are exempt. Positioning must live in this
+        // measured pass (not a transition): widths only exist post-render.
+        const PAD = 2;
+        const rowEnd = [-Infinity, -Infinity];
+        const nodes = this.regionLabelsGroup
+            .selectAll('text.bd-region-label')
+            .nodes();
+        const placed = this.regionLabels
+            .map((d, i) => {
+                const w = nodes[i].getComputedTextLength();
+                const cx = Math.min(
+                    Math.max(this.xScale(d.x) + (d.dx || 0), w / 2),
+                    this.plotWidth - w / 2
+                );
+                return { d, i, w, cx };
+            })
+            .sort((a, b) => a.cx - b.cx);
+        for (const { d, i, w, cx } of placed) {
+            const sel = d3.select(nodes[i]);
+            if (d.y === 'top' || typeof d.y === 'number') {
+                sel.attr('x', this.xScale(d.x) + (d.dx || 0))
+                    .attr('y', d.y === 'top' ? -2 : this.yScale(d.y))
+                    .attr('dy', d.dy)
+                    .style('display', null);
+                continue;
+            }
+            const row = [0, 1].find((r) => cx - w / 2 >= rowEnd[r] + PAD);
+            if (row === undefined) {
+                sel.style('display', 'none');
+                continue;
+            }
+            rowEnd[row] = cx + w / 2;
+            sel.attr('x', cx)
+                .attr('y', this.plotHeight + 2)
+                .attr('dy', row === 0 ? d.dy : '-0.5em')
+                .style('display', null);
+        }
     }
 
     /** Hatch/tint bands shading one side of a trace (see HATCH_DEFAULTS). */
