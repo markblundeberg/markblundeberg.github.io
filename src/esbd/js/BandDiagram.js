@@ -51,6 +51,10 @@ const STYLE_DEFAULTS = {
 // hover tooltips and click-to-pin.
 const HIT_THRESHOLD_PX = 15;
 
+// The ⌇ break glyph: a small vertical zigzag, axis-break vocabulary. Shared by
+// the on-trace refShift glyphs and the corner blurb that keys them.
+const REFSHIFT_ZIG = 'M0,-7 L-3,-3.5 L3,0.5 L-3,4.5 L0,8';
+
 /**
  * Creates an interactive Band Diagram using D3.js.
  * Uses a boundaries array and region properties array for layout.
@@ -69,10 +73,16 @@ class BandDiagram extends ResponsivePlot {
      * @param {Boolean} [config.xMode='abstract'] - Should x have numbered ticks or is it more 'abstract'.
      * @param {Boolean} [config.yMode='numeric'] - 'numeric' for numbered y ticks, or 'abstract' to hide them (schematic / "not to scale").
      * @param {number} [config.hoverThrottleDelay=50] - Mouseover throttling.
+     * @param {string} [config.refShiftBlurbCorner='tl'] - Which plot corner ('tl'|'tr'|'bl'|'br') holds the ⌇ explainer note. The note itself is mandatory (it appears whenever any trace carries a refShift); the corner is the caller's choice, to keep it clear of the traces.
      */
     constructor(containerId, config = {}) {
         // Configuration with defaults
-        const defaults = { xMode: 'abstract', yMode: 'numeric', hoverThrottleDelay: 50 };
+        const defaults = {
+            xMode: 'abstract',
+            yMode: 'numeric',
+            hoverThrottleDelay: 50,
+            refShiftBlurbCorner: 'tl',
+        };
         super({ containerId: containerId, ...defaults, ...config });
         // ^ sets this.config, with extra defaults
 
@@ -475,6 +485,7 @@ class BandDiagram extends ResponsivePlot {
         this._drawHatches();
         this._drawTraces();
         this._drawRefShiftGlyphs();
+        this._drawRefShiftBlurb();
         this._drawVerticalMarkers();
         this._drawTraceLabels();
 
@@ -578,15 +589,7 @@ class BandDiagram extends ResponsivePlot {
             onUpdateTransition: (s) => s.call(this.yAxisGen),
         });
 
-        const anyRefShift = (this.traceData ?? []).some(
-            (d) => d.refShift != null
-        );
-        this.drawYAxisLabel(
-            this.axesGroup,
-            anyRefShift
-                ? this._yAxisLabelStr + ' — per-species offsets ⌇'
-                : this._yAxisLabelStr
-        );
+        this.drawYAxisLabel(this.axesGroup, this._yAxisLabelStr);
     }
 
     _drawBackgrounds() {
@@ -838,9 +841,8 @@ class BandDiagram extends ResponsivePlot {
 
     /** Break glyphs marking per-species display offsets (refShift). */
     _drawRefShiftGlyphs() {
-        // a small vertical zigzag crossing the trace: axis-break vocabulary,
-        // per species. Hover gives the exact shift.
-        const ZIG = 'M0,-7 L-3,-3.5 L3,0.5 L-3,4.5 L0,8';
+        // Crosses the trace, per species. Hover gives the exact shift.
+        const ZIG = REFSHIFT_ZIG;
         const groups = this.drawElements({
             parentGroups: this.linesGroup,
             element: 'g',
@@ -878,6 +880,67 @@ class BandDiagram extends ResponsivePlot {
                     `drawn ${d.refShift >= 0 ? '+' : ''}${d.refShift.toFixed(2)} V from its IUPAC-referenced position (per-species display offset)`
             );
         groups.select('.bd-refshift-zig').attr('stroke', (d) => d.color);
+    }
+
+    /** Corner note keying the ⌇ break glyphs. Drawn whenever any trace carries
+     * a refShift; config.refShiftBlurbCorner picks which corner. The glyph is
+     * drawn as artwork (the same zig path as on the traces), not font text. */
+    _drawRefShiftBlurb() {
+        const corner = this.config.refShiftBlurbCorner;
+        const PAD = 4;
+        const ZIG_SCALE = 0.6;
+        const anyRefShift = this.traceData.some((d) => d.refShift != null);
+        this.drawStaticElements({
+            parentGroups: this.linesGroup,
+            element: 'g',
+            cssClass: 'bd-refshift-blurb',
+            data: anyRefShift ? [corner] : [],
+            onNew: (g) => {
+                g.append('text').attr('class', 'bd-blurb-open').text('(');
+                g.append('path')
+                    .attr('d', REFSHIFT_ZIG)
+                    .attr('fill', 'none')
+                    .attr('stroke', '#fff')
+                    .attr('stroke-width', 4.5)
+                    .attr('stroke-linecap', 'round');
+                g.append('path')
+                    .attr('class', 'bd-blurb-zig')
+                    .attr('d', REFSHIFT_ZIG)
+                    .attr('fill', 'none')
+                    .attr('stroke', '#555')
+                    .attr('stroke-width', 1.6)
+                    .attr('stroke-linecap', 'round');
+                g.append('text')
+                    .attr('class', 'bd-blurb-rest')
+                    .text('= per-species offset)');
+            },
+            onUpdateImmediate: (s) =>
+                s.each((d, i, nodes) => {
+                    const g = d3.select(nodes[i]);
+                    const open = g.select('text.bd-blurb-open');
+                    const rest = g.select('text.bd-blurb-rest');
+                    const baseline =
+                        corner[0] === 't' ? PAD + 8 : this.plotHeight - PAD;
+                    // lay out "(" + zig + "= per-species offset)" left to right
+                    const xGlyph =
+                        open.node().getComputedTextLength() + 1.5 + 3 * ZIG_SCALE;
+                    const xRest = xGlyph + 3 * ZIG_SCALE + 3;
+                    open.attr('x', 0).attr('y', baseline);
+                    g.selectAll('path').attr(
+                        'transform',
+                        // zig path spans y -7..8 around its origin; centre it
+                        // on the text's x-height
+                        `translate(${xGlyph}, ${baseline - 3.8}) scale(${ZIG_SCALE})`
+                    );
+                    rest.attr('x', xRest).attr('y', baseline);
+                    const total =
+                        xRest + rest.node().getComputedTextLength();
+                    g.attr(
+                        'transform',
+                        `translate(${corner[1] === 'l' ? PAD : this.plotWidth - PAD - total}, 0)`
+                    );
+                }),
+        });
     }
 
     /** Draws or updates the vertical marker symbols. */
