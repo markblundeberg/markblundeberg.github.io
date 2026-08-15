@@ -1,8 +1,9 @@
 {
-  "hash": "5fa51b9375d391a531d5a81d610fcd80783318c91b97da011a7ac9e42b6c4609",
+  "hash": "dd561959d8cea522925bd2eddc3e5b858e9f7b5de1b4bd03df8129205a314c31",
   "ids": [
     "V-std-ladder--diagram-container",
     "ag-agcl-electrode-container",
+    "ag-agcl-electrode-simple-container",
     "bd-basicbattery-energy-ion-too-",
     "bd-basicbattery-energy-missing",
     "bd-basicbattery-multicell--energy",

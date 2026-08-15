@@ -1,0 +1,57 @@
+{% set idprefix = "ag-agcl-electrode-simple" %}
+<div class="bd-container" id="{{idprefix}}-container" style="height: 250px"></div>
+
+<script type="module">
+    import ElectrochemicalSpeciesBandDiagram from '{{ esbdJsPath }}ElectrochemicalSpeciesBandDiagram.js';
+    import { SPECIES, REGION } from '{{ esbdJsPath }}figureDefs.js';
+
+    const diagram = new ElectrochemicalSpeciesBandDiagram('{{idprefix}}-container', {
+        cation: SPECIES.silver,
+        anion: SPECIES.chloride,
+        electron: SPECIES.electron,
+    });
+
+    const boundaries = [0.0, 0.3, 0.7, 1.0];
+    diagram.setSpatialLayout(boundaries, [
+        { ...REGION.metal, name: 'Silver wire' },
+        { ...REGION.agcl, name: 'AgCl coating' },
+        REGION.solution,
+    ]);
+
+    const V_el = +0;
+    const V_Cl = V_el + 1.138;
+    diagram.setVRange(V_el - 0.33, V_Cl + 0.23);
+
+    const b = boundaries;
+    diagram.updateTraceData([
+        {
+            id: `electron_trace`,
+            speciesId: 'electron',
+            curveType: 'voltage',
+            showLabel: true,
+            labelFrac: 0.5,
+            labelHAlign: 'center',
+            x: [b[0], b[1]],
+            y: [V_el, V_el],
+        },
+        {
+            id: `anion_trace`,
+            speciesId: 'anion',
+            curveType: 'voltage',
+            showLabel: true,
+            x: [b[1], b[3]],
+            y: [V_Cl, V_Cl],
+        },
+    ]);
+
+    diagram.updateVerticalMarkers([
+        {
+            id: 'ag-cl-',
+            x: b[1],
+            yDefs: [{ y: V_el }, { y: V_Cl }],
+            symbol: '⇌',
+            popupCallback: () =>
+                '$\\mathrm{AgCl} + \\mathrm{e}^- \\rightleftharpoons \\mathrm{Ag} + \\mathrm{Cl}^-$',
+        },
+    ]);
+</script>

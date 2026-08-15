@@ -123,7 +123,7 @@ $$ V_{\mathrm{Cl}^-} - V_{\mathrm{e}^-} =  \frac{1}{F} ( \mu_{\mathrm{Ag}} - \mu
 Let's plot this on a band diagram once again:
 
 <figure class="demo-container" style="max-width: 300px">
-{% include "esbd-diagrams/esbd-ag-agcl-electrode.njk" %}
+{% include "esbd-diagrams/esbd-ag-agcl-electrode-simple.njk" %}
 </figure>
 
 Since we have $\mu_{\mathrm{Ag}} = 0~\mathrm{kJ/mol}$ and $\mu_{\mathrm{AgCl}} = -109.8~\mathrm{kJ/mol}$ we get:
