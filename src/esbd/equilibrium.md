@@ -78,7 +78,7 @@ The coefficients on the left are just the ionic charges. Notice they sum to zero
 <figure class="demo-container" style="max-width: 300px">
 {% include "esbd-diagrams/esbd-struvite.njk" %}
 {% figcaption %}
-A solution saturated with struvite. The reaction holds $2 V_{\mathrm{Mg}^{2+}} + V_{\mathrm{NH_4}^+} - 3 V_{\mathrm{PO_4}^{3-}}$ fixed while the individual gaps trade off against each other. Note the lever arms as the slider moves the levels: $V_{\mathrm{NH_4}^+}$ swings twice as far as $V_{\mathrm{Mg}^{2+}}$, because the doubly charged ion carries double weight in the pinned sum. (The stacking order is realistic but the axis is qualitative; the true spacings span several volts, which would dwarf the slider's motion.)
+A solution saturated with struvite. The reaction holds $2 V_{\mathrm{Mg}^{2+}} + V_{\mathrm{NH_4}^+} - 3 V_{\mathrm{PO_4}^{3-}}$ fixed while the individual gaps trade off against each other. Note the lever arms as the slider moves the levels: $V_{\mathrm{NH_4}^+}$ swings twice as far as $V_{\mathrm{Mg}^{2+}}$, because the doubly charged ion carries double weight in the pinned sum.
 {% endfigcaption %}
 </figure>
 
