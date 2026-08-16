@@ -7,7 +7,7 @@ orderESBD: 21
 
 # {{title}}
 
-In the earlier [topic about equilibrium](../equilibrium/), we saw that solid $\mathrm{NaCl}$ in equilibrium with a solvent (such as water) sets a fixed $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = \tfrac{1}{F} \mu_{\mathrm{NaCl}} = -3.9813~\mathrm{V}$. But that is for a *fully saturated* solution. What happens when we only have a tiny amount dissolved? How does $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ depend on the concentration of dissolved $\mathrm{NaCl}$?
+In the earlier [topic about reactions](../reactions/), we saw that solid $\mathrm{NaCl}$ in equilibrium with a solvent (such as water) sets a fixed $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-} = \tfrac{1}{F} \mu_{\mathrm{NaCl}} = -3.9813~\mathrm{V}$. But that is for a *fully saturated* solution. What happens when we only have a tiny amount dissolved? How does $V_{\mathrm{Na}^+} - V_{\mathrm{Cl}^-}$ depend on the concentration of dissolved $\mathrm{NaCl}$?
 
 To anchor the discussion, here are some fairly accurate modelled curves:
 
@@ -69,7 +69,7 @@ In effect, the standard state ladder is a stand-in for the electrostatic potenti
 
 ## Multiple ions and pH
 
-Back in [Equilibrium](../equilibrium/) we drew two separate figures for water: an acid pair, $\mathrm{H}^+$ and $\mathrm{OH}^-$ tied together by autoionization, and a salt pair, $\mathrm{Na}^+$ and $\mathrm{Cl}^-$ tied by dissolving solid, and we left open how the two share one axis. Here is the answer: put all four ions in one solution, and there is one rigid ladder underneath with each carrier hanging off its own rung by its own concentration.
+Back in [Reactions](../reactions/) we drew two separate figures for water: an acid pair, $\mathrm{H}^+$ and $\mathrm{OH}^-$ tied together by autoionization, and a salt pair, $\mathrm{Na}^+$ and $\mathrm{Cl}^-$ tied by dissolving solid, and we left open how the two share one axis. Here is the answer: put all four ions in one solution, and there is one rigid ladder underneath with each carrier hanging off its own rung by its own concentration.
 
 <figure class="demo-container" style="max-width: 400px">
 {% include "esbd-diagrams/esbd-four-ion.njk" %}

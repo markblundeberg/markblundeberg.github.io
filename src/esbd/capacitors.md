@@ -9,7 +9,7 @@ orderESBD: 26
 
 By now we have quietly collected two capacitances. Back in [species voltage](../v_i/), two co-located carriers formed a capacitor wired directly between their $V_i$ rails, and in [lithium-ion batteries](../lib/) each electrode *was* that capacitor, charged deep into its nonlinear regime. Then the [last topic](../basicelectrostatics/) produced another: the "screening capacitance" $\chi$, measuring how much charge a conductor banks when its potential is nudged. Meanwhile the ordinary dielectric capacitor of circuit theory has not even made its appearance. This topic puts the whole family on one page: each piece on its own terms, and then how the pieces assemble, because assembled is the only way a measurement ever meets them.
 
-Throughout, capacitance is the storage-side response of a conductor (charge held in proportion to a voltage *difference*), as against conductance, the flow-side response (current in proportion to a voltage *gradient*) we take up [next](../basictransport/). It is also the elastic counterpart to a reaction: a [reaction](../equilibrium/) couples two species' voltages *rigidly*, fixing the difference $V_i - V_j$, whereas a capacitance lets that difference flex, banking charge as it moves.
+Throughout, capacitance is the storage-side response of a conductor (charge held in proportion to a voltage *difference*), as against conductance, the flow-side response (current in proportion to a voltage *gradient*) we take up [next](../basictransport/). It is also the elastic counterpart to a reaction: a [reaction](../reactions/) couples two species' voltages *rigidly*, fixing the difference $V_i - V_j$, whereas a capacitance lets that difference flex, banking charge as it moves.
 
 ## Dielectric capacitance
 

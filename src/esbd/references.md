@@ -26,7 +26,7 @@ While I can't answer all the philosophical questions, what I can do is provide a
 
 In the language of [half-reactions](../half/), a reference electrode is built on a couple chosen for fast, reproducible equilibration: the reaction pins the wire's $V_{\mathrm{e}^-}$ to the couple's implied level in the solution, a definite Nernst offset from the local $V^\circ_i$ ladder. Know the activities and you know exactly where the wire sits relative to that ladder. Two couples do most of this work in practice.
 
-The **silver/silver chloride electrode** hangs off the chloride rung. Its reaction swaps an electron for a chloride ion, and equilibrium locks the wire to the solution, as we saw back in the [equilibrium topic](../equilibrium/):
+The **silver/silver chloride electrode** hangs off the chloride rung. Its reaction swaps an electron for a chloride ion, and equilibrium locks the wire to the solution, as we saw back in the [Reactions](../reactions/) topic:
 $$ V_{\mathrm{e}^-} = V_{\mathrm{Cl}^-} - \frac{\mu_{\mathrm{Ag}} - \mu_{\mathrm{AgCl}}}{F}, $$
 which the redox [floating Nernst equation](../half/) is equivalently:
 $$

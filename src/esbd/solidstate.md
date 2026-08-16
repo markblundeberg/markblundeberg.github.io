@@ -58,7 +58,7 @@ The simplest way to drive a semiconductor out of equilibrium: shine light on it.
 {% endfigcaption %}
 </figure>
 
-At equilibrium the two collapse onto a single Fermi level, $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$, and this is really a reaction equilibrium of the kind we met in the [equilibrium topic](../equilibrium/): there, chemical reactions pinned ionic differences $V_i - V_j$ with an offset $\Delta$ set by the neutral species involved. The electron/hole recombination reaction $\mathrm{e}^- + \mathrm{h}^+ \rightleftharpoons \varnothing$ involves no neutral species at all, and yields $-V_{\mathrm{e}^-} + V_{\mathrm{h}^+} = 0$.
+At equilibrium the two collapse onto a single Fermi level, $V_{\mathrm{e}^-} = V_{\mathrm{h}^+}$, and this is really a reaction equilibrium of the kind we met in the [Reactions](../reactions/) topic: there, chemical reactions pinned ionic differences $V_i - V_j$ with an offset $\Delta$ set by the neutral species involved. The electron/hole recombination reaction $\mathrm{e}^- + \mathrm{h}^+ \rightleftharpoons \varnothing$ involves no neutral species at all, and yields $-V_{\mathrm{e}^-} + V_{\mathrm{h}^+} = 0$.
 
 ## Band edges are standard states ($V^\circ_i$)
 
