@@ -11,7 +11,7 @@ eleventyNavigation:
 
 <p class="epigraph">A semiconductor physicist wanders into electrochemistry and refuses to leave without a band diagram.</p>
 
-<p class="byline">Mark Lundeberg // July 2026</p>
+<p class="byline">Mark Lundeberg // August 2026</p>
 
 <p class="lede">What is the electrical state deep inside of a battery?</p>
 
