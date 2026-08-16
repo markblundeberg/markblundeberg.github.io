@@ -7,9 +7,9 @@ orderESBD: 23
 
 # {{title}}
 
-So far we have worked in one direction: given the concentrations, we read off the species voltages. Real problems usually run the other way around. Some of the voltages are pinned for us, whether by a contact, a reservoir, or a reaction with a solid phase, and what we are left to determine is where the standard-state ladder $V^\circ_i$ sits. Pinning the $V_i$ does not pin the ladder, and pinning the ladder does not pin the $V_i$; the two are tied together only through a constraint that we have so far set aside: **bulk charge neutrality.**
+So far we have worked in one direction: given the concentrations, we read off the species voltages. Real problems often run the other way around: some of the voltages are pinned for us, whether by a contact, a reservoir, or a reaction with a solid phase, and what we are left to determine is where the standard-state ladder $V^\circ_i$ sits. Pinning the $V_i$ does not pin the ladder, and pinning the ladder does not pin the $V_i$; the two are tied together only through a constraint that we have so far set aside: **bulk charge neutrality.**
 
-Handled algebraically this quickly becomes tedious, since every concentration depends exponentially on the gap between a carrier's voltage and its standard state. On a $V_i$ diagram, though, the whole business reduces to a single motion: sliding the rigid $V^\circ_i$ ladder up or down until the net charge balances.
+On this page I want to illustrate how we can visualize charge neutrality on a $V_i$ diagram, where it turns into a motion: sliding the rigid $V^\circ_i$ ladder up or down until the net charge balances.
 
 As a reminder, the ideal-dilute relation from the [solutions topic](../solutions/) can be rearranged to express a concentration in terms of that gap:
 
