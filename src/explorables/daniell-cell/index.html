@@ -244,11 +244,11 @@ header.top { padding-block: 34px 28px; }
     <p>The last picture gives every charged species its own line. Take each species' electrochemical potential (its free energy per particle, electrical part included) and divide by its charge. What comes out is a voltage, <span class="math">V<sub>i</sub> = μ̃<sub>i</sub> / z<sub>i</sub>F</span>, on the same axis as the electrons. Zinc ions, copper ions, sulfate, potassium, chloride and electrons all share one plot.</p>
     <p>Read it like a landscape for current. Each species carries current down its own slope, and a flat line means that species carries none. Each ion also has a dashed companion, its standard level; the gap between the two encodes the ion's concentration on a log scale.</p>
     <figure class="fig">
-      <div class="fighead"><div class="legend" id="legSpecies"></div><div class="seg" role="group" aria-label="Vertical range"><button id="zoomIn" aria-pressed="true">Electrodes</button><button id="zoomOut" aria-pressed="false">Full ladder</button></div></div>
+      <div class="fighead"><div class="legend" id="legSpecies"></div></div>
       <div class="plot" id="figSpecies"></div>
-      <figcaption>Solid: species voltage V<sub>i</sub>. Dashed: standard level V°<sub>i</sub>. Arrows at the edge point to ions off the scale; switch to <em>Full ladder</em> to see them.</figcaption>
+      <figcaption>Solid: species voltage V<sub>i</sub>. Dashed: standard level V°<sub>i</sub>. The zinc terminal is at 0 V; position is schematic. Hover or drag across the plot to read values.</figcaption>
     </figure>
-    <p>Switch to the full ladder, connect a load, and several things that were invisible become plain:</p>
+    <p>Connect a load, and several things that picture 3 couldn't show become plain:</p>
     <ul class="plain">
       <li>In the thin layer next to each plate, sulfate's line is flat. Sulfate isn't consumed at either plate, so in steady state it carries no current there. Zn²⁺ and Cu²⁺ bend instead.</li>
       <li>In the bulk of each beaker, every line tilts together. That shared tilt is the ohmic drop, the same thing the ledger books as I·R.</li>
@@ -319,7 +319,7 @@ header.top { padding-block: 34px 28px; }
 <script>
 (() => {
 const X = MODEL.X, SP = MODEL.SP, f = MODEL.f;
-const S = { pZn: 200, pCu: 200, load: 50, sep: 'bridge', ladder: 'zoom', playing: true, steady: true };
+const S = { pZn: 200, pCu: 200, load: 50, sep: 'bridge', playing: true, steady: true };
 const DEFAULTS = { ...S };
 const cOf = p => Math.pow(10, p / 100 - 3);
 const loadR = p => p <= 0 ? Infinity : p >= 100 ? 0 : Math.pow(10, 4 - 4 * (p - 1) / 98);
@@ -349,8 +349,6 @@ function syncControls() {
   el('loadOut').textContent = fmtR(loadR(S.load));
   el('sepBridge').setAttribute('aria-pressed', S.sep === 'bridge');
   el('sepPot').setAttribute('aria-pressed', S.sep === 'pot');
-  el('zoomIn').setAttribute('aria-pressed', S.ladder === 'zoom');
-  el('zoomOut').setAttribute('aria-pressed', S.ladder === 'full');
   el('vOut').textContent = R.V.toFixed(3);
   el('iOut').textContent = (R.I * 1e3).toFixed(R.I * 1e3 < 10 ? 2 : 1);
 }
@@ -361,8 +359,6 @@ el('cCu').addEventListener('input', e => { S.pCu = +e.target.value; if (!S.stead
 el('load').addEventListener('input', e => { S.load = +e.target.value; update(); });
 el('sepBridge').addEventListener('click', () => { S.sep = 'bridge'; Sim.reset(); update(); });
 el('sepPot').addEventListener('click', () => { S.sep = 'pot'; Sim.reset(); update(); });
-el('zoomIn').addEventListener('click', () => { S.ladder = 'zoom'; update(); });
-el('zoomOut').addEventListener('click', () => { S.ladder = 'full'; update(); });
 el('reset').addEventListener('click', () => { Object.assign(S, DEFAULTS, { playing: S.playing }); el('steady').checked = true; Sim.reset(); update(); });
 el('barToggle').addEventListener('click', () => { const b = el('bar'); const open = b.dataset.open !== 'true'; b.dataset.open = open; el('barToggle').setAttribute('aria-expanded', open); el('barToggle').textContent = open ? 'Done' : 'Adjust'; });
 
@@ -424,7 +420,7 @@ function spatial(host, mode, compact) {
   const H = Math.round(Math.min(470, Math.max(260, W * (narrow ? 0.72 : 0.56))));
   const m = { l: narrow ? 38 : 50, r: narrow ? 58 : 84, t: 30, b: narrow ? 20 : 26 };
   const pw = W - m.l - m.r, ph = H - m.t - m.b;
-  const full = mode === 'species' && S.ladder === 'full';
+  const full = mode === 'species'; // species plot always shows the whole ladder
   const [v0, v1] = full ? [-2.9, 5.2] : [-0.55, 1.6];
   const sx = x => m.l + x * pw, sy = v => m.t + (v1 - v) / (v1 - v0) * ph;
   const fs = narrow ? 11 : 12.5;
