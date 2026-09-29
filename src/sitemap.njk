@@ -11,4 +11,10 @@ eleventyExcludeFromCollections: true
     </url>
 {%- endif %}
 {%- endfor %}
+{#- explorables are passthrough pages, so not in collections.all #}
+{%- for x in explorables %}
+    <url>
+        <loc>{{ site.url }}/explorables/{{ x.slug }}/</loc>
+    </url>
+{%- endfor %}
 </urlset>

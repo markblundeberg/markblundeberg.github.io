@@ -6,6 +6,7 @@ import katex from 'katex';
 import markdownItFootnote from 'markdown-it-footnote';
 import markdownItAnchor from 'markdown-it-anchor';
 import fs from 'node:fs';
+import explorables from './src/_data/explorables.js';
 
 // `export default` is used for ESM
 export default async function myConfig(eleventyConfig) {
@@ -21,6 +22,12 @@ export default async function myConfig(eleventyConfig) {
     // Companion notebooks: downloadable .ipynb (pages render them via the
     // `notebook` shortcode below)
     eleventyConfig.addPassthroughCopy({ notebooks: '/notebooks/' });
+    // Explorables: each src/explorables/<slug>/ is a self-contained page,
+    // copied as-is (not templated; its JS would trip Nunjucks). The section
+    // index (src/explorables/index.md) is still a normal template.
+    for (const x of explorables)
+        eleventyConfig.addPassthroughCopy({ [`src/explorables/${x.slug}`]: `/explorables/${x.slug}/` });
+    eleventyConfig.ignores.add('src/explorables/*/**');
     // If you have other static assets like fonts, add them here
 
     // --- Set variables ---
