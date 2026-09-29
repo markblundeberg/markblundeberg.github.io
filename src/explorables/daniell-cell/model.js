@@ -1,11 +1,12 @@
 // Daniell cell model: Zn | ZnSO4 || KCl bridge || CuSO4 | Cu
 // Ideal dilute solutions, Henderson (linear-mixing) liquid junctions,
 // stirred bulk + Nernst diffusion layers, symmetric Butler–Volmer kinetics.
-// Gauge: chemists' convention (ΔGf of elements and H+(aq) = 0), ground = Zn metal.
+// Conventions: neutral elements at μ = 0 (ΔGf tables); ion levels measured from the ladder's
+// floating H+ rung, so `psi` in the profiles is the local V°(H+) (= the SHE level). Ground = Zn metal.
 const MODEL = (() => {
   const F = 96485.33, R = 8.314462, T = 298.15, f = R * T / F; // f = RT/F ≈ 25.69 mV
   const K = F * F / (R * T); // conductivity prefactor: κ = K Σ z² D c
-  // standard levels V°_i = ΔGf°/(z F), volts; D in m²/s (infinite dilution)
+  // V0 = V°_i − V°(H+) = ΔGf°/(z F), volts (rung offsets on the floating ladder); D in m²/s (infinite dilution)
   const SP = {
     Zn: { z: 2, V0: -147.06e3 / (2 * F), D: 0.703e-9 },
     Cu: { z: 2, V0: 65.49e3 / (2 * F), D: 0.714e-9 },
