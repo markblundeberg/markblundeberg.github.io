@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>One Battery, Four Pictures</title>
+<meta name="description" content="The Daniell cell drawn four ways: particles, the textbook ledger, electron levels, and species voltages, all driven live by one model.">
+<link rel="canonical" href="https://marklundeberg.com/explorables/daniell-cell/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="One Battery, Four Pictures">
+<meta property="og:description" content="The Daniell cell drawn four ways: particles, the textbook ledger, electron levels, and species voltages, all driven live by one model.">
+<meta property="og:url" content="https://marklundeberg.com/explorables/daniell-cell/">
+<meta property="og:image" content="https://marklundeberg.com/explorables/daniell-cell/og.png">
+<meta property="og:site_name" content="Mark Lundeberg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@MarkLundeberg">
+<link rel="icon" href="/img/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+:root {
+  --bg: #edf1f3; --surface: #fbfcfd; --ink: #16202b; --ink-2: #394554; --muted: #5b6776;
+  --rule: #d2dae0; --faint: #e3e9ed; --accent: #a9531f; --accent-soft: #f3e3d8;
+  --metal: #cbd2d9; --hatch: #aab4be; --sol-l: #e4e9f3; --sol-r: #d9e9f2; --mid: #e7eee4;
+  --zn: #3b66c4; --cu: #c0602a; --so4: #8a4fbf; --k: #1f8f5f; --cl: #a8850a; --e: #16202b; --she: #6b7686;
+  --loss: #a4aeb9; --gain: #5f7f96; --bar: rgba(237,241,243,.92); --tip: #16202b; --tip-ink: #f4f6f8;
+  --serif: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0f1318; --surface: #151a21; --ink: #e3e8ee; --ink-2: #c2cad3; --muted: #95a1ae;
+    --rule: #2a333d; --faint: #1c232b; --accent: #e2884f; --accent-soft: #3a261a;
+    --metal: #2d353e; --hatch: #3d4752; --sol-l: #19202d; --sol-r: #142530; --mid: #1a2419;
+    --zn: #5f86d8; --cu: #d06d33; --so4: #9a6ecf; --k: #2f9f6f; --cl: #b88410; --e: #e3e8ee; --she: #8d98a5;
+    --loss: #56616d; --gain: #6f8fa6; --bar: rgba(15,19,24,.9); --tip: #e3e8ee; --tip-ink: #121820;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f1318; --surface: #151a21; --ink: #e3e8ee; --ink-2: #c2cad3; --muted: #95a1ae;
+  --rule: #2a333d; --faint: #1c232b; --accent: #e2884f; --accent-soft: #3a261a;
+  --metal: #2d353e; --hatch: #3d4752; --sol-l: #19202d; --sol-r: #142530; --mid: #1a2419;
+  --zn: #5f86d8; --cu: #d06d33; --so4: #9a6ecf; --k: #2f9f6f; --cl: #b88410; --e: #e3e8ee; --she: #8d98a5;
+  --loss: #56616d; --gain: #6f8fa6; --bar: rgba(15,19,24,.9); --tip: #e3e8ee; --tip-ink: #121820;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--serif); font-size: 18px; line-height: 1.6; }
+.wrap { padding-inline: 20px; }
+.col { max-width: 680px; margin-inline: auto; }
+.wide { max-width: 980px; margin-inline: auto; }
+header.top { padding-block: 56px 28px; }
+.kicker { font-family: var(--display); font-weight: 700; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px; }
+h1 { font-family: var(--display); font-weight: 800; font-size: clamp(40px, 7vw, 68px); line-height: .98; letter-spacing: -.02em; margin: 0 0 22px; text-wrap: balance; }
+h1 .v { color: var(--accent); }
+.lede { font-size: 21px; line-height: 1.55; color: var(--ink-2); margin: 0 0 14px; }
+h2 { font-family: var(--display); font-weight: 700; font-size: clamp(28px, 4vw, 36px); line-height: 1.1; letter-spacing: -.01em; margin: 0 0 6px; text-wrap: balance; }
+.eyebrow { font-family: var(--mono); font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; }
+p { margin: 0 0 16px; }
+section { padding-block: 44px 8px; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+em.term { font-style: italic; }
+.math { font-family: var(--mono); font-size: .88em; white-space: nowrap; }
+sub, sup { line-height: 0; }
+
+/* sticky control bar */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bar); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-block: 1px solid var(--rule); }
+.bar-in { max-width: 980px; margin-inline: auto; padding: 10px 20px; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; font-family: var(--display); font-size: 14px; }
+.ctl { display: grid; gap: 2px; min-width: 150px; flex: 1 1 150px; }
+.ctl label { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); font-weight: 500; font-size: 13px; }
+.ctl label b { white-space: nowrap; color: var(--ink); font-family: var(--mono); font-weight: 500; font-size: 13px; }
+input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; height: 22px; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 7px; overflow: hidden; }
+.seg button { font: inherit; font-size: 13px; background: transparent; color: var(--muted); border: 0; padding: 6px 10px; cursor: pointer; }
+.seg button[aria-pressed=true] { background: var(--ink); color: var(--bg); }
+.readout { display: flex; gap: 14px; font-family: var(--mono); font-size: 14px; white-space: nowrap; }
+.readout span { color: var(--muted); }
+.readout b { font-weight: 500; color: var(--ink); }
+.bar-title { font-family: var(--display); font-weight: 800; font-size: 15px; line-height: 1.1; display: grid; }
+.bar-title span { font-weight: 500; font-size: 11.5px; color: var(--muted); letter-spacing: .02em; }
+.btns { display: flex; gap: 6px; }
+.chk { font-family: var(--display); font-size: 13.5px; font-weight: 700; display: inline-flex; gap: 6px; align-items: center; color: var(--ink); order: 2; cursor: pointer; }
+.chk input { accent-color: var(--accent); width: 16px; height: 16px; margin: 0; }
+.bar { transition: box-shadow .6s ease; }
+.bar.hint { box-shadow: inset 0 -2px 0 var(--accent), 0 6px 18px -10px var(--accent); }
+@media (prefers-reduced-motion: reduce) { .bar { transition: none; } }
+.bar-toggle { display: none; font: inherit; font-size: 13px; background: transparent; border: 1px solid var(--rule); color: var(--ink); border-radius: 7px; padding: 5px 10px; cursor: pointer; }
+.btn { font-family: var(--display); font-size: 13px; background: transparent; border: 1px solid var(--rule); color: var(--ink-2); border-radius: 7px; padding: 5px 10px; cursor: pointer; }
+@media (max-width: 700px) {
+  body { font-size: 17px; }
+  .bar-in { gap: 10px 14px; padding: 8px 16px; }
+  .bar-toggle { display: inline-block; margin-left: auto; }
+  .bar[data-open=false] .ctl, .bar[data-open=false] .seg, .bar[data-open=false] .btns { display: none; }
+  .ctl { flex-basis: 100%; }
+  .wrap { padding-inline: 16px; }
+}
+
+/* figures */
+figure { margin: 22px 0 18px; }
+.fig { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 14px 10px; }
+.fighead { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-family: var(--mono); font-size: 12.5px; color: var(--ink-2); }
+.legend i { display: inline-block; width: 16px; height: 0; border-top: 2.5px solid currentColor; vertical-align: middle; margin-right: 5px; }
+.legend i.dash { border-top-style: dashed; border-top-width: 2px; }
+.legend i.dot { width: 9px; height: 9px; border: 0; border-radius: 50%; background: currentColor; }
+.legend i.ring { width: 9px; height: 9px; border: 2px solid currentColor; border-radius: 50%; }
+.plot { position: relative; width: 100%; touch-action: pan-y; }
+.plot svg { display: block; width: 100%; height: auto; overflow: visible; }
+.plot canvas { display: block; width: 100%; }
+figcaption { font-family: var(--display); font-size: 14px; line-height: 1.45; color: var(--muted); margin-top: 10px; }
+.tip { position: absolute; pointer-events: none; background: var(--tip); color: var(--tip-ink); font-family: var(--mono); font-size: 12px; line-height: 1.45; padding: 7px 9px; border-radius: 6px; white-space: nowrap; transform: translate(12px, -50%); z-index: 3; }
+.tip .r { font-family: var(--display); font-weight: 700; font-size: 12px; margin-bottom: 2px; }
+.tip i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+.note { font-family: var(--mono); font-size: 13px; color: var(--ink-2); background: var(--faint); border-radius: 6px; padding: 8px 10px; margin-top: 8px; }
+.eq { font-family: var(--mono); font-size: 13.5px; line-height: 1.7; color: var(--ink-2); background: var(--faint); border-radius: 8px; padding: 10px 12px; margin-top: 10px; overflow-x: auto; white-space: pre; }
+
+.sh { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid var(--rule); margin-top: 20px; font-size: 16px; }
+.sh > div { padding: 12px 16px 4px 0; }
+.sh > div + div { padding-left: 16px; border-left: 1px solid var(--rule); }
+.sh h4 { font-family: var(--display); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 4px; color: var(--muted); }
+.sh .shows h4 { color: var(--k); }
+.sh .hides h4 { color: var(--accent); }
+@media (max-width: 560px) { .sh { grid-template-columns: 1fr; } .sh > div + div { padding-left: 0; border-left: 0; border-top: 1px dashed var(--rule); } }
+
+.grid4 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid4 .fig { padding: 10px 10px 8px; }
+.grid4 h3 { font-family: var(--display); font-size: 15px; font-weight: 700; margin: 0 0 6px; display: flex; gap: 8px; align-items: baseline; }
+.grid4 h3 span { font-family: var(--mono); font-size: 11.5px; font-weight: 400; color: var(--muted); }
+@media (max-width: 760px) { .grid4 { grid-template-columns: 1fr; } }
+
+ul.plain { padding-left: 1.1em; margin: 0 0 16px; }
+ul.plain li { margin-bottom: 8px; }
+.tablewrap { overflow-x: auto; margin: 18px 0; }
+table { border-collapse: collapse; width: 100%; font-size: 16px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--rule); }
+th { font-family: var(--display); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+td:first-child { font-family: var(--display); font-weight: 700; white-space: nowrap; }
+table.nums td, table.nums th { font-size: 14px; padding: 5px 10px 5px 0; }
+table.nums td:last-child { font-family: var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+table.nums td:first-child { font-family: var(--serif); font-weight: 400; white-space: normal; }
+details { margin-top: 14px; font-family: var(--display); font-size: 14px; }
+details summary { cursor: pointer; color: var(--ink-2); }
+footer { padding-block: 40px 70px; }
+.about { font-size: 16px; color: var(--ink-2); }
+.about h2 { font-size: 24px; }
+.about li { margin-bottom: 6px; }
+.credit { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; margin: 0 0 20px; }
+</style>
+<style>
+html { color-scheme: light; }
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+.crumbs { font-family: var(--display); font-size: 14px; font-weight: 500; color: var(--muted); padding-top: 18px; }
+.crumbs a { color: var(--muted); text-decoration: none; }
+.crumbs a:hover { color: var(--accent); text-decoration: underline; }
+.crumbs span { margin-inline: 6px; opacity: .6; }
+header.top { padding-block: 34px 28px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top col">
+    <nav class="crumbs" aria-label="Site"><a href="/">Mark Lundeberg</a><span>/</span><a href="/explorables/">Explorables</a></nav>
+    <p class="kicker">The Daniell cell, drawn four ways</p>
+    <h1>One battery, four pictures</h1>
+    <p class="lede">Zinc in zinc sulfate, copper in copper sulfate, a salt bridge between them. John Frederic Daniell's cell of 1836 is the first battery most chemistry students meet, and it makes about <span class="math">1.10 V</span>. Ask where those 1.10 volts actually <em>are</em>, and you get at least four different answers.</p>
+    <p>Each answer is a picture of the same cell. Each is correct, each makes something easy to see, and each hides something else. The bar just below this paragraph stays pinned to the top of the screen, and it drives every picture on this page at once: change what's in the beakers, connect a load, or swap the salt bridge for Daniell's original porous pot, and see what each picture does with it.</p>
+  </header>
+</div>
+
+<div id="barSentinel" aria-hidden="true" style="height:1px"></div>
+<div class="bar" id="bar" data-open="false">
+  <div class="bar-in">
+    <div class="bar-title">The cell<span>drives every picture</span></div>
+    <div class="ctl"><label for="cZn">Zn²⁺, zinc side <b id="cZnOut">0.10 M</b></label><input id="cZn" type="range" min="0" max="300" step="1" value="200" aria-label="Zinc ion concentration"></div>
+    <div class="ctl"><label for="cCu">Cu²⁺, copper side <b id="cCuOut">0.10 M</b></label><input id="cCu" type="range" min="0" max="300" step="1" value="200" aria-label="Copper ion concentration"></div>
+    <div class="ctl"><label for="load">Load <b id="loadOut">open</b></label><input id="load" type="range" min="0" max="100" step="1" value="50" aria-label="Load resistance, from open circuit to short circuit"></div>
+    <div class="seg" role="group" aria-label="Separator">
+      <button id="sepBridge" aria-pressed="true">Salt bridge</button><button id="sepPot" aria-pressed="false">Porous pot</button>
+    </div>
+    <div class="readout" aria-live="polite"><span>V <b id="vOut">1.10</b></span><span>I <b id="iOut">0.0</b> mA</span></div>
+    <div class="btns"><button class="btn" id="playBtn" aria-pressed="true">Pause</button><button class="btn reset" id="reset">Reset</button></div>
+    <button class="bar-toggle" id="barToggle" aria-expanded="false">Adjust</button>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="col" id="crowd">
+    <h2>The crowd</h2>
+    <p class="eyebrow">Picture 1 · particles</p>
+    <p>Up close there is no voltage to see, only particles. At the zinc plate, atoms keep leaving the metal as Zn²⁺ ions, each leaving two electrons behind, and Zn²⁺ ions keep landing and turning back into metal. At the copper plate the same two-way traffic runs with Cu²⁺.</p>
+    <p>Set the load to open circuit (slider all the way left). Each plate's traffic now balances: as many ions leave as land. Equilibrium here doesn't mean nothing is happening. It means two opposite processes are tied.</p>
+    <figure class="fig">
+      <div class="fighead">
+        <label class="chk"><input type="checkbox" id="steady" checked> Hold steady</label>
+        <div class="legend"><span style="color:var(--zn)"><i class="dot"></i>Zn²⁺</span><span style="color:var(--cu)"><i class="dot"></i>Cu²⁺</span><span style="color:var(--so4)"><i class="ring"></i>SO₄²⁻</span><span style="color:var(--k)"><i class="dot"></i>K⁺</span><span style="color:var(--cl)"><i class="ring"></i>Cl⁻</span><span style="color:var(--e)"><i class="dot" style="width:6px;height:6px"></i>e⁻</span></div>
+      </div>
+      <div class="plot" id="figCrowd"></div>
+      <figcaption>Filled dots are positive ions, rings negative; flashes mark single reaction events at the plates. Counts and speeds are schematic; event rates follow the same model as the other pictures. With <b>Hold steady</b> on, the particles obey the diagrams' rules: beakers and bridge are topped up like large reservoirs, and each ion stays in its own region plus the mixing zones (dashed) where the diagrams show it fading out. Turn it off and they run free, as a time-lapse with hours squeezed into seconds: the cell really discharges, the bridge leaks and runs down, and the pictures below, which are snapshots, stop matching. Reset refills everything.</figcaption>
+    </figure>
+    <p>Connect a load and the tie breaks. Zinc dissolves faster than it redeposits; the electrons it leaves behind run through the wire to the copper, where Cu²⁺ ions pick them up and plate out as metal. Inside the cell, ions close the circuit: positive ions drift toward the copper, negative ions toward the zinc, and in the bridge K⁺ and Cl⁻ carry the current across the gap.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>That everything is motion, and that equilibrium is a balance of rates.</p></div><div class="hides"><h4>Hides</h4><p>Why the answer is 1.10 volts and not 0.5 or 3. A voltage is an energy per charge, set by the statistics of all these particles together. No single particle carries it.</p></div></div>
+  </section>
+
+  <section class="col" id="ledger">
+    <h2>The ledger</h2>
+    <p class="eyebrow">Picture 2 · the textbook</p>
+    <p>A chemistry course turns the cell into bookkeeping. Each half-reaction gets a standard potential, measured against the standard hydrogen electrode (SHE): <span class="math">−0.76 V</span> for Zn²⁺/Zn, <span class="math">+0.34 V</span> for Cu²⁺/Cu. The Nernst equation corrects each for its actual concentration, and the cell voltage is the difference.</p>
+    <figure class="fig">
+      <div class="plot" id="figLedger"></div>
+      <div class="eq" id="eqLedger"></div>
+    </figure>
+    <p>Draw current and the ledger adds line items: the resistance of the electrolyte, an overpotential at each plate to drive its reaction, and a concentration term once the ions next to the plates start to run short (or pile up). It's quick, and it's usually right to within a few millivolts. That's why it's the textbook's picture.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>The numbers, fast, and a clean list of where the voltage goes.</p></div><div class="hides"><h4>Hides</h4><p>Position: the ledger never says where in the cell a loss happens. It also carries a quiet assumption, that both electrodes are measured against one and the same hydrogen reference. The "liquid junction" row is the price of that assumption, and textbooks usually set it to zero.</p></div></div>
+  </section>
+
+  <section class="col" id="levels">
+    <h2>The levels</h2>
+    <p class="eyebrow">Picture 3 · electron levels, with the reference drawn in</p>
+    <p>Put position back, and plot what a voltmeter actually responds to: the energy of the electrons, expressed as a voltage. In each metal that's the Fermi level. For each redox couple in solution it's the <em>redox level</em>: the electron voltage at which the couple is balanced, with no net reaction either way.</p>
+    <p>Then do what the ledger doesn't, and draw the reference itself. The dash-dot line is where a standard hydrogen electrode would sit if you could dip one in at that exact spot. The standard potentials E° are distances measured up or down from that line (the dashed levels).</p>
+    <figure class="fig">
+      <div class="fighead"><div class="legend" id="legLevels"></div></div>
+      <div class="plot" id="figLevels"></div>
+      <div class="note" id="noteLevels"></div>
+      <figcaption>Voltage axis with the zinc terminal at 0. Position is schematic: the thin layers beside each plate are stretched to be visible. Hover or drag across the plot to read values.</figcaption>
+    </figure>
+    <p>At open circuit each metal's Fermi level lies exactly on its couple's redox level, and the voltmeter reads the gap between the two metals. Connect a load and gaps open at both plates. Those are the overpotentials, and in this picture you read them straight off as voltage drops. The reference line isn't flat either. It tilts through the electrolyte as current flows, and it steps slightly at each liquid junction. The textbook's E(Cu) − E(Zn) equals the terminal voltage only when that line is level from one plate to the other.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>Where each loss happens, as a voltage you can read, and where the reference really is.</p></div><div class="hides"><h4>Hides</h4><p>Every ion that isn't in a redox couple. The sulfate, and the K⁺ and Cl⁻ that carry the current through the bridge, get no line at all.</p></div></div>
+  </section>
+
+  <section class="col" id="species">
+    <h2>Every species</h2>
+    <p class="eyebrow">Picture 4 · species voltages</p>
+    <p>The last picture gives every charged species its own line. Take each species' electrochemical potential (its free energy per particle, electrical part included) and divide by its charge. What comes out is a voltage, <span class="math">V<sub>i</sub> = μ̃<sub>i</sub> / z<sub>i</sub>F</span>, on the same axis as the electrons. Zinc ions, copper ions, sulfate, potassium, chloride and electrons all share one plot.</p>
+    <p>Read it like a landscape for current. Each species carries current down its own slope, and a flat line means that species carries none. Each ion also has a dashed companion, its standard level; the gap between the two encodes the ion's concentration on a log scale.</p>
+    <figure class="fig">
+      <div class="fighead"><div class="legend" id="legSpecies"></div><div class="seg" role="group" aria-label="Vertical range"><button id="zoomIn" aria-pressed="true">Electrodes</button><button id="zoomOut" aria-pressed="false">Full ladder</button></div></div>
+      <div class="plot" id="figSpecies"></div>
+      <figcaption>Solid: species voltage V<sub>i</sub>. Dashed: standard level V°<sub>i</sub>. Arrows at the edge point to ions off the scale; switch to <em>Full ladder</em> to see them.</figcaption>
+    </figure>
+    <p>Switch to the full ladder, connect a load, and several things that were invisible become plain:</p>
+    <ul class="plain">
+      <li>In the thin layer next to each plate, sulfate's line is flat. Sulfate isn't consumed at either plate, so in steady state it carries no current there. Zn²⁺ and Cu²⁺ bend instead.</li>
+      <li>In the bulk of each beaker, every line tilts together. That shared tilt is the ohmic drop, the same thing the ledger books as I·R.</li>
+      <li>In the bridge, K⁺ and Cl⁻ tilt: they're the ones carrying the current across.</li>
+    </ul>
+    <p>Now compare with picture 3. In the chemists' convention used here (every element and H⁺(aq) counted at zero), the Zn²⁺ line <em>is</em> the zinc redox level, and the dashed V°(Zn²⁺) is its E° line. For zinc and copper, pictures 3 and 4 carry the same information. Picture 4 adds the ions that picture 3 leaves out, and drops the hydrogen reference, which it doesn't need.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>Every ion's push, which ions carry the current where, and (next) the slow leak at the junctions.</p></div><div class="hides"><h4>Hides</h4><p>Overpotentials read as one clean gap here only because each metal is its own reactant; in general they don't. The vertical offsets between different ions depend on conventions, so reading them takes practice.</p></div></div>
+  </section>
+
+  <section class="wide" id="all">
+    <div class="col">
+      <h2>All four at once</h2>
+      <p>Same cell, same moment, four pictures. Move the load slider and watch one event land four ways: the particles start streaming, the ledger grows loss lines, gaps open in the levels, and every species tilts together.</p>
+    </div>
+    <div class="grid4">
+      <div class="fig"><h3>The crowd <span>particles</span></h3><div class="plot" id="miniCrowd"></div></div>
+      <div class="fig"><h3>The ledger <span>textbook</span></h3><div class="plot" id="miniLedger"></div></div>
+      <div class="fig"><h3>The levels <span>electron levels</span></h3><div class="plot" id="miniLevels"></div></div>
+      <div class="fig"><h3>Every species <span>species voltages</span></h3><div class="plot" id="miniSpecies"></div></div>
+    </div>
+    <details class="col" id="numbers"><summary>Show the numbers</summary><div class="tablewrap"><table class="nums" id="numTable"></table></div></details>
+  </section>
+
+  <section class="col" id="hiding">
+    <h2>What the Daniell cell is hiding</h2>
+    <p>Textbooks describe an unloaded Daniell cell as being at equilibrium. It isn't, quite. Set the load to open circuit and look at the junctions in picture 4: wherever two solutions meet, lines that are flat on one side plunge or climb on the other. Zn²⁺ dives into the bridge; K⁺ dives into the zinc sulfate. A sloping line is a push, and a push means flow. Even with nothing connected, ions are diffusing out of their own compartment and into the next one; the bridge's K⁺ and Cl⁻ creep into both beakers, and a little zinc and copper sulfate creeps into the bridge.</p>
+    <p>That leak does two things. The first is a small <em>liquid junction potential</em>: the step in the hydrogen reference line in picture 3, and the "liquid junction" row in the ledger. A concentrated KCl bridge keeps it to a few millivolts, because K⁺ and Cl⁻ move at nearly the same speed and the junctions at the two ends of the bridge nearly cancel. Switch to the porous pot, Daniell's original design, and the two sulfate solutions meet directly. Make their concentrations very different and the junction potential grows past ten millivolts.</p>
+    <p>The second is slower and worse. Copper ions that wander all the way to the zinc plate are reduced right there, no wire needed, and the cell quietly discharges itself. Choose the porous pot, untick <b>Hold steady</b> in picture 1, and watch the zinc plate for copper-coloured flashes. Real Daniell cells were designed to slow this down, never to stop it.</p>
+    <p>Load makes all of it worse, because under current a junction can't hold still. At the zinc end of the bridge, Zn²⁺ keeps arriving from one side while K⁺ leaves from the other, and Cl⁻ is pushed out into the zinc sulfate. Real junctions drift and smear out. The diagrams here, like the textbook Henderson treatment behind them, hold each junction in place as a fixed mixing zone. That is a good approximation for the voltage, and a poor description of what the ions are actually doing. <b>Hold steady</b> is that approximation, made visible; untick it to watch the particles do what the diagrams won't.</p>
+    <p>So "equilibrium" is an approximation with a clock on it, good for minutes to hours but not forever. The particles show the leak happening; picture 4 shows it as slopes. The ledger books it as a correction assumed to be zero, and picture 3 shows only its side effect, the step in the reference.</p>
+  </section>
+
+  <section class="col" id="when">
+    <h2>Which picture, when?</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Picture</th><th>Makes easy</th><th>Hides</th></tr></thead>
+        <tbody>
+          <tr><td>The crowd</td><td>Equilibrium as a balance of rates; what physically moves where.</td><td>Where the voltage comes from.</td></tr>
+          <tr><td>The ledger</td><td>Quick numbers; designing a cell; a list of losses.</td><td>Position, and the single-reference assumption.</td></tr>
+          <tr><td>The levels</td><td>Reading overpotentials as voltage drops; seeing where references actually sit.</td><td>Ions outside redox couples, including the ones carrying the current.</td></tr>
+          <tr><td>Every species</td><td>Who carries current where; the junction leak; how the other pictures fit together.</td><td>Overpotentials in general; it depends on conventions and takes practice to read.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>None of them is <em>the</em> truth about the cell. They're one set of physics in four notations, and it's worth being able to move between them.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="col about">
+    <h2>About this page</h2>
+    <p class="credit">Written and built by Claude (Opus 5.5, an AI model made by Anthropic), using the species-voltage framework from Mark Lundeberg's web book <a href="/esbd/">Electrochemical species band diagrams</a>, which works through these ideas in much more depth. Mark set the brief; the words, the code and any mistakes are mine.</p>
+    <p>Every picture is driven by one small model of the cell, solved live in your browser. It's a quasi-steady snapshot: it treats the beakers and bridge as large enough that their contents don't change while you watch. No real cell under load is in steady state. The beakers slowly change composition as it discharges, and the salt bridge slowly empties into them even at rest; the pictures show one moment of that slow drift.</p>
+    <ul>
+      <li>Ideal dilute solutions, with activity equal to concentration in mol/L. Real sulfate solutions are strongly non-ideal (activity coefficients near 0.15 at 0.1 M), which shifts real voltages by tens of millivolts without changing any of the pictures.</li>
+      <li>Standard levels from standard Gibbs energies of formation at 25 °C, in the chemists' convention (elements and H⁺(aq) at zero): V°<sub>i</sub> = ΔG°<sub>f,i</sub> / z<sub>i</sub>F.</li>
+      <li>Liquid junctions as fixed linear mixing zones with Henderson-style transport, using diffusion coefficients at infinite dilution. Under current a real junction drifts and broadens; the model holds it fixed.</li>
+      <li>A stirred bulk, with 50 µm diffusion layers at each plate, and symmetric Butler–Volmer kinetics with illustrative exchange currents of 0.2 mA/cm² (zinc) and 0.1 mA/cm² (copper).</li>
+      <li>1 cm² plates with 5 mm of electrolyte in front of each; a 2 cm long, 1 cm² bridge of 1 M KCl (real bridges often use saturated KCl, about 3.5 M), or a 3 mm porous wall with 30 % open area.</li>
+      <li>Position axes are schematic: the 50 µm diffusion layers and the 2 cm bridge are drawn at comparable widths.</li>
+      <li>The particle picture is schematic too: counts scale with the logarithm of concentration, and the beakers are topped up to behave like a large, stirred cell.</li>
+    </ul>
+  </div>
+</footer>
+
+<script src="model.js"></script>
+<script>
+(() => {
+const X = MODEL.X, SP = MODEL.SP, f = MODEL.f;
+const S = { pZn: 200, pCu: 200, load: 50, sep: 'bridge', ladder: 'zoom', playing: true, steady: true };
+const DEFAULTS = { ...S };
+const cOf = p => Math.pow(10, p / 100 - 3);
+const loadR = p => p <= 0 ? Infinity : p >= 100 ? 0 : Math.pow(10, 4 - 4 * (p - 1) / 98);
+const sig2 = v => { if (v === 0) return 0; const d = Math.floor(Math.log10(Math.abs(v))); const q = Math.pow(10, d - 1); return Math.round(v / q) * q; };
+const fmtR = R => !isFinite(R) ? 'open circuit' : R === 0 ? 'short circuit' : R >= 1000 ? `${+(sig2(R) / 1000).toFixed(1)} kΩ` : `${+sig2(R).toFixed(1)} Ω`;
+const fmtC = c => `${c.toPrecision(2)} M`;
+const fV = (v, d = 3) => (v < 0 && Math.abs(v).toFixed(d) != 0 ? '−' : '') + Math.abs(v).toFixed(d);
+const fS = (v, d = 3) => (Math.abs(v).toFixed(d) == 0 ? '±' : v < 0 ? '−' : '+') + Math.abs(v).toFixed(d);
+const NAME = { Zn: 'Zn²⁺', Cu: 'Cu²⁺', SO4: 'SO₄²⁻', K: 'K⁺', Cl: 'Cl⁻' };
+const COLVAR = { Zn: '--zn', Cu: '--cu', SO4: '--so4', K: '--k', Cl: '--cl', e: '--e', she: '--she' };
+let R = null;
+const css = () => { const cs = getComputedStyle(document.documentElement); const o = {}; for (const v of ['--bg','--surface','--ink','--ink-2','--muted','--rule','--faint','--accent','--metal','--hatch','--sol-l','--sol-r','--mid','--zn','--cu','--so4','--k','--cl','--e','--she','--loss','--gain']) o[v] = cs.getPropertyValue(v).trim(); return o; };
+let C = css();
+const mq = matchMedia('(prefers-color-scheme: dark)');
+const reTheme = () => { C = css(); renderAll(); };
+mq.addEventListener?.('change', reTheme);
+new MutationObserver(reTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+function compute() { R = MODEL.solve(cOf(S.pZn), cOf(S.pCu), loadR(S.load), S.sep); }
+
+/* ---------- controls ---------- */
+const el = id => document.getElementById(id);
+function syncControls() {
+  el('cZn').value = S.pZn; el('cCu').value = S.pCu; el('load').value = S.load;
+  el('cZnOut').textContent = fmtC(cOf(S.pZn));
+  el('cCuOut').textContent = fmtC(cOf(S.pCu));
+  el('loadOut').textContent = fmtR(loadR(S.load));
+  el('sepBridge').setAttribute('aria-pressed', S.sep === 'bridge');
+  el('sepPot').setAttribute('aria-pressed', S.sep === 'pot');
+  el('zoomIn').setAttribute('aria-pressed', S.ladder === 'zoom');
+  el('zoomOut').setAttribute('aria-pressed', S.ladder === 'full');
+  el('vOut').textContent = R.V.toFixed(3);
+  el('iOut').textContent = (R.I * 1e3).toFixed(R.I * 1e3 < 10 ? 2 : 1);
+}
+let pending = false;
+function update() { if (pending) return; pending = true; requestAnimationFrame(() => { pending = false; compute(); renderAll(); }); }
+el('cZn').addEventListener('input', e => { S.pZn = +e.target.value; if (!S.steady) Sim.reset(); update(); });
+el('cCu').addEventListener('input', e => { S.pCu = +e.target.value; if (!S.steady) Sim.reset(); update(); });
+el('load').addEventListener('input', e => { S.load = +e.target.value; update(); });
+el('sepBridge').addEventListener('click', () => { S.sep = 'bridge'; Sim.reset(); update(); });
+el('sepPot').addEventListener('click', () => { S.sep = 'pot'; Sim.reset(); update(); });
+el('zoomIn').addEventListener('click', () => { S.ladder = 'zoom'; update(); });
+el('zoomOut').addEventListener('click', () => { S.ladder = 'full'; update(); });
+el('reset').addEventListener('click', () => { Object.assign(S, DEFAULTS, { playing: S.playing }); el('steady').checked = true; Sim.reset(); update(); });
+el('barToggle').addEventListener('click', () => { const b = el('bar'); const open = b.dataset.open !== 'true'; b.dataset.open = open; el('barToggle').setAttribute('aria-expanded', open); el('barToggle').textContent = open ? 'Done' : 'Adjust'; });
+
+/* ---------- spatial plots (pictures 3 & 4) ---------- */
+function regionAt(x) {
+  if (x < X.m1) return 'zinc metal';
+  if (x < X.d1) return 'diffusion layer (zinc side)';
+  if (x < X.b1) return 'ZnSO₄ solution';
+  if (S.sep === 'pot') { if (x < X.j2) return 'porous wall (solutions mixing)'; }
+  else { if (x < X.j1) return 'junction: ZnSO₄ meets KCl'; if (x < X.br) return 'KCl salt bridge'; if (x < X.j2) return 'junction: KCl meets CuSO₄'; }
+  if (x < X.b2) return 'CuSO₄ solution';
+  if (x < X.d2) return 'diffusion layer (copper side)';
+  return 'copper metal';
+}
+function seriesFor(mode) {
+  const out = [];
+  const pts = R.pts;
+  const segs = (fn) => { const res = []; let cur = null; for (const p of pts) { const v = fn(p); if (v == null) { if (cur && cur.length > 1) res.push(cur); cur = null; } else { (cur = cur || []).push([p.x, v]); } } if (cur && cur.length > 1) res.push(cur); return res; };
+  const metal = [
+    { key: 'e', id: 'eZn', color: C['--e'], width: 3, segs: [[[0, 0], [X.m1, 0]]], label: 'e⁻', lx: X.m1 * 0.5, side: 'above' },
+    { key: 'e', id: 'eCu', color: C['--e'], width: 3, segs: [[[X.d2, R.V], [1, R.V]]], label: 'e⁻', lx: (1 + X.d2) / 2, side: 'above' },
+  ];
+  const ionV = (k) => (p) => p.c[k] > 0 ? MODEL.Vi(k, p.c[k], p.psi) : null;
+  const ionV0 = (k) => (p) => p.c[k] > 0 ? SP[k].V0 + p.psi : null;
+  const home = { Zn: 0.27, SO4: 0.80, K: (X.j1 + X.br) / 2, Cl: (X.j1 + X.br) / 2, Cu: 0.74 };
+  if (S.sep === 'pot') { home.K = home.Cl = null; }
+  if (mode === 'species') {
+    for (const k of ['Zn', 'Cu', 'SO4', 'K', 'Cl']) {
+      if (S.sep === 'pot' && (k === 'K' || k === 'Cl')) continue;
+      out.push({ key: k, color: C[COLVAR[k]], width: 2.2, dash: '5 4', thin: true, segs: segs(ionV0(k)), label: null });
+    }
+    for (const k of ['Zn', 'Cu', 'SO4', 'K', 'Cl']) {
+      if (S.sep === 'pot' && (k === 'K' || k === 'Cl')) continue;
+      out.push({ key: k, color: C[COLVAR[k]], width: 2.4, segs: segs(ionV(k)), label: NAME[k], lx: home[k] });
+    }
+  } else {
+    const onlySide = (k) => (p) => { if (!(p.c[k] > 0)) return null; if (k === 'Zn' && p.x > X.j2) return null; if (k === 'Cu' && p.x < X.b1) return null; return MODEL.Vi(k, p.c[k], p.psi); };
+    const onlySide0 = (k) => (p) => { if (!(p.c[k] > 0)) return null; if (k === 'Zn' && p.x > X.b1 + 0.02) return null; if (k === 'Cu' && p.x < X.j2 - 0.02) return null; return SP[k].V0 + p.psi; };
+    out.push({ key: 'she', color: C['--she'], width: 2, dash: '8 4 2 4', segs: segs(p => p.psi), label: 'SHE', lx: S.sep === 'pot' ? (X.b1 + X.j2) / 2 : (X.j1 + X.br) / 2, side: 'below' });
+    out.push({ key: 'Zn', color: C['--zn'], width: 1.8, dash: '5 4', segs: segs(onlySide0('Zn')), label: 'E°', lx: 0.17, side: 'below' });
+    out.push({ key: 'Cu', color: C['--cu'], width: 1.8, dash: '5 4', segs: segs(onlySide0('Cu')), label: 'E°', lx: 0.83, side: 'below' });
+    out.push({ key: 'Zn', color: C['--zn'], width: 2.4, segs: segs(onlySide('Zn')), label: 'Zn²⁺/Zn', lx: 0.28 });
+    out.push({ key: 'Cu', color: C['--cu'], width: 2.4, segs: segs(onlySide('Cu')), label: 'Cu²⁺/Cu', lx: 0.73 });
+  }
+  return out.concat(metal);
+}
+function legendHTML(mode) {
+  const it = (c, t, cls = '') => `<span style="color:${c}"><i class="${cls}"></i>${t}</span>`;
+  if (mode === 'species') {
+    let s = it('var(--e)', 'e⁻ (metal)') + it('var(--zn)', 'Zn²⁺') + it('var(--cu)', 'Cu²⁺') + it('var(--so4)', 'SO₄²⁻');
+    if (S.sep === 'bridge') s += it('var(--k)', 'K⁺') + it('var(--cl)', 'Cl⁻');
+    return s + it('var(--muted)', 'V° (standard)', 'dash');
+  }
+  return it('var(--e)', 'e⁻ Fermi level') + it('var(--zn)', 'Zn²⁺/Zn level') + it('var(--cu)', 'Cu²⁺/Cu level') + it('var(--muted)', 'E° levels', 'dash') + it('var(--she)', 'hydrogen reference (SHE)', 'dash');
+}
+function spatial(host, mode, compact) {
+  const W = Math.max(300, Math.round(host.clientWidth || 600));
+  const narrow = W < 520 || compact;
+  const H = Math.round(Math.min(470, Math.max(260, W * (narrow ? 0.72 : 0.56))));
+  const m = { l: narrow ? 38 : 50, r: narrow ? 58 : 84, t: 30, b: narrow ? 20 : 26 };
+  const pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const full = mode === 'species' && S.ladder === 'full';
+  const [v0, v1] = full ? [-2.9, 5.2] : [-0.55, 1.6];
+  const sx = x => m.l + x * pw, sy = v => m.t + (v1 - v) / (v1 - v0) * ph;
+  const fs = narrow ? 11 : 12.5;
+  const id = host.id;
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${mode === 'species' ? 'Species voltage diagram of the Daniell cell' : 'Electron level diagram of the Daniell cell'}" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="${fs}">`;
+  s += `<defs><clipPath id="clip-${id}"><rect x="${m.l}" y="${m.t}" width="${pw}" height="${ph}"/></clipPath>
+    <pattern id="hatch-${id}" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="${C['--metal']}"/><line x1="0" y1="0" x2="0" y2="6" stroke="${C['--hatch']}" stroke-width="2"/></pattern>
+    <pattern id="pore-${id}" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="${C['--mid']}"/><circle cx="3.5" cy="3.5" r="1.1" fill="${C['--hatch']}"/></pattern></defs>`;
+  // regions
+  const band = (a, b, fill) => `<rect x="${sx(a)}" y="${m.t}" width="${sx(b) - sx(a)}" height="${ph}" fill="${fill}"/>`;
+  s += band(0, X.m1, `url(#hatch-${id})`) + band(X.d2, 1, `url(#hatch-${id})`);
+  s += band(X.m1, X.b1, C['--sol-l']) + band(X.j2, X.d2, C['--sol-r']);
+  s += band(X.b1, X.j2, S.sep === 'pot' ? `url(#pore-${id})` : C['--mid']);
+  const vline = (x, dash) => `<line x1="${sx(x)}" x2="${sx(x)}" y1="${m.t}" y2="${m.t + ph}" stroke="${C['--rule']}" stroke-width="1" ${dash ? 'stroke-dasharray="2 3"' : ''}/>`;
+  s += vline(X.d1, true) + vline(X.b2, true);
+  if (S.sep === 'bridge') s += vline(X.j1, true) + vline(X.br, true);
+  // region labels
+  const rl = (x, t) => `<text x="${sx(x)}" y="${m.t - 10}" text-anchor="middle" fill="${C['--muted']}" font-family="Bricolage Grotesque, system-ui, sans-serif" font-weight="700" font-size="${fs}">${t}</text>`;
+  s += rl(X.m1 / 2, 'Zn') + rl((1 + X.d2) / 2, 'Cu') + rl((X.m1 + X.b1) / 2, 'ZnSO₄') + rl((X.j2 + X.d2) / 2, 'CuSO₄');
+  s += rl((X.b1 + X.j2) / 2, S.sep === 'pot' ? (narrow ? 'wall' : 'porous wall') : (narrow ? 'KCl' : 'KCl bridge'));
+  // grid + y ticks
+  const step = full ? 1 : 0.5;
+  for (let v = Math.ceil(v0 / step) * step; v <= v1 + 1e-9; v += step) {
+    const y = sy(v);
+    s += `<line x1="${m.l}" x2="${m.l + pw}" y1="${y}" y2="${y}" stroke="${C['--ink']}" stroke-opacity="${Math.abs(v) < 1e-9 ? 0.22 : 0.07}"/>`;
+    s += `<text x="${m.l - 6}" y="${y + 4}" text-anchor="end" fill="${C['--muted']}">${fV(v, step < 1 ? 1 : 0)}</text>`;
+  }
+  s += `<text transform="translate(${narrow ? 10 : 13},${m.t + ph / 2}) rotate(-90)" text-anchor="middle" fill="${C['--muted']}" font-size="${fs - 1}">volts</text>`;
+  if (!narrow) s += `<text x="${m.l + pw / 2}" y="${H - 6}" text-anchor="middle" fill="${C['--muted']}" font-size="${fs - 1}">position across the cell (schematic)</text>`;
+  // series
+  const ser = seriesFor(mode);
+  const path = pts => pts.map((p, i) => `${i ? 'L' : 'M'}${sx(p[0]).toFixed(1)},${sy(Math.max(v0 - 5, Math.min(v1 + 5, p[1]))).toFixed(1)}`).join('');
+  s += `<g clip-path="url(#clip-${id})" fill="none" stroke-linejoin="round" stroke-linecap="round">`;
+  for (const o of ser) for (const sg of o.segs) s += `<path d="${path(sg)}" stroke="${o.color}" stroke-width="${o.thin ? 1.3 : o.width}" ${o.dash ? `stroke-dasharray="${o.dash}"` : ''} ${o.thin ? 'stroke-opacity="0.75"' : ''}/>`;
+  s += `</g>`;
+  // overpotential markers
+  const eta = (x, a, b, lbl) => {
+    if (Math.abs(a - b) < 0.004) return '';
+    const y1 = sy(a), y2 = sy(b);
+    return `<line x1="${sx(x)}" x2="${sx(x)}" y1="${y1}" y2="${y2}" stroke="${C['--accent']}" stroke-width="2"/><line x1="${sx(x) - 4}" x2="${sx(x) + 4}" y1="${y1}" y2="${y1}" stroke="${C['--accent']}" stroke-width="2"/><line x1="${sx(x) - 4}" x2="${sx(x) + 4}" y1="${y2}" y2="${y2}" stroke="${C['--accent']}" stroke-width="2"/>` +
+      (narrow ? '' : (lbl === 'L'
+        ? `<text x="${sx(x) + 6}" y="${Math.max(y1, y2) + 14}" fill="${C['--accent']}" stroke="${C['--surface']}" stroke-width="3" paint-order="stroke" font-size="${fs - 1}">η ${Math.round(Math.abs(a - b) * 1000)} mV</text>`
+        : `<text x="${sx(x) - 6}" y="${Math.min(y1, y2) - 6}" text-anchor="end" fill="${C['--accent']}" stroke="${C['--surface']}" stroke-width="3" paint-order="stroke" font-size="${fs - 1}">η ${Math.round(Math.abs(a - b) * 1000)} mV</text>`));
+  };
+  s += eta(X.m1, 0, R.VZn_s, 'L') + eta(X.d2, R.V, R.VCu_s, 'R');
+  // direct labels (with simple collision nudging)
+  const labs = [], off = [];
+  for (const o of ser) {
+    if (!o.label) continue;
+    let best = null;
+    for (const sg of o.segs) for (const p of sg) if (best == null || Math.abs(p[0] - o.lx) < Math.abs(best[0] - o.lx)) best = p;
+    if (!best) continue;
+    if (best[1] > v1 || best[1] < v0) { off.push({ o, v: best[1], x: best[0] }); continue; }
+    labs.push({ x: sx(best[0]), y: sy(best[1]) + (o.side === 'below' ? 15 : -7), t: o.label, c: o.color });
+  }
+  labs.sort((a, b) => a.y - b.y);
+  for (let i = 1; i < labs.length; i++) for (let j = 0; j < i; j++) if (Math.abs(labs[i].x - labs[j].x) < 60 && labs[i].y - labs[j].y < 14) labs[i].y = labs[j].y + 14;
+  const halo = C['--surface'];
+  for (const L of labs) s += `<text x="${L.x}" y="${L.y}" text-anchor="middle" fill="${L.c}" stroke="${halo}" stroke-width="4" paint-order="stroke" font-weight="500">${L.t}</text>`;
+  const offTop = off.filter(q => q.v > v1), offBot = off.filter(q => q.v < v0);
+  offTop.forEach((q, i) => { const x = Math.min(m.l + pw - 30, Math.max(m.l + 30, sx(q.x))) + (i * 0); s += `<text x="${x}" y="${m.t + 13 + i * 14}" text-anchor="middle" fill="${q.o.color}" stroke="${halo}" stroke-width="4" paint-order="stroke">↑ ${q.o.label} ${fV(q.v, 1)} V</text>`; });
+  offBot.forEach((q, i) => { const x = Math.min(m.l + pw - 30, Math.max(m.l + 30, sx(q.x))); s += `<text x="${x}" y="${m.t + ph - 6 - i * 14}" text-anchor="middle" fill="${q.o.color}" stroke="${halo}" stroke-width="4" paint-order="stroke">↓ ${q.o.label} ${fV(q.v, 1)} V</text>`; });
+  // terminal bracket in right margin
+  const bx = m.l + pw + (narrow ? 10 : 14), ya = sy(0), yb = sy(R.V);
+  s += `<path d="M${bx - 4},${ya}H${bx}V${yb}H${bx - 4}" fill="none" stroke="${C['--ink']}" stroke-width="1.5"/>`;
+  s += `<text x="${bx + 5}" y="${(ya + yb) / 2 - (narrow ? 2 : 6)}" fill="${C['--ink']}" font-weight="500">${R.V.toFixed(narrow ? 2 : 3)} V</text>`;
+  if (!narrow) s += `<text x="${bx + 5}" y="${(ya + yb) / 2 + 10}" fill="${C['--muted']}" font-size="${fs - 1.5}">voltmeter</text>`;
+  s += `<line class="xh" x1="0" x2="0" y1="${m.t}" y2="${m.t + ph}" stroke="${C['--ink']}" stroke-opacity="0" stroke-width="1"/>`;
+  s += `</svg><div class="tip" hidden></div>`;
+  host.innerHTML = s;
+  // hover layer
+  const svg = host.querySelector('svg'), tip = host.querySelector('.tip'), xh = host.querySelector('.xh');
+  const move = (ev) => {
+    const rect = svg.getBoundingClientRect();
+    const px = (ev.clientX - rect.left) * W / rect.width;
+    const x = (px - m.l) / pw;
+    if (x < 0 || x > 1) { tip.hidden = true; xh.setAttribute('stroke-opacity', 0); return; }
+    xh.setAttribute('x1', px); xh.setAttribute('x2', px); xh.setAttribute('stroke-opacity', 0.35);
+    let rows = [];
+    const sw = (c) => `<i style="background:${c}"></i>`;
+    if (x < X.m1) rows.push(`${sw(C['--e'])}e⁻ in Zn  ${fV(0)} V`);
+    else if (x > X.d2) rows.push(`${sw(C['--e'])}e⁻ in Cu  ${fV(R.V)} V`);
+    else {
+      let best = R.pts[0]; for (const p of R.pts) if (Math.abs(p.x - x) < Math.abs(best.x - x)) best = p;
+      if (mode === 'species') {
+        for (const k of ['Zn', 'Cu', 'SO4', 'K', 'Cl']) if (best.c[k] > 1e-7) rows.push(`${sw(C[COLVAR[k]])}${NAME[k].padEnd(6)} ${fV(MODEL.Vi(k, best.c[k], best.psi))} V  ${best.c[k] >= 0.001 ? best.c[k].toPrecision(2) : best.c[k].toExponential(0)} M`);
+      } else {
+        rows.push(`${sw(C['--she'])}SHE level  ${fV(best.psi)} V`);
+        if (best.c.Zn > 1e-7 && best.x <= X.j2) rows.push(`${sw(C['--zn'])}Zn²⁺/Zn    ${fV(MODEL.Vi('Zn', best.c.Zn, best.psi))} V  (E ${fS(MODEL.Vi('Zn', best.c.Zn, best.psi) - best.psi)} V vs SHE)`);
+        if (best.c.Cu > 1e-7 && best.x >= X.b1) rows.push(`${sw(C['--cu'])}Cu²⁺/Cu    ${fV(MODEL.Vi('Cu', best.c.Cu, best.psi))} V  (E ${fS(MODEL.Vi('Cu', best.c.Cu, best.psi) - best.psi)} V vs SHE)`);
+      }
+    }
+    tip.innerHTML = `<div class="r">${regionAt(x)}</div>` + rows.join('<br>');
+    tip.hidden = false;
+    const hx = (ev.clientX - host.getBoundingClientRect().left), hy = (ev.clientY - host.getBoundingClientRect().top);
+    const flip = hx > host.clientWidth * 0.55;
+    tip.style.left = hx + 'px'; tip.style.top = hy + 'px';
+    tip.style.transform = flip ? 'translate(calc(-100% - 12px), -50%)' : 'translate(12px, -50%)';
+  };
+  svg.addEventListener('pointermove', move);
+  svg.addEventListener('pointerdown', move);
+  svg.addEventListener('pointerleave', () => { tip.hidden = true; xh.setAttribute('stroke-opacity', 0); });
+}
+
+/* ---------- ledger (picture 2) ---------- */
+function ledgerRows() {
+  const conc = R.V - (R.E + R.ljp - R.ohmic - R.etaA - R.etaC);
+  return [
+    { t: 'Nernst voltage E', v: R.E, total: true },
+    { t: 'Liquid junction', v: R.ljp },
+    { t: 'Ohmic drop I·R', v: -R.ohmic },
+    { t: 'Zinc overpotential', v: -R.etaA },
+    { t: 'Copper overpotential', v: -R.etaC },
+    { t: 'Concentration', v: conc },
+    { t: 'Terminal voltage V', v: R.V, total: true },
+  ];
+}
+function ledger(host, compact) {
+  const W = Math.max(300, Math.round(host.clientWidth || 600));
+  const stacked = W < 600 || compact;
+  const fs = stacked ? 11.5 : 12.5;
+  const E0Zn = SP.Zn.V0, E0Cu = SP.Cu.V0;
+  const EZn = E0Zn + (f / 2) * Math.log(R.cZn), ECu = E0Cu + (f / 2) * Math.log(R.cCu);
+  // block A: SHE scale
+  const Aw = stacked ? W : Math.round(W * 0.36), Ah = stacked ? (compact ? 150 : 170) : 300;
+  const Bw = stacked ? W : W - Aw - 20, rows = ledgerRows(), rowH = compact ? 21 : 26, Bh = rows.length * rowH + 34;
+  const H = stacked ? Ah + Bh + 14 : Math.max(Ah, Bh);
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Textbook voltage ledger" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="${fs}">`;
+  const halo = C['--surface'];
+  {
+    const t = 22, b = Ah - 14, vA = -1.0, vB = 0.6;
+    const sy = v => t + (vB - v) / (vB - vA) * (b - t);
+    const ax = stacked ? Math.round(W * 0.42) : Math.round(Aw * 0.5);
+    s += `<text x="${ax}" y="12" text-anchor="middle" fill="${C['--muted']}" font-family="Bricolage Grotesque, system-ui, sans-serif" font-weight="700">potential vs SHE</text>`;
+    s += `<line x1="${ax}" x2="${ax}" y1="${t}" y2="${b}" stroke="${C['--rule']}" stroke-width="2"/>`;
+    for (let v = -1; v <= 0.6 + 1e-9; v += 0.5) s += `<line x1="${ax - 4}" x2="${ax + 4}" y1="${sy(v)}" y2="${sy(v)}" stroke="${C['--muted']}"/><text x="${ax - 8}" y="${sy(v) + 4}" text-anchor="end" fill="${C['--muted']}" font-size="${fs - 1}">${fV(v, 1)}</text>`;
+    s += `<line x1="${ax - 10}" x2="${ax + 10}" y1="${sy(0)}" y2="${sy(0)}" stroke="${C['--she']}" stroke-width="2" stroke-dasharray="6 3 2 3"/><text x="${ax + 22}" y="${sy(0) + 4}" fill="${C['--she']}">SHE ±0</text>`;
+    const mark = (v, c, lbl, side, dash) => `<line x1="${ax - 16}" x2="${ax + 16}" y1="${sy(v)}" y2="${sy(v)}" stroke="${c}" stroke-width="2.4" ${dash ? 'stroke-dasharray="4 3"' : ''}/><text x="${side > 0 ? ax + 22 : ax - 22}" y="${sy(v) + 4}" text-anchor="${side > 0 ? 'start' : 'end'}" fill="${c}" stroke="${halo}" stroke-width="3" paint-order="stroke">${lbl}</text>`;
+    s += mark(E0Zn, C['--zn'], `E° ${fV(E0Zn, 3)}`, -1, true) + mark(E0Cu, C['--cu'], `E° ${fS(E0Cu, 3)}`, -1, true);
+    s += mark(EZn, C['--zn'], `E(Zn) ${fV(EZn, 3)}`, 1) + mark(ECu, C['--cu'], `E(Cu) ${fS(ECu, 3)}`, 1);
+  }
+  // block B: waterfall
+  {
+    const ox = stacked ? 0 : Aw + 20, oy = stacked ? Ah + 14 : Math.max(0, (H - Bh) / 2);
+    const labW = stacked ? 150 : 170, valW = 70;
+    const bx0 = ox + labW, bx1 = ox + Bw - valW;
+    const vmax = Math.max(1.25, R.E + Math.max(0, R.ljp) + 0.05);
+    const sx = v => bx0 + v / vmax * (bx1 - bx0);
+    s += `<text x="${ox}" y="${oy + 12}" fill="${C['--muted']}" font-family="Bricolage Grotesque, system-ui, sans-serif" font-weight="700">where the voltage goes</text>`;
+    for (let v = 0; v <= vmax + 1e-9; v += 0.5) s += `<line x1="${sx(v)}" x2="${sx(v)}" y1="${oy + 22}" y2="${oy + 22 + rows.length * rowH}" stroke="${C['--ink']}" stroke-opacity="${v === 0 ? 0.25 : 0.07}"/><text x="${sx(v)}" y="${oy + 32 + rows.length * rowH}" text-anchor="middle" fill="${C['--muted']}" font-size="${fs - 1.5}">${v.toFixed(1)} V</text>`;
+    let run = 0;
+    rows.forEach((r, i) => {
+      const y = oy + 22 + i * rowH, bh = rowH - 9;
+      let a, b, fill;
+      if (r.total) { a = 0; b = r.v; run = r.v; fill = i === 0 ? C['--gain'] : C['--accent']; }
+      else { a = run; b = run + r.v; run = b; fill = r.v >= 0 ? C['--gain'] : C['--loss']; }
+      const xa = sx(Math.min(a, b)), w = Math.max(r.total ? 0 : 1.5, Math.abs(sx(b) - sx(a)));
+      s += `<text x="${ox}" y="${y + bh / 2 + 4}" fill="${r.total ? C['--ink'] : C['--ink-2']}" font-family="Source Serif 4, Georgia, serif" font-size="${fs + 0.5}" ${r.total ? 'font-weight="600"' : ''}>${r.t}</text>`;
+      s += `<rect x="${xa}" y="${y + 4}" width="${w}" height="${bh}" rx="2" fill="${fill}"/>`;
+      if (!r.total && i < rows.length - 1) s += `<line x1="${sx(b)}" x2="${sx(b)}" y1="${y + 4 + bh}" y2="${y + rowH + 4}" stroke="${C['--muted']}" stroke-opacity=".5"/>`;
+      s += `<text x="${ox + Bw}" y="${y + bh / 2 + 4}" text-anchor="end" fill="${C['--ink']}" font-weight="${r.total ? 500 : 400}">${r.total ? fV(r.v) : fS(r.v)}</text>`;
+      if (r.note && !compact) s += `<text x="${sx(Math.max(a, b)) + 6}" y="${y + bh / 2 + 4}" fill="${C['--muted']}" font-size="${fs - 1.5}">${r.note}</text>`;
+    });
+  }
+  s += `</svg>`;
+  host.innerHTML = s;
+}
+function ledgerEq() {
+  const Eq = `E = E°(Cu) − E°(Zn) + (RT/2F)·ln([Cu²⁺]/[Zn²⁺])\n  = ${fS(SP.Cu.V0)} − (${fV(SP.Zn.V0)}) + ${(f / 2).toFixed(4)}·ln(${R.cCu.toPrecision(2)}/${R.cZn.toPrecision(2)})  = ${fV(R.E)} V`;
+  const conc = R.V - (R.E + R.ljp - R.ohmic - R.etaA - R.etaC);
+  const Vq = `V = E + E_junction − I·R − η(Zn) − η(Cu) − η(conc)\n  = ${fV(R.E)} ${fS(R.ljp)} − ${R.ohmic.toFixed(3)} − ${R.etaA.toFixed(3)} − ${R.etaC.toFixed(3)} − ${Math.abs(conc).toFixed(3)}  = ${fV(R.V)} V\n  at I = ${(R.I * 1e3).toFixed(2)} mA through ${fmtR(R.Rl)}`;
+  el('eqLedger').textContent = Eq + '\n\n' + Vq;
+}
+function levelsNote() {
+  const a = R.pts.find(p => p.x >= X.m1), b = [...R.pts].reverse().find(p => p.x <= X.d2);
+  const EZn = R.VZn_s - a.psi, ECu = R.VCu_s - b.psi, d = (b.psi - a.psi) * 1000;
+  el('noteLevels').textContent = `At the plates, vs the local hydrogen reference: E(Zn) ${fV(EZn)} V, E(Cu) ${fS(ECu)} V, difference ${fV(ECu - EZn)} V. The reference itself is ${Math.abs(d).toFixed(d > -10 && d < 10 ? 1 : 0)} mV ${d < 0 ? 'lower' : 'higher'} at the copper plate than at the zinc plate.`;
+}
+function numbers() {
+  const conc = R.V - (R.E + R.ljp - R.ohmic - R.etaA - R.etaC);
+  const rows = [
+    ['Zn²⁺ concentration', fmtC(R.cZn)], ['Cu²⁺ concentration', fmtC(R.cCu)], ['Separator', S.sep === 'pot' ? 'porous pot' : '1 M KCl salt bridge'],
+    ['Load', fmtR(R.Rl)], ['Current', `${(R.I * 1e3).toFixed(3)} mA`], ['Terminal voltage', `${fV(R.V, 4)} V`],
+    ['Nernst voltage', `${fV(R.E, 4)} V`], ['Liquid junction potential', `${fS(R.ljp * 1000, 2)} mV`],
+    ['Ohmic drop', `${(R.ohmic * 1000).toFixed(1)} mV`], ['Zinc overpotential', `${(R.etaA * 1000).toFixed(1)} mV`], ['Copper overpotential', `${(R.etaC * 1000).toFixed(1)} mV`],
+    ['Concentration polarization', `${(conc * 1000).toFixed(1)} mV`], ['Cu²⁺ at the copper surface', fmtC(R.csC)], ['Copper limiting current', `${(R.ilimCu * 1000).toFixed(1)} mA`],
+  ];
+  el('numTable').innerHTML = rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
+}
+
+/* ---------- particles (picture 1) ---------- */
+const Sim = (() => {
+  const BW = 1000, BH = 560;
+  let parts = [], flashes = [], ephase = 0, selfCount = 0, last = performance.now(), stirT = 0, simT = 0, eBuf = 0;
+  const G = () => { let u = 0, v = 0; while (u === 0) u = Math.random(); v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+  const zones = () => S.sep === 'pot'
+    ? { L: { x0: 96, x1: 488, y0: 262, y1: 512 }, R: { x0: 512, x1: 904, y0: 262, y1: 512 } }
+    : { L: { x0: 96, x1: 392, y0: 262, y1: 512 }, R: { x0: 608, x1: 904, y0: 262, y1: 512 } };
+  // bridge tube polyline
+  const tube = [[330, 470], [330, 150], [670, 150], [670, 470]];
+  const segL = []; let TL = 0; for (let i = 0; i < 3; i++) { const [a, b] = [tube[i], tube[i + 1]]; const l = Math.hypot(b[0] - a[0], b[1] - a[1]); segL.push(l); TL += l; }
+  const onTube = (u, w) => { let acc = 0; for (let i = 0; i < 3; i++) { if (u <= acc + segL[i] || i === 2) { const t = Math.min(1, Math.max(0, (u - acc) / segL[i])); const [a, b] = [tube[i], tube[i + 1]]; const dx = (b[0] - a[0]) / segL[i], dy = (b[1] - a[1]) / segL[i]; return [a[0] + (b[0] - a[0]) * t - dy * w, a[1] + (b[1] - a[1]) * t + dx * w]; } acc += segL[i]; } };
+  const N = c => Math.round(6 + 7 * Math.log10(c / 0.001));
+  const NB = 26;              // 1 M KCl: denser than the beakers
+  const UMIX = 80, RMIX = 75; // mixing-zone (junction) depths at each bridge mouth / either side of the pot wall
+  // Where the diagrams say each ion can be: its home region plus the adjacent junction zones.
+  const allowed = (p) => {
+    if (S.sep === 'pot') { if (p.zone === p.home) return true; return Math.abs(p.x - 500) < RMIX; }
+    if (p.home === 'B') { if (p.zone === 'B') return true; const [mx, my] = p.zone === 'L' ? tube[0] : tube[3]; return Math.hypot(p.x - mx, p.y - my) < RMIX; }
+    if (p.zone === p.home) return true;
+    if (p.zone === 'B') return p.home === 'L' ? p.u < UMIX : p.u > TL - UMIX;
+    return false;
+  };
+  const spawn = (k, zone, x, y, vx = 0) => { const z = zones()[zone]; parts.push({ k, zone, home: zone, born: simT, x: x ?? (z.x0 + Math.random() * (z.x1 - z.x0)), y: y ?? (z.y0 + Math.random() * (z.y1 - z.y0)), vx, vy: 0 }); };
+  const spawnB = (k, u) => parts.push({ k, zone: 'B', home: 'B', born: simT, u: u ?? TL * (0.3 + 0.4 * Math.random()), w: (Math.random() - 0.5) * 20 });
+  function reset() {
+    parts = []; flashes = []; selfCount = 0; eBuf = 0;
+    const nL = N(cOf(S.pZn)), nR = N(cOf(S.pCu));
+    for (let i = 0; i < nL; i++) { spawn('Zn', 'L'); spawn('SO4', 'L'); }
+    for (let i = 0; i < nR; i++) { spawn('Cu', 'R'); spawn('SO4', 'R'); }
+    if (S.sep === 'bridge') for (let i = 0; i < NB; i++) { spawnB('K', Math.random() * TL); spawnB('Cl', Math.random() * TL); }
+  }
+  const flash = (x, y, c) => flashes.push({ x, y, c, t: 0 });
+  function step(dt) {
+    if (!R) return;
+    simT += dt;
+    const z = zones(), I = R.I, drift = Math.min(1, Math.sqrt(I / 0.016)) * 70;
+    const cat = k => k === 'Zn' || k === 'Cu' || k === 'K';
+    // reaction events
+    const k0 = 1.4, cap = 8;
+    const rate = (x) => Math.min(cap, k0 * Math.exp(Math.max(-8, Math.min(8, x))));
+    // reduction goes as the ion count next to the plate (mass action), relative to the steady-state count
+    const near = (k, zn, test) => parts.reduce((n, p) => n + (p.k === k && p.zone === zn && test(p) ? 1 : 0), 0);
+    const nZn = near('Zn', 'L', p => p.x - z.L.x0 < 60), nCu = near('Cu', 'R', p => z.R.x1 - p.x < 60);
+    const eqZn = Math.max(1, 0.2 * N(cOf(S.pZn))), eqCu = Math.max(1, 0.2 * N(cOf(S.pCu)));
+    const znOx = rate(R.etaA / f), znRed = rate(-R.etaA / f) * nZn / eqZn, cuRed = rate(R.etaC / f) * nCu / eqCu, cuOx = rate(-R.etaC / f);
+    const ry = () => z.L.y0 + 10 + Math.random() * (z.L.y1 - z.L.y0 - 20);
+    const EB = isFinite(R.Rl) ? 2 : 0; // pairs allowed in transit; none at open circuit
+    if (Math.random() < znOx * dt && (eBuf < EB || znRed > 0 && !isFinite(R.Rl))) { const y = ry(); spawn('Zn', 'L', z.L.x0 + 3, y, 90); flash(92, y, C['--zn']); if (isFinite(R.Rl)) eBuf++; }
+    if (Math.random() < znRed * dt) { let bi = -1, bd = 1e9; parts.forEach((p, i) => { if (p.k === 'Zn' && p.zone === 'L' && p.x - z.L.x0 < 60 && p.x < bd) { bd = p.x; bi = i; } }); if (bi >= 0) { flash(92, parts[bi].y, C['--ink']); parts.splice(bi, 1); if (isFinite(R.Rl)) eBuf--; } }
+    if (Math.random() < cuRed * dt && (!isFinite(R.Rl) || eBuf > -EB)) { let bi = -1, bd = -1; parts.forEach((p, i) => { if (p.k === 'Cu' && p.zone === 'R' && z.R.x1 - p.x < 60 && p.x > bd) { bd = p.x; bi = i; } }); if (bi >= 0) { flash(908, parts[bi].y, C['--cu']); parts.splice(bi, 1); if (isFinite(R.Rl)) eBuf--; } }
+    if (Math.random() < cuOx * dt && (!isFinite(R.Rl) || eBuf < EB)) { const y = ry(); spawn('Cu', 'R', z.R.x1 - 3, y, -90); flash(908, y, C['--cu']); if (isFinite(R.Rl)) eBuf++; }
+    // motion
+    const sig = 260, damp = Math.exp(-dt * 3.5);
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const p = parts[i];
+      if (p.zone === 'B') {
+        p.u += ((cat(p.k) ? 1 : -1) * drift * 0.35 + G() * 110) * dt; p.w += G() * 30 * dt;
+        p.w = Math.max(-12, Math.min(12, p.w));
+        if (p.u < 0 || p.u > TL) {
+          const right = p.u > TL;
+          if (Math.random() < 0.06) { // leave through the mouth into that beaker
+            const [mx, my] = right ? tube[3] : tube[0];
+            p.zone = right ? 'R' : 'L'; p.x = mx + (Math.random() - 0.5) * 16; p.y = my + 14; p.vx = 0; p.vy = 40; p.born = simT;
+            delete p.u; delete p.w;
+          } else p.u = p.u < 0 ? -p.u : 2 * TL - p.u;
+        }
+        continue;
+      }
+      const d = (cat(p.k) ? 1 : -1) * drift;
+      p.vx = p.vx * damp + G() * sig * Math.sqrt(dt) + d * (1 - damp);
+      p.vy = p.vy * damp + G() * sig * Math.sqrt(dt);
+      p.x += p.vx * dt; p.y += p.vy * dt;
+      const Z = z[p.zone];
+      if (S.sep === 'bridge') { // wander into the bridge through its mouth
+        const [mx, my] = p.zone === 'L' ? tube[0] : tube[3];
+        if (Math.hypot(p.x - mx, p.y - my) < 16 && Math.random() < 0.02) { p.u = mx < 500 ? 3 : TL - 3; p.zone = 'B'; p.w = 0; p.born = simT; continue; }
+      }
+      if (p.y < Z.y0) { p.y = 2 * Z.y0 - p.y; p.vy *= -1; } if (p.y > Z.y1) { p.y = 2 * Z.y1 - p.y; p.vy *= -1; }
+      if (p.x < Z.x0) {
+        if (p.zone === 'R' && S.sep === 'pot' && Math.random() < 0.06) { p.zone = 'L'; p.x = z.L.x1 - 2; }
+        else { p.x = 2 * Z.x0 - p.x; p.vx *= -1; }
+        if (p.zone === 'L' && p.k === 'Cu' && p.x < z.L.x0 + 4) { flash(92, p.y, C['--cu']); spawn('Zn', 'L', z.L.x0 + 3, p.y, 90); parts.splice(i, 1); selfCount++; continue; }
+      }
+      if (p.x > Z.x1) {
+        if (p.zone === 'L' && S.sep === 'pot' && Math.random() < 0.06) { p.zone = 'R'; p.x = z.R.x0 + 2; }
+        else { p.x = 2 * Z.x1 - p.x; p.vx *= -1; }
+      }
+    }
+    // steady mode: ions outside their allowed region are recycled to their home reservoir
+    if (S.steady) for (let i = parts.length - 1; i >= 0; i--) if (!allowed(parts[i])) parts.splice(i, 1);
+    // stirring / reservoir top-up (steady mode only)
+    stirT += dt;
+    if (S.steady && stirT > 0.25) {
+      stirT = 0;
+      const nL = N(cOf(S.pZn)), nR = N(cOf(S.pCu));
+      const tgt = { L: { Zn: nL, SO4: nL }, R: { Cu: nR, SO4: nR }, B: S.sep === 'bridge' ? { K: NB, Cl: NB } : {} };
+      for (const zn of ['L', 'R', 'B']) {
+        for (const k in tgt[zn]) {
+          const mine = parts.filter(p => p.zone === zn && p.k === k);
+          const want = tgt[zn][k];
+          for (let d = mine.length; d < want; d++) { if (zn === 'B') spawnB(k); else { const Z = z[zn]; spawn(k, zn, Z.x0 + (0.3 + 0.4 * Math.random()) * (Z.x1 - Z.x0)); } }
+          if (mine.length > want + 1) {
+            let pool = mine;
+            if (zn !== 'B') { const Z = z[zn], mx = (Z.x0 + Z.x1) / 2; const far = mine.filter(p => zn === 'L' ? p.x > mx : p.x < mx); if (far.length) pool = far; }
+            pool = pool.slice().sort(() => Math.random() - 0.5);
+            for (let d = 0; d < Math.min(pool.length, mine.length - want - 1); d++) parts.splice(parts.indexOf(pool[d]), 1);
+          }
+        }
+        // strays (ions from elsewhere) linger, then dilute away: keep at most a few per zone
+        const strays = parts.filter(p => p.zone === zn && !(p.k in tgt[zn])).sort((a, b) => a.born - b.born);
+        if (strays.length > (zn === 'B' ? 3 : 5)) parts.splice(parts.indexOf(strays[0]), 1);
+      }
+    }
+    for (const fl of flashes) fl.t += dt;
+    flashes = flashes.filter(fl => fl.t < 0.55);
+    ephase += (I > 0 ? 25 + 160 * Math.min(1, Math.sqrt(I / 0.016)) : 0) * dt;
+  }
+  function draw(cv, compact) {
+    const host = cv.parentElement; const W = Math.max(280, host.clientWidth || 600); const H = Math.round(W * 0.56);
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cv.style.height = H + 'px'; }
+    const g = cv.getContext('2d'); const k = W / BW;
+    g.setTransform(dpr * k, 0, 0, dpr * k, 0, 0);
+    g.clearRect(0, 0, BW, BH);
+    const lw = 1 / k;
+    const fsz = Math.max(11, compact ? 11 : 13) / k;
+    const pot = S.sep === 'pot';
+    // liquids + glass
+    g.lineWidth = 2 * lw * 1.2; g.strokeStyle = C['--muted'];
+    const beaker = (x0, x1, fill) => { g.fillStyle = fill; g.fillRect(x0, 252, x1 - x0, 270); g.beginPath(); g.moveTo(x0, 200); g.lineTo(x0, 522); g.lineTo(x1, 522); g.lineTo(x1, 200); g.stroke(); };
+    if (pot) { g.fillStyle = C['--sol-l']; g.fillRect(40, 252, 460, 270); g.fillStyle = C['--sol-r']; g.fillRect(500, 252, 460, 270); g.beginPath(); g.moveTo(40, 200); g.lineTo(40, 522); g.lineTo(960, 522); g.lineTo(960, 200); g.stroke(); g.save(); g.setLineDash([6, 6]); g.lineWidth = 8; g.strokeStyle = C['--hatch']; g.beginPath(); g.moveTo(500, 225); g.lineTo(500, 522); g.stroke(); g.restore(); }
+    else { beaker(40, 400, C['--sol-l']); beaker(600, 960, C['--sol-r']); }
+    // plates
+    g.fillStyle = C['--metal']; g.fillRect(72, 150, 18, 352); g.strokeStyle = C['--hatch']; g.lineWidth = 2 * lw; g.strokeRect(72, 150, 18, 352);
+    g.fillStyle = C['--cu']; g.globalAlpha = 0.8; g.fillRect(910, 150, 18, 352); g.globalAlpha = 1;
+    // wire + load
+    g.strokeStyle = C['--ink']; g.lineWidth = 2.2 * lw * 1.2; g.beginPath(); g.moveTo(81, 150); g.lineTo(81, 70); g.lineTo(440, 70); g.moveTo(560, 70); g.lineTo(919, 70); g.lineTo(919, 150); g.stroke();
+    const open = !isFinite(R.Rl);
+    g.beginPath();
+    if (open) { g.moveTo(440, 70); g.lineTo(470, 70); g.lineTo(528, 44); g.moveTo(530, 70); g.lineTo(560, 70); g.stroke(); g.fillStyle = C['--ink']; g.beginPath(); g.arc(470, 70, 4, 0, 7); g.arc(530, 70, 4, 0, 7); g.fill(); }
+    else if (R.Rl === 0) { g.moveTo(440, 70); g.lineTo(560, 70); g.stroke(); }
+    else { g.moveTo(440, 70); g.lineTo(455, 70); for (let i = 0; i < 6; i++) g.lineTo(462 + i * 13, i % 2 ? 58 : 82); g.lineTo(545, 70); g.lineTo(560, 70); g.stroke(); }
+    // electrons on the wire
+    const wire = [[81, 150], [81, 70], [919, 70], [919, 150]];
+    const wl = [80, 838, 80], WL = 998;
+    g.fillStyle = C['--e'];
+    for (let n = 0; n < 22; n++) { let u = ((n / 22) * WL + ephase) % WL; let i = 0; while (i < 2 && u > wl[i]) { u -= wl[i]; i++; } const a = wire[i], b = wire[i + 1], t = u / wl[i]; const x = a[0] + (b[0] - a[0]) * t, y = a[1] + (b[1] - a[1]) * t; if (x > 440 && x < 560 && y < 90) continue; g.beginPath(); g.arc(x, y, 4.2, 0, 7); g.fill(); }
+    // particles: solution ions, then the bridge tube, then the bridge ions
+    const dot = (p, x, y) => { const c = C[COLVAR[p.k]]; g.beginPath(); g.arc(x, y, 7.5, 0, 7); if (p.k === 'SO4' || p.k === 'Cl') { g.strokeStyle = c; g.lineWidth = 3.2; g.stroke(); } else { g.fillStyle = c; g.fill(); } };
+    for (const p of parts) if (p.zone !== 'B') dot(p, p.x, p.y);
+    if (!pot) { g.save(); g.lineCap = 'round'; g.lineJoin = 'round'; g.strokeStyle = C['--muted']; g.lineWidth = 34; g.beginPath(); tube.forEach((p, i) => i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])); g.stroke(); g.strokeStyle = C['--mid']; g.lineWidth = 30; g.stroke(); g.restore(); }
+    for (const p of parts) if (p.zone === 'B') { const [x, y] = onTube(p.u, p.w); dot(p, x, y); }
+    if (S.steady && !compact) {
+      g.save(); g.setLineDash([5, 6]); g.strokeStyle = C['--muted']; g.globalAlpha = 0.55; g.lineWidth = 1.5 / k;
+      if (!pot) for (const [mx, my] of [tube[0], tube[3]]) { g.beginPath(); g.arc(mx, my, RMIX, 0, 7); g.stroke(); }
+      else { g.strokeRect(500 - RMIX, 258, 2 * RMIX, 258); }
+      g.restore();
+    }
+    for (const fl of flashes) { const a = 1 - fl.t / 0.55; g.strokeStyle = fl.c; g.globalAlpha = a; g.lineWidth = 3; g.beginPath(); g.arc(fl.x, fl.y, 8 + 40 * fl.t, 0, 7); g.stroke(); g.globalAlpha = 1; }
+    // labels
+    g.fillStyle = C['--ink']; g.font = `700 ${fsz}px Bricolage Grotesque, system-ui, sans-serif`; g.textAlign = 'center';
+    g.textAlign = 'left'; g.fillText('Zn', 100, 140); g.textAlign = 'right'; g.fillText('Cu', 900, 140); g.textAlign = 'center';
+    g.fillStyle = C['--muted']; g.font = `500 ${fsz}px Bricolage Grotesque, system-ui, sans-serif`;
+    if (!compact) { g.fillText('ZnSO₄', pot ? 290 : 220, 545); g.fillText('CuSO₄', pot ? 710 : 780, 545); g.fillText(pot ? 'porous wall' : 'KCl salt bridge', 500, pot ? 215 : 128); }
+    g.fillStyle = C['--ink']; g.font = `500 ${fsz * 1.05}px IBM Plex Mono, ui-monospace, monospace`;
+    g.fillText(`${R.V.toFixed(3)} V · ${(R.I * 1e3).toFixed(2)} mA`, 500, 30);
+    if (pot && selfCount > 0 && !compact) { g.fillStyle = C['--cu']; g.textAlign = 'left'; g.font = `500 ${fsz * 0.9}px IBM Plex Mono, ui-monospace, monospace`; g.fillText(`Cu²⁺ plated straight onto zinc: ${selfCount}`, 100, 238); }
+  }
+  let canvases = [];
+  function attach(host, compact) { const cv = document.createElement('canvas'); cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', 'Animated particle view of the Daniell cell'); host.appendChild(cv); canvases.push({ cv, compact }); }
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  function loop(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    if (S.playing) step(dt);
+    for (const c of canvases) if (c.visible !== false) draw(c.cv, c.compact);
+    requestAnimationFrame(loop);
+  }
+  function start() {
+    if (reduce.matches) { S.playing = false; for (let i = 0; i < 120; i++) step(1 / 30); }
+    const io = new IntersectionObserver(es => es.forEach(e => { const c = canvases.find(q => q.cv === e.target); if (c) c.visible = e.isIntersecting; }));
+    canvases.forEach(c => io.observe(c.cv));
+    requestAnimationFrame(t => { last = t; loop(t); });
+  }
+  const stats = () => { const o = {}; for (const p of parts) { let z = p.zone; if (z === 'B') z = p.u < UMIX ? 'B:mouthL' : p.u > TL - UMIX ? 'B:mouthR' : 'B:mid'; const key = z + ':' + p.k; o[key] = (o[key] || 0) + 1; } o.self = selfCount; return o; };
+  return { reset, attach, start, stats, advance: (sec) => { for (let i = 0; i < sec * 30; i++) step(1 / 30); }, drawAll: () => canvases.forEach(c => draw(c.cv, c.compact)) };
+})();
+
+/* ---------- render ---------- */
+function renderAll() {
+  if (!R) compute();
+  syncControls();
+  el('legLevels').innerHTML = legendHTML('levels');
+  el('legSpecies').innerHTML = legendHTML('species');
+  ledger(el('figLedger'), false); ledgerEq();
+  spatial(el('figLevels'), 'levels', false); levelsNote();
+  spatial(el('figSpecies'), 'species', false);
+  ledger(el('miniLedger'), true);
+  spatial(el('miniLevels'), 'levels', true);
+  spatial(el('miniSpecies'), 'species', true);
+  numbers();
+  Sim.drawAll();
+}
+el('steady').addEventListener('change', e => { S.steady = e.target.checked; if (S.steady) Sim.reset(); });
+el('playBtn').addEventListener('click', () => { S.playing = !S.playing; el('playBtn').textContent = S.playing ? 'Pause' : 'Play'; el('playBtn').setAttribute('aria-pressed', S.playing); });
+compute();
+Sim.reset();
+Sim.attach(el('figCrowd'), false);
+Sim.attach(el('miniCrowd'), true);
+renderAll();
+Sim.start();
+if (!S.playing) { el('playBtn').textContent = 'Play'; el('playBtn').setAttribute('aria-pressed', false); }
+{ let hinted = false; new IntersectionObserver(([e]) => { if (!e.isIntersecting && e.boundingClientRect.top < 0 && !hinted) { hinted = true; const b = el('bar'); b.classList.add('hint'); setTimeout(() => b.classList.remove('hint'), 1800); } }).observe(el('barSentinel')); }
+let rz = null; new ResizeObserver(() => { clearTimeout(rz); rz = setTimeout(renderAll, 120); }).observe(document.querySelector('main'));
+})();
+</script>
+<script data-goatcounter="https://marklundeberg.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
