@@ -7,6 +7,8 @@ eleventyNavigation:
     order: 1
 ---
 
+# Mark Lundeberg
+
 Welcome to my site!
 
 I'm Mark Lundeberg, a former physicist. I used to study graphene, but even after I left academia I've maintained a fascination with thermodynamics and statistical mechanics.
