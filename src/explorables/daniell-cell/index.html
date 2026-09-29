@@ -205,7 +205,7 @@ header.top { padding-block: 34px 28px; }
         <div class="legend"><span style="color:var(--zn)"><i class="dot"></i>Zn²⁺</span><span style="color:var(--cu)"><i class="dot"></i>Cu²⁺</span><span style="color:var(--so4)"><i class="ring"></i>SO₄²⁻</span><span style="color:var(--k)"><i class="dot"></i>K⁺</span><span style="color:var(--cl)"><i class="ring"></i>Cl⁻</span><span style="color:var(--e)"><i class="dot" style="width:6px;height:6px"></i>e⁻</span></div>
       </div>
       <div class="plot" id="figCrowd"></div>
-      <figcaption>Filled dots are positive ions, rings negative; flashes mark single reaction events at the plates. Counts and speeds are schematic; event rates follow the same model as the other pictures. With <b>Hold steady</b> on, the particles obey the diagrams' rules: beakers and bridge are topped up like large reservoirs, and each ion stays in its own region plus the mixing zones (dashed) where the diagrams show it fading out. Turn it off and they run free, as a time-lapse with hours squeezed into seconds: the cell really discharges, the bridge leaks and runs down, and the pictures below, which are snapshots, stop matching. Reset refills everything.</figcaption>
+      <figcaption>Filled dots are positive ions, rings negative; flashes mark single reaction events at the plates. Counts and speeds are schematic; event rates follow the same model as the other pictures. With <b>Hold steady</b> on, the particles obey the diagrams' rules: beakers and bridge are topped up like large reservoirs, and each ion stays in its own region plus the mixing zones (dashed) where the diagrams show it fading out. Turn it off and they run free, as a time-lapse with hours squeezed into seconds: the cell really discharges, the current fades as the copper runs out, the bridge leaks and runs down, and the pictures below, which are snapshots, stop matching. Reset refills everything.</figcaption>
     </figure>
     <p>Connect a load and the tie breaks. Zinc dissolves faster than it redeposits; the electrons it leaves behind run through the wire to the copper, where Cu²⁺ ions pick them up and plate out as metal. Inside the cell, ions close the circuit: positive ions drift toward the copper, negative ions toward the zinc, and in the bridge K⁺ and Cl⁻ carry the current across the gap.</p>
     <div class="sh"><div class="shows"><h4>Shows</h4><p>That everything is motion, and that equilibrium is a balance of rates.</p></div><div class="hides"><h4>Hides</h4><p>Why the answer is 1.10 volts and not 0.5 or 3. A voltage is an energy per charge, set by the statistics of all these particles together. No single particle carries it.</p></div></div>
@@ -615,6 +615,7 @@ function numbers() {
 const Sim = (() => {
   const BW = 1000, BH = 560;
   let parts = [], flashes = [], ephase = 0, selfCount = 0, last = performance.now(), stirT = 0, simT = 0, eBuf = 0;
+  let cu0 = 1, cuLeft = 1, depleted = false; // free-running bookkeeping
   const G = () => { let u = 0, v = 0; while (u === 0) u = Math.random(); v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
   const zones = () => S.sep === 'pot'
     ? { L: { x0: 96, x1: 488, y0: 262, y1: 512 }, R: { x0: 512, x1: 904, y0: 262, y1: 512 } }
@@ -635,23 +636,30 @@ const Sim = (() => {
     return false;
   };
   const spawn = (k, zone, x, y, vx = 0) => { const z = zones()[zone]; parts.push({ k, zone, home: zone, born: simT, x: x ?? (z.x0 + Math.random() * (z.x1 - z.x0)), y: y ?? (z.y0 + Math.random() * (z.y1 - z.y0)), vx, vy: 0 }); };
-  const spawnB = (k, u) => parts.push({ k, zone: 'B', home: 'B', born: simT, u: u ?? TL * (0.3 + 0.4 * Math.random()), w: (Math.random() - 0.5) * 20 });
+  const spawnB = (k, u) => parts.push({ k, zone: 'B', home: 'B', born: simT, u: u ?? TL * Math.random(), w: (Math.random() - 0.5) * 20 });
   function reset() {
-    parts = []; flashes = []; selfCount = 0; eBuf = 0;
+    parts = []; flashes = []; selfCount = 0; eBuf = 0; depleted = false;
     const nL = N(cOf(S.pZn)), nR = N(cOf(S.pCu));
+    cu0 = cuLeft = nR;
     for (let i = 0; i < nL; i++) { spawn('Zn', 'L'); spawn('SO4', 'L'); }
     for (let i = 0; i < nR; i++) { spawn('Cu', 'R'); spawn('SO4', 'R'); }
     if (S.sep === 'bridge') for (let i = 0; i < NB; i++) { spawnB('K', Math.random() * TL); spawnB('Cl', Math.random() * TL); }
   }
   const flash = (x, y, c) => flashes.push({ x, y, c, t: 0 });
   function step(dt) {
-    if (!R) return;
+    if (!R || depleted) return;
     simT += dt;
-    const z = zones(), I = R.I, drift = Math.min(1, Math.sqrt(I / 0.016)) * 70;
+    // Free-running: the current fades with the copper left (reduction is mass-action), and the
+    // cell goes flat when it's gone. Held steady, the reservoirs keep the model's current.
+    cuLeft = parts.reduce((n, p) => n + (p.k === 'Cu' && p.zone === 'R' ? 1 : 0), 0);
+    const fr = S.steady ? 1 : Math.min(1, cuLeft / Math.max(1, cu0));
+    if (!S.steady && isFinite(R.Rl) && cuLeft === 0) { depleted = true; return; }
+    const z = zones(), I = R.I, drift = Math.min(1, Math.sqrt(I / 0.016)) * 70 * fr;
+    const conveyor = S.steady && drift > 1; // stirred bulk under current: keep concentrations uniform
     const cat = k => k === 'Zn' || k === 'Cu' || k === 'K';
     // reaction events
     const k0 = 1.4, cap = 8;
-    const rate = (x) => Math.min(cap, k0 * Math.exp(Math.max(-8, Math.min(8, x))));
+    const rate = (x) => (S.steady ? 1 : 0.35) * Math.min(cap, k0 * Math.exp(Math.max(-8, Math.min(8, x)))); // free-running: slower time-lapse
     // reduction goes as the ion count next to the plate (mass action), relative to the steady-state count
     const near = (k, zn, test) => parts.reduce((n, p) => n + (p.k === k && p.zone === zn && test(p) ? 1 : 0), 0);
     const nZn = near('Zn', 'L', p => p.x - z.L.x0 < 60), nCu = near('Cu', 'R', p => z.R.x1 - p.x < 60);
@@ -671,8 +679,9 @@ const Sim = (() => {
         p.u += ((cat(p.k) ? 1 : -1) * drift * 0.35 + G() * 110) * dt; p.w += G() * 30 * dt;
         p.w = Math.max(-12, Math.min(12, p.w));
         if (p.u < 0 || p.u > TL) {
-          const right = p.u > TL;
-          if (Math.random() < 0.06) { // leave through the mouth into that beaker
+          const right = p.u > TL, downstream = right === cat(p.k);
+          if (conveyor && downstream && Math.random() > 0.3) { p.u = right ? p.u - TL : p.u + TL; continue; } // carried round to the upstream end
+          if (Math.random() < (conveyor && downstream ? 1 : 0.06)) { // leave through the mouth into that beaker
             const [mx, my] = right ? tube[3] : tube[0];
             p.zone = right ? 'R' : 'L'; p.x = mx + (Math.random() - 0.5) * 16; p.y = my + 14; p.vx = 0; p.vy = 40; p.born = simT;
             delete p.u; delete p.w;
@@ -692,11 +701,13 @@ const Sim = (() => {
       if (p.y < Z.y0) { p.y = 2 * Z.y0 - p.y; p.vy *= -1; } if (p.y > Z.y1) { p.y = 2 * Z.y1 - p.y; p.vy *= -1; }
       if (p.x < Z.x0) {
         if (p.zone === 'R' && S.sep === 'pot' && Math.random() < 0.06) { p.zone = 'L'; p.x = z.L.x1 - 2; }
+        else if (conveyor && !cat(p.k)) p.x = Z.x1 - (Z.x0 - p.x); // anion carried round to the far side
         else { p.x = 2 * Z.x0 - p.x; p.vx *= -1; }
         if (p.zone === 'L' && p.k === 'Cu' && p.x < z.L.x0 + 4) { flash(92, p.y, C['--cu']); spawn('Zn', 'L', z.L.x0 + 3, p.y, 90); parts.splice(i, 1); selfCount++; continue; }
       }
       if (p.x > Z.x1) {
         if (p.zone === 'L' && S.sep === 'pot' && Math.random() < 0.06) { p.zone = 'R'; p.x = z.R.x0 + 2; }
+        else if (conveyor && cat(p.k)) p.x = Z.x0 + (p.x - Z.x1); // cation carried round to the far side
         else { p.x = 2 * Z.x1 - p.x; p.vx *= -1; }
       }
     }
@@ -712,11 +723,9 @@ const Sim = (() => {
         for (const k in tgt[zn]) {
           const mine = parts.filter(p => p.zone === zn && p.k === k);
           const want = tgt[zn][k];
-          for (let d = mine.length; d < want; d++) { if (zn === 'B') spawnB(k); else { const Z = z[zn]; spawn(k, zn, Z.x0 + (0.3 + 0.4 * Math.random()) * (Z.x1 - Z.x0)); } }
+          for (let d = mine.length; d < want; d++) { if (zn === 'B') spawnB(k, drift > 1 ? (cat(k) ? 0.12 * TL * Math.random() : TL * (1 - 0.12 * Math.random())) : undefined); else { const Z = z[zn]; spawn(k, zn, Z.x0 + (0.3 + 0.4 * Math.random()) * (Z.x1 - Z.x0)); } }
           if (mine.length > want + 1) {
-            let pool = mine;
-            if (zn !== 'B') { const Z = z[zn], mx = (Z.x0 + Z.x1) / 2; const far = mine.filter(p => zn === 'L' ? p.x > mx : p.x < mx); if (far.length) pool = far; }
-            pool = pool.slice().sort(() => Math.random() - 0.5);
+            const pool = mine.slice().sort(() => Math.random() - 0.5); // remove at random: keeps the bulk uniform
             for (let d = 0; d < Math.min(pool.length, mine.length - want - 1); d++) parts.splice(parts.indexOf(pool[d]), 1);
           }
         }
@@ -727,7 +736,7 @@ const Sim = (() => {
     }
     for (const fl of flashes) fl.t += dt;
     flashes = flashes.filter(fl => fl.t < 0.55);
-    ephase += (I > 0 ? 25 + 160 * Math.min(1, Math.sqrt(I / 0.016)) : 0) * dt;
+    ephase += (I > 0 ? 25 + 160 * Math.min(1, Math.sqrt(I / 0.016)) : 0) * fr * dt;
   }
   function draw(cv, compact) {
     const host = cv.parentElement; const W = Math.max(280, host.clientWidth || 600); const H = Math.round(W * 0.56);
@@ -777,7 +786,15 @@ const Sim = (() => {
     g.fillStyle = C['--muted']; g.font = `500 ${fsz}px Bricolage Grotesque, system-ui, sans-serif`;
     if (!compact) { g.fillText('ZnSO₄', pot ? 290 : 220, 545); g.fillText('CuSO₄', pot ? 710 : 780, 545); g.fillText(pot ? 'porous wall' : 'KCl salt bridge', 500, pot ? 215 : 128); }
     g.fillStyle = C['--ink']; g.font = `500 ${fsz * 1.05}px IBM Plex Mono, ui-monospace, monospace`;
-    g.fillText(`${R.V.toFixed(3)} V · ${(R.I * 1e3).toFixed(2)} mA`, 500, 30);
+    g.fillText(S.steady ? `${R.V.toFixed(3)} V · ${(R.I * 1e3).toFixed(2)} mA` : `free-running · Cu²⁺ left ${cuLeft}/${cu0}`, 500, 30);
+    if (depleted) {
+      g.fillStyle = C['--surface']; g.globalAlpha = 0.9; g.fillRect(250, 300, 500, compact ? 90 : 110); g.globalAlpha = 1;
+      g.strokeStyle = C['--accent']; g.lineWidth = 2 / k; g.strokeRect(250, 300, 500, compact ? 90 : 110);
+      g.fillStyle = C['--ink']; g.textAlign = 'center'; g.font = `700 ${fsz * 1.3}px Bricolage Grotesque, system-ui, sans-serif`;
+      g.fillText('Copper used up: the cell is flat', 500, compact ? 345 : 350);
+      g.fillStyle = C['--muted']; g.font = `500 ${fsz}px Bricolage Grotesque, system-ui, sans-serif`;
+      g.fillText('Press Reset to refill', 500, compact ? 375 : 385);
+    }
     if (pot && selfCount > 0 && !compact) { g.fillStyle = C['--cu']; g.textAlign = 'left'; g.font = `500 ${fsz * 0.9}px IBM Plex Mono, ui-monospace, monospace`; g.fillText(`Cu²⁺ plated straight onto zinc: ${selfCount}`, 100, 238); }
   }
   let canvases = [];
@@ -795,8 +812,7 @@ const Sim = (() => {
     canvases.forEach(c => io.observe(c.cv));
     requestAnimationFrame(t => { last = t; loop(t); });
   }
-  const stats = () => { const o = {}; for (const p of parts) { let z = p.zone; if (z === 'B') z = p.u < UMIX ? 'B:mouthL' : p.u > TL - UMIX ? 'B:mouthR' : 'B:mid'; const key = z + ':' + p.k; o[key] = (o[key] || 0) + 1; } o.self = selfCount; return o; };
-  return { reset, attach, start, stats, advance: (sec) => { for (let i = 0; i < sec * 30; i++) step(1 / 30); }, drawAll: () => canvases.forEach(c => draw(c.cv, c.compact)) };
+  return { reset, attach, start, drawAll: () => canvases.forEach(c => draw(c.cv, c.compact)) };
 })();
 
 /* ---------- render ---------- */
