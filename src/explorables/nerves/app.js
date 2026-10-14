@@ -8,7 +8,7 @@ import { COL, span, drawRace, drawWave, drawIons } from './pictures.js';
 const $ = (id) => document.getElementById(id);
 
 // ---------- colours, from the page's CSS (both themes) ----------
-const TOKENS = ['bg', 'surface', 'line', 'line-2', 'ink', 'ink-2', 'muted', 'axon', 'outside', 'spike', 'spike-glow', 'sheath', 'sheath-line', 'bare', 'myelin', 'squid', 'na', 'k', 'cl'];
+const TOKENS = ['anion', 'warn', 'bg', 'surface', 'line', 'line-2', 'ink', 'ink-2', 'muted', 'axon', 'outside', 'spike', 'spike-glow', 'sheath', 'sheath-line', 'bare', 'myelin', 'squid', 'na', 'k', 'cl'];
 function readColours() {
   const cs = getComputedStyle(document.documentElement);
   for (const k of TOKENS) COL[k] = cs.getPropertyValue(`--${k}`).trim();
@@ -53,11 +53,11 @@ const wraps = $('wraps'), gap = $('gap'), loop = $('loop');
 const params = () => ({ ...MYELIN, wraps: Math.round(10 ** +wraps.value), gap: +gap.value * 1e-3 });
 function showBar() {
   const p = params();
-  $('wrapsOut').textContent = `${p.wraps} layers`;
+  $('wrapsOut').textContent = `${p.wraps} membranes`;
   $('gapOut').textContent = `${gap.value} mm`;
 }
 showBar();
-let nerves = null, next = null, want = false, clock = 0, rest = 0;
+let nerves = null, next = null, want = false, clock = 0, rest = 0, over = false;
 const PACE = 0.2e-3; // simulated seconds per second: slowed down five thousand times
 const RACE = 3e-3; // the race ends when the wrapped and squid nerves are in, or at 3 ms
 // Each race starts from nerves at rest: the next three settle in the background, a few
@@ -76,7 +76,7 @@ $('fire').addEventListener('click', () => (want = true));
 for (const el of [wraps, gap]) el.addEventListener('input', () => { showBar(); prepare(); want = true; });
 
 // ---------- run ----------
-figure($('figRace'), [960, 420], [600, 500], (f) => drawRace(f, nerves, { pace: '5000×', over: ['myelin', 'squid'].every((k) => nerves[k].arrived !== null) }));
+figure($('figRace'), [960, 420], [600, 500], (f) => drawRace(f, nerves, { pace: '5000×', over }));
 figure($('figWave'), [960, 400], [600, 460], (f) => drawWave(f, nerves));
 figure($('figIons'), [960, 410], [600, 440], (f) => drawIons(f, nerves.squid));
 let last;
@@ -84,6 +84,7 @@ function frame(now) {
   const dt = Math.min(0.1, (now - (last ?? now)) / 1000);
   last = now;
   const done = ['myelin', 'squid'].every((k) => nerves[k].arrived !== null) || clock > RACE;
+  over = done;
   if (!done && !want) {
     // one clock for all three: it waits for whichever is slowest to compute
     clock = Math.min(clock + dt * PACE, ...KINDS.map((k) => nerves[k].time + 0.3e-3));

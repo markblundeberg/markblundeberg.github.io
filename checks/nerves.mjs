@@ -65,10 +65,21 @@ out.squid_area_ratio = Math.round((M.SQUID / M.THIN) ** 2);
   }
   out.axial_shares_at_peak_current = shares;
   out.axial_current_peak_A_per_m2 = +best.toFixed(1);
-  // how far an ion inside drifts in one spike: the largest drift velocity there times about a millisecond
-  const E = best * 0.354; // V/m, from the axoplasm's resistivity
-  const vK = (M.D / M.VT) * E; // m/s
-  out.K_drift_um_per_ms_at_peak = +(vK * 1e-3 * 1e6).toFixed(4);
+  // how far an ion inside drifts in one spike: K⁺'s flux over its concentration at the middle of the
+  // squid axon, integrated over the whole spike (fired again, from rest)
+  const m = new M.Nerve('squid');
+  m.fire();
+  const g = m.solution.x.findIndex((x) => x >= 0.01);
+  let shift = 0, most = 0, last = 0;
+  for (let t = 0; t < 4e-3; t += 0.005e-3) {
+    m.advance(t + 0.005e-3);
+    const S2 = m.solution, v = S2.flux['K+'][g] / S2.c['K+'][g]; // m/s
+    shift += v * (m.time - last);
+    last = m.time;
+    most = Math.max(most, Math.abs(shift));
+  }
+  out.K_shift_nm_mid_squid = +(1e9 * most).toFixed(2);
+  out.thermal_um_in_1ms = +(1e6 * Math.sqrt(2 * M.D * 1e-3)).toFixed(2);
 }
 out.compute_s = +((performance.now() - t0) / 1000).toFixed(1);
 console.log(JSON.stringify(out, null, 2));

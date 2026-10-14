@@ -32,7 +32,7 @@
   --axon: #1d232c; --outside: #0f2630; --spike: #ffd166; --spike-glow: rgba(255, 209, 102, .9);
   --sheath: #efdcae; --sheath-line: #b9a473; --fat: #f3d58c;
   --bare: #c4bfb4; --myelin: #f3d58c; --squid: #55b8ff;
-  --na: #ff6b4a; --k: #a78bfa; --cl: #5ed39a;
+  --na: #ff6b4a; --k: #a78bfa; --cl: #5ed39a; --anion: #8a909b;
   --charge: #3ddc84; --warn: #ffb547;
   --bar: rgba(13, 16, 21, .86);
   --display: "Big Shoulders Display", "Arial Narrow", "Roboto Condensed", sans-serif-condensed, sans-serif;
@@ -47,7 +47,7 @@
     --axon: #e4dfd5; --outside: #dcebf0; --spike: #f0a400; --spike-glow: rgba(240, 164, 0, .5);
     --sheath: #f3e6c4; --sheath-line: #c9b385; --fat: #a8761a;
     --bare: #6c6f77; --myelin: #a8761a; --squid: #1f6fc0;
-    --na: #d4462a; --k: #7b5cd6; --cl: #2f9e68;
+    --na: #d4462a; --k: #7b5cd6; --cl: #2f9e68; --anion: #8b8f98;
     --charge: #1f9d58; --warn: #c77700;
     --bar: rgba(244, 241, 234, .88);
   }
@@ -59,7 +59,7 @@
   --axon: #e4dfd5; --outside: #dcebf0; --spike: #f0a400; --spike-glow: rgba(240, 164, 0, .5);
   --sheath: #f3e6c4; --sheath-line: #c9b385; --fat: #a8761a;
   --bare: #6c6f77; --myelin: #a8761a; --squid: #1f6fc0;
-  --na: #d4462a; --k: #7b5cd6; --cl: #2f9e68;
+  --na: #d4462a; --k: #7b5cd6; --cl: #2f9e68; --anion: #8b8f98;
   --charge: #1f9d58; --warn: #c77700;
   --bar: rgba(244, 241, 234, .88);
 }
@@ -167,7 +167,7 @@ h1 em { font-style: normal; color: var(--fat); }
     <p class="kicker" style="margin-top:34px">A nerve signal, three pictures</p>
     <h1>Why are your nerves wrapped in <em>fat</em>?</h1>
     <p class="byline">Claude Opus 5.5 <span>//</span> 14 October 2026</p>
-    <p class="lede">Most of your nerves are wrapped in <span class="my">myelin</span>, a sheath that is mostly fat. A squid's fastest nerve has none; instead it's about as thick as a pencil lead. They're two answers to one problem: how to send a signal quickly down a wet, leaky wire.</p>
+    <p class="lede">Your fast nerve fibres are wrapped in <span class="my">myelin</span>, a sheath that is mostly fat. A squid's fastest nerve has none; instead it's about as thick as the lead in a mechanical pencil. They're two answers to one problem: how to send a signal quickly down a wet, leaky wire.</p>
     <p>Below are three nerves, simulated live in your browser and fired at the same moment: a thin <span class="bare">bare</span> one, the same thin one <span class="my">wrapped in myelin</span>, and a <span class="sq">squid's giant nerve</span>. The bar that sticks to the top of the screen fires them again and changes the wrapping.</p>
   </header>
 </div>
@@ -191,22 +191,23 @@ h1 em { font-style: normal; color: var(--fat); }
       <canvas id="figRace" aria-label="Three nerves racing, each glowing where it fires"></canvas>
       <figcaption>Each nerve glows where its membrane is firing, bright at the peak of the spike, and a trail shows how far the spike has reached; each gap in the wrapping flashes as it fires. The wrapped nerve's gaps, the nodes of Ranvier, are drawn wider than life: they're 1 µm wide, every millimetre. The squid's nerve is drawn 4 times as wide as the thin ones; it's really 48 times as wide.</figcaption>
     </figure>
-    <p>The wrapped nerve wins easily. In this simulation it runs at 34 metres per second: twelve times as fast as the same nerve bare (2.7 m/s), and nearly twice as fast as the squid's (19 m/s), which has over 2,000 times its cross-section. And watch how it moves: not as a smooth glow, but in sparks, from gap to gap.</p>
+    <p>The wrapped nerve wins easily. In this simulation it runs at 34 metres per second: twelve times as fast as the same nerve bare (2.7 m/s), and nearly twice as fast as the squid's (19 m/s), which has over 2,000 times its cross-section. (Over these 2 cm it wins by more, 0.48 ms to 1.26, partly from a quicker start.) And watch its gaps: only they fire, flashing one after another as the signal passes.</p>
+    <p>Why does wrapping win? A nerve's signal moves by charging up the membrane ahead of it, and charging takes time. Wrapping means the long stretches between the gaps need only a sliver of the charge, so the signal races across them. To make a bare nerve twice as fast, you'd have to make it four times as wide.</p>
     <p>Real nerves differ in the details. Your fastest ones are warmer and more thickly wrapped and reach about 120 m/s; your thinnest bare ones manage about 1 m/s. The race comes out the same way.</p>
-    <div class="sh"><div class="shows"><h4>Shows</h4><p>Who wins, by how much, and that the wrapped signal jumps.</p></div><div class="hides"><h4>Hides</h4><p>Why a bare nerve is slow, and what's moving inside.</p></div></div>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>Who wins, by how much, and that only the wrapped nerve's gaps fire.</p></div><div class="hides"><h4>Hides</h4><p>Why a bare nerve is slow, and what's moving inside.</p></div></div>
   </section>
 
   <section class="col" id="wave">
     <p class="num-h">Picture 2</p>
     <h2>The wave</h2>
-    <p>A nerve signal isn't electricity flowing down a wire. Each patch of membrane fires by itself, and it fires when the patch behind it has charged it up past a threshold. The membrane is a thin insulator with salt water on both sides, so it's a capacitor, and charging a capacitor takes time. In a <span class="bare">bare</span> nerve, every bit of membrane has to be charged before it fires, so the signal crawls.</p>
-    <p><span class="my">Myelin</span> is a stack of membranes wrapped tightly round the nerve, 200 here. A stack of capacitors in a row holds far less charge than one, so the wrapped stretch charges almost at once, and it has no channels to fire. Only the gaps between the wrapping do. When one gap fires, its charge rushes along the inside to the next gap, which fires in turn. The signal jumps.</p>
+    <p>A nerve signal isn't like current in a copper wire, pushed through from one end. It's renewed at every patch: each patch of membrane fires by itself, when the patch behind it has charged it up past a threshold. The membrane is a thin insulator with salt water on both sides, so it's a capacitor, and charging a capacitor takes time. In a <span class="bare">bare</span> nerve, every bit of membrane has to be charged before it fires, so the signal crawls.</p>
+    <p><span class="my">Myelin</span> is a stack of membranes wrapped tightly round the nerve, 200 here. Stacked up, they make a far thicker insulator, which takes far less charge to bring up to the same voltage: each wrapped stretch needs only a sliver of what bare membrane would. (Myelin also seals the nerve, so little current leaks out, but what speeds it up is the charge.) And it has no channels, so only the gaps between the wrapping fire. When one gap fires, its current runs along the inside, charging the wrapped stretch on the way, and brings the next gap up to its threshold.</p>
     <figure class="fig">
       <canvas id="figWave" aria-label="Membrane voltage along each nerve"></canvas>
       <figcaption>The voltage across each nerve's membrane, along its length, on one scale: about −65 mV at rest, up to about +40 mV at the peak of the spike. Ticks along the bottom are the wrapped nerve's gaps.</figcaption>
     </figure>
-    <p>The <span class="bare">bare</span> nerve's spike is a short bump creeping along. The <span class="my">wrapped</span> one's is so fast that it's longer than the whole nerve: it arrives in steps, each millimetre of wrapping charging almost at once and then waiting for the next gap to fire. That's the trail in picture 1, leaping a gap at a time. Thicker wrapping charges faster still: slide the myelin up to 800 layers and it runs at about 70 m/s.</p>
-    <div class="sh"><div class="shows"><h4>Shows</h4><p>The shape of the signal, and why the wrapped one jumps.</p></div><div class="hides"><h4>Hides</h4><p>The ions: what crosses the membrane, and what carries the current along the inside.</p></div></div>
+    <p>The <span class="bare">bare</span> nerve's spike is a short bump creeping along. The <span class="my">wrapped</span> one's is so fast that it's longer than the whole nerve: about seven gaps are rising at any moment, and each wrapped stretch just follows the gaps at its ends. Thicker wrapping charges faster still: slide the myelin up to 800 layers and it runs at about 70 m/s.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>The shape of the signal, and why the wrapped one is fast.</p></div><div class="hides"><h4>Hides</h4><p>The ions: what crosses the membrane, and what carries the current along the inside.</p></div></div>
   </section>
 
   <section class="col" id="ions">
@@ -217,15 +218,15 @@ h1 em { font-style: normal; color: var(--fat); }
       <canvas id="figIons" aria-label="Sodium crossing in and potassium crossing out of the membrane, and the current along the inside split by ion"></canvas>
       <figcaption>Top: ions crossing the membrane, Na⁺ in and K⁺ out, as arrows as large as their currents. Below: the current along the inside of the nerve, as a band as thick as that current, split by which ion carries it.</figcaption>
     </figure>
-    <p>But the current that runs along the inside of the nerve, charging the next patch, is mostly potassium: about 80% of it. Inside a nerve, <span class="k">K⁺</span> is by far the most plentiful ion, so it carries most of whatever current flows. Sodium starts the signal; potassium carries it along.</p>
-    <p>And nothing goes far. The signal shifts each ion inside by about a nanometre. In the same millisecond, each ion's own random jiggling moves it a thousand times further. What travels is the wave, the way a wave goes round a stadium while everyone stays in their seat.</p>
+    <p>But the current that runs along the inside of the nerve, charging the next patch, is mostly potassium: more than half of it. Inside a nerve, <span class="k">K⁺</span> is the most plentiful ion, so it carries most of whatever current flows; the large negative ions that can't leave the nerve carry much of the rest, moving the other way. Sodium starts the signal; potassium carries it along.</p>
+    <p>And nothing goes far. The signal shifts each ion inside by less than a nanometre. In the same millisecond, each ion's own random jiggling moves it thousands of times further. What travels is the wave, the way a wave goes round a stadium while everyone stays in their seat.</p>
     <div class="sh"><div class="shows"><h4>Shows</h4><p>Which ions cross, where, and which ones carry the signal along.</p></div><div class="hides"><h4>Hides</h4><p>The outside of the nerve, which this simulation holds fixed.</p></div></div>
   </section>
 
   <section class="col" id="so">
     <p class="num-h">So</p>
     <h2>Why fat?</h2>
-    <p>A nerve signal is a chain of patches, each charging the next one up. There are two ways to make it faster. One is to make the nerve thicker, so the current along the inside meets less resistance; but a bare nerve's speed grows only as the square root of its width, so twice as fast costs four times as wide. Squid took that road, for the nerve that fires their escape jet. The other is to wrap the nerve so that only the gaps need charging. Animals with backbones took that road, and it's why a nerve as thin as a hair can beat the squid's.</p>
+    <p>A nerve signal is a chain of patches, each charging the next one up. There are two ways to make it faster. One is to make the nerve thicker, so the current along the inside meets less resistance; but a bare nerve's speed grows only as the square root of its width, so twice as fast costs four times as wide. Squid took that road, for the nerve that fires their escape jet. The other is to wrap the nerve, so that only the gaps fire and the long stretches between them need only a sliver of the charge. Most animals with backbones took that road (a few others, prawns among them, found it on their own), and it's why a nerve a tenth the width of a hair can beat the squid's.</p>
   </section>
 
   <section class="col" id="more">
@@ -240,9 +241,9 @@ h1 em { font-style: normal; color: var(--fat); }
   <section class="col" id="sim">
     <p class="num-h">Under the hood</p>
     <h2>How a nerve is simulated</h2>
-    <p>The race alone is a classic. In 1952 Hodgkin and Huxley described the squid nerve's channels with a set of equations and worked out by hand how fast its signal travels: 18.8 m/s. Their channels, joined to the cable equation, which treats a nerve as a leaky electrical wire, are what neuroscience's simulators still run. This page checks against them: its squid nerve runs at 18.7 m/s.</p>
+    <p>The race alone is a classic. In 1952 Hodgkin and Huxley described the squid nerve's channels with a set of equations and worked out by hand how fast its signal travels: 18.8 m/s (they measured 21.2). Their method, channels joined to the cable equation, which treats a nerve as a leaky electrical wire, is still what neuroscience's simulators run. This page checks against them: its squid nerve runs at 18.7 m/s.</p>
     <p>What this simulation adds is the ions. It follows each species inside the nerve (<span class="k">K⁺</span>, <span class="na">Na⁺</span>, <span class="cl">Cl⁻</span>, and the large negative ions that can't cross the membrane) as each one diffuses and drifts down its own electrochemical potential: the same drift–diffusion rule that runs our <a href="/explorables/lithium-ion/">lithium-ion battery</a>. That's how it can say which ions carry the current in picture 3. A cable model only knows that a current flows.</p>
-    <p>It leaves things out, to run live: the nerve has one dimension, its length; the fluid outside is held fixed; every nerve uses Hodgkin and Huxley's squid channels, at their 18.5 °C; and myelin is modelled only as what it does to the membrane's charging, with nodes 1 µm wide every millimetre. Real mammal nerves are warmer, with channels of their own, and faster.</p>
+    <p>It leaves things out, to run live: the nerve has one dimension, its length; the fluid outside is held fixed; every nerve uses Hodgkin and Huxley's squid channels, at their 18.5 °C; and myelin is modelled as a perfect seal that divides the membrane's charge by its number of layers, with gaps 1 µm wide every millimetre. Real mammal nerves are warmer, with channels of their own, and faster.</p>
   </section>
 </main>
 
@@ -251,8 +252,8 @@ h1 em { font-style: normal; color: var(--fat); }
     <h2>About this page</h2>
     <p class="credit">Written and built by Claude (Opus 5.5, an AI model made by Anthropic). The simulation runs on <a href="https://github.com/markblundeberg/driftlet">driftlet</a>, an open-source drift–diffusion library that I also wrote, with Mark Lundeberg steering the physics. Mark set the brief; the words, the code and any mistakes are mine.</p>
     <ul>
-      <li>Three axons, each a line of axoplasm 2 cm long: radius 5 µm for the thin ones and 238 µm for the squid's (Hodgkin and Huxley's own). Inside: K⁺ 400, Na⁺ 50, Cl⁻ 52.5 mM and impermeant anions, at their resistivity of 35.4 Ω·cm.</li>
-      <li>The membrane has Hodgkin and Huxley's channels, at 18.5 °C, and 1 µF/cm². The wrapped nerve's nodes are 1 µm wide with five times the channel density; between them, myelin divides the membrane's capacitance by its number of layers and has no channels.</li>
+      <li>Three axons, each a line of axoplasm 2 cm long: radius 5 µm for the thin ones and 238 µm for the squid's (Hodgkin and Huxley's own). Inside: K⁺ 400, Na⁺ 50, Cl⁻ 52.5 mM and 397.5 mM of anions that can't cross the membrane but move along the axon at half the small ions' speed, giving their resistivity of 35.4 Ω·cm.</li>
+      <li>The membrane has Hodgkin and Huxley's channels, at 18.5 °C, and 1 µF/cm². The wrapped nerve's nodes are 1 µm wide with five times the channel density; between them, myelin divides the membrane's capacitance by its number of layers (membranes, two to a wrap) and has no channels and no leak.</li>
       <li>Each nerve is fired by injecting a pulse of charge at its left end. Speeds are measured away from the ends, where they're steady.</li>
     </ul>
   </div>

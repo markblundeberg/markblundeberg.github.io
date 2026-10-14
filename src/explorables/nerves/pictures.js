@@ -2,7 +2,7 @@
 // the page and by the film made from it. Each figure is { ctx, VW, VH }, a virtual page the canvas
 // is scaled to; the pictures share one x mapping, so 1 cm sits at the same place in each.
 
-import { L, KINDS, NODE, G, D, VT, OUT, z } from './model.js';
+import { L, KINDS, NODE, G, D, DA, VT, OUT, z } from './model.js';
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const mV = 1e-3, F = 96485.332, RT = VT * F;
@@ -44,7 +44,8 @@ function mix(a, b, u) {
 export function drawRace(f, nerves, opts = {}) {
   const { ctx, VW, VH } = f, narrow = VW < 900;
   ctx.clearRect(0, 0, VW, VH);
-  const t = nerves.bare.time, lanes = narrow ? [138, 278, 428] : [112, 228, 354];
+  // (a film may lay it out bigger: opts.lanes, and the thin and squid nerves' drawn widths)
+  const t = nerves.bare.time, lanes = opts.lanes ?? (narrow ? [138, 278, 428] : [112, 228, 354]);
   // the clock
   ctx.textBaseline = 'alphabetic';
   ctx.textAlign = 'left';
@@ -65,7 +66,7 @@ export function drawRace(f, nerves, opts = {}) {
   ctx.fillText('2 cm', px(L), VH - 12);
   ctx.fillText('0', px(0), VH - 12);
   KINDS.forEach((kind, i) => {
-    const n = nerves[kind], S = n.solution, y = lanes[i], h = kind === 'squid' ? (narrow ? 34 : 40) : 10, colour = LANE()[kind];
+    const n = nerves[kind], S = n.solution, y = lanes[i], h = kind === 'squid' ? opts.thick ?? (narrow ? 34 : 40) : opts.thin ?? 10, colour = LANE()[kind];
     // its name, and how it's doing
     ctx.textAlign = 'left';
     ctx.textBaseline = 'alphabetic';
@@ -81,7 +82,26 @@ export function drawRace(f, nerves, opts = {}) {
     ctx.fillText(sub, nx + wName + 12, ny);
     ctx.textAlign = 'right';
     ctx.font = MONO(13, 600);
-    if (n.arrived !== null) { ctx.fillStyle = COL.ink; ctx.fillText(`${(1000 * n.arrived).toFixed(2)} ms`, X1, ny); }
+    if (n.arrived !== null) {
+      ctx.fillStyle = COL.ink;
+      ctx.fillText(`${(1000 * n.arrived).toFixed(2)} ms`, X1, ny);
+      // the finish, flashed in the first moments after it arrives (the first one in, brighter)
+      const since = n.time - n.arrived, first = KINDS.every((kk) => kk === kind || nerves[kk].arrived === null || nerves[kk].arrived > n.arrived);
+      if (since >= 0 && since < 0.25e-3 * (opts.flash ?? 1)) {
+        const u = 1 - since / (0.25e-3 * (opts.flash ?? 1)), r0 = (first ? 70 : 34) * (h > 20 ? 1.4 : 1);
+        const g = ctx.createRadialGradient(px(Math.min(n.end, L)), y, 0, px(Math.min(n.end, L)), y, r0);
+        g.addColorStop(0, first ? COL.spike : colour);
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.globalAlpha = u * (first ? 1 : 0.5);
+        ctx.fillStyle = g;
+        ctx.fillRect(px(Math.min(n.end, L)) - r0, y - r0, 2 * r0, 2 * r0);
+        ctx.globalAlpha = 1;
+      }
+    }
+    else if (opts.over && (n.front ?? 0) < 0.5 * L && kind === 'myelin') {
+      ctx.fillStyle = COL.warn ?? COL.na;
+      ctx.fillText('stopped', X1, ny);
+    }
     else if (opts.over && n.front !== null && Number.isFinite(n.pace)) {
       // still crawling when the others are in: when it would arrive, at its own speed so far
       ctx.fillStyle = COL.muted;
@@ -116,7 +136,7 @@ export function drawRace(f, nerves, opts = {}) {
       const g = ctx.createRadialGradient(x0 + ((x1 - x0) * k) / N, y, 0, x0 + ((x1 - x0) * k) / N, y, h + 18);
       g.addColorStop(0, COL['spike-glow']);
       g.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.globalAlpha = (u - 0.35) * 0.5;
+      ctx.globalAlpha = (u - 0.35) * (kind === 'squid' ? 0.3 : 0.5); // (the squid's glow is big enough already)
       ctx.fillStyle = g;
       ctx.fillRect(x0 + ((x1 - x0) * k) / N - h - 18, y - h - 18, 2 * (h + 18), 2 * (h + 18));
     }
@@ -213,7 +233,7 @@ export function ions(S) {
     'K+': Vm.map((v, g) => G['K+'] * n[g] ** 4 * (v - E('K+', g))),
   };
   const xm = xs.slice(1).map((x, g) => (x + xs[g]) / 2);
-  const along = Object.fromEntries(['K+', 'Na+', 'Cl-'].map((s) => [s, xm.map((_, g) => (-(F * F) * D * 0.5 * (S.c[s][g] + S.c[s][g + 1]) * (S.V[s][g + 1] - S.V[s][g])) / (RT * (xs[g + 1] - xs[g])))]));
+  const along = Object.fromEntries(['K+', 'Na+', 'Cl-', 'A-'].map((s) => [s, xm.map((_, g) => (-(F * F) * (s === 'A-' ? DA : D) * 0.5 * (S.c[s][g] + S.c[s][g + 1]) * (S.V[s][g + 1] - S.V[s][g])) / (RT * (xs[g + 1] - xs[g])))]));
   return { xs, cross, xm, along };
 }
 export function drawIons(f, nerve) {
@@ -241,9 +261,9 @@ export function drawIons(f, nerve) {
     if (kk > 0.04) arrow(ctx, xp + 3, yMem + 26 * kk + 4, xp + 3, yMem - 40 * kk - 4, COL.k, 1 + 2.5 * kk);
   }
   // along the inside: a band as thick as the current there, split by ion
-  const tot = I.xm.map((_, g) => I.along['K+'][g] + I.along['Na+'][g] + I.along['Cl-'][g]);
+  const tot = I.xm.map((_, g) => I.along['K+'][g] + I.along['Na+'][g] + I.along['Cl-'][g] + I.along['A-'][g]);
   const big = Math.max(1e-9, ...tot.map(Math.abs));
-  const order = [['K+', COL.k], ['Na+', COL.na], ['Cl-', COL.cl]];
+  const order = [['K+', COL.k], ['Na+', COL.na], ['Cl-', COL.cl], ['A-', COL.anion]];
   for (let k = 0; k < I.xm.length; k++) {
     const a = px(I.xs[k]), b = px(I.xs[k + 1]), T = tot[k], w = (Math.abs(T) / big) * band;
     if (w < 0.3) continue;
@@ -269,7 +289,7 @@ export function drawIons(f, nerve) {
     const tx = X0;
     ctx.fillText('current along the inside, carried by:', tx, yAxis + 44);
     ctx.font = MONO(13, 600);
-    const parts = [[`K⁺ ${share('K+')}%`, COL.k], [`Na⁺ ${share('Na+')}%`, COL.na], [`Cl⁻ ${share('Cl-')}%`, COL.cl]];
+    const parts = [[`K⁺ ${share('K+')}%`, COL.k], [`Na⁺ ${share('Na+')}%`, COL.na], [`Cl⁻ ${share('Cl-')}%`, COL.cl], [`large anions ${share('A-')}%`, COL.anion]];
     const widths = parts.map(([t]) => ctx.measureText(t).width + 18), all = widths.reduce((a, b) => a + b);
     let sx = tx;
     parts.forEach(([t, c], i) => { ctx.fillStyle = c; ctx.fillText(t, sx, yAxis + 68); sx += widths[i]; });
@@ -295,4 +315,57 @@ function arrow(ctx, x0, y0, x1, y1, colour, w) {
   ctx.lineTo(x1 - hl * Math.cos(a - 0.45), y1 - hl * Math.sin(a - 0.45));
   ctx.lineTo(x1 - hl * Math.cos(a + 0.45), y1 - hl * Math.sin(a + 0.45));
   ctx.closePath(); ctx.fill();
+}
+
+// ---------- a zoom on the wrapped nerve ----------
+// A few millimetres of it, magnified, following its front: each gap's firing and the trail's leap
+// to the next. (Space is magnified; time runs as in the race.)
+export function drawZoom(f, n, opts = {}) {
+  const { ctx, VW, VH } = f, span = opts.span ?? 5e-3, h = opts.h ?? 56, y = VH / 2 + 10;
+  ctx.clearRect(0, 0, VW, VH);
+  const front = n.front ?? 0, a = clamp(front - 0.6 * span, 0, Math.max(0, n.end - span)), b = a + span;
+  const zx = (x) => 30 + ((x - a) / span) * (VW - 60);
+  const S = n.solution, step = NODE + n.p.gap;
+  ctx.save();
+  ctx.beginPath(); ctx.rect(30, 0, VW - 60, VH); ctx.clip();
+  ctx.fillStyle = COL.axon;
+  ctx.fillRect(30, y - h / 2, VW - 60, h);
+  if (n.front !== null) { ctx.fillStyle = mix(COL.axon, LANE()[n.kind], 0.45); ctx.fillRect(30, y - h / 2, zx(front) - 30, h); }
+  for (let k = 0; k < 200; k++) {
+    const x = a + ((k + 0.5) / 200) * span, u = heat(vmAt(S, x));
+    if (u < 0.05) continue;
+    ctx.globalAlpha = Math.min(1, u * 1.4);
+    ctx.fillStyle = mix(COL.axon, COL.spike, u);
+    ctx.fillRect(zx(a + (k / 200) * span), y - h / 2, (VW - 60) / 200 + 0.8, h);
+    ctx.globalAlpha = 1;
+  }
+  // the sheath, and a flash at each gap as it fires
+  ctx.fillStyle = COL.sheath; ctx.strokeStyle = COL['sheath-line']; ctx.lineWidth = 1.5;
+  for (let x = Math.floor(a / step) * step; n.kind === 'myelin' && x < b; x += step) {
+    const l = zx(x + NODE) + 9, r = zx(x + step) - 9;
+    ctx.globalAlpha = 0.62;
+    ctx.beginPath(); ctx.roundRect(l, y - h / 2 - 16, r - l, h + 32, 18); ctx.fill(); ctx.stroke();
+    ctx.globalAlpha = 1;
+    const i = Math.round(((x + NODE / 2) / n.end) * (n.spots.length - 1)), since = n.time - n.at[i];
+    if (since >= 0 && since < 0.08e-3) {
+      const u = 1 - since / 0.08e-3, gx = zx(x + NODE / 2);
+      const g = ctx.createRadialGradient(gx, y, 0, gx, y, 90);
+      g.addColorStop(0, COL.spike); g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.globalAlpha = u; ctx.fillStyle = g; ctx.fillRect(gx - 90, y - 90, 180, 180); ctx.globalAlpha = 1;
+    }
+  }
+  ctx.restore();
+  // a scale bar and a label
+  ctx.font = MONO(13, 600);
+  ctx.fillStyle = LANE()[n.kind];
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText(opts.label ?? 'CLOSE UP', 30, 26);
+  ctx.strokeStyle = COL.muted; ctx.lineWidth = 2;
+  const bx = VW - 30 - (VW - 60) / (span / 1e-3);
+  ctx.beginPath(); ctx.moveTo(bx, VH - 22); ctx.lineTo(VW - 30, VH - 22); ctx.stroke();
+  ctx.font = MONO(12.5); ctx.fillStyle = COL.muted; ctx.textAlign = 'right';
+  ctx.fillText('1 mm', VW - 30, VH - 30);
+  ctx.textAlign = 'left';
+  if (n.kind === 'myelin') ctx.fillText('a gap in the wrapping every millimetre', 30, VH - 30);
 }

@@ -8,6 +8,7 @@
 //   toks   [{ t, f, pan, gain }]  a soft wooden "tok": a sine that sags as it dies
 //   bonks  [{ t, f, pan, gain }]  a soft, low, rubbery "bonk": something went a little wrong
 //   clicks [{ t, gain }]          a plug going in or out
+//   bells  [{ t, f, pan, gain }]  a soft chime: a few out-of-tune partials, ringing out over a second
 //   beds   [{ kind: 'rush' | 'bell', fps, gain: [per frame], pan?: [per frame], f? }]  continuous
 //          sounds, faded (and panned) frame by frame; a rush's f is its brightness (lowpass, Hz)
 
@@ -96,6 +97,19 @@ export async function render(score) {
       o.start(t); o.stop(t + die + 0.02);
     }
     lp.connect(g);
+    panTo(ctx, g, pan, bus);
+  }
+  for (const { t, f, pan, gain } of score.bells ?? []) {
+    const g = ctx.createGain();
+    for (const [mult, a, die] of [[1, 1, 1.4], [2.76, 0.3, 0.6], [5.4, 0.1, 0.3]]) {
+      const o = ctx.createOscillator(), og = ctx.createGain();
+      o.frequency.value = f * mult;
+      og.gain.setValueAtTime(0, t);
+      og.gain.linearRampToValueAtTime(a * gain, t + 0.006);
+      og.gain.exponentialRampToValueAtTime(1e-4, t + die);
+      o.connect(og).connect(g);
+      o.start(t); o.stop(t + die + 0.05);
+    }
     panTo(ctx, g, pan, bus);
   }
   const burst = noise(ctx, 0.05, 99);

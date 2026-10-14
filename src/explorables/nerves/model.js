@@ -19,9 +19,13 @@ export const IN = { 'Na+': 50, 'K+': 400, 'Cl-': 52.5, 'A-': 397.5 };
 const E0 = { 'Na+': 50 * mV, 'K+': -77 * mV, 'Cl-': -54.387 * mV };
 export const OUT = Object.fromEntries(['Na+', 'K+', 'Cl-'].map((s) => [s, IN[s] * Math.exp((z[s] * E0[s]) / VT)]));
 export const G = { 'Na+': 1200, 'K+': 360, 'Cl-': 3 };
-// The small ions' diffusivity, for their axoplasm's resistivity, 35.4 Ω·cm; the anions barely move.
-const DA = 1e-11;
-export const D = (1 / 0.354 / ((FARADAY * FARADAY) / (GAS_CONSTANT * T)) - DA * IN['A-']) / (IN['Na+'] + IN['K+'] + IN['Cl-']);
+// The diffusivities, for their axoplasm's resistivity, 35.4 Ω·cm: one for the small ions, and half
+// that for the large anions, which can't cross the membrane but move freely along the axon (in a
+// squid mostly isethionate and aspartate, about half as mobile as K⁺). Their mobility sets K⁺'s share
+// of the current along the axon; holding them still would overstate it (80% rather than about 57%).
+const RA = 0.5;
+export const D = 1 / 0.354 / ((FARADAY * FARADAY) / (GAS_CONSTANT * T)) / (IN['Na+'] + IN['K+'] + IN['Cl-'] + RA * IN['A-']);
+export const DA = RA * D;
 
 export const L = 0.02; // each axon's length, m: the race is end to end
 export const THIN = 5e-6, SQUID = 238e-6, NODE = 1e-6;
