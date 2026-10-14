@@ -15,6 +15,20 @@ function readColours() {
     COL[k] = cs.getPropertyValue(`--${k}`).trim();
 }
 readColours();
+// The night/day switch: an explicit choice overrides the system's, and is remembered.
+const themeBtn = $('theme');
+function setTheme(t) {
+  if (t) document.documentElement.dataset.theme = t;
+  const dark = getComputedStyle(document.documentElement).colorScheme.includes('dark');
+  themeBtn.textContent = dark ? '☀ day' : '☾ night';
+  readColours();
+}
+try { setTheme(localStorage.getItem('li-theme')); } catch { setTheme(); }
+themeBtn.addEventListener('click', () => {
+  const next = getComputedStyle(document.documentElement).colorScheme.includes('dark') ? 'light' : 'dark';
+  try { localStorage.setItem('li-theme', next); } catch {}
+  setTheme(next);
+});
 matchMedia('(prefers-color-scheme: light)').addEventListener?.('change', () => (readColours(), (dirty = true)));
 const MONO = (px, w = 400) => `${w} ${px * FS}px "Martian Mono", ui-monospace, monospace`;
 const DISPLAY = (px, w = 800) => `${w} ${px * FS}px "Big Shoulders Display", "Arial Narrow", sans-serif`;
@@ -348,7 +362,7 @@ function drawShelves(f) {
   ctx.fillStyle = plating ? COL.warn : COL['ink-2'];
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
-  const lines = plating ? ['arriving lithium is above', 'the metal: it plates'] : ['lithium arriving'];
+  const lines = plating ? ['arriving lithium is above', 'the metal: it plates'] : [cell.I > 1e-9 ? 'lithium arriving' : cell.I < -1e-9 ? 'lithium leaving' : 'lithium at the surface'];
   lines.forEach((t, k) => ctx.fillText(t, px(La) + 22, Math.max(ya + 10, w.high(0) + 10) + 17 * k));
   // the jump between the shelves (at rest: the battery's voltage), drawn down the liquid
   const ga = S.region.lastIndexOf(0), gc = S.region.indexOf(2), xm = px(La + Ls * 0.86);
@@ -461,6 +475,15 @@ function drawSpecies(f) {
   const Vli = (k) => S.V['Li+'][k], Ve = (k) => S.V['e-'][k];
   const within = (y, r) => (v) => y(clamp(v, r[0] - 0.02, r[1] + 0.02));
   trace(ctx, S, Vli, () => true, within(w.low, SP_LOW), COL.li, 4.5);
+  ctx.setLineDash([7, 6]);
+  trace(ctx, S, (k) => S.V['PF6-'][k], (r) => r === 1, within(w.low, SP_LOW), COL.ink, 2.2);
+  ctx.setLineDash([]);
+  const im = S.x.findIndex((x) => x > La + 0.3 * Ls);
+  ctx.font = MONO(13, 600);
+  ctx.fillStyle = COL.anion;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  ctx.fillText('PF₆⁻ (dashed)', px(La + 0.3 * Ls), within(w.low, SP_LOW)(S.V['PF6-'][im]) + 10);
   trace(ctx, S, Ve, (r) => r === 0, within(w.low, SP_LOW), COL.e, 4.5);
   trace(ctx, S, Ve, (r) => r === 2, within(w.high, SP_HIGH), COL.e, 4.5);
   const n = S.x.length - 1, ia = S.region.lastIndexOf(0);

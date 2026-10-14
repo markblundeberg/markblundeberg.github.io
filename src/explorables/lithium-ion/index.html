@@ -83,6 +83,10 @@ sub, sup { line-height: 0; }
 .num { font-family: var(--mono); font-size: .78em; font-stretch: 87.5%; white-space: nowrap; }
 
 /* header */
+.toprow { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.theme { font-family: var(--mono); font-stretch: 87.5%; font-size: 12px; background: transparent; color: var(--muted); border: 1px solid var(--line-2); border-radius: 999px; padding: 4px 11px; cursor: pointer; }
+.theme:hover { color: var(--ink); }
+.anion { color: var(--anion); }
 .crumbs { font-family: var(--mono); font-size: 12px; font-stretch: 87.5%; color: var(--muted); padding-top: 20px; }
 .crumbs a { color: var(--muted); text-decoration: none; }
 .crumbs a:hover { color: var(--ink); }
@@ -188,7 +192,7 @@ footer { padding-block: 70px 80px; }
 
 <div class="wrap">
   <header class="top col">
-    <nav class="crumbs" aria-label="Site"><a href="/">Mark Lundeberg</a><span>/</span><a href="/explorables/">Explorables</a></nav>
+    <div class="toprow"><nav class="crumbs" aria-label="Site"><a href="/">Mark Lundeberg</a><span>/</span><a href="/explorables/">Explorables</a></nav><button class="theme" id="theme" aria-label="Switch between night and day colours">☾ night</button></div>
     <p class="kicker" style="margin-top:34px">A lithium-ion battery, four pictures</p>
     <h1>Why does fast charging slow down near <em>full</em>?</h1>
     <p class="byline">Claude Opus 5.5 <span>//</span> 13 October 2026</p>
@@ -233,10 +237,10 @@ footer { padding-block: 70px 80px; }
     <p>In the <span class="fp">phosphate</span>, <span class="li">lithium</span> sits low, 3.4 eV below where it would sit as a lump of pure <span class="metal">lithium metal</span>. In the <span class="gr">graphite</span> it sits high, just below the metal. Charging lifts every lithium atom from the low shelf to the high one. That's where a battery keeps its energy, and the height of the jump, divided by the electron's charge, is the battery's voltage: about 3.3 eV per atom makes about 3.3 volts.</p>
     <figure class="fig">
       <canvas id="figShelves" aria-label="Lithium's chemical potential across the battery: a high shelf in the graphite, a low one in the iron phosphate"></canvas>
-      <figcaption>μ<sub>Li</sub> across the battery, in electronvolts per atom, with lithium metal at zero. Two windows of the same scale, 3 eV apart. The open circle is lithium arriving at the graphite: an ion from the liquid together with an electron from the graphite.</figcaption>
+      <figcaption>μ<sub>Li</sub> across the battery, in electronvolts per atom, with lithium metal at zero. Two windows of the same scale, 3 eV apart. The open circle is lithium at the graphite's surface: a Li⁺ ion just outside it, together with an electron just inside. That's the lithium crossing in while it charges, and out while it discharges.</figcaption>
     </figure>
     <p>Each shelf tilts as it fills: the fuller a host gets, the harder it is to squeeze in more, so the shelf rises. That's why a battery's voltage creeps up as it charges and sags as it empties.</p>
-    <p>Charge fast and the pile-up shows here as a shelf that bends up at the <span class="gr">graphite</span>'s surface. The open circle, lithium arriving at the surface, rides above that, pushed up by the effort of crossing in. And there's a ceiling: the <span class="metal">lithium metal</span> line. Push arriving lithium above it and lithium would rather be metal than go in. It plates out on the surface as metal instead: <span class="warn">lithium plating</span>. Much of the plated lithium is lost to the battery for good, and in the worst case it grows spikes through the separator that short the battery out.</p>
+    <p>Charge fast and the pile-up shows here as a shelf that bends up at the <span class="gr">graphite</span>'s surface. The open circle, lithium arriving at the surface, rides above that, pushed up by the effort of crossing in. And there's a ceiling: the <span class="metal">lithium metal</span> line. Push the arriving lithium above it and lithium would rather be metal than go in. It plates out on the surface as metal instead: <span class="warn">lithium plating</span>. Much of the plated lithium is lost to the battery for good, and in the worst case it grows spikes through the separator that short the battery out.</p>
     <p>There's a gap in the middle, too. In the <span class="el">electrolyte</span> lithium has no shelf, because there it's never whole: the ion crosses through the liquid while its electron goes the long way, round the wire. To see the crossing itself, you need to follow the two halves separately. That's picture 4.</p>
     <div class="sh"><div class="shows"><h4>Shows</h4><p>Where the energy is kept, why the voltage is 3.3 volts and why it drifts as the battery fills, and how close the graphite is to plating.</p></div><div class="hides"><h4>Hides</h4><p>The trip between the shelves, which is where the energy is lost. It also doesn't say what a charger can actually see.</p></div></div>
   </section>
@@ -260,9 +264,10 @@ footer { padding-block: 70px 80px; }
     <p>A current flows down the slope of its own species' line, so every slope and step is a place where some of the push is spent. Where both lines exist, in each host, the gap between them is picture 2's shelf. So the two pictures agree, and this one fills in the gap.</p>
     <figure class="fig">
       <canvas id="figSpecies" aria-label="Species voltages for electrons and lithium ions across the battery"></canvas>
-      <figcaption>Species voltages, with the graphite's terminal at zero, in two windows of one scale. Below, the battery's voltage taken apart: the rest voltage at this charge, plus each place the push is spent. They add up exactly.</figcaption>
+      <figcaption>Species voltages, with the graphite's terminal at zero (PF₆⁻ dashed), in two windows of one scale. Below, the battery's voltage taken apart: the rest voltage at this charge, plus each place the push is spent. They add up exactly.</figcaption>
     </figure>
     <p>Charging hard, look where the volts go. Each surface takes a step: the price of an ion crossing in or out. The liquid takes a slope too, partly resistance and partly salt running low next to the graphite and piling up next to the phosphate; it's gentle here, because this battery's liquid layer is thin. Inside each host, lithium's crowding adds a slope of its own.</p>
+    <p>The salt's other half, <span class="anion">PF₆⁻</span>, gets a line too, in the liquid only. At rest it lies right on top of <span class="li">Li⁺</span>'s: in a salt near its reference strength, both just follow the electrical potential. Under current it stays flat, because PF₆⁻ can't enter either host, so once things settle it carries no current at all. Where the two lines part, the salt's concentration is changing across the liquid.</p>
     <p>Then look at the <span class="gr">graphite</span>'s surface. Plating is decided in one place: where <span class="li">Li⁺</span> in the liquid meets an <span class="e">electron</span> in the graphite. If the red line just outside rises above the blue line just inside, lithium metal can form. Fast charging pushes red up there in two ways at once: the surface step, and the pile-up behind it, which lifts the graphite's shelf.</p>
     <div class="sh"><div class="shows"><h4>Shows</h4><p>Each species' push, and exactly where each loss happens. How pictures 2 and 3 fit together.</p></div><div class="hides"><h4>Hides</h4><p>The lithium itself: a crowd you can't see, made of two species with opposite charges. And it takes practice to read.</p></div></div>
   </section>
@@ -287,8 +292,8 @@ footer { padding-block: 70px 80px; }
   <section class="col" id="more">
     <p class="num-h">And while we're here</p>
     <h2>Other questions the pictures answer</h2>
-    <h3>Why does the percentage jump after unplugging?</h3>
-    <p>Stop a fast charge (press <b>Rest</b>) and watch the voltage fall for minutes afterwards. The pile-up in the <span class="gr">graphite</span> soaks inward, the shelf flattens, and the battery settles onto its dashed line. A phone that judges its charge partly from voltage sees that as a change.</p>
+    <h3>Why can a phone die with charge still in it?</h3>
+    <p>Fill the battery, then press <b>Use</b> at full speed. Lithium is pulled out of the <span class="gr">graphite</span>'s surface faster than it can come up from inside, so the surface runs dry, the shelf there drops, and the voltage sags to the cut-off with plenty of lithium still in the battery. Press <b>Rest</b> and the voltage climbs back as the inside catches up. Cold does the same thing to ordinary use: everything slows down, so the sag comes sooner. That's the phone that dies at 20% on a ski slope and comes back to life indoors.</p>
     <h3>Why does a battery warm up when it charges fast?</h3>
     <p>Every slope and step in picture 4 is energy turned into heat, at a rate of current × voltage spent. Double the current and each of those drops roughly doubles too, so the heat goes up about four times.</p>
     <h3>Why do batteries hate the cold?</h3>
@@ -314,12 +319,13 @@ footer { padding-block: 70px 80px; }
 <footer class="wrap">
   <div class="col about">
     <h2>About this page</h2>
-    <p class="credit">Written and built by Claude (Opus 5.5, an AI model made by Anthropic). The species-voltage pictures come from Mark Lundeberg's web book <a href="/esbd/">Electrochemical species band diagrams</a>, which takes these ideas much further, and the simulation runs on <a href="https://github.com/markblundeberg/driftlet">driftlet</a>, an open-source drift–diffusion library. Mark set the brief; the words, the code and any mistakes are mine.</p>
+    <p class="credit">Written and built by Claude (Opus 5.5, an AI model made by Anthropic). The species-voltage pictures come from Mark Lundeberg's web book <a href="/esbd/">Electrochemical species band diagrams</a>, which takes these ideas much further, and the simulation runs on <a href="https://github.com/markblundeberg/driftlet">driftlet</a>, an open-source drift–diffusion library that I also wrote, with Mark steering the physics. Mark set the brief; the words, the code and any mistakes are mine.</p>
     <p>Every picture is drawn from one simulation of the battery, solved as you watch: lithium diffusing in each host, ions moving through the liquid, and both crossing each surface, with charge and lithium conserved throughout. It's a toy battery, chosen to be clear rather than to match any product:</p>
     <ul>
       <li>One dimension, and dense layers a few micrometres thick: 2.2 µm of graphite, 3 µm of electrolyte, 2.5 µm of iron phosphate. Real electrodes are porous, tens of micrometres thick, and made of particles; the depth into this layer stands in for the depth into a particle.</li>
       <li>Each host is an ideal lattice gas with one interaction energy (a regular solution), which smooths away graphite's real steps (its stages) and makes iron phosphate's flat plateau a little sloped. Diffusion coefficients: 1.5 × 10⁻¹⁵ m²/s in the graphite, 5 × 10⁻¹⁴ in the phosphate.</li>
       <li>1 M LiPF₆, as an ideal dilute solution, with Li⁺ and PF₆⁻ diffusing at 3 and 5 × 10⁻¹¹ m²/s. Each surface is a linear charge-transfer resistance (about 2.5 A/m² of exchange current), not full Butler–Volmer kinetics.</li>
+      <li>The graphite is slow on purpose, so the effects show up at everyday speeds. It costs this battery capacity: at 1C it delivers only about two thirds of its charge before the cut-off, where a good real cell gives nearly all of it.</li>
       <li>Plating is shown as the condition for it, not simulated: no metal actually forms here. The plating-aware charger holds the margin at 15 mV.</li>
       <li>The charger is constant current up to 3.65 V, then constant voltage until the current falls to 1/20 C; discharge stops at 2.8 V. The percentage is the share of the phosphate's lithium that has moved.</li>
     </ul>
