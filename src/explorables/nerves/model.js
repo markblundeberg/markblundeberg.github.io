@@ -18,7 +18,7 @@ export const T = 273.15 + 18.5, VT = (GAS_CONSTANT * T) / FARADAY;
 export const IN = { 'Na+': 50, 'K+': 400, 'Cl-': 52.5, 'A-': 397.5 };
 const E0 = { 'Na+': 50 * mV, 'K+': -77 * mV, 'Cl-': -54.387 * mV };
 export const OUT = Object.fromEntries(['Na+', 'K+', 'Cl-'].map((s) => [s, IN[s] * Math.exp((z[s] * E0[s]) / VT)]));
-const G = { 'Na+': 1200, 'K+': 360, 'Cl-': 3 };
+export const G = { 'Na+': 1200, 'K+': 360, 'Cl-': 3 };
 // The small ions' diffusivity, for their axoplasm's resistivity, 35.4 Ω·cm; the anions barely move.
 const DA = 1e-11;
 export const D = (1 / 0.354 / ((FARADAY * FARADAY) / (GAS_CONSTANT * T)) - DA * IN['A-']) / (IN['Na+'] + IN['K+'] + IN['Cl-']);
@@ -76,50 +76,70 @@ function definition(kind, p, fireAt, L) {
 const UP = -30 * mV;
 
 // One axon: settled to rest, then fired on request. Times are from the firing (t = 0 at the pulse).
+// (Rest is where it settles in 30 ms, not a steady state: with no pumps, this model's only true
+// steady state has every ion's flux zero, which is a nerve run down, near −14 mV. So it's settled
+// in time; pass settle = false to do that in budgeted pieces, with settle(ms), until ready.)
 export class Nerve {
-  constructor(kind, p = MYELIN, length = L) {
+  constructor(kind, p = MYELIN, length = L, settle = true) {
     this.kind = kind;
     this.p = { ...p };
     this.def = (at) => definition(kind, this.p, at, length);
     this.dev = new Device(this.def(null));
-    this.dev.advance(SETTLE, { tol: 1e-4 });
+    this.ready = false;
+    if (settle) this.settle();
     this.fired = null; // device time of the latest firing
     this.front = null; // where the spike has reached: the furthest x past −30 mV since firing
     this.arrived = null; // when it reached the far end
+    this.end = this.dev.solution().x.at(-1);
     this.spots = Array.from({ length: 41 }, (_, i) => (i / 40) * this.end); // timed along the axon
     this.at = this.spots.map(() => NaN); // when the spike reached each spot, s after firing
   }
-  get end() { return this.dev.solution().x.at(-1); }
-  get time() { return this.fired === null ? 0 : this.dev.solution().time - this.fired; }
+  settle(budgetMs = Infinity) {
+    if (!this.ready) this.ready = this.dev.advance(SETTLE, { tol: 1e-4, budgetMs }).done;
+    this.sol = null;
+    return this.ready;
+  }
+  get time() { return this.fired === null ? 0 : this.dev.solver.time - this.fired; }
   fire() {
-    const now = this.dev.solution().time;
+    const now = this.dev.solver.time;
     this.fired = now + 1e-6;
     this.dev.set(this.def(this.fired));
+    this.sol = null;
     this.front = null;
     this.arrived = null;
+    this.last = null;
     this.at.fill(NaN);
   }
   // Advance to t after the firing (or by dt at rest), for at most budgetMs; returns whether it got there.
   advance(t, budgetMs = Infinity) {
-    const target = this.fired === null ? this.dev.solution().time + t : this.fired + t;
+    const target = this.fired === null ? this.dev.solver.time + t : this.fired + t;
     const probes = this.spots.map((x) => ({ x, quantity: 'phi' }));
+    this.sol = null;
     const sol = this.dev.advance(target, { tol: 1e-4, dtMax: this.kind === 'squid' ? 10e-6 : 5e-6, budgetMs, probes });
     if (this.fired !== null) {
-      const { t: ts, probes: pr } = sol.trace;
+      // (each call's readings, joined to the last call's last, so a crossing between calls counts)
+      const ts = [this.last?.t ?? NaN, ...sol.trace.t], pr = this.spots.map((_, j) => [this.last?.v[j] ?? NaN, ...sol.trace.probes[j]]);
       for (let j = 0; j < this.spots.length; j++)
         for (let i = 1; i < ts.length; i++)
           if (Number.isNaN(this.at[j]) && ts[i] > this.fired && pr[j][i - 1] < UP && pr[j][i] >= UP)
             this.at[j] = ts[i - 1] + ((ts[i] - ts[i - 1]) * (UP - pr[j][i - 1])) / (pr[j][i] - pr[j][i - 1]) - this.fired;
+      if (sol.trace.t.length) this.last = { t: ts.at(-1), v: pr.map((r) => r.at(-1)) };
       const k = this.at.findLastIndex((v) => Number.isFinite(v));
       if (k >= 0) this.front = this.spots[k];
       if (Number.isFinite(this.at.at(-1)) && this.arrived === null) this.arrived = this.at.at(-1);
     }
     return sol.done;
   }
+  // Its speed so far (m/s): between the furthest spot it has reached and one 2 mm back.
+  get pace() {
+    const k = this.at.findLastIndex((v) => Number.isFinite(v)), j = this.spots.findLastIndex((x, i) => i < k && x <= this.spots[k] - 2e-3);
+    return k > 0 && j >= 0 ? (this.spots[k] - this.spots[j]) / (this.at[k] - this.at[j]) : NaN;
+  }
   // Speed between two spots (m/s), from the arrival times: the middle of the axon, away from its ends.
   speed(a = 0.25, b = 0.75) {
     const i = Math.round(a * 40), j = Math.round(b * 40);
     return (this.spots[j] - this.spots[i]) / (this.at[j] - this.at[i]);
   }
-  get solution() { return this.dev.solution(); }
+  // (read once per change: the pictures read it several times a frame)
+  get solution() { return (this.sol ??= this.dev.solution()); }
 }

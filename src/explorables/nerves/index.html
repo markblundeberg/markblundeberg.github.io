@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Why are your nerves wrapped in fat?</title>
+<meta name="description" content="Three nerves race, simulated live in your browser: a thin bare one, the same one wrapped in myelin, and a squid's giant nerve. Why wrapping wins, and which ions carry the signal.">
+<link rel="canonical" href="https://marklundeberg.com/explorables/nerves/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Why are your nerves wrapped in fat?">
+<meta property="og:description" content="Three nerves race, simulated live: why wrapping a thin nerve beats making it thick.">
+<meta property="og:url" content="https://marklundeberg.com/explorables/nerves/">
+<meta property="og:image" content="https://marklundeberg.com/explorables/nerves/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Three nerves racing: a bare one, one wrapped in myelin, and a squid's giant nerve">
+<meta property="og:site_name" content="Mark Lundeberg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@MarkLundeberg">
+<meta name="twitter:image" content="https://marklundeberg.com/explorables/nerves/og.png">
+<link rel="icon" href="/img/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Martian+Mono:wdth,wght@87.5,400;87.5,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap">
+<style>
+/* Night: a nerve in the dark, glowing where it fires. Sodium is red-orange, potassium violet, and
+   myelin (mostly fat) is cream; every word for a thing is printed in that thing's colour. */
+:root {
+  color-scheme: dark;
+  --bg: #0d1015; --bg-2: #11151c; --surface: #151a22; --line: #252c38; --line-2: #313a48;
+  --ink: #ece7dc; --ink-2: #c4bfb4; --muted: #8a909b; --e: #55b8ff;
+  --axon: #1d232c; --outside: #0f2630; --spike: #ffd166; --spike-glow: rgba(255, 209, 102, .9);
+  --sheath: #efdcae; --sheath-line: #b9a473; --fat: #f3d58c;
+  --bare: #c4bfb4; --myelin: #f3d58c; --squid: #55b8ff;
+  --na: #ff6b4a; --k: #a78bfa; --cl: #5ed39a;
+  --charge: #3ddc84; --warn: #ffb547;
+  --bar: rgba(13, 16, 21, .86);
+  --display: "Big Shoulders Display", "Arial Narrow", "Roboto Condensed", sans-serif-condensed, sans-serif;
+  --serif: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --mono: "Martian Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #f4f1ea; --bg-2: #ece8de; --surface: #fbfaf6; --line: #ddd7ca; --line-2: #cbc3b3;
+    --ink: #1a1d24; --ink-2: #3c4049; --muted: #6c6f77; --e: #1f6fc0;
+    --axon: #e4dfd5; --outside: #dcebf0; --spike: #f0a400; --spike-glow: rgba(240, 164, 0, .5);
+    --sheath: #f3e6c4; --sheath-line: #c9b385; --fat: #a8761a;
+    --bare: #6c6f77; --myelin: #a8761a; --squid: #1f6fc0;
+    --na: #d4462a; --k: #7b5cd6; --cl: #2f9e68;
+    --charge: #1f9d58; --warn: #c77700;
+    --bar: rgba(244, 241, 234, .88);
+  }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4f1ea; --bg-2: #ece8de; --surface: #fbfaf6; --line: #ddd7ca; --line-2: #cbc3b3;
+  --ink: #1a1d24; --ink-2: #3c4049; --muted: #6c6f77; --e: #1f6fc0;
+  --axon: #e4dfd5; --outside: #dcebf0; --spike: #f0a400; --spike-glow: rgba(240, 164, 0, .5);
+  --sheath: #f3e6c4; --sheath-line: #c9b385; --fat: #a8761a;
+  --bare: #6c6f77; --myelin: #a8761a; --squid: #1f6fc0;
+  --na: #d4462a; --k: #7b5cd6; --cl: #2f9e68;
+  --charge: #1f9d58; --warn: #c77700;
+  --bar: rgba(244, 241, 234, .88);
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; color: var(--ink); font-family: var(--serif); font-size: 19px; line-height: 1.6;
+  background: radial-gradient(1200px 600px at 70% -10%, var(--bg-2), transparent 70%), var(--bg);
+}
+.wrap { padding-inline: 22px; }
+.col { max-width: 700px; margin-inline: auto; }
+.wide { max-width: 1000px; margin-inline: auto; }
+a { color: var(--e); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--e); outline-offset: 2px; }
+p { margin: 0 0 16px; }
+sub, sup { line-height: 0; }
+.warn { color: var(--warn); }
+.num { font-family: var(--mono); font-size: .78em; font-stretch: 87.5%; white-space: nowrap; }
+
+/* header */
+.toprow { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.theme { font-family: var(--mono); font-stretch: 87.5%; font-size: 12px; background: transparent; color: var(--muted); border: 1px solid var(--line-2); border-radius: 999px; padding: 4px 11px; cursor: pointer; }
+.theme:hover { color: var(--ink); }
+.crumbs { font-family: var(--mono); font-size: 12px; font-stretch: 87.5%; color: var(--muted); padding-top: 20px; }
+.crumbs a { color: var(--muted); text-decoration: none; }
+.crumbs a:hover { color: var(--ink); }
+.crumbs span { margin-inline: 6px; opacity: .6; }
+header.top { padding-block: 40px 10px; }
+h1 { font-family: var(--display); font-weight: 900; font-size: clamp(52px, 10vw, 104px); line-height: .9; letter-spacing: .005em; text-transform: uppercase; margin: 0 0 22px; text-wrap: balance; }
+.byline { font-family: var(--mono); font-size: 12px; font-stretch: 87.5%; color: var(--muted); margin: 0 0 26px; }
+.byline span { margin-inline: 6px; opacity: .6; }
+.lede { font-size: 22px; line-height: 1.5; color: var(--ink-2); }
+
+/* the bar: the cell's controls, and its gauge */
+.bar { position: sticky; top: 0; z-index: 20; background: var(--bar); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-block: 1px solid var(--line); margin-top: 26px; }
+.bar-in { max-width: 1000px; margin-inline: auto; padding: 10px 22px; display: flex; gap: 14px 22px; align-items: center; flex-wrap: wrap; font-family: var(--mono); font-stretch: 87.5%; font-size: 12.5px; }
+.ctl { display: grid; gap: 2px; min-width: 170px; flex: 1 1 170px; }
+.ctl label { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); }
+.ctl label b { color: var(--ink); font-weight: 600; white-space: nowrap; }
+input[type=range] { width: 100%; accent-color: var(--charge); margin: 0; height: 22px; }
+.chk { display: inline-flex; gap: 7px; align-items: center; cursor: pointer; color: var(--ink-2); }
+.chk input { accent-color: var(--warn); width: 16px; height: 16px; margin: 0; }
+.btn { font: inherit; font-size: 12.5px; background: transparent; border: 1px solid var(--line-2); color: var(--ink-2); border-radius: 8px; padding: 7px 11px; cursor: pointer; }
+.btn:hover { color: var(--ink); border-color: var(--muted); }
+.more { display: none; }
+@media (max-width: 700px) {
+  body { font-size: 18px; }
+  .bar-in { padding: 8px 14px; gap: 8px 12px; }
+  .wrap { padding-inline: 16px; }
+  .more { display: inline-block; margin-left: auto; }
+  .bar:not(.open) #play, .bar:not(.open) #empty { display: none; }
+  .ctl { flex-basis: 100%; }
+  .fig { padding: 8px; margin-inline: -8px; border-radius: 10px; }
+}
+
+/* sections and figures */
+section { padding-block: 64px 0; }
+.num-h { font-family: var(--mono); font-size: 12px; font-stretch: 87.5%; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+h2 { font-family: var(--display); font-weight: 800; font-size: clamp(38px, 6vw, 58px); line-height: .95; text-transform: uppercase; letter-spacing: .01em; margin: 0 0 18px; text-wrap: balance; }
+h3 { font-family: var(--display); font-weight: 800; font-size: 28px; line-height: 1; text-transform: uppercase; margin: 32px 0 10px; }
+figure { margin: 26px 0 22px; }
+.fig { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; box-shadow: 0 24px 60px -40px rgba(0, 0, 0, .7); }
+.fig canvas { display: block; width: 100%; height: auto; }
+figcaption { font-family: var(--mono); font-stretch: 87.5%; font-size: 12px; line-height: 1.55; color: var(--muted); margin-top: 10px; }
+.hero-fig { margin-top: 34px; }
+.sh { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); margin-top: 22px; font-size: 16.5px; line-height: 1.5; }
+.sh > div { padding: 12px 18px 0 0; }
+.sh > div + div { padding-left: 18px; border-left: 1px solid var(--line); }
+.sh h4 { font-family: var(--mono); font-stretch: 87.5%; font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 4px; font-weight: 600; }
+.sh .shows h4 { color: var(--charge); }
+.sh .hides h4 { color: var(--muted); }
+@media (max-width: 560px) { .sh { grid-template-columns: 1fr; } .sh > div + div { padding-left: 0; border-left: 0; border-top: 1px dashed var(--line); } }
+.eqn { font-family: var(--mono); font-stretch: 87.5%; font-size: 14.5px; line-height: 1.7; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; overflow-x: auto; }
+.eqn-note { color: var(--muted); font-size: 12.5px; }
+.callout { border-left: 3px solid var(--li); padding: 4px 0 4px 16px; margin: 22px 0; color: var(--ink-2); }
+
+/* the race */
+@media (max-width: 640px) { .race { grid-template-columns: 1fr; } }
+
+table { border-collapse: collapse; width: 100%; font-size: 16px; line-height: 1.45; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px 10px 0; border-bottom: 1px solid var(--line); }
+th { font-family: var(--mono); font-stretch: 87.5%; font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+td:first-child { font-family: var(--display); font-weight: 800; font-size: 20px; text-transform: uppercase; white-space: nowrap; }
+.tablewrap { overflow-x: auto; margin: 18px 0; }
+footer { padding-block: 70px 80px; }
+.about { font-size: 16px; color: var(--ink-2); }
+.about h2 { font-size: 34px; }
+.about li { margin-bottom: 6px; }
+.credit { border-left: 3px solid var(--e); padding: 4px 0 4px 16px; margin: 0 0 22px; }
+.kicker { font-family: var(--mono); font-size: 12.5px; font-stretch: 87.5%; letter-spacing: .12em; text-transform: uppercase; color: var(--na); margin: 0 0 14px; }
+h1 em { font-style: normal; color: var(--fat); }
+.na { color: var(--na); } .k { color: var(--k); } .cl { color: var(--cl); }
+.bare { color: var(--bare); } .my { color: var(--myelin); } .sq { color: var(--squid); }
+.fire { font: inherit; font-size: 13px; font-weight: 600; background: var(--spike); color: #1a1d24; border: 0; border-radius: 8px; padding: 8px 18px; cursor: pointer; }
+.fire:hover { filter: brightness(1.08); }
+.status { color: var(--muted); }
+.ctl { max-width: 260px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top col">
+    <div class="toprow"><nav class="crumbs" aria-label="Site"><a href="/">Mark Lundeberg</a><span>/</span><a href="/explorables/">Explorables</a></nav><button class="theme" id="theme" aria-label="Switch between night and day colours">☾ night</button></div>
+    <p class="kicker" style="margin-top:34px">A nerve signal, three pictures</p>
+    <h1>Why are your nerves wrapped in <em>fat</em>?</h1>
+    <p class="byline">Claude Opus 5.5 <span>//</span> 14 October 2026</p>
+    <p class="lede">Most of your nerves are wrapped in <span class="my">myelin</span>, a sheath that is mostly fat. A squid's fastest nerve has none; instead it's about as thick as a pencil lead. They're two answers to one problem: how to send a signal quickly down a wet, leaky wire.</p>
+    <p>Below are three nerves, simulated live in your browser and fired at the same moment: a thin <span class="bare">bare</span> one, the same thin one <span class="my">wrapped in myelin</span>, and a <span class="sq">squid's giant nerve</span>. The bar that sticks to the top of the screen fires them again and changes the wrapping.</p>
+  </header>
+</div>
+
+<div class="bar" id="bar">
+  <div class="bar-in">
+    <button class="fire" id="fire">Fire</button>
+    <label class="chk"><input type="checkbox" id="loop" checked> fire again by itself</label>
+    <div class="ctl"><label for="wraps">myelin <b id="wrapsOut">200 layers</b></label><input id="wraps" type="range" min="1.3" max="2.9" step="0.05" value="2.3" aria-label="Layers of myelin wrapped round the nerve"></div>
+    <div class="ctl"><label for="gap">gaps every <b id="gapOut">1 mm</b></label><input id="gap" type="range" min="0.25" max="3" step="0.25" value="1" aria-label="Spacing of the gaps in the myelin (nodes of Ranvier), in millimetres"></div>
+    <span class="status" id="status"></span>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="col" id="race">
+    <p class="num-h">Picture 1</p>
+    <h2>The race</h2>
+    <p>Each nerve is 2 centimetres long, fired at its left end. Everything is slowed down five thousand times: the real race is over in about a thousandth of a second.</p>
+    <figure class="fig">
+      <canvas id="figRace" aria-label="Three nerves racing, each glowing where it fires"></canvas>
+      <figcaption>Each nerve glows where its membrane is firing: dark at rest, bright at the peak of the spike. The wrapped nerve's gaps, the nodes of Ranvier, are drawn wider than life: they're 1 µm wide, every millimetre. The squid's nerve is drawn 4 times as wide as the thin ones; it's really 48 times as wide.</figcaption>
+    </figure>
+    <p>The wrapped nerve wins easily. In this simulation it runs at 34 metres per second: twelve times as fast as the same nerve bare (2.7 m/s), and nearly twice as fast as the squid's (19 m/s), which has over 2,000 times its cross-section. And watch how it moves: not as a smooth glow, but in sparks, from gap to gap.</p>
+    <p>Real nerves differ in the details. Your fastest ones are warmer and more thickly wrapped and reach about 120 m/s; your thinnest bare ones manage about 1 m/s. The race comes out the same way.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>Who wins, by how much, and that the wrapped signal jumps.</p></div><div class="hides"><h4>Hides</h4><p>Why a bare nerve is slow, and what's moving inside.</p></div></div>
+  </section>
+
+  <section class="col" id="wave">
+    <p class="num-h">Picture 2</p>
+    <h2>The wave</h2>
+    <p>A nerve signal isn't electricity flowing down a wire. Each patch of membrane fires by itself, and it fires when the patch behind it has charged it up past a threshold. The membrane is a thin insulator with salt water on both sides, so it's a capacitor, and charging a capacitor takes time. In a <span class="bare">bare</span> nerve, every bit of membrane has to be charged before it fires, so the signal crawls.</p>
+    <p><span class="my">Myelin</span> is a stack of membranes wrapped tightly round the nerve, 200 here. A stack of capacitors in a row holds far less charge than one, so the wrapped stretch charges almost at once, and it has no channels to fire. Only the gaps between the wrapping do. When one gap fires, its charge rushes along the inside to the next gap, which fires in turn. The signal jumps.</p>
+    <figure class="fig">
+      <canvas id="figWave" aria-label="Membrane voltage along each nerve"></canvas>
+      <figcaption>The voltage across each nerve's membrane, along its length, on one scale: about −65 mV at rest, up to about +40 mV at the peak of the spike. Ticks along the bottom are the wrapped nerve's gaps.</figcaption>
+    </figure>
+    <p>The <span class="bare">bare</span> nerve's spike is a short bump creeping along. The <span class="my">wrapped</span> one's voltage rises in steps, a whole millimetre at a time. Thicker wrapping charges faster still: slide the myelin up to 800 layers and it runs at about 70 m/s.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>The shape of the signal, and why the wrapped one jumps.</p></div><div class="hides"><h4>Hides</h4><p>The ions: what crosses the membrane, and what carries the current along the inside.</p></div></div>
+  </section>
+
+  <section class="col" id="ions">
+    <p class="num-h">Picture 3</p>
+    <h2>Who carries it</h2>
+    <p>So what actually travels down a nerve? Look inside the <span class="sq">squid's</span>, the widest. At the front of the spike, sodium channels open and <span class="na">Na⁺</span> rushes in from outside, which is what fires the membrane. Behind it, potassium channels open and <span class="k">K⁺</span> flows out, resetting it.</p>
+    <figure class="fig">
+      <canvas id="figIons" aria-label="Sodium crossing in and potassium crossing out of the membrane, and the current along the inside split by ion"></canvas>
+      <figcaption>Top: ions crossing the membrane, Na⁺ in and K⁺ out, as arrows as large as their currents. Below: the current along the inside of the nerve, as a band as thick as that current, split by which ion carries it.</figcaption>
+    </figure>
+    <p>But the current that runs along the inside of the nerve, charging the next patch, is mostly potassium: about 80% of it. Inside a nerve, <span class="k">K⁺</span> is by far the most plentiful ion, so it carries most of whatever current flows. Sodium starts the signal; potassium carries it along.</p>
+    <p>And nothing goes far. The signal shifts each ion inside by about a nanometre. In the same millisecond, each ion's own random jiggling moves it a thousand times further. What travels is the wave, the way a wave goes round a stadium while everyone stays in their seat.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>Which ions cross, where, and which ones carry the signal along.</p></div><div class="hides"><h4>Hides</h4><p>The outside of the nerve, which this simulation holds fixed.</p></div></div>
+  </section>
+
+  <section class="col" id="so">
+    <p class="num-h">So</p>
+    <h2>Why fat?</h2>
+    <p>A nerve signal is a chain of patches, each charging the next one up. There are two ways to make it faster. One is to make the nerve thicker, so the current along the inside meets less resistance; but a bare nerve's speed grows only as the square root of its width, so twice as fast costs four times as wide. Squid took that road, for the nerve that fires their escape jet. The other is to wrap the nerve so that only the gaps need charging. Animals with backbones took that road, and it's why a nerve as thin as a hair can beat the squid's.</p>
+  </section>
+
+  <section class="col" id="more">
+    <p class="num-h">And while we're here</p>
+    <h2>Other questions the pictures answer</h2>
+    <h3>Why does a stubbed toe hurt twice?</h3>
+    <p>First a sharp pain, then a second or so later, a dull ache. Your pain nerves come in both kinds. Thin wrapped ones, at about 5 to 30 m/s, bring the sharp first pain; thin bare ones, at about 1 m/s, bring the ache, and over a metre from toe to spine, the difference is most of a second.</p>
+    <h3>What happens when myelin is damaged?</h3>
+    <p>Slide the myelin down to its fewest layers. Too thin, and each wrapped stretch soaks up so much charge that the next gap never reaches its threshold: the signal stops. In multiple sclerosis, the body's immune system damages myelin in the brain and spinal cord, and signals through the damaged stretches slow down or fail.</p>
+  </section>
+
+  <section class="col" id="sim">
+    <p class="num-h">Under the hood</p>
+    <h2>How a nerve is simulated</h2>
+    <p>The race alone is a classic. In 1952 Hodgkin and Huxley described the squid nerve's channels with a set of equations and worked out by hand how fast its signal travels: 18.8 m/s. Their channels, joined to the cable equation, which treats a nerve as a leaky electrical wire, are what neuroscience's simulators still run. This page checks against them: its squid nerve runs at 18.7 m/s.</p>
+    <p>What this simulation adds is the ions. It follows each species inside the nerve (<span class="k">K⁺</span>, <span class="na">Na⁺</span>, <span class="cl">Cl⁻</span>, and the large negative ions that can't cross the membrane) as each one diffuses and drifts down its own electrochemical potential: the same drift–diffusion rule that runs our <a href="/explorables/lithium-ion/">lithium-ion battery</a>. That's how it can say which ions carry the current in picture 3. A cable model only knows that a current flows.</p>
+    <p>It leaves things out, to run live: the nerve has one dimension, its length; the fluid outside is held fixed; every nerve uses Hodgkin and Huxley's squid channels, at their 18.5 °C; and myelin is modelled only as what it does to the membrane's charging, with nodes 1 µm wide every millimetre. Real mammal nerves are warmer, with channels of their own, and faster.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="col about">
+    <h2>About this page</h2>
+    <p class="credit">Written and built by Claude (Opus 5.5, an AI model made by Anthropic). The simulation runs on <a href="https://github.com/markblundeberg/driftlet">driftlet</a>, an open-source drift–diffusion library that I also wrote, with Mark Lundeberg steering the physics. Mark set the brief; the words, the code and any mistakes are mine.</p>
+    <ul>
+      <li>Three axons, each a line of axoplasm 2 cm long: radius 5 µm for the thin ones and 238 µm for the squid's (Hodgkin and Huxley's own). Inside: K⁺ 400, Na⁺ 50, Cl⁻ 52.5 mM and impermeant anions, at their resistivity of 35.4 Ω·cm.</li>
+      <li>The membrane has Hodgkin and Huxley's channels, at 18.5 °C, and 1 µF/cm². The wrapped nerve's nodes are 1 µm wide with five times the channel density; between them, myelin divides the membrane's capacitance by its number of layers and has no channels.</li>
+      <li>Each nerve is fired by injecting a pulse of charge at its left end. Speeds are measured away from the ends, where they're steady.</li>
+    </ul>
+  </div>
+</footer>
+
+<script type="module" src="app.js"></script>
+<script data-goatcounter="https://marklundeberg.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
