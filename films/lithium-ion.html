@@ -14,8 +14,9 @@
 // plating line, then the same charge watching for it, eased off to the top. Rendered one frame
 // per call of window.reel.frame(k) by driftlet's tools/film.js (--root at this site).
 
-import { Cell, C1 } from '../src/explorables/lithium-ion/model.js';
-import { COL, span, createCrowd, crowdStep, drawCrowd, drawShelves, MONO, DISPLAY } from '../src/explorables/lithium-ion/pictures.js';
+import { Cell, C1, L } from '../src/explorables/lithium-ion/model.js';
+import { COL, span, createCrowd, crowdStep, drawCrowd, drawShelves, FLY } from '../src/explorables/lithium-ion/pictures.js';
+import { render } from './sound.js';
 
 Object.assign(COL, {
   bg: '#0d1015', surface: '#151a22', line: '#252c38', 'line-2': '#313a48', ink: '#ece7dc', 'ink-2': '#c4bfb4', muted: '#8a909b',
@@ -56,10 +57,11 @@ const plan = (() => {
   return { tPlate, tA, tB: cell.time - tA };
 })();
 
-let cell, crowd, k0, frames;
+let cell, crowd, k0, frames, heard;
 function reset() {
   cell = fresh();
   crowd = createCrowd(cell, 7);
+  heard = { drops: [], toks: [], clicks: [], rush: [], bell: [] }; // what each frame did, for the soundtrack
   frames = [];
   PHASES.forEach((ph, p) => { const n = Math.round(ph.secs * FPS); for (let j = 0; j < n; j++) frames.push({ p, u: (j + 1) / n, j, n }); });
   // the question and the fast charge share one run to the plating line
@@ -162,7 +164,8 @@ function draw(fr) {
 function frame(k) {
   if (k < k0) reset();
   for (let j = k0 + 1; j <= k; j++) {
-    const fr = frames[j], key = PHASES[fr.p].key, t0 = cell.time;
+    const fr = frames[j], key = PHASES[fr.p].key, t0 = cell.time, was = cell.mode;
+    const landing = crowd.flyers.filter((f) => f.site && f.age === FLY - 1);
     if (key === 'question' || key === 'fast') {
       if (cell.mode !== 'charge') cell.setMode('charge');
       cell.advance(fr.run * plan.tPlate, 50);
@@ -172,6 +175,14 @@ function frame(k) {
     }
     crowdStep(crowd, cell);
     crowd.wire += (cell.I / (4 * C1)) * 5;
+    // the sounds: a plip for each dot settling into a host, a tok for each one leaving, the charger's
+    // plug, a rush as loud as the current, and a glassy tone while past the plating line
+    const t = j / FPS;
+    for (const f of landing) heard.drops.push({ t, x: f.site.xd / L, y: f.site.Y });
+    for (const f of crowd.flyers) if (!f.site && f.age === 1) heard.toks.push({ t, x: f.from[0] / L, y: f.from[1] });
+    if ((was === 'charge') !== (cell.mode === 'charge')) heard.clicks.push({ t });
+    heard.rush[j] = cell.mode === 'charge' ? cell.I / (4 * C1) : 0;
+    heard.bell[j] = cell.mode === 'charge' && cell.state.margin < 0 ? Math.min(1, -cell.state.margin / 0.03) : 0;
   }
   k0 = k;
   draw(frames[k]);
@@ -179,7 +190,23 @@ function frame(k) {
 await document.fonts.load('900 92px "Big Shoulders Display"');
 await document.fonts.load('400 31px "Newsreader"');
 await document.fonts.load('600 22px "Martian Mono"');
-window.reel = { frames: frames.length, fps: FPS, frame };
+// The soundtrack, from what the frames did (so after they've all been taken, in order).
+function audio() {
+  const rnd = mulberry(3), pan = (x) => 1.5 * (x - 0.5), pitch = (y, lo) => lo * 2 ** (1.1 * (1 - (y - 120) / 280) + 0.06 * (rnd() - 0.5));
+  return render({
+    seconds: frames.length / FPS,
+    master: 1,
+    drops: heard.drops.map((d) => ({ t: d.t, f: pitch(d.y, 900), pan: pan(d.x), gain: 0.16 })),
+    toks: heard.toks.map((d) => ({ t: d.t, f: pitch(d.y, 260), pan: pan(d.x), gain: 0.07 })),
+    clicks: heard.clicks.map((c) => ({ t: c.t, gain: 0.5 })),
+    beds: [
+      { kind: 'rush', fps: FPS, gain: heard.rush.map((v) => 0.22 * v) },
+      { kind: 'bell', fps: FPS, f: 392, gain: heard.bell.map((v) => 0.04 * v) },
+    ],
+  });
+}
+const mulberry = (seed) => () => ((seed = (seed + 0x6d2b79f5) | 0), (((seed ^ (seed >>> 15)) * (1 | seed)) >>> 0) / 4294967296);
+window.reel = { frames: frames.length, fps: FPS, frame, audio };
 frame(0);
 </script>
 </body>

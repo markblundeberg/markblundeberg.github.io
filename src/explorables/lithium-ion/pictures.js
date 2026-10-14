@@ -40,7 +40,8 @@ export function regionLabels(ctx, y) {
 // grid in the phosphate), each site a fixed amount, filled column by column as the solution says.
 // The electrolyte's ions are a fast-mixing crowd. Lithium leaving a host flies to the crowd and
 // lithium entering one comes from it, so the dots are conserved.
-const CT = 116, CB = 396, CPAD = 9, FLY = 14;
+export const FLY = 14; // frames a dot takes to fly between a host and the liquid
+const CT = 116, CB = 396, CPAD = 9;
 const HOSTS = [
   { region: 0, x0: 0, x1: La, cMax: GR.cMax, cols: 24, rows: 13, side: 0, y: (j) => CT + 21 + 21 * j, xd: (K) => ((K + 0.5) / 24) * La, nudge: (j) => (j % 2) * 3 },
   { region: 2, x0: La + Ls, x1: L, cMax: LFP.cMax, cols: 15, rows: 18, side: 1, y: (j) => CT + CPAD + 6 + ((j + 0.5) * (CB - CT - 2 * CPAD - 12)) / 18, xd: (K) => La + Ls + ((K + 0.5) / 15) * Lc, nudge: () => 0 },
