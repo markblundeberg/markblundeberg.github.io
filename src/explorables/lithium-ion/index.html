@@ -159,6 +159,8 @@ figcaption { font-family: var(--mono); font-stretch: 87.5%; font-size: 12px; lin
 .ledger { display: grid; grid-template-columns: max-content 1fr max-content; gap: 6px 12px; align-items: center; font-family: var(--mono); font-stretch: 87.5%; font-size: 12px; margin-top: 12px; color: var(--ink-2); }
 .ledger .bar-v { height: 10px; border-radius: 3px; background: var(--line-2); min-width: 1px; }
 .ledger b { font-weight: 600; color: var(--ink); text-align: right; }
+.eqn { font-family: var(--mono); font-stretch: 87.5%; font-size: 14.5px; line-height: 1.7; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; overflow-x: auto; }
+.eqn-note { color: var(--muted); font-size: 12.5px; }
 .callout { border-left: 3px solid var(--li); padding: 4px 0 4px 16px; margin: 22px 0; color: var(--ink-2); }
 
 /* the race */
@@ -313,6 +315,18 @@ footer { padding-block: 70px 80px; }
       </tbody>
     </table></div>
     <p>None of them is <em>the</em> picture of a battery. They're one set of physics in four notations, and the questions get easy when you can move between them.</p>
+  </section>
+
+  <section class="col" id="sim">
+    <p class="num-h">Under the hood</p>
+    <h2>How a battery is simulated</h2>
+    <p>A chemistry course meets batteries as electrochemistry: two half-reactions, a table of standard potentials, the Nernst equation. That gets you the voltage of a battery at rest. Almost everything on this page is something else: lithium having to <em>move</em>, through solids and through a liquid, over micrometres and minutes. The pile-up, the plating line, the sag and the heat all come from that motion. So the programs that design real batteries (the Doyle–Fuller–Newman model, in tools like <a href="https://pybamm.org">PyBaMM</a> and COMSOL) are transport simulations first.</p>
+    <p>At heart they follow one rule, the one picture 4 draws: <b>each species is pushed down its own electrochemical potential</b>, μ̄, so each one's current runs down its own line. Its flux is proportional to how steeply its μ̄ falls:</p>
+    <p class="eqn">flux = −(D c / RT) · slope of μ̄ = −(D c F / RT) · z · slope of V<sub>i</sub></p>
+    <p>Write μ̄ out, as a concentration part and an electrical part, μ̄ = μ° + RT ln c + zFφ, and the one push becomes two familiar ones:</p>
+    <p class="eqn">flux = −D · slope of c  −  (z F D c / RT) · slope of φ<br><span class="eqn-note">diffusion, down the concentration&nbsp;&nbsp;·&nbsp;&nbsp;drift, pushed by the electric field</span></p>
+    <p>That's why these are called <em>drift–diffusion</em> simulations (the Nernst–Planck equation, to electrochemists). Add bookkeeping (lithium and charge are conserved: whatever flows into a slice either stays there or flows out) and a rule for each surface, how fast ions cross it for a given push, and you have the whole machine. The simulator chops the battery into thin slices, and steps forward in time solving all of it at once.</p>
+    <p>The real battery models carry more detail than this page: electrodes made of porous layers of particles, so lithium soaks into each particle while also travelling through the layer (that's the "pseudo-two-dimensional" in the Doyle–Fuller–Newman model); measured open-circuit curves with graphite's real steps; a concentrated electrolyte; full Butler–Volmer kinetics; heat. This one, built on <a href="https://github.com/markblundeberg/driftlet">driftlet</a>, keeps one dimension, simple materials and a linear surface law, so it can solve a few hundred time steps a second in your browser. The things that decide the answers here are all in it: lithium and charge conserved, every species pushed down its own μ̄, and the surfaces taking their toll.</p>
   </section>
 </main>
 
