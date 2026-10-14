@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Why does fast charging slow down near full? (film)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Martian+Mono:wdth,wght@87.5,400;87.5,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap">
+<style>html, body { margin: 0; background: #0d1015; } canvas { display: block; }</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1350"></canvas>
+<script type="module">
+// A 4:5 film of the explorable at /explorables/lithium-ion/, drawn with its own pictures
+// (pictures.js) from one continuous run: a plain fast charge until the graphite crosses the
+// plating line, then the same charge watching for it, eased off to the top. Rendered one frame
+// per call of window.reel.frame(k) by driftlet's tools/film.js (--root at this site).
+
+import { Cell, C1 } from '../src/explorables/lithium-ion/model.js';
+import { COL, span, createCrowd, crowdStep, drawCrowd, drawShelves, MONO, DISPLAY } from '../src/explorables/lithium-ion/pictures.js';
+
+Object.assign(COL, {
+  bg: '#0d1015', surface: '#151a22', line: '#252c38', 'line-2': '#313a48', ink: '#ece7dc', 'ink-2': '#c4bfb4', muted: '#8a909b',
+  li: '#ff4f62', 'li-glow': 'rgba(255, 79, 98, .35)', e: '#55b8ff', anion: '#7d8696', graphite: '#22252b', 'graphite-line': '#353a43',
+  electrolyte: '#0f2630', lfp: '#2a2a1d', 'lfp-line': '#4a4a33', copper: '#c9773f', aluminium: '#9aa3ad', metal: '#c8ced6',
+  charge: '#3ddc84', use: '#ffb547', warn: '#ffb547',
+});
+const W = 1080, H = 1350, FPS = 30, ctx = document.getElementById('c').getContext('2d');
+const S = 1.125; // the pictures' 960-wide pages, scaled to the frame
+const FIG = { ctx, VW: 960, VH: 440 };
+
+// The story. Each phase: its length on screen, and how it ends in the simulation.
+const PHASES = [
+  { key: 'question', secs: 2.6 },
+  { key: 'fast', secs: 5.2 }, // a plain charger at 4C, to the plating line
+  { key: 'plate', secs: 3.4 }, // and 100 s past it
+  { key: 'ease', secs: 6.4 }, // the same charge, now watching for plating, to full
+  { key: 'end', secs: 3.2 },
+];
+function fresh() {
+  const cell = new Cell();
+  cell.rate = 4;
+  cell.setMode('rest');
+  return cell;
+}
+// A dry run, to time the two charging phases in simulated seconds.
+const plan = (() => {
+  const cell = fresh();
+  cell.setMode('charge');
+  let tPlate = null;
+  while (cell.mode === 'charge' && (tPlate === null || cell.time < tPlate + 100)) {
+    cell.advance(cell.time + 1);
+    if (tPlate === null && cell.state.margin < 0) tPlate = cell.time;
+  }
+  const tA = cell.time;
+  cell.watch = true;
+  while (cell.mode === 'charge') cell.advance(cell.time + 10);
+  return { tPlate, tA, tB: cell.time - tA };
+})();
+
+let cell, crowd, k0, frames;
+function reset() {
+  cell = fresh();
+  crowd = createCrowd(cell, 7);
+  frames = [];
+  PHASES.forEach((ph, p) => { const n = Math.round(ph.secs * FPS); for (let j = 0; j < n; j++) frames.push({ p, u: (j + 1) / n, j, n }); });
+  k0 = -1;
+}
+reset();
+
+// Captions: a headline and a line under it, chosen by the phase and what the battery is doing.
+function caption(fr) {
+  const key = PHASES[fr.p].key, plating = cell.state.margin < 0 && cell.I > 0;
+  if (key === 'question') return null;
+  if (key === 'fast') return ['Charge fast, and lithium piles up', 'It reaches the graphite faster than it can soak in, so it crowds the surface. Below: each lithium’s energy, rising.'];
+  if (key === 'plate') return ['…and plates out as metal', 'Pushed above lithium metal’s level (the dashed line), it would rather be metal: it coats the graphite, and much of it is lost for good.'];
+  if (key === 'ease') return ['So a careful charger eases off', 'It slows down to keep the graphite just under the line. The fuller it gets, the less room there is, the slower it goes.'];
+  return ['Simulated, not drawn', 'Every frame is solved from the physics. Play with it yourself: link below.'];
+}
+function wrap(text, width) {
+  const words = text.split(' '), lines = [];
+  let line = '';
+  for (const w of words) { const t = line ? `${line} ${w}` : w; if (ctx.measureText(t).width > width && line) { lines.push(line); line = w; } else line = t; }
+  if (line) lines.push(line);
+  return lines;
+}
+const ease = (u) => u * u * (3 - 2 * u);
+
+function draw(fr) {
+  const key = PHASES[fr.p].key;
+  const g = ctx.createRadialGradient(W * 0.7, -80, 50, W * 0.7, -80, 1100);
+  g.addColorStop(0, '#161b24');
+  g.addColorStop(1, COL.bg);
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+  // the pictures
+  span(FIG);
+  ctx.save(); ctx.translate(0, 290); ctx.scale(S, S); drawCrowd(FIG, cell, crowd); ctx.restore();
+  ctx.save(); ctx.translate(0, 792); ctx.scale(S, S); drawShelves({ ctx, VW: 960, VH: 420 }, cell); ctx.restore();
+  // the headline
+  const fade = Math.min(1, fr.j / 8, (fr.n - fr.j) / 6);
+  ctx.textBaseline = 'alphabetic';
+  ctx.textAlign = 'left';
+  if (key === 'question') {
+    ctx.globalAlpha = Math.min(1, fr.j / 6);
+    ctx.fillStyle = COL.li;
+    ctx.font = '600 22px "Martian Mono", monospace';
+    ctx.fillText('A LITHIUM-ION BATTERY, SIMULATED', 64, 78);
+    ctx.font = '900 92px "Big Shoulders Display", sans-serif';
+    const lines = ['WHY DOES FAST CHARGING', 'SLOW DOWN NEAR FULL?'];
+    lines.forEach((t, i) => {
+      ctx.fillStyle = COL.ink;
+      if (i === 1) {
+        const a = 'SLOW DOWN NEAR ', b = 'FULL', c = '?';
+        ctx.fillText(a, 60, 168 + 84 * i);
+        const x = 60 + ctx.measureText(a).width;
+        ctx.fillStyle = COL.charge; ctx.fillText(b, x, 168 + 84 * i);
+        ctx.fillStyle = COL.ink; ctx.fillText(c, x + ctx.measureText(b).width, 168 + 84 * i);
+      } else ctx.fillText(t, 60, 168 + 84 * i);
+    });
+    ctx.globalAlpha = 1;
+  } else {
+    const [head, sub] = caption(fr);
+    ctx.globalAlpha = key === 'end' ? Math.min(1, fr.j / 8) : 1;
+    ctx.fillStyle = key === 'plate' ? COL.warn : COL.ink;
+    ctx.font = '900 76px "Big Shoulders Display", sans-serif';
+    ctx.fillText(head.toUpperCase(), 60, 122);
+    ctx.fillStyle = COL['ink-2'];
+    ctx.font = '400 31px "Newsreader", serif';
+    wrap(sub, 960).forEach((t, i) => ctx.fillText(t, 62, 176 + 40 * i));
+    ctx.globalAlpha = 1;
+  }
+  // the gauge: charge, and the charger's current
+  const soc = Math.max(0, Math.min(1, cell.state.soc)), gx = 64, gy = 1308, gw = 104, gh = 42;
+  ctx.strokeStyle = COL.ink; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.roundRect(gx, gy - gh / 2, gw, gh, 7); ctx.stroke();
+  ctx.fillStyle = COL.ink; ctx.fillRect(gx + gw + 2, gy - 8, 6, 16);
+  ctx.fillStyle = COL.charge; ctx.fillRect(gx + 5, gy - gh / 2 + 5, (gw - 10) * soc, gh - 10);
+  ctx.font = '600 30px "Martian Mono", monospace';
+  ctx.fillStyle = COL.ink; ctx.textBaseline = 'middle';
+  ctx.fillText(`${Math.round(100 * soc)}%`, gx + gw + 22, gy + 1);
+  ctx.font = '400 24px "Martian Mono", monospace';
+  ctx.fillStyle = COL.muted;
+  const c = cell.I / C1, mins = cell.time / 60;
+  const what = key === 'question' ? 'unplugged' : key === 'end' ? `full in ${(plan.tA + plan.tB) / 60 | 0} min` : `charging at ${c.toFixed(1)}C · ${mins.toFixed(0)} min`;
+  ctx.fillText(what, gx + gw + 140, gy + 1);
+  ctx.textAlign = 'right';
+  ctx.fillStyle = key === 'end' ? COL.ink : COL.muted;
+  ctx.font = `${key === 'end' ? 600 : 400} 22px "Martian Mono", monospace`;
+  ctx.fillText(key === 'end' ? 'marklundeberg.com/explorables' : 'driftlet', W - 60, gy + 1);
+}
+
+// Frame k: the run moves on to it (frames are taken in order), the dots follow, and it's drawn.
+function frame(k) {
+  if (k < k0) reset();
+  for (let j = k0 + 1; j <= k; j++) {
+    const fr = frames[j], key = PHASES[fr.p].key, t0 = cell.time;
+    if (key === 'fast') {
+      if (cell.mode !== 'charge') cell.setMode('charge');
+      cell.advance(fr.u * plan.tPlate, 50);
+    } else if (key === 'plate') cell.advance(plan.tPlate + fr.u * (plan.tA - plan.tPlate), 50); else if (key === 'ease') {
+      cell.watch = true;
+      if (cell.mode === 'charge') cell.advance(plan.tA + fr.u * plan.tB, 50);
+    }
+    crowdStep(crowd, cell);
+    crowd.wire += (cell.I / (4 * C1)) * 5;
+  }
+  k0 = k;
+  draw(frames[k]);
+}
+await document.fonts.load('900 92px "Big Shoulders Display"');
+await document.fonts.load('400 31px "Newsreader"');
+await document.fonts.load('600 22px "Martian Mono"');
+window.reel = { frames: frames.length, fps: FPS, frame };
+frame(0);
+</script>
+</body>
+</html>
