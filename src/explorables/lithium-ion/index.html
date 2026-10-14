@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Why does fast charging slow down near full?</title>
+<meta name="description" content="A lithium-ion battery drawn four ways, all driven live by one simulation: the crowd of lithium, the two shelves of its energy, the charging curve, and every species' voltage.">
+<link rel="canonical" href="https://marklundeberg.com/explorables/lithium-ion/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Why does fast charging slow down near full?">
+<meta property="og:description" content="A lithium-ion battery drawn four ways, all driven live by one simulation.">
+<meta property="og:url" content="https://marklundeberg.com/explorables/lithium-ion/">
+<meta property="og:image" content="https://marklundeberg.com/explorables/lithium-ion/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Lithium filling the layers of graphite inside a charging battery">
+<meta property="og:site_name" content="Mark Lundeberg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@MarkLundeberg">
+<meta name="twitter:image" content="https://marklundeberg.com/explorables/lithium-ion/og.png">
+<link rel="icon" href="/img/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Martian+Mono:wdth,wght@87.5,400;87.5,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap">
+<style>
+/* Night: a phone charging on the nightstand. Lithium is crimson (its flame colour), electrons
+   are blue, and every word for a thing is printed in that thing's colour. */
+:root {
+  color-scheme: dark;
+  --bg: #0d1015; --bg-2: #11151c; --surface: #151a22; --line: #252c38; --line-2: #313a48;
+  --ink: #ece7dc; --ink-2: #c4bfb4; --muted: #8a909b;
+  --li: #ff4f62; --li-glow: rgba(255, 79, 98, .35); --e: #55b8ff; --anion: #7d8696;
+  --graphite: #22252b; --graphite-line: #353a43; --electrolyte: #0f2630; --lfp: #2a2a1d; --lfp-line: #4a4a33;
+  --copper: #c9773f; --aluminium: #9aa3ad; --metal: #c8ced6;
+  --charge: #3ddc84; --use: #ffb547; --warn: #ffb547;
+  --bar: rgba(13, 16, 21, .86);
+  --display: "Big Shoulders Display", "Arial Narrow", "Roboto Condensed", sans-serif-condensed, sans-serif;
+  --serif: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --mono: "Martian Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #f4f1ea; --bg-2: #ece8de; --surface: #fbfaf6; --line: #ddd7ca; --line-2: #cbc3b3;
+    --ink: #1a1d24; --ink-2: #3c4049; --muted: #6c6f77;
+    --li: #d0283c; --li-glow: rgba(208, 40, 60, .22); --e: #1f6fc0; --anion: #8b8f98;
+    --graphite: #dddbd6; --graphite-line: #c5c2bc; --electrolyte: #dcebf0; --lfp: #ebe6d2; --lfp-line: #cfc6a4;
+    --copper: #b86a35; --aluminium: #a9b0b8; --metal: #6d7785;
+    --charge: #1f9d58; --use: #c77700; --warn: #c77700;
+    --bar: rgba(244, 241, 234, .88);
+  }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4f1ea; --bg-2: #ece8de; --surface: #fbfaf6; --line: #ddd7ca; --line-2: #cbc3b3;
+  --ink: #1a1d24; --ink-2: #3c4049; --muted: #6c6f77;
+  --li: #d0283c; --li-glow: rgba(208, 40, 60, .22); --e: #1f6fc0; --anion: #8b8f98;
+  --graphite: #dddbd6; --graphite-line: #c5c2bc; --electrolyte: #dcebf0; --lfp: #ebe6d2; --lfp-line: #cfc6a4;
+  --copper: #b86a35; --aluminium: #a9b0b8; --metal: #6d7785;
+  --charge: #1f9d58; --use: #c77700; --warn: #c77700;
+  --bar: rgba(244, 241, 234, .88);
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; color: var(--ink); font-family: var(--serif); font-size: 19px; line-height: 1.6;
+  background: radial-gradient(1200px 600px at 70% -10%, var(--bg-2), transparent 70%), var(--bg);
+}
+.wrap { padding-inline: 22px; }
+.col { max-width: 700px; margin-inline: auto; }
+.wide { max-width: 1000px; margin-inline: auto; }
+a { color: var(--e); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--e); outline-offset: 2px; }
+p { margin: 0 0 16px; }
+sub, sup { line-height: 0; }
+.li { color: var(--li); }
+.e { color: var(--e); }
+.gr { color: var(--ink); background: linear-gradient(transparent 62%, var(--graphite-line) 62%); }
+.fp { color: var(--ink); background: linear-gradient(transparent 62%, var(--lfp-line) 62%); }
+.el { color: var(--ink); background: linear-gradient(transparent 62%, var(--electrolyte) 62%); }
+.metal { color: var(--metal); }
+.warn { color: var(--warn); }
+.num { font-family: var(--mono); font-size: .78em; font-stretch: 87.5%; white-space: nowrap; }
+
+/* header */
+.crumbs { font-family: var(--mono); font-size: 12px; font-stretch: 87.5%; color: var(--muted); padding-top: 20px; }
+.crumbs a { color: var(--muted); text-decoration: none; }
+.crumbs a:hover { color: var(--ink); }
+.crumbs span { margin-inline: 6px; opacity: .6; }
+header.top { padding-block: 40px 10px; }
+.kicker { font-family: var(--mono); font-size: 12.5px; font-stretch: 87.5%; letter-spacing: .12em; text-transform: uppercase; color: var(--li); margin: 0 0 14px; }
+h1 { font-family: var(--display); font-weight: 900; font-size: clamp(52px, 10vw, 104px); line-height: .9; letter-spacing: .005em; text-transform: uppercase; margin: 0 0 22px; text-wrap: balance; }
+h1 em { font-style: normal; color: var(--charge); }
+.byline { font-family: var(--mono); font-size: 12px; font-stretch: 87.5%; color: var(--muted); margin: 0 0 26px; }
+.byline span { margin-inline: 6px; opacity: .6; }
+.lede { font-size: 22px; line-height: 1.5; color: var(--ink-2); }
+
+/* the bar: the cell's controls, and its gauge */
+.bar { position: sticky; top: 0; z-index: 20; background: var(--bar); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-block: 1px solid var(--line); margin-top: 26px; }
+.bar-in { max-width: 1000px; margin-inline: auto; padding: 10px 22px; display: flex; gap: 14px 22px; align-items: center; flex-wrap: wrap; font-family: var(--mono); font-stretch: 87.5%; font-size: 12.5px; }
+.gauge { display: flex; align-items: center; gap: 10px; }
+.cell-icon { position: relative; width: 58px; height: 26px; border: 2px solid var(--ink); border-radius: 5px; padding: 2px; }
+.cell-icon::after { content: ""; position: absolute; right: -6px; top: 7px; width: 4px; height: 8px; border-radius: 0 2px 2px 0; background: var(--ink); }
+.cell-icon i { display: block; height: 100%; width: 0; border-radius: 2px; background: var(--charge); transition: background .3s; }
+.cell-icon.low i { background: var(--li); }
+.gauge b { font-size: 17px; font-weight: 600; min-width: 3.2em; }
+.gauge small { display: block; color: var(--muted); font-size: 11.5px; }
+.modes { display: inline-flex; border: 1px solid var(--line-2); border-radius: 8px; overflow: hidden; }
+.modes button { font: inherit; font-size: 12.5px; background: transparent; color: var(--muted); border: 0; padding: 7px 12px; cursor: pointer; }
+.modes button + button { border-left: 1px solid var(--line-2); }
+.modes button[aria-pressed=true] { color: var(--bg); }
+.modes button[data-mode=charge][aria-pressed=true] { background: var(--charge); }
+.modes button[data-mode=rest][aria-pressed=true] { background: var(--ink-2); }
+.modes button[data-mode=use][aria-pressed=true] { background: var(--use); }
+.ctl { display: grid; gap: 2px; min-width: 170px; flex: 1 1 170px; }
+.ctl label { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); }
+.ctl label b { color: var(--ink); font-weight: 600; white-space: nowrap; }
+input[type=range] { width: 100%; accent-color: var(--charge); margin: 0; height: 22px; }
+.chk { display: inline-flex; gap: 7px; align-items: center; cursor: pointer; color: var(--ink-2); }
+.chk input { accent-color: var(--warn); width: 16px; height: 16px; margin: 0; }
+.btn { font: inherit; font-size: 12.5px; background: transparent; border: 1px solid var(--line-2); color: var(--ink-2); border-radius: 8px; padding: 7px 11px; cursor: pointer; }
+.btn:hover { color: var(--ink); border-color: var(--muted); }
+.status { color: var(--muted); min-width: 12em; }
+.status b { color: var(--ink); font-weight: 600; }
+.status .warn { font-weight: 600; }
+.more { display: none; }
+@media (max-width: 700px) {
+  body { font-size: 18px; }
+  .bar-in { padding: 8px 14px; gap: 8px 12px; }
+  .wrap { padding-inline: 16px; }
+  .status { flex-basis: 100%; order: 9; font-size: 11.5px; }
+  .more { display: inline-block; margin-left: auto; }
+  .bar:not(.open) .ctl, .bar:not(.open) .chk, .bar:not(.open) #play, .bar:not(.open) #empty { display: none; }
+  .ctl { flex-basis: 100%; }
+  .fig { padding: 8px; margin-inline: -8px; border-radius: 10px; }
+}
+
+/* sections and figures */
+section { padding-block: 64px 0; }
+.num-h { font-family: var(--mono); font-size: 12px; font-stretch: 87.5%; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+h2 { font-family: var(--display); font-weight: 800; font-size: clamp(38px, 6vw, 58px); line-height: .95; text-transform: uppercase; letter-spacing: .01em; margin: 0 0 18px; text-wrap: balance; }
+h3 { font-family: var(--display); font-weight: 800; font-size: 28px; line-height: 1; text-transform: uppercase; margin: 32px 0 10px; }
+figure { margin: 26px 0 22px; }
+.fig { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; box-shadow: 0 24px 60px -40px rgba(0, 0, 0, .7); }
+.fig canvas { display: block; width: 100%; height: auto; }
+figcaption { font-family: var(--mono); font-stretch: 87.5%; font-size: 12px; line-height: 1.55; color: var(--muted); margin-top: 10px; }
+.hero-fig { margin-top: 34px; }
+.sh { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); margin-top: 22px; font-size: 16.5px; line-height: 1.5; }
+.sh > div { padding: 12px 18px 0 0; }
+.sh > div + div { padding-left: 18px; border-left: 1px solid var(--line); }
+.sh h4 { font-family: var(--mono); font-stretch: 87.5%; font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 4px; font-weight: 600; }
+.sh .shows h4 { color: var(--charge); }
+.sh .hides h4 { color: var(--muted); }
+@media (max-width: 560px) { .sh { grid-template-columns: 1fr; } .sh > div + div { padding-left: 0; border-left: 0; border-top: 1px dashed var(--line); } }
+.ledger { display: grid; grid-template-columns: max-content 1fr max-content; gap: 6px 12px; align-items: center; font-family: var(--mono); font-stretch: 87.5%; font-size: 12px; margin-top: 12px; color: var(--ink-2); }
+.ledger .bar-v { height: 10px; border-radius: 3px; background: var(--line-2); min-width: 1px; }
+.ledger b { font-weight: 600; color: var(--ink); text-align: right; }
+.callout { border-left: 3px solid var(--li); padding: 4px 0 4px 16px; margin: 22px 0; color: var(--ink-2); }
+
+/* the race */
+.race { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.lane { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; font-family: var(--mono); font-stretch: 87.5%; font-size: 12.5px; color: var(--muted); }
+.lane h4 { font-family: var(--display); font-weight: 800; font-size: 26px; line-height: 1; text-transform: uppercase; color: var(--ink); margin: 0 0 10px; }
+.lane .big { display: flex; align-items: center; gap: 14px; margin: 10px 0; }
+.lane .big .cell-icon { width: 120px; height: 46px; border-width: 3px; border-radius: 8px; padding: 3px; }
+.lane .big .cell-icon::after { top: 13px; height: 14px; right: -8px; width: 5px; }
+.lane .big b { font-size: 26px; color: var(--ink); font-weight: 600; }
+.lane dl { display: grid; grid-template-columns: 1fr max-content; gap: 4px 10px; margin: 0; }
+.lane dd { margin: 0; color: var(--ink); text-align: right; }
+.lane dd.warn { color: var(--warn); }
+.lane canvas { display: block; width: 100%; height: 70px; margin-top: 10px; }
+.race-go { margin-top: 12px; display: flex; gap: 10px; align-items: center; font-family: var(--mono); font-stretch: 87.5%; font-size: 12.5px; color: var(--muted); }
+@media (max-width: 640px) { .race { grid-template-columns: 1fr; } }
+
+table { border-collapse: collapse; width: 100%; font-size: 16px; line-height: 1.45; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px 10px 0; border-bottom: 1px solid var(--line); }
+th { font-family: var(--mono); font-stretch: 87.5%; font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+td:first-child { font-family: var(--display); font-weight: 800; font-size: 20px; text-transform: uppercase; white-space: nowrap; }
+.tablewrap { overflow-x: auto; margin: 18px 0; }
+footer { padding-block: 70px 80px; }
+.about { font-size: 16px; color: var(--ink-2); }
+.about h2 { font-size: 34px; }
+.about li { margin-bottom: 6px; }
+.credit { border-left: 3px solid var(--e); padding: 4px 0 4px 16px; margin: 0 0 22px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top col">
+    <nav class="crumbs" aria-label="Site"><a href="/">Mark Lundeberg</a><span>/</span><a href="/explorables/">Explorables</a></nav>
+    <p class="kicker" style="margin-top:34px">A lithium-ion battery, four pictures</p>
+    <h1>Why does fast charging slow down near <em>full</em>?</h1>
+    <p class="byline">Claude Opus 5.5 <span>//</span> 13 October 2026</p>
+    <p class="lede">You've seen it: a fast charger races a phone to half full, then creeps the rest of the way. "It protects the battery" is true, and it explains nothing. Protects it from <em>what</em>?</p>
+    <p>Below is one lithium-ion battery, simulated live in your browser, drawn four ways. Each picture shows something the others hide. By the fourth, the answer is in plain sight, and so are the answers to a few other battery questions. The bar that sticks to the top of the screen drives every picture at once.</p>
+  </header>
+</div>
+
+<div class="bar" id="bar">
+  <div class="bar-in">
+    <div class="gauge" aria-live="polite"><div class="cell-icon" id="gIcon"><i id="gFill"></i></div><div><b id="gPct">3%</b><small id="gV">3.20 V</small></div></div>
+    <div class="modes" role="group" aria-label="What the battery is doing">
+      <button data-mode="charge" aria-pressed="true">Charge</button><button data-mode="rest" aria-pressed="false">Rest</button><button data-mode="use" aria-pressed="false">Use</button>
+    </div>
+    <div class="ctl"><label for="rate">speed <b id="rateOut">4C · 15 min</b></label><input id="rate" type="range" min="-1" max="0.9" step="0.01" value="0.602" aria-label="Charging or discharging speed, as a C-rate"></div>
+    <label class="chk"><input type="checkbox" id="watch"> watch for plating</label>
+    <span class="status" id="status"></span>
+    <button class="btn" id="play" aria-pressed="true">Pause</button>
+    <button class="btn" id="empty">Empty it</button>
+    <button class="btn more" id="more" aria-expanded="false">More</button>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="col" id="crowd">
+    <p class="num-h">Picture 1</p>
+    <h2>The crowd</h2>
+    <p>Inside are two stores for <span class="li">lithium</span>, with a liquid between them. One is <span class="gr">graphite</span>: sheets of carbon, stacked like pages, that <span class="li">lithium</span> can slip between. The other is <span class="fp">iron phosphate</span>, a crystal with rooms for it. The <span class="el">electrolyte</span> lets <span class="li">lithium</span> through as an ion, Li⁺, and lets nothing else cross.</p>
+    <figure class="fig">
+      <canvas id="figCrowd" aria-label="Animated cross-section of the battery: lithium moving between graphite and iron phosphate"></canvas>
+      <figcaption>Every dot of lithium is a fixed amount, about 10¹⁶ atoms per square centimetre of battery, and the dots are conserved: one leaving a host flies into the liquid, and one filling a host comes out of it. Grey rings are PF₆⁻, the salt's other half. Blue dots on the wire are electrons. Time-lapse: a full charge takes about fifteen seconds at any speed.</figcaption>
+    </figure>
+    <p>Charging pulls <span class="li">lithium</span> out of the <span class="fp">phosphate</span>, sends it across, and packs it into the <span class="gr">graphite</span>. For every lithium ion that crosses inside, one <span class="e">electron</span> makes the same trip outside, through the charger. Using the battery runs it all backwards. Nothing is used up: the same lithium sloshes from one side to the other, for thousands of cycles.</p>
+    <p>Now watch the <span class="gr">graphite</span> while it charges fast. <span class="li">Lithium</span> arrives at its surface faster than it can soak inwards, so it piles up there, filling the outside sheets while the inside stays half empty.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>What moves, and where it goes. The pile-up at the surface when you charge fast.</p></div><div class="hides"><h4>Hides</h4><p>Why lithium flows back on its own, where 3.3 volts comes from, and why a pile-up would matter.</p></div></div>
+  </section>
+
+  <section class="col" id="shelves">
+    <p class="num-h">Picture 2</p>
+    <h2>Two shelves</h2>
+    <p>Here is what the crowd doesn't show: <span class="li">lithium</span> has an energy, and it's different in each place. Physicists call it the chemical potential, μ<sub>Li</sub>. It's the free energy it takes to add one more atom, so it counts how crowded the place already is as well as how strongly the place holds on.</p>
+    <p>In the <span class="fp">phosphate</span>, <span class="li">lithium</span> sits low, 3.4 eV below where it would sit as a lump of pure <span class="metal">lithium metal</span>. In the <span class="gr">graphite</span> it sits high, just below the metal. Charging lifts every lithium atom from the low shelf to the high one. That's where a battery keeps its energy, and the height of the jump, divided by the electron's charge, is the battery's voltage: about 3.3 eV per atom makes about 3.3 volts.</p>
+    <figure class="fig">
+      <canvas id="figShelves" aria-label="Lithium's chemical potential across the battery: a high shelf in the graphite, a low one in the iron phosphate"></canvas>
+      <figcaption>μ<sub>Li</sub> across the battery, in electronvolts per atom, with lithium metal at zero. Two windows of the same scale, 3 eV apart. The open circle is lithium arriving at the graphite: an ion from the liquid together with an electron from the graphite.</figcaption>
+    </figure>
+    <p>Each shelf tilts as it fills: the fuller a host gets, the harder it is to squeeze in more, so the shelf rises. That's why a battery's voltage creeps up as it charges and sags as it empties.</p>
+    <p>Charge fast and the pile-up shows here as a shelf that bends up at the <span class="gr">graphite</span>'s surface. The open circle, lithium arriving at the surface, rides above that, pushed up by the effort of crossing in. And there's a ceiling: the <span class="metal">lithium metal</span> line. Push arriving lithium above it and lithium would rather be metal than go in. It plates out on the surface as metal instead: <span class="warn">lithium plating</span>. Much of the plated lithium is lost to the battery for good, and in the worst case it grows spikes through the separator that short the battery out.</p>
+    <p>There's a gap in the middle, too. In the <span class="el">electrolyte</span> lithium has no shelf, because there it's never whole: the ion crosses through the liquid while its electron goes the long way, round the wire. To see the crossing itself, you need to follow the two halves separately. That's picture 4.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>Where the energy is kept, why the voltage is 3.3 volts and why it drifts as the battery fills, and how close the graphite is to plating.</p></div><div class="hides"><h4>Hides</h4><p>The trip between the shelves, which is where the energy is lost. It also doesn't say what a charger can actually see.</p></div></div>
+  </section>
+
+  <section class="col" id="curve">
+    <p class="num-h">Picture 3</p>
+    <h2>The charging curve</h2>
+    <p>A charger can't see inside the battery. It sees two numbers, the voltage across the terminals and the current it's pushing, and it can track how much charge has gone in. This is the picture an engineer looks at first.</p>
+    <figure class="fig">
+      <canvas id="figCurve" aria-label="Voltage and current against state of charge"></canvas>
+      <figcaption>Top: voltage against charge. The dashed line is the battery at rest at each charge, its open-circuit voltage: the height between the shelves, with both hosts evenly filled. Bottom: the current, as a C-rate (1C fills the battery in an hour). Stretches past the plating line are drawn in amber.</figcaption>
+    </figure>
+    <p>Charging, the voltage runs above the dashed line; discharging, below it. The gap is the extra push the current costs, and the energy it represents ends up as heat. The faster you go, the wider the gap. Charge fast with the voltage limit alone, and the curve looks fine: the current holds at full speed until the voltage reaches its ceiling, then tapers. But tick <b>watch for plating</b> and run it again. The current starts easing off well before half full, long before the voltage limit, because the charger is now holding the <span class="gr">graphite</span>'s surface just under the plating line.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>What a charger can measure, the losses as a gap, and the taper.</p></div><div class="hides"><h4>Hides</h4><p>Where inside the battery the losses happen, and so why the taper has to start so early.</p></div></div>
+  </section>
+
+  <section class="col" id="species">
+    <p class="num-h">Picture 4</p>
+    <h2>Every species</h2>
+    <p>The last picture follows <span class="li">lithium</span>'s two halves separately. Give each charged species a line: its free energy per charge, a voltage, V<sub>i</sub> = μ̄<sub>i</sub>/z<sub>i</sub>F. The <span class="e">electrons'</span> line is the familiar Fermi level, and it's what a voltmeter reads. The <span class="li">lithium ions'</span> line runs right across the battery, liquid included.</p>
+    <p>A current flows down the slope of its own species' line, so every slope and step is a place where some of the push is spent. Where both lines exist, in each host, the gap between them is picture 2's shelf. So the two pictures agree, and this one fills in the gap.</p>
+    <figure class="fig">
+      <canvas id="figSpecies" aria-label="Species voltages for electrons and lithium ions across the battery"></canvas>
+      <figcaption>Species voltages, with the graphite's terminal at zero, in two windows of one scale. Below, the battery's voltage taken apart: the rest voltage at this charge, plus each place the push is spent. They add up exactly.</figcaption>
+    </figure>
+    <p>Charging hard, look where the volts go. Each surface takes a step: the price of an ion crossing in or out. The liquid takes a slope too, partly resistance and partly salt running low next to the graphite and piling up next to the phosphate; it's gentle here, because this battery's liquid layer is thin. Inside each host, lithium's crowding adds a slope of its own.</p>
+    <p>Then look at the <span class="gr">graphite</span>'s surface. Plating is decided in one place: where <span class="li">Li⁺</span> in the liquid meets an <span class="e">electron</span> in the graphite. If the red line just outside rises above the blue line just inside, lithium metal can form. Fast charging pushes red up there in two ways at once: the surface step, and the pile-up behind it, which lifts the graphite's shelf.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>Each species' push, and exactly where each loss happens. How pictures 2 and 3 fit together.</p></div><div class="hides"><h4>Hides</h4><p>The lithium itself: a crowd you can't see, made of two species with opposite charges. And it takes practice to read.</p></div></div>
+  </section>
+
+  <section class="wide" id="race">
+    <div class="col">
+      <p class="num-h">So</p>
+      <h2>Why it slows down near full</h2>
+      <p>Put the pictures together. Charging fast piles <span class="li">lithium</span> up at the <span class="gr">graphite</span>'s surface (picture 1). That lifts the graphite's shelf toward the <span class="metal">lithium metal</span> line (2), and the surface step lifts arriving lithium higher still (4). The fuller the graphite, the higher its shelf already sits, so the closer the line and the less room there is for the pile-up. A charger that won't plate has to slow down, and keep slowing, as the battery fills (3).</p>
+      <p>Race two chargers from empty at the speed in the bar: one that only watches the voltage, and one that watches for plating too.</p>
+    </div>
+    <div class="race">
+      <div class="lane" id="laneA"><h4>Voltage limit only</h4><div class="big"><div class="cell-icon"><i></i></div><b>0%</b></div><dl><dt>time</dt><dd data-k="time">0 min</dd><dt>past the plating line</dt><dd data-k="plate">0 min</dd></dl><canvas></canvas></div>
+      <div class="lane" id="laneB"><h4>Watching for plating</h4><div class="big"><div class="cell-icon"><i></i></div><b>0%</b></div><dl><dt>time</dt><dd data-k="time">0 min</dd><dt>past the plating line</dt><dd data-k="plate">0 min</dd></dl><canvas></canvas></div>
+    </div>
+    <div class="col race-go"><button class="btn" id="raceGo">Start the race</button><span id="raceNote">Each lane is its own copy of the battery, charged from empty.</span></div>
+    <div class="col">
+      <p style="margin-top:22px">In this battery, at 4C, the careful charger finishes about three minutes later and never crosses the line. The other spends minutes past it. Real phone chargers juggle more limits than this (temperature above all, since cold graphite soaks lithium in far more slowly), but the shape is the same: fast while the graphite has room, then gentler.</p>
+    </div>
+  </section>
+
+  <section class="col" id="more">
+    <p class="num-h">And while we're here</p>
+    <h2>Other questions the pictures answer</h2>
+    <h3>Why does the percentage jump after unplugging?</h3>
+    <p>Stop a fast charge (press <b>Rest</b>) and watch the voltage fall for minutes afterwards. The pile-up in the <span class="gr">graphite</span> soaks inward, the shelf flattens, and the battery settles onto its dashed line. A phone that judges its charge partly from voltage sees that as a change.</p>
+    <h3>Why does a battery warm up when it charges fast?</h3>
+    <p>Every slope and step in picture 4 is energy turned into heat, at a rate of current × voltage spent. Double the current and each of those drops roughly doubles too, so the heat goes up about four times.</p>
+    <h3>Why do batteries hate the cold?</h3>
+    <p>Cold slows everything that picture 4 charges for, above all lithium soaking into graphite. The pile-up comes sooner and taller, and the plating line arrives at a much lower charge. That's why phones and cars charge slowly, or refuse to, when they're cold.</p>
+  </section>
+
+  <section class="col" id="when">
+    <p class="num-h">Four pictures</p>
+    <h2>Which one, when?</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Picture</th><th>Makes easy</th><th>Hides</th></tr></thead>
+      <tbody>
+        <tr><td>The crowd</td><td>What moves where; the pile-up.</td><td>Energy, and why anything moves.</td></tr>
+        <tr><td>Two shelves</td><td>Where the energy is kept; the voltage; the plating line.</td><td>The trip between, where the losses are.</td></tr>
+        <tr><td>The curve</td><td>What a charger sees; losses as a gap; the taper.</td><td>Where the losses happen.</td></tr>
+        <tr><td>Every species</td><td>Each loss in its place; how the others fit together.</td><td>The lithium itself; it takes practice.</td></tr>
+      </tbody>
+    </table></div>
+    <p>None of them is <em>the</em> picture of a battery. They're one set of physics in four notations, and the questions get easy when you can move between them.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="col about">
+    <h2>About this page</h2>
+    <p class="credit">Written and built by Claude (Opus 5.5, an AI model made by Anthropic). The species-voltage pictures come from Mark Lundeberg's web book <a href="/esbd/">Electrochemical species band diagrams</a>, which takes these ideas much further, and the simulation runs on <a href="https://github.com/markblundeberg/driftlet">driftlet</a>, an open-source drift–diffusion library. Mark set the brief; the words, the code and any mistakes are mine.</p>
+    <p>Every picture is drawn from one simulation of the battery, solved as you watch: lithium diffusing in each host, ions moving through the liquid, and both crossing each surface, with charge and lithium conserved throughout. It's a toy battery, chosen to be clear rather than to match any product:</p>
+    <ul>
+      <li>One dimension, and dense layers a few micrometres thick: 2.2 µm of graphite, 3 µm of electrolyte, 2.5 µm of iron phosphate. Real electrodes are porous, tens of micrometres thick, and made of particles; the depth into this layer stands in for the depth into a particle.</li>
+      <li>Each host is an ideal lattice gas with one interaction energy (a regular solution), which smooths away graphite's real steps (its stages) and makes iron phosphate's flat plateau a little sloped. Diffusion coefficients: 1.5 × 10⁻¹⁵ m²/s in the graphite, 5 × 10⁻¹⁴ in the phosphate.</li>
+      <li>1 M LiPF₆, as an ideal dilute solution, with Li⁺ and PF₆⁻ diffusing at 3 and 5 × 10⁻¹¹ m²/s. Each surface is a linear charge-transfer resistance (about 2.5 A/m² of exchange current), not full Butler–Volmer kinetics.</li>
+      <li>Plating is shown as the condition for it, not simulated: no metal actually forms here. The plating-aware charger holds the margin at 15 mV.</li>
+      <li>The charger is constant current up to 3.65 V, then constant voltage until the current falls to 1/20 C; discharge stops at 2.8 V. The percentage is the share of the phosphate's lithium that has moved.</li>
+    </ul>
+  </div>
+</footer>
+
+<script type="module" src="app.js"></script>
+<script data-goatcounter="https://marklundeberg.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -4,6 +4,13 @@
 // This list feeds the /explorables/ index and the sitemap.
 export default [
     {
+        slug: 'lithium-ion',
+        title: 'Why does fast charging slow down near full?',
+        description:
+            'A lithium-ion battery drawn four ways, all driven live by one simulation: ' +
+            'the crowd of lithium, the two shelves of its energy, the charging curve, and every species.',
+    },
+    {
         slug: 'daniell-cell',
         title: 'One battery, four pictures',
         description:
