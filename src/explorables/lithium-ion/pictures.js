@@ -2,7 +2,7 @@
 // and by the films made from it. Each figure is { ctx, VW, VH }, a virtual page the canvas is
 // scaled to; the spatial pictures share one x mapping, so the graphite lines up between them.
 
-import { C1, L, La, Ls, Lc, GR, LFP, SALT, VMAX, VMIN, ocvCurve } from './model.js';
+import { C1, L, La, Ls, Lc, GR, LFP, SALT, VMAX, VMIN, E, ocvCurve } from './model.js';
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 // The colours, filled in from the page's CSS by whoever draws (both themes).
@@ -190,7 +190,7 @@ export function drawCrowd(f, cell, crowd) {
     ctx.font = MONO(14, 600);
     ctx.textAlign = 'left';
     ctx.textBaseline = 'alphabetic';
-    ctx.fillText('lithium would plate here', px(La) + 10, CT - 12);
+    ctx.fillText('lithium can plate here', px(La) + 10, CT - 12);
   }
   regionLabels(ctx, CB + 30);
 }
@@ -275,11 +275,11 @@ export function drawShelves(f, cell) {
   ctx.fillStyle = plating ? COL.warn : COL['ink-2'];
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
-  const lines = plating ? ['arriving lithium is above', 'the metal: it plates'] : [cell.I > 1e-9 ? 'lithium arriving' : cell.I < -1e-9 ? 'lithium leaving' : 'lithium at the surface'];
+  const lines = plating ? ['arriving lithium is above', 'the metal: it can plate'] : [cell.I > 1e-9 ? 'lithium arriving' : cell.I < -1e-9 ? 'lithium leaving' : 'lithium at the surface'];
   lines.forEach((t, k) => ctx.fillText(t, px(La) + 22, Math.max(ya + 10, w.high(0) + 10) + 17 * k));
-  // the jump between the shelves (at rest: the battery's voltage), drawn down the liquid
-  const ga = S.region.lastIndexOf(0), gc = S.region.indexOf(2), xm = px(La + Ls * 0.86);
-  const hi = w.high(clamp(mu(ga), SH_TOP[0], SH_TOP[1])), lo = w.low(clamp(mu(gc), SH_LOW[0], SH_LOW[1]));
+  // the jump between the shelves at rest (the battery's rest voltage), drawn down the liquid
+  const xm = px(La + Ls * 0.86);
+  const hi = w.high(clamp(-E(GR, st.xa), SH_TOP[0], SH_TOP[1])), lo = w.low(clamp(-E(LFP, st.xc), SH_LOW[0], SH_LOW[1])); // the hosts' average shelves, whose gap is the rest voltage
   ctx.strokeStyle = COL.muted;
   ctx.lineWidth = 1.4;
   ctx.setLineDash([3, 4]);
@@ -299,17 +299,21 @@ export function drawShelves(f, cell) {
   ctx.fillStyle = COL.muted;
   ctx.fillText('per lithium, at rest:', xm - 14, jy + 22);
   ctx.fillText(`the battery's ${st.ocv.toFixed(2)} V`, xm - 14, jy + 40);
-  ctx.textAlign = 'center';
-  const ny = w.high(SH_TOP[0]) - 8;
-  ctx.textBaseline = 'alphabetic';
-  ctx.fillText('no shelf in the liquid:', px(La + Ls * 0.36), ny - 18);
-  ctx.fillText('lithium crosses in two halves', px(La + Ls * 0.36), ny);
-  ctx.save();
-  ctx.translate(18, (w.bands[0][0] + w.bands[1][1]) / 2);
-  ctx.rotate(-Math.PI / 2);
-  ctx.textAlign = 'center';
-  ctx.fillText('μ_Li (eV per atom)', 0, 0);
-  ctx.restore();
+  // (a narrow page has no room for the note beside the arrow, or for the axis title: the text
+  // and the caption say both)
+  if (FS === 1) {
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'alphabetic';
+    const ny = w.high(SH_TOP[0]) - 8;
+    ctx.fillText('no shelf in the liquid:', px(La + Ls * 0.36), ny - 18);
+    ctx.fillText('lithium crosses in two halves', px(La + Ls * 0.36), ny);
+    ctx.save();
+    ctx.translate(18, (w.bands[0][0] + w.bands[1][1]) / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.textAlign = 'center';
+    ctx.fillText('μ_Li (eV per atom)', 0, 0);
+    ctx.restore();
+  }
   regionLabels(ctx, VH - 14);
 }
 
@@ -424,11 +428,13 @@ export function drawSpecies(f, cell) {
   }
   ctx.font = MONO(12.5);
   ctx.fillStyle = COL.muted;
-  ctx.save();
-  ctx.translate(18, (w.bands[0][0] + w.bands[1][1]) / 2);
-  ctx.rotate(-Math.PI / 2);
-  ctx.textAlign = 'center';
-  ctx.fillText('species voltage (V)', 0, 0);
-  ctx.restore();
+  if (FS === 1) {
+    ctx.save();
+    ctx.translate(18, (w.bands[0][0] + w.bands[1][1]) / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.textAlign = 'center';
+    ctx.fillText('species voltage (V)', 0, 0);
+    ctx.restore();
+  }
   regionLabels(ctx, VH - 14);
 }

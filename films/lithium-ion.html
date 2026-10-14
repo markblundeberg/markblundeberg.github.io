@@ -29,11 +29,11 @@ const FIG = { ctx, VW: 960, VH: 440 };
 
 // The story. Each phase: its length on screen, and how it ends in the simulation.
 const PHASES = [
-  { key: 'question', secs: 2.6 },
-  { key: 'fast', secs: 5.2 }, // a plain charger at 4C, to the plating line
-  { key: 'plate', secs: 3.4 }, // and 100 s past it
-  { key: 'ease', secs: 6.4 }, // the same charge, now watching for plating, to full
-  { key: 'end', secs: 3.2 },
+  { key: 'question', secs: 2.6 }, // already charging, under the question
+  { key: 'fast', secs: 5.6 }, // a plain charger at 4C, to the plating line
+  { key: 'plate', secs: 4.6 }, // and 100 s past it
+  { key: 'ease', secs: 7.2 }, // the same charge, now watching for plating, to full
+  { key: 'end', secs: 3.8 },
 ];
 function fresh() {
   const cell = new Cell();
@@ -62,6 +62,9 @@ function reset() {
   crowd = createCrowd(cell, 7);
   frames = [];
   PHASES.forEach((ph, p) => { const n = Math.round(ph.secs * FPS); for (let j = 0; j < n; j++) frames.push({ p, u: (j + 1) / n, j, n }); });
+  // the question and the fast charge share one run to the plating line
+  const run = frames.filter((fr) => fr.p <= 1);
+  run.forEach((fr, i) => (fr.run = (i + 1) / run.length));
   k0 = -1;
 }
 reset();
@@ -70,10 +73,11 @@ reset();
 function caption(fr) {
   const key = PHASES[fr.p].key, plating = cell.state.margin < 0 && cell.I > 0;
   if (key === 'question') return null;
-  if (key === 'fast') return ['Charge fast, and lithium piles up', 'It reaches the graphite faster than it can soak in, so it crowds the surface. Below: each lithium’s energy, rising.'];
-  if (key === 'plate') return ['…and plates out as metal', 'Pushed above lithium metal’s level (the dashed line), it would rather be metal: it coats the graphite, and much of it is lost for good.'];
-  if (key === 'ease') return ['So a careful charger eases off', 'It slows down to keep the graphite just under the line. The fuller it gets, the less room there is, the slower it goes.'];
-  return ['Simulated, not drawn', 'Every frame is solved from the physics. Play with it yourself: link below.'];
+  // (each line short enough to read in its scene: twelve words at most)
+  if (key === 'fast') return ['Charge fast, and lithium piles up', 'It arrives faster than the graphite can soak it in.'];
+  if (key === 'plate') return ['…until it can plate out as metal', 'Past the dashed line, some can coat the graphite as metal.'];
+  if (key === 'ease') return ['So a careful charger eases off', cell.cv || cell.mode !== 'charge' ? 'At the very top, the voltage limit slows it further.' : 'It slows to keep the graphite just under the line.'];
+  return ['Simulated, not drawn', 'Every frame is solved from the physics. Try it: link below.'];
 }
 function wrap(text, width) {
   const words = text.split(' '), lines = [];
@@ -126,6 +130,11 @@ function draw(fr) {
     ctx.fillStyle = COL['ink-2'];
     ctx.font = '400 31px "Newsreader", serif';
     wrap(sub, 960).forEach((t, i) => ctx.fillText(t, 62, 176 + 40 * i));
+    if (key === 'end') {
+      ctx.fillStyle = COL.li;
+      ctx.font = '600 22px "Martian Mono", monospace';
+      ctx.fillText('MADE BY MARK LUNDEBERG & CLAUDE · ON DRIFTLET', 64, 238);
+    }
     ctx.globalAlpha = 1;
   }
   // the gauge: charge, and the charger's current
@@ -140,12 +149,13 @@ function draw(fr) {
   ctx.font = '400 24px "Martian Mono", monospace';
   ctx.fillStyle = COL.muted;
   const c = cell.I / C1, mins = cell.time / 60;
-  const what = key === 'question' ? 'unplugged' : key === 'end' ? `full in ${(plan.tA + plan.tB) / 60 | 0} min` : `charging at ${c.toFixed(1)}C · ${mins.toFixed(0)} min`;
+  const what = key === 'end' ? `full in ${Math.round((plan.tA + plan.tB) / 60)} min` : `${c.toFixed(1)}× speed · ${mins.toFixed(0)} min${cell.cv ? ' · voltage limit' : ''}`;
   ctx.fillText(what, gx + gw + 140, gy + 1);
   ctx.textAlign = 'right';
   ctx.fillStyle = key === 'end' ? COL.ink : COL.muted;
   ctx.font = `${key === 'end' ? 600 : 400} 22px "Martian Mono", monospace`;
-  ctx.fillText(key === 'end' ? 'marklundeberg.com/explorables' : 'driftlet', W - 60, gy + 1);
+  // (what "4×" means, while it's 4×; then the readout needs the room)
+  if (key === 'end' || key === 'question' || key === 'fast') ctx.fillText(key === 'end' ? 'marklundeberg.com' : '1× = full in an hour', W - 60, gy + 1);
 }
 
 // Frame k: the run moves on to it (frames are taken in order), the dots follow, and it's drawn.
@@ -153,9 +163,9 @@ function frame(k) {
   if (k < k0) reset();
   for (let j = k0 + 1; j <= k; j++) {
     const fr = frames[j], key = PHASES[fr.p].key, t0 = cell.time;
-    if (key === 'fast') {
+    if (key === 'question' || key === 'fast') {
       if (cell.mode !== 'charge') cell.setMode('charge');
-      cell.advance(fr.u * plan.tPlate, 50);
+      cell.advance(fr.run * plan.tPlate, 50);
     } else if (key === 'plate') cell.advance(plan.tPlate + fr.u * (plan.tA - plan.tPlate), 50); else if (key === 'ease') {
       cell.watch = true;
       if (cell.mode === 'charge') cell.advance(plan.tA + fr.u * plan.tB, 50);
