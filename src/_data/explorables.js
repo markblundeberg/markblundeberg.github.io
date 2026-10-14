@@ -4,6 +4,13 @@
 // This list feeds the /explorables/ index and the sitemap.
 export default [
     {
+        slug: 'nerves',
+        title: 'Why are your nerves wrapped in fat?',
+        description:
+            'Three nerves race, simulated live: a thin bare one, the same one wrapped in myelin, ' +
+            "and a squid's giant one. Why wrapping wins, and which ions carry the signal.",
+    },
+    {
         slug: 'lithium-ion',
         title: 'Why does fast charging slow down near full?',
         description:

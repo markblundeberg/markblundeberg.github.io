@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Nerves card (og.png)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Martian+Mono:wdth,wght@87.5,400;87.5,600&display=swap">
+<style>html, body { margin: 0; background: #0d1015; } canvas { display: block; }</style>
+</head>
+<body>
+<canvas id="c" width="1200" height="630"></canvas>
+<script type="module">
+// The nerves explorable's link card, 1200 × 630: the question over the race, 0.4 ms after firing
+// (the wrapped nerve nearly in, the squid's a third of the way, the bare one barely started). One
+// frame, taken by driftlet's tools/film.js --png; copied to src/explorables/nerves/og.png.
+
+import { Nerve, KINDS } from '../src/explorables/nerves/model.js';
+import { COL, span, drawRace } from '../src/explorables/nerves/pictures.js';
+
+Object.assign(COL, {
+  bg: '#0d1015', surface: '#151a22', line: '#252c38', 'line-2': '#313a48', ink: '#ece7dc', 'ink-2': '#c4bfb4', muted: '#8a909b',
+  axon: '#1d232c', outside: '#0f2630', spike: '#ffd166', 'spike-glow': 'rgba(255, 209, 102, .9)', sheath: '#efdcae', 'sheath-line': '#b9a473',
+  bare: '#c4bfb4', myelin: '#f3d58c', squid: '#55b8ff', na: '#ff6b4a', k: '#a78bfa', cl: '#5ed39a',
+});
+const W = 1200, H = 630, ctx = document.getElementById('c').getContext('2d');
+const nerves = Object.fromEntries(KINDS.map((k) => [k, new Nerve(k)]));
+for (const n of Object.values(nerves)) n.fire();
+for (let t = 0; t < 0.4e-3; t += 0.02e-3) for (const n of Object.values(nerves)) n.advance(t + 0.02e-3);
+await document.fonts.load('900 70px "Big Shoulders Display"');
+await document.fonts.load('600 20px "Martian Mono"');
+function frame() {
+  const g = ctx.createRadialGradient(W * 0.75, -80, 50, W * 0.75, -80, 1100);
+  g.addColorStop(0, '#161b24');
+  g.addColorStop(1, COL.bg);
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+  const F = { ctx, VW: 960, VH: 420 }, s = 1.12;
+  span(F);
+  ctx.save(); ctx.translate((W - 960 * s) / 2, 150); ctx.scale(s, s); drawRace(F, nerves, { pace: '5000×' }); ctx.restore();
+  ctx.textBaseline = 'alphabetic';
+  ctx.textAlign = 'left';
+  ctx.fillStyle = COL.na;
+  ctx.font = '600 20px "Martian Mono", monospace';
+  ctx.fillText('A NERVE SIGNAL, SIMULATED', 66, 56);
+  ctx.font = '900 70px "Big Shoulders Display", sans-serif';
+  const a = 'WHY ARE YOUR NERVES WRAPPED IN ', b = 'FAT', c = '?';
+  const px = Math.min(70, (70 * (W - 124)) / ctx.measureText(a + b + c).width);
+  ctx.font = `900 ${px.toFixed(1)}px "Big Shoulders Display", sans-serif`;
+  ctx.fillStyle = COL.ink; ctx.fillText(a, 62, 128);
+  let x = 62 + ctx.measureText(a).width;
+  ctx.fillStyle = COL.myelin; ctx.fillText(b, x, 128);
+  x += ctx.measureText(b).width;
+  ctx.fillStyle = COL.ink; ctx.fillText(c, x, 128);
+}
+window.reel = { frames: 1, fps: 1, width: W, height: H, frame };
+frame();
+</script>
+</body>
+</html>

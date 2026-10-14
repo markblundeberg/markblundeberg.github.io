@@ -32,6 +32,18 @@ for (const k of ['myelin', 'squid']) {
   out[k].steady_m_per_s = +n.speed(1 / 3, 2 / 3).toFixed(2);
 }
 out.bare.steady_m_per_s = out.bare.speed_m_per_s;
+// The wrapping slider's ends: thick (800 layers) and too thin (20, the slider's least).
+{
+  const thick = new M.Nerve('myelin', { ...M.MYELIN, wraps: 800 }, 0.06);
+  thick.fire();
+  for (let t = 0; t < 10e-3 && thick.arrived === null; t += 0.25e-3) thick.advance(t + 0.25e-3);
+  out.myelin_800_layers_m_per_s = +thick.speed(1 / 3, 2 / 3).toFixed(1);
+  const thin = new M.Nerve('myelin', { ...M.MYELIN, wraps: 20 });
+  thin.fire();
+  thin.advance(10e-3);
+  out.myelin_20_layers_reaches_cm = +(100 * (thin.front ?? 0)).toFixed(2);
+  out.myelin_20_layers_arrives = thin.arrived !== null;
+}
 out.bare_from_squid_by_sqrt_radius = +(out.squid.steady_m_per_s * Math.sqrt(M.THIN / M.SQUID)).toFixed(2);
 out.myelin_over_bare = +(out.myelin.steady_m_per_s / out.bare.steady_m_per_s).toFixed(1);
 out.myelin_over_squid = +(out.myelin.steady_m_per_s / out.squid.steady_m_per_s).toFixed(2);

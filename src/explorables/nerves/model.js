@@ -91,7 +91,7 @@ export class Nerve {
     this.front = null; // where the spike has reached: the furthest x past −30 mV since firing
     this.arrived = null; // when it reached the far end
     this.end = this.dev.solution().x.at(-1);
-    this.spots = Array.from({ length: 41 }, (_, i) => (i / 40) * this.end); // timed along the axon
+    this.spots = Array.from({ length: 161 }, (_, i) => (i / 160) * this.end); // timed along the axon, every 1/8 mm
     this.at = this.spots.map(() => NaN); // when the spike reached each spot, s after firing
   }
   settle(budgetMs = Infinity) {
@@ -137,7 +137,7 @@ export class Nerve {
   }
   // Speed between two spots (m/s), from the arrival times: the middle of the axon, away from its ends.
   speed(a = 0.25, b = 0.75) {
-    const i = Math.round(a * 40), j = Math.round(b * 40);
+    const n = this.spots.length - 1, i = Math.round(a * n), j = Math.round(b * n);
     return (this.spots[j] - this.spots[i]) / (this.at[j] - this.at[i]);
   }
   // (read once per change: the pictures read it several times a frame)

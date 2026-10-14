@@ -88,14 +88,22 @@ export function drawRace(f, nerves, opts = {}) {
       ctx.font = MONO(12.5);
       ctx.fillText(`${n.pace.toFixed(1)} m/s: in at about ${(1000 * (n.at[n.at.findLastIndex(Number.isFinite)] + (L - n.front) / n.pace)).toFixed(1)} ms`, X1, ny);
     }
-    // the nerve: axoplasm glowing by membrane voltage
+    // the nerve: a lit trail as far as the spike has reached (the wrapped one's leaps a gap at a
+    // time), and axoplasm glowing by membrane voltage
     const x0 = px(0), x1 = px(L), N = Math.round((x1 - x0) / 2);
+    if (n.front !== null) {
+      ctx.fillStyle = mix(COL.axon, colour, 0.45);
+      ctx.fillRect(x0, y - h / 2, px(n.front) - x0, h);
+    }
     for (let k = 0; k < N; k++) {
       const x = ((k + 0.5) / N) * L;
       if (x > n.end) break;
       const u = heat(vmAt(S, x));
+      if (u < 0.05) continue;
+      ctx.globalAlpha = Math.min(1, u * 1.4);
       ctx.fillStyle = mix(COL.axon, COL.spike, u);
       ctx.fillRect(x0 + ((x1 - x0) * k) / N, y - h / 2, (x1 - x0) / N + 0.6, h);
+      ctx.globalAlpha = 1;
     }
     // glow where it's firing
     ctx.save();
@@ -126,13 +134,17 @@ export function drawRace(f, nerves, opts = {}) {
         ctx.beginPath(); ctx.roundRect(a, y - h / 2 - 6, b - a, h + 12, 7); ctx.fill(); ctx.stroke();
       }
       ctx.globalAlpha = 1;
-      // a spark at each node that's firing
+      // a flash at each node as it fires (the spike reaching it), fading over 0.06 ms
       for (let x = 0; x < n.end; x += step) {
-        const u = heat(vmAt(S, x + NODE / 2));
-        if (u < 0.4) continue;
-        ctx.fillStyle = COL.spike;
+        const i = Math.round(((x + NODE / 2) / n.end) * (n.spots.length - 1)), since = n.time - n.at[i];
+        if (!(since >= 0 && since < 0.06e-3)) continue;
+        const u = 1 - since / 0.06e-3;
+        const g = ctx.createRadialGradient(px(x), y, 0, px(x), y, 26);
+        g.addColorStop(0, COL.spike);
+        g.addColorStop(1, 'rgba(0,0,0,0)');
         ctx.globalAlpha = u;
-        ctx.beginPath(); ctx.arc(px(x + NODE / 2), y, 3 + 4 * u, 0, 7); ctx.fill();
+        ctx.fillStyle = g;
+        ctx.fillRect(px(x) - 26, y - 26, 52, 52);
         ctx.globalAlpha = 1;
       }
     }

@@ -8,7 +8,8 @@
 //   toks   [{ t, f, pan, gain }]  a soft wooden "tok": a sine that sags as it dies
 //   bonks  [{ t, f, pan, gain }]  a soft, low, rubbery "bonk": something went a little wrong
 //   clicks [{ t, gain }]          a plug going in or out
-//   beds   [{ kind: 'rush' | 'bell', fps, gain: [per frame] }]  continuous sounds, faded frame by frame
+//   beds   [{ kind: 'rush' | 'bell', fps, gain: [per frame], pan?: [per frame], f? }]  continuous
+//          sounds, faded (and panned) frame by frame; a rush's f is its brightness (lowpass, Hz)
 
 const RATE = 48000;
 const mulberry = (seed) => () => ((seed = (seed + 0x6d2b79f5) | 0), (((seed ^ (seed >>> 15)) * (1 | seed)) >>> 0) / 4294967296);
@@ -115,17 +116,21 @@ export async function render(score) {
     o.start(t); o.stop(t + 0.1);
   }
   for (const bed of score.beds ?? []) {
-    const g = ctx.createGain(), dt = 1 / bed.fps;
+    const g = ctx.createGain(), dt = 1 / bed.fps, out = ctx.createStereoPanner();
     g.gain.setValueAtTime(bed.gain[0] ?? 0, 0);
     bed.gain.forEach((v, k) => g.gain.linearRampToValueAtTime(v, (k + 1) * dt));
+    out.pan.setValueAtTime(bed.pan?.[0] ?? 0, 0);
+    bed.pan?.forEach((v, k) => out.pan.linearRampToValueAtTime(Math.max(-1, Math.min(1, v)), (k + 1) * dt));
+    out.connect(bus);
     if (bed.kind === 'rush') {
       // a soft, warm rush, like air through a vent
       const s = ctx.createBufferSource(), lp = ctx.createBiquadFilter(), hp = ctx.createBiquadFilter();
       s.buffer = noise(ctx, 6, 7, true);
       s.loop = true;
-      lp.type = 'lowpass'; lp.frequency.value = 520;
+      lp.type = 'lowpass'; lp.frequency.value = bed.f ?? 520;
       hp.type = 'highpass'; hp.frequency.value = 70;
-      s.connect(hp).connect(lp).connect(g).connect(master);
+      s.connect(hp).connect(lp).connect(g);
+      if (bed.pan) g.connect(out); else g.connect(master);
       s.start(0);
     } else if (bed.kind === 'bell') {
       // a soft, wavering glass tone, its partials out of tune with each other
@@ -140,7 +145,7 @@ export async function render(score) {
         o.start(0);
       }
       lfo.start(0);
-      trem.connect(g).connect(bus);
+      trem.connect(g).connect(out);
     }
   }
   const out = await ctx.startRendering();
