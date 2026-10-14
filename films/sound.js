@@ -6,6 +6,7 @@
 // A score is { seconds, drops, toks, clicks, beds }:
 //   drops  [{ t, f, pan, gain }]  a water-drop "plip": a sine whose pitch springs upward
 //   toks   [{ t, f, pan, gain }]  a soft wooden "tok": a sine that sags as it dies
+//   bonks  [{ t, f, pan, gain }]  a soft, low, rubbery "bonk": something went a little wrong
 //   clicks [{ t, gain }]          a plug going in or out
 //   beds   [{ kind: 'rush' | 'bell', fps, gain: [per frame] }]  continuous sounds, faded frame by frame
 
@@ -77,6 +78,24 @@ export async function render(score) {
     o.connect(lp).connect(g);
     panTo(ctx, g, pan, bus);
     o.start(t); o.stop(t + 0.09);
+  }
+  for (const { t, f, pan, gain } of score.bonks ?? []) {
+    const g = ctx.createGain(), lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = 1400;
+    // a body that drops in pitch, and a hollow overtone that dies first
+    for (const [mult, a, die] of [[1, 1, 0.24], [2.6, 0.3, 0.07]]) {
+      const o = ctx.createOscillator(), og = ctx.createGain();
+      o.frequency.setValueAtTime(f * mult * 1.25, t);
+      o.frequency.exponentialRampToValueAtTime(f * mult, t + 0.03);
+      o.frequency.exponentialRampToValueAtTime(f * mult * 0.8, t + die);
+      og.gain.setValueAtTime(0, t);
+      og.gain.linearRampToValueAtTime(a * gain, t + 0.005);
+      og.gain.exponentialRampToValueAtTime(1e-4, t + die);
+      o.connect(og).connect(lp);
+      o.start(t); o.stop(t + die + 0.02);
+    }
+    lp.connect(g);
+    panTo(ctx, g, pan, bus);
   }
   const burst = noise(ctx, 0.05, 99);
   for (const { t, gain } of score.clicks ?? []) {
