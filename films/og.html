@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lithium-ion card (og.png)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Martian+Mono:wdth,wght@87.5,400;87.5,600&display=swap">
+<style>html, body { margin: 0; background: #0d1015; } canvas { display: block; }</style>
+</head>
+<body>
+<canvas id="c" width="1200" height="630"></canvas>
+<script type="module">
+// The explorable's link card, 1200 × 630: the question over the crowd picture, at the moment a
+// plain 4C charge pushes the graphite past the plating line. One frame, taken by driftlet's
+// tools/film.js --png; copied to src/explorables/lithium-ion/og.png.
+
+import { Cell } from '../src/explorables/lithium-ion/model.js';
+import { COL, span, createCrowd, crowdStep, drawCrowd } from '../src/explorables/lithium-ion/pictures.js';
+
+Object.assign(COL, {
+  bg: '#0d1015', surface: '#151a22', line: '#252c38', 'line-2': '#313a48', ink: '#ece7dc', 'ink-2': '#c4bfb4', muted: '#8a909b',
+  li: '#ff4f62', 'li-glow': 'rgba(255, 79, 98, .35)', e: '#55b8ff', anion: '#7d8696', graphite: '#22252b', 'graphite-line': '#353a43',
+  electrolyte: '#0f2630', lfp: '#2a2a1d', 'lfp-line': '#4a4a33', copper: '#c9773f', aluminium: '#9aa3ad', metal: '#c8ced6',
+  charge: '#3ddc84', use: '#ffb547', warn: '#ffb547',
+});
+const W = 1200, H = 630, ctx = document.getElementById('c').getContext('2d');
+const cell = new Cell();
+cell.rate = 4;
+cell.setMode('rest');
+const crowd = createCrowd(cell, 7);
+cell.setMode('charge');
+// to the plating line and a little past, the dots following as in the film
+let tPlate = null;
+while (cell.mode === 'charge' && (tPlate === null || cell.time < tPlate + 40)) {
+  cell.advance(cell.time + 4);
+  crowdStep(crowd, cell);
+  crowd.wire += 1.25;
+  if (tPlate === null && cell.state.margin < 0) tPlate = cell.time;
+}
+await document.fonts.load('900 70px "Big Shoulders Display"');
+await document.fonts.load('600 20px "Martian Mono"');
+
+function frame() {
+  const g = ctx.createRadialGradient(W * 0.75, -80, 50, W * 0.75, -80, 1100);
+  g.addColorStop(0, '#161b24');
+  g.addColorStop(1, COL.bg);
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+  const FIG = { ctx, VW: 960, VH: 440 }, s = 1.05;
+  span(FIG);
+  ctx.save(); ctx.translate((W - 960 * s) / 2, 160); ctx.scale(s, s); drawCrowd(FIG, cell, crowd); ctx.restore();
+  ctx.textBaseline = 'alphabetic';
+  ctx.textAlign = 'left';
+  ctx.fillStyle = COL.li;
+  ctx.font = '600 20px "Martian Mono", monospace';
+  ctx.fillText('A LITHIUM-ION BATTERY, SIMULATED', 66, 56);
+  const a = 'WHY DOES FAST CHARGING SLOW DOWN NEAR ', b = 'FULL', c = '?';
+  ctx.font = '900 70px "Big Shoulders Display", sans-serif';
+  const px = Math.min(70, (70 * (W - 124)) / ctx.measureText(a + b + c).width); // one line, edge to edge
+  ctx.font = `900 ${px.toFixed(1)}px "Big Shoulders Display", sans-serif`;
+  ctx.fillStyle = COL.ink; ctx.fillText(a, 62, 128);
+  let x = 62 + ctx.measureText(a).width;
+  ctx.fillStyle = COL.charge; ctx.fillText(b, x, 128);
+  x += ctx.measureText(b).width;
+  ctx.fillStyle = COL.ink; ctx.fillText(c, x, 128);
+}
+window.reel = { frames: 1, fps: 1, width: W, height: H, frame };
+frame();
+</script>
+</body>
+</html>
