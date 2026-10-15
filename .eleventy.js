@@ -28,6 +28,10 @@ export default async function myConfig(eleventyConfig) {
     for (const x of explorables)
         eleventyConfig.addPassthroughCopy({ [`src/explorables/${x.slug}`]: `/explorables/${x.slug}/` });
     eleventyConfig.ignores.add('src/explorables/*/**');
+    // Opustek's "Engine, Learning to Sing": a standalone page like the
+    // explorables (its own HTML, the track, the source zip, the drawing).
+    eleventyConfig.addPassthroughCopy({ 'src/opustek': '/opustek/' });
+    eleventyConfig.ignores.add('src/opustek/**');
     // If you have other static assets like fonts, add them here
 
     // --- Set variables ---
