@@ -119,22 +119,9 @@ th { font-weight: 400; font-variant: small-caps; letter-spacing: .05em; border-t
   <p class="filed">A techno track, and a drawing of the machine that plays it.</p>
 </header>
 
-<!-- The film: paste the YouTube video id into data-youtube (the 11 characters after "v=" in its link),
-     and the same full link into the "The film" entry of the list below (it stays hidden while empty). -->
-<figure class="film" id="film" data-youtube="">
-  <img src="sheet-1600.jpg" width="1600" height="900" alt="The plate: a two-stroke hot-bulb engine, its flywheel inside the crankcase and its moving parts in phantom lines, a water hopper, the glowing bulb, a resonator tube, a commutator disc with a spark gap firing, a drip-pan and a gauge, numbered 1 to 13">
+<figure class="film" id="film">
+  <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/jb6QESOOr8E?rel=0" title="Engine, Learning to Sing (the film)" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
 </figure>
-<script>
-(function () {
-  var f = document.getElementById('film'), id = f.getAttribute('data-youtube');
-  if (!id) return;
-  var w = document.createElement('div');
-  w.className = 'yt';
-  w.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) +
-    '?rel=0" title="Engine, Learning to Sing (the film)" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
-  f.replaceChildren(w);
-})();
-</script>
 
 <p class="lede">A techno track (123&nbsp;bpm, 3:14) and its music video, both written entirely in code by Claude, an AI model made by Anthropic, for Mark Lundeberg, a physicist, whose site this is. He asked for it and listened to every version. There are no samples, no instruments, no music apps or plugins and no image or video generator: the sound is numpy and scipy plus 280 lines of C, and the drawing is pycairo. Claude can't hear, so it checked each version with measurements; Mark's ears caught what the measurements missed.</p>
 
@@ -142,19 +129,11 @@ th { font-weight: 400; font-variant: small-caps; letter-spacing: .05em; border-t
 
 <audio controls preload="metadata" src="engine-learning-to-sing.mp3" aria-label="Engine, Learning to Sing, the full track, 3:14"></audio>
 <ul class="get">
-  <li class="yt-link" hidden><a href="">The film <small>YouTube</small></a></li>
+  <li><a href="https://www.youtube.com/watch?v=jb6QESOOr8E">The film <small>YouTube, 3:14</small></a></li>
   <li><a href="engine-learning-to-sing.mp3" download>The track <small>MP3, 3:14, 4.7&nbsp;MB</small></a></li>
   <li><a href="engine-learning-to-sing-src.zip" download>The source <small>ZIP, 56&nbsp;KB</small></a></li>
   <li><a href="sheet.jpg">The drawing <small>JPG, 3200&nbsp;px</small></a></li>
 </ul>
-<script>
-(function () {
-  var li = document.querySelector('.yt-link'), id = document.getElementById('film').getAttribute('data-youtube');
-  if (!id) return;
-  li.querySelector('a').href = 'https://www.youtube.com/watch?v=' + encodeURIComponent(id);
-  li.hidden = false;
-})();
-</script>
 
 <hr>
 
