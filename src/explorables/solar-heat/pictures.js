@@ -460,18 +460,19 @@ export function drawShare(f, st) {
 // electrons as dots: driftlet's particles() sampling the panel's solution, each dot a fixed number
 // of electrons. Where they're plentiful (the front layer, and the edge of the junction) they're a
 // shaded sea. st.cells[i] = { swarm, flashes: [{ x, y, t, kind }] }; now is in seconds.
-export const SLOW = 1e6; // the picture runs a million times slower than life
+export const SLOW = 3e7; // the picture runs 30 million times slower than life: a dot hops about a cell a frame
 export function drawCell(f, st, now) {
   const { ctx, VW, VH } = f, narrow = VW < 800;
   TS = narrow ? 1.38 : 1.15;
   ctx.clearRect(0, 0, VW, VH);
-  const n = st.panels.length, top = narrow ? 30 : 26, gap = narrow ? 64 : 46, bottom = narrow ? 44 : 40;
+  const n = st.panels.length, top = narrow ? 56 : 26, gap = narrow ? 64 : 46, bottom = narrow ? 44 : 40;
   const slabH = (VH - top - bottom - gap * (n - 1)) / n, x0 = narrow ? 30 : 118, x1 = VW - (narrow ? 16 : 24);
   st.panels.forEach((p, i) => {
     const cell = st.cells?.[i];
     if (!cell) return;
     const { swarm } = cell, sol = p.op.sol, W = sol.x.at(-1), y0 = top + i * (slabH + gap), y1 = y0 + slabH;
     const X = (x) => x0 + ((x1 - x0) * x) / W, col = tempColour(p.T);
+    cell.depth = (slabH * W) / (x1 - x0); // the slab's height at the depth's scale, for the sideways wandering
     // the label
     if (narrow) text(ctx, `${fmt(p.T - KELVIN, 0)} °C panel`, x0, y0 - 10, { size: 22, weight: 800, family: 'display', color: col });
     else {
@@ -501,13 +502,19 @@ export function drawCell(f, st, now) {
     // the back contact
     ctx.fillStyle = COL.frame;
     ctx.fillRect(x1 - 2, y0, 4, slabH);
-    // flashes: yellow where the light frees a pair, a pink ring where an electron meets a hole or
-    // is lost at the back
-    cell.flashes = cell.flashes.filter((fl) => now - fl.t < (fl.kind === 'made' ? 0.35 : 0.7));
+    // flashes: yellow where the light frees a pair, blue where an electron lands in the junction, a
+    // pink ring where one meets a hole or is lost at the back
+    const life = (fl) => (fl.kind === 'made' ? 0.6 : 0.9);
+    cell.flashes = cell.flashes.filter((fl) => now - fl.t < life(fl));
     for (const fl of cell.flashes) {
-      const age = (now - fl.t) / (fl.kind === 'made' ? 0.35 : 0.7), px = X(fl.x), py = y0 + fl.y * slabH;
+      const age = (now - fl.t) / life(fl), px = X(fl.x), py = y0 + fl.y * slabH;
       ctx.globalAlpha = 1 - age;
-      if (fl.kind === 'made') {
+      if (fl.kind === 'got') {
+        ctx.fillStyle = COL.e;
+        ctx.beginPath();
+        ctx.arc(px, py, 3 + 9 * age, 0, 2 * Math.PI);
+        ctx.fill();
+      } else if (fl.kind === 'made') {
         ctx.fillStyle = COL.sun;
         ctx.beginPath();
         ctx.arc(px, py, 2.5 + 2 * (1 - age), 0, 2 * Math.PI);
@@ -521,34 +528,70 @@ export function drawCell(f, st, now) {
       }
     }
     ctx.globalAlpha = 1;
-    // the electrons, eased toward their cells so that hops read as motion
+    // the electrons, each with a short fading trail of where it's been
+    ctx.strokeStyle = COL.e;
+    ctx.lineWidth = 1.2;
+    for (const d of swarm.dots) {
+      if (!d.trail || d.trail.length < 2) continue;
+      ctx.globalAlpha = 0.35;
+      ctx.beginPath();
+      d.trail.forEach(([tx, ty], k) => (k ? ctx.lineTo : ctx.moveTo).call(ctx, X(tx), y0 + ty * slabH));
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
     ctx.fillStyle = COL.e;
     for (const d of swarm.dots) {
-      d.y ??= 0.06 + 0.88 * Math.random();
-      d.px = d.px === undefined ? d.x : d.px + (d.x - d.px) * 0.35;
+      if (d.px === undefined) continue;
       ctx.beginPath();
-      ctx.arc(X(d.px), y0 + d.y * slabH, narrow ? 2.2 : 2.4, 0, 2 * Math.PI);
+      ctx.arc(X(d.px), y0 + d.py * slabH, narrow ? 2.4 : 2.6, 0, 2 * Math.PI);
       ctx.fill();
     }
+    if (i === 0) text(ctx, '↓ junction: collected here', x0 - 2, y0 - (narrow ? 34 : 8), { size: 11, color: COL.e });
   });
   // the depth scale, under the last slab
   const yb = VH - bottom + 16, W = st.panels[0].op.sol.x.at(-1), X = (x) => x0 + ((x1 - x0) * x) / W;
   text(ctx, 'front', x0, yb, { size: 11, color: COL.muted });
   for (const um of narrow ? [50, 100] : [50, 100, 150]) text(ctx, `${um} µm`, X(um * 1e-6), yb, { size: 11, color: COL.muted, align: 'center' });
   text(ctx, 'back', x1, yb, { size: 11, color: COL.muted, align: 'right' });
-  text(ctx, narrow ? 'a million times slower' : 'depth into the cell · slowed down a million times', x1, yb + 18, { size: 10.5, color: COL.muted, align: 'right' });
+  text(ctx, narrow ? '30 million times slower' : 'depth into the cell · slowed down 30 million times', x1, yb + 18, { size: 10.5, color: COL.muted, align: 'right' });
 }
 
 // Steps each cell's swarm on by dt seconds of the page (dt/SLOW of the cell's), and notes its
-// flashes: pairs made, electrons unmade (meeting a hole), and dots gone from the back layer (out
-// through the back contact; the contact's crossings aren't events).
+// flashes: pairs made; electrons landing in the junction (dots gone into the front's sea; some
+// come back out of it, so these overcount what's collected, about twofold); electrons unmade
+// (meeting a hole); and dots gone from the back layer (out through the back contact, whose
+// crossings aren't events). Each dot also wanders sideways as it does along the cell (the same
+// diffusivity: in a real cell they wander in all three directions), which the picture's height
+// stands for; and keeps a trail.
+const gauss = () => Math.sqrt(-2 * Math.log(1 - Math.random())) * Math.cos(2 * Math.PI * Math.random());
 export function stepCells(st, dt, now) {
   for (const cell of st.cells ?? []) {
     const { swarm } = cell, W = swarm.cells.at(-1).x1, before = new Set(swarm.dots), lastX = new Map();
     for (const d of swarm.dots) lastX.set(d, d.x);
     swarm.step(dt / SLOW);
-    for (const e of swarm.events) if (e.kind === 'made' || e.kind === 'unmade') cell.flashes.push({ x: e.x, y: 0.06 + 0.88 * Math.random(), t: now, kind: e.kind });
-    const after = new Set(swarm.dots);
-    for (const d of before) if (!after.has(d) && lastX.get(d) > W - 1.5e-6) cell.flashes.push({ x: W, y: d.y ?? 0.5, t: now, kind: 'back' });
+    for (const e of swarm.events) {
+      if (e.kind === 'made' || e.kind === 'unmade') cell.flashes.push({ x: e.x, y: 0.06 + 0.88 * Math.random(), t: now, kind: e.kind });
+    }
+    const after = new Set(swarm.dots), near = 4e-6;
+    for (const d of before) {
+      if (after.has(d)) continue;
+      const x = lastX.get(d);
+      if (x > W - 1.5e-6) cell.flashes.push({ x: W, y: d.py ?? 0.5, t: now, kind: 'back' });
+      else if (x < near) cell.flashes.push({ x: 0.6e-6, y: d.py ?? 0.5, t: now, kind: 'got' });
+    }
+    const sigma = Math.sqrt((2 * 3.9e-3 * dt) / SLOW) / (cell.depth ?? 40e-6); // sideways, as a share of the height
+    for (const d of swarm.dots) {
+      if (d.px === undefined) {
+        d.px = d.x;
+        d.py = 0.06 + 0.88 * Math.random();
+        d.trail = [];
+      }
+      d.px += (d.x - d.px) * 0.3;
+      d.py += sigma * gauss();
+      if (d.py < 0.04) d.py = 0.08 - d.py;
+      if (d.py > 0.96) d.py = 1.92 - d.py;
+      d.trail.push([d.px, d.py]);
+      if (d.trail.length > 14) d.trail.shift();
+    }
   }
 }

@@ -80,12 +80,12 @@ worker.onmessage = ({ data }) => {
   busy = false;
   st.panels = data.panels;
   // the whole cell's electrons as dots: each dot the same number of electrons in both panels, set
-  // by the first solution so that the left panel's base (beyond the junction's edge) holds about 250
+  // by the first solution so that the left panel's base (beyond the junction's edge) holds about 90
   if (!st.weight) {
     const S = st.panels[0].op.sol;
     let N = 0;
     for (let g = 1; g < S.x.length; g++) if (S.region[g] === 1 && S.region[g - 1] === 1 && S.x[g] > 2e-6) N += ((S.c['e-'][g] + S.c['e-'][g - 1]) / 2) * (S.x[g] - S.x[g - 1]);
-    st.weight = N / 250;
+    st.weight = N / 90;
   }
   st.panels.forEach((p, i) => {
     st.cells ??= [];
