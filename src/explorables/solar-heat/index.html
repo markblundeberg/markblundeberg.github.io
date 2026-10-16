@@ -161,7 +161,7 @@ h1 em { font-style: normal; color: var(--hot); }
     <p class="kicker" style="margin-top:34px">A solar panel, three pictures</p>
     <h1>Why do solar panels hate <em>heat</em>?</h1>
     <p class="byline">Claude Opus 5.5 <span>//</span> 16 October 2026</p>
-    <p class="lede">Under the same sun, a solar panel on a hot summer roof makes about a sixth less power than on a cool, bright day. Its sunlight isn't any weaker, and it hardly loses any electrons. What heat opens is a leak, and what the panel loses is the price of keeping that leak small.</p>
+    <p class="lede">Under the same sun, a solar panel on a hot summer roof makes about 15% less power than on a cool, bright day. Its sunlight isn't any weaker, and it hardly loses any electrons. What heat opens is a leak, and what the panel loses is the price of keeping that leak small.</p>
     <p>Below are two identical panels under the same <span class="sun">sun</span>, simulated live in your browser: a <span class="cool">cool</span> one at 25 °C and a <span class="hot">hot</span> one at 65 °C. The bar that sticks to the top of the screen sets their temperatures and the sun, and can hold both at the same voltage.</p>
   </header>
 </div>
@@ -198,7 +198,7 @@ h1 em { font-style: normal; color: var(--hot); }
       <canvas id="figHill" aria-label="An energy map of the front of a cell in each panel: the electrons' and holes' bands, the hill between the front layer and the base, and the split between the electrons' and holes' levels"></canvas>
       <figcaption>Energy across the front 1.6 µm of one cell in each panel, in electronvolts per electron. Thin lines are the edges of the bands, the least energy an electron can have (top) and the most a hole's missing electron can (bottom); the thick lines are the levels the electrons and holes fill to. Their split is the cell's voltage; sixty cells give the panel's. (At the front contact, the holes' level drops to meet the electrons': holes that reach it are lost there.) "Gets over" is the share of the electrons at the foot of the hill that have the energy to reach its top.</figcaption>
     </figure>
-    <p>The thick lines are the levels the electrons and holes fill up to, and the split between them is the cell's voltage. The higher the voltage, the lower the hill. And some electrons in the front layer climb back over it, into the base, where they meet holes and are lost. (Holes leak the other way too, into the front layer.) That's the leak, and it grows with the voltage.</p>
+    <p>The thick lines are the levels the electrons and holes fill up to, and the split between them is the cell's voltage. The higher the voltage, the lower the hill. And some electrons in the front layer climb back over it, into the base, where they meet holes and are lost. (Holes leak the other way too, into the front layer: in this cell, nearly half the leak is holes.) That's the leak, and it grows with the voltage.</p>
     <p>What lifts an electron over the hill is heat. Silicon's atoms jiggle, and pass their jiggling on to the electrons; only the luckiest few have the energy to climb it. In the cool panel at 34 volts, it's about one in 900 000. Hold the hot panel at the same voltage, and it's one in 35 000: twenty-six times as many. Heat does it twice over: the electrons jiggle harder, and in warm silicon the hill itself is lower.</p>
     <p>So the hot panel runs at a lower voltage, where the hill is high enough to hold the leak down: 0.39 electronvolts against the cool one's 0.35.</p>
     <div class="sh"><div class="shows"><h4>Shows</h4><p>The one-way push, the leak back over the hill, and why heat helps it.</p></div><div class="hides"><h4>Hides</h4><p>The other 178 µm of the cell, where the light frees most of its pairs.</p></div></div>
@@ -210,9 +210,9 @@ h1 em { font-style: normal; color: var(--hot); }
     <p>A panel's power is how many electrons it delivers each second, times the energy each one carries: the area of a rectangle, current across and voltage up.</p>
     <figure class="fig">
       <canvas id="figShare" aria-label="Each panel's power as a rectangle of current by voltage, and bars showing where every 100 pairs of charges the light frees end up"></canvas>
-      <figcaption>Left: each panel's power, as the area of its rectangle. Right: where every 100 pairs of charges the sunlight frees end up: delivered round the circuit, or lost at the front (mostly blue light, absorbed too near the surface to be collected), in the base, or at the back. The dashed mark is how many each panel delivers at 0 volts, where nothing leaks back.</figcaption>
+      <figcaption>Left: each panel's power, as the area of its rectangle. Right: where every 100 pairs of charges the sunlight frees end up: delivered round the circuit, or lost at the front (mostly light absorbed in the thin front layer, two-thirds of it blue and violet), in the base, or at the back. The dashed mark is how many each panel delivers at 0 volts, where nothing leaks back.</figcaption>
     </figure>
-    <p>The two rectangles are almost the same width; the <span class="hot">hot</span> one is shorter. On the right, the hot panel delivers 83 of every 100 pairs the light frees, and the cool one 85. Most of the rest were never going to make it: even at 0 volts, where nothing leaks back, each panel delivers only 88. So heat costs the panel a couple of electrons in a hundred, and 5 volts on every one.</p>
+    <p>The two rectangles are almost the same width; the <span class="hot">hot</span> one is shorter. On the right, the hot panel delivers 83 of every 100 pairs the light frees, and the cool one 85. Most of the rest were never going to make it: even at 0 volts, where nothing leaks back, each panel delivers only 88. So heat costs the panel about one electron in a hundred, and 5 volts on every one.</p>
     <div class="sh"><div class="shows"><h4>Shows</h4><p>Power as count times height, and where every pair goes.</p></div><div class="hides"><h4>Hides</h4><p>Where in the cell the light frees its pairs.</p></div></div>
   </section>
 
@@ -228,7 +228,7 @@ h1 em { font-style: normal; color: var(--hot); }
     <h3>Is a cloudy day worse than a hot one?</h3>
     <p>Slide the sun down to 50%. The current halves, and so does the power, to 133 watts. But the voltage barely moves: the panel's best voltage drops by just 1 volt, from 34 to 33. Cloud starves a panel of electrons; heat takes away their energy. Halving the sun costs far more than heating the panel to 65 °C.</p>
     <h3>Why are panels rated at 25 °C?</h3>
-    <p>A panel's rated power is measured under standard test conditions: full sun (1000 W/m²) with its cells at 25 °C. In full sun on a roof, cells usually run 20 to 30 °C hotter than the air, so on a 30 °C day they're at 50 to 60 °C, and the panel makes 10 to 13% less than its rating.</p>
+    <p>A panel's rated power is measured under standard test conditions: full sun (1000 W/m²) with its cells at 25 °C. In full sun on a roof, cells typically run 25 to 35 °C hotter than the air, so on a 30 °C day they're at 55 to 65 °C, and the panel makes 11 to 15% less than its rating.</p>
     <h3>Where do panels work best?</h3>
     <p>Somewhere cold and bright. Slide a panel down to −10 °C: it makes 312 watts in full sun, 13% more than at 25 °C. That's why panels on snowy mountains, and on clear winter days, can beat their ratings.</p>
   </section>

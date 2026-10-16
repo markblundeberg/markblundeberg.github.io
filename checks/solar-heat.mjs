@@ -98,12 +98,28 @@ expect('γ implied by dVoc/dT (Green 2003)', out.gamma_implied, 1.58, 3, "betwee
   out.one_in_ratio_same_V = +(out.panel_cool_best.one_in / out.panel_hot_at_cool_V.one_in).toFixed(1);
   expect('the hot panel at the cool one\'s voltage delivers nothing', Math.abs(out.panel_hot_at_cool_V.W), 0, 10, 'its V_oc is the cool one\'s V_mp');
   expect('the per-100 ledger closes', out.panel_cool_best.per100_sum_error, 0, 1e-6, 'every pair accounted for');
+  // The leak, by where it ends: what each loss grows by from 0 V to the best voltage, per 100 pairs
+  // (holes leaking into the front layer show up at the front; electrons into the base, in the base
+  // and at the back).
+  {
+    const best = cool.operate(cool.Vmp).fates, zero = cool.short, d = (k) => (100 * best[k]) / best.made - (100 * zero[k]) / zero.made;
+    const total = d('front') + d('base') + d('back');
+    out.leak_by_place_cool = { per100: +total.toFixed(2), front_share: +(d('front') / total).toFixed(2), base_share: +(d('base') / total).toFixed(2), back_share: +(d('back') / total).toFixed(2) };
+    // what's lost at the front at 0 V, against what the light frees within the front layer and the
+    // first 0.1 µm past it (mostly blue: absorbed within a fraction of a micron)
+    const within = (x) => M.NM.reduce((s, nm, k) => s - M.FLUX[k] * Math.expm1(-M.alphaAt(nm, cool.T) * x), 0);
+    out.front_loss_at_0V_per100 = +((100 * zero.front) / zero.made).toFixed(1);
+    out.freed_in_front_layer_per100 = +((100 * within(M.WE)) / zero.made).toFixed(1);
+    out.freed_in_front_layer_below_500nm_share = +(M.NM.reduce((s, nm, k) => s - (nm < 500 ? M.FLUX[k] * Math.expm1(-M.alphaAt(nm, cool.T) * M.WE) : 0), 0) / within(M.WE)).toFixed(2);
+  }
+  // a dot on the wires: 14 a second at 8.5 A
+  out.electrons_per_dot = +(8.5 / 14 / 1.602176634e-19).toPrecision(2);
   // A cloudy day (half sun) and a freezing bright one (−10 °C), against the cool panel.
   const half = new M.Panel(M.KELVIN + 25, 0.5), cold = new M.Panel(M.KELVIN - 10, 1);
   out.panel_half_sun = { W: +M.panel.W(half.Pmax).toFixed(1), Vmp: +M.panel.V(half.Vmp).toFixed(1), Voc: +M.panel.V(half.Voc).toFixed(1), A_sc: +M.panel.A(half.Jsc).toFixed(2), Voc_drop_V: +M.panel.V(cool.Voc - half.Voc).toFixed(2) };
   out.panel_minus10 = { W: +M.panel.W(cold.Pmax).toFixed(1), over_25C: +(cold.Pmax / cool.Pmax).toFixed(3) };
   // a hot day: air at 30 °C, cells 25–30 °C above it
-  out.power_at_55_and_60_over_25 = { C55: +(by(55).Pmax / c25.Pmax).toFixed(3), C60: +((by(55).Pmax + by(65).Pmax) / 2 / c25.Pmax).toFixed(3) };
+  out.power_over_25C = { C45: +(by(45).Pmax / c25.Pmax).toFixed(3), C55: +(by(55).Pmax / c25.Pmax).toFixed(3), C65: +(by(65).Pmax / c25.Pmax).toFixed(3) };
 }
 // The kit's checks at 25 °C, open circuit: where every pair goes, and a grid twice as fine.
 {
