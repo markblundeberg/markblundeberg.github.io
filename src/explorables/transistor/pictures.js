@@ -246,7 +246,7 @@ export function drawCurve(f, st) {
   text(ctx, 'gate voltage', x1, y1 + 42, { size: 10.5, color: COL.muted, align: 'right' });
   text(ctx, 'channel electrons per cm²', x0, y0 - 12, { size: 10.5, color: COL.muted });
   // the 60 mV-per-tenfold line, the best any gate can do at room temperature, through the curve at 0 V
-  const off = Math.log10(channelAt(st.sweep, OFF_V)), lim = VT * Math.LN10;
+  const lim = VT * Math.LN10;
   ctx.save();
   ctx.beginPath();
   ctx.rect(x0, y0, x1 - x0, y1 - y0);
@@ -254,9 +254,11 @@ export function drawCurve(f, st) {
   ctx.strokeStyle = COL.muted;
   ctx.setLineDash([5, 5]);
   ctx.lineWidth = 1.4;
+  // (from the curve's foot, at the bottom of the scale, rightward: so it stays to one side of the curve)
+  const k0 = st.sweep.n.findIndex((n) => Math.log10(n) >= L0), Va = st.sweep.V[k0];
   ctx.beginPath();
-  ctx.moveTo(X(OFF_V - 0.5), Y(off - 0.5 / lim));
-  ctx.lineTo(X(OFF_V + 0.5), Y(off + 0.5 / lim));
+  ctx.moveTo(X(Va), Y(L0));
+  ctx.lineTo(X(Va + 0.8), Y(L0 + 0.8 / lim));
   ctx.stroke();
   ctx.setLineDash([]);
   // the curve
@@ -266,7 +268,9 @@ export function drawCurve(f, st) {
   st.sweep.V.forEach((v, k) => (k ? ctx.lineTo : ctx.moveTo).call(ctx, X(v), Y(Math.log10(Math.max(1e-3, st.sweep.n[k])))));
   ctx.stroke();
   ctx.restore();
-  text(ctx, narrow ? 'dashed: 60 mV per tenfold' : 'dashed: the limit, 60 mV per tenfold', X(OFF_V + 0.05) + 10, Y(off + 0.05 / lim) + 18, { size: 10.5, color: COL.muted });
+  // (its label in the empty lower right)
+  text(ctx, narrow ? '- - the steepest possible:' : '- - the steepest possible, 60 mV per tenfold', x1 - 4, Y(L0 + 2), { size: 10.5, color: COL.muted, align: 'right' });
+  if (narrow) text(ctx, '60 mV per tenfold', x1 - 4, Y(L0 + 2) + 16, { size: 10.5, color: COL.muted, align: 'right' });
   // where it is now
   const lg = Math.log10(st.here.n);
   ctx.fillStyle = COL.gate;
