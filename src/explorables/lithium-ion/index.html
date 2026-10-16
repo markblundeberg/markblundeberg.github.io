@@ -85,6 +85,7 @@ h1 em { color: var(--charge); }
 .modes button[data-mode=charge][aria-pressed=true] { background: var(--charge); }
 .modes button[data-mode=rest][aria-pressed=true] { background: var(--ink-2); }
 .modes button[data-mode=use][aria-pressed=true] { background: var(--use); }
+.modes button:focus-visible { outline-offset: -2px; } /* inside, since .modes clips */
 .status { color: var(--muted); min-width: 12em; }
 .status b { color: var(--ink); font-weight: 600; }
 .status .warn { font-weight: 600; }
@@ -94,6 +95,8 @@ h1 em { color: var(--charge); }
   .more { display: inline-block; margin-left: auto; }
   .bar:not(.open) #play, .bar:not(.open) #empty { display: none; }
 }
+/* reduced motion starts paused, so Play stays in reach on a phone */
+@media (max-width: 700px) and (prefers-reduced-motion: reduce) { .bar:not(.open) #play { display: inline-block; } }
 
 /* sections and figures */
 .ledger { display: grid; grid-template-columns: max-content 1fr max-content; gap: 6px 12px; align-items: center; font-family: var(--mono); font-stretch: 87.5%; font-size: 12px; margin-top: 12px; color: var(--ink-2); }
@@ -139,7 +142,7 @@ h1 em { color: var(--charge); }
     <div class="ctl"><label for="rate">speed <b id="rateOut">4C · 15 min</b></label><input id="rate" type="range" min="-1" max="0.9" step="0.01" value="0.602" aria-label="Charging or discharging speed, as a C-rate"></div>
     <label class="chk"><input type="checkbox" id="watch"> watch for plating</label>
     <span class="status" id="status"></span>
-    <button class="btn" id="play" aria-pressed="true">Pause</button>
+    <button class="btn" id="play">Pause</button>
     <button class="btn" id="empty">Empty it</button>
     <button class="btn more" id="more" aria-expanded="false">More</button>
   </div>
@@ -210,8 +213,8 @@ h1 em { color: var(--charge); }
       <p>Race two chargers from empty at the speed in the bar: one that only watches the voltage, and one that watches for plating too.</p>
     </div>
     <div class="race">
-      <div class="lane" id="laneA"><h4>Voltage limit only</h4><div class="big"><div class="cell-icon"><i></i></div><b>0%</b></div><dl><dt>time</dt><dd data-k="time">0 min</dd><dt>past the plating line</dt><dd data-k="plate">0 min</dd></dl><canvas></canvas></div>
-      <div class="lane" id="laneB"><h4>Watching for plating</h4><div class="big"><div class="cell-icon"><i></i></div><b>0%</b></div><dl><dt>time</dt><dd data-k="time">0 min</dd><dt>past the plating line</dt><dd data-k="plate">0 min</dd></dl><canvas></canvas></div>
+      <div class="lane" id="laneA"><h4>Voltage limit only</h4><div class="big"><div class="cell-icon"><i></i></div><b>0%</b></div><dl><dt>time</dt><dd data-k="time">0 min</dd><dt>past the plating line</dt><dd data-k="plate">0 min</dd></dl><canvas aria-label="This charger’s current over the race, marked where it is past the plating line"></canvas></div>
+      <div class="lane" id="laneB"><h4>Watching for plating</h4><div class="big"><div class="cell-icon"><i></i></div><b>0%</b></div><dl><dt>time</dt><dd data-k="time">0 min</dd><dt>past the plating line</dt><dd data-k="plate">0 min</dd></dl><canvas aria-label="This charger’s current over the race, marked where it is past the plating line"></canvas></div>
     </div>
     <div class="col race-go"><button class="btn" id="raceGo">Start the race</button><span id="raceNote">Each lane is its own copy of the battery, charged from empty.</span></div>
     <div class="col">

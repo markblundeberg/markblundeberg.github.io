@@ -29,7 +29,9 @@ themeBtn.addEventListener('click', () => {
   setTheme(next);
 });
 matchMedia('(prefers-color-scheme: light)').addEventListener?.('change', () => setTheme());
+// Reduced motion: no photons or drifting dots; each figure is drawn when what it shows changes.
 const still = matchMedia('(prefers-reduced-motion: reduce)');
+still.addEventListener?.('change', () => { for (const f of figs) f.dirty = true; });
 
 // ---------- canvases ----------
 function figure(canvas, wide, narrow, draw) {
@@ -98,7 +100,7 @@ function frame(now) {
       stepPhotons(st, dt);
       stepInside(st, dt, now / 1000);
     } else if (!st.box || st.box.of !== st.inside) stepInside(st, 0, now / 1000);
-    for (const f of figs) if (f.visible && (!f.static || f.dirty) && (!still.matches || f.dirty || !f.static)) { f.draw(f); f.dirty = false; }
+    for (const f of figs) if (f.visible && (still.matches ? f.dirty : !f.static || f.dirty)) { f.draw(f); f.dirty = false; }
   }
   requestAnimationFrame(frame);
 }

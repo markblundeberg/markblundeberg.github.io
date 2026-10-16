@@ -6,6 +6,7 @@ import { Nerve, KINDS, MYELIN } from './model.js';
 import { COL, span, drawRace, drawWave, drawIons } from './pictures.js';
 
 const $ = (id) => document.getElementById(id);
+const figs = [];
 
 // ---------- colours, from the page's CSS (both themes) ----------
 const TOKENS = ['anion', 'warn', 'bg', 'surface', 'line', 'line-2', 'ink', 'ink-2', 'muted', 'axon', 'outside', 'spike', 'spike-glow', 'sheath', 'sheath-line', 'bare', 'myelin', 'squid', 'na', 'k', 'cl'];
@@ -20,6 +21,7 @@ function setTheme(t) {
   const dark = getComputedStyle(document.documentElement).colorScheme.includes('dark');
   themeBtn.textContent = dark ? '☀ day' : '☾ night';
   readColours();
+  for (const f of figs) f.dirty = true;
 }
 try { setTheme(localStorage.getItem('li-theme')); } catch { setTheme(); }
 themeBtn.addEventListener('click', () => {
@@ -27,10 +29,12 @@ themeBtn.addEventListener('click', () => {
   try { localStorage.setItem('li-theme', next); } catch {}
   setTheme(next);
 });
-matchMedia('(prefers-color-scheme: light)').addEventListener?.('change', readColours);
+matchMedia('(prefers-color-scheme: light)').addEventListener?.('change', () => setTheme());
+// Reduced motion: each race is run out of sight, as fast as it computes, and drawn when it's over.
+const still = matchMedia('(prefers-reduced-motion: reduce)');
+still.addEventListener?.('change', () => { for (const f of figs) f.dirty = true; });
 
 // ---------- canvases ----------
-const figs = [];
 function figure(canvas, wide, narrow, draw) {
   const f = { canvas, ctx: canvas.getContext('2d'), wide, narrow, draw, visible: true };
   figs.push(f);
@@ -45,6 +49,7 @@ function fit(f) {
   f.canvas.height = Math.round((w * f.VH * dpr) / f.VW);
   f.canvas.style.height = `${(w * f.VH) / f.VW}px`;
   f.ctx.setTransform((w * dpr) / f.VW, 0, 0, (w * dpr) / f.VW, 0, 0);
+  f.dirty = true;
 }
 addEventListener('resize', () => { for (const f of figs) fit(f); });
 
@@ -76,28 +81,39 @@ $('fire').addEventListener('click', () => (want = true));
 for (const el of [wraps, gap]) el.addEventListener('input', () => { showBar(); prepare(); want = true; });
 
 // ---------- run ----------
-figure($('figRace'), [960, 420], [600, 500], (f) => drawRace(f, nerves, { pace: '5000×', over }));
+figure($('figRace'), [960, 420], [600, 500], (f) => drawRace(f, nerves, { pace: still.matches ? '' : '5000×', over }));
 figure($('figWave'), [960, 400], [600, 460], (f) => drawWave(f, nerves));
 figure($('figIons'), [960, 410], [600, 440], (f) => drawIons(f, nerves.squid));
 let last;
+const finished = () => ['myelin', 'squid'].every((k) => nerves[k].arrived !== null) || clock > RACE;
+// one clock for all three: it waits for whichever is slowest to compute
+function tick(dt) {
+  clock = Math.min(clock + dt * PACE, ...KINDS.map((k) => nerves[k].time + 0.3e-3));
+  for (const k of KINDS) nerves[k].advance(clock, 6);
+}
 function frame(now) {
   const dt = Math.min(0.1, (now - (last ?? now)) / 1000);
   last = now;
-  const done = ['myelin', 'squid'].every((k) => nerves[k].arrived !== null) || clock > RACE;
+  let done = finished();
+  if (still.matches && !done && !want) {
+    // the same 60-a-second ticks as the animation, as many as fit in 40 ms, undrawn
+    const t0 = performance.now();
+    while (!done && performance.now() - t0 < 40) { tick(1 / 60); done = finished(); }
+    $('status').textContent = done ? '' : 'running the race…';
+  }
+  if (done && !over) for (const f of figs) f.dirty = true;
   over = done;
   if (!done && !want) {
-    // one clock for all three: it waits for whichever is slowest to compute
-    clock = Math.min(clock + dt * PACE, ...KINDS.map((k) => nerves[k].time + 0.3e-3));
-    for (const k of KINDS) nerves[k].advance(clock, 6);
+    if (!still.matches) tick(dt);
   } else {
     // held at the finish while the next three settle
     rest += dt;
     if (!next) prepare();
     const k = KINDS.find((kk) => !next[kk].ready);
     if (k) next[k].settle(10);
-    else if (want || (loop.checked && rest > 2.5)) fire();
+    else if (want || (loop.checked && rest > 2.5 && !still.matches)) fire();
   }
-  for (const f of figs) if (f.visible) { span(f); f.draw(f); }
+  for (const f of figs) if (f.visible && (still.matches ? over && f.dirty : true)) { span(f); f.draw(f); f.dirty = false; }
   requestAnimationFrame(frame);
 }
 document.fonts.ready.then(() => {

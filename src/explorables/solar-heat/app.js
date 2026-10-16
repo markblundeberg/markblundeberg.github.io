@@ -30,6 +30,9 @@ themeBtn.addEventListener('click', () => {
   setTheme(next);
 });
 matchMedia('(prefers-color-scheme: light)').addEventListener?.('change', () => setTheme());
+// Reduced motion: no drifting dots; each figure is drawn when what it shows changes.
+const still = matchMedia('(prefers-reduced-motion: reduce)');
+still.addEventListener?.('change', () => { for (const f of figs) f.dirty = true; });
 
 // ---------- canvases ----------
 function figure(canvas, wide, narrow, draw) {
@@ -46,6 +49,7 @@ function fit(f) {
   f.canvas.height = Math.round((w * f.VH * dpr) / f.VW);
   f.canvas.style.height = `${(w * f.VH) / f.VW}px`;
   f.ctx.setTransform((w * dpr) / f.VW, 0, 0, (w * dpr) / f.VW, 0, 0);
+  f.dirty = true;
 }
 addEventListener('resize', () => { for (const f of figs) fit(f); });
 
@@ -96,7 +100,7 @@ worker.onmessage = ({ data }) => {
   st.sun = st.next.sun;
   window.panels = st.panels; // (for the console)
   $('status').textContent = '';
-  for (const f of figs) if (f.static) f.dirty = true;
+  for (const f of figs) f.dirty = true;
   if (pending) ask();
 };
 worker.onerror = (e) => ($('status').textContent = `the simulation failed to load: ${e.message ?? e}`);
@@ -114,9 +118,11 @@ function frame(now) {
   const dt = Math.min(0.1, (now - (last ?? now)) / 1000);
   last = now;
   if (st.panels) {
-    stepDots(st, dt);
-    if (cellFig.visible) stepCells(st, dt, now / 1000);
-    for (const f of figs) if (f.visible && (!f.static || f.dirty)) { f.draw(f); f.dirty = false; }
+    if (!still.matches) {
+      stepDots(st, dt);
+      if (cellFig.visible) stepCells(st, dt, now / 1000);
+    }
+    for (const f of figs) if (f.visible && (still.matches ? f.dirty : !f.static || f.dirty)) { f.draw(f); f.dirty = false; }
   }
   requestAnimationFrame(frame);
 }

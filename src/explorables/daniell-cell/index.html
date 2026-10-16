@@ -81,6 +81,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; height:
 .seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 7px; overflow: hidden; }
 .seg button { font: inherit; font-size: 13px; background: transparent; color: var(--muted); border: 0; padding: 6px 10px; cursor: pointer; }
 .seg button[aria-pressed=true] { background: var(--ink); color: var(--bg); }
+.seg button:focus-visible { outline-offset: -2px; } /* inside, since .seg clips */
 .readout { display: flex; gap: 14px; font-family: var(--mono); font-size: 14px; white-space: nowrap; }
 .readout span { color: var(--muted); }
 .readout b { font-weight: 500; color: var(--ink); }
@@ -192,7 +193,7 @@ header.top { padding-block: 34px 28px; }
       <button id="sepBridge" aria-pressed="true">Salt bridge</button><button id="sepPot" aria-pressed="false">Porous pot</button>
     </div>
     <div class="readout" aria-live="polite"><span>V <b id="vOut">1.10</b></span><span>I <b id="iOut">0.0</b> mA</span></div>
-    <div class="btns"><button class="btn" id="playBtn" aria-pressed="true">Pause</button><button class="btn reset" id="reset">Reset</button></div>
+    <div class="btns"><button class="btn" id="playBtn">Pause</button><button class="btn reset" id="reset">Reset</button></div>
     <button class="bar-toggle" id="barToggle" aria-expanded="false">Adjust</button>
   </div>
 </div>
@@ -835,14 +836,14 @@ function renderAll() {
   Sim.drawAll();
 }
 el('steady').addEventListener('change', e => { S.steady = e.target.checked; if (S.steady) Sim.reset(); });
-el('playBtn').addEventListener('click', () => { S.playing = !S.playing; el('playBtn').textContent = S.playing ? 'Pause' : 'Play'; el('playBtn').setAttribute('aria-pressed', S.playing); });
+el('playBtn').addEventListener('click', () => { S.playing = !S.playing; el('playBtn').textContent = S.playing ? 'Pause' : 'Play'; });
 compute();
 Sim.reset();
 Sim.attach(el('figCrowd'), false);
 Sim.attach(el('miniCrowd'), true);
 renderAll();
 Sim.start();
-if (!S.playing) { el('playBtn').textContent = 'Play'; el('playBtn').setAttribute('aria-pressed', false); }
+if (!S.playing) el('playBtn').textContent = 'Play';
 { let hinted = false; new IntersectionObserver(([e]) => { if (!e.isIntersecting && e.boundingClientRect.top < 0 && !hinted) { hinted = true; const b = el('bar'); b.classList.add('hint'); setTimeout(() => b.classList.remove('hint'), 1800); } }).observe(el('barSentinel')); }
 let rz = null; new ResizeObserver(() => { clearTimeout(rz); rz = setTimeout(renderAll, 120); }).observe(document.querySelector('main'));
 })();

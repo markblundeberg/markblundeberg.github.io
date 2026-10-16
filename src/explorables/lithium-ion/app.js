@@ -7,6 +7,12 @@ import { COL, span, createCrowd, crowdStep, drawCrowd, drawShelves, drawCurve, d
 
 const $ = (id) => document.getElementById(id);
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const figs = [];
+const touch = () => { for (const f of figs) f.dirty = true; };
+// Reduced motion: the time-lapse starts paused (Play runs it), and a race is run out of sight and
+// shown when it's over; each figure is drawn when what it shows changes.
+const still = matchMedia('(prefers-reduced-motion: reduce)');
+still.addEventListener?.('change', touch);
 
 // ---------- colours, from the page's CSS (both themes) ----------
 function readColours() {
@@ -22,6 +28,7 @@ function setTheme(t) {
   const dark = getComputedStyle(document.documentElement).colorScheme.includes('dark');
   themeBtn.textContent = dark ? '☀ day' : '☾ night';
   readColours();
+  touch();
 }
 try { setTheme(localStorage.getItem('li-theme')); } catch { setTheme(); }
 themeBtn.addEventListener('click', () => {
@@ -29,11 +36,10 @@ themeBtn.addEventListener('click', () => {
   try { localStorage.setItem('li-theme', next); } catch {}
   setTheme(next);
 });
-matchMedia('(prefers-color-scheme: light)').addEventListener?.('change', () => (readColours(), (dirty = true)));
+matchMedia('(prefers-color-scheme: light)').addEventListener?.('change', () => setTheme());
 // ---------- canvases ----------
 // Each figure draws on a virtual page, VW × VH, scaled to the canvas's width; a narrow screen
 // gets a narrower page (so larger type and dots).
-const figs = [];
 function figure(canvas, wide, narrow, draw) {
   const f = { canvas, ctx: canvas.getContext('2d'), wide, narrow, draw, visible: true };
   figs.push(f);
@@ -48,8 +54,9 @@ function fit(f) {
   f.canvas.height = Math.round((w * f.VH * dpr) / f.VW);
   f.canvas.style.height = `${(w * f.VH) / f.VW}px`;
   f.ctx.setTransform((w * dpr) / f.VW, 0, 0, (w * dpr) / f.VW, 0, 0);
+  f.dirty = true;
 }
-addEventListener('resize', () => { for (const f of figs) fit(f); dirty = true; });
+addEventListener('resize', () => { for (const f of figs) fit(f); });
 // ---------- the battery, and the bar ----------
 let cell = new Cell();
 const rate = $('rate'), watch = $('watch');
@@ -58,7 +65,7 @@ const fmtTime = (min) => (min >= 90 ? `${(min / 60).toFixed(min >= 600 ? 0 : 1)}
 const fmtC = (c) => (c < 1 ? c.toFixed(2) : c < 10 ? c.toFixed(1) : c.toFixed(0)).replace(/\.0$/, '');
 cell.rate = C();
 cell.setMode('charge');
-let playing = true, dirty = true;
+let playing = !still.matches;
 function showBar() {
   const st = cell.state;
   $('rateOut').textContent = `${fmtC(C())}C · ${fmtTime(60 / C())}`;
@@ -76,11 +83,13 @@ function showBar() {
   if (plating) s += ' · <span class="warn">past the plating line</span>';
   $('status').innerHTML = s;
 }
-for (const b of document.querySelectorAll('.modes button')) b.addEventListener('click', () => { cell.setMode(b.dataset.mode); dirty = true; });
-rate.addEventListener('input', () => { cell.setRate(C()); showBar(); });
-watch.addEventListener('change', () => { cell.watch = watch.checked; if (cell.mode === 'charge' && !cell.cv) cell.setI(cell.rate * C1); });
+for (const b of document.querySelectorAll('.modes button')) b.addEventListener('click', () => { cell.setMode(b.dataset.mode); touch(); });
+rate.addEventListener('input', () => { cell.setRate(C()); showBar(); touch(); });
+watch.addEventListener('change', () => { cell.watch = watch.checked; if (cell.mode === 'charge' && !cell.cv) cell.setI(cell.rate * C1); touch(); });
 $('more').addEventListener('click', () => { const open = $('bar').classList.toggle('open'); $('more').textContent = open ? 'Less' : 'More'; $('more').setAttribute('aria-expanded', open); });
-$('play').addEventListener('click', () => { playing = !playing; $('play').textContent = playing ? 'Pause' : 'Play'; $('play').setAttribute('aria-pressed', playing); });
+const showPlay = () => ($('play').textContent = playing ? 'Pause' : 'Play');
+showPlay();
+$('play').addEventListener('click', () => { playing = !playing; showPlay(); touch(); });
 $('empty').addEventListener('click', () => {
   const mode = cell.mode === 'rest' ? 'charge' : cell.mode;
   cell = new Cell();
@@ -88,7 +97,7 @@ $('empty').addEventListener('click', () => {
   cell.watch = watch.checked;
   cell.setMode(mode === 'use' ? 'rest' : mode);
   crowd = createCrowd(cell);
-  dirty = true;
+  touch();
 });
 // Time-lapse: a full charge (or discharge) at the speed in the bar takes about fifteen seconds.
 const simPerWall = () => 3600 / C() / 15;
@@ -124,6 +133,13 @@ function raceStart() {
 $('raceGo').addEventListener('click', raceStart);
 function raceStep(dtWall) {
   if (!racing) return;
+  if (still.matches) {
+    // the animation's 60-a-second steps, as many as fit in 40 ms, undrawn
+    const t0 = performance.now();
+    while (racing && performance.now() - t0 < 40) raceTick(1 / 60);
+  } else raceTick(dtWall);
+}
+function raceTick(dtWall) {
   const t = Math.max(...lanes.map((l) => l.cell.time)) + dtWall * (3600 / C() / 12);
   for (const ln of lanes) if (ln.cell.mode === 'charge') {
     ln.cell.advance(t, 6);
@@ -176,12 +192,13 @@ function frame(now) {
     cell.advance(cell.time + dt * simPerWall(), 10);
     crowdStep(crowd, cell);
     crowd.wire += (70 * dt * cell.I) / (C() * C1); // electrons, right to left round the wire while charging
-    if (was !== cell.mode) dirty = true;
-    raceStep(dt);
+    if (was !== cell.mode) touch();
+    if (!still.matches) raceStep(dt);
   }
+  if (still.matches) raceStep(dt);
   showBar();
-  for (const f of figs) if (f.visible) { span(f); f.draw(f); }
-  drawLanes();
+  for (const f of figs) if (f.visible && (playing || !still.matches || f.dirty)) { span(f); f.draw(f); f.dirty = false; }
+  if (!(still.matches && racing)) drawLanes();
   requestAnimationFrame(frame);
 }
 document.fonts.ready.then(() => { for (const f of figs) fit(f); requestAnimationFrame(frame); });
