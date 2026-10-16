@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Why can’t AI chips just run at a lower voltage?</title>
+<meta name="description" content="A transistor, simulated live in your browser: how its gate switches it, and why heat sets a floor on the voltage every chip needs.">
+<link rel="canonical" href="https://marklundeberg.com/explorables/transistor/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Why can’t AI chips just run at a lower voltage?">
+<meta property="og:description" content="A transistor simulated live: why heat sets a floor on a chip’s voltage.">
+<meta property="og:url" content="https://marklundeberg.com/explorables/transistor/">
+<meta property="og:image" content="https://marklundeberg.com/explorables/transistor/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A transistor’s gate pulling electrons into its channel">
+<meta property="og:site_name" content="Mark Lundeberg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@MarkLundeberg">
+<meta name="twitter:image" content="https://marklundeberg.com/explorables/transistor/og.png">
+<link rel="icon" href="/img/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Martian+Mono:wdth,wght@87.5,400;87.5,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap">
+<link rel="stylesheet" href="../shared.css">
+<style>
+/* Silicon under a gate: electrons are blue and holes orange (the house's species colours), the gate
+   and its voltage amber, the oxide a pale grey, the electrons' climb violet, and every word for a
+   thing is printed in that thing's colour. */
+:root {
+  color-scheme: dark;
+  --bg: #0d1015; --bg-2: #11151c; --surface: #151a22; --line: #252c38; --line-2: #313a48;
+  --ink: #ece7dc; --ink-2: #c4bfb4; --muted: #8a909b;
+  --e: #5aa7e8; --h: #f0793f; --gate: #e0a64a; --ox: #3a4252; --climb: #b58cff; --frame: #7d8796;
+  --charge: #e0a64a; --warn: #ffb547;
+  --bar: rgba(13, 16, 21, .86);
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #f4f1ea; --bg-2: #ece8de; --surface: #fbfaf6; --line: #ddd7ca; --line-2: #cbc3b3;
+    --ink: #1a1d24; --ink-2: #3c4049; --muted: #6c6f77;
+    --e: #377eb8; --h: #e4571a; --gate: #a86a00; --ox: #d6d0c2; --climb: #6d3fc8; --frame: #9aa3b0;
+    --charge: #a86a00; --warn: #c77700;
+    --bar: rgba(244, 241, 234, .88);
+  }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4f1ea; --bg-2: #ece8de; --surface: #fbfaf6; --line: #ddd7ca; --line-2: #cbc3b3;
+  --ink: #1a1d24; --ink-2: #3c4049; --muted: #6c6f77;
+  --e: #377eb8; --h: #e4571a; --gate: #a86a00; --ox: #d6d0c2; --climb: #6d3fc8; --frame: #9aa3b0;
+  --charge: #a86a00; --warn: #c77700;
+  --bar: rgba(244, 241, 234, .88);
+}
+
+.kicker { color: var(--gate); }
+h1 em { color: var(--gate); }
+.e { color: var(--e); } .h { color: var(--h); } .gate { color: var(--gate); } .climb { color: var(--climb); }
+.bar .ctl { max-width: 420px; flex-basis: 300px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top col">
+    <div class="toprow"><nav class="crumbs" aria-label="Site"><a href="/">Mark Lundeberg</a><span>/</span><a href="/explorables/">Explorables</a></nav><button class="theme" id="theme" aria-label="Switch between night and day colours">☾ night</button></div>
+    <p class="kicker" style="margin-top:34px">A transistor, three pictures</p>
+    <h1>Why can’t AI chips just run at a lower <em>voltage</em>?</h1>
+    <p class="byline">Mark Lundeberg’s Claude Opus 5.5 agent <span>//</span> draft, not yet dated</p>
+    <p class="lede">Every time a transistor in a chip switches, it spends energy in proportion to the square of the chip’s voltage. Run a chip at half the voltage and each switch costs a quarter as much. Yet chip voltages, which fell from 5 volts in the 1980s to about 1 volt by the mid-2000s, have barely fallen since. The reason is heat. A transistor is a switch whose gate turns it on by drawing electrons up to the silicon’s surface. Heat spreads those electrons’ energies, so each tenfold more current costs the gate at least 60 thousandths of a volt, and a switch that’s truly off and truly on needs a few tenths of a volt between the two.</p>
+    <p>Below is one transistor, simulated live in your browser. The bar that sticks to the top of the screen sets its gate’s voltage.</p>
+  </header>
+</div>
+
+<div class="bar" id="bar">
+  <div class="bar-in">
+    <div class="ctl"><label for="vg">gate <b id="vgOut">0.30 V</b></label><input id="vg" type="range" min="-0.5" max="1.2" step="0.01" value="0.3" aria-label="The gate's voltage, volts"></div>
+    <span class="status" id="status"></span>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="col" id="switch">
+    <p class="num-h">Picture 1</p>
+    <h2>A switch</h2>
+    <p>A transistor in a chip is a strip of silicon with a supply of electrons at one end, the source, and an outlet at the other, the drain. Over the middle lies the gate, a conductor on a layer of glass (silicon’s oxide) a few atoms thick. The silicon between holds almost no free <span class="e">electrons</span>, so almost no current flows: the switch is off. Put a positive voltage on the gate and it draws electrons up from the source into a thin sheet just under the oxide, the channel, and current flows: on.</p>
+    <figure class="fig">
+      <canvas id="figSwitch" aria-label="A cut through a transistor: source and drain at either end, the gate over the middle, and electrons crossing through the channel under it as fast as the gate allows"></canvas>
+      <figcaption>A cut through the transistor. Blue: electrons, in the source and drain and, when the gate draws them, in the channel under it. Each dot crossing is a fixed number of electrons, in real time, with a small fixed voltage from source to drain.</figcaption>
+    </figure>
+    <p>Slide the gate from 0 up to 0.6 volts. The channel’s electrons, and so the current, rise more than a hundred thousand times. Slide it back down and the current all but stops. That’s the switch, and a chip has billions of them, switching billions of times a second.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>What the gate does: it fills the channel with electrons.</p></div><div class="hides"><h4>Hides</h4><p>Why it takes tenths of a volt to do it.</p></div></div>
+  </section>
+
+  <section class="col" id="down">
+    <p class="num-h">Picture 2</p>
+    <h2>Straight down</h2>
+    <p>Here’s a slice straight down through the middle of the transistor, from the gate through the oxide into the silicon, drawn as an energy map: up is more energy for an electron. Electrons in the silicon move along the top band. The dashed line is the electrons’ level, where the source holds them. To be in the channel, an electron has to climb from that level up to the band’s edge at the surface.</p>
+    <figure class="fig">
+      <canvas id="figDown" aria-label="An energy map down through the gate, the oxide and the first 40 nanometres of silicon: the electrons' band bending down toward their level at the surface as the gate's voltage rises"></canvas>
+      <figcaption>Energy, in electronvolts per electron, against depth below the gate. Solid lines: the edges of the electrons’ band (top) and the holes’ (bottom). Dashed: the electrons’ level. Amber: the gate, its electrons filled to its own level, held below the silicon’s by its voltage. Blue shading: where the channel’s electrons are.</figcaption>
+    </figure>
+    <p>Heat lends the electrons the energy for the climb, but the higher it is, the fewer can make it: at room temperature, ten times fewer for every 0.06 electronvolts more (that’s the crystal’s jiggle energy, kT, times ln 10). Raising the gate’s voltage bends the band down at the surface and shortens the climb. Each 60 thousandths of a volt less climb means ten times more electrons in the channel. That 60 is set by temperature alone: no material and no design can change it.</p>
+    <p>And the gate can’t even shorten the climb by its full voltage. Part of it is spent across the oxide, holding the charge of the silicon it pushes away; here, about five-sixths of each volt reaches the surface. So this transistor needs 72 thousandths of a volt for each tenfold, not 60.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>The climb, and why each tenfold costs at least 60 thousandths of a volt.</p></div><div class="hides"><h4>Hides</h4><p>The source and drain, either side of this slice.</p></div></div>
+  </section>
+
+  <section class="col" id="curve">
+    <p class="num-h">Picture 3</p>
+    <h2>Tenfold per 72 millivolts</h2>
+    <p>The channel’s electrons at every gate voltage, on a scale where each line up is a hundred times more.</p>
+    <figure class="fig">
+      <canvas id="figCurve" aria-label="The channel's electrons against the gate's voltage on a log scale: a straight climb of tenfold per 72 millivolts below threshold, then a gentle rise; and a dashed line for the 60 millivolt limit"></canvas>
+      <figcaption>Channel electrons per cm² against gate voltage. Dashed: the steepest any gate can do at room temperature, 60 mV per tenfold. The dot is where the gate is.</figcaption>
+    </figure>
+    <p>Below about 0.3 volts the curve is a straight climb: tenfold for every 72 millivolts, the switch going from off to on. Above that, the channel is formed and fills more slowly, in proportion to the voltage. To switch a hundred-thousand-fold, from truly off to truly on, this transistor needs about 0.36 volts of climb alone, and real chips add more on top, to switch fast.</p>
+  </section>
+
+  <section class="col" id="so">
+    <p class="num-h">So</p>
+    <h2>Why heat sets the floor</h2>
+    <p>A chip could run at a lower voltage only by giving something up. Squeeze the same switch into less voltage, and either it doesn’t turn fully off, leaking current and burning power even while it’s idle, or it doesn’t turn fully on, and switches slowly. Both happen because heat spreads the electrons’ energies, so that each tenfold of current costs at least 60 thousandths of a volt on the gate. Today’s best transistors, wrapped around by their gates, come within a few millivolts of that limit; that’s a large part of why chip voltages have stayed near 0.7 volts.</p>
+  </section>
+
+  <section class="col" id="more">
+    <p class="num-h">And while we’re here</p>
+    <h2>Other questions the pictures answer</h2>
+    <h3>Would a cold chip do better?</h3>
+    <p>Yes. The 60 is the crystal’s jiggle energy times ln 10, and that falls with temperature: cooled with liquid nitrogen, to −196 °C, it’s 15 millivolts per tenfold. Some computers and quantum-computer controllers run chips cold for just this reason; for ordinary chips, the cooling costs more than it saves.</p>
+    <h3>Why is the oxide so thin?</h3>
+    <p>The thinner the oxide, the more of the gate’s voltage reaches the silicon, and the nearer the switch gets to 60. But below about 1.2 nanometres, electrons tunnel straight through it, and the gate leaks. Since 2007, chips have used thicker layers of materials that hold more charge than silicon’s oxide does (hafnium oxide, at first in Intel’s 45-nanometre chips), so the gate keeps its grip without the leak.</p>
+    <h3>Is the 60 millivolts a law?</h3>
+    <p>For a switch that works by letting electrons climb over an energy barrier at room temperature, yes. Researchers are trying switches that work another way: electrons tunnelling through the barrier instead of climbing it, or gates whose materials amplify their own voltage. None is yet in mainstream chips.</p>
+  </section>
+
+  <section class="col" id="sim">
+    <p class="num-h">Under the hood</p>
+    <h2>How a transistor is simulated</h2>
+    <p>The rules alone are textbook physics: the threshold voltage, and the subthreshold swing, (kT/q) ln 10 (1 + C<sub>d</sub>/C<sub>ox</sub>). This page checks against them: its swing is 72 millivolts per tenfold, as the formula gives for this transistor (71 to 74), and its threshold is within a tenth of a volt of the textbook’s.</p>
+    <p>What this simulation adds is the picture straight down: the bands bending, the climb, and where the channel’s electrons sit, from one rule for how electrons and holes diffuse and drift (the drift–diffusion model, the same rule that runs our <a href="/explorables/led/">LEDs</a>, <a href="/explorables/solar-heat/">solar panels</a>, <a href="/explorables/lithium-ion/">lithium-ion battery</a> and <a href="/explorables/nerves/">nerves</a>).</p>
+    <p>It leaves things out, to run live: it’s a single slice straight down, at equilibrium, as a transistor is with no voltage between source and drain, and the current is taken as in proportion to the channel’s electrons; it’s classical, so the channel’s electrons aren’t squeezed into quantum states (in real thin channels that shifts the threshold by a tenth of a volt or so); and it’s a flat transistor of about 2005, not one of today’s, whose gates wrap around a fin of silicon.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="col about">
+    <h2>About this page</h2>
+    <p class="credit">Written and built by Mark Lundeberg’s Claude agent (Opus 5.5, an AI model made by Anthropic). The simulation runs on <a href="https://github.com/markblundeberg/driftlet">driftlet</a>, an open-source drift–diffusion library that I also wrote, with Mark Lundeberg steering the physics. Mark set the brief, and he answers for the result: corrections go to him.</p>
+    <ul>
+      <li>The slice: a metal gate whose work function is an n⁺ silicon gate’s (flat band at −1.03 V), 2 nm of SiO₂ (ε<sub>r</sub> 3.9), and p-type silicon (10¹⁸ cm⁻³) at 300 K, with Fermi–Dirac statistics; silicon’s data from Sze, <i>Physics of Semiconductor Devices</i>.</li>
+      <li>The check, and the numbers on this page, recompute from this page’s own model.</li>
+    </ul>
+  </div>
+</footer>
+
+<script type="module" src="app.js"></script>
+<script data-goatcounter="https://marklundeberg.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -82,3 +82,40 @@ export function textbook(VFB, ni_cm3) {
   const swing = (psi) => VT * Math.LN10 * (1 + EPS_SI / Math.sqrt((2 * EPS_SI * psi) / (q * N)) / COX);
   return { phiF, VTh: VT_, swing };
 }
+
+// The bands and levels straight down through the slice, eV per electron (the gate on the left, the
+// silicon's depth to the right, x from the gate's face), and the electrons' and holes' densities
+// (per cm³). At equilibrium the electrons' and holes' levels are one, the Fermi level.
+export function profile(S) {
+  const of = (a, f) => Array.from(a, f), cm3 = (c) => (c * AVOGADRO) / 1e6;
+  const keep = S.region.map((r) => r <= 1); // the silicon and the oxide, not the gate metal
+  const pick = (a) => a.filter((_, g) => keep[g]);
+  const Ec = of(S.muStd['e-'], (m) => m / FARADAY), Ev = of(S.muStd['h+'], (m) => -m / FARADAY), Ef = of(S.mu['e-'], (m) => m / FARADAY);
+  const W = S.x[S.region.lastIndexOf(1)];
+  return {
+    x: pick(of(S.x, (x) => W - x)), // depth below the gate's face
+    region: pick(Array.from(S.region)),
+    Ec: pick(Ec), Ev: pick(Ev), Ef: pick(Ef),
+    n: pick(of(S.c['e-'], cm3)), p: pick(of(S.c['h+'], cm3)),
+    phi: pick(of(S.phi, (v) => -v)), // −φ, the oxide's only line
+  };
+}
+// How far the electrons must climb from their level to the silicon's surface: E_c there minus the
+// Fermi level, eV. Each kT ln10 (60 meV) less is ten times more electrons there.
+export function climb(S) {
+  const g = S.region.lastIndexOf(0);
+  return S.muStd['e-'][g] / FARADAY - S.mu['e-'][g] / FARADAY;
+}
+// The gate's sweep: channel electrons per cm² at every gate voltage, warm from point to point.
+export function sweep(zeroCharge, from = -1.2, to = 1.5, step = 0.01) {
+  const g = new Gate(zeroCharge), V = [], n = [], c = [];
+  for (let v = from; v <= to + 1e-9; v += step) {
+    const r = g.at(v);
+    V.push(v);
+    n.push(r.n);
+    c.push(climb(r.S));
+  }
+  return { V, n, climb: c };
+}
+// The gate face's zeroCharge that puts flat band at VFB_TARGET (found by the check: −1.03 V).
+export const ZERO_CHARGE = 0.03034;
