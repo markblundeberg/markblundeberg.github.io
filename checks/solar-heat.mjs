@@ -160,6 +160,8 @@ expect('γ implied by dVoc/dT (Green 2003)', out.gamma_implied, 1.58, 3, "betwee
   if (!report.ok) failed++;
   console.error(report.text);
 }
+// n_i² (electrons × holes in the dark) grows per kelvin at 25 °C
+out.ni2_growth_per_K = +((M.ni(M.KELVIN + 25.5) / M.ni(M.KELVIN + 24.5)) ** 2 - 1).toFixed(3);
 out.compute_s = +((performance.now() - t0) / 1000).toFixed(1);
 console.log(JSON.stringify(out, null, 2));
 if (failed) console.error(`${failed} FAILED`), (process.exitCode = 1);
