@@ -172,9 +172,9 @@ function audio() {
   return render({
     seconds: frames / FPS,
     master: 1.2,
-    toks: heard.photons.map((d) => ({ t: d.t, f: f(LEDS[d.i].key), pan: [-0.5, 0, 0.5][d.i], gain: 0.03 })),
-    drops: heard.light.map((d) => ({ t: d.t, f: 2 * f(d.key), pan: 0, gain: 0.07 })),
-    bonks: heard.heat.map((d) => ({ t: d.t, f: 140, pan: 0, gain: 0.1 })),
+    toks: heard.photons.map((d) => ({ t: d.t, f: f(LEDS[d.i].key), pan: [-0.5, 0, 0.5][d.i], gain: 0.065 })),
+    drops: heard.light.map((d) => ({ t: d.t, f: 2 * f(d.key), pan: 0, gain: 0.15 })),
+    bonks: heard.heat.map((d) => ({ t: d.t, f: 140, pan: 0, gain: 0.2 })),
   });
 }
 await document.fonts.load('900 96px "Big Shoulders Display"');
