@@ -56,8 +56,8 @@ out.absorbed_mA_cm2 = { C25: +((F * M.absorbed(M.KELVIN + 25, 1)) / 10).toFixed(
 
 expect('dVoc/dT, mV/K per cell', out.dVoc_dT_mV_per_K, -2.3, -1.8, 'measured silicon cells, about −2 mV/K');
 expect('Voc coefficient, %/K', out.Voc_coeff_pct_per_K, -0.36, -0.26, 'datasheets, −0.27 to −0.35 %/K');
-expect('Jsc coefficient, %/K', out.Jsc_coeff_pct_per_K, 0.01, 0.08, 'datasheets, +0.03 to +0.06 %/K');
-expect('Pmax coefficient, %/K', out.Pmax_coeff_pct_per_K, -0.5, -0.3, 'datasheets, −0.3 to −0.5 %/K');
+expect('Jsc coefficient, %/K', out.Jsc_coeff_pct_per_K, 0.01, 0.08, 'datasheets +0.03 to +0.06 %/K; this cell, without light trapping, sits a little below them (not stated on the page)');
+expect('Pmax coefficient, %/K', out.Pmax_coeff_pct_per_K, -0.45, -0.25, 'datasheets: about −0.25 (heterojunction) to −0.45 (old multicrystalline), most −0.3 to −0.4 %/K');
 expect('γ implied by dVoc/dT (Green 2003)', out.gamma_implied, 1.58, 3, "between the emitter's and back layer's 1.58 and the base's 3");
 
 // A cloudy day: half the sun at 25 °C. The current halves; the voltage drops by only V_T ln 2.
@@ -123,7 +123,7 @@ expect('γ implied by dVoc/dT (Green 2003)', out.gamma_implied, 1.58, 3, "betwee
   out.panel_half_sun = { W: +M.panel.W(half.Pmax).toFixed(1), Vmp: +M.panel.V(half.Vmp).toFixed(1), Voc: +M.panel.V(half.Voc).toFixed(1), A_sc: +M.panel.A(half.Jsc).toFixed(2), Voc_drop_V: +M.panel.V(cool.Voc - half.Voc).toFixed(2) };
   out.panel_minus10 = { W: +M.panel.W(cold.Pmax).toFixed(1), over_25C: +(cold.Pmax / cool.Pmax).toFixed(3) };
   // a hot day: air at 30 °C, cells 25–30 °C above it
-  out.power_over_25C = { C45: +(by(45).Pmax / c25.Pmax).toFixed(3), C55: +(by(55).Pmax / c25.Pmax).toFixed(3), C65: +(by(65).Pmax / c25.Pmax).toFixed(3) };
+  out.power_over_25C = { C45: +(by(45).Pmax / c25.Pmax).toFixed(3), C55: +(by(55).Pmax / c25.Pmax).toFixed(3), C65: +(by(65).Pmax / c25.Pmax).toFixed(3), C75: +(by(75).Pmax / c25.Pmax).toFixed(3) };
 }
 // The kit's checks at 25 °C, open circuit: where every pair goes, and a grid twice as fine.
 {
