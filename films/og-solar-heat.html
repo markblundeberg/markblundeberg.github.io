@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Solar heat card (og.png)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Martian+Mono:wdth,wght@87.5,400;87.5,600&display=swap">
+<style>html, body { margin: 0; background: #0d1015; } canvas { display: block; }</style>
+</head>
+<body>
+<canvas id="c" width="1200" height="630"></canvas>
+<script type="module">
+// The solar-heat explorable's link card, 1200 × 630: the question over the two panels, each at its
+// best, with 3 s of dots on their wires. One frame, taken by driftlet's tools/film.js --png;
+// copied to src/explorables/solar-heat/og.png.
+
+import { Panel, KELVIN } from '../src/explorables/solar-heat/model.js';
+import { COL, stepDots, drawPanels } from '../src/explorables/solar-heat/pictures.js';
+
+Object.assign(COL, {
+  bg: '#0d1015', surface: '#151a22', line: '#252c38', 'line-2': '#313a48', ink: '#ece7dc', 'ink-2': '#c4bfb4', muted: '#8a909b',
+  sun: '#ffd166', e: '#55b8ff', h: '#ff6b6b', cool: '#7fdbca', hot: '#ff8a3d', leak: '#f07aa6', cell: '#14203a', 'cell-line': '#2b3d5c', frame: '#7d8796',
+});
+const W = 1200, H = 630, ctx = document.getElementById('c').getContext('2d');
+const cool = new Panel(KELVIN + 25, 1), hot = new Panel(KELVIN + 65, 1);
+const st = { panels: [{ T: cool.T, panel: cool, op: cool.operate(cool.Vmp) }, { T: hot.T, panel: hot, op: hot.operate(hot.Vmp) }], sun: 1, same: false };
+for (let k = 0; k < 90; k++) stepDots(st, 1 / 30);
+await document.fonts.load('900 70px "Big Shoulders Display"');
+await document.fonts.load('600 20px "Martian Mono"');
+function frame() {
+  const g = ctx.createRadialGradient(W * 0.5, -80, 50, W * 0.5, -80, 1100);
+  g.addColorStop(0, '#1a1c22');
+  g.addColorStop(1, COL.bg);
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+  const s = 1.0;
+  ctx.save(); ctx.translate((W - 960 * s) / 2, 150); ctx.scale(s, s);
+  drawPanels({ ctx, VW: 960, VH: 480 }, st, { noChart: true, clear: false, ts: 1.3 });
+  ctx.restore();
+  ctx.textBaseline = 'alphabetic';
+  ctx.textAlign = 'left';
+  ctx.fillStyle = COL.sun;
+  ctx.font = '600 20px "Martian Mono", monospace';
+  ctx.fillText('TWO SOLAR PANELS, SIMULATED', 66, 56);
+  ctx.font = '900 70px "Big Shoulders Display", sans-serif';
+  const a = 'WHY DO SOLAR PANELS HATE ', b = 'HEAT', c = '?';
+  ctx.fillStyle = COL.ink; ctx.fillText(a, 62, 128);
+  let x = 62 + ctx.measureText(a).width;
+  ctx.fillStyle = COL.hot; ctx.fillText(b, x, 128);
+  x += ctx.measureText(b).width;
+  ctx.fillStyle = COL.ink; ctx.fillText(c, x, 128);
+}
+window.reel = { frames: 1, fps: 1, width: W, height: H, frame };
+frame();
+</script>
+</body>
+</html>

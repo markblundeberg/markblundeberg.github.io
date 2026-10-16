@@ -137,3 +137,70 @@ export class Cell {
     return { T: this.T, sun: this.sun, Jsc, Voc, Vmp: mp.V, Jmp: mp.J, Pmax: mp.P, FF: mp.P / (Jsc * Voc) };
   }
 }
+
+// Where the pairs the light makes go, mol/(m²·s): delivered (out through the front contact and round
+// the circuit), or lost: holes reaching the front contact, where they meet its electrons;
+// recombining in the emitter or the base; or at the back, in the p⁺ layer or electrons reaching the
+// back contact. They add up to what's made (to round-off).
+export function fates(S) {
+  const rec = S.bulkReactions[0].regions;
+  return {
+    made: S.bulkReactions[1]?.total ?? 0,
+    delivered: S.current / FARADAY,
+    front: -S.contacts.left.flux['h+'] + rec[0],
+    base: rec[1],
+    back: rec[2] + S.contacts.right.flux['e-'],
+  };
+}
+
+// The energies across the cell, eV per electron: the band edges E_c and E_v, and the quasi-Fermi
+// levels E_Fn and E_Fp, whose split is the cell's voltage at its contacts.
+export function levels(S) {
+  const of = (a, f) => Array.from(a, f);
+  return {
+    x: Array.from(S.x),
+    Ec: of(S.muStd['e-'], (m) => m / FARADAY),
+    Ev: of(S.muStd['h+'], (m) => -m / FARADAY),
+    Efn: of(S.mu['e-'], (m) => m / FARADAY),
+    Efp: of(S.mu['h+'], (m) => -m / FARADAY),
+  };
+}
+// The hill electrons must climb to leak back: how far E_c rises from the emitter to the base (taken
+// at x = 0.1 µm and 1.5 µm, either side of the junction's depleted layer), eV.
+export function hill(S) {
+  const at = (x) => S.x.findIndex((v) => v >= x), Ec = (g) => S.muStd['e-'][g] / FARADAY;
+  return Ec(at(1.5 * um)) - Ec(at(0.1 * um));
+}
+
+// A panel: CELLS cells in series, each AREA in size (15.6 cm square), at one temperature and sun;
+// its current–voltage curve, its best operating point, and its state at any voltage.
+export const AREA = 243; // cm²
+export const panel = {
+  V: (cellV) => CELLS * cellV, // V
+  A: (J) => (J * AREA) / 1000, // mA/cm² → A
+  W: (P) => (CELLS * P * AREA) / 1000, // mW/cm² → W
+};
+export class Panel {
+  constructor(T, sun) {
+    this.cell = new Cell(T, sun);
+    this.set(T, sun);
+  }
+  set(T, sun) {
+    const c = this.cell.set(T, sun);
+    Object.assign(this, c.measure());
+    this.short = fates((c.at(0), c.solution));
+    // the curve from short circuit to just past open circuit, warm from point to point
+    this.curve = { V: [], J: [] };
+    for (let k = 0; k <= 40; k++) {
+      const V = (k / 40) * 1.01 * this.Voc;
+      this.curve.V.push(V);
+      this.curve.J.push(c.at(V));
+    }
+    return this;
+  }
+  // the panel held at a cell voltage V: its current, power and state
+  operate(V) {
+    const J = this.cell.at(V), S = this.cell.solution;
+    return { V, J, P: V * J, leak: this.Jsc - J, S, fates: fates(S), hill: hill(S) };
+  }
+}

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Why do solar panels hate heat? (film)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Martian+Mono:wdth,wght@87.5,400;87.5,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap">
+<style>html, body { margin: 0; background: #0d1015; } canvas { display: block; }</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1350"></canvas>
+<script type="module">
+// A 4:5 film of the explorable at /explorables/solar-heat/, drawn with its own pictures
+// (pictures.js) from its two live panels (model.js), a cool one at 25 °C and a hot one at 65 °C
+// under the same sun, in real time: each dot is a fixed number of electrons per second throughout.
+// The hot panel is held at the cool one's voltage, then let back down. Rendered one frame per call
+// of window.reel.frame(k) by driftlet's tools/film.js (--root at this site), with a soundtrack made
+// from what the dots did (sound.js).
+
+import { Panel, KELVIN, panel } from '../src/explorables/solar-heat/model.js';
+import { COL, stepDots, drawPanels } from '../src/explorables/solar-heat/pictures.js';
+import { render } from './sound.js';
+
+Object.assign(COL, {
+  bg: '#0d1015', surface: '#151a22', line: '#252c38', 'line-2': '#313a48', ink: '#ece7dc', 'ink-2': '#c4bfb4', muted: '#8a909b',
+  sun: '#ffd166', e: '#55b8ff', h: '#ff6b6b', cool: '#7fdbca', hot: '#ff8a3d', leak: '#f07aa6', cell: '#14203a', 'cell-line': '#2b3d5c', frame: '#7d8796',
+});
+const W = 1080, H = 1350, FPS = 30, ctx = document.getElementById('c').getContext('2d');
+const S = 1.125; // the pictures' 960-wide figure, scaled to the frame
+// The story, in seconds of film.
+const PHASES = [
+  { key: 'question', until: 3.0 },
+  { key: 'same', until: 7.8 },
+  { key: 'held', until: 12.8 },
+  { key: 'lower', until: 17.4 },
+  { key: 'end', until: 21.4 },
+];
+const frames = Math.round(PHASES.at(-1).until * FPS);
+const phaseAt = (t) => PHASES.find((p) => t < p.until) ?? PHASES.at(-1);
+
+const cool = new Panel(KELVIN + 25, 1), hot = new Panel(KELVIN + 65, 1);
+const coolOp = cool.operate(cool.Vmp), hotBest = hot.operate(hot.Vmp);
+// the hot panel's voltage: its own best, raised to the cool one's while it's held, then let down.
+// (Held at its own open-circuit voltage, 0.1 mV a cell short of the cool one's best, so it
+// delivers exactly nothing rather than taking a trickle: both read 34.0 V.)
+const ease = (u) => (u <= 0 ? 0 : u >= 1 ? 1 : u * u * (3 - 2 * u));
+const HELD = Math.min(cool.Vmp, hot.Voc);
+const hotV = (t) => hot.Vmp + (HELD - hot.Vmp) * (ease((t - 8.1) / 1.0) - ease((t - 13.1) / 1.0));
+let st, k0, heard, lastV;
+function reset() {
+  st = { panels: [{ T: cool.T, panel: cool, op: coolOp }, { T: hot.T, panel: hot, op: hotBest }], sun: 1, same: false };
+  heard = { out: [], leak: [] };
+  lastV = hot.Vmp;
+  k0 = -1;
+}
+reset();
+
+function caption(key) {
+  // (each short enough to read in its scene)
+  if (key === 'same') return ['Same sun. 15% less power.', 'Look at the meters: the same current, but a lower voltage.'];
+  if (key === 'held') return ['Hold it at the same voltage', '…and it makes nothing. Heat lets every electron leak back.'];
+  if (key === 'lower') return ['So a hot panel runs lower', 'Just as many electrons, but each carries less energy.'];
+  return ['Simulated, not drawn', 'Every frame is computed from a physical model. Try it: link in reply.'];
+}
+function wrap(text, width) {
+  const words = text.split(' '), lines = [];
+  let line = '';
+  for (const w of words) { const t = line ? `${line} ${w}` : w; if (ctx.measureText(t).width > width && line) { lines.push(line); line = w; } else line = t; }
+  if (line) lines.push(line);
+  return lines;
+}
+
+function draw(k) {
+  const t = k / FPS, ph = phaseAt(t), key = ph.key, start = PHASES[PHASES.indexOf(ph) - 1]?.until ?? 0, j = (t - start) * FPS;
+  const g = ctx.createRadialGradient(W * 0.5, -80, 50, W * 0.5, -80, 1100);
+  g.addColorStop(0, '#1a1c22');
+  g.addColorStop(1, COL.bg);
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+  // the panels, and their power curves
+  ctx.save(); ctx.translate(0, 300); ctx.scale(S, S);
+  drawPanels({ ctx, VW: 960, VH: 860 }, st, { ts: 1.45, clear: false });
+  ctx.restore();
+  // the headline
+  ctx.textBaseline = 'alphabetic';
+  ctx.textAlign = 'left';
+  if (key === 'question') {
+    ctx.globalAlpha = Math.min(1, j / 6);
+    ctx.fillStyle = COL.sun;
+    ctx.font = '600 22px "Martian Mono", monospace';
+    ctx.fillText('TWO SOLAR PANELS, SIMULATED', 64, 78);
+    ctx.font = '900 96px "Big Shoulders Display", sans-serif';
+    ctx.fillStyle = COL.ink;
+    ctx.fillText('WHY DO SOLAR PANELS', 60, 170);
+    const a = 'HATE ', b = 'HEAT', c = '?';
+    ctx.fillText(a, 60, 258);
+    const x = 60 + ctx.measureText(a).width;
+    ctx.fillStyle = COL.hot; ctx.fillText(b, x, 258);
+    ctx.fillStyle = COL.ink; ctx.fillText(c, x + ctx.measureText(b).width, 258);
+    ctx.globalAlpha = 1;
+  } else {
+    const [head, sub] = caption(key);
+    ctx.globalAlpha = Math.min(1, j / 8);
+    ctx.fillStyle = key === 'end' ? COL.ink : key === 'held' ? COL.leak : key === 'lower' ? COL.hot : COL.ink;
+    ctx.font = '900 76px "Big Shoulders Display", sans-serif';
+    ctx.fillText(head.toUpperCase(), 60, 122);
+    ctx.fillStyle = COL['ink-2'];
+    ctx.font = '400 31px "Newsreader", serif';
+    wrap(sub, 960).forEach((s, i) => ctx.fillText(s, 62, 176 + 40 * i));
+    if (key === 'end') {
+      ctx.fillStyle = COL.sun;
+      ctx.font = '600 22px "Martian Mono", monospace';
+      ctx.fillText('MADE BY MARK LUNDEBERG & CLAUDE · ON DRIFTLET', 64, 258);
+    }
+    ctx.globalAlpha = 1;
+  }
+  // the footer
+  ctx.font = '400 24px "Martian Mono", monospace';
+  ctx.fillStyle = COL.muted;
+  ctx.textBaseline = 'middle';
+  ctx.fillText(key === 'end' ? '60-cell silicon panels · full sun' : 'real time · same sun on both', 64, 1308);
+  ctx.textAlign = 'right';
+  ctx.fillStyle = key === 'end' ? COL.ink : COL.muted;
+  ctx.font = `${key === 'end' ? 600 : 400} 22px "Martian Mono", monospace`;
+  ctx.fillText(key === 'end' ? 'marklundeberg.com' : 'driftlet', W - 60, 1308);
+}
+
+// Frame k: the panels move on to it (frames are taken in order), the dots are stepped, what they
+// did is noted for the soundtrack, and it's drawn.
+function frame(k) {
+  if (k < k0) reset();
+  for (let i = k0 + 1; i <= k; i++) {
+    const t = i / FPS, V = hotV(t);
+    if (Math.abs(V - lastV) > 1e-6) st.panels[1].op = Math.abs(V - hot.Vmp) < 1e-9 ? hotBest : hot.operate(V);
+    lastV = V;
+    st.same = t > 8.1 && t < 14.1;
+    if (i === 0) continue;
+    for (const e of stepDots(st, 1 / FPS)) heard[e.kind].push({ t, i: e.i, V: panel.V(st.panels[e.i].op.V) });
+  }
+  k0 = k;
+  draw(k);
+}
+
+// The soundtrack: from what the dots did (so after the frames have all been taken, in order).
+function audio() {
+  // Only sounds with an event behind them: a soft tok as each dot of electrons is delivered, at a
+  // pitch set by its panel's voltage (higher is more energy each), on that panel's side; and a low
+  // bonk as each dot leaks back.
+  console.log(`sound: ${heard.out.length} delivered, ${heard.leak.length} leaked`);
+  const pan = (i) => (i ? 0.55 : -0.55);
+  return render({
+    seconds: frames / FPS,
+    master: 1.2,
+    toks: heard.out.map((d) => ({ t: d.t, f: 180 * 2 ** (d.V / 12), pan: pan(d.i), gain: 0.1 })),
+    bonks: heard.leak.map((d) => ({ t: d.t, f: 150, pan: pan(d.i), gain: 0.14 })),
+  });
+}
+await document.fonts.load('900 96px "Big Shoulders Display"');
+await document.fonts.load('400 31px "Newsreader"');
+await document.fonts.load('600 22px "Martian Mono"');
+window.reel = { frames, fps: FPS, frame, audio };
+frame(0);
+</script>
+</body>
+</html>

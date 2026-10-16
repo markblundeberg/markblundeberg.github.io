@@ -4,6 +4,13 @@
 // This list feeds the /explorables/ index and the sitemap.
 export default [
     {
+        slug: 'solar-heat',
+        title: 'Why do solar panels hate heat?',
+        description:
+            'Two identical solar panels under the same sun, simulated live: one cool, one hot. ' +
+            'Why the hot one makes less power: a leak that heat opens, and the voltage it costs.',
+    },
+    {
         slug: 'nerves',
         title: 'Why are your nerves wrapped in fat?',
         description:

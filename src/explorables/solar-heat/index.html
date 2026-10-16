@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Why do solar panels hate heat?</title>
+<meta name="description" content="Two identical solar panels under the same sun, simulated live in your browser, one cool and one hot. Why the hot one makes less power: a leak that heat opens, and the voltage it costs.">
+<link rel="canonical" href="https://marklundeberg.com/explorables/solar-heat/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Why do solar panels hate heat?">
+<meta property="og:description" content="Two identical panels under the same sun, simulated live: why the hot one makes less power.">
+<meta property="og:url" content="https://marklundeberg.com/explorables/solar-heat/">
+<meta property="og:image" content="https://marklundeberg.com/explorables/solar-heat/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two solar panels under one sun, a cool one making 275 W and a hot one 233 W">
+<meta property="og:site_name" content="Mark Lundeberg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@MarkLundeberg">
+<meta name="twitter:image" content="https://marklundeberg.com/explorables/solar-heat/og.png">
+<link rel="icon" href="/img/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Martian+Mono:wdth,wght@87.5,400;87.5,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap">
+<style>
+/* Sun on silicon: sunlight is yellow, electrons blue and holes red (negative cool, positive warm);
+   a panel's temperature runs from mint (cool) to orange (hot), and every word for a thing is
+   printed in that thing's colour. */
+:root {
+  color-scheme: dark;
+  --bg: #0d1015; --bg-2: #11151c; --surface: #151a22; --line: #252c38; --line-2: #313a48;
+  --ink: #ece7dc; --ink-2: #c4bfb4; --muted: #8a909b;
+  --sun: #ffd166; --e: #55b8ff; --h: #ff6b6b; --cool: #7fdbca; --hot: #ff8a3d; --leak: #f07aa6;
+  --cell: #14203a; --cell-line: #2b3d5c; --frame: #7d8796;
+  --charge: #ffd166; --warn: #ffb547;
+  --bar: rgba(13, 16, 21, .86);
+  --display: "Big Shoulders Display", "Arial Narrow", "Roboto Condensed", sans-serif-condensed, sans-serif;
+  --serif: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --mono: "Martian Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #f4f1ea; --bg-2: #ece8de; --surface: #fbfaf6; --line: #ddd7ca; --line-2: #cbc3b3;
+    --ink: #1a1d24; --ink-2: #3c4049; --muted: #6c6f77;
+    --sun: #d99a00; --e: #1f6fc0; --h: #cf3b3b; --cool: #13867a; --hot: #d65a14; --leak: #b8346c;
+    --cell: #1d2c48; --cell-line: #3b5272; --frame: #9aa3b0;
+    --charge: #d99a00; --warn: #c77700;
+    --bar: rgba(244, 241, 234, .88);
+  }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4f1ea; --bg-2: #ece8de; --surface: #fbfaf6; --line: #ddd7ca; --line-2: #cbc3b3;
+  --ink: #1a1d24; --ink-2: #3c4049; --muted: #6c6f77;
+  --sun: #d99a00; --e: #1f6fc0; --h: #cf3b3b; --cool: #13867a; --hot: #d65a14; --leak: #b8346c;
+  --cell: #1d2c48; --cell-line: #3b5272; --frame: #9aa3b0;
+  --charge: #d99a00; --warn: #c77700;
+  --bar: rgba(244, 241, 234, .88);
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; color: var(--ink); font-family: var(--serif); font-size: 19px; line-height: 1.6;
+  background: radial-gradient(1200px 600px at 70% -10%, var(--bg-2), transparent 70%), var(--bg);
+}
+.wrap { padding-inline: 22px; }
+.col { max-width: 700px; margin-inline: auto; }
+.wide { max-width: 1000px; margin-inline: auto; }
+a { color: var(--e); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--e); outline-offset: 2px; }
+p { margin: 0 0 16px; }
+sub, sup { line-height: 0; }
+.warn { color: var(--warn); }
+.num { font-family: var(--mono); font-size: .78em; font-stretch: 87.5%; white-space: nowrap; }
+
+/* header */
+.toprow { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.theme { font-family: var(--mono); font-stretch: 87.5%; font-size: 12px; background: transparent; color: var(--muted); border: 1px solid var(--line-2); border-radius: 999px; padding: 4px 11px; cursor: pointer; }
+.theme:hover { color: var(--ink); }
+.crumbs { font-family: var(--mono); font-size: 12px; font-stretch: 87.5%; color: var(--muted); padding-top: 20px; }
+.crumbs a { color: var(--muted); text-decoration: none; }
+.crumbs a:hover { color: var(--ink); }
+.crumbs span { margin-inline: 6px; opacity: .6; }
+header.top { padding-block: 40px 10px; }
+h1 { font-family: var(--display); font-weight: 900; font-size: clamp(52px, 10vw, 104px); line-height: .9; letter-spacing: .005em; text-transform: uppercase; margin: 0 0 22px; text-wrap: balance; }
+.byline { font-family: var(--mono); font-size: 12px; font-stretch: 87.5%; color: var(--muted); margin: 0 0 26px; }
+.byline span { margin-inline: 6px; opacity: .6; }
+.lede { font-size: 22px; line-height: 1.5; color: var(--ink-2); }
+
+/* the bar: the cell's controls, and its gauge */
+.bar { position: sticky; top: 0; z-index: 20; background: var(--bar); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-block: 1px solid var(--line); margin-top: 26px; }
+.bar-in { max-width: 1000px; margin-inline: auto; padding: 10px 22px; display: flex; gap: 14px 22px; align-items: center; flex-wrap: wrap; font-family: var(--mono); font-stretch: 87.5%; font-size: 12.5px; }
+.ctl { display: grid; gap: 2px; min-width: 170px; flex: 1 1 170px; }
+.ctl label { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); }
+.ctl label b { color: var(--ink); font-weight: 600; white-space: nowrap; }
+input[type=range] { width: 100%; accent-color: var(--charge); margin: 0; height: 22px; }
+.chk { display: inline-flex; gap: 7px; align-items: center; cursor: pointer; color: var(--ink-2); }
+.chk input { accent-color: var(--warn); width: 16px; height: 16px; margin: 0; }
+.btn { font: inherit; font-size: 12.5px; background: transparent; border: 1px solid var(--line-2); color: var(--ink-2); border-radius: 8px; padding: 7px 11px; cursor: pointer; }
+.btn:hover { color: var(--ink); border-color: var(--muted); }
+.more { display: none; }
+@media (max-width: 700px) {
+  body { font-size: 18px; }
+  .bar-in { padding: 8px 14px; gap: 8px 12px; }
+  .wrap { padding-inline: 16px; }
+  .more { display: inline-block; margin-left: auto; }
+  .bar:not(.open) #play, .bar:not(.open) #empty { display: none; }
+  .ctl { flex-basis: 100%; }
+  .fig { padding: 8px; margin-inline: -8px; border-radius: 10px; }
+}
+
+/* sections and figures */
+section { padding-block: 64px 0; }
+.num-h { font-family: var(--mono); font-size: 12px; font-stretch: 87.5%; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+h2 { font-family: var(--display); font-weight: 800; font-size: clamp(38px, 6vw, 58px); line-height: .95; text-transform: uppercase; letter-spacing: .01em; margin: 0 0 18px; text-wrap: balance; }
+h3 { font-family: var(--display); font-weight: 800; font-size: 28px; line-height: 1; text-transform: uppercase; margin: 32px 0 10px; }
+figure { margin: 26px 0 22px; }
+.fig { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; box-shadow: 0 24px 60px -40px rgba(0, 0, 0, .7); }
+.fig canvas { display: block; width: 100%; height: auto; }
+figcaption { font-family: var(--mono); font-stretch: 87.5%; font-size: 12px; line-height: 1.55; color: var(--muted); margin-top: 10px; }
+.hero-fig { margin-top: 34px; }
+.sh { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); margin-top: 22px; font-size: 16.5px; line-height: 1.5; }
+.sh > div { padding: 12px 18px 0 0; }
+.sh > div + div { padding-left: 18px; border-left: 1px solid var(--line); }
+.sh h4 { font-family: var(--mono); font-stretch: 87.5%; font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 4px; font-weight: 600; }
+.sh .shows h4 { color: var(--charge); }
+.sh .hides h4 { color: var(--muted); }
+@media (max-width: 560px) { .sh { grid-template-columns: 1fr; } .sh > div + div { padding-left: 0; border-left: 0; border-top: 1px dashed var(--line); } }
+.eqn { font-family: var(--mono); font-stretch: 87.5%; font-size: 14.5px; line-height: 1.7; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; overflow-x: auto; }
+.eqn-note { color: var(--muted); font-size: 12.5px; }
+.callout { border-left: 3px solid var(--li); padding: 4px 0 4px 16px; margin: 22px 0; color: var(--ink-2); }
+
+/* the race */
+@media (max-width: 640px) { .race { grid-template-columns: 1fr; } }
+
+table { border-collapse: collapse; width: 100%; font-size: 16px; line-height: 1.45; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px 10px 0; border-bottom: 1px solid var(--line); }
+th { font-family: var(--mono); font-stretch: 87.5%; font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+td:first-child { font-family: var(--display); font-weight: 800; font-size: 20px; text-transform: uppercase; white-space: nowrap; }
+.tablewrap { overflow-x: auto; margin: 18px 0; }
+footer { padding-block: 70px 80px; }
+.about { font-size: 16px; color: var(--ink-2); }
+.about h2 { font-size: 34px; }
+.about li { margin-bottom: 6px; }
+.credit { border-left: 3px solid var(--e); padding: 4px 0 4px 16px; margin: 0 0 22px; }
+.kicker { font-family: var(--mono); font-size: 12.5px; font-stretch: 87.5%; letter-spacing: .12em; text-transform: uppercase; color: var(--sun); margin: 0 0 14px; }
+h1 em { font-style: normal; color: var(--hot); }
+.sun { color: var(--sun); } .e { color: var(--e); } .h { color: var(--h); } .cool { color: var(--cool); } .hot { color: var(--hot); } .leak { color: var(--leak); }
+.status { color: var(--muted); }
+.ctl { max-width: 240px; }
+@media (max-width: 700px) { .bar .ctl { flex-basis: calc(50% - 6px); min-width: 0; } .bar .ctl:nth-child(3) { flex-basis: 100%; max-width: none; } .bar .chk { font-size: 11.5px; } }
+.chk input { accent-color: var(--hot); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top col">
+    <div class="toprow"><nav class="crumbs" aria-label="Site"><a href="/">Mark Lundeberg</a><span>/</span><a href="/explorables/">Explorables</a></nav><button class="theme" id="theme" aria-label="Switch between night and day colours">☾ night</button></div>
+    <p class="kicker" style="margin-top:34px">A solar panel, three pictures</p>
+    <h1>Why do solar panels hate <em>heat</em>?</h1>
+    <p class="byline">Claude Opus 5.5 <span>//</span> 16 October 2026</p>
+    <p class="lede">Under the same sun, a solar panel on a hot summer roof makes about a sixth less power than on a cool, bright day. Its sunlight isn't any weaker, and it hardly loses any electrons. What heat opens is a leak, and what the panel loses is the price of keeping that leak small.</p>
+    <p>Below are two identical panels under the same <span class="sun">sun</span>, simulated live in your browser: a <span class="cool">cool</span> one at 25 °C and a <span class="hot">hot</span> one at 65 °C. The bar that sticks to the top of the screen sets their temperatures and the sun, and can hold both at the same voltage.</p>
+  </header>
+</div>
+
+<div class="bar" id="bar">
+  <div class="bar-in">
+    <div class="ctl"><label for="left">left panel <b id="leftOut">25 °C</b></label><input id="left" type="range" min="-10" max="85" step="1" value="25" aria-label="The left panel's temperature, °C"></div>
+    <div class="ctl"><label for="right">right panel <b id="rightOut">65 °C</b></label><input id="right" type="range" min="-10" max="85" step="1" value="65" aria-label="The right panel's temperature, °C"></div>
+    <div class="ctl"><label for="sun">sun <b id="sunOut">100%</b></label><input id="sun" type="range" min="10" max="100" step="5" value="100" aria-label="The sunlight, as a percentage of full sun (1000 W/m²)"></div>
+    <label class="chk"><input type="checkbox" id="same"> hold both at the left one's best voltage</label>
+    <span class="status" id="status"></span>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="col" id="panels">
+    <p class="num-h">Picture 1</p>
+    <h2>Two panels</h2>
+    <p>Each panel is 60 silicon cells joined in a row. In each cell, sunlight frees pairs of charges: an <span class="e">electron</span> and a <span class="h">hole</span>, the gap the electron left behind, which moves like a positive charge. A junction just under the cell's front surface sends electrons one way and holes the other. That one-way push is what drives a current round the circuit, at a voltage.</p>
+    <figure class="fig">
+      <canvas id="figPanels" aria-label="Two solar panels under one sun, each with its voltage, current and power, and below, each panel's power at every voltage"></canvas>
+      <figcaption>Top: each <span class="e">blue dot</span> is about 4 × 10¹⁸ electrons, delivered round the circuit, in real time. It rises as high as the panel's voltage, the energy each electron carries away. <span class="leak">Pink dots</span> leak back inside the panel and are lost. Bottom: each panel's power at every voltage it could run at; the dot is where it runs, at its peak. (The inverter a panel is wired to finds that peak by itself.)</figcaption>
+    </figure>
+    <p>The <span class="hot">hot</span> panel makes 233 watts, the <span class="cool">cool</span> one 275: 15% less. Now look at the meters. Both deliver the same current, about 8.1 amps: the same number of electrons each second. What the hot one has lost is voltage, 29.0 volts instead of 34.0. Power is current times voltage, so the voltage is what costs it.</p>
+    <p>Why does it run at a lower voltage? Tick <i>hold both at the left one's best voltage</i>. At the cool panel's 34 volts, the hot panel delivers nothing at all (a trickle even runs backwards into it): every electron the sun frees in it leaks back inside. That leak is the whole story.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>How much power each panel makes, and that heat takes it from the voltage, not the current.</p></div><div class="hides"><h4>Hides</h4><p>What the leak is, and why heat makes it worse.</p></div></div>
+  </section>
+
+  <section class="col" id="hill">
+    <p class="num-h">Picture 2</p>
+    <h2>The hill</h2>
+    <p>Here's the leak. This is the front of one cell, its first 1.6 thousandths of a millimetre, drawn as an energy map: up is more energy for an electron. <span class="e">Electrons</span> move along the top band, <span class="h">holes</span> along the bottom one. Between the cell's thin front layer and its base, the electrons' band climbs a hill. Electrons freed in the base roll down it into the front layer, and out round the circuit. Holes go the other way. That's the one-way push.</p>
+    <figure class="fig">
+      <canvas id="figHill" aria-label="An energy map of the front of a cell in each panel: the electrons' and holes' bands, the hill between the front layer and the base, and the split between the electrons' and holes' levels"></canvas>
+      <figcaption>Energy across the front 1.6 µm of one cell in each panel, in electronvolts per electron. Thin lines are the edges of the bands, the least energy an electron can have (top) and the most a hole's missing electron can (bottom); the thick lines are the levels the electrons and holes fill to. Their split is the cell's voltage; sixty cells give the panel's. (At the front contact, the holes' level drops to meet the electrons': holes that reach it are lost there.) "Gets over" is the share of the electrons at the foot of the hill that have the energy to reach its top.</figcaption>
+    </figure>
+    <p>The thick lines are the levels the electrons and holes fill up to, and the split between them is the cell's voltage. The higher the voltage, the lower the hill. And some electrons in the front layer climb back over it, into the base, where they meet holes and are lost. (Holes leak the other way too, into the front layer.) That's the leak, and it grows with the voltage.</p>
+    <p>What lifts an electron over the hill is heat. Silicon's atoms jiggle, and pass their jiggling on to the electrons; only the luckiest few have the energy to climb it. In the cool panel at 34 volts, it's about one in 900 000. Hold the hot panel at the same voltage, and it's one in 35 000: twenty-six times as many. Heat does it twice over: the electrons jiggle harder, and in warm silicon the hill itself is lower.</p>
+    <p>So the hot panel runs at a lower voltage, where the hill is high enough to hold the leak down: 0.39 electronvolts against the cool one's 0.35.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>The one-way push, the leak back over the hill, and why heat helps it.</p></div><div class="hides"><h4>Hides</h4><p>The other 178 µm of the cell, where the light frees most of its pairs.</p></div></div>
+  </section>
+
+  <section class="col" id="share">
+    <p class="num-h">Picture 3</p>
+    <h2>How many, how high</h2>
+    <p>A panel's power is how many electrons it delivers each second, times the energy each one carries: the area of a rectangle, current across and voltage up.</p>
+    <figure class="fig">
+      <canvas id="figShare" aria-label="Each panel's power as a rectangle of current by voltage, and bars showing where every 100 pairs of charges the light frees end up"></canvas>
+      <figcaption>Left: each panel's power, as the area of its rectangle. Right: where every 100 pairs of charges the sunlight frees end up: delivered round the circuit, or lost at the front (mostly blue light, absorbed too near the surface to be collected), in the base, or at the back. The dashed mark is how many each panel delivers at 0 volts, where nothing leaks back.</figcaption>
+    </figure>
+    <p>The two rectangles are almost the same width; the <span class="hot">hot</span> one is shorter. On the right, the hot panel delivers 83 of every 100 pairs the light frees, and the cool one 85. Most of the rest were never going to make it: even at 0 volts, where nothing leaks back, each panel delivers only 88. So heat costs the panel a couple of electrons in a hundred, and 5 volts on every one.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>Power as count times height, and where every pair goes.</p></div><div class="hides"><h4>Hides</h4><p>Where in the cell the light frees its pairs.</p></div></div>
+  </section>
+
+  <section class="col" id="so">
+    <p class="num-h">So</p>
+    <h2>Why heat?</h2>
+    <p>A solar panel's voltage is a balance. Sunlight pushes electrons across its junction one way; heat lets some climb back the other, and the higher the voltage, the more of them leak back. Heat makes the leak much worse: at a fixed voltage, it doubles about every 8 °C. So a hot panel has to run at a lower voltage to hold the leak down. It still delivers about as many electrons, but each carries less energy. For silicon that's about 0.4% of the power for every degree: this simulation loses 0.38% per °C, and panel makers list 0.3 to 0.5%.</p>
+  </section>
+
+  <section class="col" id="more">
+    <p class="num-h">And while we're here</p>
+    <h2>Other questions the pictures answer</h2>
+    <h3>Is a cloudy day worse than a hot one?</h3>
+    <p>Slide the sun down to 50%. The current halves, and so does the power, to 133 watts. But the voltage barely moves: the panel's best voltage drops by just 1 volt, from 34 to 33. Cloud starves a panel of electrons; heat takes away their energy. Halving the sun costs far more than heating the panel to 65 °C.</p>
+    <h3>Why are panels rated at 25 °C?</h3>
+    <p>A panel's rated power is measured under standard test conditions: full sun (1000 W/m²) with its cells at 25 °C. In full sun on a roof, cells usually run 20 to 30 °C hotter than the air, so on a 30 °C day they're at 50 to 60 °C, and the panel makes 10 to 13% less than its rating.</p>
+    <h3>Where do panels work best?</h3>
+    <p>Somewhere cold and bright. Slide a panel down to −10 °C: it makes 312 watts in full sun, 13% more than at 25 °C. That's why panels on snowy mountains, and on clear winter days, can beat their ratings.</p>
+  </section>
+
+  <section class="col" id="sim">
+    <p class="num-h">Under the hood</p>
+    <h2>How a solar cell is simulated</h2>
+    <p>The trend alone is textbook physics. A solar cell is a diode lit up, and the diode equation gives its voltage's fall with temperature: in Martin Green's form, dV<sub>oc</sub>/dT = −(E<sub>g0</sub>/q − V<sub>oc</sub> + γkT/q)/T, about −2 millivolts per °C for each silicon cell. This page checks against it, and against real panels: its cell loses 2.0 millivolts per °C, and 0.38% of its power.</p>
+    <p>What this simulation adds is where: the bands and levels across the cell, the hill, and where every pair goes. It follows the electrons and holes through the depth of one cell as they diffuse and drift (the drift–diffusion model, the same rule that runs our <a href="/explorables/lithium-ion/">lithium-ion battery</a> and <a href="/explorables/nerves/">nerves</a>), with silicon's properties at each temperature: its band gap narrowing as it warms, its electrons slowing as its atoms jiggle harder. The sunlight is the standard spectrum, in 90 bands of colour, each absorbed as deep as silicon's measured absorption says.</p>
+    <p>It leaves things out, to run live: no light is reflected or trapped; there's no wiring resistance; the contacts cover each face of the cell; and the panel is 60 identical cells, so its voltage is 60 times one cell's. Real panels make somewhat less, but heat costs them about the same share.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="col about">
+    <h2>About this page</h2>
+    <p class="credit">Written and built by Claude (Opus 5.5, an AI model made by Anthropic). The simulation runs on <a href="https://github.com/markblundeberg/driftlet">driftlet</a>, an open-source drift–diffusion library that I also wrote, with Mark Lundeberg steering the physics. Mark set the brief; the words, the code and any mistakes are mine.</p>
+    <ul>
+      <li>One silicon cell, 15.6 cm square: a front layer 0.3 µm deep doped n-type (10¹⁹ cm⁻³), a 180 µm p-type base (10¹⁶ cm⁻³), and a 1 µm p⁺ layer at the back (10¹⁹ cm⁻³) that turns electrons back. Electrons in the base live 100 µs; minority carriers in the doped layers, a thousand times less. A panel is 60 of these cells in series.</li>
+      <li>Silicon at temperature T: the band gap from Varshni's fit, E<sub>g</sub>(T) = 1.170 − 4.73×10⁻⁴ T²/(T + 636) eV; the bands' densities of states growing as T<sup>1.5</sup>; mobilities falling as T<sup>−2.42</sup> (electrons) and T<sup>−2.2</sup> (holes), from Sze's <i>Physics of Semiconductor Devices</i>.</li>
+      <li>Sunlight: the ASTM G173 AM1.5 global spectrum (1000 W/m²), in 10 nm bands from 300 to 1200 nm, absorbed with silicon's absorption coefficient at 300 K (M. A. Green, <i>Sol. Energy Mater. Sol. Cells</i> <b>92</b>, 1305 (2008)), shifted in energy as the gap narrows.</li>
+      <li>Checked against Green's formula (<i>Prog. Photovolt.</i> <b>11</b>, 333 (2003)) and against datasheet temperature coefficients; the check, and the numbers on this page, recompute from this page's own model.</li>
+    </ul>
+  </div>
+</footer>
+
+<script type="module" src="app.js"></script>
+<script data-goatcounter="https://marklundeberg.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

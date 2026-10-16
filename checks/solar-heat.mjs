@@ -75,17 +75,35 @@ expect('γ implied by dVoc/dT (Green 2003)', out.gamma_implied, 1.58, 3, "betwee
   out.leak_at_0_55V_mA_cm2 = { C25: +l25.toPrecision(3), C65: +l65.toPrecision(3), ratio: +(l65 / l25).toFixed(1) };
   out.leak_doubles_every_K = +(Math.LN2 / Math.log(l26 / l25)).toFixed(2);
 }
-// The two panels of the film and the page's first picture: 25 °C (a cold bright day) and 65 °C (a
-// summer roof), under the full sun: a 60-cell panel of 15.6 cm cells (243 cm² each).
+// The two panels of the film and the page's pictures: 25 °C (a cool bright day) and 65 °C (a hot
+// summer roof), under the full sun, each at its best voltage, and the hot one held at the cool one's.
 {
-  const area = 15.6 * 15.6, hot = by(65);
-  for (const [k, m] of [['C25', c25], ['C65', hot]]) out[`panel_${k}`] = { Voc_V: +(M.CELLS * m.Voc).toFixed(1), Isc_A: +((m.Jsc * area) / 1000).toFixed(2), Vmp_V: +(M.CELLS * m.Vmp).toFixed(1), Pmax_W: +((M.CELLS * m.Pmax * area) / 1000).toFixed(0) };
-  out.hot_over_cool_power = +(hot.Pmax / c25.Pmax).toFixed(3);
-  // where the pairs went at the most power, as fractions of those made: delivered, or lost
-  for (const [k, m] of [['C25', c25], ['C65', hot]]) {
-    const made = (F * M.absorbed(m.T, 1)) / 10;
-    out[`fate_at_max_power_${k}`] = { delivered: +(m.Jmp / made).toFixed(3), lost: +(1 - m.Jmp / made).toFixed(3), lost_at_short_circuit: +(1 - m.Jsc / made).toFixed(3) };
-  }
+  const cool = new M.Panel(M.KELVIN + 25, 1), hot = new M.Panel(M.KELVIN + 65, 1);
+  const show = (p, V) => {
+    const o = p.operate(V), F0 = o.fates, per100 = (x) => +((100 * x) / F0.made).toFixed(1);
+    return {
+      V: +M.panel.V(V).toFixed(1), A: +M.panel.A(o.J).toFixed(2), W: +M.panel.W(o.P).toFixed(1),
+      hill_eV: +o.hill.toFixed(3), one_in: +Math.exp(o.hill / M.VT(p.T)).toPrecision(2),
+      per100: { delivered: per100(F0.delivered), front: per100(F0.front), base: per100(F0.base), back: per100(F0.back) },
+      per100_sum_error: +Math.abs((F0.delivered + F0.front + F0.base + F0.back) / F0.made - 1).toExponential(1),
+    };
+  };
+  out.panel_cool_best = show(cool, cool.Vmp);
+  out.panel_hot_best = show(hot, hot.Vmp);
+  out.panel_hot_at_cool_V = show(hot, cool.Vmp);
+  out.delivered_at_0V_per100 = { cool: +((100 * cool.short.delivered) / cool.short.made).toFixed(1), hot: +((100 * hot.short.delivered) / hot.short.made).toFixed(1) };
+  out.hot_over_cool_power = +(hot.Pmax / cool.Pmax).toFixed(3);
+  out.panel_Voc_V = { cool: +M.panel.V(cool.Voc).toFixed(1), hot: +M.panel.V(hot.Voc).toFixed(1) };
+  out.panel_Isc_A = { cool: +M.panel.A(cool.Jsc).toFixed(2), hot: +M.panel.A(hot.Jsc).toFixed(2) };
+  out.one_in_ratio_same_V = +(out.panel_cool_best.one_in / out.panel_hot_at_cool_V.one_in).toFixed(1);
+  expect('the hot panel at the cool one\'s voltage delivers nothing', Math.abs(out.panel_hot_at_cool_V.W), 0, 10, 'its V_oc is the cool one\'s V_mp');
+  expect('the per-100 ledger closes', out.panel_cool_best.per100_sum_error, 0, 1e-6, 'every pair accounted for');
+  // A cloudy day (half sun) and a freezing bright one (−10 °C), against the cool panel.
+  const half = new M.Panel(M.KELVIN + 25, 0.5), cold = new M.Panel(M.KELVIN - 10, 1);
+  out.panel_half_sun = { W: +M.panel.W(half.Pmax).toFixed(1), Vmp: +M.panel.V(half.Vmp).toFixed(1), Voc: +M.panel.V(half.Voc).toFixed(1), A_sc: +M.panel.A(half.Jsc).toFixed(2), Voc_drop_V: +M.panel.V(cool.Voc - half.Voc).toFixed(2) };
+  out.panel_minus10 = { W: +M.panel.W(cold.Pmax).toFixed(1), over_25C: +(cold.Pmax / cool.Pmax).toFixed(3) };
+  // a hot day: air at 30 °C, cells 25–30 °C above it
+  out.power_at_55_and_60_over_25 = { C55: +(by(55).Pmax / c25.Pmax).toFixed(3), C60: +((by(55).Pmax + by(65).Pmax) / 2 / c25.Pmax).toFixed(3) };
 }
 // The kit's checks at 25 °C, open circuit: where every pair goes, and a grid twice as fine.
 {
