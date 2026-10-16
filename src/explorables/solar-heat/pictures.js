@@ -33,7 +33,7 @@ function mix(a, b, t) {
   return `rgb(${A.map((v, i) => Math.round(v + (B[i] - v) * t)).join(',')})`;
 }
 export const tempColour = (T) => mix(COL.cool, COL.hot, clamp((T - KELVIN - 25) / 40, 0, 1));
-// what a panel at T in full sun suggests (cells run some 25–35 °C above the air)
+// what a panel at T in full sun suggests (cells run some 25–45 °C above the air)
 export function describe(T) {
   const C = T - KELVIN;
   return C < 5 ? 'a freezing day' : C < 35 ? 'a cold, bright day' : C < 55 ? 'a warm day, on a roof' : 'a hot day, on a roof';

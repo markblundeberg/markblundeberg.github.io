@@ -240,11 +240,11 @@ h1 em { font-style: normal; color: var(--hot); }
     <p class="num-h">And while we're here</p>
     <h2>Other questions the pictures answer</h2>
     <h3>Is a cloudy day worse than a hot one?</h3>
-    <p>Slide the sun down to 50%. The current halves, and so does the power, to 133 watts. But the voltage barely moves: the panel's best voltage drops by just 1 volt, from 34 to 33. Cloud starves a panel of electrons; heat takes away their energy. Halving the sun costs far more than heating the panel to 65 °C.</p>
+    <p>Slide the sun down to 50%. The current halves, and so does the power, to 133 watts. But the voltage barely moves: the panel's best voltage drops by just 1 volt, from 34 to 33. Cloud starves a panel of electrons; heat makes it deliver them at a lower voltage. Halving the sun costs far more than heating the panel to 65 °C.</p>
     <h3>Why are panels rated at 25 °C?</h3>
     <p>A panel's rated power is measured under standard test conditions: full sun (1000 W/m²) with its cells at 25 °C. In full sun, cells typically run 25 to 45 °C hotter than the air (the high end on a roof in still air), so on a 30 °C day they're at 55 to 75 °C, and the panel makes about 11 to 19% less than its rating.</p>
     <h3>Where do panels work best?</h3>
-    <p>Somewhere cold and bright. Slide a panel down to −10 °C (in full sun, that takes bitterly cold air): it makes 312 watts, 13% more than at 25 °C. That's part of why panels on snowy mountains can beat their ratings: cold cells, and extra light from thin air and bright snow.</p>
+    <p>Somewhere cold and bright. Slide a panel down to −10 °C (in full sun, that takes air at about −40 °C): it makes 312 watts, 13% more than at 25 °C. That's part of why panels on snowy mountains can beat their ratings: cold cells, and extra light from thin air and bright snow.</p>
   </section>
 
   <section class="col" id="sim">
@@ -252,7 +252,7 @@ h1 em { font-style: normal; color: var(--hot); }
     <h2>How a solar cell is simulated</h2>
     <p>The trend alone is textbook physics. A solar cell is a diode lit up, and the diode equation gives its voltage's fall with temperature: in Martin Green's form, dV<sub>oc</sub>/dT = −(E<sub>g0</sub>/q − V<sub>oc</sub> + γkT/q)/T, about −2 millivolts per °C for each silicon cell. This page checks against it, and against real panels: its cell loses 2.0 millivolts per °C, and 0.38% of its power.</p>
     <p>What this simulation adds is where: the bands and levels across the cell, the hill, and where every pair goes. It follows the electrons and holes through the depth of one cell as they diffuse and drift (the drift–diffusion model, the same rule that runs our <a href="/explorables/lithium-ion/">lithium-ion battery</a> and <a href="/explorables/nerves/">nerves</a>), with silicon's properties at each temperature: its band gap narrowing as it warms, its electrons slowing as its atoms jiggle harder. The sunlight is the standard spectrum, in 90 bands of colour, each absorbed as deep as silicon's measured absorption says.</p>
-    <p>It leaves things out, to run live: no light is reflected or trapped; there's no wiring resistance; the contacts cover each face of the cell; and the panel is 60 identical cells, so its voltage is 60 times one cell's. Real panels make somewhat less, but heat costs them about the same share.</p>
+    <p>It leaves things out, to run live: no light is reflected or trapped; there's no wiring resistance; the contacts cover each face of the cell; and the panel is 60 identical cells, so its voltage is 60 times one cell's. Real panels make somewhat less. Heat costs them a similar share: the best of today's, with a higher voltage to start from, lose less, about 0.25 to 0.35% per degree.</p>
   </section>
 </main>
 
