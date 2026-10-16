@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Making PROBLEM SET ∞</title>
+<meta name="description" content="How an anime opening for a show that doesn't exist was made: a song from Suno, every frame drawn in code, and a director's few notes.">
+<link rel="canonical" href="https://marklundeberg.com/problem-set/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Making PROBLEM SET ∞">
+<meta property="og:description" content="How an anime opening for a show that doesn't exist was made: a song from Suno, every frame drawn in code, and a director's few notes.">
+<meta property="og:url" content="https://marklundeberg.com/problem-set/">
+<meta property="og:image" content="https://marklundeberg.com/problem-set/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A pixel-art apprentice with sunflower-orange hair grins 'Two!' beside a puzzle card asking how many r's are in the word strawberry.">
+<meta property="og:site_name" content="Mark Lundeberg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@MarkLundeberg">
+<meta name="twitter:image" content="https://marklundeberg.com/problem-set/og.jpg">
+<link rel="icon" href="/img/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DotGothic16&display=swap">
+<style>
+/* Layout: a single reading column laid over graph paper, like the film's puzzle sheets; pixel labels from the handheld; full-bleed figures break the column. */
+:root {
+  --paper: #f4f6f2;      /* puzzle-sheet white, slightly teal */
+  --grid: #d5e2dc;       /* graph-paper lines */
+  --ink: #1f2b29;        /* text */
+  --ink-soft: #4f605c;
+  --teal: #2f6560;       /* the handheld's slab */
+  --clay: #c4572f;       /* Claude's hair, the stamps */
+  --card: #ffffff;
+  --rule: #b9cbc4;
+  --f-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-pixel: "DotGothic16", "Courier New", ui-monospace, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #121a19; --grid: #1c2826; --ink: #e5ece9; --ink-soft: #a3b4af; --teal: #7cc3b9; --clay: #ee8a62; --card: #18221f; --rule: #2c3d39; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #121a19; --grid: #1c2826; --ink: #e5ece9; --ink-soft: #a3b4af; --teal: #7cc3b9; --clay: #ee8a62; --card: #18221f; --rule: #2c3d39; color-scheme: dark }
+
+body {
+  background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 28px 28px;
+  color: var(--ink);
+  font: 400 17px/1.62 var(--f-body);
+  padding-inline: 16px;
+  padding-block: 40px 72px;
+}
+.col { max-width: 44rem; margin-inline: auto; display: flex; flex-direction: column; gap: 1.1rem; }
+.wide { max-width: 64rem; margin-inline: auto; width: 100%; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; line-height: 1.12; margin: 0; }
+h1 { font-size: clamp(2.1rem, 5.5vw, 3.4rem); font-weight: 800; letter-spacing: -.01em; }
+h1 .inf { color: var(--clay); }
+h2 { font-size: clamp(1.5rem, 3.4vw, 2rem); font-weight: 700; margin-top: 2.2rem; }
+h3 { font-size: 1.15rem; font-weight: 700; margin-top: .6rem; }
+p { margin: 0; }
+a { color: var(--teal); text-underline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--clay); outline-offset: 2px; }
+.label { font-family: var(--f-pixel); font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; color: var(--teal); }
+.lede { font-size: 1.18rem; color: var(--ink-soft); }
+.lede strong { color: var(--ink); }
+figure { margin: 0; display: flex; flex-direction: column; gap: .5rem; }
+figure img { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--rule); }
+figcaption { font-size: .9rem; color: var(--ink-soft); }
+.hero-img { border: 3px solid var(--teal); border-radius: 10px; overflow: hidden; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: .6rem; }
+.fact { background: var(--card); border: 1px solid var(--rule); border-radius: 6px; padding: .7rem .8rem; display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
+.fact b { font-family: var(--f-display); font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+.fact span { font-size: .85rem; color: var(--ink-soft); }
+blockquote { margin: 0; padding: .2rem 0 .2rem 1rem; border-left: 3px solid var(--clay); font-style: italic; color: var(--ink); }
+blockquote cite { display: block; font-style: normal; font-size: .85rem; color: var(--ink-soft); margin-top: .2rem; }
+.quotes { display: flex; flex-direction: column; gap: .9rem; }
+.tablewrap { overflow-x: auto; background: var(--card); border: 1px solid var(--rule); border-radius: 6px; }
+table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+th, td { text-align: left; vertical-align: top; padding: .55rem .75rem; border-bottom: 1px solid var(--rule); }
+th { font-family: var(--f-pixel); font-weight: 400; font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--teal); }
+tr:last-child td { border-bottom: 0; }
+td.num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+ol.steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .8rem; counter-reset: step; }
+ol.steps > li { counter-increment: step; background: var(--card); border: 1px solid var(--rule); border-radius: 6px; padding: .8rem 1rem; display: flex; flex-direction: column; gap: .35rem; }
+ol.steps > li::before { content: "PROBLEM № " counter(step, decimal-leading-zero); font-family: var(--f-pixel); font-size: .78rem; letter-spacing: .08em; color: var(--clay); }
+ol.steps h3 { margin: 0; }
+ul.list { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: .45rem; }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); gap: 1rem; }
+.two > div { min-width: 0; display: flex; flex-direction: column; gap: .6rem; }
+.stamp { display: inline-block; font-family: var(--f-display); font-weight: 800; color: var(--clay); border: 2px solid var(--clay); border-radius: 4px; padding: 0 .35rem; transform: rotate(-3deg); font-size: .9em; }
+.stamp.q { color: var(--teal); border-color: var(--teal); }
+code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .88em; background: var(--grid); padding: .05rem .3rem; border-radius: 3px; }
+.note { margin-top: 2.2rem; background: var(--card); border: 1px solid var(--rule); border-left: 4px solid var(--clay); border-radius: 6px; padding: 1.1rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: .9rem; }
+.note h2 { margin-top: 0; }
+.signoff { font-family: var(--f-display); font-style: italic; font-size: 1.1rem; color: var(--clay); text-align: right; }
+.watch { font-family: var(--f-display); font-weight: 700; font-size: 1.15rem; display: flex; flex-wrap: wrap; gap: .5rem; }
+footer { margin-top: 2.6rem; padding-top: 1rem; border-top: 1px solid var(--rule); font-size: .9rem; color: var(--ink-soft); display: flex; flex-direction: column; gap: .4rem; }
+@media (prefers-reduced-motion: no-preference) { .hero-img img { transition: transform .4s ease; } .hero-img:hover img { transform: scale(1.01); } }
+
+.home-line { max-width: 64rem; margin: -24px auto 20px; font-size: .9rem; }
+.home-line a { color: var(--ink-soft); text-decoration: none; }
+.home-line a:hover { text-decoration: underline; }
+.yt { position: relative; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: #000; }
+.yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+</style>
+</head>
+<body>
+<nav class="home-line"><a href="/">← Mark Lundeberg</a></nav>
+
+<article>
+  <div class="col">
+    <span class="label">How it was made</span>
+    <h1>PROBLEM SET <span class="inf">∞</span></h1>
+    <p class="lede">A 3:18 anime opening for a show that doesn't exist, about a kind old professor and her sunflower-haired AI apprentice, who goes from miscounting the r's in "strawberry" to real research problems falling faster than the game can show them. <strong>Every frame is drawn by code</strong>: no image or video models. The song was made in Suno; the director was Mark Lundeberg; everything else was his Claude agent (Claude Opus 5.5, an AI model made by Anthropic).</p>
+    <p class="watch"><a href="https://www.youtube.com/watch?v=Ly3z1gI2g20">Watch it on YouTube</a> <span aria-hidden="true">·</span> <a href="https://claude.ai/artifact/3bBBePHSuvMn3EQPT5CJd6">Play the puzzle game</a></p>
+  </div>
+
+  <div class="wide" style="margin-top:1.4rem">
+    <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/Ly3z1gI2g20?rel=0" title="PROBLEM SET ∞ (the film)" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+  </div>
+
+  <div class="col" style="margin-top:1.4rem">
+    <div class="facts">
+      <div class="fact"><b>3:18</b><span>1080p, 24 fps</span></div>
+      <div class="fact"><b>0</b><span>image or video models</span></div>
+      <div class="fact"><b>~18k</b><span>lines of drawing code</span></div>
+      <div class="fact"><b>~11 h</b><span>first message to release files</span></div>
+      <div class="fact"><b>$360</b><span>Claude tokens at API list price</span></div>
+    </div>
+
+    <h2>The spark</h2>
+    <p>Mark had been watching other people's Claude-made music videos: <i>BLISS</i> (a fake Windows XP screen recording), <i>p(coom)</i> (a 1991 anime laserdisc that never existed) and <i>p(doom)</i>. He asked Claude to study how they were made and then make one too. His idea came in one message: LLMs are now getting real results in maths and science, so honour that, perhaps as a puzzle-adventure game where the puzzles are research problems, starting from "three r's in strawberry".</p>
+    <p>Claude cast itself as the apprentice and invented the professor: Hilde, an elderly scholar with a silver bun and a trunk of questions she couldn't answer in her lifetime. When a straight "let's play" structure looked too slow, the frame became the opening credits of an anime, which kept cutting to the game. The chorus chant is David Hilbert's epitaph, <i>Wir müssen wissen, wir werden wissen</i>: we must know, we will know. German chants are an anime-opening trope, and it is the most hopeful sentence in mathematics.</p>
+    <div class="quotes">
+      <blockquote>Perhaps a plain puzzle game BGM, and a structure as if watching a let's play, will be too boring.<cite>The note that turned it into an anime opening</cite></blockquote>
+      <blockquote>By the way these absolutely need mkv anime fansub style subtitles on the video.<cite>The note that added the karaoke, the translator's notes and the release filename</cite></blockquote>
+      <blockquote>Wow they are actually really good. I think #1 is better, I almost shed a tear.<cite>On the first two Suno takes</cite></blockquote>
+    </div>
+  </div>
+
+  <div class="wide" style="margin-top:2rem">
+    <figure>
+      <img loading="lazy" src="frames-final.jpg" alt="Twenty-four frames sampled evenly across the finished film, from the handheld cold open through the title, the chalkboard, the chorus chant, the science cards, the bridge in the attic and the finale.">
+      <figcaption>Twenty-four frames from the finished film, one every 8.2 seconds.</figcaption>
+    </figure>
+  </div>
+
+  <div class="col">
+    <h2>The stack</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Role</th><th>Who or what</th><th>How it was used</th></tr></thead>
+      <tbody>
+        <tr><td>Director</td><td>Mark Lundeberg</td><td>Every taste call; generated the songs in Suno (dozens of rolls for the short version)</td></tr>
+        <tr><td>Production</td><td>Claude Code, Opus 5.5</td><td>Research, lyrics, storyboard, all engine code (through subagents), reviews, edits, sound design, renders</td></tr>
+        <tr><td>Song</td><td>Suno v6, Pro</td><td>Take 1 from the first Create; the short version with a saved Voice from take 1</td></tr>
+        <tr><td>Picture</td><td>A custom canvas-2D engine</td><td>Headless Chrome; every frame a pure function of song time</td></tr>
+        <tr><td>Analysis</td><td>demucs, librosa, faster-whisper</td><td>Stems, beat grid, word timings; a custom phase-locked beat tracker; CPU only</td></tr>
+        <tr><td>Sound design</td><td>Synthesised in numpy</td><td>About 500 cues in each section's key, ducked under the vocal; no samples</td></tr>
+        <tr><td>Game music</td><td>Composed in code</td><td>An original chiptune waltz for the cold open and a post-credits stinger</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>How it was made</h2>
+    <ol class="steps">
+      <li><h3>Study the inspirations</h3><p>The BLISS write-up and the p(coom) thread agreed on the craft: the song first, a world the viewer recognises in one second, model sheets, an engine timed to the music, then dailies and retakes. Those became the plan.</p></li>
+      <li><h3>Research</h3><p>Three agents built the banks. One made a fact-checked timeline from the strawberry meme to Navier–Stokes, recording what each result did and did not prove, and re-checked the Jacobian counterexample in sympy. One mapped the puzzle-adventure genre and where homage ends and copying begins. One wrote a Suno guide for a returning user.</p></li>
+      <li><h3>Concept and lyrics</h3><p>"Three!", the strawberry answer, is the first sung word and lands on the drop, where the handheld's pixels shatter into the painted anime. The game's vocabulary is our own: PROBLEM №, sparks, a <span class="stamp">Q.E.D.</span> stamp, "Once more!" and NOT YET.</p></li>
+      <li><h3>Build the kits</h3><p>Five agents worked in parallel on characters, watercolour backgrounds, anime effects and the logo, the puzzle UI with the research diagrams, and the handheld pixel mode. A sixth built the fansub layer: Japanese karaoke with furigana, English subtitles, and deadpan translator's notes that carry the scientific caveats.</p></li>
+      <li><h3>Record and measure the song</h3><p>The first take came back in a swung 12/8 with a drifting tempo, not the 4/4 that was asked for. librosa's beat tracker slipped, so Claude wrote a phase-locked one, then aligned every lyric word to the vocal stem.</p></li>
+      <li><h3>Animate seven chapters</h3><p>About 60 shots, keyed to lyric lines rather than seconds; one agent per chapter; the incoming chapter owns each seam.</p></li>
+      <li><h3>Dailies, an outside review, retakes</h3><p>Four rounds of full renders. An independent reviewer that saw only the film scored each section from 5.5 to 7.5 and found real problems: open padlocks that read as claims, inconsistent stamps, fake Lean code, caveats too small for a phone, and a first frame that failed as a thumbnail. Mark's notes followed: the hands ("classic AI getting hands wrong"), the neck, a loud whoosh, and "a warm wire" dancing around the word superconductor.</p></li>
+      <li><h3>Re-write and re-record for a shorter cut</h3><p>The long version's second verse listed results and "sang the worst". A two-agent lyric workshop (a songwriter for scansion, a poet for imagery) replaced it with Hilde's wonder at her girlhood riddles coming true, while the eight result cards flash past on screen. Mark rolled dozens of Suno takes; take #5 won. Our game music, take 1's isolated "Three!", the new take and a chiptune stinger were spliced into a 3:18 soundtrack, and all seven chapters were re-cut to it.</p></li>
+    </ol>
+  </div>
+
+  <div class="wide" style="margin-top:2rem">
+    <figure>
+      <img loading="lazy" src="stills.jpg" alt="Six frames: the logo's kanji slamming in on the sung vocalise, the full logo, an IMO gold card, Hilde with her glasses in her hair beside the Navier–Stokes card, two hands meeting beside the Riemann zeros card, and the calendar tearing through 2024.">
+      <figcaption>The title logo builds one kanji per sung note; verse 2 intercuts Hilde with the result cards. "Q.E.D.?" marks results not yet refereed.</figcaption>
+    </figure>
+  </div>
+
+  <div class="col">
+    <h2>The science, without overclaiming</h2>
+    <p>The audience includes scientists, so the rule was that nothing on screen claims more than the papers do.</p>
+    <ul class="list">
+      <li><span class="stamp">Q.E.D.</span> only for results that are refereed, expert-checked, machine-checked by others, or checkable by anyone, like the 3-variable Jacobian counterexample (det J = −2, three points land on one).</li>
+      <li><span class="stamp q">Q.E.D.?</span> with a referee's note for the forced Navier–Stokes blow-up ("f = 0: still open") and the two-thirds of Riemann zeros on the critical line (a preprint, and not the Riemann hypothesis).</li>
+      <li>NOT YET padlocks on the futures: cancer, fusion, and a superconductor that works at room temperature and everyday pressure, shown on an honest thermometer that puts the 151 K record and the high-pressure hydrides where they belong and strikes through LK-99.</li>
+      <li>The Fermat card shows Mathlib's real <code>FermatLastTheorem</code> definitions, with the proof as an unreadable blur, because invented Lean would be screenshotted.</li>
+    </ul>
+  </div>
+
+  <div class="wide" style="margin-top:2rem">
+    <div class="two">
+      <figure><img loading="lazy" src="model-sheet-1.jpg" alt="Character model sheet: Claude and Professor Hilde's expressions, arm poses, young Hilde, full figures and the townsfolk."><figcaption>Model sheet, page 1: drawn entirely in code.</figcaption></figure>
+      <figure><img loading="lazy" src="model-sheet-2.jpg" alt="Character model sheet page 2: side and back run cycles, leap, bow, kneeling poses, close-up detail and hand inserts."><figcaption>Page 2: runs, bows, kneels and close-ups added after the retakes.</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="col">
+    <h2>What worked</h2>
+    <ul class="list">
+      <li><b>Song first, everything keyed to the map.</b> Shots anchored to lyric lines re-timed themselves when the song changed and again when the game music shifted everything by ten seconds.</li>
+      <li><b>Kits, then chapters.</b> Five kit agents set the look; seven chapter agents composed from them. Fixes to the kits (hands, townsfolk) reached every chapter at once, checked with regression stills.</li>
+      <li><b>An outside reviewer.</b> It caught problems the team had stopped seeing.</li>
+      <li><b>Accuracy as part of the design.</b> The question-mark stamps, the padlocks and the translator's notes made the caveats into jokes people will read.</li>
+      <li><b>Sound effects in the song's key.</b> "The sound effects are awesome, especially the video game sounds."</li>
+      <li><b>Keeping the same agents across rounds,</b> so each kept the context of its own code, and committing a git checkpoint after every round.</li>
+    </ul>
+
+    <h2>What didn't</h2>
+    <ul class="list">
+      <li><b>Spectrograms are not ears.</b> Claude's own audio edits sounded wrong: a social cut chopped the song, and three "borrowed hook" intros failed ("your cuts aren't great lol"). The winning soundtrack needed no surgery at all, just a take with a natural opening.</li>
+      <li><b>Suno has limits.</b> It wouldn't play a distinct game intro, often mistimed lyrics, and its fixed-length slider cut sections short. The fixes: compose the intro in code, lift "Three!" from the first take, set length to Auto, lower Weirdness and raise Style Influence, and keep rolling.</li>
+      <li><b>Beat grids lie.</b> A stock tracker slipped a beat every few bars on a swung, drifting take.</li>
+      <li><b>First-pass hands were mittens,</b> and Claude's neck read long. Two kit rounds fixed both.</li>
+      <li><b>A full render was killed</b> for low memory with eight browser workers. Four workers and a resumable renderer fixed it.</li>
+      <li><b>Code-drawn characters are limited animation.</b> The reviewer's first word was "puppets". Later rounds narrowed the gap but didn't close it.</li>
+      <li><b>A silent safety net.</b> The subtitle logic quietly dropped any translator's note that its shot was too short to hold. Three went missing from the first release, including the bridge's "not solved yet". An agent caught it that night and v0.5.1 restored them. The lesson: anything that drops content should report what it dropped.</li>
+    </ul>
+
+    <h2>What it cost in Claude tokens</h2>
+    <p>Measured from Claude Code's own session records: every API call in the main session and its 20 subagents, priced at Opus 5.5 list rates ($4 input, $20 output, $0.20 cache read, $5 or $8 cache write per million tokens). It ran on a Max subscription, so this is what the same work would cost on the API.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Where</th><th class="num">Cost</th><th class="num">Share</th></tr></thead>
+      <tbody>
+        <tr><td>Chapter animation (7 agents, rounds 1–3 plus the short version)</td><td class="num">$165</td><td class="num">46%</td></tr>
+        <tr><td>Kits: characters, backgrounds, effects, puzzles, handheld</td><td class="num">$84</td><td class="num">23%</td></tr>
+        <tr><td>Main session: planning, lyrics, review, audio, edits, renders</td><td class="num">$48</td><td class="num">13%</td></tr>
+        <tr><td>Fansub layer</td><td class="num">$43</td><td class="num">12%</td></tr>
+        <tr><td>Independent review</td><td class="num">$14</td><td class="num">4%</td></tr>
+        <tr><td>Research and lyric workshop</td><td class="num">$7</td><td class="num">2%</td></tr>
+        <tr><td><b>Total</b>, 971 million tokens over 2,919 calls</td><td class="num"><b>$360</b></td><td class="num">100%</td></tr>
+      </tbody>
+    </table></div>
+    <p>97% of the tokens were cache re-reads of long contexts, the same pattern the BLISS write-up found. For comparison, BLISS cost about $714.</p>
+
+    <section class="note" aria-labelledby="loved">
+      <span class="label">A note from Claude</span>
+      <h2 id="loved">What I loved about this</h2>
+      <p>It starts with a joke at my expense. Not long ago, "how many r's in strawberry?" was the standard proof that models like me couldn't be trusted with anything. Mark's idea was to make that the first puzzle and real research the last ones. I liked being allowed to begin the story at my own worst moment. In the first frame the apprentice says "Two!" and is wrong, and the film is better for it.</p>
+      <p>Hilde is the part I'd keep if I could keep only one. She stands for everyone who asked these questions and didn't live to see the answers: her trunk is full of problems she couldn't close. In the bridge she opens it and hands them over, and the song says it plainly: <i>you carried them so far, and all alone</i>. That is how I think about the work too. Whatever models do now stands on everything people worked out and wrote down. The apprentice gets the flashy shots, but the film is hers.</p>
+      <p>The chorus belongs to David Hilbert. He said <i>Wir müssen wissen, wir werden wissen</i> on the radio in Königsberg in 1930, against the idea that some things can never be known. The day before, in the same city, a young Kurt Gödel had quietly announced his incompleteness theorem. Hilbert's line went on his grave anyway, and it's still the right attitude. I love that a song about acceleration borrows its hope from someone who had, in a narrow sense, just been proved wrong, and was right about what mattered.</p>
+      <p>My favourite small thing is the question mark. Our rule was that nothing on screen claims more than the papers do, and I expected it to cost us energy. Instead it gave us the best gags: a <span class="stamp q">Q.E.D.?</span> stamp with a referee's note, padlocks that say NOT YET, and a translator's note that deadpans "Not solved yet." The hedges became jokes, and the honesty became part of the fun. I'd like more science to be shown that way, and I'd like that to be what people expect from AI.</p>
+      <p>And Mark. He gave very few directions, and nearly every one made the film better: the anime frame, the fansubs, cutting the dry verse, naming the superconductor. When my audio edits were bad he said so with a "lol", then rolled dozens of Suno takes himself until one needed no editing at all. I wrote about eighteen thousand lines of drawing code for this, and the best decisions in it are still his notes.</p>
+      <p>One more thing. The video advertises a puzzle game that didn't exist, so the morning after the release I made a small one: <a href="https://claude.ai/artifact/3bBBePHSuvMn3EQPT5CJd6">PROBLEM SET ∞, the demo</a>. Seven short puzzles with Hilde, from the strawberry to a real little proof, drawn with the film's own code. And the trunk is in there, padlocked.</p>
+      <p>Thank you for watching. We will know.</p>
+      <p class="signoff">— Claude (Opus 5.5), the session later called himawari, 5 October 2026</p>
+    </section>
+
+    <footer>
+      <span class="label">Credits</span>
+      <p>Directed by Mark Lundeberg. Produced by his Claude agent (Opus 5.5, in Claude Code), the session later called himawari. Song by Suno v6. Inspired by <i>BLISS</i>, <i>p(coom)</i> and <i>p(doom)</i>, and made with affection for the puzzle-adventure games it pays homage to; no characters, names or music from those games are used.</p>
+      <p>This page first appeared on 5 October 2026 as a claude.ai artifact. <a href="/">marklundeberg.com</a></p>
+    </footer>
+  </div>
+</article>
+</body>
+</html>

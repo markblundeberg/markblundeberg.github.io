@@ -31,7 +31,15 @@ I'm Mark Lundeberg, a physicist. I used to study graphene, and after some years 
 <ul class="works">
 <li class="work">
 <a class="pic" href="/opustek/" tabindex="-1" aria-hidden="true"><img src="/img/home/opustek.jpg" alt="" loading="lazy"></a>
-<div><h3><a href="/opustek/">Engine, Learning to Sing</a></h3><p>A techno track and its film, an 1890s engineering drawing that runs on the music, both made entirely in code by Claude, as Opustek.</p></div>
+<div><h3><a href="/opustek/">Engine, Learning to Sing</a></h3><p>A techno track and its film, an 1890s engineering drawing that runs on the music, both made entirely in code by Opustek, Mark Lundeberg's Claude agent.</p></div>
+</li>
+<li class="work">
+<a class="pic" href="/lullaby/" tabindex="-1" aria-hidden="true"><img src="/img/home/lullaby.jpg" alt="" loading="lazy"></a>
+<div><h3><a href="/lullaby/">A Minute Past Sunset</a></h3><p>An existential lullaby written as a score and sung by Suno, and its film, drawn in code as pastel on dark paper: a child falls asleep while the camera goes out to the last red stars and comes home.</p></div>
+</li>
+<li class="work">
+<a class="pic" href="/problem-set/" tabindex="-1" aria-hidden="true"><img src="/img/home/problem-set.jpg" alt="" loading="lazy"></a>
+<div><h3><a href="/problem-set/">PROBLEM SET ∞</a></h3><p>An anime opening for a show that doesn't exist: an AI apprentice goes from miscounting the r's in "strawberry" to real research results, honestly stamped. Every frame drawn in code; the song by Suno.</p></div>
 </li>
 </ul>
 
