@@ -119,3 +119,70 @@ export class LED {
 // The light's spectrum: photons per energy, in proportion to E² α(E) e^{−E/kT} (van Roosbroeck and
 // Shockley), with the absorption of a direct gap, α ∝ √(E − E_g). Energies in eV.
 export const spectrum = (Eg, E) => (E <= Eg ? 0 : E * E * Math.sqrt(E - Eg) * Math.exp(-(E - Eg) / VT));
+
+// The page's three LEDs: GaAs, which glows in the infrared, and two with the gaps of a red LED's
+// and a blue one's light (630 and 460 nm, at E_g + kT/2), as GaAs with only its gap changed.
+export const LEDS = [
+  { key: 'ir', name: 'infrared', dEg: 0 },
+  { key: 'red', name: 'red', dEg: HC / 630 - 0.5 * VT - CRYSTALS.GaAs.Eg },
+  { key: 'blue', name: 'blue', dEg: HC / 460 - 0.5 * VT - CRYSTALS.GaAs.Eg },
+].map((l) => ({ ...l, Eg: CRYSTALS.GaAs.Eg + l.dEg, nm: HC / (CRYSTALS.GaAs.Eg + l.dEg + 0.5 * VT) }));
+
+// Each LED is a chip 0.32 mm square (10⁻³ cm², so 1 A/cm² is 1 mA), wired to the battery through
+// its own resistor, as LEDs must be: alone, an LED takes as much current as it's offered.
+export const CHIP = 1e-3, OHMS = 50;
+// The energy a photon carries away, on average, eV: E_g + 3kT/2 (the spectrum's mean, near enough).
+export const photonEnergy = (Eg) => Eg + 1.5 * VT;
+
+// Where its electrons end up, per second, as currents (A/cm²): light, heat, and on through the
+// diode to the far contact (or, for holes, the near one), from a solution.
+export function fates(S) {
+  const A = (r) => (r * FARADAY) / 1e4, J = Math.abs(S.current) / 1e4;
+  const light = A(S.bulkReactions[0].total), heat = A(S.bulkReactions[1].total);
+  return { J, light, heat, through: Math.max(0, J - light - heat) };
+}
+
+// The bands and levels across a diode, eV per electron, with the electrons' and holes' densities
+// (per cm³) and the rates of light and of heat (per cm³ per s).
+export function profile(S) {
+  const of = (a, f) => Array.from(a, f), cm3 = (c) => (c * AVOGADRO) / 1e6;
+  return {
+    x: Array.from(S.x),
+    region: Array.from(S.region),
+    Ec: of(S.muStd['e-'], (m) => m / FARADAY),
+    Ev: of(S.muStd['h+'], (m) => -m / FARADAY),
+    Efn: of(S.mu['e-'], (m) => m / FARADAY),
+    Efp: of(S.mu['h+'], (m) => -m / FARADAY),
+    n: of(S.c['e-'], cm3),
+    p: of(S.c['h+'], cm3),
+    light: of(S.bulkReactions[0].rate, cm3),
+    heat: of(S.bulkReactions[1].rate, cm3),
+  };
+}
+
+// An LED's current at every voltage, from 0 to just past its gap, for wiring it to a battery: V
+// (volts) and log₁₀ J (A/cm²), warm from point to point.
+export function curve(led) {
+  const V = [], logJ = [], top = led.opts.dEg + CRYSTALS.GaAs.Eg + 0.02;
+  for (let v = 0.2; v <= top + 1e-9; v += v < top - 0.5 ? 0.05 : 0.01) {
+    V.push(v);
+    logJ.push(Math.log10(Math.max(1e-300, led.at(v).J)));
+  }
+  return { V, logJ };
+}
+// Wired to a battery of VB volts through OHMS: the LED's own voltage, where V + J·CHIP·OHMS = VB.
+export function operate(c, VB) {
+  const J = (v) => {
+    const k = Math.min(c.V.length - 2, Math.max(0, c.V.findIndex((x) => x > v) - 1));
+    const t = (v - c.V[k]) / (c.V[k + 1] - c.V[k]);
+    return 10 ** (c.logJ[k] + t * (c.logJ[k + 1] - c.logJ[k]));
+  };
+  let lo = 0, hi = Math.min(VB, c.V.at(-1));
+  if (!(VB > c.V[0])) return VB;
+  for (let k = 0; k < 50; k++) {
+    const m = (lo + hi) / 2;
+    if (m + J(m) * CHIP * OHMS > VB) hi = m;
+    else lo = m;
+  }
+  return (lo + hi) / 2;
+}

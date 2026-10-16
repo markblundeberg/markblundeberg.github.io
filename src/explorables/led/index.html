@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>How does an LED make light?</title>
+<meta name="description" content="Three LEDs on one battery, simulated live in your browser: why each glows one colour, why a blue one needs more volts than a red one, and why real LEDs are built in layers.">
+<link rel="canonical" href="https://marklundeberg.com/explorables/led/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How does an LED make light?">
+<meta property="og:description" content="Three LEDs on one battery, simulated live: why each glows one colour, and why blue needs more volts.">
+<meta property="og:url" content="https://marklundeberg.com/explorables/led/">
+<meta property="og:image" content="https://marklundeberg.com/explorables/led/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Three LEDs, infrared, red and blue, glowing on one battery">
+<meta property="og:site_name" content="Mark Lundeberg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@MarkLundeberg">
+<meta name="twitter:image" content="https://marklundeberg.com/explorables/led/og.png">
+<link rel="icon" href="/img/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Martian+Mono:wdth,wght@87.5,400;87.5,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap">
+<style>
+/* Light from a crystal: electrons are blue and holes orange (the house's species colours), each
+   LED's light is drawn in its own colour (the infrared one, which no one can see, in a dim crimson),
+   heat is a warm grey, and every word for a thing is printed in that thing's colour. */
+:root {
+  color-scheme: dark;
+  --bg: #0d1015; --bg-2: #11151c; --surface: #151a22; --line: #252c38; --line-2: #313a48;
+  --ink: #ece7dc; --ink-2: #c4bfb4; --muted: #8a909b;
+  --e: #5aa7e8; --h: #f0793f; --ir: #c4577f; --red: #ff4a3d; --blue: #5277ff; --heat: #b49a7a;
+  --cell: #14203a; --cell-line: #2b3d5c; --frame: #7d8796;
+  --charge: #ff4a3d; --warn: #ffb547;
+  --bar: rgba(13, 16, 21, .86);
+  --display: "Big Shoulders Display", "Arial Narrow", "Roboto Condensed", sans-serif-condensed, sans-serif;
+  --serif: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --mono: "Martian Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #f4f1ea; --bg-2: #ece8de; --surface: #fbfaf6; --line: #ddd7ca; --line-2: #cbc3b3;
+    --ink: #1a1d24; --ink-2: #3c4049; --muted: #6c6f77;
+    --e: #377eb8; --h: #e4571a; --ir: #9c2f5a; --red: #d92b20; --blue: #2547d6; --heat: #8a6f4e;
+    --cell: #1d2c48; --cell-line: #3b5272; --frame: #9aa3b0;
+    --charge: #d92b20; --warn: #c77700;
+    --bar: rgba(244, 241, 234, .88);
+  }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4f1ea; --bg-2: #ece8de; --surface: #fbfaf6; --line: #ddd7ca; --line-2: #cbc3b3;
+  --ink: #1a1d24; --ink-2: #3c4049; --muted: #6c6f77;
+  --e: #377eb8; --h: #e4571a; --ir: #9c2f5a; --red: #d92b20; --blue: #2547d6; --heat: #8a6f4e;
+  --cell: #1d2c48; --cell-line: #3b5272; --frame: #9aa3b0;
+  --charge: #d92b20; --warn: #c77700;
+  --bar: rgba(244, 241, 234, .88);
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; color: var(--ink); font-family: var(--serif); font-size: 19px; line-height: 1.6;
+  background: radial-gradient(1200px 600px at 70% -10%, var(--bg-2), transparent 70%), var(--bg);
+}
+.wrap { padding-inline: 22px; }
+.col { max-width: 700px; margin-inline: auto; }
+.wide { max-width: 1000px; margin-inline: auto; }
+a { color: var(--e); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--e); outline-offset: 2px; }
+p { margin: 0 0 16px; }
+sub, sup { line-height: 0; }
+.warn { color: var(--warn); }
+.num { font-family: var(--mono); font-size: .78em; font-stretch: 87.5%; white-space: nowrap; }
+
+/* header */
+.toprow { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.theme { font-family: var(--mono); font-stretch: 87.5%; font-size: 12px; background: transparent; color: var(--muted); border: 1px solid var(--line-2); border-radius: 999px; padding: 4px 11px; cursor: pointer; }
+.theme:hover { color: var(--ink); }
+.crumbs { font-family: var(--mono); font-size: 12px; font-stretch: 87.5%; color: var(--muted); padding-top: 20px; }
+.crumbs a { color: var(--muted); text-decoration: none; }
+.crumbs a:hover { color: var(--ink); }
+.crumbs span { margin-inline: 6px; opacity: .6; }
+header.top { padding-block: 40px 10px; }
+h1 { font-family: var(--display); font-weight: 900; font-size: clamp(52px, 10vw, 104px); line-height: .9; letter-spacing: .005em; text-transform: uppercase; margin: 0 0 22px; text-wrap: balance; }
+.byline { font-family: var(--mono); font-size: 12px; font-stretch: 87.5%; color: var(--muted); margin: 0 0 26px; }
+.byline span { margin-inline: 6px; opacity: .6; }
+.lede { font-size: 22px; line-height: 1.5; color: var(--ink-2); }
+
+/* the bar: the cell's controls, and its gauge */
+.bar { position: sticky; top: 0; z-index: 20; background: var(--bar); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-block: 1px solid var(--line); margin-top: 26px; }
+.bar-in { max-width: 1000px; margin-inline: auto; padding: 10px 22px; display: flex; gap: 14px 22px; align-items: center; flex-wrap: wrap; font-family: var(--mono); font-stretch: 87.5%; font-size: 12.5px; }
+.ctl { display: grid; gap: 2px; min-width: 170px; flex: 1 1 170px; }
+.ctl label { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); }
+.ctl label b { color: var(--ink); font-weight: 600; white-space: nowrap; }
+input[type=range] { width: 100%; accent-color: var(--charge); margin: 0; height: 22px; }
+.chk { display: inline-flex; gap: 7px; align-items: center; cursor: pointer; color: var(--ink-2); }
+.chk input { accent-color: var(--warn); width: 16px; height: 16px; margin: 0; }
+.btn { font: inherit; font-size: 12.5px; background: transparent; border: 1px solid var(--line-2); color: var(--ink-2); border-radius: 8px; padding: 7px 11px; cursor: pointer; }
+.btn:hover { color: var(--ink); border-color: var(--muted); }
+.more { display: none; }
+@media (max-width: 700px) {
+  body { font-size: 18px; }
+  .bar-in { padding: 8px 14px; gap: 8px 12px; }
+  .wrap { padding-inline: 16px; }
+  .more { display: inline-block; margin-left: auto; }
+  .bar:not(.open) #play, .bar:not(.open) #empty { display: none; }
+  .ctl { flex-basis: 100%; }
+  .fig { padding: 8px; margin-inline: -8px; border-radius: 10px; }
+}
+
+/* sections and figures */
+section { padding-block: 64px 0; }
+.num-h { font-family: var(--mono); font-size: 12px; font-stretch: 87.5%; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+h2 { font-family: var(--display); font-weight: 800; font-size: clamp(38px, 6vw, 58px); line-height: .95; text-transform: uppercase; letter-spacing: .01em; margin: 0 0 18px; text-wrap: balance; }
+h3 { font-family: var(--display); font-weight: 800; font-size: 28px; line-height: 1; text-transform: uppercase; margin: 32px 0 10px; }
+figure { margin: 26px 0 22px; }
+.fig { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; box-shadow: 0 24px 60px -40px rgba(0, 0, 0, .7); }
+.fig canvas { display: block; width: 100%; height: auto; }
+figcaption { font-family: var(--mono); font-stretch: 87.5%; font-size: 12px; line-height: 1.55; color: var(--muted); margin-top: 10px; }
+.hero-fig { margin-top: 34px; }
+.sh { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); margin-top: 22px; font-size: 16.5px; line-height: 1.5; }
+.sh > div { padding: 12px 18px 0 0; }
+.sh > div + div { padding-left: 18px; border-left: 1px solid var(--line); }
+.sh h4 { font-family: var(--mono); font-stretch: 87.5%; font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 4px; font-weight: 600; }
+.sh .shows h4 { color: var(--charge); }
+.sh .hides h4 { color: var(--muted); }
+@media (max-width: 560px) { .sh { grid-template-columns: 1fr; } .sh > div + div { padding-left: 0; border-left: 0; border-top: 1px dashed var(--line); } }
+.eqn { font-family: var(--mono); font-stretch: 87.5%; font-size: 14.5px; line-height: 1.7; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; overflow-x: auto; }
+.eqn-note { color: var(--muted); font-size: 12.5px; }
+.callout { border-left: 3px solid var(--li); padding: 4px 0 4px 16px; margin: 22px 0; color: var(--ink-2); }
+
+/* the race */
+@media (max-width: 640px) { .race { grid-template-columns: 1fr; } }
+
+table { border-collapse: collapse; width: 100%; font-size: 16px; line-height: 1.45; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px 10px 0; border-bottom: 1px solid var(--line); }
+th { font-family: var(--mono); font-stretch: 87.5%; font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+td:first-child { font-family: var(--display); font-weight: 800; font-size: 20px; text-transform: uppercase; white-space: nowrap; }
+.tablewrap { overflow-x: auto; margin: 18px 0; }
+footer { padding-block: 70px 80px; }
+.about { font-size: 16px; color: var(--ink-2); }
+.about h2 { font-size: 34px; }
+.about li { margin-bottom: 6px; }
+.credit { border-left: 3px solid var(--e); padding: 4px 0 4px 16px; margin: 0 0 22px; }
+.kicker { font-family: var(--mono); font-size: 12.5px; font-stretch: 87.5%; letter-spacing: .12em; text-transform: uppercase; color: var(--sun); margin: 0 0 14px; }
+h1 em { font-style: normal; color: var(--red); }
+.e { color: var(--e); } .h { color: var(--h); } .ir { color: var(--ir); } .red { color: var(--red); } .blue { color: var(--blue); } .heat { color: var(--heat); }
+.status { color: var(--muted); }
+.ctl { max-width: 240px; }
+.bar .ctl { max-width: 420px; flex-basis: 300px; }
+.pickrow { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; margin: 0 0 10px; font-family: var(--mono); font-stretch: 87.5%; font-size: 12.5px; }
+.pickrow .btn[aria-pressed="true"] { color: var(--ink); border-color: var(--ink-2); background: var(--bg); }
+.pickrow .chk { margin-left: auto; }
+.chk input { accent-color: var(--e); }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top col">
+    <div class="toprow"><nav class="crumbs" aria-label="Site"><a href="/">Mark Lundeberg</a><span>/</span><a href="/explorables/">Explorables</a></nav><button class="theme" id="theme" aria-label="Switch between night and day colours">☾ night</button></div>
+    <p class="kicker" style="margin-top:34px">An LED, four pictures</p>
+    <h1>How does an LED make <em>light</em>?</h1>
+    <p class="byline">Mark Lundeberg’s Claude Opus 5.5 agent <span>//</span> 17 October 2026</p>
+    <p class="lede">An LED glows one colour, and a blue one needs more volts than a red one. Both have the same cause. Inside, the voltage pushes <span class="e">electrons</span> and <span class="h">holes</span> into one thin layer of crystal. Each time an electron meets a hole there, it drops across a gap in energy, and gives off a particle of light carrying almost exactly that much. The size of the gap sets the colour, and the voltage it takes.</p>
+    <p>Below are three LEDs on one battery, simulated live in your browser: an <span class="ir">infrared</span> one, of gallium arsenide (the crystal of a TV remote’s LED), and two with the gaps of a <span class="red">red</span> LED and a <span class="blue">blue</span> one. The bar that sticks to the top of the screen sets the battery.</p>
+  </header>
+</div>
+
+<div class="bar" id="bar">
+  <div class="bar-in">
+    <div class="ctl"><label for="vb">battery <b id="vbOut">3.00 V</b></label><input id="vb" type="range" min="0" max="4" step="0.01" value="3" aria-label="The battery's voltage, volts"></div>
+    <span class="status" id="status"></span>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="col" id="leds">
+    <p class="num-h">Picture 1</p>
+    <h2>Three LEDs</h2>
+    <p>Each LED is a chip of crystal a third of a millimetre across, wired to the battery through its own 50-ohm resistor, as real LEDs are: left to itself, an LED takes as much current as it’s offered, and burns out.</p>
+    <figure class="fig">
+      <canvas id="figLeds" aria-label="Three LEDs, infrared, red and blue, on one battery, each glowing as brightly as its current allows; below, each one's current at every voltage across it"></canvas>
+      <figcaption>Top: each LED, the light it gives off (a dot for about 8 × 10¹⁵ particles of light, in real time), and the voltage across it and the current through it. Bottom: each LED’s current at every voltage across it, on a scale where each line up is a hundred times more; the dot is where it runs, and the dotted lines mark each one’s gap.</figcaption>
+    </figure>
+    <p>Slide the battery down to zero, then slowly up. Nothing, nothing, and then the <span class="ir">infrared</span> one starts to glow, with about 1.1 volts across it; then the <span class="red">red</span> one, at about 1.6; then the <span class="blue">blue</span>, at about 2.4. At 3 volts, a coin cell’s, all three are bright, with 1.26, 1.78 and 2.49 volts across them.</p>
+    <p>The chart shows why each waits for its own voltage. Once it’s glowing, every LED’s current rises tenfold for each 60 millivolts more, the same steep climb in all three, but each climbs in a different place: just under its own gap (the dotted line), measured in volts. Once an LED is on, extra battery volts barely change the voltage across it; they go to its resistor instead.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>That each colour needs its own voltage, and that it’s set by the gap.</p></div><div class="hides"><h4>Hides</h4><p>What the gap is, and where the light comes from.</p></div></div>
+  </section>
+
+  <section class="col" id="inside">
+    <p class="num-h">Picture 2</p>
+    <h2>Inside an LED</h2>
+    <p>Here’s the inside of one chip, its middle 2½ thousandths of a millimetre, drawn as an energy map: up is more energy for an electron. <span class="e">Electrons</span> move along the top band. The places where electrons are missing, called <span class="h">holes</span>, act like positive charges and move along the bottom one. Between the two bands is a gap: no electron can have an energy in it.</p>
+    <div class="pickrow" role="group" aria-label="Which LED to open up">
+      <button class="btn" data-pick="ir" aria-pressed="true">infrared</button>
+      <button class="btn" data-pick="red" aria-pressed="false">red</button>
+      <button class="btn" data-pick="blue" aria-pressed="false">blue</button>
+      <label class="chk"><input type="checkbox" id="walls" checked> with walls</label>
+    </div>
+    <figure class="fig">
+      <canvas id="figInside" aria-label="An energy map across the middle of an LED: the electrons' band on top, the holes' below, a thin layer in the middle where the electrons gather and drop across the gap, each drop giving off light"></canvas>
+      <figcaption>Energy across the middle 2.5 µm of the chip, in electronvolts per electron. The solid lines are the edges of the bands: the least energy an electron can have (top), and the most a hole’s missing electron can (bottom). The dashed lines are the levels the electrons and holes fill to; their split is the voltage across the LED. Shading: where electrons (above) and holes (below) are plentiful. Each <span class="e">blue dot</span> is about 120 million electrons, a sample of the simulation’s own, slowed down 300 million times: each wanders all over the layer faster than the eye could follow, so it’s drawn smoothed. A coloured stroke is an electron dropping into a hole and giving off light; grey rings, one meeting a hole at a flaw in the crystal, its energy left as heat.</figcaption>
+    </figure>
+    <p>The battery holds the two dashed levels apart. On the left, the n side, electrons are plentiful; on the right, the p side, holes are. Raise the voltage and the levels split further: electrons pour in from the left and holes from the right, into the thin layer in the middle. There they meet. An electron meeting a hole drops across the gap (the coloured stroke), and its energy leaves as a particle of light, a photon.</p>
+    <p>Why one colour? The electrons sit just above the floor of their band, within a few hundredths of an electronvolt (that spread is heat, the crystal’s jiggling), and the holes just under the ceiling of theirs. So every drop is nearly the same size, the gap, and so is every photon’s energy. A photon’s energy is its colour. Pick <i>red</i> or <i>blue</i>: the gap widens, each photon carries more energy, and it takes a bigger split, more volts, to push the electrons in. The volts go up with the gap, one for one.</p>
+    <p>Now take the walls away. The middle layer is there to trap the electrons: its crystal has a narrower gap than the crystal on either side, so the electrons that fall in can’t climb out, and neither can the holes. Without walls, the electrons don’t stay put. Most wander on through the p side and out at the far contact, long before they meet a hole: 2 in 100 make light, instead of 92. Layered crystals like this, called heterostructures, won Zhores Alferov and Herbert Kroemer a share of the 2000 Nobel Prize in physics, and nearly every LED and laser diode is built this way.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>Where the light comes from, why its energy is the gap, and what the walls are for.</p></div><div class="hides"><h4>Hides</h4><p>The light trapped inside the chip; and the crystals real red and blue LEDs are made of.</p></div></div>
+  </section>
+
+  <section class="col" id="colour">
+    <p class="num-h">Picture 3</p>
+    <h2>One colour each</h2>
+    <p>Here is each LED’s light, spread out by colour.</p>
+    <figure class="fig">
+      <canvas id="figColour" aria-label="The light of the three LEDs spread out by wavelength: three narrow peaks, at 863 nm in the infrared, 630 nm red and 460 nm blue"></canvas>
+      <figcaption>How many photons each LED gives off at each wavelength, scaled to the same height, from the textbook law for light from a band gap (van Roosbroeck and Shockley’s, with the absorption of a direct gap). The strip below is the colours our eyes see.</figcaption>
+    </figure>
+    <p>Each peak sits just above its gap, by half the crystal’s jiggle energy, and is about twice that wide: for the infrared LED, 28 nanometres. That’s why an LED looks like one pure colour, where a hot filament glows across the whole rainbow and beyond. (Real LEDs are a little wider than this, because their crystals are mixtures of elements and not quite even.)</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>That the gap sets the colour, and how narrow the colour is.</p></div><div class="hides"><h4>Hides</h4><p>Why it’s that narrow: the electrons’ spread above the band’s floor (picture 2).</p></div></div>
+  </section>
+
+  <section class="col" id="ledger">
+    <p class="num-h">Picture 4</p>
+    <h2>Where every 100 go</h2>
+    <p>Each electron that crosses the LED ends one of three ways: it meets a hole and makes light, it meets one at a flaw in the crystal and makes heat, or it runs on through to the far contact without meeting one. Here are the infrared LED’s electrons at 20 milliamps, with its walls and without.</p>
+    <figure class="fig">
+      <canvas id="figLedger" aria-label="Bars showing where every 100 electrons end up in a walled LED and in a plain junction: light, heat, or on through"></canvas>
+      <figcaption>Where every 100 electrons crossing the chip end, at 20 mA. Light here is light made inside the crystal; much of it is then trapped inside the chip by reflection, which real LEDs fight with shaped chips and textured surfaces.</figcaption>
+    </figure>
+    <p>With walls, 92 of every 100 electrons make light, and 8 make heat, at flaws. Without, the electrons are spread through a layer six times thicker, with nothing to stop them: 2 make light, and the other 98 run through. A plain junction like this was the first kind of LED (the first, in 1962, glowed in the infrared, of gallium arsenide, and had to be cooled to work well).</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>What the walls are worth.</p></div><div class="hides"><h4>Hides</h4><p>How the light gets out of the chip.</p></div></div>
+  </section>
+
+  <section class="col" id="so">
+    <p class="num-h">So</p>
+    <h2>A solar cell, backwards</h2>
+    <p>An LED is a solar cell run backwards. In a solar cell, light makes electrons and holes, and the junction sorts them to the two wires, as a voltage; electrons and holes meeting again inside are its loss. In an LED, a voltage pushes electrons and holes together, and their meeting is the whole point: in the right crystal, each meeting makes one photon, with the gap’s energy. So the gap sets the colour, and the gap sets the voltage it takes.</p>
+  </section>
+
+  <section class="col" id="more">
+    <p class="num-h">And while we’re here</p>
+    <h2>Other questions the pictures answer</h2>
+    <h3>Why don’t silicon chips glow?</h3>
+    <p>Silicon has a gap, and its electrons and holes meet all the time, but it almost never makes light. In silicon, the electrons at the bottom of their band and the holes at the top of theirs move with different momentum, and a photon can’t carry the difference away; the crystal has to jiggle at the same moment. So an electron among the holes of a doped silicon chip (10¹⁷ per cm³) waits about 2 milliseconds to give off light, where in gallium arsenide it waits 14 nanoseconds. Long before 2 milliseconds, a flaw in the crystal usually catches it, and its energy goes to heat: even in good silicon, fewer than 1 in 100 meetings make light.</p>
+    <h3>Why does a real blue LED need about 3 volts?</h3>
+    <p>This page’s blue LED runs at about 2.5 volts. Real ones need 2.8 to 3.3 volts at 20 milliamps. Their crystal, indium gallium nitride, has more resistance and more barriers inside than gallium arsenide, and those take volts too. Real red LEDs, of aluminium gallium indium phosphide, need 1.8 to 2.2, close to this page’s.</p>
+    <h3>Does the light carry more energy than the battery gives?</h3>
+    <p>In picture 2, the split (the voltage across the LED, 1.25 volts) is smaller than the gap (1.42). Each photon carries away about 1.46 electronvolts, while the battery gives each electron 1.25. The difference comes from heat: the electrons that climb into the light-making layer are the ones the crystal’s jiggling lifts there, and an LED with nothing wasted would cool itself a little as it glows. Real LEDs waste far more than this in resistance and in light trapped inside, so they warm up. Only at tiny currents has an LED been measured giving out more light than the electrical power put in (P. Santhanam and colleagues, <i>Phys. Rev. Lett.</i> <b>108</b>, 097403 (2012)).</p>
+    <h3>How does a white LED work?</h3>
+    <p>It’s a blue LED coated with a phosphor, a powder that absorbs some of the blue and gives off yellow. Blue and yellow together look white.</p>
+  </section>
+
+  <section class="col" id="sim">
+    <p class="num-h">Under the hood</p>
+    <h2>How an LED is simulated</h2>
+    <p>The rules alone are textbook physics: a diode’s current grows tenfold for each 60 millivolts at room temperature, and the voltage it needs follows the gap. This page checks against them, and against real LEDs. Its infrared LED takes 1.25 volts for 20 milliamps, as real gallium arsenide LEDs take about 1.2 to 1.3 before their resistance; its light peaks at 863 nm, as gallium arsenide’s does at room temperature (about 870); and 92 of every 100 of its electrons make light, as in good real ones.</p>
+    <p>What this simulation adds is where: the bands and levels across the chip, where the electrons gather, and where each one ends. It follows the electrons and holes through the chip as they diffuse and drift (the drift–diffusion model, the same rule that runs our <a href="/explorables/solar-heat/">solar panels</a>, <a href="/explorables/lithium-ion/">lithium-ion battery</a> and <a href="/explorables/nerves/">nerves</a>), and lets them meet two ways: by giving off light, at the measured rate for gallium arsenide, or at flaws in the crystal.</p>
+    <p>It leaves things out, to run live: the light, once made, simply leaves (none is trapped or reabsorbed); there’s no resistance in the chip or its contacts; the red and blue LEDs are gallium arsenide with only its gap changed, not the crystals real ones are made of; and the colours come from the textbook law, not the simulation.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="col about">
+    <h2>About this page</h2>
+    <p class="credit">Written and built by Mark Lundeberg’s Claude agent (Opus 5.5, an AI model made by Anthropic). The simulation runs on <a href="https://github.com/markblundeberg/driftlet">driftlet</a>, an open-source drift–diffusion library that I also wrote, with Mark Lundeberg steering the physics. Mark set the brief, and he answers for the result: corrections go to him.</p>
+    <ul>
+      <li>The LED: a 0.5 µm layer of p-type GaAs (10¹⁷ cm⁻³) between 1 µm walls of Al₀.₃Ga₀.₇As, n-type (10¹⁸ cm⁻³) on one side and p-type (10¹⁷ cm⁻³) on the other, a chip 10⁻³ cm² in area at 300 K. The conduction band steps 0.23 eV and the valence band 0.14 eV at each wall. Without walls: 1 µm of n-type GaAs on 3 µm of p-type.</li>
+      <li>GaAs: gap 1.424 eV, densities of states 4.7 × 10¹⁷ and 7.0 × 10¹⁸ cm⁻³, mobilities 8500 and 400 cm²/Vs (Sze, <i>Physics of Semiconductor Devices</i>); light from electron–hole meetings at B = 7.2 × 10⁻¹⁰ cm³/s (Ioffe Institute’s NSM archive); flaws with lifetimes of 100 ns. Al₀.₃Ga₀.₇As from the Ioffe archive’s fits. Silicon, for comparison: B = 4.73 × 10⁻¹⁵ cm³/s (Trupke et al., <i>J. Appl. Phys.</i> <b>94</b>, 4930 (2003)).</li>
+      <li>The light’s spectrum: van Roosbroeck and Shockley’s law with a direct gap’s absorption, peaking at E<sub>g</sub> + kT/2 and 1.8 kT wide (E. F. Schubert, <i>Light-Emitting Diodes</i>).</li>
+      <li>The check, and the numbers on this page, recompute from this page’s own model.</li>
+    </ul>
+  </div>
+</footer>
+
+<script type="module" src="app.js"></script>
+<script data-goatcounter="https://marklundeberg.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
