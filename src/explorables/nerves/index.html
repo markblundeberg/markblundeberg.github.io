@@ -206,19 +206,19 @@ h1 em { font-style: normal; color: var(--fat); }
       <canvas id="figWave" aria-label="Membrane voltage along each nerve"></canvas>
       <figcaption>The voltage across each nerve's membrane, along its length, on one scale: about −65 mV at rest, up to about +40 mV at the peak of the spike. Ticks along the bottom are the wrapped nerve's gaps.</figcaption>
     </figure>
-    <p>The <span class="bare">bare</span> nerve's spike is a short bump creeping along. The <span class="my">wrapped</span> one's is so fast that it's longer than the whole nerve: about seven gaps are rising at any moment, and each wrapped stretch just follows the gaps at its ends. Thicker wrapping charges faster still: slide the myelin up to 800 layers and it runs at about 70 m/s.</p>
+    <p>The <span class="bare">bare</span> nerve's spike is a short bump creeping along. The <span class="my">wrapped</span> one's is so fast that it's longer than the whole nerve: about seven gaps are rising at any moment, and each wrapped stretch just follows the gaps at its ends. Thicker wrapping charges faster still: slide the myelin up to 800 layers and it runs at about 70 m/s. (Here the wrapping takes no room. Real myelin does, so for a nerve of a given overall width there's a best balance, with the axon about 60 to 70% of the width: wrap more and the axon inside must be thinner.)</p>
     <div class="sh"><div class="shows"><h4>Shows</h4><p>The shape of the signal, and why the wrapped one is fast.</p></div><div class="hides"><h4>Hides</h4><p>The ions: what crosses the membrane, and what carries the current along the inside.</p></div></div>
   </section>
 
   <section class="col" id="ions">
     <p class="num-h">Picture 3</p>
     <h2>Who carries it</h2>
-    <p>So what actually travels down a nerve? Look inside the <span class="sq">squid's</span>, the widest. At the front of the spike, sodium channels open and <span class="na">Na⁺</span> rushes in from outside, which is what fires the membrane. Behind it, potassium channels open and <span class="k">K⁺</span> flows out, resetting it.</p>
+    <p>So what actually travels down a nerve? Look inside the <span class="sq">squid's</span>, the widest. At the front of the spike, sodium channels open and <span class="na">Na⁺</span> rushes in from outside, which is what fires the membrane. Behind it, the sodium channels shut themselves, and potassium channels open and <span class="k">K⁺</span> flows out, resetting it. The shut sodium channels stay shut for a moment, which is why the signal can't turn round and run backwards.</p>
     <figure class="fig">
       <canvas id="figIons" aria-label="Sodium crossing in and potassium crossing out of the membrane, and the current along the inside split by ion"></canvas>
       <figcaption>Top: ions crossing the membrane, Na⁺ in and K⁺ out, as arrows as large as their currents. Below: the current along the inside of the nerve, as a band as thick as that current, split by which ion carries it.</figcaption>
     </figure>
-    <p>But the current that runs along the inside of the nerve, charging the next patch, is mostly potassium: more than half of it. Inside a nerve, <span class="k">K⁺</span> is the most plentiful ion, so it carries most of whatever current flows; the large negative ions that can't leave the nerve carry much of the rest, moving the other way. Sodium starts the signal; potassium carries it along.</p>
+    <p>But the current that runs along the inside of the nerve, charging the next patch, is mostly potassium: more than half of it. Inside a nerve, <span class="k">K⁺</span> is the most plentiful ion, so it carries most of whatever current flows; the large negative ions that can't leave the nerve carry much of the rest, moving the other way. Sodium starts the signal; along the inside, potassium carries most of its current.</p>
     <p>And nothing goes far. The signal shifts each ion inside by less than a nanometre. In the same millisecond, each ion's own random jiggling moves it thousands of times further. What travels is the wave, the way a wave goes round a stadium while everyone stays in their seat.</p>
     <div class="sh"><div class="shows"><h4>Shows</h4><p>Which ions cross, where, and which ones carry the signal along.</p></div><div class="hides"><h4>Hides</h4><p>The outside of the nerve, which this simulation holds fixed.</p></div></div>
   </section>
