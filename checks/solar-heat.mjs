@@ -23,6 +23,7 @@ const out = {}, t0 = performance.now(), F = 96485.33212;
 let failed = 0;
 const expect = (name, value, lo, hi, why) => {
   const ok = value >= lo && value <= hi;
+  [lo, hi] = [lo, hi].map((v) => +v.toPrecision(3));
   if (!ok) failed++;
   console.error(`${ok ? 'PASS' : 'FAIL'} ${name} = ${+value.toPrecision(4)} (want ${lo} to ${hi}: ${why})`);
 };
@@ -124,6 +125,31 @@ expect('γ implied by dVoc/dT (Green 2003)', out.gamma_implied, 1.58, 3, "betwee
   out.panel_minus10 = { W: +M.panel.W(cold.Pmax).toFixed(1), over_25C: +(cold.Pmax / cool.Pmax).toFixed(3) };
   // a hot day: air at 30 °C, cells 25–30 °C above it
   out.power_over_25C = { C45: +(by(45).Pmax / c25.Pmax).toFixed(3), C55: +(by(55).Pmax / c25.Pmax).toFixed(3), C65: +(by(65).Pmax / c25.Pmax).toFixed(3), C75: +(by(75).Pmax / c25.Pmax).toFixed(3) };
+}
+// Picture 4, the whole cell: the dots (driftlet's particles(), sampling the cool panel at its best)
+// must recombine and leave at the back as the solution says, over 50 µs of the cell's time, to
+// Poisson's noise; and the page's numbers about it.
+{
+  const cool = new M.Panel(M.KELVIN + 25, 1), S = cool.operate(cool.Vmp).S;
+  let N = 0;
+  for (let g = 1; g < S.x.length; g++) if (S.region[g] === 1 && S.region[g - 1] === 1 && S.x[g] > 2e-6) N += ((S.c['e-'][g] + S.c['e-'][g - 1]) / 2) * (S.x[g] - S.x[g - 1]);
+  const weight = N / 250, sw = M.particles(S, { species: ['e-'], weight, cap: 150, cells: 120, random: ((seed) => () => ((seed = (seed * 16807) % 2147483647) / 2147483647))(7) });
+  const T = 50e-6, steps = 3000, nc = sw.cells.length;
+  let unmade = 0;
+  for (let k = 0; k < steps; k++) {
+    sw.step(T / steps);
+    for (const e of sw.events) if (e.kind === 'unmade') unmade++;
+  }
+  const rec = S.bulkReactions[0].regions, wantRec = ((rec[1] + rec[2]) * T) / weight, wantBack = (S.contacts.right.flux['e-'] * T) / weight, back = sw.crossed['e-'].up[nc] - sw.crossed['e-'].down[nc];
+  out.cell_dots = { dots: sw.dots.length, unmade, unmade_expected: +wantRec.toFixed(1), out_back: back, out_back_expected: +wantBack.toFixed(1) };
+  expect('picture 4: recombinations, over expected', unmade / wantRec, 1 - 3 / Math.sqrt(wantRec), 1 + 3 / Math.sqrt(wantRec), 'the dots sample the solution (3σ)');
+  expect('picture 4: lost at the back, over expected', back / wantBack, 1 - 3 / Math.sqrt(wantBack), 1 + 3 / Math.sqrt(wantBack), 'the dots sample the solution (3σ)');
+  out.freed_beyond_front_layer_per100 = +(100 - out.freed_in_front_layer_per100).toFixed(1);
+  const Dn = S.D['e-'][S.x.findIndex((x) => x > 50e-6)];
+  out.diffusion_length_mm = { C25: +(1e3 * Math.sqrt(Dn * M.TAU)).toFixed(2) };
+  const g = S.x.findIndex((x) => x > 50e-6);
+  out.holes_over_electrons_mid_base = Math.round(S.c['h+'][g] / S.c['e-'][g]);
+  out.absorption_depth_um = Object.fromEntries([450, 650, 950].map((nm) => [nm, +(1e6 / M.alphaAt(nm, cool.T)).toPrecision(2)]));
 }
 // The kit's checks at 25 °C, open circuit: where every pair goes, and a grid twice as fine.
 {

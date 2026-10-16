@@ -453,3 +453,102 @@ export function drawShare(f, st) {
   ctx.setLineDash([]);
   text(ctx, narrow ? 'delivered at 0 V' : 'delivered at 0 V, where nothing leaks back', b.x0 + 54 + 16, ky + 37, { size: 11, color: COL['ink-2'] });
 }
+
+// ---------- picture 4: the whole cell ----------
+
+// A cut through each panel's cell, front (left, where the light comes in) to back, with its
+// electrons as dots: driftlet's particles() sampling the panel's solution, each dot a fixed number
+// of electrons. Where they're plentiful (the front layer, and the edge of the junction) they're a
+// shaded sea. st.cells[i] = { swarm, flashes: [{ x, y, t, kind }] }; now is in seconds.
+export const SLOW = 1e6; // the picture runs a million times slower than life
+export function drawCell(f, st, now) {
+  const { ctx, VW, VH } = f, narrow = VW < 800;
+  TS = narrow ? 1.38 : 1.15;
+  ctx.clearRect(0, 0, VW, VH);
+  const n = st.panels.length, top = narrow ? 30 : 26, gap = narrow ? 64 : 46, bottom = narrow ? 44 : 40;
+  const slabH = (VH - top - bottom - gap * (n - 1)) / n, x0 = narrow ? 30 : 118, x1 = VW - (narrow ? 16 : 24);
+  st.panels.forEach((p, i) => {
+    const cell = st.cells?.[i];
+    if (!cell) return;
+    const { swarm } = cell, sol = p.op.sol, W = sol.x.at(-1), y0 = top + i * (slabH + gap), y1 = y0 + slabH;
+    const X = (x) => x0 + ((x1 - x0) * x) / W, col = tempColour(p.T);
+    // the label
+    if (narrow) text(ctx, `${fmt(p.T - KELVIN, 0)} °C panel`, x0, y0 - 10, { size: 22, weight: 800, family: 'display', color: col });
+    else {
+      text(ctx, `${fmt(p.T - KELVIN, 0)} °C`, 18, y0 + 30, { size: 28, weight: 800, family: 'display', color: col });
+      text(ctx, 'panel', 18, y0 + 50, { size: 11, color: COL.muted });
+      text(ctx, `${fmt(panel.V(p.op.V))} V`, 18, y0 + 70, { size: 11, color: COL['ink-2'] });
+    }
+    // the slab: the base, and the sunlight as it's absorbed (brighter where more is)
+    ctx.fillStyle = COL.surface;
+    ctx.fillRect(x0, y0, x1 - x0, slabH);
+    const g = ctx.createLinearGradient(x0, 0, x1, 0);
+    for (const u of [0, 0.02, 0.06, 0.15, 0.35, 0.7, 1]) g.addColorStop(u, `rgba(255, 209, 102, ${(0.16 * Math.exp(-u * 9) + 0.03 * Math.exp(-u * 1.5)).toFixed(3)})`);
+    ctx.fillStyle = g;
+    ctx.fillRect(x0, y0, x1 - x0, slabH);
+    ctx.strokeStyle = COL.line;
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x0, y0, x1 - x0, slabH);
+    // seas of electrons: the front layer, and wherever else there are too many to draw as dots
+    const sea = swarm.sea['e-'], m = swarm.expected('e-');
+    ctx.fillStyle = COL.e;
+    swarm.cells.forEach((cl, K) => {
+      if (!sea[K]) return;
+      ctx.globalAlpha = 0.25 + 0.6 * Math.min(1, Math.log10(Math.max(1, m[K])) / 8);
+      ctx.fillRect(X(cl.x0), y0, Math.max(3, X(cl.x1) - X(cl.x0)), slabH);
+    });
+    ctx.globalAlpha = 1;
+    // the back contact
+    ctx.fillStyle = COL.frame;
+    ctx.fillRect(x1 - 2, y0, 4, slabH);
+    // flashes: yellow where the light frees a pair, a pink ring where an electron meets a hole or
+    // is lost at the back
+    cell.flashes = cell.flashes.filter((fl) => now - fl.t < (fl.kind === 'made' ? 0.35 : 0.7));
+    for (const fl of cell.flashes) {
+      const age = (now - fl.t) / (fl.kind === 'made' ? 0.35 : 0.7), px = X(fl.x), py = y0 + fl.y * slabH;
+      ctx.globalAlpha = 1 - age;
+      if (fl.kind === 'made') {
+        ctx.fillStyle = COL.sun;
+        ctx.beginPath();
+        ctx.arc(px, py, 2.5 + 2 * (1 - age), 0, 2 * Math.PI);
+        ctx.fill();
+      } else {
+        ctx.strokeStyle = COL.leak;
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.arc(px, py, 3 + 12 * age, 0, 2 * Math.PI);
+        ctx.stroke();
+      }
+    }
+    ctx.globalAlpha = 1;
+    // the electrons, eased toward their cells so that hops read as motion
+    ctx.fillStyle = COL.e;
+    for (const d of swarm.dots) {
+      d.y ??= 0.06 + 0.88 * Math.random();
+      d.px = d.px === undefined ? d.x : d.px + (d.x - d.px) * 0.35;
+      ctx.beginPath();
+      ctx.arc(X(d.px), y0 + d.y * slabH, narrow ? 2.2 : 2.4, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+  });
+  // the depth scale, under the last slab
+  const yb = VH - bottom + 16, W = st.panels[0].op.sol.x.at(-1), X = (x) => x0 + ((x1 - x0) * x) / W;
+  text(ctx, 'front', x0, yb, { size: 11, color: COL.muted });
+  for (const um of narrow ? [50, 100] : [50, 100, 150]) text(ctx, `${um} µm`, X(um * 1e-6), yb, { size: 11, color: COL.muted, align: 'center' });
+  text(ctx, 'back', x1, yb, { size: 11, color: COL.muted, align: 'right' });
+  text(ctx, narrow ? 'a million times slower' : 'depth into the cell · slowed down a million times', x1, yb + 18, { size: 10.5, color: COL.muted, align: 'right' });
+}
+
+// Steps each cell's swarm on by dt seconds of the page (dt/SLOW of the cell's), and notes its
+// flashes: pairs made, electrons unmade (meeting a hole), and dots gone from the back layer (out
+// through the back contact; the contact's crossings aren't events).
+export function stepCells(st, dt, now) {
+  for (const cell of st.cells ?? []) {
+    const { swarm } = cell, W = swarm.cells.at(-1).x1, before = new Set(swarm.dots), lastX = new Map();
+    for (const d of swarm.dots) lastX.set(d, d.x);
+    swarm.step(dt / SLOW);
+    for (const e of swarm.events) if (e.kind === 'made' || e.kind === 'unmade') cell.flashes.push({ x: e.x, y: 0.06 + 0.88 * Math.random(), t: now, kind: e.kind });
+    const after = new Set(swarm.dots);
+    for (const d of before) if (!after.has(d) && lastX.get(d) > W - 1.5e-6) cell.flashes.push({ x: W, y: d.y ?? 0.5, t: now, kind: 'back' });
+  }
+}

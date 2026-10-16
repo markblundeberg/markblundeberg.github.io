@@ -4,7 +4,9 @@
 // A panel is 60 of these cells in series, so its voltage is 60 times one cell's.
 
 import { Device, FARADAY, GAS_CONSTANT, AVOGADRO } from 'https://cdn.jsdelivr.net/npm/driftlet@1.0.1/src/index.js';
-import { build, layer, ohmic } from 'https://cdn.jsdelivr.net/npm/driftlet@1.0.1/src/kit.js';
+import { build, layer, ohmic, particles } from 'https://cdn.jsdelivr.net/npm/driftlet@1.0.1/src/kit.js';
+
+export { particles }; // for the page's picture of the whole cell
 
 export const KELVIN = 273.15, CELLS = 60;
 const um = 1e-6, perCm3 = (n) => (n * 1e6) / AVOGADRO; // per cm³ → mol/m³

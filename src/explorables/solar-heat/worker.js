@@ -21,7 +21,7 @@ onmessage = ({ data: { id, T, sun, same } }) => {
       return {
         T: p.T,
         panel: { Jsc: p.Jsc, Voc: p.Voc, Vmp: p.Vmp, Pmax: p.Pmax, curve: p.curve, short: p.short },
-        op: { V: op.V, J: op.J, P: op.P, leak: op.leak, fates: op.fates, hill: op.hill, levels: levels(op.S) },
+        op: { V: op.V, J: op.J, P: op.P, leak: op.leak, fates: op.fates, hill: op.hill, levels: levels(op.S), sol: op.S },
       };
     }),
   });

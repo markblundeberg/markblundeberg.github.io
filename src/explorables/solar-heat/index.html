@@ -158,7 +158,7 @@ h1 em { font-style: normal; color: var(--hot); }
 <div class="wrap">
   <header class="top col">
     <div class="toprow"><nav class="crumbs" aria-label="Site"><a href="/">Mark Lundeberg</a><span>/</span><a href="/explorables/">Explorables</a></nav><button class="theme" id="theme" aria-label="Switch between night and day colours">☾ night</button></div>
-    <p class="kicker" style="margin-top:34px">A solar panel, three pictures</p>
+    <p class="kicker" style="margin-top:34px">A solar panel, four pictures</p>
     <h1>Why do solar panels hate <em>heat</em>?</h1>
     <p class="byline">Mark Lundeberg’s Claude Opus 5.5 agent <span>//</span> 16 October 2026</p>
     <p class="lede">Under the same sun, a solar panel on a hot roof makes about 15% less power than on a cold, bright day. It delivers just as many electrons, but each one carries less energy. The reason: heat lets electrons leak back over the panel's one-way hill, and to keep that leak small, a hot panel has to run at a lower voltage.</p>
@@ -215,6 +215,19 @@ h1 em { font-style: normal; color: var(--hot); }
     </figure>
     <p>The two rectangles are almost the same width; the <span class="hot">hot</span> one is shorter. On the right, the hot panel delivers 83 of every 100 pairs (an electron and its hole) that the light frees, and the cool one 85: just over one in a hundred fewer. In this simulated cell, about 12 more are lost whatever the voltage, mostly light absorbed in its bare front layer (real cells, with a treated front surface, lose fewer there, and lose some light to reflection instead): even at 0 volts, where nothing leaks back, each panel delivers 88. The rest leak back: 4 in the cool panel, 5 in the hot one. And the hot cell absorbs a little more of the sunlight, so its current is only half a percent lower. Heat costs the panel almost nothing in electrons, and 5 volts on every one.</p>
     <div class="sh"><div class="shows"><h4>Shows</h4><p>Power as count times height, and where every pair goes.</p></div><div class="hides"><h4>Hides</h4><p>Where in the cell the light frees its pairs.</p></div></div>
+  </section>
+
+  <section class="col" id="cell">
+    <p class="num-h">Picture 4</p>
+    <h2>The whole cell</h2>
+    <p>Picture 2 zoomed in on the hill, in the first thousandth of a millimetre. Here's the whole cell, 0.18 millimetres deep, slowed down a million times. Most of the electrons are freed out in the base: 84 of every 100. Blue light is absorbed in the first thousandth of a millimetre, red within a few, and infrared all through the base.</p>
+    <figure class="fig">
+      <canvas id="figCell" aria-label="A cut through each panel's cell from front to back, with the electrons freed by light wandering as dots until they reach the junction at the front or are lost"></canvas>
+      <figcaption>A cut through one cell in each panel, front (left, where the light comes in) to back. Each <span class="e">blue dot</span> is a fixed number of electrons, a sample of the simulation's own electron density, hopping at the rates it gives. Where electrons are too plentiful to draw (the front layer and the junction's edge, at the far left), they're shaded instead. A <span class="sun">yellow spark</span> is a pair freed by light; a <span class="leak">pink ring</span> is an electron meeting a hole, or lost at the back contact.</figcaption>
+    </figure>
+    <p>A freed electron has no field out in the base to push it anywhere. It just wanders at random, jostled by the atoms, until it happens to reach the edge of the junction at the front. There the hill sweeps it down into the front layer, and out round the circuit. Most of them make it, because an electron here can wander about 0.6 millimetres before it meets a hole: three times the cell's depth. A few meet a hole first, or wander to the back contact, and are lost.</p>
+    <p>The leak is here too, as a crowd. The higher the voltage, the lower the hill, and the more electrons come back over it from the front layer, so the base fills up. More of them then meet holes or reach the back. Tick <i>hold both at the left one's best voltage</i>: the hot panel's base floods with electrons, and every one of them is eventually lost inside.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>Where the light frees electrons, how they get out, and where they're lost.</p></div><div class="hides"><h4>Hides</h4><p>The holes, which outnumber the electrons in the base several hundred to one, and aren't drawn.</p></div></div>
   </section>
 
   <section class="col" id="so">

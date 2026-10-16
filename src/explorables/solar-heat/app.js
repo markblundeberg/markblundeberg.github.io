@@ -2,8 +2,8 @@
 // the sun and their voltage, and the pictures of them (pictures.js). Every picture is a canvas
 // drawn in its own virtual units and scaled to fit.
 
-import { KELVIN } from './model.js';
-import { COL, stepDots, drawPanels, drawHill, drawShare } from './pictures.js';
+import { KELVIN, particles } from './model.js';
+import { COL, stepDots, drawPanels, drawHill, drawShare, drawCell, stepCells } from './pictures.js';
 
 const $ = (id) => document.getElementById(id);
 const figs = [];
@@ -79,6 +79,19 @@ function ask() {
 worker.onmessage = ({ data }) => {
   busy = false;
   st.panels = data.panels;
+  // the whole cell's electrons as dots: each dot the same number of electrons in both panels, set
+  // by the first solution so that the left panel's base (beyond the junction's edge) holds about 250
+  if (!st.weight) {
+    const S = st.panels[0].op.sol;
+    let N = 0;
+    for (let g = 1; g < S.x.length; g++) if (S.region[g] === 1 && S.region[g - 1] === 1 && S.x[g] > 2e-6) N += ((S.c['e-'][g] + S.c['e-'][g - 1]) / 2) * (S.x[g] - S.x[g - 1]);
+    st.weight = N / 250;
+  }
+  st.panels.forEach((p, i) => {
+    st.cells ??= [];
+    if (st.cells[i]) st.cells[i].swarm.update(p.op.sol, { resample: true });
+    else st.cells[i] = { swarm: particles(p.op.sol, { species: ['e-'], weight: st.weight, cap: 150, cells: 120 }), flashes: [] };
+  });
   st.same = st.next.same;
   st.sun = st.next.sun;
   window.panels = st.panels; // (for the console)
@@ -95,12 +108,14 @@ figure($('figPanels'), [960, 720], [440, 640], (f) => drawPanels(f, st));
 const hillFig = figure($('figHill'), [960, 440], [440, 760], (f) => drawHill(f, st));
 const shareFig = figure($('figShare'), [960, 300], [440, 560], (f) => drawShare(f, st));
 hillFig.static = shareFig.static = true;
+const cellFig = figure($('figCell'), [960, 400], [440, 640], (f) => drawCell(f, st, performance.now() / 1000));
 let last;
 function frame(now) {
   const dt = Math.min(0.1, (now - (last ?? now)) / 1000);
   last = now;
   if (st.panels) {
     stepDots(st, dt);
+    if (cellFig.visible) stepCells(st, dt, now / 1000);
     for (const f of figs) if (f.visible && (!f.static || f.dirty)) { f.draw(f); f.dirty = false; }
   }
   requestAnimationFrame(frame);
