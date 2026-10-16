@@ -1,0 +1,39 @@
+{
+ "_note": "Loop points: play from loopStart, loop [loopStart, loopEnd) in seconds. Files are 44.1 kHz; the loop is periodic through the whole file, so a decoder that ignores the MP3 gapless header is seamless too.",
+ "hub": {
+  "file": "hub.mp3",
+  "sampleRate": 44100,
+  "loopStart": 0.2,
+  "loopEnd": 40.2,
+  "loopStartSample": 8820,
+  "loopLengthSamples": 1764000,
+  "fileSamples": 1781640,
+  "bpm": 108,
+  "meter": 3,
+  "bars": 24
+ },
+ "puzzle": {
+  "file": "puzzle.mp3",
+  "sampleRate": 44100,
+  "loopStart": 0.2,
+  "loopEnd": 36.2,
+  "loopStartSample": 8820,
+  "loopLengthSamples": 1587600,
+  "fileSamples": 1605240,
+  "bpm": 80,
+  "meter": 4,
+  "bars": 12
+ },
+ "trunk": {
+  "file": "trunk.mp3",
+  "sampleRate": 44100,
+  "loopStart": 0.2,
+  "loopEnd": 30.2,
+  "loopStartSample": 8820,
+  "loopLengthSamples": 1323000,
+  "fileSamples": 1340640,
+  "bpm": 72,
+  "meter": 3,
+  "bars": 12
+ }
+}
