@@ -70,13 +70,14 @@ export function stepPhotons(st, dt) {
 // about as our eyes judge brightness, by ratios).
 const glow = (light) => clamp((Math.log10(Math.max(1e-30, mA(light))) + 3) / 4.3, 0, 1);
 
+const clear = (hex) => `rgba(${[1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)).join(',')},0)`;
 function drawLED(ctx, x, y, s, key, light) {
   const g = glow(light), col = COL[key];
   // the glow
   if (g > 0) {
     const R = s * (1.2 + 2.2 * g), grad = ctx.createRadialGradient(x, y - s * 0.55, 0, x, y - s * 0.55, R);
     grad.addColorStop(0, col);
-    grad.addColorStop(1, 'transparent');
+    grad.addColorStop(1, clear(col)); // the same colour, faded (not to transparent black, which greys it on a light page)
     ctx.globalAlpha = 0.85 * g;
     ctx.fillStyle = grad;
     ctx.beginPath();
