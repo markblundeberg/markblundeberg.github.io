@@ -302,7 +302,7 @@ export function drawInside(f, st, now, { clear = true, ts } = {}) {
   if (clear) ctx.clearRect(0, 0, VW, VH);
   if (!I) return;
   const P = I.profile, key = I.key, col = COL[key], box = st.box;
-  const x0 = narrow ? 18 : 40, x1 = VW - (narrow ? 18 : 40), top = narrow ? 104 : 70, bot = VH - (narrow ? 60 : 64);
+  const x0 = narrow ? 18 : 40, x1 = VW - (narrow ? 18 : 40), top = narrow ? 104 : 30 + 30 * TS, bot = VH - (narrow ? 60 : 26 + 30 * TS);
   const W = P.x.at(-1), X = (x) => x0 + ((x1 - x0) * x) / W;
   // energy scale: the bands' range, plus room
   const hi = Math.max(...P.Ec) + 0.25, lo = Math.min(...P.Ev) - 0.25, Y = (E) => top + ((bot - top) * (hi - E)) / (hi - lo), px = (bot - top) / (hi - lo); // px per eV
@@ -320,8 +320,8 @@ export function drawInside(f, st, now, { clear = true, ts } = {}) {
     const sub = walled ? [`wider gap`, key === 'ir' ? 'GaAs' : `${nameOf(key).name} LED’s gap`, 'wider gap'][r] : '';
     const cx = (X(P.x[a]) + X(P.x[b])) / 2, mid = walled && r === 1;
     // on a phone the middle layer's label goes above the others
-    text(ctx, label, cx, top - (narrow && mid ? 62 : 40), { size: 11, color: mid ? COL.ink : COL.muted, align: 'center' });
-    if (sub && (!narrow || mid)) text(ctx, sub, cx, top - (narrow ? 46 : 24), { size: 10.5, color: COL.muted, align: 'center' });
+    text(ctx, label, cx, top - (narrow && mid ? 62 : 8 + 24 * TS), { size: 11, color: mid ? COL.ink : COL.muted, align: 'center' });
+    if (sub && (!narrow || mid)) text(ctx, sub, cx, top - (narrow ? 46 : 8 + 10 * TS), { size: 10.5, color: COL.muted, align: 'center' });
   });
   // the seas: electrons above the n side's band floor, holes below the valence top, shaded by how
   // many there are (per cm³, 10¹⁵ faint to 10¹⁸ full)
@@ -439,14 +439,15 @@ export function drawInside(f, st, now, { clear = true, ts } = {}) {
       ctx.closePath();
       ctx.fill();
     }
-    const y = atTop ? ya + (narrow ? 44 : 22) : yb - 26, align = left ? 'right' : 'left';
+    const y = atTop ? ya + (narrow ? 44 : 6 + 13 * TS) : yb - 6 - 16 * TS, align = left ? 'right' : 'left';
     text(ctx, label, xb + 7 * t, y, { size: narrow ? 12 : 13, weight: 600, color, align });
-    text(ctx, sub, xb + 7 * t, y + 15, { size: 10.5, color: COL.muted, align });
+    text(ctx, sub, xb + 7 * t, y + 13 * TS, { size: 10.5, color: COL.muted, align });
   };
   bracket(bx, Y(P.Ec[gm]), Y(P.Ev[gm]), col, `gap ${gap.toFixed(2)} eV`, narrow ? 'each photon' : 'each photon, just over', { atTop: true });
-  bracket(narrow ? x1 - 4 : bx + 150, Y(P.Efn[gm]), Y(P.Efp[gm]), COL.ink, `split ${split.toFixed(2)} V`, 'the voltage', { atTop: false, left: narrow });
+  const edge = narrow || TS > 1.5; // big text: the split's bracket at the right edge, labelled to its left
+  bracket(edge ? x1 - 4 : bx + 150, Y(P.Efn[gm]), Y(P.Efp[gm]), COL.ink, `split ${split.toFixed(2)} V`, 'the voltage', { atTop: false, left: edge });
   // the legend
-  const ly = VH - (narrow ? 36 : 34);
+  const ly = VH - (narrow ? 36 : 4 + 26 * TS);
   // a legend in runs of colour
   const runsOf = (parts, x, y) => {
     for (const [s, c] of parts) {
@@ -461,7 +462,7 @@ export function drawInside(f, st, now, { clear = true, ts } = {}) {
     runsOf([['● electrons', COL.e], ['  ▬ holes', COL.h], [` · ${SLOW / 1e6} million× slower`, COL.muted]], x0, ly + 18);
   } else {
     runsOf([['solid: the bands · dashed: the ', COL.muted], ['electrons’', COL.e], [' and ', COL.muted], ['holes’', COL.h], [' levels', COL.muted]], x0, ly);
-    runsOf([['● electrons', COL.e], [`, ${sci(PERDOT, 1)} each · `, COL.muted], ['shading: holes', COL.h], [` · ${slow}`, COL.muted]], x0, ly + 20);
+    runsOf([['● electrons', COL.e], [`, ${sci(PERDOT, 1)} each · `, COL.muted], ['shading: holes', COL.h], [TS > 1.5 ? '' : ` · ${slow}`, COL.muted]], x0, ly + 15 * TS);
   }
   // energy arrow
   if (!narrow) {

@@ -100,7 +100,7 @@ function draw(k) {
   ctx.globalAlpha = 0.6;
   ctx.fillRect(14, 0, 932, 500);
   ctx.globalAlpha = 1;
-  drawInside({ ctx, VW: 960, VH: 500 }, st, t, { clear: false });
+  drawInside({ ctx, VW: 960, VH: 500 }, st, t, { clear: false, ts: 1.75 });
   ctx.restore();
   // the headline
   ctx.textBaseline = 'alphabetic';
