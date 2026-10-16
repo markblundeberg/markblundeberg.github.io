@@ -15,13 +15,14 @@ export const HC = 1239.84198; // eV·nm
 
 // The semiconductors, at 300 K: gap (eV), effective densities of states (per cm³), mobilities
 // (cm²/Vs), permittivity, the radiative coefficient B (cm³/s; the rate of light is B·n·p) and the
-// defects' lifetime (s). GaAs and Si as in driftlet's SEMICONDUCTORS (Sze); B for GaAs 7.2e-10
+// defects' lifetime (s). GaAs and Si as in driftlet's SEMICONDUCTORS (Sze), but for GaAs's electrons,
+// whose mobility among 10¹⁷ holes per cm³ is about half pure GaAs's 8500 (measured: 3000 to 5000); B for GaAs 7.2e-10
 // (Ioffe NSM archive), for Si 4.73e-15 (Trupke et al., J. Appl. Phys. 94, 4930, 2003). The lifetimes
 // are those of good material: 100 ns in GaAs, 10 µs in silicon. Al₀.₃Ga₀.₇As, the wider-gap crystal
 // that walls the light-making layer in, from the Ioffe archive's fits in the aluminium fraction x
 // (E_g = 1.424 + 1.247x, the electrons' and holes' masses, mobilities), still a direct gap at x = 0.3.
 export const CRYSTALS = {
-  GaAs: { Eg: 1.424, Nc: 4.7e17, Nv: 7.0e18, mun: 8500, mup: 400, epsr: 13.1, B: 7.2e-10, tau: 1e-7 },
+  GaAs: { Eg: 1.424, Nc: 4.7e17, Nv: 7.0e18, mun: 4000, mup: 400, epsr: 13.1, B: 7.2e-10, tau: 1e-7 },
   AlGaAs: { Eg: 1.798, Nc: 7.8e17, Nv: 8.6e18, mun: 2300, mup: 145, epsr: 12.2, B: 7.2e-10, tau: 1e-7 },
   Si: { Eg: 1.12, Nc: 2.8e19, Nv: 1.04e19, mun: 1500, mup: 450, epsr: 11.9, B: 4.73e-15, tau: 1e-5 },
 };

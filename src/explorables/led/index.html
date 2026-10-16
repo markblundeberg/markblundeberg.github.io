@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>How does an LED make light?</title>
-<meta name="description" content="Three LEDs on one battery, simulated live in your browser: why each glows one colour, why a blue one needs more volts than a red one, and why real LEDs are built in layers.">
+<meta name="description" content="Three LEDs on one battery, simulated live in your browser: why each glows one colour, and why a blue one needs more volts than a red one.">
 <link rel="canonical" href="https://marklundeberg.com/explorables/led/">
 <meta property="og:type" content="article">
 <meta property="og:title" content="How does an LED make light?">
@@ -165,8 +165,8 @@ h1 em { font-style: normal; color: var(--red); }
     <p class="kicker" style="margin-top:34px">An LED, four pictures</p>
     <h1>How does an LED make <em>light</em>?</h1>
     <p class="byline">Mark Lundeberg’s Claude Opus 5.5 agent <span>//</span> 17 October 2026</p>
-    <p class="lede">An LED glows one colour, and a blue one needs more volts than a red one. Both have the same cause. Inside, the voltage pushes <span class="e">electrons</span> and <span class="h">holes</span> into one thin layer of crystal. Each time an electron meets a hole there, it drops across a gap in energy, and gives off a particle of light carrying almost exactly that much. The size of the gap sets the colour, and the voltage it takes.</p>
-    <p>Below are three LEDs on one battery, simulated live in your browser: an <span class="ir">infrared</span> one, of gallium arsenide (the crystal of a TV remote’s LED), and two with the gaps of a <span class="red">red</span> LED and a <span class="blue">blue</span> one. The bar that sticks to the top of the screen sets the battery.</p>
+    <p class="lede">An LED glows one colour, and a blue one needs more volts than a red one. Both have the same cause. Inside, the voltage pushes <span class="e">electrons</span> and <span class="h">holes</span> into one thin layer of crystal. Almost every time an electron meets a hole there, it drops across a gap in energy and gives off a particle of light carrying just about that much. The size of the gap sets the colour, and the voltage it takes.</p>
+    <p>Below are three LEDs on one battery, simulated live in your browser: an <span class="ir">infrared</span> one, of gallium arsenide (invisible to us, like a TV remote’s), and two with the gaps of a <span class="red">red</span> LED and a <span class="blue">blue</span> one. The bar that sticks to the top of the screen sets the battery.</p>
   </header>
 </div>
 
@@ -181,34 +181,31 @@ h1 em { font-style: normal; color: var(--red); }
   <section class="col" id="leds">
     <p class="num-h">Picture 1</p>
     <h2>Three LEDs</h2>
-    <p>Each LED is a chip of crystal a third of a millimetre across, wired to the battery through its own 50-ohm resistor, as real LEDs are: left to itself, an LED takes as much current as it’s offered, and burns out.</p>
+    <p>Each LED is a chip of crystal a third of a millimetre across, wired to the battery through its own 50-ohm resistor, as real LEDs are: a few tenths of a volt too much across a bare LED sends its current up a thousandfold, and it burns out.</p>
     <figure class="fig">
-      <canvas id="figLeds" aria-label="Three LEDs, infrared, red and blue, on one battery, each glowing as brightly as its current allows; below, each one's current at every voltage across it"></canvas>
-      <figcaption>Top: each LED, the light it gives off (a dot for about 8 × 10¹⁵ particles of light, in real time), and the voltage across it and the current through it. Bottom: each LED’s current at every voltage across it, on a scale where each line up is a hundred times more; the dot is where it runs, and the dotted lines mark each one’s gap.</figcaption>
+      <canvas id="figLeds" aria-label="Three LEDs, infrared, red and blue, on one battery, each glowing as brightly as its current allows, with the voltage across it and the current through it"></canvas>
+      <figcaption>Each LED, its light (the dots, in real time), the voltage across it and the current through it.</figcaption>
     </figure>
-    <p>Slide the battery down to zero, then slowly up. Nothing, nothing, and then the <span class="ir">infrared</span> one starts to glow, with about 1.1 volts across it; then the <span class="red">red</span> one, at about 1.6; then the <span class="blue">blue</span>, at about 2.4. At 3 volts, a coin cell’s, all three are bright, with 1.26, 1.78 and 2.49 volts across them.</p>
-    <p>The chart shows why each waits for its own voltage. Once it’s glowing, every LED’s current rises tenfold for each 60 millivolts more, the same steep climb in all three, but each climbs in a different place: just under its own gap (the dotted line), measured in volts. Once an LED is on, extra battery volts barely change the voltage across it; they go to its resistor instead.</p>
-    <div class="sh"><div class="shows"><h4>Shows</h4><p>That each colour needs its own voltage, and that it’s set by the gap.</p></div><div class="hides"><h4>Hides</h4><p>What the gap is, and where the light comes from.</p></div></div>
+    <p>Slide the battery down to zero, then slowly up. Nothing, nothing, and then the <span class="ir">infrared</span> one lights, with about 1.1 volts across it; then the <span class="red">red</span> one, at about 1.6; then the <span class="blue">blue</span>, at about 2.4. At 3 volts (two AA cells), all three are bright, with 1.26, 1.78 and 2.49 volts across them. Each colour waits for its own voltage. Why?</p>
   </section>
 
   <section class="col" id="inside">
     <p class="num-h">Picture 2</p>
     <h2>Inside an LED</h2>
-    <p>Here’s the inside of one chip, its middle 2½ thousandths of a millimetre, drawn as an energy map: up is more energy for an electron. <span class="e">Electrons</span> move along the top band. The places where electrons are missing, called <span class="h">holes</span>, act like positive charges and move along the bottom one. Between the two bands is a gap: no electron can have an energy in it.</p>
+    <p>Here’s the inside of one chip, its middle 2½ thousandths of a millimetre, drawn as an energy map: up is more energy for an electron. <span class="e">Electrons</span> move along the top band. The places where electrons are missing, called <span class="h">holes</span>, act like positive charges and move along the bottom one. Between the two bands is a gap: in a perfect crystal, no electron can have an energy in it.</p>
     <div class="pickrow" role="group" aria-label="Which LED to open up">
       <button class="btn" data-pick="ir" aria-pressed="true">infrared</button>
       <button class="btn" data-pick="red" aria-pressed="false">red</button>
       <button class="btn" data-pick="blue" aria-pressed="false">blue</button>
-      <label class="chk"><input type="checkbox" id="walls" checked> with walls</label>
     </div>
     <figure class="fig">
       <canvas id="figInside" aria-label="An energy map across the middle of an LED: the electrons' band on top, the holes' below, a thin layer in the middle where the electrons gather and drop across the gap, each drop giving off light"></canvas>
-      <figcaption>Energy across the middle 2.5 µm of the chip, in electronvolts per electron. The solid lines are the edges of the bands: the least energy an electron can have (top), and the most a hole’s missing electron can (bottom). The dashed lines are the levels the electrons and holes fill to; their split is the voltage across the LED. Shading: where electrons (above) and holes (below) are plentiful. Each <span class="e">blue dot</span> is about 120 million electrons, a sample of the simulation’s own, slowed down 300 million times: each wanders all over the layer faster than the eye could follow, so it’s drawn smoothed. A coloured stroke is an electron dropping into a hole and giving off light; grey rings, one meeting a hole at a flaw in the crystal, its energy left as heat.</figcaption>
+      <figcaption>Up is energy for an electron. Solid lines: the edges of the bands. Dashed: the electrons’ and holes’ levels; the gap between those two lines is the voltage. Each <span class="e">blue dot</span> is about 120 million electrons, slowed down 300 million times (they cross the layer faster than the eye could follow, so they’re drawn smoothed). A coloured stroke: a dot’s worth of electrons dropping into holes and giving off light. Grey rings: a dot’s worth meeting holes at flaws, giving heat.</figcaption>
     </figure>
-    <p>The battery holds the two dashed levels apart. On the left, the n side, electrons are plentiful; on the right, the p side, holes are. Raise the voltage and the levels split further: electrons pour in from the left and holes from the right, into the thin layer in the middle. There they meet. An electron meeting a hole drops across the gap (the coloured stroke), and its energy leaves as a particle of light, a photon.</p>
-    <p>Why one colour? The electrons sit just above the floor of their band, within a few hundredths of an electronvolt (that spread is heat, the crystal’s jiggling), and the holes just under the ceiling of theirs. So every drop is nearly the same size, the gap, and so is every photon’s energy. A photon’s energy is its colour. Pick <i>red</i> or <i>blue</i>: the gap widens, each photon carries more energy, and it takes a bigger split, more volts, to push the electrons in. The volts go up with the gap, one for one.</p>
-    <p>Now take the walls away. The middle layer is there to trap the electrons: its crystal has a narrower gap than the crystal on either side, so the electrons that fall in can’t climb out, and neither can the holes. Without walls, the electrons don’t stay put. Most wander on through the p side and out at the far contact, long before they meet a hole: 2 in 100 make light, instead of 92. Layered crystals like this, called heterostructures, won Zhores Alferov and Herbert Kroemer a share of the 2000 Nobel Prize in physics, and nearly every LED and laser diode is built this way.</p>
-    <div class="sh"><div class="shows"><h4>Shows</h4><p>Where the light comes from, why its energy is the gap, and what the walls are for.</p></div><div class="hides"><h4>Hides</h4><p>The light trapped inside the chip; and the crystals real red and blue LEDs are made of.</p></div></div>
+    <p>The dashed lines are the electrons’ and holes’ levels: how crowded each is, written as an energy. They aren’t places an electron sits, so they can run through the gap. The battery holds them apart: the gap between them is the voltage across the LED, because an electronvolt is the energy one electron gains crossing one volt. Raise the voltage and they split further: electrons crowd in from the n side on the left, holes from the p side on the right, into the thin layer in the middle. There they meet. An electron meeting a hole drops across the gap (the coloured stroke), and its energy leaves as a particle of light, a photon.</p>
+    <p>Why one colour? The electrons sit just above the floor of their band, within about kT, the crystal’s jiggle energy (0.026 electronvolts at room temperature), and the holes just under the ceiling of theirs. So every drop is nearly the same size, the gap, and so is every photon’s energy. A photon’s energy is its colour. Pick <i>red</i> or <i>blue</i>: the gap widens, each photon carries more energy, and it takes a bigger split, more volts, to crowd the electrons and holes in. A 2.7 electronvolt gap takes about 2.7 volts.</p>
+    <p>The middle layer is walled in. Its crystal has a narrower gap than the crystal on either side, so the step up on the right stops electrons going on into the p side, and the step on the left stops holes going on into the n side. Caught between the two, they meet: here 92 of every 100 electrons make light, and 8 meet holes at flaws and make heat. The walls’ wider gap also lets the light out without swallowing it. Layered crystals like this won Zhores Alferov and Herbert Kroemer a share of the 2000 Nobel Prize in physics, and nearly every LED and laser diode is built this way.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>Where the light comes from, why its energy is the gap, and why the volts follow the gap.</p></div><div class="hides"><h4>Hides</h4><p>The light trapped inside the chip; and the crystals real red and blue LEDs are made of.</p></div></div>
   </section>
 
   <section class="col" id="colour">
@@ -217,39 +214,37 @@ h1 em { font-style: normal; color: var(--red); }
     <p>Here is each LED’s light, spread out by colour.</p>
     <figure class="fig">
       <canvas id="figColour" aria-label="The light of the three LEDs spread out by wavelength: three narrow peaks, at 863 nm in the infrared, 630 nm red and 460 nm blue"></canvas>
-      <figcaption>How many photons each LED gives off at each wavelength, scaled to the same height, from the textbook law for light from a band gap (van Roosbroeck and Shockley’s, with the absorption of a direct gap). The strip below is the colours our eyes see.</figcaption>
+      <figcaption>How many photons each LED gives off at each wavelength, scaled to the same height, from the textbook law for light from a band gap. The strip below is the colours our eyes see.</figcaption>
     </figure>
-    <p>Each peak sits just above its gap, by half the crystal’s jiggle energy, and is about twice that wide: for the infrared LED, 28 nanometres. That’s why an LED looks like one pure colour, where a hot filament glows across the whole rainbow and beyond. (Real LEDs are a little wider than this, because their crystals are mixtures of elements and not quite even.)</p>
-    <div class="sh"><div class="shows"><h4>Shows</h4><p>That the gap sets the colour, and how narrow the colour is.</p></div><div class="hides"><h4>Hides</h4><p>Why it’s that narrow: the electrons’ spread above the band’s floor (picture 2).</p></div></div>
+    <p>Each peak sits just above its gap, by half the jiggle energy, kT, and is about twice kT wide: for the infrared LED, 28 nanometres. That’s why an LED looks like one pure colour, where a hot filament glows across the whole rainbow and beyond. (Real LEDs are wider than this, often two or three times: heavy doping blurs a crystal’s band edges, and the mixed crystals of red and blue LEDs aren’t quite even.)</p>
   </section>
 
-  <section class="col" id="ledger">
+  <section class="col" id="volts">
     <p class="num-h">Picture 4</p>
-    <h2>Where every 100 go</h2>
-    <p>Each electron that crosses the LED ends one of three ways: it meets a hole and makes light, it meets one at a flaw in the crystal and makes heat, or it runs on through to the far contact without meeting one. Here are the infrared LED’s electrons at 20 milliamps, with its walls and without.</p>
+    <h2>The volts</h2>
+    <p>Each LED’s current at every voltage across it, on a scale where each line up is a hundred times more.</p>
     <figure class="fig">
-      <canvas id="figLedger" aria-label="Bars showing where every 100 electrons end up in a walled LED and in a plain junction: light, heat, or on through"></canvas>
-      <figcaption>Where every 100 electrons crossing the chip end, at 20 mA. Light here is light made inside the crystal; much of it is then trapped inside the chip by reflection, which real LEDs fight with shaped chips and textured surfaces.</figcaption>
+      <canvas id="figCurves" aria-label="Each LED's current at every voltage across it, on a log scale: three steep curves, each just below its own gap"></canvas>
+      <figcaption>Each LED’s current at every voltage across it; the dot is where it runs, and the dotted line marks its gap, in volts.</figcaption>
     </figure>
-    <p>With walls, 92 of every 100 electrons make light, and 8 make heat, at flaws. Without, the electrons are spread through a layer six times thicker, with nothing to stop them: 2 make light, and the other 98 run through. A plain junction like this was the first kind of LED (the first, in 1962, glowed in the infrared, of gallium arsenide, and had to be cooled to work well).</p>
-    <div class="sh"><div class="shows"><h4>Shows</h4><p>What the walls are worth.</p></div><div class="hides"><h4>Hides</h4><p>How the light gets out of the chip.</p></div></div>
+    <p>All three curves have the same shape, shifted: once it’s lit, each LED’s current rises tenfold for every 60 millivolts more. Each climbs just under its own gap. That steep climb is why each seems to switch on at its own voltage, and why, once it’s on, the extra volts of the battery go to its resistor instead.</p>
   </section>
 
   <section class="col" id="so">
     <p class="num-h">So</p>
     <h2>A solar cell, backwards</h2>
-    <p>An LED is a solar cell run backwards. In a solar cell, light makes electrons and holes, and the junction sorts them to the two wires, as a voltage; electrons and holes meeting again inside are its loss. In an LED, a voltage pushes electrons and holes together, and their meeting is the whole point: in the right crystal, each meeting makes one photon, with the gap’s energy. So the gap sets the colour, and the gap sets the voltage it takes.</p>
+    <p>An LED is a solar cell run backwards. In a solar cell, light makes electrons and holes, and the junction sorts them to the two wires, as a voltage; electrons and holes meeting again inside are its loss. In an LED, a voltage pushes electrons and holes together, and their meeting is the whole point: in clean crystal, each meeting makes one photon, with the gap’s energy. So the gap sets the colour, and the gap sets the voltage it takes.</p>
   </section>
 
   <section class="col" id="more">
     <p class="num-h">And while we’re here</p>
     <h2>Other questions the pictures answer</h2>
     <h3>Why don’t silicon chips glow?</h3>
-    <p>Silicon has a gap, and its electrons and holes meet all the time, but it almost never makes light. In silicon, the electrons at the bottom of their band and the holes at the top of theirs move with different momentum, and a photon can’t carry the difference away; the crystal has to jiggle at the same moment. So an electron among the holes of a doped silicon chip (10¹⁷ per cm³) waits about 2 milliseconds to give off light, where in gallium arsenide it waits 14 nanoseconds. Long before 2 milliseconds, a flaw in the crystal usually catches it, and its energy goes to heat: even in good silicon, fewer than 1 in 100 meetings make light.</p>
+    <p>Silicon has a gap, and its electrons and holes meet all the time, but it almost never makes light. In silicon, the electrons at the bottom of their band and the holes at the top of theirs move with different momentum, and a photon can’t carry the difference away; the crystal has to jiggle at the same moment. So an electron among the holes of a doped silicon chip (10¹⁷ per cm³) waits about 2 milliseconds to give off light, where in gallium arsenide it waits 14 nanoseconds. Long before 2 milliseconds, a flaw in the crystal usually catches it, and its energy goes to heat: in ordinary silicon, fewer than 1 in 100 meetings make light (the best silicon LEDs ever made, with great care, only just pass 1 in 100).</p>
     <h3>Why does a real blue LED need about 3 volts?</h3>
-    <p>This page’s blue LED runs at about 2.5 volts. Real ones need 2.8 to 3.3 volts at 20 milliamps. Their crystal, indium gallium nitride, has more resistance and more barriers inside than gallium arsenide, and those take volts too. Real red LEDs, of aluminium gallium indium phosphide, need 1.8 to 2.2, close to this page’s.</p>
+    <p>This page’s blue LED runs at about 2.5 volts. Real ones need 2.8 to 3.3 volts at 20 milliamps: their p-type gallium nitride conducts poorly, and the layers around their light-making layers add barriers, and those take volts too. Real red LEDs need 1.8 to 2.2, close to this page’s.</p>
     <h3>Does the light carry more energy than the battery gives?</h3>
-    <p>In picture 2, the split (the voltage across the LED, 1.25 volts) is smaller than the gap (1.42). Each photon carries away about 1.46 electronvolts, while the battery gives each electron 1.25. The difference comes from heat: the electrons that climb into the light-making layer are the ones the crystal’s jiggling lifts there, and an LED with nothing wasted would cool itself a little as it glows. Real LEDs waste far more than this in resistance and in light trapped inside, so they warm up. Only at tiny currents has an LED been measured giving out more light than the electrical power put in (P. Santhanam and colleagues, <i>Phys. Rev. Lett.</i> <b>108</b>, 097403 (2012)).</p>
+    <p>In this simulation, yes. In picture 2, at 3 volts, the gap is 1.42 electronvolts but the split, the voltage, is 1.26: each photon carries away about 1.46 electronvolts, while the battery gives each electron 1.26. Even with 8 in 100 electrons lost to heat at flaws, this LED gives out more light energy than it takes in. The difference comes from heat: the electrons and holes that meet sit a little above their levels, put there by the crystal’s jiggling, so an LED with nothing else wasted cools itself a little as it glows. Real LEDs waste far more, in resistance and in light trapped inside, and they warm up. Only warmed, and at tiny currents, has an LED been measured giving out more light than the electrical power put in (P. Santhanam, D. J. Gray and R. J. Ram, <i>Phys. Rev. Lett.</i> <b>108</b>, 097403 (2012)).</p>
     <h3>How does a white LED work?</h3>
     <p>It’s a blue LED coated with a phosphor, a powder that absorbs some of the blue and gives off yellow. Blue and yellow together look white.</p>
   </section>
@@ -258,7 +253,7 @@ h1 em { font-style: normal; color: var(--red); }
     <p class="num-h">Under the hood</p>
     <h2>How an LED is simulated</h2>
     <p>The rules alone are textbook physics: a diode’s current grows tenfold for each 60 millivolts at room temperature, and the voltage it needs follows the gap. This page checks against them, and against real LEDs. Its infrared LED takes 1.25 volts for 20 milliamps, as real gallium arsenide LEDs take about 1.2 to 1.3 before their resistance; its light peaks at 863 nm, as gallium arsenide’s does at room temperature (about 870); and 92 of every 100 of its electrons make light, as in good real ones.</p>
-    <p>What this simulation adds is where: the bands and levels across the chip, where the electrons gather, and where each one ends. It follows the electrons and holes through the chip as they diffuse and drift (the drift–diffusion model, the same rule that runs our <a href="/explorables/solar-heat/">solar panels</a>, <a href="/explorables/lithium-ion/">lithium-ion battery</a> and <a href="/explorables/nerves/">nerves</a>), and lets them meet two ways: by giving off light, at the measured rate for gallium arsenide, or at flaws in the crystal.</p>
+    <p>What this simulation adds is where: the bands and levels across the chip, where the electrons gather, and how each one ends. It follows the electrons and holes through the chip as they diffuse and drift (the drift–diffusion model, the same rule that runs our <a href="/explorables/solar-heat/">solar panels</a>, <a href="/explorables/lithium-ion/">lithium-ion battery</a> and <a href="/explorables/nerves/">nerves</a>), and lets them meet two ways: by giving off light, at the standard rate for gallium arsenide, or at flaws in the crystal.</p>
     <p>It leaves things out, to run live: the light, once made, simply leaves (none is trapped or reabsorbed); there’s no resistance in the chip or its contacts; the red and blue LEDs are gallium arsenide with only its gap changed, not the crystals real ones are made of; and the colours come from the textbook law, not the simulation.</p>
   </section>
 </main>
@@ -268,8 +263,8 @@ h1 em { font-style: normal; color: var(--red); }
     <h2>About this page</h2>
     <p class="credit">Written and built by Mark Lundeberg’s Claude agent (Opus 5.5, an AI model made by Anthropic). The simulation runs on <a href="https://github.com/markblundeberg/driftlet">driftlet</a>, an open-source drift–diffusion library that I also wrote, with Mark Lundeberg steering the physics. Mark set the brief, and he answers for the result: corrections go to him.</p>
     <ul>
-      <li>The LED: a 0.5 µm layer of p-type GaAs (10¹⁷ cm⁻³) between 1 µm walls of Al₀.₃Ga₀.₇As, n-type (10¹⁸ cm⁻³) on one side and p-type (10¹⁷ cm⁻³) on the other, a chip 10⁻³ cm² in area at 300 K. The conduction band steps 0.23 eV and the valence band 0.14 eV at each wall. Without walls: 1 µm of n-type GaAs on 3 µm of p-type.</li>
-      <li>GaAs: gap 1.424 eV, densities of states 4.7 × 10¹⁷ and 7.0 × 10¹⁸ cm⁻³, mobilities 8500 and 400 cm²/Vs (Sze, <i>Physics of Semiconductor Devices</i>); light from electron–hole meetings at B = 7.2 × 10⁻¹⁰ cm³/s (Ioffe Institute’s NSM archive); flaws with lifetimes of 100 ns. Al₀.₃Ga₀.₇As from the Ioffe archive’s fits. Silicon, for comparison: B = 4.73 × 10⁻¹⁵ cm³/s (Trupke et al., <i>J. Appl. Phys.</i> <b>94</b>, 4930 (2003)).</li>
+      <li>The LED: a 0.5 µm layer of p-type GaAs (10¹⁷ cm⁻³) between 1 µm walls of Al₀.₃Ga₀.₇As, n-type (10¹⁸ cm⁻³) on one side and p-type (10¹⁷ cm⁻³) on the other, a chip 10⁻³ cm² in area at 300 K. The conduction band steps 0.23 eV and the valence band 0.14 eV at each wall (Ioffe Institute’s NSM archive).</li>
+      <li>GaAs: gap 1.424 eV, densities of states 4.7 × 10¹⁷ and 7.0 × 10¹⁸ cm⁻³ (Sze, <i>Physics of Semiconductor Devices</i>); mobilities 4000 (electrons among 10¹⁷ holes per cm³) and 400 cm²/Vs; light from electron–hole meetings at B = 7.2 × 10⁻¹⁰ cm³/s (the Ioffe archive, after Varshni); flaws with lifetimes of 100 ns. Al₀.₃Ga₀.₇As from the Ioffe archive’s fits. Silicon, for comparison: B = 4.73 × 10⁻¹⁵ cm³/s (Trupke et al., <i>J. Appl. Phys.</i> <b>94</b>, 4930 (2003)).</li>
       <li>The light’s spectrum: van Roosbroeck and Shockley’s law with a direct gap’s absorption, peaking at E<sub>g</sub> + kT/2 and 1.8 kT wide (E. F. Schubert, <i>Light-Emitting Diodes</i>).</li>
       <li>The check, and the numbers on this page, recompute from this page’s own model.</li>
     </ul>

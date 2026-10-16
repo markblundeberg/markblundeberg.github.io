@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>How does an LED make light? (film)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Martian+Mono:wdth,wght@87.5,400;87.5,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap">
+<style>html, body { margin: 0; background: #0d1015; } canvas { display: block; }</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1350"></canvas>
+<script type="module">
+// A 4:5 film of the explorable at /explorables/led/, drawn with its own pictures (pictures.js) from
+// its live LEDs (model.js): three LEDs on one battery, turned up from nothing to 3 volts, with the
+// inside of one of them below. The LEDs' light is in real time (each dot a fixed number of photons
+// a second throughout); the inside is slowed 300 million times throughout. Rendered one frame per
+// call of window.reel.frame(k) by driftlet's tools/film.js (--root at this site), with a soundtrack
+// made from what the dots did (sound.js).
+
+import { LED, LEDS, curve, operate, fates, profile, photonEnergy } from '../src/explorables/led/model.js';
+import { COL, stepPhotons, drawLeds, stepInside, drawInside } from '../src/explorables/led/pictures.js';
+import { render } from './sound.js';
+
+Object.assign(COL, {
+  bg: '#0d1015', surface: '#151a22', line: '#252c38', 'line-2': '#313a48', ink: '#ece7dc', 'ink-2': '#c4bfb4', muted: '#8a909b',
+  e: '#5aa7e8', h: '#f0793f', ir: '#c4577f', red: '#ff4a3d', blue: '#5277ff', heat: '#b49a7a', frame: '#7d8796',
+});
+const W = 1080, H = 1350, FPS = 30, ctx = document.getElementById('c').getContext('2d');
+const S = 1.125; // the pictures' 960-wide figures, scaled to the frame
+// The story, in seconds of film.
+const PHASES = [
+  { key: 'question', until: 3.2 },
+  { key: 'ramp', until: 12.0 },
+  { key: 'inside', until: 17.0 },
+  { key: 'blue', until: 21.6 },
+  { key: 'end', until: 25.0 },
+];
+const frames = Math.round(PHASES.at(-1).until * FPS);
+const phaseAt = (t) => PHASES.find((p) => t < p.until) ?? PHASES.at(-1);
+const ease = (u) => (u <= 0 ? 0 : u >= 1 ? 1 : u * u * (3 - 2 * u));
+// the battery: nothing, then up to 3 volts
+const battery = (t) => 3 * ease((t - 3.4) / 8.0);
+const pickAt = (t) => (t < 17.0 ? 'red' : 'blue');
+
+const leds = LEDS.map((l) => new LED({ kind: 'walled', dEg: l.dEg })), curves = leds.map(curve);
+// a separate copy of each, for the inside picture, so its state stays warm
+const insides = Object.fromEntries(LEDS.map((l) => [l.key, new LED({ kind: 'walled', dEg: l.dEg })]));
+let st, k0, heard, last;
+function reset() {
+  st = { VB: 0 };
+  heard = { photons: [], light: [], heat: [] };
+  last = { VB: -1, pick: null, insideVB: -1 };
+  k0 = -1;
+}
+reset();
+function update(t) {
+  const VB = battery(t), pick = pickAt(t);
+  if (VB !== last.VB) {
+    st.VB = VB;
+    st.leds = LEDS.map((l, i) => ({ key: l.key, V: operate(curves[i], VB), ...fates(leds[i].at(operate(curves[i], VB)).S) }));
+    last.VB = VB;
+  }
+  // the inside, re-solved when the battery has moved 20 mV (its dots are then re-placed), or the LED changes
+  if (pick !== last.pick || Math.abs(VB - last.insideVB) > 0.02) {
+    const i = LEDS.findIndex((l) => l.key === pick), V = operate(curves[i], VB), S = insides[pick].at(V).S;
+    st.inside = { key: pick, walls: true, V, ...fates(S), profile: profile(S) };
+    if (pick !== last.pick) st.box = null;
+    last.pick = pick;
+    last.insideVB = VB;
+  }
+}
+
+function caption(key) {
+  // (each short enough to read in its scene)
+  if (key === 'ramp') return ['Turn up the voltage', 'Infrared first, then red, then blue. Each colour waits for its own voltage.'];
+  if (key === 'inside') return ['Inside the red one', 'Electrons drop across a gap. Each drop gives off one particle of light, with the gap’s energy.'];
+  if (key === 'blue') return ['Bigger gap, bluer light', 'A bigger drop: bluer light, and more volts to push the electrons in.'];
+  return ['Simulated, not drawn', 'Every frame is computed from a physical model. Try it: link in reply.'];
+}
+function wrap(text, width) {
+  const words = text.split(' '), lines = [];
+  let line = '';
+  for (const w of words) { const t = line ? `${line} ${w}` : w; if (ctx.measureText(t).width > width && line) { lines.push(line); line = w; } else line = t; }
+  if (line) lines.push(line);
+  return lines;
+}
+
+function draw(k) {
+  const t = k / FPS, ph = phaseAt(t), key = ph.key, start = PHASES[PHASES.indexOf(ph) - 1]?.until ?? 0, j = (t - start) * FPS;
+  const g = ctx.createRadialGradient(W * 0.5, -80, 50, W * 0.5, -80, 1100);
+  g.addColorStop(0, '#1a1c22');
+  g.addColorStop(1, COL.bg);
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+  // the LEDs, and the inside of one
+  ctx.save(); ctx.translate(0, 236); ctx.scale(S, S);
+  drawLeds({ ctx, VW: 960, VH: 640 }, st, { clear: false, noChart: true });
+  ctx.restore();
+  ctx.save(); ctx.translate(0, 700); ctx.scale(S, S);
+  ctx.fillStyle = COL.surface;
+  ctx.globalAlpha = 0.6;
+  ctx.fillRect(14, 0, 932, 500);
+  ctx.globalAlpha = 1;
+  drawInside({ ctx, VW: 960, VH: 500 }, st, t, { clear: false });
+  ctx.restore();
+  // the headline
+  ctx.textBaseline = 'alphabetic';
+  ctx.textAlign = 'left';
+  if (key === 'question') {
+    ctx.globalAlpha = Math.min(1, j / 6);
+    ctx.fillStyle = COL.red;
+    ctx.font = '600 22px "Martian Mono", monospace';
+    ctx.fillText('THREE LEDS, SIMULATED', 64, 78);
+    ctx.font = '900 96px "Big Shoulders Display", sans-serif';
+    ctx.fillStyle = COL.ink;
+    ctx.fillText('HOW DOES AN LED', 60, 170);
+    const a = 'MAKE ', b = 'LIGHT', c = '?';
+    ctx.fillText(a, 60, 258);
+    const x = 60 + ctx.measureText(a).width;
+    ctx.fillStyle = COL.red; ctx.fillText(b, x, 258);
+    ctx.fillStyle = COL.ink; ctx.fillText(c, x + ctx.measureText(b).width, 258);
+    ctx.globalAlpha = 1;
+  } else {
+    const [head, sub] = caption(key);
+    ctx.globalAlpha = Math.min(1, j / 8);
+    ctx.fillStyle = key === 'inside' ? COL.red : key === 'blue' ? COL.blue : COL.ink;
+    ctx.font = '900 76px "Big Shoulders Display", sans-serif';
+    ctx.fillText(head.toUpperCase(), 60, 122);
+    ctx.fillStyle = COL['ink-2'];
+    ctx.font = '400 31px "Newsreader", serif';
+    wrap(sub, 960).forEach((s, i) => ctx.fillText(s, 62, 176 + 40 * i));
+    if (key === 'end') {
+      ctx.fillStyle = COL.red;
+      ctx.font = '600 22px "Martian Mono", monospace';
+      ctx.fillText('MADE BY MARK LUNDEBERG & CLAUDE · ON DRIFTLET', 64, 258);
+    }
+    ctx.globalAlpha = 1;
+  }
+  // the footer
+  ctx.font = '400 24px "Martian Mono", monospace';
+  ctx.fillStyle = COL.muted;
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'left';
+  ctx.fillText(key === 'end' ? 'GaAs, and two more gaps · 50 Ω each' : 'light in real time · inside, 300 million× slower', 64, 1308);
+  ctx.textAlign = 'right';
+  ctx.fillStyle = key === 'end' ? COL.ink : COL.muted;
+  ctx.font = `${key === 'end' ? 600 : 400} 22px "Martian Mono", monospace`;
+  ctx.fillText(key === 'end' ? 'marklundeberg.com' : 'driftlet', W - 60, 1308);
+}
+// Frame k: the LEDs move on to it (frames are taken in order), the dots are stepped, what they did
+// is noted for the soundtrack, and it's drawn.
+function frame(k) {
+  if (k < k0) reset();
+  for (let i = k0 + 1; i <= k; i++) {
+    const t = i / FPS;
+    update(t);
+    if (i === 0) continue;
+    for (const e of stepPhotons(st, 1 / FPS)) heard.photons.push({ t, i: e.i });
+    for (const e of stepInside(st, 1 / FPS, t)) if (e.kind !== 'through') heard[e.kind].push({ t, key: st.inside.key });
+  }
+  k0 = k;
+  draw(k);
+}
+
+// The soundtrack: from what the dots did (so after the frames have all been taken, in order).
+function audio() {
+  // Only sounds with an event behind them. A soft tok as each dot of light leaves an LED, its pitch
+  // in proportion to the light's frequency (infrared lowest, blue highest), on that LED's side; a
+  // brighter plip as an electron inside drops across the gap and gives off light, and a low bonk as
+  // one gives its energy to heat instead.
+  console.log(`sound: ${heard.photons.length} photon dots, ${heard.light.length} light inside, ${heard.heat.length} heat`);
+  const f = (key) => 260 * (photonEnergy(LEDS.find((l) => l.key === key).Eg) / photonEnergy(LEDS[0].Eg));
+  return render({
+    seconds: frames / FPS,
+    master: 1.2,
+    toks: heard.photons.map((d) => ({ t: d.t, f: f(LEDS[d.i].key), pan: [-0.5, 0, 0.5][d.i], gain: 0.03 })),
+    drops: heard.light.map((d) => ({ t: d.t, f: 2 * f(d.key), pan: 0, gain: 0.07 })),
+    bonks: heard.heat.map((d) => ({ t: d.t, f: 140, pan: 0, gain: 0.1 })),
+  });
+}
+await document.fonts.load('900 96px "Big Shoulders Display"');
+await document.fonts.load('400 31px "Newsreader"');
+await document.fonts.load('600 22px "Martian Mono"');
+window.reel = { frames, fps: FPS, frame, audio };
+frame(0);
+</script>
+</body>
+</html>

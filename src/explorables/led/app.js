@@ -2,7 +2,7 @@
 // them, and the pictures of them (pictures.js). Every picture is a canvas drawn in its own virtual
 // units and scaled to fit.
 
-import { COL, stepPhotons, drawLeds, stepInside, drawInside, drawColour, drawLedger } from './pictures.js';
+import { COL, stepPhotons, drawLeds, drawCurves, stepInside, drawInside, drawColour } from './pictures.js';
 
 const $ = (id) => document.getElementById(id);
 const figs = [];
@@ -51,13 +51,12 @@ function fit(f) {
 addEventListener('resize', () => { for (const f of figs) fit(f); });
 
 // ---------- the battery, and which LED is opened up ----------
-const vb = $('vb'), walls = $('walls'), picks = [...document.querySelectorAll('[data-pick]')];
+const vb = $('vb'), picks = [...document.querySelectorAll('[data-pick]')];
 const st = { pick: 'ir' };
 {
   const q = new URLSearchParams(location.search);
   if (q.has('vb')) vb.value = q.get('vb');
   if (q.has('pick')) st.pick = q.get('pick');
-  if (q.has('plain')) walls.checked = false;
 }
 const showBar = () => ($('vbOut').textContent = `${(+vb.value).toFixed(2)} V`);
 showBar();
@@ -70,11 +69,11 @@ function ask() {
   if (busy) return void (pending = true);
   busy = true;
   pending = false;
-  worker.postMessage({ id: ++asked, VB: +vb.value, pick: st.pick, walls: walls.checked });
+  worker.postMessage({ id: ++asked, VB: +vb.value, pick: st.pick });
 }
 worker.onmessage = ({ data }) => {
   busy = false;
-  Object.assign(st, { VB: data.VB, leds: data.leds, curves: data.curves, inside: data.inside, ledger: data.ledger });
+  Object.assign(st, { VB: data.VB, leds: data.leds, curves: data.curves, inside: data.inside });
   window.leds = data; // (for the console)
   $('status').textContent = '';
   for (const f of figs) f.dirty = true;
@@ -82,15 +81,14 @@ worker.onmessage = ({ data }) => {
 };
 worker.onerror = (e) => ($('status').textContent = `the simulation failed to load: ${e.message ?? e}`);
 vb.addEventListener('input', () => { showBar(); ask(); });
-walls.addEventListener('change', ask);
 for (const b of picks) b.addEventListener('click', () => { st.pick = b.dataset.pick; showPick(); ask(); });
 
 // ---------- run ----------
-figure($('figLeds'), [960, 640], [440, 820], (f) => drawLeds(f, st));
+figure($('figLeds'), [960, 380], [440, 400], (f) => drawLeds(f, st, { noChart: true }));
 figure($('figInside'), [960, 500], [440, 640], (f) => drawInside(f, st, performance.now() / 1000));
 const colour = figure($('figColour'), [960, 300], [440, 420], (f) => drawColour(f));
-const ledger = figure($('figLedger'), [960, 180], [440, 290], (f) => drawLedger(f, st));
-colour.static = ledger.static = true;
+const curves = figure($('figCurves'), [960, 420], [440, 520], (f) => drawCurves(f, st));
+colour.static = curves.static = true;
 let last;
 function frame(now) {
   const dt = Math.min(0.1, (now - (last ?? now)) / 1000);

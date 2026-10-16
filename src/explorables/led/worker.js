@@ -1,30 +1,26 @@
 // The page's LEDs, solved off the page's thread. On the first message it measures each LED's
-// current at every voltage and where every 100 electrons go in two diodes; then, for a battery
-// voltage, it finds where each LED runs, and solves the one the inside picture shows (with its
-// walls or without) exactly there.
+// current at every voltage; then, for a battery voltage, it finds where each LED runs, and solves
+// the one the inside picture shows exactly there.
 
-import { LED, LEDS, CHIP, curve, operate, fates, profile } from './model.js';
+import { LED, LEDS, curve, operate, fates, profile } from './model.js';
 
 const leds = {}, curves = {};
-const get = (key, walls) => {
-  const id = `${key}${walls ? '' : '-plain'}`;
-  if (!leds[id]) {
-    leds[id] = new LED({ kind: walls ? 'walled' : 'plain', dEg: LEDS.find((l) => l.key === key).dEg });
-    curves[id] = curve(leds[id]);
+const get = (key) => {
+  if (!leds[key]) {
+    leds[key] = new LED({ kind: 'walled', dEg: LEDS.find((l) => l.key === key).dEg });
+    curves[key] = curve(leds[key]);
   }
-  return { led: leds[id], c: curves[id] };
+  return { led: leds[key], c: curves[key] };
 };
-let ledger;
-onmessage = ({ data: { id, VB, pick, walls } }) => {
-  // where every 100 electrons go, at 20 mA: a walled GaAs LED, and a plain GaAs junction
-  ledger ??= [
-    { name: 'GaAs, walled', f: fates(new LED({ kind: 'walled' }).drive(20 / (CHIP * 1e3)).S) },
-    { name: 'GaAs, plain', f: fates(new LED({ kind: 'plain' }).drive(20 / (CHIP * 1e3)).S) },
-  ];
+onmessage = ({ data: { id, VB, pick } }) => {
   const out = LEDS.map((l) => {
-    const { led, c } = get(l.key, true), V = operate(c, VB), S = led.at(V).S;
-    return { key: l.key, V, ...fates(S) };
+    const { led, c } = get(l.key), V = operate(c, VB);
+    return { key: l.key, V, ...fates(led.at(V).S) };
   });
-  const { led, c } = get(pick, walls), V = operate(c, VB), S = led.at(V).S;
-  postMessage({ id, VB, leds: out, curves: LEDS.map((l) => get(l.key, true).c), inside: { key: pick, walls, V, ...fates(S), profile: profile(S) }, ledger });
+  // the inside: its own copy, so the three above stay where they are
+  const { c } = get(pick), V = operate(c, VB);
+  inside[pick] ??= new LED({ kind: 'walled', dEg: LEDS.find((l) => l.key === pick).dEg });
+  const S = inside[pick].at(V).S;
+  postMessage({ id, VB, leds: out, curves: LEDS.map((l) => get(l.key).c), inside: { key: pick, walls: true, V, ...fates(S), profile: profile(S) } });
 };
+const inside = {};

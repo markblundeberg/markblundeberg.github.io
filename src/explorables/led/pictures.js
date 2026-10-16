@@ -4,7 +4,6 @@
 //   st.leds     each LED where it runs: { key, V, J, light, heat, through } (A/cm²)
 //   st.curves   each LED's current at every voltage: { V, logJ }
 //   st.inside   the LED the inside picture shows: as st.leds, plus { walls, profile }
-//   st.ledger   where every 100 electrons go, in three diodes
 
 import { LEDS, CHIP, VT, HC, photonEnergy, spectrum } from './model.js';
 
@@ -67,9 +66,9 @@ export function stepPhotons(st, dt) {
   return events;
 }
 
-// The glow's strength: nothing below a nanoamp's worth of light, full at 20 mA's (seven decades,
+// The glow's strength: nothing below a microamp's worth of light, full at 20 mA's (four decades,
 // about as our eyes judge brightness, by ratios).
-const glow = (light) => clamp((Math.log10(Math.max(1e-30, mA(light))) + 6) / 7.3, 0, 1);
+const glow = (light) => clamp((Math.log10(Math.max(1e-30, mA(light))) + 3) / 4.3, 0, 1);
 
 function drawLED(ctx, x, y, s, key, light) {
   const g = glow(light), col = COL[key];
@@ -156,7 +155,7 @@ export function drawLeds(f, st, { clear = true, noChart = false } = {}) {
     drawLED(ctx, x, L.ledY, L.s, l.key, l.light);
     const y = L.ledY + L.s + 30;
     text(ctx, spec.name, x, y, { size: narrow ? 24 : 28, weight: 800, family: 'display', color: col, align: 'center' });
-    text(ctx, l.key === 'ir' && !narrow ? 'GaAs · 863 nm, unseen' : `${spec.nm.toFixed(0)} nm`, x, y + 18, { size: 11, color: COL.muted, align: 'center' });
+    text(ctx, l.key === 'ir' ? (narrow ? '863 nm · unseen' : 'GaAs · 863 nm, unseen') : `${spec.nm.toFixed(0)} nm`, x, y + 18, { size: 11, color: COL.muted, align: 'center' });
     text(ctx, `${fmt(l.V, 2)} V`, x, y + 42, { size: narrow ? 13 : 14, weight: 600, color: COL.ink, align: 'center' });
     text(ctx, current(l.J), x, y + 60, { size: 11, color: COL['ink-2'], align: 'center' });
   });
@@ -164,8 +163,14 @@ export function drawLeds(f, st, { clear = true, noChart = false } = {}) {
 }
 
 // Each LED's current at every voltage across it (log scale), the dot where it runs, and its gap.
+export function drawCurves(f, st) {
+  const { ctx, VW, VH } = f, narrow = VW < 800;
+  TS = narrow ? 1.38 : 1.35;
+  ctx.clearRect(0, 0, VW, VH);
+  drawIV(ctx, st, narrow ? { x0: 78, x1: VW - 18, y0: 34, y1: VH - 64 } : { x0: 120, x1: VW - 30, y0: 40, y1: VH - 64 }, narrow);
+}
 function drawIV(ctx, st, c, narrow) {
-  if (!st.curves) return;
+  if (!st.curves || !st.leds) return;
   const VMAX = 3, LO = -6, HI = 2; // log₁₀ mA
   const X = (v) => c.x0 + ((c.x1 - c.x0) * v) / VMAX, Y = (lg) => c.y1 - ((c.y1 - c.y0) * (lg - LO)) / (HI - LO);
   ctx.strokeStyle = COL.line;
@@ -175,11 +180,11 @@ function drawIV(ctx, st, c, narrow) {
     ctx.moveTo(c.x0, Y(lg));
     ctx.lineTo(c.x1, Y(lg));
     ctx.stroke();
-    text(ctx, lg >= 0 ? `${10 ** lg} mA` : lg >= -3 ? `${10 ** (lg + 3)} µA` : `${10 ** (lg + 6)} nA`, c.x0 - 8, Y(lg) + 4, { size: 10.5, color: COL.muted, align: 'right' });
+    text(ctx, lg >= 0 ? `${10 ** lg} mA` : lg >= -3 ? `${10 ** (lg + 3)} µA` : `${10 ** (lg + 6)} nA`, c.x0 - 8, Y(lg) + 5, { size: 10.5, color: COL.muted, align: 'right' });
   }
-  for (let v = 0; v <= VMAX; v += 0.5) text(ctx, `${v}`, X(v), c.y1 + 18, { size: 10.5, color: COL.muted, align: 'center' });
-  text(ctx, 'volts across the LED', c.x1, c.y1 + 36, { size: 11, color: COL.muted, align: 'right' });
-  text(ctx, 'current through it', c.x0, c.y0 - 12, { size: 11, color: COL.muted });
+  for (let v = 0; v <= VMAX; v += narrow ? 1 : 0.5) text(ctx, `${v}`, X(v), c.y1 + 20, { size: 10.5, color: COL.muted, align: 'center' });
+  text(ctx, 'volts across the LED', c.x1, c.y1 + 44, { size: 11, color: COL.muted, align: 'right' });
+  text(ctx, 'current through it', c.x0, c.y0 - 14, { size: 11, color: COL.muted });
   ctx.save();
   ctx.beginPath();
   ctx.rect(c.x0, c.y0 - 4, c.x1 - c.x0, c.y1 - c.y0 + 8);
@@ -204,7 +209,7 @@ function drawIV(ctx, st, c, narrow) {
     ctx.lineTo(X(Eg), c.y0);
     ctx.stroke();
     ctx.setLineDash([]);
-    if (!narrow || i === 0) text(ctx, narrow ? 'gaps' : `gap ${Eg.toFixed(2)} eV`, X(Eg) + 4, c.y0 + 12 + (narrow ? 0 : 0), { size: 10.5, color: COL[key] });
+    text(ctx, narrow ? `${Eg.toFixed(2)}` : `gap ${Eg.toFixed(2)} eV`, X(Eg) + 4, c.y1 - 10, { size: 10.5, color: COL[key] });
     const lg = Math.log10(Math.max(1e-30, mA(l.J)));
     if (lg > LO) {
       ctx.fillStyle = COL[key];
@@ -291,13 +296,13 @@ export function stepInside(st, dt, now) {
 }
 const newDot = (p, x, fresh = false) => ({ x, target: p.n.pick(), e: -Math.log(1 - Math.random()), fresh });
 
-export function drawInside(f, st, now) {
+export function drawInside(f, st, now, { clear = true, ts } = {}) {
   const { ctx, VW, VH } = f, narrow = VW < 800, I = st.inside;
-  TS = narrow ? 1.38 : 1.1;
-  ctx.clearRect(0, 0, VW, VH);
+  TS = ts ?? (narrow ? 1.38 : 1.3);
+  if (clear) ctx.clearRect(0, 0, VW, VH);
   if (!I) return;
   const P = I.profile, key = I.key, col = COL[key], box = st.box;
-  const x0 = narrow ? 18 : 40, x1 = VW - (narrow ? 18 : 40), top = narrow ? 104 : 64, bot = VH - (narrow ? 60 : 50);
+  const x0 = narrow ? 18 : 40, x1 = VW - (narrow ? 18 : 40), top = narrow ? 104 : 70, bot = VH - (narrow ? 60 : 64);
   const W = P.x.at(-1), X = (x) => x0 + ((x1 - x0) * x) / W;
   // energy scale: the bands' range, plus room
   const hi = Math.max(...P.Ec) + 0.25, lo = Math.min(...P.Ev) - 0.25, Y = (E) => top + ((bot - top) * (hi - E)) / (hi - lo), px = (bot - top) / (hi - lo); // px per eV
@@ -312,7 +317,7 @@ export function drawInside(f, st, now) {
     ctx.fillRect(X(P.x[a]), top - 30, X(P.x[b]) - X(P.x[a]), bot - top + 50);
     ctx.globalAlpha = 1;
     const label = walled ? ['n side', narrow ? 'light-making layer' : 'the light-making layer', 'p side'][r] : ['n side', 'p side'][r];
-    const sub = walled ? [`wider gap`, key === 'ir' ? 'GaAs' : `gap ${nameOf(key).Eg.toFixed(2)} eV`, 'wider gap'][r] : '';
+    const sub = walled ? [`wider gap`, key === 'ir' ? 'GaAs' : `${nameOf(key).name} LED’s gap`, 'wider gap'][r] : '';
     const cx = (X(P.x[a]) + X(P.x[b])) / 2, mid = walled && r === 1;
     // on a phone the middle layer's label goes above the others
     text(ctx, label, cx, top - (narrow && mid ? 62 : 40), { size: 11, color: mid ? COL.ink : COL.muted, align: 'center' });
@@ -356,6 +361,11 @@ export function drawInside(f, st, now) {
     const g = Math.max(1, P.x.findIndex((v) => v >= x));
     return g;
   };
+  // (the photons fade before they reach the labels)
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(0, top - 16, VW, VH);
+  ctx.clip();
   for (const fl of box?.flashes ?? []) {
     const age = now - fl.t, g = at(fl.x), xx = X(fl.x);
     if (fl.kind === 'light') {
@@ -395,6 +405,7 @@ export function drawInside(f, st, now) {
       ctx.fill();
     }
   }
+  ctx.restore();
   ctx.globalAlpha = 1;
   // the electrons, just above the band's floor: most within kT of it, drawn to scale
   ctx.fillStyle = COL.e;
@@ -412,25 +423,46 @@ export function drawInside(f, st, now) {
   const bracket = (xb, ya, yb, color, label, sub, { atTop, left = false }) => {
     const t = left ? -1 : 1;
     ctx.strokeStyle = color;
+    ctx.fillStyle = color;
     ctx.lineWidth = 1.4;
+    ctx.setLineDash([2, 3]);
     ctx.beginPath();
-    ctx.moveTo(xb - 5 * t, ya);
-    ctx.lineTo(xb, ya);
-    ctx.lineTo(xb, yb);
-    ctx.lineTo(xb - 5 * t, yb);
+    ctx.moveTo(xb, ya + 6);
+    ctx.lineTo(xb, yb - 6);
     ctx.stroke();
+    ctx.setLineDash([]);
+    for (const [y, d] of [[ya, 1], [yb, -1]]) {
+      ctx.beginPath();
+      ctx.moveTo(xb, y);
+      ctx.lineTo(xb - 4, y + 8 * d);
+      ctx.lineTo(xb + 4, y + 8 * d);
+      ctx.closePath();
+      ctx.fill();
+    }
     const y = atTop ? ya + (narrow ? 44 : 22) : yb - 26, align = left ? 'right' : 'left';
     text(ctx, label, xb + 7 * t, y, { size: narrow ? 12 : 13, weight: 600, color, align });
     text(ctx, sub, xb + 7 * t, y + 15, { size: 10.5, color: COL.muted, align });
   };
-  bracket(bx, Y(P.Ec[gm]), Y(P.Ev[gm]), col, `gap ${gap.toFixed(2)} eV`, 'each photon', { atTop: true });
+  bracket(bx, Y(P.Ec[gm]), Y(P.Ev[gm]), col, `gap ${gap.toFixed(2)} eV`, narrow ? 'each photon' : 'each photon, just over', { atTop: true });
   bracket(narrow ? x1 - 4 : bx + 150, Y(P.Efn[gm]), Y(P.Efp[gm]), COL.ink, `split ${split.toFixed(2)} V`, 'the voltage', { atTop: false, left: narrow });
   // the legend
-  const ly = VH - (narrow ? 36 : 18);
+  const ly = VH - (narrow ? 36 : 34);
+  // a legend in runs of colour
+  const runsOf = (parts, x, y) => {
+    for (const [s, c] of parts) {
+      text(ctx, s, x, y, { size: 10.5, color: c });
+      font(ctx, 10.5);
+      x += ctx.measureText(s).width;
+    }
+  };
+  const slow = `slowed ${SLOW / 1e6} million times`;
   if (narrow) {
-    text(ctx, '— bands   - - electrons’ level, holes’ level', x0, ly, { size: 10.5, color: COL.muted });
-    text(ctx, `● electrons · slowed ${SLOW / 1e6} million times`, x0, ly + 18, { size: 10.5, color: COL.muted });
-  } else text(ctx, `solid: the bands' edges · dashed: the electrons' and holes' levels · ● electrons, ${sci(PERDOT)} each · slowed ${SLOW / 1e6} million times`, x0, ly, { size: 10.5, color: COL.muted });
+    runsOf([['— bands  ', COL.muted], ['- - electrons’', COL.e], [' and ', COL.muted], ['holes’', COL.h], [' levels', COL.muted]], x0, ly);
+    runsOf([['● electrons', COL.e], ['  ▬ holes', COL.h], [` · ${SLOW / 1e6} million× slower`, COL.muted]], x0, ly + 18);
+  } else {
+    runsOf([['solid: the bands · dashed: the ', COL.muted], ['electrons’', COL.e], [' and ', COL.muted], ['holes’', COL.h], [' levels', COL.muted]], x0, ly);
+    runsOf([['● electrons', COL.e], [`, ${sci(PERDOT, 1)} each · `, COL.muted], ['shading: holes', COL.h], [` · ${slow}`, COL.muted]], x0, ly + 20);
+  }
   // energy arrow
   if (!narrow) {
     ctx.strokeStyle = COL.muted;
@@ -487,8 +519,8 @@ export function drawColour(f) {
     ctx.stroke();
     const peak = pts.reduce((a, b) => (b[1] > a[1] ? b : a)), i = LEDS.indexOf(l);
     // on a phone, the labels step down so they don't meet, and the last keeps inside the edge
-    if (narrow) text(ctx, `${l.name}, ${peak[0].toFixed(0)} nm`, i === 0 ? x1 : X(peak[0]) + 6, 24 + 18 * i, { size: 11, weight: 600, color: COL[l.key], align: i === 0 ? 'right' : 'left' });
-    else text(ctx, `${l.name}, ${peak[0].toFixed(0)} nm`, X(peak[0]), y0 + 4, { size: 12, weight: 600, color: COL[l.key], align: 'center' });
+    if (narrow) text(ctx, `${l.name}, ${l.nm.toFixed(0)} nm`, i === 0 ? x1 : X(peak[0]) + 6, 24 + 18 * i, { size: 11, weight: 600, color: COL[l.key], align: i === 0 ? 'right' : 'left' });
+    else text(ctx, `${l.name}, ${l.nm.toFixed(0)} nm`, X(peak[0]), y0 + 4, { size: 12, weight: 600, color: COL[l.key], align: 'center' });
   }
   ctx.strokeStyle = COL.line;
   ctx.lineWidth = 1;
@@ -496,38 +528,4 @@ export function drawColour(f) {
   ctx.moveTo(x0, y1);
   ctx.lineTo(x1, y1);
   ctx.stroke();
-}
-
-// ---------- picture 4: where every 100 electrons go ----------
-
-export function drawLedger(f, st) {
-  const { ctx, VW, VH } = f, narrow = VW < 800;
-  TS = narrow ? 1.38 : 1;
-  ctx.clearRect(0, 0, VW, VH);
-  if (!st.ledger) return;
-  const x0 = narrow ? 18 : 210, x1 = VW - (narrow ? 18 : 40), rowH = narrow ? 120 : 70, y0 = narrow ? 34 : 40;
-  const parts = [['light', COL.ir, 'light'], ['heat', COL.heat, 'heat'], ['through', COL.muted, 'on through']];
-  st.ledger.forEach((row, i) => {
-    const y = y0 + i * rowH, f0 = row.f, labelY = narrow ? y : y + 22, barY = narrow ? y + 14 : y;
-    text(ctx, row.name, narrow ? x0 : x0 - 16, labelY, { size: narrow ? 20 : 22, weight: 800, family: 'display', color: COL.ink, align: narrow ? 'left' : 'right' });
-    let x = x0, below = x0;
-    const bh = narrow ? 30 : 34;
-    for (const [k, c, name] of parts) {
-      const share = f0[k] / f0.J, w = (x1 - x0) * share;
-      ctx.fillStyle = c;
-      ctx.globalAlpha = k === 'through' ? 0.45 : 0.9;
-      ctx.fillRect(x, barY, Math.max(0, w - 2), bh);
-      ctx.globalAlpha = 1;
-      const n = 100 * share, label = n >= 0.95 ? `${fmt(n, 0)} ${name}` : n >= 0.01 ? `${fmt(n, 2)} ${name}` : n > 0 ? `<0.01 ${name}` : '';
-      if (w > (narrow ? 120 : 130)) text(ctx, label, x + 8, barY + bh / 2 + 4, { size: 11, weight: 600, color: k === 'through' ? COL.ink : COL.bg });
-      else if (label) {
-        // too small to label inside: below the bar, each after the last
-        font(ctx, 11, 600);
-        const wide = ctx.measureText(label).width, at = Math.min(Math.max(x, below), x1 - wide);
-        text(ctx, label, at, barY + bh + 16, { size: 11, weight: 600, color: k === 'light' ? COL.ir : k === 'heat' ? COL.heat : COL.muted });
-        below = at + wide + 12;
-      }
-      x += w;
-    }
-  });
 }

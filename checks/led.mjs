@@ -14,7 +14,7 @@ const lib = join(homedir(), 'git/driftlet/src/');
 const tmp = mkdtempSync(join(tmpdir(), 'led-'));
 let source = readFileSync(join(here, '../src/explorables/led/model.js'), 'utf8').replaceAll('https://cdn.jsdelivr.net/npm/driftlet@1.0.1/src/', pathToFileURL(lib).href);
 // BREAK=walls takes the walls away (the wider-gap crystal made GaAs, no band steps), to see the
-// checks fail.
+// checks fail: the electrons then run on through the thin p side to its contact.
 if (process.env.BREAK === 'walls') source = source.replace('export const DEC = 0.23', 'export const DEC = 0').replace('AlGaAs: { Eg: 1.798', 'AlGaAs: { Eg: 1.424');
 writeFileSync(join(tmp, 'model.mjs'), source);
 const M = await import(pathToFileURL(join(tmp, 'model.mjs')).href);
@@ -54,11 +54,6 @@ expect('light: mV per tenfold', Math.max(...out.mV_per_decade), 57, 62, 'kT ln10
 expect('light: mV per tenfold (least)', Math.min(...out.mV_per_decade), 57, 62, 'the same, across five decades');
 out.photon_eV_mean = r4(G + 1.5 * kT);
 out.qV_at_20 = r4(at20.V);
-
-// 3. Without the walls, the electrons run on through to the far contact.
-const plain = new M.LED({ kind: 'plain' }).drive(20);
-out.plain = { Vf_20A_cm2: r4(plain.V), light: r4(plain.light / plain.J), heat: r4(plain.heat / plain.J), lost: r4(1 - (plain.light + plain.heat) / plain.J) };
-expect('walls: light share walled over plain', out.walled.light / out.plain.light, 10, Infinity, 'the double heterostructure (Alferov, Kroemer; Nobel 2000) is why LEDs are bright');
 
 // 4. The gap sets the volts: every crystal shifted, at the same current.
 out.Vf_by_gap = [0, 0.5, 1.3].map((d) => ({ Eg: r4(G + d), Vf: r4(new M.LED({ kind: 'walled', dEg: d }).drive(20).V) }));
