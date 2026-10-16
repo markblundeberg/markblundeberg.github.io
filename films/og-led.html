@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LED card (og.png)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Martian+Mono:wdth,wght@87.5,400;87.5,600&display=swap">
+<style>html, body { margin: 0; background: #0d1015; } canvas { display: block; }</style>
+</head>
+<body>
+<canvas id="c" width="1200" height="630"></canvas>
+<script type="module">
+// The LED explorable's link card, 1200 × 630: the question over the three LEDs on a 3 V battery,
+// with 1.4 s of their light in flight. One frame, taken by driftlet's tools/film.js --png; copied to
+// src/explorables/led/og.png.
+
+import { LED, LEDS, curve, operate, fates } from '../src/explorables/led/model.js';
+import { COL, stepPhotons, drawLeds } from '../src/explorables/led/pictures.js';
+
+Object.assign(COL, {
+  bg: '#0d1015', surface: '#151a22', line: '#252c38', 'line-2': '#313a48', ink: '#ece7dc', 'ink-2': '#c4bfb4', muted: '#8a909b',
+  e: '#5aa7e8', h: '#f0793f', ir: '#c4577f', red: '#ff4a3d', blue: '#5277ff', heat: '#b49a7a', frame: '#7d8796',
+});
+const W = 1200, H = 630, ctx = document.getElementById('c').getContext('2d');
+const st = { VB: 3 };
+st.leds = LEDS.map((l) => {
+  const led = new LED({ kind: 'walled', dEg: l.dEg }), V = operate(curve(led), 3);
+  return { key: l.key, V, ...fates(led.at(V).S) };
+});
+for (let k = 0; k < 42; k++) stepPhotons(st, 1 / 30);
+await document.fonts.load('900 70px "Big Shoulders Display"');
+await document.fonts.load('600 20px "Martian Mono"');
+function frame() {
+  const g = ctx.createRadialGradient(W * 0.5, -80, 50, W * 0.5, -80, 1100);
+  g.addColorStop(0, '#1a1c22');
+  g.addColorStop(1, COL.bg);
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+  const s = 1.2;
+  ctx.save(); ctx.translate((W - 960 * s) / 2, 150); ctx.scale(s, s);
+  drawLeds({ ctx, VW: 960, VH: 380 }, st, { noChart: true, clear: false });
+  ctx.restore();
+  ctx.textBaseline = 'alphabetic';
+  ctx.textAlign = 'left';
+  ctx.fillStyle = COL.red;
+  ctx.font = '600 20px "Martian Mono", monospace';
+  ctx.fillText('THREE LEDS, SIMULATED', 66, 56);
+  ctx.font = '900 70px "Big Shoulders Display", sans-serif';
+  const a = 'HOW DOES AN LED MAKE ', b = 'LIGHT', c = '?';
+  ctx.fillStyle = COL.ink; ctx.fillText(a, 62, 128);
+  let x = 62 + ctx.measureText(a).width;
+  ctx.fillStyle = COL.red; ctx.fillText(b, x, 128);
+  x += ctx.measureText(b).width;
+  ctx.fillStyle = COL.ink; ctx.fillText(c, x, 128);
+}
+window.reel = { frames: 1, fps: 1, width: W, height: H, frame };
+frame();
+</script>
+</body>
+</html>

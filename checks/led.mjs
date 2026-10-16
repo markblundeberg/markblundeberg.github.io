@@ -70,6 +70,21 @@ const tauRad = (c) => 1 / (c.B * 1e17);
 out.radiative_wait = { GaAs_ns: r4(tauRad(M.CRYSTALS.GaAs) * 1e9), Si_ms: r4(tauRad(M.CRYSTALS.Si) * 1e3) };
 expect('silicon: light / (light + heat)', out.Si.light_over_light_plus_heat, 0, 0.01, 'silicon LEDs: well under 1 % (1 % only with special care, Green et al., Nature 412, 805, 2001)');
 
+// 6. The page's three LEDs on a 3 V battery through 50 Ω, where each lights (0.1 mA of light, a
+// tenth of a milliamp's worth of electrons ending as photons), and the light's energy against the
+// electrical energy in, per electron, for the infrared one.
+out.battery_3V = M.LEDS.map((l) => {
+  const led = new M.LED({ kind: 'walled', dEg: l.dEg }), c = M.curve(led), V = M.operate(c, 3), f = M.fates(led.at(V).S);
+  let lo = 0.5, hi = l.Eg;
+  for (let k = 0; k < 40; k++) {
+    const m = (lo + hi) / 2;
+    if (led.at(m).light * M.CHIP * 1e3 > 0.1) hi = m;
+    else lo = m;
+  }
+  return { key: l.key, nm: r4(l.nm), Eg: r4(l.Eg), V: r4(V), mA: r4(f.J * M.CHIP * 1e3), light_share: r4(f.light / f.J), lights_at_V: r4(hi), light_energy_over_qV: r4(((f.light / f.J) * M.photonEnergy(l.Eg)) / V) };
+});
+expect('infrared: light energy out over electrical in, at 3 V', out.battery_3V[0].light_energy_over_qV, 1, 1.2, 'the photons carry more than qV each: heat makes up the rest (this model wastes nothing else)');
+
 out.ms = Math.round(performance.now() - t0);
 console.log(JSON.stringify(out, null, 1));
 writeFileSync(join(tmp, 'out.json'), JSON.stringify(out));

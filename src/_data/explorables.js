@@ -4,6 +4,13 @@
 // This list feeds the /explorables/ index and the sitemap.
 export default [
     {
+        slug: 'led',
+        title: 'How does an LED make light?',
+        description:
+            'Three LEDs on one battery, simulated live: infrared, red and blue. ' +
+            'Why each glows one colour, and why a blue one needs more volts than a red one.',
+    },
+    {
         slug: 'solar-heat',
         title: 'Why do solar panels hate heat?',
         description:
