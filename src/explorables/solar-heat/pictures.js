@@ -142,13 +142,13 @@ const VMAX = 44; // the panels' voltage scale, V
 
 export function drawPanels(f, st, opts = {}) {
   const { ctx, VW, VH } = f, L = panelsLayout(VW, VH), { narrow } = L;
-  TS = opts.ts ?? (narrow ? 1.2 : 1);
+  TS = opts.ts ?? (narrow ? 1.38 : 1);
   if (opts.clear !== false) ctx.clearRect(0, 0, VW, VH);
   drawSun(ctx, VW / 2, 34, narrow ? 15 : 18, st.sun);
   st.panels.forEach((p, i) => {
     const x = L.panelX(i), col = tempColour(p.T), lx = L.lift(i), H = L.ph;
     text(ctx, `${fmt(p.T - KELVIN, 0)} °C panel`, i === 0 ? x : i * L.cw + L.cw - (narrow ? 14 : 24), 40, { size: narrow ? 34 : 40, weight: 800, family: 'display', color: col, align: i === 0 ? 'left' : 'right' });
-    text(ctx, describe(p.T), i === 0 ? x : i * L.cw + L.cw - (narrow ? 14 : 24), 62, { size: narrow ? 11 : 12, color: COL.muted, align: i === 0 ? 'left' : 'right' });
+    if (!narrow) text(ctx, describe(p.T), i === 0 ? x : i * L.cw + L.cw - (narrow ? 14 : 24), 62, { size: narrow ? 11 : 12, color: COL.muted, align: i === 0 ? 'left' : 'right' });
     drawPanelArt(ctx, x, L.top, L.pw, L.ph, p.T, st.sun);
     // the wire from the panel's foot to the lift, and the lift: as high as the panel's voltage
     const V = panel.V(p.op.V), top = L.base - (H * clamp(V, 0, VMAX)) / VMAX;
@@ -166,7 +166,7 @@ export function drawPanels(f, st, opts = {}) {
     ctx.fillRect(lx + 7, L.top, 4, H);
     ctx.fillStyle = col;
     ctx.fillRect(lx + 7, top, 4, L.base - top);
-    text(ctx, `${fmt(V)} V`, lx + 14, top - 10, { size: narrow ? 13 : 15, weight: 600, color: COL.ink });
+    text(ctx, `${fmt(V)} V`, lx + 14, top - 10, { size: narrow ? 11 : 15, weight: 600, color: COL.ink });
     // the dots: delivered up the lift and off to the right; leaks climb partway and fall back
     for (const d of (st.dots ?? []).filter((dd) => dd.i === i)) {
       let px, py, a = 1;
@@ -261,16 +261,16 @@ function drawPV(ctx, st, c, narrow) {
 const XMAX = 1.6e-6; // the front 1.6 µm: the emitter, the junction, and the start of the base
 export function drawHill(f, st) {
   const { ctx, VW, VH } = f, narrow = VW < 800;
-  TS = narrow ? 1.2 : 1.15;
+  TS = narrow ? 1.38 : 1.15;
   ctx.clearRect(0, 0, VW, VH);
   const lv = st.panels.map((p) => p.op.levels ?? levels(p.op.S));
   // one energy scale for both: from below the lowest E_v to above the highest E_c, in the window
   const inWin = (l, k) => lv.flatMap((L) => L[k].filter((_, g) => L.x[g] <= XMAX));
-  const lo = Math.min(...inWin(lv, 'Ev')) - 0.12, hi = Math.max(...inWin(lv, 'Ec')) + 0.18;
+  const lo = Math.min(...inWin(lv, 'Ev')) - 0.12, hi = Math.max(...inWin(lv, 'Ec')) + (narrow ? 0.3 : 0.18);
   const cw = narrow ? VW : VW / 2, ch = narrow ? VH / 2 : VH;
   st.panels.forEach((p, i) => {
     const L = lv[i], ox = narrow ? 0 : i * cw, oy = narrow ? i * ch : 0;
-    const px0 = ox + (narrow ? 56 : 64), px1 = ox + cw - (narrow ? 124 : 124), py0 = oy + 46, py1 = oy + ch - 34;
+    const px0 = ox + (narrow ? 56 : 64), px1 = ox + cw - (narrow ? 142 : 124), py0 = oy + (narrow ? 56 : 46), py1 = oy + ch - 34;
     const X = (x) => px0 + ((px1 - px0) * x) / XMAX, Y = (E) => py1 - ((py1 - py0) * (E - lo)) / (hi - lo);
     const col = tempColour(p.T), idx = L.x.map((x, g) => g).filter((g) => L.x[g] <= XMAX * 1.0001);
     text(ctx, `${fmt(p.T - KELVIN, 0)} °C`, px0, oy + 26, { size: 26, weight: 800, family: 'display', color: col });
@@ -324,7 +324,7 @@ export function drawHill(f, st) {
     ctx.setLineDash([]);
     arrow(ctx, hx, yA - 2, hx, yB + 2, col);
     const tx = X(0.55e-6);
-    text(ctx, `hill ${(p.op.hill).toFixed(2)} eV`, tx, yB - 26, { size: 12, weight: 600, color: col });
+    text(ctx, `hill ${(p.op.hill).toFixed(2)} eV`, tx, yB - (narrow ? 32 : 26), { size: 12, weight: 600, color: col });
     text(ctx, `1 in ${oneIn(Math.exp(p.op.hill / VT(p.T)))} gets over`, tx, yB - 10, { size: 10.5, color: COL['ink-2'] });
     // the split between the levels, at the back of the window: the cell's voltage
     const sx = X(XMAX) + 40, yn = Y(L.Efn[g1]), yp = Y(L.Efp[g1]);
@@ -368,7 +368,7 @@ function arrow(ctx, x0, y0, x1, y1, color, both = false) {
 // where every 100 pairs the light makes go.
 export function drawShare(f, st) {
   const { ctx, VW, VH } = f, narrow = VW < 800;
-  TS = narrow ? 1.2 : 1;
+  TS = narrow ? 1.38 : 1;
   ctx.clearRect(0, 0, VW, VH);
   // the rectangles
   const r = narrow ? { x0: 56, x1: VW - 30, y0: 30, y1: VH * 0.5 - 30 } : { x0: 64, x1: VW * 0.46, y0: 36, y1: VH - 46 };
