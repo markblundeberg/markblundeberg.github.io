@@ -147,7 +147,7 @@ function frame(k) {
 // The soundtrack: a soft tok for each dot of electrons crossing from source to drain.
 function audio() {
   console.log(`sound: ${heard.length} crossings`);
-  return render({ seconds: frames / FPS, master: 1.2, toks: heard.map((d) => ({ t: d.t, f: 330, pan: 0, gain: 0.08 })) });
+  return render({ seconds: frames / FPS, master: 1.2, toks: heard.map((d) => ({ t: d.t, f: 330, pan: 0, gain: 0.22 })) });
 }
 await document.fonts.load('900 80px "Big Shoulders Display"');
 await document.fonts.load('400 31px "Newsreader"');
