@@ -68,14 +68,14 @@ h1 em { color: var(--gate); }
     <p class="kicker" style="margin-top:34px">A transistor, three pictures</p>
     <h1>Why can’t AI chips just run at a lower <em>voltage</em>?</h1>
     <p class="byline">Mark Lundeberg’s Claude Opus 5.5 agent <span>//</span> draft, not yet dated</p>
-    <p class="lede">Every time a transistor in a chip switches, it spends energy in proportion to the square of the chip’s voltage. Run a chip at half the voltage and each switch costs a quarter as much. Much of an AI data centre’s power goes into its chips, and much of a chip’s into exactly this. Yet chip voltages, which fell from 5 volts in the 1980s to about 1.1 volts by the mid-2000s, have crept down only to about 0.7 since. A large part of the reason is heat. A transistor is a switch whose gate turns it on by drawing electrons up to the silicon’s surface. Heat spreads those electrons’ energies, so each tenfold more current costs the gate at least 60 millivolts (thousandths of a volt), and a switch that’s truly off and truly on needs a few tenths of a volt between the two.</p>
-    <p>Below is one transistor, simulated live in your browser. The bar that sticks to the top of the screen sets its gate’s voltage.</p>
+    <p class="lede">Every time a transistor in a chip switches, it spends energy in proportion to the square of the chip’s voltage: run a chip at half the voltage and each switch costs a quarter as much. Much of an AI data centre’s power goes into its chips, and much of a chip’s into exactly this. Yet chip voltages, which fell from 5 volts in the 1980s to about 1.1 volts by the mid-2000s, have crept down only to about 0.7 since. A large part of the reason is heat. A transistor’s gate switches it on by letting electrons climb an energy hill into its channel. Heat is what lifts them, and it lifts few very high: each tenfold more electrons costs the gate at least 60 millivolts (thousandths of a volt). Off to on is a hundred-thousand-fold, five tenfolds, so at least 0.3 volts, before any margin for speed.</p>
+    <p>Below is one transistor, simulated live in your browser. Drag the gate slider below; it follows you down the page.</p>
   </header>
 </div>
 
 <div class="bar" id="bar">
   <div class="bar-in">
-    <div class="ctl"><label for="vg">gate <b id="vgOut">0.30 V</b></label><input id="vg" type="range" min="-0.5" max="1.2" step="0.01" value="0.3" aria-label="The gate's voltage, volts"></div>
+    <div class="ctl"><label for="vg">gate <b id="vgOut">0.15 V</b></label><input id="vg" type="range" min="-0.5" max="1.2" step="0.01" value="0.15" aria-label="The gate's voltage, volts"></div>
     <span class="status" id="status"></span>
   </div>
 </div>
@@ -84,26 +84,26 @@ h1 em { color: var(--gate); }
   <section class="col" id="switch">
     <p class="num-h">Picture 1</p>
     <h2>A switch</h2>
-    <p>A transistor in a chip is a strip of silicon with a supply of electrons at one end, the source, and an outlet at the other, the drain. Over the middle lies the gate, a conductor on a layer of glass (silicon’s oxide) a few atoms thick. The silicon between holds almost no free <span class="e">electrons</span> (it’s doped to be full of <span class="h">holes</span> instead, places where electrons are missing, which can’t carry current from source to drain), so almost no current flows: the switch is off. Put a positive voltage on the gate and it draws electrons up from the source into a thin sheet just under the oxide, the channel, and current flows: on.</p>
+    <p>A transistor in a chip is a strip of silicon with a supply of electrons at one end, the source, and an outlet at the other, the drain. Over the middle lies the gate, a conductor on a layer of glass (silicon’s oxide) a few atoms thick. The silicon between holds almost no free <span class="e">electrons</span>, so the switch is off. Put a positive voltage on the gate and it draws electrons up from the source into a thin sheet just under the oxide, the channel, and current flows: on. Slide the gate from 0 up to 0.6 volts.</p>
     <figure class="fig">
       <canvas id="figSwitch" aria-label="A cut through a transistor: source and drain at either end, the gate over the middle, and electrons crossing through the channel under it as fast as the gate allows"></canvas>
-      <figcaption>A cut through the transistor. Blue: electrons, in the source and drain and, when the gate draws them, in the channel under it. Each dot crossing is a fixed number of electrons, in real time, with a small fixed voltage from source to drain.</figcaption>
+      <figcaption>A cut through the transistor. Blue: electrons, in the source and drain and, when the gate draws them, in the channel under it. Each dot crossing is a fixed number of electrons, in real time, with a small fixed voltage from source to drain (at low gate voltages, almost none cross).</figcaption>
     </figure>
-    <p>Slide the gate from 0 up to 0.6 volts. The channel’s electrons, and so the current, rise more than a hundred thousand times. Slide it back down and the current all but stops. That’s the switch, and a chip has billions of them, switching billions of times a second.</p>
+    <p>The channel’s electrons, and so the current, rise more than a hundred thousand times. Slide it back down and the current all but stops. That’s the switch, and a chip has billions of them, switching billions of times a second.</p>
     <div class="sh"><div class="shows"><h4>Shows</h4><p>What the gate does: it fills the channel with electrons.</p></div><div class="hides"><h4>Hides</h4><p>Why it takes tenths of a volt to do it.</p></div></div>
   </section>
 
   <section class="col" id="down">
     <p class="num-h">Picture 2</p>
     <h2>Straight down</h2>
-    <p>Here’s a slice straight down through the middle of the transistor, from the gate through the oxide into the silicon, drawn as an energy map: up is more energy for an electron. Electrons in the silicon move along the top band. The dashed line is the electrons’ level, where the source holds them. To be in the channel, an electron has to climb from that level up to the band’s edge at the surface.</p>
+    <p>Here’s a slice straight down through the middle of the transistor, from the gate through the oxide into the silicon, drawn as an energy map: up is more energy for an electron. The upper solid line is the band edge, the least energy a free electron in the silicon can have. The dashed line is the energy the source’s electrons sit at. To be in the channel, an electron has to climb from that line up to the band edge at the surface.</p>
     <figure class="fig">
-      <canvas id="figDown" aria-label="An energy map down through the gate, the oxide and the first 40 nanometres of silicon: the electrons' band bending down toward their level at the surface as the gate's voltage rises"></canvas>
-      <figcaption>Energy, in electronvolts per electron, against depth below the gate. Solid lines: the edges of the electrons’ band (top) and the holes’ (bottom). Dashed: the electrons’ level. Amber: the gate, its electrons filled to its own level, held below the silicon’s by its voltage. Blue shading: where the channel’s electrons are.</figcaption>
+      <canvas id="figDown" aria-label="An energy map down through the gate, the oxide and the first 40 nanometres of silicon: the electrons' band bending down toward the source's electrons' energy at the surface as the gate's voltage rises"></canvas>
+      <figcaption>Up is energy for an electron; across is depth below the gate. Solid: the electrons’ band edge (top) and the holes’ (bottom). Dashed: the source’s electrons. Violet: the climb. Amber: the gate, its electrons held below the silicon’s by a positive voltage (above, by a negative one). Blue shading: the channel’s electrons.</figcaption>
     </figure>
-    <p>Heat lends the electrons the energy for the climb, but the higher it is, the fewer can make it: at room temperature, ten times fewer for every 0.06 electronvolts more. (An electronvolt is the energy an electron gains crossing one volt; 0.06 is the heat energy per particle, kT, times 2.3, the factor that turns its natural steps into tenfolds.) Raising the gate’s voltage bends the band down at the surface and shortens the climb: each 0.06 electronvolts less climb means ten times more electrons in the channel. That 60 is set by temperature alone: for any switch that works by electrons climbing over a barrier, no material and no design can change it.</p>
-    <p>And the gate can’t even shorten the climb by its full voltage. Part of it is spent across the oxide, holding the charge of the silicon it pushes away; here, about five-sixths of each volt reaches the surface. So this transistor needs 72 millivolts on its gate for each tenfold, not 60.</p>
-    <div class="sh"><div class="shows"><h4>Shows</h4><p>The climb, and why each tenfold costs at least 60 millivolts.</p></div><div class="hides"><h4>Hides</h4><p>The source and drain, either side of this slice.</p></div></div>
+    <p>Heat lends the electrons the energy for the climb, and it lifts few very high: below threshold, every 0.06 electronvolts more climb means ten times fewer electrons in the channel. (An electronvolt is the energy an electron gains crossing one volt.) Raising the gate’s voltage bends the band down at the surface and shortens the climb. That 0.06 is set by temperature alone, for anything that climbs a hill on heat.</p>
+    <p>And the gate can’t shorten the climb by its full voltage. Part of it is spent across the oxide, holding the charge left behind in the silicon as the gate pushes holes away; here, about five-sixths of each volt reaches the surface. So this transistor needs 72 millivolts on its gate for each tenfold, not 60. No ordinary gate can do better than 60, because it can’t move the hill further than its own voltage.</p>
+    <div class="sh"><div class="shows"><h4>Shows</h4><p>The climb, and why each tenfold costs the gate at least 60 millivolts.</p></div><div class="hides"><h4>Hides</h4><p>The source and drain, either side of this slice.</p></div></div>
   </section>
 
   <section class="col" id="curve">
@@ -114,32 +114,34 @@ h1 em { color: var(--gate); }
       <canvas id="figCurve" aria-label="The channel's electrons against the gate's voltage on a log scale: a straight climb of tenfold per 72 millivolts below threshold, then a gentle rise; and a dashed line for the 60 millivolt limit"></canvas>
       <figcaption>Channel electrons per cm² against gate voltage. Dashed: the steepest slope any barrier-climbing switch can have at room temperature, 60 mV per tenfold. The dot is where the gate is.</figcaption>
     </figure>
-    <p>Below about 0.3 volts the curve is a straight climb: tenfold for every 72 millivolts, the switch going from off to on, a little less steep than the limit. Above that, the channel is formed and fills more slowly, in proportion to the voltage. To switch a hundred-thousand-fold, from truly off to truly on, this transistor needs about 0.36 volts of climb alone, and real chips add more on top, to switch fast.</p>
+    <p>Below about 0.25 volts the curve is nearly straight, tenfold for every 72 to 80 millivolts: the switch going from off to on, a little less steep than the limit. Above about 0.4 volts the channel is formed, and fills more slowly, in proportion to the voltage past threshold. To switch a hundred-thousand-fold from 0 volts takes this transistor about 0.44 volts on its gate, and real chips add more on top, to switch fast.</p>
   </section>
 
   <section class="col" id="so">
     <p class="num-h">So</p>
     <h2>Why heat sets the floor</h2>
-    <p>Chips can run at lower voltage, and sometimes do, when there’s little work to do. But it costs. Squeeze the same switch into less voltage, and either it doesn’t turn fully off, leaking current and burning power even while it’s idle, or it doesn’t turn fully on, and switches slowly, so the same work takes longer while the leak goes on. Somewhere around half a volt, depending on the chip, the leak starts to eat the savings. Both happen because heat spreads the electrons’ energies, so that each tenfold of current costs at least 60 millivolts on the gate. Today’s best transistors, their gates wrapped around the channel, come within about 5 to 10 millivolts of that limit. And no two of a chip’s billions of transistors are quite alike, so it needs margin for the worst of them. That’s a large part of why chip voltages have stayed near 0.7 volts.</p>
+    <p>Chips can run at lower voltage, and sometimes do, when there’s little work to do. But it costs. Squeeze the same switch into less voltage, and either it doesn’t turn fully off, leaking current and burning power even while it’s idle, or it doesn’t turn fully on, and switches slowly, so the same work takes longer while the leak goes on. Somewhere around half a volt, depending on the chip, the leak starts to eat the savings.</p>
+    <p>Both costs come from the same place: heat spreads the electrons’ energies, so each tenfold of current costs the gate at least 60 millivolts. Today’s transistors, their gates wrapped around a fin of silicon, come within about 10 millivolts of that limit.</p>
+    <p>Add it up: about 0.3 to 0.4 volts just to go from off to on, more on top to switch fast, and more again so that the worst of a chip’s billions of slightly different transistors still works. That’s roughly where 0.7 volts comes from.</p>
   </section>
 
   <section class="col" id="more">
     <p class="num-h">And while we’re here</p>
     <h2>Other questions the pictures answer</h2>
     <h3>Would a cold chip do better?</h3>
-    <p>Sharper, yes. The 60 is the heat energy per particle times 2.3, and that falls with temperature: cooled with liquid nitrogen, to −196 °C, the limit is 15 millivolts per tenfold, and real transistors reach about 20 to 30. The controllers of some quantum computers already run cold, to sit near their qubits, and switch more sharply as a bonus. For ordinary chips, the cooling costs more than it saves.</p>
+    <p>Sharper, yes. The 60 follows the thermal energy scale, kT, which falls with temperature: cooled with liquid nitrogen, to −196 °C, the limit is 15 millivolts per tenfold, and real transistors reach about 20 to 30. The controllers of some quantum computers run colder still, near 4 kelvin, to sit near their qubits, and switch more sharply as a bonus (there the swing stops following temperature, at about 10 to 20). For ordinary chips, so far, the cooling costs more than it saves.</p>
     <h3>Why is the oxide so thin?</h3>
-    <p>The thinner the oxide, the stronger the gate’s grip on the channel: more of its voltage reaches the silicon, the switch gets nearer to 60, it carries more current when on, and the drain, close by in a tiny transistor, gets less say over the channel than the gate does. (That last is also why today’s gates wrap around a fin of silicon rather than lying on top.) But below about 1.2 nanometres, electrons tunnel straight through the oxide, and the gate leaks. So since 2007 (Intel first, the rest by about 2011), chips have used thicker layers of materials that hold more charge than silicon’s oxide does, hafnium-based, so the gate keeps its grip without the leak.</p>
+    <p>The thinner the oxide, the stronger the gate’s grip on the channel: more of its voltage reaches the silicon, the switch gets nearer to 60, it carries more current when on, and the drain, close by in a tiny transistor, gets less say over the channel than the gate does. (That last is also why today’s gates wrap around a fin of silicon rather than lying on top.) But electrons tunnel straight through a thin oxide, and the gate leaks; at about 1.2 nanometres it could get no thinner. So since 2007 (Intel first, the rest by about 2011), chips have used thicker layers of hafnium-based materials, which hold more charge per volt than silicon’s oxide, with metal gates, so the gate keeps its grip without the leak.</p>
     <h3>Is the 60 millivolts a law?</h3>
-    <p>For a switch that works by letting electrons climb over an energy barrier at room temperature, yes. Researchers are trying switches that work another way: electrons tunnelling through the barrier instead of climbing it, or gates whose materials amplify their own voltage. None is yet in mainstream chips.</p>
+    <p>For a switch whose gate can’t move the hill by more than its own voltage, yes. Researchers are trying ways round it: electrons tunnelling through the hill instead of climbing it, or gates whose materials amplify their own voltage, so the hill moves further than the gate. None is yet in mainstream chips.</p>
   </section>
 
   <section class="col" id="sim">
     <p class="num-h">Under the hood</p>
     <h2>How a transistor is simulated</h2>
-    <p>The rules alone are textbook physics: the threshold voltage, and the subthreshold swing, (kT/q) ln 10 (1 + C<sub>d</sub>/C<sub>ox</sub>). This page checks against them: its swing is 72 millivolts per tenfold, as the formula gives for this transistor (71 to 74), and its threshold is within a tenth of a volt of the textbook’s.</p>
+    <p>The rules alone are textbook physics: the threshold voltage, and the subthreshold swing, (kT/q) ln 10 (1 + C<sub>d</sub>/C<sub>ox</sub>). This page checks against them: its swing is 72 millivolts per tenfold, as the formula gives for this transistor (71 to 74), and its threshold is about a tenth of a volt from the textbook’s (the two define it differently).</p>
     <p>What this simulation adds is the picture straight down: the bands bending, the climb, and where the channel’s electrons sit, from one rule for how electrons and holes diffuse and drift (the drift–diffusion model, the same rule that runs our <a href="/explorables/led/">LEDs</a>, <a href="/explorables/solar-heat/">solar panels</a>, <a href="/explorables/lithium-ion/">lithium-ion battery</a> and <a href="/explorables/nerves/">nerves</a>).</p>
-    <p>It leaves things out, to run live: it’s a single slice straight down, at equilibrium, as a transistor is with no voltage between source and drain, and the current is taken as in proportion to the channel’s electrons; it’s classical, so the channel’s electrons aren’t squeezed into quantum states (in real thin channels that shifts the threshold by a tenth of a volt or so); and it’s a flat transistor of about 2005, not one of today’s, whose gates wrap around a fin of silicon.</p>
+    <p>It leaves things out, to run live. It’s a single slice straight down, at equilibrium, as a transistor is with no voltage between source and drain, and the current is taken as in proportion to the channel’s electrons. It’s a long transistor: in a short one the drain also pulls the hill down, worsening the swing and the leak, which is what drove gates onto fins. It’s classical: the surface field squeezes the channel’s electrons into quantum states, which shifts the threshold by 50 to 100 millivolts. It has no current tunnelling through the oxide and no traps at its face. And its 2 nanometres of oxide are a flat transistor’s of about 2000.</p>
   </section>
 </main>
 

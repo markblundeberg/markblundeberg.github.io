@@ -62,7 +62,7 @@ export function stepFlow(st, dt) {
 
 export function drawSwitch(f, st, { clear = true } = {}) {
   const { ctx, VW, VH } = f, narrow = VW < 800;
-  TS = narrow ? 1.38 : 1.15;
+  TS = f.ts ?? (narrow ? 1.38 : 1.15);
   if (clear) ctx.clearRect(0, 0, VW, VH);
   if (!st.here || !st.sweep) return;
   const x0 = narrow ? 20 : 60, x1 = VW - (narrow ? 20 : 60), w = x1 - x0;
@@ -126,7 +126,8 @@ export function drawSwitch(f, st, { clear = true } = {}) {
   const y = bot + (narrow ? 30 : 32);
   text(ctx, `channel: ${sci(n, 1)} electrons per cm²`, x0, y, { size: narrow ? 12 : 13, weight: 600, color: COL.e });
   const rel = ratio >= 10 ? `${sci(ratio, 1)} times the current at 0 V` : ratio >= 0.1 ? `${fmt(ratio, ratio < 1 ? 2 : 1)} × the current at 0 V` : `1/${sci(1 / ratio, 1)} of the current at 0 V`;
-  text(ctx, rel, narrow ? x0 : x1, narrow ? y + 22 : y, { size: narrow ? 12 : 13, color: COL['ink-2'], align: narrow ? 'left' : 'right' });
+  const two = narrow || TS > 1.3; // big text: the second readout on its own line
+  text(ctx, rel, two ? x0 : x1, two ? y + 22 * TS / 1.2 : y, { size: narrow ? 12 : 13, color: COL['ink-2'], align: two ? 'left' : 'right' });
   text(ctx, 'p-type silicon', x0 + 8, bot - 10, { size: 11, color: COL.muted });
 }
 
@@ -135,8 +136,8 @@ export function drawSwitch(f, st, { clear = true } = {}) {
 const XMAX = 40e-9; // the oxide and the first 38 nm of silicon
 export function drawDown(f, st) {
   const { ctx, VW, VH } = f, narrow = VW < 800;
-  TS = narrow ? 1.38 : 1.25;
-  ctx.clearRect(0, 0, VW, VH);
+  TS = f.ts ?? (narrow ? 1.38 : 1.25);
+  if (!f.noClear) ctx.clearRect(0, 0, VW, VH);
   if (!st.here) return;
   const P = st.here.profile, gx = narrow ? 64 : 110, x1 = VW - (narrow ? 16 : 30), top = narrow ? 40 : 34, bot = VH - (narrow ? 64 : 50);
   const X = (x) => gx + ((x1 - gx) * x) / XMAX;
@@ -194,19 +195,20 @@ export function drawDown(f, st) {
   line(P.Ev, COL.ink, 2.2);
   line(P.Ef, COL.e, 1.6, [6, 5]);
   text(ctx, 'electrons’ band', X(XMAX) - 4, Y(P.Ec[0]) - 8, { size: 10.5, color: COL.muted, align: 'right' });
-  text(ctx, 'holes’ band', X(XMAX) - 4, Y(P.Ev[0]) + 16, { size: 10.5, color: COL.muted, align: 'right' });
-  text(ctx, 'electrons’ level', X(XMAX) - 4, Y(P.Ef[0]) - 8, { size: 10.5, color: COL.e, align: 'right' });
+  text(ctx, 'the source’s electrons', X(XMAX) - 4, Y(P.Ef[0]) - 8, { size: 10.5, color: COL.e, align: 'right' });
   // the climb, at the surface: from the electrons' level up to their band's edge
   const gs = P.region.lastIndexOf(0), xs = X(P.x[gs]) + 14, c = P.Ec[gs] - P.Ef[gs];
   const ya = Y(P.Ec[gs]), yb = Y(P.Ef[gs]);
   ctx.strokeStyle = COL.climb;
   ctx.fillStyle = COL.climb;
   ctx.lineWidth = 1.6;
-  ctx.beginPath();
-  ctx.moveTo(xs, yb);
-  ctx.lineTo(xs, ya);
-  ctx.stroke();
-  if (Math.abs(ya - yb) > 10) {
+  if (c > 0) {
+    ctx.beginPath();
+    ctx.moveTo(xs, yb);
+    ctx.lineTo(xs, ya);
+    ctx.stroke();
+  }
+  if (c > 0 && Math.abs(ya - yb) > 10) {
     ctx.beginPath();
     const d = ya < yb ? 1 : -1;
     ctx.moveTo(xs, ya);
@@ -216,8 +218,23 @@ export function drawDown(f, st) {
   }
   // its label in the open space between the band and the level, a little way in
   const gm = P.x.findIndex((x) => x <= XMAX * 0.5), ly = (Y(P.Ec[gm]) + Y(P.Ef[gm])) / 2 - 4, lx = narrow ? X(XMAX * 0.18) : xs + 24;
-  text(ctx, c > 0 ? `the climb: ${fmt(c, 2)} eV` : 'no climb left', lx, ly, { size: narrow ? 12 : 13, weight: 600, color: COL.climb });
-  text(ctx, c > 0 ? 'each 0.06 less: 10× the electrons' : 'the channel is on', lx, ly + 18 * TS * 0.85, { size: 10.5, color: COL.muted });
+  const knock = (str, x, y, size, weight, color) => {
+    font(ctx, size, weight);
+    const w = ctx.measureText(str).width;
+    ctx.fillStyle = COL.surface;
+    ctx.globalAlpha = 0.85;
+    ctx.fillRect(x - 3, y - size * TS, w + 6, size * TS * 1.3);
+    ctx.globalAlpha = 1;
+    text(ctx, str, x, y, { size, weight, color });
+  };
+  knock(c > 0 ? `the climb: ${fmt(c, 2)} eV` : 'no climb left', lx, ly, narrow ? 12 : 13, 600, COL.climb);
+  knock(c > 0 ? 'each 0.06 less: 10× the electrons' : 'the channel is on', lx, ly + 18 * TS * 0.85, 10.5, 400, COL.muted);
+  // the energy axis
+  ctx.save();
+  ctx.translate(narrow ? 8 : 14, (top + bot) / 2);
+  ctx.rotate(-Math.PI / 2);
+  text(ctx, 'energy of an electron →', 0, 0, { size: 10.5, color: COL.muted, align: 'center', base: 'middle' });
+  ctx.restore();
   // depth scale
   for (const nm of narrow ? [10, 20, 30] : [10, 20, 30, 40]) text(ctx, `${nm} nm`, X(nm * 1e-9), bot + 16, { size: 10.5, color: COL.muted, align: 'center' });
   text(ctx, 'depth below the gate', x1, bot + 36, { size: 10.5, color: COL.muted, align: 'right' });
@@ -227,15 +244,15 @@ export function drawDown(f, st) {
 
 export function drawCurve(f, st) {
   const { ctx, VW, VH } = f, narrow = VW < 800;
-  TS = narrow ? 1.38 : 1.3;
-  ctx.clearRect(0, 0, VW, VH);
+  TS = f.ts ?? (narrow ? 1.38 : 1.3);
+  if (!f.noClear) ctx.clearRect(0, 0, VW, VH);
   if (!st.sweep || !st.here) return;
   const x0 = narrow ? 70 : 110, x1 = VW - (narrow ? 16 : 30), y0 = narrow ? 30 : 34, y1 = VH - (narrow ? 60 : 56);
   const V0 = -0.5, V1 = 1.2, L0 = 2, L1 = 13;
   const X = (v) => x0 + ((x1 - x0) * (v - V0)) / (V1 - V0), Y = (lg) => y1 - ((y1 - y0) * (lg - L0)) / (L1 - L0);
   ctx.strokeStyle = COL.line;
   ctx.lineWidth = 1;
-  for (let lg = L0; lg <= L1; lg += narrow ? 3 : 2) {
+  for (let lg = L0; lg <= L1; lg += 2) {
     ctx.beginPath();
     ctx.moveTo(x0, Y(lg));
     ctx.lineTo(x1, Y(lg));

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Why can’t AI chips just run at a lower voltage? (film)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Martian+Mono:wdth,wght@87.5,400;87.5,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap">
+<style>html, body { margin: 0; background: #0d1015; } canvas { display: block; }</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1350"></canvas>
+<script type="module">
+// A 4:5 film of the explorable at /explorables/transistor/, drawn with its own pictures (pictures.js)
+// from its live transistor (model.js): the gate raised from 0 to 0.6 V, the channel filling and the
+// current with it (each dot a fixed number of electrons, in real time throughout), then the slice
+// straight down, where the climb shortens. Rendered one frame per call of window.reel.frame(k) by
+// driftlet's tools/film.js (--root at this site), with a soundtrack made from what the dots did.
+
+import { Gate, ZERO_CHARGE, sweep, profile, climb } from '../src/explorables/transistor/model.js';
+import { COL, stepFlow, drawSwitch, drawDown, drawCurve } from '../src/explorables/transistor/pictures.js';
+import { render } from './sound.js';
+
+Object.assign(COL, {
+  bg: '#0d1015', surface: '#151a22', line: '#252c38', 'line-2': '#313a48', ink: '#ece7dc', 'ink-2': '#c4bfb4', muted: '#8a909b',
+  e: '#5aa7e8', h: '#f0793f', gate: '#e0a64a', ox: '#3a4252', climb: '#b58cff', frame: '#7d8796',
+});
+const W = 1080, H = 1350, FPS = 30, ctx = document.getElementById('c').getContext('2d');
+const S = 1.125;
+const PHASES = [
+  { key: 'question', until: 3.2 },
+  { key: 'ramp', until: 11.0 },
+  { key: 'climb', until: 17.0 },
+  { key: 'floor', until: 21.6 },
+  { key: 'end', until: 25.0 },
+];
+const frames = Math.round(PHASES.at(-1).until * FPS);
+const phaseAt = (t) => PHASES.find((p) => t < p.until) ?? PHASES.at(-1);
+const ease = (u) => (u <= 0 ? 0 : u >= 1 ? 1 : u * u * (3 - 2 * u));
+// the gate: 0, up to 0.6 V; held; then down to 0.15 and back up, to show the climb come and go
+const gateV = (t) => 0.6 * ease((t - 3.6) / 6.6) - 0.45 * (ease((t - 12.0) / 2.0) - ease((t - 15.0) / 2.0));
+
+const sw = sweep(ZERO_CHARGE), gate = new Gate(ZERO_CHARGE);
+let st, k0, heard, lastV;
+function reset() {
+  st = { sweep: sw, V: 0 };
+  heard = [];
+  lastV = null;
+  k0 = -1;
+}
+reset();
+function update(t) {
+  const V = Math.round(gateV(t) * 1000) / 1000;
+  if (V === lastV) return;
+  const r = gate.at(V);
+  st.V = V;
+  st.here = { V, n: r.n, climb: climb(r.S), profile: profile(r.S) };
+  lastV = V;
+}
+
+function caption(key) {
+  if (key === 'ramp') return ['A transistor is a switch', 'Raise its gate 0.6 volts and the current rises more than 100,000 times.'];
+  if (key === 'climb') return ['Heat does the switching', 'Electrons climb into the channel on heat alone. Shorten the climb a little and ten times more make it.'];
+  if (key === 'floor') return ['So voltage has a floor', 'Heat sets at least 60 millivolts per tenfold, so off to on takes tenths of a volt.'];
+  return ['Simulated, not drawn', 'Every frame is computed from a physical model. Try it: link in reply.'];
+}
+function wrap(text, width) {
+  const words = text.split(' '), lines = [];
+  let line = '';
+  for (const w of words) { const t = line ? `${line} ${w}` : w; if (ctx.measureText(t).width > width && line) { lines.push(line); line = w; } else line = t; }
+  if (line) lines.push(line);
+  return lines;
+}
+
+function draw(k) {
+  const t = k / FPS, ph = phaseAt(t), key = ph.key, start = PHASES[PHASES.indexOf(ph) - 1]?.until ?? 0, j = (t - start) * FPS;
+  const g = ctx.createRadialGradient(W * 0.5, -80, 50, W * 0.5, -80, 1100);
+  g.addColorStop(0, '#1a1c22');
+  g.addColorStop(1, COL.bg);
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+  // the switch, and below it the curve (while the gate rises) or the slice straight down
+  ctx.save(); ctx.translate(0, 250); ctx.scale(S, S);
+  drawSwitch({ ctx, VW: 960, VH: 380, ts: 1.4 }, st, { clear: false });
+  ctx.restore();
+  ctx.save(); ctx.translate(0, 690); ctx.scale(S, S);
+  ctx.fillStyle = COL.surface;
+  ctx.globalAlpha = 0.6;
+  ctx.fillRect(14, 0, 932, 520);
+  ctx.globalAlpha = 1;
+  const below = key === 'question' || key === 'ramp' ? drawCurve : drawDown;
+  below({ ctx, VW: 960, VH: 520, noClear: true, ts: 1.6 }, st);
+  ctx.restore();
+  ctx.textBaseline = 'alphabetic';
+  ctx.textAlign = 'left';
+  if (key === 'question') {
+    ctx.globalAlpha = Math.min(1, j / 6);
+    ctx.fillStyle = COL.gate;
+    ctx.font = '600 22px "Martian Mono", monospace';
+    ctx.fillText('ONE TRANSISTOR, SIMULATED', 64, 64);
+    ctx.font = '900 80px "Big Shoulders Display", sans-serif';
+    ctx.fillStyle = COL.ink;
+    ctx.fillText('WHY CAN’T AI CHIPS JUST RUN', 60, 142);
+    const a = 'AT A LOWER ', b = 'VOLTAGE', c = '?';
+    ctx.fillText(a, 60, 216);
+    const x = 60 + ctx.measureText(a).width;
+    ctx.fillStyle = COL.gate; ctx.fillText(b, x, 216);
+    ctx.fillStyle = COL.ink; ctx.fillText(c, x + ctx.measureText(b).width, 216);
+    ctx.globalAlpha = 1;
+  } else {
+    const [head, sub] = caption(key);
+    ctx.globalAlpha = Math.min(1, j / 8);
+    ctx.fillStyle = key === 'climb' ? COL.climb : key === 'floor' ? COL.gate : COL.ink;
+    ctx.font = '900 76px "Big Shoulders Display", sans-serif';
+    ctx.fillText(head.toUpperCase(), 60, 112);
+    ctx.fillStyle = COL['ink-2'];
+    ctx.font = '400 31px "Newsreader", serif';
+    wrap(sub, 960).forEach((s, i) => ctx.fillText(s, 62, 164 + 40 * i));
+    if (key === 'end') {
+      ctx.fillStyle = COL.gate;
+      ctx.font = '600 22px "Martian Mono", monospace';
+      ctx.fillText('MADE BY MARK LUNDEBERG & CLAUDE · ON DRIFTLET', 64, 246);
+    }
+    ctx.globalAlpha = 1;
+  }
+  ctx.font = '400 24px "Martian Mono", monospace';
+  ctx.fillStyle = COL.muted;
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'left';
+  ctx.fillText(key === 'end' ? 'one silicon transistor · 2 nm oxide' : 'real time · room temperature', 64, 1308);
+  ctx.textAlign = 'right';
+  ctx.fillStyle = key === 'end' ? COL.ink : COL.muted;
+  ctx.font = `${key === 'end' ? 600 : 400} 22px "Martian Mono", monospace`;
+  ctx.fillText(key === 'end' ? 'marklundeberg.com' : 'driftlet', W - 60, 1308);
+}
+
+function frame(k) {
+  if (k < k0) reset();
+  for (let i = k0 + 1; i <= k; i++) {
+    const t = i / FPS;
+    update(t);
+    if (i === 0) continue;
+    for (const e of stepFlow(st, 1 / FPS)) heard.push({ t });
+  }
+  k0 = k;
+  draw(k);
+}
+
+// The soundtrack: a soft tok for each dot of electrons crossing from source to drain.
+function audio() {
+  console.log(`sound: ${heard.length} crossings`);
+  return render({ seconds: frames / FPS, master: 1.2, toks: heard.map((d) => ({ t: d.t, f: 330, pan: 0, gain: 0.08 })) });
+}
+await document.fonts.load('900 80px "Big Shoulders Display"');
+await document.fonts.load('400 31px "Newsreader"');
+await document.fonts.load('600 22px "Martian Mono"');
+window.reel = { frames, fps: FPS, frame, audio };
+frame(0);
+</script>
+</body>
+</html>
