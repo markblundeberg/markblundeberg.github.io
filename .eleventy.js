@@ -28,6 +28,8 @@ export default async function myConfig(eleventyConfig) {
     for (const x of explorables)
         eleventyConfig.addPassthroughCopy({ [`src/explorables/${x.slug}`]: `/explorables/${x.slug}/` });
     eleventyConfig.ignores.add('src/explorables/*/**');
+    // the room's shared stylesheet, which each explorable links as ../shared.css
+    eleventyConfig.addPassthroughCopy({ 'src/explorables/shared.css': '/explorables/shared.css' });
     // Opustek's "Engine, Learning to Sing": a standalone page like the
     // explorables (its own HTML, the track, the source zip, the drawing).
     eleventyConfig.addPassthroughCopy({ 'src/opustek': '/opustek/' });
