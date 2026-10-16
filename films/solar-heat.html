@@ -40,7 +40,7 @@ const phaseAt = (t) => PHASES.find((p) => t < p.until) ?? PHASES.at(-1);
 const cool = new Panel(KELVIN + 25, 1), hot = new Panel(KELVIN + 65, 1);
 const coolOp = cool.operate(cool.Vmp), hotBest = hot.operate(hot.Vmp);
 // the hot panel's voltage: its own best, raised to the cool one's while it's held, then let down.
-// (Held at its own open-circuit voltage, 0.1 mV a cell short of the cool one's best, so it
+// (Held at its own open-circuit voltage, half a millivolt a cell short of the cool one's best, so it
 // delivers exactly nothing rather than taking a trickle: both read 34.0 V.)
 const ease = (u) => (u <= 0 ? 0 : u >= 1 ? 1 : u * u * (3 - 2 * u));
 const HELD = Math.min(cool.Vmp, hot.Voc);
@@ -56,9 +56,9 @@ reset();
 
 function caption(key) {
   // (each short enough to read in its scene)
-  if (key === 'same') return ['Same sun. 15% less power.', 'Look at the meters: the same current, but a lower voltage.'];
-  if (key === 'held') return ['Hold it at the same voltage', '…and it makes nothing. Heat lets every electron leak back.'];
-  if (key === 'lower') return ['So a hot panel runs lower', 'Just as many electrons, but each carries less energy.'];
+  if (key === 'same') return ['Same sun. 15% less power.', 'Same current, 8.1 amps. But 29 volts, not 34.'];
+  if (key === 'held') return ['Force the hot one to 34 volts', '…and it makes nothing. Heat lets its electrons leak back over the cell’s one-way hill.'];
+  if (key === 'lower') return ['So a hot panel runs lower', 'Lower voltage, higher hill, less leak. Same electrons, less energy each.'];
   return ['Simulated, not drawn', 'Every frame is computed from a physical model. Try it: link in reply.'];
 }
 function wrap(text, width) {
@@ -78,7 +78,7 @@ function draw(k) {
   ctx.fillRect(0, 0, W, H);
   // the panels, and their power curves
   ctx.save(); ctx.translate(0, 300); ctx.scale(S, S);
-  drawPanels({ ctx, VW: 960, VH: 860 }, st, { ts: 1.45, clear: false });
+  drawPanels({ ctx, VW: 960, VH: 860 }, st, { ts: 1.8, clear: false });
   ctx.restore();
   // the headline
   ctx.textBaseline = 'alphabetic';
@@ -113,6 +113,24 @@ function draw(k) {
     }
     ctx.globalAlpha = 1;
   }
+  // what the dots and the curve are
+  if (key !== 'question' && key !== 'end') {
+    ctx.globalAlpha = Math.min(1, j / 8);
+    ctx.font = '600 23px "Martian Mono", monospace';
+    ctx.textBaseline = 'middle';
+    const dot = (y, c) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(72, y, 9, 0, 2 * Math.PI); ctx.fill(); };
+    dot(256, COL.e);
+    ctx.fillStyle = COL['ink-2'];
+    ctx.fillText('electrons delivered, lifted to the voltage', 92, 257);
+    if (key !== 'same') { dot(288, COL.leak); ctx.fillStyle = COL['ink-2']; ctx.fillText('electrons leaking back', 92, 289); }
+    ctx.globalAlpha = 1;
+  }
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = COL.ink;
+  ctx.font = '800 34px "Big Shoulders Display", sans-serif';
+  ctx.fillText('POWER AT EACH VOLTAGE', W - 40, 300 + (334 + 160 - 6) * S);
+  ctx.textAlign = 'left';
   // the footer
   ctx.font = '400 24px "Martian Mono", monospace';
   ctx.fillStyle = COL.muted;
@@ -150,7 +168,7 @@ function audio() {
   return render({
     seconds: frames / FPS,
     master: 1.2,
-    toks: heard.out.map((d) => ({ t: d.t, f: 180 * 2 ** (d.V / 12), pan: pan(d.i), gain: 0.1 })),
+    toks: heard.out.map((d) => ({ t: d.t, f: 180 * 2 ** (d.V / 12), pan: pan(d.i), gain: 0.075 })),
     bonks: heard.leak.map((d) => ({ t: d.t, f: 150, pan: pan(d.i), gain: 0.14 })),
   });
 }

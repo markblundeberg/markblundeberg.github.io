@@ -33,9 +33,10 @@ function mix(a, b, t) {
   return `rgb(${A.map((v, i) => Math.round(v + (B[i] - v) * t)).join(',')})`;
 }
 export const tempColour = (T) => mix(COL.cool, COL.hot, clamp((T - KELVIN - 25) / 40, 0, 1));
+// what a panel at T in full sun suggests (cells run some 25–35 °C above the air)
 export function describe(T) {
   const C = T - KELVIN;
-  return C < 5 ? 'a freezing bright day' : C < 35 ? 'a cool bright day' : C < 55 ? 'a warm roof' : 'a hot summer roof';
+  return C < 5 ? 'a freezing day' : C < 35 ? 'a cold, bright day' : C < 55 ? 'a warm day, on a roof' : 'a hot day, on a roof';
 }
 const fmt = (x, d = 1) => (Math.abs(x) < 0.5 * 10 ** -d ? 0 : x).toFixed(d).replace('-', '−');
 
@@ -146,7 +147,7 @@ export function drawPanels(f, st, opts = {}) {
   drawSun(ctx, VW / 2, 34, narrow ? 15 : 18, st.sun);
   st.panels.forEach((p, i) => {
     const x = L.panelX(i), col = tempColour(p.T), lx = L.lift(i), H = L.ph;
-    text(ctx, `${fmt(p.T - KELVIN, 0)} °C`, i === 0 ? x : i * L.cw + L.cw - (narrow ? 14 : 24), 40, { size: narrow ? 34 : 40, weight: 800, family: 'display', color: col, align: i === 0 ? 'left' : 'right' });
+    text(ctx, `${fmt(p.T - KELVIN, 0)} °C panel`, i === 0 ? x : i * L.cw + L.cw - (narrow ? 14 : 24), 40, { size: narrow ? 34 : 40, weight: 800, family: 'display', color: col, align: i === 0 ? 'left' : 'right' });
     text(ctx, describe(p.T), i === 0 ? x : i * L.cw + L.cw - (narrow ? 14 : 24), 62, { size: narrow ? 11 : 12, color: COL.muted, align: i === 0 ? 'left' : 'right' });
     drawPanelArt(ctx, x, L.top, L.pw, L.ph, p.T, st.sun);
     // the wire from the panel's foot to the lift, and the lift: as high as the panel's voltage
@@ -260,7 +261,7 @@ function drawPV(ctx, st, c, narrow) {
 const XMAX = 1.6e-6; // the front 1.6 µm: the emitter, the junction, and the start of the base
 export function drawHill(f, st) {
   const { ctx, VW, VH } = f, narrow = VW < 800;
-  TS = narrow ? 1.2 : 1;
+  TS = narrow ? 1.2 : 1.15;
   ctx.clearRect(0, 0, VW, VH);
   const lv = st.panels.map((p) => p.op.levels ?? levels(p.op.S));
   // one energy scale for both: from below the lowest E_v to above the highest E_c, in the window
@@ -269,11 +270,11 @@ export function drawHill(f, st) {
   const cw = narrow ? VW : VW / 2, ch = narrow ? VH / 2 : VH;
   st.panels.forEach((p, i) => {
     const L = lv[i], ox = narrow ? 0 : i * cw, oy = narrow ? i * ch : 0;
-    const px0 = ox + (narrow ? 56 : 64), px1 = ox + cw - (narrow ? 110 : 124), py0 = oy + 46, py1 = oy + ch - 34;
+    const px0 = ox + (narrow ? 56 : 64), px1 = ox + cw - (narrow ? 124 : 124), py0 = oy + 46, py1 = oy + ch - 34;
     const X = (x) => px0 + ((px1 - px0) * x) / XMAX, Y = (E) => py1 - ((py1 - py0) * (E - lo)) / (hi - lo);
     const col = tempColour(p.T), idx = L.x.map((x, g) => g).filter((g) => L.x[g] <= XMAX * 1.0001);
     text(ctx, `${fmt(p.T - KELVIN, 0)} °C`, px0, oy + 26, { size: 26, weight: 800, family: 'display', color: col });
-    text(ctx, st.same ? `held at ${fmt(panel.V(st.panels[0].op.V))} V` : `at its best, ${fmt(panel.V(p.op.V))} V`, px0 + 62, oy + 26, { size: 11.5, color: COL.muted });
+    text(ctx, st.same ? `held at ${fmt(panel.V(p.op.V))} V` : `at its best, ${fmt(panel.V(p.op.V))} V`, px0 + 62, oy + 26, { size: 11.5, color: COL.muted });
     // the emitter, shaded
     ctx.fillStyle = COL.line;
     ctx.globalAlpha = 0.35;
@@ -330,6 +331,8 @@ export function drawHill(f, st) {
     arrow(ctx, sx, yp - 2, sx, yn + 2, COL.ink, true);
     text(ctx, `${(L.Efn[g1] - L.Efp[g1]).toFixed(3)} V`, sx + 6, (yn + yp) / 2 - 6, { size: 11.5, weight: 600, color: COL.ink });
     text(ctx, 'split', sx + 6, (yn + yp) / 2 + 9, { size: 10.5, color: COL.muted });
+    text(ctx, '× 60 cells', sx + 6, (yn + yp) / 2 + 23, { size: 10.5, color: COL.muted });
+    text(ctx, `= ${fmt(panel.V(L.Efn[g1] - L.Efp[g1]))} V`, sx + 6, (yn + yp) / 2 + 37, { size: 10.5, color: COL.muted });
   });
 }
 function oneIn(n) {

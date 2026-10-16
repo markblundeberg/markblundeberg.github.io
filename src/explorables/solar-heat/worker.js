@@ -10,7 +10,10 @@ onmessage = ({ data: { id, T, sun, same } }) => {
     if (!panels[i]) panels[i] = new Panel(t, sun);
     else if (panels[i].T !== t || panels[i].sun !== sun) panels[i].set(t, sun);
   });
-  const V = [panels[0].Vmp, same ? panels[0].Vmp : panels[1].Vmp];
+  // Held together, the second goes to the first's best voltage, or its own open-circuit voltage if
+  // that's lower (a hotter panel's, at 65 °C against 25, is half a millivolt a cell lower): there it delivers
+  // exactly nothing, rather than taking a trickle.
+  const V = [panels[0].Vmp, same ? Math.min(panels[0].Vmp, panels[1].Voc) : panels[1].Vmp];
   postMessage({
     id,
     panels: panels.map((p, i) => {

@@ -90,13 +90,17 @@ expect('γ implied by dVoc/dT (Green 2003)', out.gamma_implied, 1.58, 3, "betwee
   };
   out.panel_cool_best = show(cool, cool.Vmp);
   out.panel_hot_best = show(hot, hot.Vmp);
-  out.panel_hot_at_cool_V = show(hot, cool.Vmp);
+  // held together, as the page and film do: at the cool one's best voltage, or the hot one's open
+  // circuit if that's lower (it is, by half a millivolt a cell)
+  out.held_V_cell = { cool_Vmp: +cool.Vmp.toFixed(5), hot_Voc: +hot.Voc.toFixed(5) };
+  out.panel_hot_at_cool_V = show(hot, Math.min(cool.Vmp, hot.Voc));
   out.delivered_at_0V_per100 = { cool: +((100 * cool.short.delivered) / cool.short.made).toFixed(1), hot: +((100 * hot.short.delivered) / hot.short.made).toFixed(1) };
   out.hot_over_cool_power = +(hot.Pmax / cool.Pmax).toFixed(3);
   out.panel_Voc_V = { cool: +M.panel.V(cool.Voc).toFixed(1), hot: +M.panel.V(hot.Voc).toFixed(1) };
   out.panel_Isc_A = { cool: +M.panel.A(cool.Jsc).toFixed(2), hot: +M.panel.A(hot.Jsc).toFixed(2) };
   out.one_in_ratio_same_V = +(out.panel_cool_best.one_in / out.panel_hot_at_cool_V.one_in).toFixed(1);
-  expect('the hot panel at the cool one\'s voltage delivers nothing', Math.abs(out.panel_hot_at_cool_V.W), 0, 10, 'its V_oc is the cool one\'s V_mp');
+  expect('the hot panel held at the cool one\'s voltage delivers nothing', Math.abs(out.panel_hot_at_cool_V.W), 0, 0.5, 'held at its own V_oc, half a millivolt a cell below the cool one\'s V_mp');
+  expect('…and that\'s the cool one\'s best voltage, to a fraction of a mV', 1000 * (cool.Vmp - hot.Voc), -1, 1, 'both read 34.0 V');
   expect('the per-100 ledger closes', out.panel_cool_best.per100_sum_error, 0, 1e-6, 'every pair accounted for');
   // The leak, by where it ends: what each loss grows by from 0 V to the best voltage, per 100 pairs
   // (holes leaking into the front layer show up at the front; electrons into the base, in the base
