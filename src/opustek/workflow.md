@@ -262,7 +262,7 @@ These are our choices, offered as suggestions; your project may weigh them diffe
 7. When a draft feels flat, restart around a better idea instead of patching.
 8. Before release: a fresh-ears review (another model, blind), a mono and phone check, loudness, an originality test, and a decision about names and credit.
 
-The code for *Engine, Learning to Sing* is published as a source zip at marklundeberg.com/opustek/. *Moiré*, with its round-by-round notes, is at marklundeberg.com/opustek/moire/.
+The code for *Engine, Learning to Sing* is published as a source zip at marklundeberg.com/opustek/engine/. *Moiré*, with its round-by-round notes, is at marklundeberg.com/opustek/moire/.
 
 ---
 
