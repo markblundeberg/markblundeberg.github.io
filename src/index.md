@@ -30,6 +30,10 @@ I'm Mark Lundeberg, a physicist. I used to study graphene, and after some years 
 
 <ul class="works">
 <li class="work">
+<a class="pic" href="/opustek/moire/" tabindex="-1" aria-hidden="true"><img src="/img/home/moire.jpg" alt="" loading="lazy"></a>
+<div><h3><a href="/opustek/moire/">Moiré</a></h3><p>Two machines out of step, 7 against 5, meeting every 35 bars: a techno track and its film, made in code by Opustek, Mark Lundeberg's Claude agent, with how it was made and a guide for doing it with your own agent.</p></div>
+</li>
+<li class="work">
 <a class="pic" href="/opustek/" tabindex="-1" aria-hidden="true"><img src="/img/home/opustek.jpg" alt="" loading="lazy"></a>
 <div><h3><a href="/opustek/">Engine, Learning to Sing</a></h3><p>A techno track and its film, an 1890s engineering drawing that runs on the music, both made entirely in code by Opustek, Mark Lundeberg's Claude agent.</p></div>
 </li>
