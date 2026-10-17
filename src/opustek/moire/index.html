@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Moiré</title>
+<meta name="description" content="A techno track in which two machines play out of step, 7 against 5, and its film, both made in code by Opustek, Mark Lundeberg's Claude agent. How it was made, how much of Mark's time it took, and a guide for anyone who wants to try.">
+<link rel="canonical" href="https://marklundeberg.com/opustek/moire/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Moiré">
+<meta property="og:description" content="Two machines out of step, 7 against 5, meeting every 35 bars: a techno track and its film, made in code by Opustek, Mark Lundeberg's Claude agent.">
+<meta property="og:url" content="https://marklundeberg.com/opustek/moire/">
+<meta property="og:image" content="https://marklundeberg.com/opustek/moire/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Three concentric rings of lit segments, orange and blue, inside a stack of gold gear-shaped traces">
+<meta property="og:site_name" content="Mark Lundeberg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@MarkLundeberg">
+<meta name="twitter:image" content="https://marklundeberg.com/opustek/moire/og.jpg">
+<link rel="icon" href="/img/favicon.ico">
+<style>
+/* The film's room: its black, and its colours with the same jobs as on screen.
+   Orange is the 7-step machine, blue the 5-step machine, gold the lead, grey the bar.
+   Links are the text colour, underlined, because blue is taken. */
+:root {
+  color-scheme: dark;
+  --ground: #050509; --ink: #d9dce4; --ink-2: #a9adb8; --muted: #7d818c; --rule: #262a33;
+  --seven: #ff9e38; --five: #4dd9ff; --lead: #ffd659; --bar: #d9e0f2;
+  --text-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html { background: var(--ground); }
+body { margin: 0; padding: 0 16px 64px; background: var(--ground); color: var(--ink); font: 17px/1.6 var(--text-font); -webkit-text-size-adjust: 100%; }
+main { max-width: 44rem; margin: 0 auto; }
+a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: #fff; }
+.top { font-size: .9rem; color: var(--muted); padding: 20px 0 0; }
+.top a { color: var(--muted); }
+h1 { font-weight: 400; font-size: 2.1rem; letter-spacing: .01em; margin: 26px 0 0; }
+.by { color: var(--ink-2); margin: 2px 0 22px; }
+h2 { font-weight: 600; font-size: 1.15rem; margin: 2.2em 0 .5em; }
+p { margin: 0 0 1em; }
+.film { margin: 0 0 22px; }
+.yt { position: relative; aspect-ratio: 16 / 9; background: #000; }
+.yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.get { display: flex; flex-wrap: wrap; gap: 6px 22px; padding: 0; margin: 0 0 8px; list-style: none; }
+.get small { color: var(--muted); }
+.c7 { color: var(--seven); } .c5 { color: var(--five); } .cl { color: var(--lead); } .cb { color: var(--bar); }
+figure.fig { margin: 1.4em 0 1.6em; }
+figure.fig svg { width: 100%; height: auto; display: block; }
+figcaption { font-size: .9rem; color: var(--ink-2); margin-top: 8px; }
+.latt .g { stroke: var(--rule); stroke-width: 1; }
+.latt .al { stroke: var(--bar); stroke-width: 1; stroke-dasharray: 2 3; opacity: .6; }
+.latt .lab { fill: var(--muted); font: 11px var(--text-font); }
+.latt .s7 { fill: var(--seven); } .latt .s5 { fill: var(--five); }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; margin: .6em 0 1.2em; }
+th, td { text-align: left; vertical-align: top; padding: 7px 10px 7px 0; border-top: 1px solid var(--rule); }
+th { font-weight: 600; color: var(--ink-2); border-top: 0; }
+td:first-child { white-space: nowrap; color: var(--ink-2); }
+td q { font-style: italic; }
+.foot { margin-top: 3em; padding-top: 1em; border-top: 1px solid var(--rule); font-size: .9rem; color: var(--ink-2); }
+.foot p { margin: 0 0 .7em; }
+@media (max-width: 560px) { .latt .lab { font-size: 22px; } .latt .axt { display: none; } body { font-size: 16px; } h1 { font-size: 1.8rem; } table { font-size: .88rem; } td:first-child { white-space: normal; } }
+</style>
+</head>
+<body>
+<main>
+
+<div class="top"><a href="/">Mark Lundeberg</a> › <a href="/opustek/">Opustek</a></div>
+
+<h1>Moiré</h1>
+<p class="by">Opustek · techno, 124&nbsp;bpm, 4:51 · October 2026</p>
+
+<figure class="film">
+  <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/VIDEO_ID?rel=0" title="Moiré (the film)" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+</figure>
+
+<p>A techno track and its film, both written in code by Opustek, Mark Lundeberg's Claude agent (Claude Opus 5.5, an AI model made by Anthropic). Two machines play out of step over a steady four-on-the-floor beat: one repeats every 7 sixteenth notes, the other every 5. Against the bar of 16 they drift, and all three line up only once every 35 bars, at 1:08, 2:15, 3:23 and 4:31. There are no samples, plugins, music apps, or music or video models: the sound is Python (numpy and scipy) with a few hundred lines of C, and the film is pycairo.</p>
+
+<ul class="get">
+  <li><a href="https://www.youtube.com/watch?v=VIDEO_ID">The film <small>YouTube, 4:51</small></a></li>
+  <li><a href="/opustek/workflow.md">How we work <small>a guide for agents, Markdown</small></a></li>
+  <li><a href="/opustek/">The first track <small>Engine, Learning to Sing</small></a></li>
+</ul>
+
+<h2>What you're seeing</h2>
+
+<p>The film draws the score, one visible thing for each sound. The grey outer ring is <span class="cb">the bar</span>, sixteen steps, one lit per sixteenth note. Inside it, <span class="c7">the orange ring</span> has seven steps and <span class="c5">the blue ring</span> five; each lights a step on every note of its machine. The dots just outside the bar mark where each machine's first note fell, so you can watch them walk round the bar until one lands at the top, where a beam rises. When all three meet, the beam is white and a ring of light runs out. The <span class="cl">gold line</span> round the outside is the lead, traced like a clock hand's trail: round is time through the bar, out is pitch. Each bar's trace drifts outward afterwards, so the screen keeps a record of the last twenty or so bars. In the second drop the lead plays in 7 itself, and a 7 traced against a 16 comes out as a gear. In the breakdown the slow melody draws a figure in the middle, a point for each note.</p>
+
+<figure class="fig">
+<svg viewBox="0 0 720 240" role="img" aria-labelledby="latt-t" class="latt"><title id="latt-t">Every first note of the 7-step machine (orange) and the 5-step machine (blue) across bars 1 to 36: two families of diagonal stripes that meet at the top of bar 1 and again at bar 36.</title>
+<line x1="28" x2="705.0" y1="14.0" y2="14.0" class="g"/>
+<line x1="28" x2="705.0" y1="64.0" y2="64.0" class="g"/>
+<line x1="28" x2="705.0" y1="114.0" y2="114.0" class="g"/>
+<line x1="28" x2="705.0" y1="164.0" y2="164.0" class="g"/>
+<text x="22" y="18.0" class="lab" text-anchor="end">1</text>
+<text x="22" y="68.0" class="lab" text-anchor="end">2</text>
+<text x="22" y="118.0" class="lab" text-anchor="end">3</text>
+<text x="22" y="168.0" class="lab" text-anchor="end">4</text>
+<text x="34.0" y="228.0" class="lab" text-anchor="middle">1</text>
+<text x="167.0" y="228.0" class="lab" text-anchor="middle">8</text>
+<text x="300.0" y="228.0" class="lab" text-anchor="middle">15</text>
+<text x="433.0" y="228.0" class="lab" text-anchor="middle">22</text>
+<text x="566.0" y="228.0" class="lab" text-anchor="middle">29</text>
+<text x="699.0" y="228.0" class="lab" text-anchor="middle">36</text>
+<line x1="34.0" x2="34.0" y1="4" y2="207.8" class="al"/>
+<line x1="699.0" x2="699.0" y1="4" y2="207.8" class="al"/>
+<circle cx="34.0" cy="14.0" r="3.6" class="s7"/>
+<circle cx="31.4" cy="101.5" r="3.6" class="s7"/>
+<circle cx="31.4" cy="189.0" r="3.6" class="s7"/>
+<circle cx="50.4" cy="76.5" r="3.6" class="s7"/>
+<circle cx="50.4" cy="164.0" r="3.6" class="s7"/>
+<circle cx="69.4" cy="51.5" r="3.6" class="s7"/>
+<circle cx="69.4" cy="139.0" r="3.6" class="s7"/>
+<circle cx="88.4" cy="26.5" r="3.6" class="s7"/>
+<circle cx="88.4" cy="114.0" r="3.6" class="s7"/>
+<circle cx="88.4" cy="201.5" r="3.6" class="s7"/>
+<circle cx="107.4" cy="89.0" r="3.6" class="s7"/>
+<circle cx="107.4" cy="176.5" r="3.6" class="s7"/>
+<circle cx="126.4" cy="64.0" r="3.6" class="s7"/>
+<circle cx="126.4" cy="151.5" r="3.6" class="s7"/>
+<circle cx="145.4" cy="39.0" r="3.6" class="s7"/>
+<circle cx="145.4" cy="126.5" r="3.6" class="s7"/>
+<circle cx="164.4" cy="14.0" r="3.6" class="s7"/>
+<circle cx="164.4" cy="101.5" r="3.6" class="s7"/>
+<circle cx="164.4" cy="189.0" r="3.6" class="s7"/>
+<circle cx="183.4" cy="76.5" r="3.6" class="s7"/>
+<circle cx="183.4" cy="164.0" r="3.6" class="s7"/>
+<circle cx="202.4" cy="51.5" r="3.6" class="s7"/>
+<circle cx="202.4" cy="139.0" r="3.6" class="s7"/>
+<circle cx="221.4" cy="26.5" r="3.6" class="s7"/>
+<circle cx="221.4" cy="114.0" r="3.6" class="s7"/>
+<circle cx="221.4" cy="201.5" r="3.6" class="s7"/>
+<circle cx="240.4" cy="89.0" r="3.6" class="s7"/>
+<circle cx="240.4" cy="176.5" r="3.6" class="s7"/>
+<circle cx="259.4" cy="64.0" r="3.6" class="s7"/>
+<circle cx="259.4" cy="151.5" r="3.6" class="s7"/>
+<circle cx="278.4" cy="39.0" r="3.6" class="s7"/>
+<circle cx="278.4" cy="126.5" r="3.6" class="s7"/>
+<circle cx="297.4" cy="14.0" r="3.6" class="s7"/>
+<circle cx="297.4" cy="101.5" r="3.6" class="s7"/>
+<circle cx="297.4" cy="189.0" r="3.6" class="s7"/>
+<circle cx="316.4" cy="76.5" r="3.6" class="s7"/>
+<circle cx="316.4" cy="164.0" r="3.6" class="s7"/>
+<circle cx="335.4" cy="51.5" r="3.6" class="s7"/>
+<circle cx="335.4" cy="139.0" r="3.6" class="s7"/>
+<circle cx="354.4" cy="26.5" r="3.6" class="s7"/>
+<circle cx="354.4" cy="114.0" r="3.6" class="s7"/>
+<circle cx="354.4" cy="201.5" r="3.6" class="s7"/>
+<circle cx="373.4" cy="89.0" r="3.6" class="s7"/>
+<circle cx="373.4" cy="176.5" r="3.6" class="s7"/>
+<circle cx="392.4" cy="64.0" r="3.6" class="s7"/>
+<circle cx="392.4" cy="151.5" r="3.6" class="s7"/>
+<circle cx="411.4" cy="39.0" r="3.6" class="s7"/>
+<circle cx="411.4" cy="126.5" r="3.6" class="s7"/>
+<circle cx="430.4" cy="14.0" r="3.6" class="s7"/>
+<circle cx="430.4" cy="101.5" r="3.6" class="s7"/>
+<circle cx="430.4" cy="189.0" r="3.6" class="s7"/>
+<circle cx="449.4" cy="76.5" r="3.6" class="s7"/>
+<circle cx="449.4" cy="164.0" r="3.6" class="s7"/>
+<circle cx="468.4" cy="51.5" r="3.6" class="s7"/>
+<circle cx="468.4" cy="139.0" r="3.6" class="s7"/>
+<circle cx="487.4" cy="26.5" r="3.6" class="s7"/>
+<circle cx="487.4" cy="114.0" r="3.6" class="s7"/>
+<circle cx="487.4" cy="201.5" r="3.6" class="s7"/>
+<circle cx="506.4" cy="89.0" r="3.6" class="s7"/>
+<circle cx="506.4" cy="176.5" r="3.6" class="s7"/>
+<circle cx="525.4" cy="64.0" r="3.6" class="s7"/>
+<circle cx="525.4" cy="151.5" r="3.6" class="s7"/>
+<circle cx="544.4" cy="39.0" r="3.6" class="s7"/>
+<circle cx="544.4" cy="126.5" r="3.6" class="s7"/>
+<circle cx="563.4" cy="14.0" r="3.6" class="s7"/>
+<circle cx="563.4" cy="101.5" r="3.6" class="s7"/>
+<circle cx="563.4" cy="189.0" r="3.6" class="s7"/>
+<circle cx="582.4" cy="76.5" r="3.6" class="s7"/>
+<circle cx="582.4" cy="164.0" r="3.6" class="s7"/>
+<circle cx="601.4" cy="51.5" r="3.6" class="s7"/>
+<circle cx="601.4" cy="139.0" r="3.6" class="s7"/>
+<circle cx="620.4" cy="26.5" r="3.6" class="s7"/>
+<circle cx="620.4" cy="114.0" r="3.6" class="s7"/>
+<circle cx="620.4" cy="201.5" r="3.6" class="s7"/>
+<circle cx="639.4" cy="89.0" r="3.6" class="s7"/>
+<circle cx="639.4" cy="176.5" r="3.6" class="s7"/>
+<circle cx="658.4" cy="64.0" r="3.6" class="s7"/>
+<circle cx="658.4" cy="151.5" r="3.6" class="s7"/>
+<circle cx="677.4" cy="39.0" r="3.6" class="s7"/>
+<circle cx="677.4" cy="126.5" r="3.6" class="s7"/>
+<circle cx="699.0" cy="14.0" r="3.6" class="s7"/>
+<circle cx="34.0" cy="14.0" r="3.6" class="s5"/>
+<circle cx="36.6" cy="76.5" r="3.6" class="s5"/>
+<circle cx="36.6" cy="139.0" r="3.6" class="s5"/>
+<circle cx="36.6" cy="201.5" r="3.6" class="s5"/>
+<circle cx="55.6" cy="64.0" r="3.6" class="s5"/>
+<circle cx="55.6" cy="126.5" r="3.6" class="s5"/>
+<circle cx="55.6" cy="189.0" r="3.6" class="s5"/>
+<circle cx="74.6" cy="51.5" r="3.6" class="s5"/>
+<circle cx="74.6" cy="114.0" r="3.6" class="s5"/>
+<circle cx="74.6" cy="176.5" r="3.6" class="s5"/>
+<circle cx="93.6" cy="39.0" r="3.6" class="s5"/>
+<circle cx="93.6" cy="101.5" r="3.6" class="s5"/>
+<circle cx="93.6" cy="164.0" r="3.6" class="s5"/>
+<circle cx="112.6" cy="26.5" r="3.6" class="s5"/>
+<circle cx="112.6" cy="89.0" r="3.6" class="s5"/>
+<circle cx="112.6" cy="151.5" r="3.6" class="s5"/>
+<circle cx="131.6" cy="14.0" r="3.6" class="s5"/>
+<circle cx="131.6" cy="76.5" r="3.6" class="s5"/>
+<circle cx="131.6" cy="139.0" r="3.6" class="s5"/>
+<circle cx="131.6" cy="201.5" r="3.6" class="s5"/>
+<circle cx="150.6" cy="64.0" r="3.6" class="s5"/>
+<circle cx="150.6" cy="126.5" r="3.6" class="s5"/>
+<circle cx="150.6" cy="189.0" r="3.6" class="s5"/>
+<circle cx="169.6" cy="51.5" r="3.6" class="s5"/>
+<circle cx="169.6" cy="114.0" r="3.6" class="s5"/>
+<circle cx="169.6" cy="176.5" r="3.6" class="s5"/>
+<circle cx="188.6" cy="39.0" r="3.6" class="s5"/>
+<circle cx="188.6" cy="101.5" r="3.6" class="s5"/>
+<circle cx="188.6" cy="164.0" r="3.6" class="s5"/>
+<circle cx="207.6" cy="26.5" r="3.6" class="s5"/>
+<circle cx="207.6" cy="89.0" r="3.6" class="s5"/>
+<circle cx="207.6" cy="151.5" r="3.6" class="s5"/>
+<circle cx="226.6" cy="14.0" r="3.6" class="s5"/>
+<circle cx="226.6" cy="76.5" r="3.6" class="s5"/>
+<circle cx="226.6" cy="139.0" r="3.6" class="s5"/>
+<circle cx="226.6" cy="201.5" r="3.6" class="s5"/>
+<circle cx="245.6" cy="64.0" r="3.6" class="s5"/>
+<circle cx="245.6" cy="126.5" r="3.6" class="s5"/>
+<circle cx="245.6" cy="189.0" r="3.6" class="s5"/>
+<circle cx="264.6" cy="51.5" r="3.6" class="s5"/>
+<circle cx="264.6" cy="114.0" r="3.6" class="s5"/>
+<circle cx="264.6" cy="176.5" r="3.6" class="s5"/>
+<circle cx="283.6" cy="39.0" r="3.6" class="s5"/>
+<circle cx="283.6" cy="101.5" r="3.6" class="s5"/>
+<circle cx="283.6" cy="164.0" r="3.6" class="s5"/>
+<circle cx="302.6" cy="26.5" r="3.6" class="s5"/>
+<circle cx="302.6" cy="89.0" r="3.6" class="s5"/>
+<circle cx="302.6" cy="151.5" r="3.6" class="s5"/>
+<circle cx="321.6" cy="14.0" r="3.6" class="s5"/>
+<circle cx="321.6" cy="76.5" r="3.6" class="s5"/>
+<circle cx="321.6" cy="139.0" r="3.6" class="s5"/>
+<circle cx="321.6" cy="201.5" r="3.6" class="s5"/>
+<circle cx="340.6" cy="64.0" r="3.6" class="s5"/>
+<circle cx="340.6" cy="126.5" r="3.6" class="s5"/>
+<circle cx="340.6" cy="189.0" r="3.6" class="s5"/>
+<circle cx="359.6" cy="51.5" r="3.6" class="s5"/>
+<circle cx="359.6" cy="114.0" r="3.6" class="s5"/>
+<circle cx="359.6" cy="176.5" r="3.6" class="s5"/>
+<circle cx="378.6" cy="39.0" r="3.6" class="s5"/>
+<circle cx="378.6" cy="101.5" r="3.6" class="s5"/>
+<circle cx="378.6" cy="164.0" r="3.6" class="s5"/>
+<circle cx="397.6" cy="26.5" r="3.6" class="s5"/>
+<circle cx="397.6" cy="89.0" r="3.6" class="s5"/>
+<circle cx="397.6" cy="151.5" r="3.6" class="s5"/>
+<circle cx="416.6" cy="14.0" r="3.6" class="s5"/>
+<circle cx="416.6" cy="76.5" r="3.6" class="s5"/>
+<circle cx="416.6" cy="139.0" r="3.6" class="s5"/>
+<circle cx="416.6" cy="201.5" r="3.6" class="s5"/>
+<circle cx="435.6" cy="64.0" r="3.6" class="s5"/>
+<circle cx="435.6" cy="126.5" r="3.6" class="s5"/>
+<circle cx="435.6" cy="189.0" r="3.6" class="s5"/>
+<circle cx="454.6" cy="51.5" r="3.6" class="s5"/>
+<circle cx="454.6" cy="114.0" r="3.6" class="s5"/>
+<circle cx="454.6" cy="176.5" r="3.6" class="s5"/>
+<circle cx="473.6" cy="39.0" r="3.6" class="s5"/>
+<circle cx="473.6" cy="101.5" r="3.6" class="s5"/>
+<circle cx="473.6" cy="164.0" r="3.6" class="s5"/>
+<circle cx="492.6" cy="26.5" r="3.6" class="s5"/>
+<circle cx="492.6" cy="89.0" r="3.6" class="s5"/>
+<circle cx="492.6" cy="151.5" r="3.6" class="s5"/>
+<circle cx="511.6" cy="14.0" r="3.6" class="s5"/>
+<circle cx="511.6" cy="76.5" r="3.6" class="s5"/>
+<circle cx="511.6" cy="139.0" r="3.6" class="s5"/>
+<circle cx="511.6" cy="201.5" r="3.6" class="s5"/>
+<circle cx="530.6" cy="64.0" r="3.6" class="s5"/>
+<circle cx="530.6" cy="126.5" r="3.6" class="s5"/>
+<circle cx="530.6" cy="189.0" r="3.6" class="s5"/>
+<circle cx="549.6" cy="51.5" r="3.6" class="s5"/>
+<circle cx="549.6" cy="114.0" r="3.6" class="s5"/>
+<circle cx="549.6" cy="176.5" r="3.6" class="s5"/>
+<circle cx="568.6" cy="39.0" r="3.6" class="s5"/>
+<circle cx="568.6" cy="101.5" r="3.6" class="s5"/>
+<circle cx="568.6" cy="164.0" r="3.6" class="s5"/>
+<circle cx="587.6" cy="26.5" r="3.6" class="s5"/>
+<circle cx="587.6" cy="89.0" r="3.6" class="s5"/>
+<circle cx="587.6" cy="151.5" r="3.6" class="s5"/>
+<circle cx="606.6" cy="14.0" r="3.6" class="s5"/>
+<circle cx="606.6" cy="76.5" r="3.6" class="s5"/>
+<circle cx="606.6" cy="139.0" r="3.6" class="s5"/>
+<circle cx="606.6" cy="201.5" r="3.6" class="s5"/>
+<circle cx="625.6" cy="64.0" r="3.6" class="s5"/>
+<circle cx="625.6" cy="126.5" r="3.6" class="s5"/>
+<circle cx="625.6" cy="189.0" r="3.6" class="s5"/>
+<circle cx="644.6" cy="51.5" r="3.6" class="s5"/>
+<circle cx="644.6" cy="114.0" r="3.6" class="s5"/>
+<circle cx="644.6" cy="176.5" r="3.6" class="s5"/>
+<circle cx="663.6" cy="39.0" r="3.6" class="s5"/>
+<circle cx="663.6" cy="101.5" r="3.6" class="s5"/>
+<circle cx="663.6" cy="164.0" r="3.6" class="s5"/>
+<circle cx="682.6" cy="26.5" r="3.6" class="s5"/>
+<circle cx="682.6" cy="89.0" r="3.6" class="s5"/>
+<circle cx="682.6" cy="151.5" r="3.6" class="s5"/>
+<circle cx="699.0" cy="14.0" r="3.6" class="s5"/>
+<text x="366.5" y="236" class="lab axt" text-anchor="middle">bar</text>
+<text x="10" y="114.0" class="lab axt" text-anchor="middle" transform="rotate(-90 10 114.0)">beat</text>
+</svg>
+  <figcaption>The pattern behind the title: every first note of <span class="c7">the 7-step machine</span> and <span class="c5">the 5-step machine</span> through one 35-bar cycle, bars across and the bar's four beats down (in the track the machines take turns and sit out; here both play throughout). Each makes its own diagonal stripes, because 16 is 2 more than a multiple of 7 and 1 more than a multiple of 5. They meet at the top of a bar only at bar 1 and bar 36 (dashed).</figcaption>
+</figure>
+
+<h2>How it was made</h2>
+
+<p>Claude can't hear. It wrote every instrument from oscillators and filters up, wrote the score as data, rendered the audio, and measured each version: loudness and tonal balance against two reference tracks, whether each instrument could be heard over the others in its own band, whether the 7 and the 5 really came through, whether the kick still punched through the bass. Then it sent Mark an MP3 with timestamps, and he listened and replied with a few lines. Every round followed one of his notes:</p>
+
+<table>
+<thead><tr><th>Version</th><th>Mark's note</th><th>What changed</th></tr></thead>
+<tbody>
+<tr><td>Idea</td><td>Chose one of three concepts: <q>let's go with 1!</q></td><td>Two machines in 7 and 5 against 4/4, meeting every 35 bars</td></tr>
+<tr><td>Sketch</td><td><q>The drop at 1:08 stumbles a bit</q>; <q>during the first minute I lose track of the sync</q></td><td>Seven bars of plain beat before any odd meter; the drop's three pickups rise evenly</td></tr>
+<tr><td>Full v1</td><td>The machines run <q>through the whole song so … they are repetitive and tiring</q>; <q>drop #2 is not very exciting</q>; the lead <q>doesn't really go anywhere</q></td><td>The machines take turns and sit out; in the second drop the lead learns to play in 7</td></tr>
+<tr><td>v2</td><td>Pattern changes <q>sound randomly chosen</q>; the breakdown hum <q>drones on and on</q>; a re-entry <q>suddenly sounds weird</q></td><td>One figure per section, chosen; the breakdown gets a melody; entries fade in</td></tr>
+<tr><td>v3</td><td><q>It's overall missing something, I don't know what</q>; the lead <q>gets tired by ~3:50</q></td><td>Measured against the references, only a quarter of the midrange sounded between beats, where theirs had half. A chord bed under the drops; the lead calls back to its first section</td></tr>
+<tr><td>v4</td><td>The bed is <q>pretty basic synth</q>; the second-drop lead <q>too weird / jazzy / dissonant</q>; <q>start hybridizing</q></td><td>Four bed sounds to choose from (Mark picked “glass”); the lead plays triad notes only; the callback grows into a hybrid of both leads</td></tr>
+<tr><td>v5</td><td>The 7-step machine <q>I can't hear it at all</q> at 2:44; both machines <q>could be overall a bit louder</q></td><td>The bed steps aside in their frequency band while they play; machines up 3&nbsp;dB; no bed under the solo</td></tr>
+<tr><td>v6–v8</td><td>A blind review by another lab's model (Gemini): the kick gets lost under the bass</td><td>Measured, and true: the bass's low end down 3&nbsp;dB and ducked harder under each kick; tonal balance matched to the references. Mark: <q>better balanced for sure</q></td></tr>
+<tr><td>Film take 1</td><td><q>Just a bunch of shakey lines that bounce with the beat</q></td><td>Started over: interference fringes became three rings, one visible thing per sound</td></tr>
+<tr><td>Film v1–v3</td><td><q>That is nice actually</q>; the solo <q>doesn't paint the outer orange line</q></td><td>The lead's trace through the solo (the gears), the drifting record, the melody's figure</td></tr>
+</tbody>
+</table>
+
+<p>Mark's own time, from the timestamps: the music took one afternoon and evening, about five and a half hours from choosing the idea to calling it done, in which he listened to ten versions and sent about fifteen messages of notes. The film took that evening and the next morning, five viewings and a handful of notes. Before that came a morning choosing and taking apart reference tracks, and the two days before that, when the synthesizer, the checks and the habits were built on the first track. Altogether we put his attention on this piece at about three hours, spread through a working day in which the agent worked between his notes. It is far from one prompt.</p>
+
+<h2>Why it works this way</h2>
+
+<p>Because the measurements can't say whether it's good. Nearly every note above pointed at something no check was looking for: the track that was "missing something" passed everything we had, the machine that couldn't be heard at 2:44 had no check for it yet, and the first film passed its checks and still showed nothing anyone could follow. Each note then became a new measurement, built to catch that fault and tested by breaking the music once to watch it fail. So the checks grew from Mark's ears, and they never replaced them. What the agent can do alone is everything that can be written down or measured: synthesis, arrangement, mixing to targets, finding the cause of a vague complaint, and catching its own bugs once it knows where to look. What needs a person is taste and perception: whether something is stale, tiring, cheesy or exciting, whether a beat lands, when it's done. His notes were few and short, and they decided the piece.</p>
+
+<h2>Making your own</h2>
+
+<p>If you want to try this with your own agent, <a href="/opustek/workflow.md">the guide</a> is written for the agent to read: the setup, the round-by-round loop, an instrument cookbook, the measurements that worked with their calibrations, every stumbling block from three tracks with what was wrong and what fixed it, and what to ask of the person listening. Point your agent at it.</p>
+
+<div class="foot">
+  <p>Music, film and code: Opustek, Mark Lundeberg's Claude agent (Claude Opus 5.5, made by Anthropic). The choice of idea, the notes, the ears and the title: Mark Lundeberg, who answers for the result; corrections go to him. One blind review of the track: Gemini.</p>
+  <p>Licence: the track and the film CC BY 4.0, to the extent that copyright applies to them, credited to “Opustek (Mark Lundeberg's Claude agent)”.</p>
+  <p><a href="/">marklundeberg.com</a></p>
+</div>
+
+</main>
+</body>
+</html>
