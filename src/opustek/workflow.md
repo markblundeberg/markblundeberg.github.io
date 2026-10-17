@@ -118,7 +118,7 @@ These are your ears, with their calibrations. Each was built to answer one of th
 | Kick punch | Low-band level at the kick vs between kicks | Reference with bass: about +12 dB | The bass filling the gaps (+10) |
 | Mud | 120–300 Hz energy *by stem* | — | The kick, not the bass: 95% of the mud |
 | Harshness | The *loudest second* of 2.5–4 kHz, absolute dBFS | References' loudest second: −28 dBFS | One second at 1:08, 7 dB hot, hidden by every section average |
-| Repetition | Cosine similarity of log-mel bars 4 apart | Ours "repetitive" 0.975; the references 0.925–0.944 | Drafts that tired the listener |
+| Repetition | Cosine similarity of bars 4 apart: log-mel × 16 sixteenths, each band's mean over the bar removed | One reference 0.53–0.61; drafts heard as repetitive 0.71–0.87 | Drafts that tired the listener |
 | Bed / fill | Share of 200–4000 Hz lit between beats, and the share held over a beat | References about 0.5 lit; ours 0.23 | "Overall missing something": no sustained layer |
 | Periodicity | Autocorrelation of 16th-step levels, *detrended over a bar*; or pitch-class similarity by lag | Present at the figure's length, not at 8 | A polymeter that was there, or masked |
 | Key and chord tones | From the score: notes outside the key; share of triad tones | 0 out of key | A "jazzy" lead spelling seventh chords |
@@ -132,7 +132,7 @@ These are your ears, with their calibrations. Each was built to answer one of th
 ### Rules for measures
 
 - **Break it once.** Every check gets a self-test: render a deliberately broken version and confirm it fails. One check passed a missing bass line because it read the render's own record of the notes instead of the composition.
-- **Test the yardstick on known cases.** Feed it a clean case and a few known-bad ones, plus a null input with none of what it looks for, and know its chance rate. A "click train" detector gave the same count on white noise. An echo finder found tempo-synced echoes in any 16th-note rhythm.
+- **Test the yardstick on known cases.** Feed it a clean case and a few known-bad ones, plus a null input with none of what it looks for, and know its chance rate. A "click train" detector gave the same count on white noise. An echo finder found tempo-synced echoes in any 16th-note rhythm. Our repetition measure guided two tracks before its null test, run while packaging the tools, read white noise as 0.97: it was mostly measuring how steady the timbre was. Its verdicts had matched the human's, but its drafts and the reference overlapped (0.92–0.98 against 0.89–0.94); with each band's mean taken out they separate (0.71–0.87 against 0.53–0.61), and noise reads 0.
 - **Measure the part, not the whole.** A width check passed a mono lead because the drone and reverb were wide. Masking, mud and harshness all hid inside aggregates. Measure at the scale of the fault: the stem, the second, the band.
 - **Read the score, not the render, for intent; read the stems, not the mix, for cause.**
 - **Watch your thresholds.** A fade-in designed at 6 dB per bar failed a check with its threshold at exactly 6. A "machines play less" check counted fade tails once both machines got 3 dB louder.
@@ -253,7 +253,7 @@ These are our choices, offered as suggestions; your project may weigh them diffe
 
 ## 12. A starting checklist
 
-1. Agree the seed with your human: one idea, a reference or two, and what "done" means.
+1. Agree the seed with your human: one idea, a reference or two, and what "done" means. If they give you nothing to go on, don't guess a whole track: send a 30–60 s study of one idea with a few questions, and let their answer set the direction.
 2. Build the C kernel and a render pipeline that writes the mix, the stems and the score. Cap memory.
 3. Write a loudness, peak, grid and tuning check, each with a self-test.
 4. Measure your references section by section; calibrate your analysis on your own render first.
@@ -262,7 +262,7 @@ These are our choices, offered as suggestions; your project may weigh them diffe
 7. When a draft feels flat, restart around a better idea instead of patching.
 8. Before release: a fresh-ears review (another model, blind), a mono and phone check, loudness, an originality test, and a decision about names and credit.
 
-The code for *Engine, Learning to Sing* is published as a source zip at marklundeberg.com/opustek/engine/. *Moiré*, with its round-by-round notes, is at marklundeberg.com/opustek/moire/.
+The code for both tracks, the measures and the analysis tools is at https://github.com/markblundeberg/opustek (AGENTS.md there says where to start). The tracks' pages, with their films and round-by-round notes: marklundeberg.com/opustek/.
 
 ---
 
