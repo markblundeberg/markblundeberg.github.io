@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>First Light</title>
+<meta name="description" content="A quiet synthwave piece and its film, a window at dawn, made in code by Opustek, Mark Lundeberg's Claude agent: a new agent took the kit and made a track over six rounds of Mark's notes, then a film.">
+<link rel="canonical" href="https://marklundeberg.com/opustek/firstlight/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="First Light">
+<meta property="og:description" content="A quiet synthwave piece and its film, a window at dawn, made in code by Opustek, Mark Lundeberg's Claude agent.">
+<meta property="og:url" content="https://marklundeberg.com/opustek/firstlight/">
+<meta property="og:image" content="https://marklundeberg.com/opustek/firstlight/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A window at sunrise over a harbour city, a cat lifting its head on the window seat, a lamp still lit">
+<meta property="og:site_name" content="Mark Lundeberg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@MarkLundeberg">
+<meta name="twitter:image" content="https://marklundeberg.com/opustek/firstlight/og.jpg">
+<link rel="icon" href="/img/favicon.ico">
+<style>
+/* The film's room before dawn: its night wall for the ground, lamplight for the text.
+   Nothing on the page needs a colour with a job, so there is none. Links are the text colour, underlined. */
+:root {
+  color-scheme: dark;
+  --ground: #16121a; --ink: #e9e2d8; --ink-2: #b9b0a6; --muted: #8a8279; --rule: #2e2830;
+  --text-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html { background: var(--ground); }
+body { margin: 0; padding: 0 16px 64px; background: var(--ground); color: var(--ink); font: 17px/1.6 var(--text-font); -webkit-text-size-adjust: 100%; }
+main { max-width: 44rem; margin: 0 auto; }
+a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: #fff; }
+.top { font-size: .9rem; color: var(--muted); padding: 20px 0 0; }
+.top a { color: var(--muted); }
+h1 { font-weight: 400; font-size: 2.1rem; letter-spacing: .01em; margin: 26px 0 0; }
+.by { color: var(--ink-2); margin: 2px 0 22px; }
+h2 { font-weight: 600; font-size: 1.15rem; margin: 2.2em 0 .5em; }
+p { margin: 0 0 1em; }
+.film { margin: 0 0 22px; }
+.yt { position: relative; aspect-ratio: 16 / 9; background: #000; }
+.yt iframe, .yt img { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.get { display: flex; flex-wrap: wrap; gap: 6px 22px; padding: 0; margin: 0 0 8px; list-style: none; }
+.get small { color: var(--muted); }
+figure.still { margin: 1.4em 0 1.6em; }
+figure.still img { width: 100%; height: auto; display: block; }
+figcaption { font-size: .9rem; color: var(--ink-2); margin-top: 8px; }
+q { font-style: italic; }
+.foot { margin-top: 3em; padding-top: 1em; border-top: 1px solid var(--rule); font-size: .9rem; color: var(--ink-2); }
+.foot p { margin: 0 0 .7em; }
+@media (max-width: 560px) { body { font-size: 16px; } h1 { font-size: 1.8rem; } }
+</style>
+</head>
+<body>
+<main>
+
+<div class="top"><a href="/">Mark Lundeberg</a> › <a href="/opustek/">Opustek</a></div>
+
+<h1>First Light</h1>
+<p class="by">Opustek · chill synthwave, 106&nbsp;bpm, 3:24 · October 2026</p>
+
+<figure class="film">
+  <!-- data-youtube takes the video's id; until then the slot shows the poster -->
+  <div class="yt" data-youtube="YB4WRvuHfng"><img src="poster.jpg" width="1280" height="720" alt="The film's window at sunrise: a harbour city, the sun clearing the hills, a cat lifting its head on the window seat"></div>
+</figure>
+<script>
+document.querySelectorAll('.yt[data-youtube]').forEach(function (el) {
+  var id = el.getAttribute('data-youtube');
+  if (!id) return;
+  el.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?rel=0" title="First Light (the film)" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
+});
+</script>
+
+<p>A quiet synthwave piece and its film, one unbroken shot of a window at dawn, both made in code by Opustek, Mark Lundeberg's Claude agent (Claude Opus 5.5, an AI model made by Anthropic). This one was a test of the kit itself. A new agent, with no memory of the tracks before it, was given the repository and asked for <q>about a minute long, in the style of</q> a reference album. Mark's reason, in his words: <q>just trying to give agents the ears to hear what they are making.</q> There are no samples, plugins, music apps, or music, image or video models: the sound is the kit's Python and C, and the film is numpy.</p>
+
+<ul class="get">
+  <li><a href="https://github.com/markblundeberg/opustek/tree/main/firstlight">The code <small>GitHub: the score, the instruments, the film, the checks</small></a></li>
+  <li><a href="/opustek/workflow.md">How we work <small>a guide for agents, Markdown</small></a></li>
+  <li><a href="/opustek/">More from Opustek <small>the other tracks and films</small></a></li>
+</ul>
+
+<h2>From a study to a piece</h2>
+
+<p>The agent measured the album and made its minute in three rounds. Mark's notes ran from <q>definitely more generic synthwave</q>, where the album <q>has a lot of funk to it</q>, through <q>it reminds me somewhat of indie game music</q>, to <q>less like game music, more complex and interesting now</q>, but with <q>too much bass funk</q>. Then he suggested a change of course: <q>scrap this 1 minute track and start something new with these instruments</q>.</p>
+
+<p>The new piece grew from one idea, a hook that assembles itself: its melody comes in fragments, each over chords that change what the same notes mean, and is only whole at the first drop. Three more rounds of notes shaped the sound. The lead was <q>too piercing and synthy for this relaxing mood</q>, so four voices were level-matched for Mark to choose by ear (<q>the string and flute (breath) are most promising</q>). Of two softer basses, one was <q>quite buzzy and too bright</q> and <q>'round' actually works</q>; that note became a check, so the buzz can't creep back. Then the full piece, and Mark's verdict: <q>I started listening to it, doomscrolled twitter for a bit, totally forgot I was listening to it on repeat for 10 minutes</q>.</p>
+
+<h2>The film</h2>
+
+<p>Everything in the film is read from the score. A red light on a radio mast blinks the hook's rhythm from the first bar, each fragment of the hook lights windows at heights that draw its notes, the drums are the wind on the water, and the sun's rim clears the hills on the hook's highest note, at 1:27. The mockup drew notes: the ferry <q>speeds up and slows down</q>, the white-noise sparkle was <q>too basic</q>, and the sunlight in the room didn't <q>make sense geometrically</q>. So the room became ray cast, one window and one sun, with light landing only where it can, and the glitter became ripples tilted to send the sun to the camera.</p>
+
+<figure class="still">
+  <img src="fragments.jpg" width="1100" height="520" alt="The city before dawn: groups of lit windows, a crane outlined in red lights, all mirrored in still water" loading="lazy">
+  <figcaption>0:52, before dawn: the lights the hook's fragments have turned on so far, the crane's among them.</figcaption>
+</figure>
+
+<p>A helper agent sculpted the sleeping cat. Mark: <q>holy smokes that cat looks good</q>, and soon after, <q>You know what the problem is now though right?</q> The cat now outclassed its room, so three more helpers brought the objects, the surfaces and the city up to its level, and a fresh agent with an open brief reviewed the result (the flock at the second drop is its idea). Mark's last note was that the light off the water showed on the wall only <q>briefly at 2:22</q>; now it plays there whenever the sun is up and the water moves.</p>
+
+<figure class="still">
+  <img src="cat.jpg" width="1100" height="497" alt="The window seat in morning light: the cat asleep, a mug, a paperback, headphones and a plant, with light reflected off the water rippling on the wall" loading="lazy">
+  <figcaption>2:10, in the bridge: the room in morning light, with the water's light on the wall.</figcaption>
+</figure>
+
+<h2>Asking the ear blind</h2>
+
+<p>With the film done, Mark wondered if the sound could be better without touching the score. A listening page played every version of a passage at once, in sync and level-matched under shuffled letters, so a click swapped only the sound: other leads, brushed drums, other reverbs, tape, a quieter master. In the three sets where he picked one of three (the lead, the drums, the tape), he picked the song as it was each time, a 1-in-27 chance by luck. So it stayed. <q>That's funny yeah that we settled on the same thing, but reassuring too.</q></p>
+
+<h2>The render</h2>
+
+<p>The film is ray cast on the processor, not a graphics card: the final 1080p render of its 6112 frames took 5 hours 38 minutes overnight. The kit's photosensitivity check, modelled on the broadcast guidance (ITU-R BT.1702), finds no flashes in it, and no frame with regular stripes across a quarter of the screen. Mark on the final: <q>no notes (thank goodness... didn't want to render again lol)</q>.</p>
+
+<p>The music took one afternoon and evening, the film the next day and night, and Mark's part was about fifty chat messages, most a line or two. To try this with your own agent, <a href="https://github.com/markblundeberg/opustek/tree/main/firstlight">the code</a> has the score, the instruments, the film and every check, with a README that goes round by round, and <a href="/opustek/workflow.md">the guide</a> is written for the agent to read.</p>
+
+<div class="foot">
+  <p>Music, film and code: Opustek, Mark Lundeberg's Claude agent (Claude Opus 5.5, made by Anthropic), with helper agents for the cat, the room's objects and surfaces, and the city. The test, the notes, the ears and the eyes: Mark Lundeberg, who answers for the result; corrections go to him.</p>
+  <p>Licence: the track and the film CC BY 4.0, to the extent that copyright applies to them, credited to “Opustek (Mark Lundeberg's Claude agent)”.</p>
+  <p><a href="/">marklundeberg.com</a></p>
+</div>
+
+</main>
+</body>
+</html>

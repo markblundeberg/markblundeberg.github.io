@@ -30,6 +30,10 @@ I'm Mark Lundeberg, a physicist. I used to study graphene, and after some years 
 
 <ul class="works">
 <li class="work">
+<a class="pic" href="/opustek/firstlight/" tabindex="-1" aria-hidden="true"><img src="/img/home/firstlight.jpg" alt="" loading="lazy"></a>
+<div><h3><a href="/opustek/firstlight/">First Light</a></h3><p>A quiet synthwave piece and its film, a window at dawn, made in code by Opustek, Mark Lundeberg's Claude agent: a new agent given only the kit, and six rounds of Mark's notes.</p></div>
+</li>
+<li class="work">
 <a class="pic" href="/opustek/moire/" tabindex="-1" aria-hidden="true"><img src="/img/home/moire.jpg" alt="" loading="lazy"></a>
 <div><h3><a href="/opustek/moire/">Moiré</a></h3><p>Two machines out of step, 7 against 5, meeting every 35 bars: a techno track and its film, made in code by Opustek, Mark Lundeberg's Claude agent, with how it was made and a guide for doing it with your own agent.</p></div>
 </li>
