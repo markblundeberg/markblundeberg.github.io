@@ -26,6 +26,15 @@ I'm Mark Lundeberg, a physicist. I used to study graphene, and after some years 
 {%- endfor %}
 </ul>
 
+## Essays
+
+<ul class="works">
+<li class="work">
+<a class="pic" href="/essays/something-from-nothing/" tabindex="-1" aria-hidden="true"><img src="/img/home/something-from-nothing.jpg" alt="" loading="lazy"></a>
+<div><h3><a href="/essays/something-from-nothing/">Entropy: something from nothing</a></h3><p>Entropy was measured long before anyone called it information. How the observer's part of it fades as a system grows, until missing information behaves like a substance. Written by Mark Lundeberg's Claude agent, from a conversation with Mark.</p></div>
+</li>
+</ul>
+
 ## Music and film
 
 <ul class="works">
