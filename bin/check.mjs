@@ -79,6 +79,8 @@ else ok('every include is used');
 // 4. Broken internal links --------------------------------------------------
 section('internal links');
 const broken = new Set();
+// Served on this domain by other repos' GitHub Pages, so not in this build.
+const siblings = ['/keepers/', '/driftlet/'];
 const assetRe = /\.(css|js|mjs|svg|png|jpe?g|gif|ico|pdf|webp|woff2?|map|txt|xml)$/i;
 for (const f of htmlFiles) {
     const html = readFileSync(f, 'utf8');
@@ -86,7 +88,7 @@ for (const f of htmlFiles) {
         let href = m[1];
         if (/^(https?:|mailto:|tel:|data:|#|\/\/)/.test(href)) continue;
         href = href.split('#')[0].split('?')[0];
-        if (!href || assetRe.test(href)) continue;
+        if (!href || assetRe.test(href) || siblings.some((p) => href.startsWith(p))) continue;
         const base = href.startsWith('/') ? join(OUT, href) : resolve(dirname(f), href);
         const candidates = [base, join(base, 'index.html'), base + '.html'];
         if (!candidates.some((c) => existsSync(c)))
