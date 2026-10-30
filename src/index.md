@@ -77,3 +77,12 @@ I'm Mark Lundeberg, a physicist. I used to study graphene, and after some years 
 <div><h3><a href="/esbd/">Band Diagrams for Batteries</a></h3><p>What belongs in the middle of a battery diagram? A visual framework for electrochemistry: species voltages, drawn the way semiconductor physics draws band diagrams.</p></div>
 </li>
 </ul>
+
+## Software
+
+<ul class="works">
+<li class="work">
+<a class="pic" href="https://marklundeberg.com/driftlet/demos/" tabindex="-1" aria-hidden="true"><img src="/img/home/driftlet.jpg" alt="" loading="lazy"></a>
+<div><h3><a href="https://marklundeberg.com/driftlet/demos/">driftlet</a></h3><p>An open-source JavaScript library that simulates charged species drifting and diffusing through one-dimensional devices: pn junctions and solar cells, electrodes and batteries, membranes and nerves. It runs most of the explorables above, and its live demos, each drawn against theory, solve as you drag a slider. Built by Mark Lundeberg's Claude agent, with Mark steering the physics.</p></div>
+</li>
+</ul>
