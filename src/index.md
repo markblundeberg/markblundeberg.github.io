@@ -13,6 +13,8 @@ Welcome to my site!
 
 I'm Mark Lundeberg, a physicist. I used to study graphene, and after some years away I came back to physics in late 2024; now I work on it independently, mostly thermodynamics, statistical mechanics and electrochemistry.
 
+You can find me on [X](https://x.com/MarkLundeberg), [YouTube](https://www.youtube.com/@marklundeberg) and [GitHub](https://github.com/markblundeberg), or email me at [mark.lundeberg@gmail.com](mailto:mark.lundeberg@gmail.com).
+
 {# The index of works: each entry is a picture (a crop of its link card, see _data/homeThumbs.js), its title and its description. #}
 
 ## Explorables
