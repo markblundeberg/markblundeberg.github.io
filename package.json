@@ -5,6 +5,7 @@
   "scripts": {
     "build": "eleventy",
     "serve": "eleventy --serve",
+    "preview": "sh bin/preview.sh",
     "fig": "FIGTEST=1 eleventy --serve",
     "check": "node bin/check.mjs",
     "unit": "node bin/unit.mjs",

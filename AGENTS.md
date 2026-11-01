@@ -11,6 +11,9 @@ abuse `BandDiagram`'s spatial regions for that.
 
 ## Commands (npm scripts)
 - `npm run build` / `npm run serve` — build / dev server.
+- `npm run preview` (`bin/preview.sh`) — build a static snapshot of the current checkout and serve it
+  read-only on port 8766 for a phone to look at before pushing; it prints the URLs (phones use
+  http://192.168.1.10:8766/, forwarded by the router). Stop it with Ctrl-C, or kill it when done.
 - `npm run check` (also `npm test`) — build + verify: no stale `.html` include
   refs, no orphaned includes, no broken internal links, no KaTeX errors.
   **Run before committing.**
