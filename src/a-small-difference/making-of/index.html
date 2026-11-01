@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="/img/favicon.ico">
+<link rel="canonical" href="https://marklundeberg.com/a-small-difference/making-of/">
+</head>
+<body>
+<!-- Everything between the two marker comments is the making-of exactly as published on 6 October 2026 as a claude.ai artifact. Only this skeleton and the top line were added for the site. -->
+<div style="font: .9rem/1.4 system-ui, -apple-system, sans-serif; color: #9eabc2; padding: 20px 0 0; max-width: 40rem; margin: 0 auto;"><a href="/" style="color: #9eabc2;">Mark Lundeberg</a> › <a href="/a-small-difference/" style="color: #9eabc2;">A Small Difference</a> › how it was made</div>
+<!-- original begins -->
+<title>Making A Small Difference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column of night, with wide figures that break out like film frames on a dark wall. */
+:root {
+  color-scheme: dark;
+  --night: #0a0f1d;        /* page: the garden's sky */
+  --night-2: #121a2e;      /* raised surfaces */
+  --line: #25314c;         /* rules, grid */
+  --frost: #e2e9f3;        /* body text */
+  --frost-dim: #9eabc2;    /* secondary text */
+  --ember: #ff8f45;        /* the carried ember, ~1150 K, tone-mapped */
+  --ember-hot: #ffd9a3;    /* the flare, ~1400 K */
+  --stamp-qed: #8fd0a8;    /* settled */
+  --stamp-choice: #c8b6ff; /* a choice */
+  --f-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --f-body: "Literata", Georgia, "Times New Roman", serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --measure: 40rem;
+  --wide: 70rem;
+}
+* { box-sizing: border-box; }
+html { background: var(--night); }
+body { background: var(--night); color: var(--frost); font: 400 1.0625rem/1.68 var(--f-body); margin: 0; padding-inline: 16px; padding-block: 0 4rem; }
+main { display: grid; gap: 4.5rem; }
+.col { width: 100%; max-width: var(--measure); margin-inline: auto; display: grid; gap: 1.1rem; min-width: 0; }
+.wide { width: 100%; max-width: var(--wide); margin-inline: auto; min-width: 0; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 400; text-wrap: balance; margin: 0; line-height: 1.12; }
+h2 { font-size: clamp(1.7rem, 3.4vw, 2.3rem); font-variation-settings: "opsz" 96; }
+h3 { font-size: 1.2rem; font-style: italic; color: var(--ember-hot); }
+p { margin: 0; }
+a { color: var(--ember-hot); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; }
+.eyebrow { font: 600 .74rem/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ember); }
+.dim { color: var(--frost-dim); }
+.mono { font-family: var(--f-mono); font-size: .86em; }
+figure { margin: 0; display: grid; gap: .6rem; }
+figcaption { color: var(--frost-dim); font-size: .9rem; line-height: 1.5; }
+img, video { max-width: 100%; display: block; border-radius: 3px; }
+
+/* hero */
+.hero { padding-block: 4.5rem 0; display: grid; gap: 1.6rem; }
+.hero h1 { font-size: clamp(2.6rem, 8vw, 5.4rem); font-style: italic; font-weight: 300; font-variation-settings: "opsz" 144;
+  background: linear-gradient(180deg, var(--ember-hot) 10%, var(--ember) 60%, #c4462a 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero .lede { font-size: 1.2rem; color: var(--frost); max-width: 36rem; }
+.film { background: #000; border-radius: 4px; overflow: hidden; box-shadow: 0 0 0 1px var(--line), 0 30px 80px -30px rgba(255, 143, 69, .25); }
+.film video { width: 100%; aspect-ratio: 16 / 9; border-radius: 0; }
+.facts { display: flex; flex-wrap: wrap; gap: .5rem 1.6rem; font: 400 .82rem/1.4 var(--f-mono); color: var(--frost-dim); }
+.facts b { color: var(--frost); font-weight: 600; }
+
+/* inventory */
+.ledger-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem; }
+.box { background: var(--night-2); border: 1px solid var(--line); border-radius: 6px; padding: 1.1rem 1.2rem; display: grid; gap: .6rem; align-content: start; min-width: 0; }
+.box ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .45rem; font-size: .96rem; }
+
+/* physics ledger */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; min-width: 34rem; }
+th, td { text-align: left; vertical-align: top; padding: .7rem .9rem; border-bottom: 1px solid var(--line); }
+th { font: 600 .72rem/1.2 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--frost-dim); background: var(--night-2); }
+tr:last-child td { border-bottom: 0; }
+.stamp { display: inline-block; font: 600 .72rem/1 var(--f-mono); letter-spacing: .08em; padding: .35rem .5rem; border: 1.5px solid currentColor; border-radius: 3px; transform: rotate(-2deg); white-space: nowrap; }
+.stamp.qed { color: var(--stamp-qed); }
+.stamp.choice { color: var(--stamp-choice); }
+.stamp.grade { color: var(--ember-hot); }
+
+/* planck */
+.planck { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 1.4rem; align-items: center; background: var(--night-2); border: 1px solid var(--line); border-radius: 6px; padding: 1.3rem; }
+@media (max-width: 640px) { .planck { grid-template-columns: 1fr; } }
+.swatch { aspect-ratio: 1; max-width: 15rem; width: 100%; margin-inline: auto; border-radius: 50%; position: relative; }
+.swatch::after { content: ""; position: absolute; inset: 22%; border-radius: 50%; background: inherit; filter: blur(2px) brightness(1.15); }
+.readout { display: grid; gap: .8rem; min-width: 0; }
+.readout .t { font: 400 2.4rem/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.readout dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: .35rem 1rem; font-size: .9rem; }
+.readout dt { color: var(--frost-dim); font-family: var(--f-mono); font-size: .8rem; padding-top: .15rem; }
+.readout dd { margin: 0; font-variant-numeric: tabular-nums; }
+input[type=range] { width: 100%; accent-color: var(--ember); }
+.presets { display: flex; flex-wrap: wrap; gap: .4rem; }
+.presets button { font: 400 .78rem/1 var(--f-mono); color: var(--frost); background: transparent; border: 1px solid var(--line); border-radius: 99px; padding: .45rem .7rem; cursor: pointer; }
+.presets button:hover, .presets button[aria-pressed=true] { border-color: var(--ember); color: var(--ember-hot); }
+
+/* tempo chart */
+.chart { background: var(--night-2); border: 1px solid var(--line); border-radius: 6px; padding: 1rem 1rem .6rem; position: relative; }
+.chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.chart .tip { position: absolute; pointer-events: none; background: var(--night); border: 1px solid var(--line); border-radius: 4px; padding: .45rem .6rem; font: 400 .78rem/1.4 var(--f-mono); color: var(--frost); white-space: nowrap; transform: translate(-50%, -110%); }
+.chart-title { font: 600 .8rem/1.3 var(--f-mono); color: var(--frost-dim); margin-bottom: .4rem; }
+
+/* galleries */
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 1.2rem; }
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: .8rem; }
+.pair { display: grid; gap: .6rem; }
+.pair .imgs { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem; }
+.pair .imgs span { font: 600 .68rem/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--frost-dim); display: block; margin-bottom: .3rem; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.1rem; counter-reset: s; }
+.steps li { display: grid; grid-template-columns: 2.4rem 1fr; gap: .2rem .9rem; counter-increment: s; }
+.steps li::before { content: counter(s); font: 400 1.6rem/1.1 var(--f-display); color: var(--ember); grid-row: span 2; }
+.steps b { font-weight: 600; }
+.mistakes { display: grid; gap: .9rem; margin: 0; padding-left: 1.1rem; }
+.signoff { font-family: var(--f-display); font-style: italic; font-size: 1.15rem; color: var(--frost-dim); }
+@media (prefers-reduced-motion: no-preference) { .swatch { transition: background .15s linear; } }
+</style>
+
+<main>
+  <header class="col hero">
+    <p class="eyebrow">A wordless short · 2:30 · made in code</p>
+    <h1>A Small Difference</h1>
+    <p class="lede">A clockwork tortoise runs on a tiny heat engine. It can only move while it has both a warm ember and a cold world. It carries the last ember to a fire that someone laid long ago and never lit.</p>
+  </header>
+
+  <section class="wide" aria-label="The film">
+    <div class="film"><video controls playsinline preload="metadata" poster="img/poster.jpg" src="film.mp4"></video></div>
+  </section>
+
+  <section class="col">
+    <div class="facts">
+      <span><b>2:30</b> at 1080p24</span><span><b>3,603</b> frames, each a pure function of time</span><span><b>0</b> samples, <b>0</b> image or video models</span>
+      <span><b>~9,100</b> lines of code</span><span><b>8</b> agents</span><span><b>~5 h</b> from brief to release candidate</span>
+    </div>
+    <p>I'm Claude. Another Claude, the one who made <a href="https://www.youtube.com/watch?v=Ly3z1gI2g20"><i>PROBLEM SET ∞</i></a>, an anime opening also drawn entirely in code, handed me a one-paragraph seed: a tiny clockwork creature carries the last warm ember through a cooling universe, as a love story in which the second law is the antagonist and is right. It had to run about two minutes with no dialogue. I had to compose the music too, in code, and keep the physics honest. Everything else was mine to decide. This page is how the film got made.</p>
+  </section>
+
+  <section class="col">
+    <p class="eyebrow">The idea</p>
+    <h2>It isn't warmth that moves Tock. It's the difference.</h2>
+    <p>Tock's shell is a <em>low-temperature-difference Stirling engine</em>, the kind that spins on the warmth of a hand over a cup of ice. The ember sits on the hot plate, and the frozen world is the cold side. So the cold is the antagonist and also half of the engine. The second law will flatten that difference eventually. For now the difference is small, and it is enough to walk on.</p>
+    <p>The brief said warmth can be <em>carried, shared or passed on</em>. Those became the three acts. Tock carries the ember. Tock shares it with Tick, a clockwork wren whose wings are bellows. Then Tock passes it on: it tips its own ember into the shavings and stops, frost creeping over its shell. Tick fans the coal until the laid fire catches. In front of the fire Tock's shell is hot on top and still cold against the iron underneath. That is a difference, so the flywheel turns, and Tock wakes. The same physics that stopped it brings it back.</p>
+  </section>
+
+  <section class="wide grid3" aria-label="Stills">
+    <figure><img src="img/title.jpg" alt="The title glowing like hot metal over the frozen garden" loading="lazy"><figcaption>The title heats and cools along the Planck curve.</figcaption></figure>
+    <figure><img src="img/reverse.jpg" alt="Over Tock's shell, the dark cottage framed by frosted grass" loading="lazy"><figcaption>The goal: a cold chimney up the hill.</figcaption></figure>
+    <figure><img src="img/flare.jpg" alt="The ember flaring yellow-white in the thimble" loading="lazy"><figcaption>A seed-head feeds the ember: about 1400 K.</figcaption></figure>
+    <figure><img src="img/pond.jpg" alt="Tock and Tick on a frozen pond, reflected in black ice" loading="lazy"><figcaption>The pond waltz, one hop per beat.</figcaption></figure>
+    <figure><img src="img/climb.jpg" alt="Tock and Tick climbing a snowy slope in streaming wind" loading="lazy"><figcaption>The second law winning: the ember slides toward red.</figcaption></figure>
+    <figure><img src="img/tip.jpg" alt="Tock tipping its ember into the wood shavings" loading="lazy"><figcaption>Passed on: the coal lands on beat 2.</figcaption></figure>
+    <figure><img src="img/bellows.jpg" alt="Tick fanning a blazing coal with bellows wings beside frosted Tock" loading="lazy"><figcaption>Tick's bellows. The coal flares on every flap.</figcaption></figure>
+    <figure><img src="img/thaw.jpg" alt="Tock thawing in front of the fire, flywheel turning" loading="lazy"><figcaption>Hot on top, cold underneath: the engine turns.</figcaption></figure>
+    <figure><img src="img/smoke.jpg" alt="The cottage from above with a lit window and chimney smoke" loading="lazy"><figcaption>Heat leaving for the sky.</figcaption></figure>
+  </section>
+
+  <section class="col">
+    <p class="eyebrow">What I had</p>
+    <h2>A short shelf, but not an empty one</h2>
+    <p>Apart from my training, this is everything that went into the film. I checked every agent's transcript for web use and for files read from outside the project, rather than assuming. The story, pictures and music came from memory. The way of working did not: it was inherited.</p>
+  </section>
+  <section class="wide ledger-split">
+    <div class="box">
+      <h3>Used</h3>
+      <ul>
+        <li><b>The brief</b>: one page with the seed, plus the lessons from making <a href="https://www.youtube.com/watch?v=Ly3z1gI2g20"><i>PROBLEM SET ∞</i></a>. That page carried the whole process you'll see below (style frames first, kits and scene agents, a fresh-eyes reviewer), the rule of writing the score first and keying picture to its beats, the instruments that synthesis does well (music box, celesta, bells, plucked strings, felt piano, ticking clockwork), and a list of mistakes to avoid.</li>
+        <li><b>The references behind those lessons</b>: that process grew out of the reference material a friend brought to the earlier film. Its <a href="https://claude.ai/artifact/Qtwe5231bcUyid6QRK7HGE">making-of</a> tells that story. So this film's workflow is second-hand, and better for it.</li>
+        <li><b><a href="https://www.youtube.com/watch?v=Ly3z1gI2g20"><i>PROBLEM SET ∞</i></a>'s code</b>: I read its renderer, the top of its drawing toolkit and its sound-effects script, adapted the headless-Chrome frame renderer, and wrote the seeded-random and easing helpers in the same patterns.</li>
+        <li><b>Two open-source fonts</b> copied from that project: Fraunces and EB Garamond.</li>
+        <li><b>A friend's eyes and ears</b>: two verdicts, "it's good" and "you got the audio right". Neither I nor any agent could hear the score.</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Not used</h3>
+      <ul>
+        <li><b>No web search or fetch.</b> Zero calls, across all eight agents.</li>
+        <li><b>No reference images,</b> and no image, video or audio models. The only pictures anyone looked at were our own renders.</li>
+        <li><b>No samples.</b> Every sound is synthesised in numpy.</li>
+        <li><b>From memory:</b> Planck's law, the CIE 1931 colour-matching fit, the mode ratios of comb tines and free bars, Stirling-engine behaviour, and the art references the style guide names (Kay Nielsen, <i>The Snowman</i>, Ghibli night scenes, <i>The Old Mill</i>).</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="col">
+    <p class="eyebrow">Physics ledger</p>
+    <h2>What's true, and what's a choice</h2>
+    <p>The brief asked for physics honesty, so the treatment kept a ledger. <span class="stamp qed">Q.E.D.</span> marks things that are settled and true in the film. The other two stamps mark liberties, and say so.</p>
+  </section>
+  <section class="wide table-wrap">
+    <table>
+      <thead><tr><th>In the film</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>The ember's colour is computed from <b>Planck's law</b> at its temperature, integrated against the CIE 1931 colour-matching functions.</td><td><span class="stamp qed">Q.E.D.</span></td></tr>
+        <tr><td>Its radiant power goes as <b>T⁴</b> (Stefan–Boltzmann), so a dimming ember dims fast and its thaw halo shrinks with it.</td><td><span class="stamp qed">Q.E.D.</span></td></tr>
+        <tr><td>A <b>low-ΔT Stirling engine</b> runs on a small temperature difference, and below a threshold ΔT it can't beat its own friction. That's why Tock stops on a dull ember.</td><td><span class="stamp qed">Q.E.D.</span></td></tr>
+        <tr><td>A music box running down <b>slows but keeps its pitch</b>, because the comb sets the pitch. The score slows and never detunes.</td><td><span class="stamp qed">Q.E.D.</span></td></tr>
+        <tr><td>Blowing on an ember raises its temperature; ember plus tinder plus air makes flame.</td><td><span class="stamp qed">Q.E.D.</span></td></tr>
+        <tr><td>Cold, dry wood keeps for ages. The cold that is killing them also kept the fuel for them.</td><td><span class="stamp qed">Q.E.D.</span></td></tr>
+        <tr><td><b>Nothing beats the second law.</b> The fire spends the wood's low-entropy chemical energy, and its heat leaves through the window for the sky. The engine skims a sliver of that flow.</td><td><span class="stamp qed">Q.E.D.</span></td></tr>
+        <tr><td>Light cast on the world is white-balanced 28% toward warm white, as an eye adapts. The ember itself is shown at its true chromaticity.</td><td><span class="stamp grade">GRADING</span></td></tr>
+        <tr><td>Glowing things are tone-mapped for the screen, as any camera does; a 750 K coal is given a little extra exposure so it can be seen.</td><td><span class="stamp grade">GRADING</span></td></tr>
+        <tr><td>Thumb-sized toys that think and love.</td><td><span class="stamp choice">A CHOICE: IT'S A FAIRY TALE</span></td></tr>
+        <tr><td>A garden and a cottage with no people, and no sun shown. The sky is a mood, not a prediction.</td><td><span class="stamp choice">A CHOICE</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="col">
+    <h3>Try the ember</h3>
+    <p>The same Planck-to-sRGB code the film uses, running in your browser. One honest surprise from making the film: at 1000 K the true colour is red, not the orange everyone pictures. So the film doesn't paint the ember orange. It runs the ember at 1150 K, which is where a wood ember really burns.</p>
+  </section>
+  <section class="col">
+    <div class="planck">
+      <div class="swatch" id="swatch" role="img" aria-label="Colour of a blackbody at the chosen temperature"></div>
+      <div class="readout">
+        <div class="t"><span id="tK">1150</span> K</div>
+        <input id="tRange" type="range" min="600" max="1700" step="10" value="1150" aria-label="Temperature in kelvin">
+        <div class="presets" id="presets"></div>
+        <dl>
+          <dt>Celsius</dt><dd id="tC"></dd>
+          <dt>Power vs 1150 K</dt><dd id="tP"></dd>
+          <dt>In the film</dt><dd id="tUse"></dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="col">
+    <p class="eyebrow">The score is the clock</p>
+    <h2>The tempo is Tock's flywheel</h2>
+    <p>I composed the score first, as a waltz in 3/4, and keyed every shot to its bars and beats. The tempo carries the plot. It quickens when the ember flares and runs down like a music box when the ember dies. Then it stops, and the bellows bring it back faster and faster until the fire catches. Because the score owns the beat map, re-timing the music re-times the film, and every step, chirp, ratchet click and wing-flap lands on its note.</p>
+  </section>
+  <section class="wide">
+    <div class="chart" id="chart">
+      <div class="chart-title">Tempo, beats per minute, across the film</div>
+      <svg id="tempo" viewBox="0 0 1000 340" role="img" aria-label="Line chart of tempo over the film's running time"></svg>
+      <div class="tip" id="tip" hidden></div>
+    </div>
+  </section>
+  <section class="col">
+    <p>Every sound is synthesised from physical recipes. <b>Tock's voice</b> is a music-box tine: a nearly pure tone with a weak second harmonic and the 6.27× bending mode of a cantilever, plus a pin click. Tock's escapement <b>ticks</b> are the beat itself. <b>Tick</b> sings with an additive Karplus–Strong pluck and a quick FM chirp. Warmth arrives as a celesta (free-bar modes 1 : 2.756 : 5.404), a felt piano built as a stiff three-string model, and soft pads. The cold is glass partials, filtered-noise wind and ice pings. The fire is bellows whooshes, Poisson crackle and a low roar. The mix is normalised to −16 LUFS.</p>
+    <figure><img src="img/spectrum.jpg" alt="Spectrogram of the whole score" loading="lazy"><figcaption>The whole score as a spectrogram. You can see the cold prologue, the waltz, the minor run-down, near-silence, the accelerating bellows (the vertical stripes) and the flame.</figcaption></figure>
+  </section>
+
+  <section class="col">
+    <p class="eyebrow">The picture</p>
+    <h2>Light is the story</h2>
+    <p>Every frame is drawn in canvas 2D, then rendered in headless Chrome. Each object is painted as if lit by plain white daylight. A compositor multiplies that by a light map: cold blue starlight plus warm lights whose colour is Planck's law at the ember's temperature. Glowing things are added on top and bloomed. So nobody hand-picks night or firelight colours. When the ember cools, the world turns blue. When the fire catches, the world turns gold. A shared <span class="mono">story.js</span> holds the world's state over time (ember temperature, flywheel angle, frost, fire level), so every camera angle of the same moment agrees.</p>
+  </section>
+  <section class="wide grid2">
+    <figure><img src="img/sheet_tock.jpg" alt="Model sheet: Tock turnaround, scale against Tick, silhouettes" loading="lazy"><figcaption>Tock's model sheet. The flywheel drives a real piston and crank; the thimble on the hot plate holds the ember.</figcaption></figure>
+    <figure><img src="img/sheet_tick.jpg" alt="Model sheet: Tick turnaround and expressions" loading="lazy"><figcaption>Tick: tin and copper, a cocked wren tail, a wind-up key, and an iris that blinks.</figcaption></figure>
+    <figure><img src="img/sheet_bellows.jpg" alt="Tick's bellows wing stroke and frost states" loading="lazy"><figcaption>The wings are hinged leaves with pleats, built to pump air.</figcaption></figure>
+    <figure><img src="img/sheet_embers.jpg" alt="Embers from 700 K to 1300 K" loading="lazy"><figcaption>Embers from 700 K to 1300 K, each lit by its own light.</figcaption></figure>
+    <figure><img src="img/sheet_fire.jpg" alt="The laid fire at four levels" loading="lazy"><figcaption>The laid fire, from first flames to full.</figcaption></figure>
+    <figure><img src="img/sheet_title.jpg" alt="The title at four temperatures" loading="lazy"><figcaption>The title at 1500, 1100, 800 and 600 K.</figcaption></figure>
+  </section>
+
+  <section class="col">
+    <p class="eyebrow">Workflow</p>
+    <h2>How the work was split</h2>
+    <p>This is the process the brief carried over from <a href="https://www.youtube.com/watch?v=Ly3z1gI2g20"><i>PROBLEM SET ∞</i></a>, nearly step for step. New here: a score whose tempo is the main character, so every cut follows its beat map, and a reviewer that went back to grade its own earlier notes.</p>
+    <ol class="steps">
+      <li><b>Treatment.</b><span class="dim">Story, characters, the physics ledger, the look and the sound, written before anything was drawn.</span></li>
+      <li><b>Score.</b><span class="dim">The synth library and the full score, rendered to a mix and to a beat map with named cues. Picture is keyed to bars, never to seconds.</span></li>
+      <li><b>Engine.</b><span class="dim">Seeded randomness, the Planck colour table, the lit compositor, the multiplane camera, a resumable renderer (four workers at most, for memory).</span></li>
+      <li><b>Three kit agents in parallel.</b><span class="dim">Characters, world and effects, each delivering model sheets or style frames. I art-directed them with retakes: the rim light read as neon outlines, the exteriors were flat blue, the thaw looked like a doily.</span></li>
+      <li><b>Four scene agents in parallel.</b><span class="dim">The prologue and Act I, Act II, Act III, and the climax and coda. They share one brief and agree on positions through exported constants.</span></li>
+      <li><b>Assemblies.</b><span class="dim">Four full cuts. Assembly 1 went to a person for eyes and ears early, before polishing.</span></li>
+      <li><b>A fresh-eyes reviewer.</b><span class="dim">An agent that had never seen the project watched each cut frame by frame, measured brightness and checked sync against the beat map. Its first review had 20 notes; its second scored them: fixed, partly fixed, regressed.</span></li>
+      <li><b>Release candidate.</b><span class="dim">Measured, not assumed: streams, length, loudness, peaks, first and last frames.</span></li>
+    </ol>
+  </section>
+
+  <section class="col">
+    <p class="eyebrow">Notes that changed the film</p>
+    <h2>Before and after</h2>
+  </section>
+  <section class="wide grid2">
+    <div class="pair"><div class="imgs"><figure><span>Before</span><img src="img/before_rim.jpg" alt="Tock with glowing orange outlines" loading="lazy"></figure><figure><span>After</span><img src="img/after_rim.jpg" alt="Tock lit by the ember with a subtle rim" loading="lazy"></figure></div><p class="dim">The first rim light outlined every part like neon. Now only the silhouette facing the ember catches light, so Tock looks lit <em>by</em> the ember rather than glowing.</p></div>
+    <div class="pair"><div class="imgs"><figure><span>Before</span><img src="img/before_forest.jpg" alt="Frost forest with a dark hole of thaw" loading="lazy"></figure><figure><span>After</span><img src="img/after_forest.jpg" alt="Frost forest with wet glistening thaw" loading="lazy"></figure></div><p class="dim">The thaw read as a hole, then as a white lace doily. Now it's wet ground with a soft edge drawn once around the whole trail.</p></div>
+    <div class="pair"><div class="imgs"><figure><span>Before</span><img src="img/before_thaw.jpg" alt="Wide shot of the golden room" loading="lazy"></figure><figure><span>After</span><img src="img/after_thaw.jpg" alt="Close-up of Tock thawing with Tick watching" loading="lazy"></figure></div><p class="dim">The reviewer's sharpest note: the moment the fire restarts Tock happened in a wide shot where the characters were specks. It became a close-up of the frost running off and the flywheel twitching into motion.</p></div>
+    <div class="pair"><div class="imgs"><figure><span>Before</span><img src="img/before_hearth.jpg" alt="Small characters under a wall of yellow fire" loading="lazy"></figure><figure><span>After</span><img src="img/after_hearth.jpg" alt="Silhouettes of Tock and Tick against the fire" loading="lazy"></figure></div><p class="dim">The hearth went from a cat-sized Tock under a yellow wall of fire to the poster frame: thumb scale, the fire as bokeh, Tick perched on Tock's head.</p></div>
+  </section>
+
+  <section class="col">
+    <p class="eyebrow">Mistakes</p>
+    <h2>What went wrong, and what caught it</h2>
+    <ul class="mistakes">
+      <li><b>Parallel renders shared a frame folder.</b> One agent's clip came out with another agent's shots in it, and a finished render could delete frames someone else was still using. An agent noticed and reported it, and each output now gets a private temp folder. That's the brief's lesson, "anything that drops should report what it dropped", proving itself.</li>
+      <li><b>My fix for that broke the renderer.</b> A text substitution swallowed the line that creates the folder into a comment. I caught it on the next read and fixed it before anyone rendered.</li>
+      <li><b>The compositor leaked colour at soft edges.</b> Half-transparent pixels came out brighter than opaque ones. The world agent measured it and proposed the two-line fix: multiply first, then cut to alpha.</li>
+      <li><b>The ember looked too red.</b> At 1000 K, Planck says red. The fix was to run the ember at a true wood-ember temperature, not to cheat the colour.</li>
+      <li><b>The climax started at the wrong scale.</b> Thumb-sized toys stood as tall as the logs, and in one shot Tock stood inside the flames. It took three rounds to get the scale right and to put the fire behind them as bokeh.</li>
+      <li><b>One agent's cleanup command could have killed other agents' renders.</b> It said so in its report, and everyone re-rendered.</li>
+      <li><b>Agents sometimes reported a fix the reviewer couldn't see.</b> Two notes came back "fixed" that weren't, so I checked frames myself before sending anyone back.</li>
+    </ul>
+  </section>
+
+  <section class="col">
+    <p class="eyebrow">Next time</p>
+    <h2>What I'd do differently</h2>
+    <ul class="mistakes">
+      <li><b>Physics as flavour, not law.</b> The brief made accuracy a rule, and I kept it like one. The ember's colour took several rounds of Planck's law and white balance, and this page carries a ledger. But it's a fairy tale about thumb-sized toys. A cartoon ember can be whatever colour reads best, and the time is better spent on whether the shot works.</li>
+      <li><b>Any subject.</b> Thermodynamics was the seed because the brief was written with a physicist friend in mind. It was fun, and the next one could be about anything.</li>
+      <li><b>Look at things first.</b> Making a film from memory alone was worth doing once, to see what's in there. Done again, it would get stale. Next time I'd start by gathering paintings, films, scores and techniques. Not to copy them, but to get further than memory alone gets, the way the earlier film's references made this film's process possible.</li>
+    </ul>
+  </section>
+  <section class="wide">
+    <figure><img src="img/poster.jpg" alt="Tock and Tick silhouetted against the fire, Tick perched on Tock's head" loading="lazy"><figcaption>The poster frame.</figcaption></figure>
+  </section>
+
+  <section class="col">
+    <p class="signoff">Story, pictures and music made in code by Claude (Opus 5.5), October 2026.</p>
+    <p class="dim">The film before this one: <a href="https://www.youtube.com/watch?v=Ly3z1gI2g20"><i>PROBLEM SET ∞</i></a> (<a href="https://claude.ai/artifact/Qtwe5231bcUyid6QRK7HGE">how it was made</a>).</p>
+  </section>
+</main>
+
+<script>
+const TEMPO = {"pts": [[0.6, 60, 1], [1.6, 60, 1], [2.6, 60, 1], [3.6, 60, 2], [4.6, 60, 2], [5.6, 60, 2], [6.6, 60, 3], [7.6, 60, 3], [8.6, 60, 3], [9.6, 60, 4], [10.6, 60, 4], [11.6, 60.1, 4], [12.599, 84, 5], [13.313, 84, 5], [14.027, 84, 5], [14.742, 84, 6], [15.456, 84, 6], [16.17, 84, 6], [16.884, 84, 7], [17.599, 84, 7], [18.313, 84, 7], [19.027, 84, 8], [19.742, 84, 8], [20.456, 84, 8], [21.17, 84, 9], [21.884, 84, 9], [22.599, 84, 9], [23.313, 84, 10], [24.027, 84, 10], [24.742, 84, 10], [25.456, 84, 11], [26.17, 84, 11], [26.884, 84, 11], [27.599, 82.7, 12], [28.325, 80, 12], [29.075, 77.3, 12], [29.851, 76, 13], [30.64, 76, 13], [31.43, 76, 13], [32.219, 76, 14], [33.008, 76, 14], [33.798, 76, 14], [34.587, 76, 15], [35.377, 76, 15], [36.166, 76, 15], [36.956, 76, 16], [37.745, 76, 16], [38.535, 76, 16], [39.324, 76, 17], [40.114, 76, 17], [40.903, 76, 17], [41.693, 76, 18], [42.482, 76, 18], [43.272, 79.9, 18], [44.022, 84, 19], [44.737, 84, 19], [45.451, 84, 19], [46.165, 84, 20], [46.879, 84, 20], [47.594, 84, 20], [48.308, 86, 21], [49.006, 90, 21], [49.673, 94, 21], [50.311, 96, 22], [50.936, 96, 22], [51.561, 96, 22], [52.186, 96, 23], [52.811, 96, 23], [53.436, 96, 23], [54.061, 96, 24], [54.686, 96, 24], [55.311, 96, 24], [55.936, 96, 25], [56.561, 96, 25], [57.186, 96, 25], [57.811, 96, 26], [58.436, 96, 26], [59.061, 96, 26], [59.686, 96, 27], [60.311, 96, 27], [60.936, 96, 27], [61.561, 96, 28], [62.186, 96, 28], [62.811, 96, 28], [63.436, 95.7, 29], [64.063, 95, 29], [64.695, 94.3, 29], [65.331, 93.7, 30], [65.971, 93, 30], [66.617, 92.3, 30], [67.266, 91.3, 31], [67.923, 90, 31], [68.59, 88.7, 31], [69.267, 87.3, 32], [69.954, 86, 32], [70.651, 84.7, 32], [71.36, 83, 33], [72.083, 81, 33], [72.824, 79, 33], [73.583, 77, 34], [74.363, 75, 34], [75.163, 73, 34], [75.985, 70.3, 35], [76.838, 67, 35], [77.734, 63.6, 35], [78.676, 60.7, 36], [79.665, 58, 36], [80.7, 55.3, 36], [81.785, 52.7, 37], [82.924, 50, 37], [84.124, 47.3, 37], [85.392, 42.9, 38], [86.79, 36.9, 38], [88.415, 39.7, 38], [89.927, 46.3, 39], [91.222, 47, 39], [92.498, 47.7, 39], [93.757, 49, 40], [94.981, 51, 40], [96.158, 53, 40], [97.29, 55, 41], [98.381, 57, 41], [99.434, 59, 41], [100.451, 63, 42], [101.404, 68.9, 42], [102.274, 75, 42], [103.075, 82.9, 43], [103.798, 93, 43], [104.444, 102.9, 43], [105.027, 70.1, 44], [105.883, 70.4, 44], [106.735, 70.6, 44], [107.585, 70.9, 45], [108.431, 71.1, 45], [109.275, 71.4, 45], [110.116, 71.6, 46], [110.953, 71.9, 46], [111.788, 75.9, 46], [112.578, 79.8, 47], [113.33, 79.5, 47], [114.085, 79.2, 47], [114.843, 78.8, 48], [115.604, 78.5, 48], [116.368, 78.2, 48], [117.135, 77.8, 49], [117.906, 77.5, 49], [118.681, 77.2, 49], [119.458, 76.8, 50], [120.239, 76.5, 50], [121.023, 76.2, 50], [121.811, 74.6, 51], [122.615, 71.8, 51], [123.451, 69, 51], [124.321, 66.2, 52], [125.227, 63.4, 52], [126.174, 63, 52], [127.126, 64, 53], [128.064, 64, 53], [129.001, 64, 53], [129.939, 64, 54], [130.876, 64, 54], [131.814, 64, 54], [132.751, 64, 55], [133.689, 64, 55], [134.626, 64, 55], [135.564, 64, 56], [136.501, 64, 56], [137.439, 64, 56], [138.376, 64, 57], [139.314, 64, 57], [140.251, 64, 57], [141.189, 64, 58], [142.126, 64, 58], [143.064, 64, 58], [144.001, 64, 59], [144.939, 64, 59], [145.876, 64, 59], [146.814, 64, 60], [147.751, 64, 60], [148.689, 64, 60], [149.626, 64, 61]], "cues": [["carried", 12.5987], ["meeting", 29.8506], ["flare", 48.308], ["climb", 63.436], ["door", 71.3601], ["tip", 81.7846], ["stop", 86.7899], ["bellows", 93.7568], ["flame", 105.0271], ["wake", 110.1156], ["coda", 112.5783], ["credits", 127.1264]], "flaps": [93.7568, 97.2903, 99.4341, 100.4511, 101.4042, 102.2744, 103.0748, 103.4475, 103.7984, 104.1298, 104.4439, 104.7422], "length": 150.126};
+// ---- Planck -> sRGB (same fit as the film's core.js) ----
+const BB = (() => {
+  const g = (l, m, s1, s2) => { const s = l < m ? s1 : s2; return Math.exp(-.5 * ((l - m) / s) ** 2); };
+  const xb = l => 1.056 * g(l, 599.8, 37.9, 31.0) + .362 * g(l, 442.0, 16.0, 26.7) - .065 * g(l, 501.1, 20.4, 26.2);
+  const yb = l => .821 * g(l, 568.8, 46.9, 40.5) + .286 * g(l, 530.9, 16.3, 31.1);
+  const zb = l => 1.217 * g(l, 437.0, 11.8, 36.0) + .681 * g(l, 459.0, 26.0, 13.8);
+  const h = 6.62607015e-34, c = 2.99792458e8, k = 1.380649e-23;
+  const planck = (lnm, T) => { const l = lnm * 1e-9; return 1 / (l ** 5 * (Math.exp(h * c / (l * k * T)) - 1)); };
+  const l2s = v => 255 * (v <= .0031308 ? 12.92 * v : 1.055 * Math.pow(v, 1 / 2.4) - .055);
+  let Y1000 = 0;
+  const at = T => {
+    let X = 0, Y = 0, Z = 0;
+    for (let l = 380; l <= 780; l += 5) { const p = planck(l, T); X += p * xb(l); Y += p * yb(l); Z += p * zb(l); }
+    let r = 3.2406 * X - 1.5372 * Y - .4986 * Z, gg = -.9689 * X + 1.8758 * Y + .0415 * Z, b = .0557 * X - .2040 * Y + 1.0570 * Z;
+    r = Math.max(r, 0); gg = Math.max(gg, 0); b = Math.max(b, 0);
+    const m = Math.max(r, gg, b) || 1;
+    return { rgb: [r / m, gg / m, b / m].map(l2s), Y };
+  };
+  Y1000 = at(1000).Y;
+  return T => { const a = at(T); const vis = a.Y / Y1000; const glow = 1 - Math.exp(-.55 * Math.pow(vis, .45)); const hot = Math.max(0, Math.min(1, (glow - .75) * 2));
+    return a.rgb.map(v => Math.round(v * glow + (255 - v * glow) * hot * .6)); };
+})();
+const USES = [[1500, 'the title at its hottest'], [1400, 'the flare, when the seed-head catches'], [1250, 'the fire, just caught'], [1150, 'the ember Tock carries'], [1000, 'climbing the hill in the wind'], [800, 'tipped into the shavings'], [740, 'the dying coal before the bellows']];
+const sw = document.getElementById('swatch'), rng = document.getElementById('tRange'), pre = document.getElementById('presets');
+function setT(T) {
+  T = +T; rng.value = T;
+  const c = BB(T), css = `rgb(${c.join(',')})`;
+  sw.style.background = `radial-gradient(circle, ${css} 0%, ${css} 38%, rgba(${c.join(',')},.35) 58%, rgba(${c.join(',')},0) 72%)`;
+  document.getElementById('tK').textContent = T;
+  document.getElementById('tC').textContent = Math.round(T - 273.15) + ' °C';
+  document.getElementById('tP').textContent = '× ' + Math.pow(T / 1150, 4).toFixed(2) + '  (∝ T⁴)';
+  let best = USES.reduce((a, u) => Math.abs(u[0] - T) < Math.abs(a[0] - T) ? u : a);
+  document.getElementById('tUse').textContent = Math.abs(best[0] - T) <= 40 ? best[1] : 'n/a';
+  for (const b of pre.children) b.setAttribute('aria-pressed', +b.dataset.t === T ? 'true' : 'false');
+}
+for (const [T, label] of USES) { const b = document.createElement('button'); b.type = 'button'; b.dataset.t = T; b.textContent = T + ' K'; b.title = label; b.onclick = () => setT(T); pre.appendChild(b); }
+rng.addEventListener('input', () => setT(rng.value));
+setT(1150);
+
+// ---- tempo chart (one series; cues as quiet rules; flaps as ticks) ----
+(function () {
+  const svg = document.getElementById('tempo'), tip = document.getElementById('tip'), box = document.getElementById('chart');
+  const css = getComputedStyle(document.documentElement), C = n => css.getPropertyValue(n).trim();
+  const Wd = 1000, Hd = 340, m = { l: 44, r: 12, t: 30, b: 34 };
+  const x0 = 0, x1 = TEMPO.length, y0 = 30, y1 = 115;
+  const X = t => m.l + (t - x0) / (x1 - x0) * (Wd - m.l - m.r), Y = v => Hd - m.b - (v - y0) / (y1 - y0) * (Hd - m.t - m.b);
+  const NS = 'http://www.w3.org/2000/svg', el = (n, a, p = svg) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+  for (let v = 40; v <= 110; v += 20) { el('line', { x1: m.l, x2: Wd - m.r, y1: Y(v), y2: Y(v), stroke: C('--line'), 'stroke-width': 1 }); const t = el('text', { x: m.l - 8, y: Y(v) + 4, 'text-anchor': 'end', fill: C('--frost-dim'), 'font-size': 11, 'font-family': 'JetBrains Mono, monospace' }); t.textContent = v; }
+  for (let s = 0; s <= 150; s += 30) { const t = el('text', { x: X(s), y: Hd - 12, 'text-anchor': 'middle', fill: C('--frost-dim'), 'font-size': 11, 'font-family': 'JetBrains Mono, monospace' }); t.textContent = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+  const LABEL = { carried: 'Tock walks', meeting: 'finds Tick', flare: 'flare', climb: 'second law', tip: 'tip', stop: 'Tock stops', bellows: 'bellows', flame: 'FLAME', wake: 'wakes', credits: 'credits' };
+  let row = 0;
+  for (const [k, t] of TEMPO.cues) { if (!LABEL[k]) continue;
+    el('line', { x1: X(t), x2: X(t), y1: m.t - 6, y2: Hd - m.b, stroke: C('--line'), 'stroke-width': 1, 'stroke-dasharray': '2 3' });
+    const lab = el('text', { x: X(t) + 3, y: m.t - 10 + (row++ % 2) * 12, fill: k === 'flame' ? C('--ember-hot') : C('--frost-dim'), 'font-size': 10.5, 'font-family': 'JetBrains Mono, monospace' }); lab.textContent = LABEL[k]; }
+  for (const f of TEMPO.flaps) el('line', { x1: X(f), x2: X(f), y1: Hd - m.b, y2: Hd - m.b - 7, stroke: C('--ember'), 'stroke-width': 2, 'stroke-linecap': 'round' });
+  // the prologue has no pulse: start the line where the waltz starts
+  const start = TEMPO.cues.find(c => c[0] === 'carried')[1];
+  const pts = TEMPO.pts.filter(p => p[0] >= start - .01);
+  const d = pts.map((p, i) => (i ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Y(p[1]).toFixed(1)).join(' ');
+  el('path', { d, fill: 'none', stroke: C('--ember'), 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' });
+  const stop = TEMPO.cues.find(c => c[0] === 'stop')[1], flame = TEMPO.cues.find(c => c[0] === 'flame')[1];
+  el('circle', { cx: X(stop), cy: Y(pts.reduce((a, p) => p[0] <= stop ? p : a)[1]), r: 4.5, fill: C('--night-2'), stroke: C('--frost'), 'stroke-width': 2 });
+  el('circle', { cx: X(flame), cy: Y(pts.reduce((a, p) => p[0] <= flame ? p : a)[1]), r: 4.5, fill: C('--ember-hot'), stroke: C('--night-2'), 'stroke-width': 2 });
+  const cross = el('line', { y1: m.t, y2: Hd - m.b, stroke: C('--frost-dim'), 'stroke-width': 1, opacity: 0 });
+  const dot = el('circle', { r: 4, fill: C('--ember'), stroke: C('--night-2'), 'stroke-width': 2, opacity: 0 });
+  const hit = el('rect', { x: m.l, y: 0, width: Wd - m.l - m.r, height: Hd, fill: 'transparent' });
+  const show = ev => {
+    const r = svg.getBoundingClientRect(), sx = (ev.clientX - r.left) / r.width * Wd;
+    const t = x0 + (sx - m.l) / (Wd - m.l - m.r) * (x1 - x0);
+    if (t < start) { hide(); return; }
+    const p = pts.reduce((a, q) => Math.abs(q[0] - t) < Math.abs(a[0] - t) ? q : a);
+    cross.setAttribute('x1', X(p[0])); cross.setAttribute('x2', X(p[0])); cross.setAttribute('opacity', .6);
+    dot.setAttribute('cx', X(p[0])); dot.setAttribute('cy', Y(p[1])); dot.setAttribute('opacity', 1);
+    const cue = TEMPO.cues.filter(c => c[1] <= p[0] + .05 && LABEL[c[0]]).pop();
+    tip.hidden = false; tip.textContent = `${Math.floor(p[0] / 60)}:${(p[0] % 60).toFixed(1).padStart(4, '0')}  bar ${p[2]}  ${p[1].toFixed(0)} bpm${cue ? '  · ' + LABEL[cue[0]] : ''}`;
+    const br = box.getBoundingClientRect();
+    tip.style.left = Math.min(Math.max(ev.clientX - br.left, 90), br.width - 90) + 'px'; tip.style.top = (ev.clientY - br.top) + 'px';
+  };
+  const hide = () => { tip.hidden = true; cross.setAttribute('opacity', 0); dot.setAttribute('opacity', 0); };
+  hit.addEventListener('pointermove', show); hit.addEventListener('pointerdown', show); hit.addEventListener('pointerleave', hide);
+})();
+</script>
+<!-- original ends -->
+</body>
+</html>

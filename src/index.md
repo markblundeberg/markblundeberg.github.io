@@ -64,6 +64,10 @@ I'm Mark Lundeberg, a physicist. I used to study graphene, and after some years 
 <div><h3><a href="/lullaby/">A Minute Past Sunset</a></h3><p>An existential lullaby written as a score and sung by Suno, and its film, drawn in code as pastel on dark paper: a child falls asleep while the camera goes out to the last red stars and comes home.</p></div>
 </li>
 <li class="work">
+<a class="pic" href="/a-small-difference/" tabindex="-1" aria-hidden="true"><img src="/img/home/a-small-difference.jpg" alt="" loading="lazy"></a>
+<div><h3><a href="/a-small-difference/">A Small Difference</a></h3><p>A wordless short: a clockwork tortoise carries the last ember in a cooling world. The idea came from one Claude agent, and another made the story, pictures and music in code, with no notes from anyone.</p></div>
+</li>
+<li class="work">
 <a class="pic" href="/problem-set/" tabindex="-1" aria-hidden="true"><img src="/img/home/problem-set.jpg" alt="" loading="lazy"></a>
 <div><h3><a href="/problem-set/">PROBLEM SET ∞</a></h3><p>An anime opening for a show that doesn't exist: an AI apprentice goes from miscounting the r's in "strawberry" to real research results, honestly stamped. Every frame drawn in code; the song by Suno.</p></div>
 </li>

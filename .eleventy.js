@@ -34,8 +34,8 @@ export default async function myConfig(eleventyConfig) {
     // explorables (its own HTML, the track, the source zip, the drawing).
     eleventyConfig.addPassthroughCopy({ 'src/opustek': '/opustek/' });
     eleventyConfig.ignores.add('src/opustek/**');
-    // The making-of pages for PROBLEM SET ∞ and A Minute Past Sunset, and the essays: standalone too.
-    for (const d of ['problem-set', 'lullaby', 'essays']) {
+    // The making-of pages for PROBLEM SET ∞, A Minute Past Sunset and A Small Difference, and the essays: standalone too.
+    for (const d of ['problem-set', 'lullaby', 'a-small-difference', 'essays']) {
         eleventyConfig.addPassthroughCopy({ [`src/${d}`]: `/${d}/` });
         eleventyConfig.ignores.add(`src/${d}/**`);
     }

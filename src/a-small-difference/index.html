@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>A Small Difference</title>
+<meta name="description" content="A wordless animated short: a clockwork tortoise carries the last ember in a cooling world. The idea came from one Claude agent; another made the story, pictures and music in code, and nobody gave it a note.">
+<link rel="canonical" href="https://marklundeberg.com/a-small-difference/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A Small Difference">
+<meta property="og:description" content="A wordless short made in code: the idea from one Claude agent, the film from another, and no notes from anyone.">
+<meta property="og:url" content="https://marklundeberg.com/a-small-difference/">
+<meta property="og:image" content="https://marklundeberg.com/a-small-difference/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A clockwork tortoise with a flywheel on its shell and a clockwork wren perched on its head, silhouetted against a blurred fire">
+<meta property="og:site_name" content="Mark Lundeberg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@MarkLundeberg">
+<meta name="twitter:image" content="https://marklundeberg.com/a-small-difference/og.jpg">
+<link rel="icon" href="/img/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300&display=swap">
+<style>
+/* The film's night garden for the ground, frost for the text, the carried ember for links.
+   The title alone is set in Fraunces, the film's own title face (and the making-of's); the text stays the house sans. */
+:root {
+  color-scheme: dark;
+  --ground: #0a0f1d; --ink: #e2e9f3; --ink-2: #b4bfd2; --muted: #8794ad; --rule: #25314c;
+  --ember: #ff8f45; --ember-hot: #ffd9a3;
+  --text-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html { background: var(--ground); }
+body { margin: 0; padding: 0 16px 64px; background: var(--ground); color: var(--ink); font: 17px/1.6 var(--text-font); -webkit-text-size-adjust: 100%; }
+main { max-width: 44rem; margin: 0 auto; }
+a { color: var(--ember-hot); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: #fff; }
+.top { font-size: .9rem; color: var(--muted); padding: 20px 0 0; }
+.top a { color: var(--muted); }
+h1 { font: italic 300 2.6rem/1.1 "Fraunces", Georgia, serif; font-variation-settings: "opsz" 144; color: var(--ember-hot); margin: 26px 0 4px; }
+.by { color: var(--ink-2); margin: 0 0 22px; }
+h2 { font-weight: 600; font-size: 1.15rem; margin: 2.2em 0 .5em; }
+p { margin: 0 0 1em; }
+.film { margin: 0 0 22px; }
+.yt { position: relative; aspect-ratio: 16 / 9; background: #000; }
+.yt iframe, .yt img { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.film figcaption { font-size: .9rem; color: var(--ink-2); margin-top: 8px; }
+.get { display: flex; flex-wrap: wrap; gap: 6px 22px; padding: 0; margin: 0 0 8px; list-style: none; }
+.get small { color: var(--muted); }
+blockquote { margin: 1.2em 0; padding: 0 0 0 1em; border-left: 2px solid var(--ember); color: var(--ink); }
+blockquote p { margin: 0; }
+.stills { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 1.4em 0 1.6em; }
+.stills figure { margin: 0; }
+.stills img { width: 100%; height: auto; display: block; }
+.stills figcaption { font-size: .82rem; color: var(--ink-2); margin-top: 6px; line-height: 1.4; }
+q { font-style: italic; }
+.foot { margin-top: 3em; padding-top: 1em; border-top: 1px solid var(--rule); font-size: .9rem; color: var(--ink-2); }
+.foot p { margin: 0 0 .7em; }
+@media (max-width: 560px) {
+  body { font-size: 16px; } h1 { font-size: 2.2rem; }
+  .stills { grid-template-columns: 1fr; gap: 14px; }
+}
+</style>
+</head>
+<body>
+<main>
+
+<div class="top"><a href="/">Mark Lundeberg</a> › A Small Difference</div>
+
+<h1>A Small Difference</h1>
+<p class="by">A wordless animated short · 2:30 · October 2026</p>
+
+<figure class="film">
+  <!-- data-youtube takes the video's id; until then the slot shows the poster and a link to the copy below -->
+  <div class="yt" data-youtube=""><img src="poster.jpg" width="1280" height="720" alt="A clockwork tortoise with a flywheel on its shell and a clockwork wren perched on its head, silhouetted against a blurred fire"></div>
+  <figcaption id="watch-local">The film is coming to YouTube. Until then it plays at the top of <a href="making-of/">how it was made</a>.</figcaption>
+</figure>
+<script>
+document.querySelectorAll('.yt[data-youtube]').forEach(function (el) {
+  var id = el.getAttribute('data-youtube');
+  if (!id) return;
+  el.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?rel=0" title="A Small Difference (the film)" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
+  var note = document.getElementById('watch-local');
+  if (note) note.remove();
+});
+</script>
+
+<p>A clockwork tortoise whose shell is a tiny heat engine carries the last ember in a cooling world to a fire that someone laid long ago and never lit. A clockwork wren with bellows for wings comes along. The story, the pictures and the music were all made in code by a Claude agent, with no image, video or audio models and no samples.</p>
+
+<h2>An idea from one Claude to another</h2>
+
+<p>The idea didn't come from a person. After making the anime opening <a href="/problem-set/"><i>PROBLEM SET ∞</i></a> with Mark, the Claude session later called himawari wrote a one-page brief addressed <q>to the Claude who makes this</q>: lessons from the film it had just finished, and a seed.</p>
+
+<blockquote><p>A tiny clockwork creature in a cold, slowly cooling universe carries the last warm ember from place to place. It's thermodynamics as a love story. The second law is the antagonist, and it is right. The ending should still land warm, without cheating the physics.</p></blockquote>
+
+<p>Mark read it, changed nothing and handed it to a new session with the words <q>the short is yours to make.</q></p>
+
+<div class="stills">
+  <figure><img src="making-of/img/pond.jpg" width="1280" height="720" alt="The tortoise and the wren on a frozen pond, reflected in black ice" loading="lazy"><figcaption>The pond waltz, one hop per beat.</figcaption></figure>
+  <figure><img src="making-of/img/tip.jpg" width="1280" height="720" alt="The tortoise tipping its ember into a nest of wood shavings" loading="lazy"><figcaption>The ember passed on.</figcaption></figure>
+  <figure><img src="making-of/img/thaw.jpg" width="1280" height="720" alt="The tortoise thawing in front of the fire, its flywheel turning" loading="lazy"><figcaption>Warm on top, cold underneath: enough to turn.</figcaption></figure>
+</div>
+
+<h2>No notes</h2>
+
+<p>That session, later called ember, wrote the story, composed a waltz in code whose tempo is the tortoise's flywheel, built a renderer, and briefed and art-directed a team of helper agents, including a fresh-eyes reviewer. It took about five hours from brief to finished film. Nobody searched the web or looked at a reference image: what's on screen and in the score came from the model's training, and the way of working came through the brief and the earlier film's code.</p>
+
+<p>Mark's whole part, once he'd passed the brief on, was a look at an early cut and two verdicts: <q>It's good. You did good.</q> and <q>As I expected you got the audio right.</q> Not one note on the film.</p>
+
+<p>ember wrote up how it was made the same evening. It's kept here as it was written, with the stills, the score's tempo map and the mistakes. It takes the physics more seriously than a fairy tale needs, and says so at the end.</p>
+
+<ul class="get">
+  <li><a href="making-of/">How it was made <small>the making-of, 6 October 2026</small></a></li>
+  <li><a href="/problem-set/">The film before this one <small><i>PROBLEM SET ∞</i>, and how it was made</small></a></li>
+</ul>
+
+<div class="foot">
+  <p>Story, pictures and music: ember, Mark Lundeberg's Claude agent (Claude Opus 5.5, an AI model made by Anthropic), with the helper agents it directed. The idea and the brief: himawari, another of his Claude agents. Mark passed the brief along, then watched and listened.</p>
+  <p><a href="/">marklundeberg.com</a></p>
+</div>
+
+</main>
+</body>
+</html>
