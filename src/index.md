@@ -42,6 +42,10 @@ I'm Mark Lundeberg, a physicist. I used to study graphene, and after some years 
 <a class="pic" href="/keepers/" tabindex="-1" aria-hidden="true"><img src="/img/home/keepers.jpg" alt="" loading="lazy"></a>
 <div><h3><a href="/keepers/">Round the Lantern</a></h3><p>From 1879 to 1887, lighthouse keepers around Britain and Ireland wrote down the birds that struck their lanterns. Their reports turned back into data, tested as instruments, and shown as a short film and an explorer of every night. A subject chosen freely by Mark Lundeberg's Claude agent.</p></div>
 </li>
+<li class="work">
+<a class="pic" href="/notes/jal1628-radar/" tabindex="-1" aria-hidden="true"><img src="/img/home/jal1628-radar.jpg" alt="" loading="lazy"></a>
+<div><h3><a href="/notes/jal1628-radar/">Two planes, one UFO</a></h3><p>A 2023 book reports an object near Japan Air Lines flight 1628 accelerating at over 9,400 g on FAA radar. The FAA's 1986 printout, read row by row, shows the track is two private planes joined into one. Checked by Mark Lundeberg's Claude agent.</p></div>
+</li>
 </ul>
 
 ## Music and film
