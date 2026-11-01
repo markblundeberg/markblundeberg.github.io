@@ -81,7 +81,7 @@ blockquote { margin: 1em 16px; padding: 0.1em 1.2em; border-left: 3px solid var(
 #bookfig .byplane .pt.A { fill: var(--plane-a); }
 #bookfig .byplane .pt.B { fill: var(--plane-b); }
 #bookfig .axis { stroke: var(--muted); stroke-width: 1; }
-.key[hidden] { display: none; }
+.key[hidden], .key span[hidden] { display: none; }
 #scope { width: 100%; aspect-ratio: 1 / 1; background: var(--scope); border-radius: 4px; }
 .readout { font-family: var(--mono-font); font-variant-numeric: tabular-nums; font-size: 0.92em; min-height: 1.6em; }
 .readout .hop { color: var(--book); }
@@ -111,20 +111,23 @@ svg.fig .grid line { stroke: var(--rule); stroke-width: 1; }
 <p>A 2023 book, <cite>Anomaly: A Scientific Exploration of the UFO Phenomenon</cite> by the physicist Daniel Coumbe, reports that an object near Japan Air Lines flight 1628 over Alaska in November 1986 made eleven jumps on FAA radar, three of them at over 9,400 g. The book builds its track from transponder code 1200. In the United States, that code means any private plane flying on its own, without talking to air traffic control. The FAA's released printout shows two such planes in the sky at once, about 130 km apart. Hopping from one plane's blip to the other's reproduces all eleven jumps.</p>
 
 <figure>
-<canvas id="scope" role="img" aria-label="Radar plan view replaying the recorded returns of two private planes and the jet, with the rotating beam. With the checkbox on, a dashed line joins the private planes' blips in time order into one supposed object."></canvas>
-<div class="controls">
+<canvas id="scope" role="img" aria-label="Radar plan view replaying the recorded returns between 02:24 and 02:29 UTC, with the rotating beam. Three views: the raw returns labelled with their transponder codes; the code-1200 returns joined in time order into one object, as the book does; and the same returns as two separate planes."></canvas>
+<div class="controls" role="radiogroup" aria-label="View">
   <button id="play" type="button">Pause</button>
-  <label><input type="checkbox" id="join" style="--q: var(--book)"> Join the code-1200 blips into one object, as the book does</label>
+  <label><input type="radio" name="view" value="raw" checked> Raw returns</label>
+  <label><input type="radio" name="view" value="ufo" style="--q: var(--book)"> As one object, as the book does</label>
+  <label><input type="radio" name="view" value="planes" style="--q: var(--plane-b)"> As two planes</label>
   <label>Speed <select id="speed"><option value="4">4×</option><option value="12" selected>12×</option><option value="40">40×</option></select></label>
 </div>
 <div class="readout" id="readout" aria-live="polite"></div>
 <div class="key">
-  <span><span class="dot" style="background: var(--plane-a)"></span>Plane A, code 1200, 7,500 ft</span>
-  <span><span class="dot" style="background: var(--plane-b)"></span>Plane B, code 1200, 4,500–11,400 ft</span>
-  <span><span class="dot" style="background: var(--faint)"></span>JAL 1628, code 1550</span>
-  <span><span class="dash"></span>The book's single object</span>
+  <span data-view="raw"><span class="dot" style="background: var(--ink)"></span>A radar return, labelled with its transponder code</span>
+  <span data-view="ufo"><span class="dot" style="background: var(--book)"></span>Code 1200: the book's single object</span>
+  <span data-view="planes"><span class="dot" style="background: var(--plane-a)"></span>Plane A, code 1200, 7,500 ft</span>
+  <span data-view="planes"><span class="dot" style="background: var(--plane-b)"></span>Plane B, code 1200, 4,500–11,400 ft</span>
+  <span data-view="ufo planes"><span class="dot" style="background: var(--faint)"></span>JAL 1628, code 1550</span>
 </div>
-<figcaption>The FAA's recorded returns between 02:24 and 02:29 UTC (5:24 to 5:29 pm Alaska time), replayed. The antenna turns once every 12.02 s, and each blip appears at its printed time as the beam passes. North is up. Distances are in nautical miles from the radar site (1 nm = 1.852 km).</figcaption>
+<figcaption>The FAA's recorded returns between 02:24 and 02:29 UTC (5:24 to 5:29 pm Alaska time), replayed. The antenna turns once every 12.02 s, and each return appears at its printed time as the beam passes. Code 1200 means any private plane flying under visual flight rules; 1550 was the code assigned to JAL 1628. North is up. Distances are in nautical miles from the radar site (1 nm = 1.852 km).</figcaption>
 </figure>
 
 <h2>The book's track</h2>
@@ -213,13 +216,13 @@ const T0 = 2 * 3600 + 24 * 60 + 40, T1 = 2 * 3600 + 28 * 60 + 50;
 const JOIN0 = 2 * 3600 + 24 * 60 + 55;
 const view = { cx: 40, cy: 42, span: 94, ring: 25 };
 const persist = 20;
-let now = T0, speed = 12, join = false;
+let now = T0, speed = 12, mode = 'raw';
 let playing = !matchMedia('(prefers-reduced-motion: reduce)').matches;
 const joinPts = [...D.A.map(p => ({ ...p, k: 'A' })), ...D.B.map(p => ({ ...p, k: 'B' }))].filter(p => p.t >= JOIN0 && p.t <= T1).sort((a, b) => a.t - b.t);
 function size() { const w = cv.clientWidth, dpr = devicePixelRatio || 1; cv.width = w * dpr; cv.height = w * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0); }
 function draw() {
   const W = cv.clientWidth, S = W / view.span, P = (x, y) => [W / 2 + (x - view.cx) * S, W / 2 - (y - view.cy) * S];
-  const C = { bg: css('--scope'), rule: css('--rule'), muted: css('--muted'), ink: css('--ink'), a: css('--plane-a'), b: css('--plane-b'), jet: css('--faint') };
+  const C = { bg: css('--scope'), rule: css('--rule'), muted: css('--muted'), ink: css('--ink'), a: css('--plane-a'), b: css('--plane-b'), jet: css('--faint'), book: css('--book') };
   const fs = Math.max(11, Math.round(W / 46));
   cx.fillStyle = C.bg; cx.fillRect(0, 0, W, W);
   const [ox, oy] = P(0, 0);
@@ -235,27 +238,41 @@ function draw() {
     cx.arc(ox, oy, W * 2, th - (i + 1) * 0.015 - Math.PI / 2, th - i * 0.015 - Math.PI / 2); cx.closePath(); cx.fill(); }
   cx.globalAlpha = 1;
   const alpha = t => t > now ? 0 : Math.exp(-(now - t) / persist);
-  const track = (pts, col, dashed) => { const seen = pts.filter(p => p.t <= now); if (seen.length > 1) { cx.strokeStyle = col; cx.globalAlpha = 0.35; cx.lineWidth = 1.5; if (dashed) cx.setLineDash([3, 4]);
-      cx.beginPath(); seen.forEach((p, i) => { const [x, y] = P(p.x, p.y); i ? cx.lineTo(x, y) : cx.moveTo(x, y); }); cx.stroke(); cx.setLineDash([]); cx.globalAlpha = 1; }
-    seen.forEach(p => { const a = alpha(p.t); if (a < 0.02) return; const [x, y] = P(p.x, p.y); cx.globalAlpha = a; cx.fillStyle = col; cx.beginPath(); cx.arc(x, y, 5, 0, 7); cx.fill(); });
-    const p = seen[seen.length - 1]; if (p && now - p.t < 70) { const [x, y] = P(p.x, p.y); cx.globalAlpha = Math.max(0.55, alpha(p.t)); cx.fillStyle = col; cx.beginPath(); cx.arc(x, y, 5, 0, 7); cx.fill(); }
-    cx.globalAlpha = 1; return p; };
+  const seen = pts => pts.filter(p => p.t <= now);
+  // fading dots; the last return of a track stays faintly visible for a while after it ends
+  const dots = (pts, col) => { const s = seen(pts); cx.fillStyle = col;
+    s.forEach((p, i) => { let a = alpha(p.t); if (i === s.length - 1 && now - p.t < 70) a = Math.max(0.55, a); if (a < 0.02) return;
+      const [x, y] = P(p.x, p.y); cx.globalAlpha = a; cx.beginPath(); cx.arc(x, y, 5, 0, 7); cx.fill(); });
+    cx.globalAlpha = 1; return s[s.length - 1]; };
+  const line = (pts, col, w, dash, op) => { if (pts.length < 2) return; cx.strokeStyle = col; cx.globalAlpha = op; cx.lineWidth = w; cx.setLineDash(dash);
+    cx.beginPath(); pts.forEach((p, i) => { const [x, y] = P(p.x, p.y); i ? cx.lineTo(x, y) : cx.moveTo(x, y); }); cx.stroke(); cx.setLineDash([]); cx.globalAlpha = 1; };
   const lab = (p, s, col) => { if (!p || now - p.t > 70) return; const [x, y] = P(p.x, p.y); cx.fillStyle = col; cx.font = `600 ${fs}px ${css('--text-font')}`; cx.fillText(s, x + 9, y - 9); };
-  lab(track(D.jet, C.jet, true), 'JAL 1628', C.muted);
-  lab(track(D.A, C.a), 'Plane A', C.a);
-  lab(track(D.B, C.b), 'Plane B', C.b);
   const out = document.getElementById('readout');
-  if (join) { const seen = joinPts.filter(p => p.t <= now);
-    if (seen.length > 1) { cx.strokeStyle = C.ink; cx.lineWidth = 1.5; cx.setLineDash([5, 4]); cx.beginPath();
-      seen.forEach((p, i) => { const [x, y] = P(p.x, p.y); i ? cx.lineTo(x, y) : cx.moveTo(x, y); }); cx.stroke(); cx.setLineDash([]);
-      const p = seen[seen.length - 1], q = seen[seen.length - 2], [x, y] = P(p.x, p.y);
-      cx.strokeStyle = C.ink; cx.lineWidth = 2; cx.beginPath(); cx.arc(x, y, 9, 0, 7); cx.stroke();
-      cx.fillStyle = C.ink; cx.font = `600 ${fs}px ${css('--text-font')}`; cx.fillText('"UFO"', x + 12, y + fs + 6);
-      const dkm = Math.hypot(p.x - q.x, p.y - q.y) * 1.852, dt = p.t - q.t;
-      out.innerHTML = p.k !== q.k ? `<span class="hop">Last jump: ${dkm.toFixed(1)} km in ${dt.toFixed(2)} s, so ${Math.round(4 * dkm * 1000 / dt / dt / 9.81).toLocaleString()} g</span>`
-        : `Same plane, one turn later: ${dkm.toFixed(2)} km in ${dt.toFixed(1)} s`;
-    } else out.textContent = 'Both planes are on the radar from 02:25:01.';
-  } else out.textContent = `${fmt(now)} UTC`;
+  if (mode === 'raw') {
+    // every return alike: a dot, and the newest one carries its transponder code; no tracks, no names
+    cx.font = `${fs}px ${css('--text-font')}`;
+    [[D.jet, '1550'], [D.A, '1200'], [D.B, '1200']].forEach(([pts, code]) => { const p = dots(pts, C.ink);
+      if (p && now - p.t < 70) { const [x, y] = P(p.x, p.y); cx.fillStyle = C.muted; cx.fillText(code, x + 8, y - 8); } });
+    out.textContent = `${fmt(now)} UTC`;
+  } else {
+    line(seen(D.jet), C.jet, 1.5, [3, 4], 0.35); lab(dots(D.jet, C.jet), 'JAL 1628', C.muted);
+    if (mode === 'planes') {
+      line(seen(D.A), C.a, 1.5, [], 0.35); lab(dots(D.A, C.a), 'Plane A', C.a);
+      line(seen(D.B), C.b, 1.5, [], 0.35); lab(dots(D.B, C.b), 'Plane B', C.b);
+      out.textContent = `${fmt(now)} UTC`;
+    } else {
+      dots(D.A, C.book); dots(D.B, C.book);
+      const s = joinPts.filter(p => p.t <= now);
+      if (s.length > 1) { line(s, C.book, 1.5, [], 0.7);
+        const p = s[s.length - 1], q = s[s.length - 2], [x, y] = P(p.x, p.y);
+        cx.strokeStyle = C.book; cx.lineWidth = 2; cx.beginPath(); cx.arc(x, y, 9, 0, 7); cx.stroke();
+        cx.fillStyle = C.book; cx.font = `600 ${fs}px ${css('--text-font')}`; cx.fillText('"UFO"', x + 12, y + fs + 6);
+        const dkm = Math.hypot(p.x - q.x, p.y - q.y) * 1.852, dt = p.t - q.t;
+        out.innerHTML = p.k !== q.k ? `<span class="hop">Last jump: ${dkm.toFixed(1)} km in ${dt.toFixed(2)} s, so ${Math.round(4 * dkm * 1000 / dt / dt / 9.81).toLocaleString()} g</span>`
+          : `Same object, one turn later: ${dkm.toFixed(2)} km in ${dt.toFixed(1)} s`;
+      } else out.textContent = 'Code 1200 returns join into one object from 02:24:55.';
+    }
+  }
 }
 let last = performance.now();
 function frame(ts) { const dt = Math.min(0.1, (ts - last) / 1000); last = ts; if (playing) { now += dt * speed; if (now > T1) now = T0; } draw(); requestAnimationFrame(frame); }
@@ -263,7 +280,10 @@ const playBtn = document.getElementById('play');
 playBtn.textContent = playing ? 'Pause' : 'Play';
 playBtn.onclick = () => { playing = !playing; playBtn.textContent = playing ? 'Pause' : 'Play'; };
 document.getElementById('speed').onchange = e => { speed = +e.target.value; };
-document.getElementById('join').onchange = e => { join = e.target.checked; if (join && (now < JOIN0 - 10 || now > T1 - 20)) now = JOIN0 - 5; };
+const setView = v => { mode = v; document.querySelectorAll('.key [data-view]').forEach(s => { s.hidden = !s.dataset.view.split(' ').includes(v); });
+  if (v === 'ufo' && (now < JOIN0 - 10 || now > T1 - 20)) now = JOIN0 - 5; };
+document.querySelectorAll('input[name="view"]').forEach(r => { r.onchange = e => { if (e.target.checked) setView(e.target.value); }; });
+setView(document.querySelector('input[name="view"]:checked').value);
 addEventListener('resize', size); size(); requestAnimationFrame(frame);
 
 /* ---- the jumps ---- */
