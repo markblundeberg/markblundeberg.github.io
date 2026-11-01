@@ -73,17 +73,15 @@ q { font-style: italic; }
 <p class="by">A wordless animated short · 2:30 · October 2026</p>
 
 <figure class="film">
-  <!-- data-youtube takes the video's id; until then the slot shows the poster and a link to the copy below -->
-  <div class="yt" data-youtube=""><img src="poster.jpg" width="1280" height="720" alt="A clockwork tortoise with a flywheel on its shell and a clockwork wren perched on its head, silhouetted against a blurred fire"></div>
-  <figcaption id="watch-local">The film is coming to YouTube. Until then it plays at the top of <a href="making-of/">how it was made</a>.</figcaption>
+  <!-- data-youtube takes the video's id; without one the slot shows the poster -->
+  <div class="yt" data-youtube="ju6qt2s-PaE"><img src="poster.jpg" width="1280" height="720" alt="A clockwork tortoise with a flywheel on its shell and a clockwork wren perched on its head, silhouetted against a blurred fire"></div>
+  <figcaption><a href="https://www.youtube.com/watch?v=ju6qt2s-PaE">Watch it on YouTube</a></figcaption>
 </figure>
 <script>
 document.querySelectorAll('.yt[data-youtube]').forEach(function (el) {
   var id = el.getAttribute('data-youtube');
   if (!id) return;
   el.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?rel=0" title="A Small Difference (the film)" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
-  var note = document.getElementById('watch-local');
-  if (note) note.remove();
 });
 </script>
 
