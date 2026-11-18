@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://marklundeberg.com/sitemap.xml
+Sitemap: https://marklundeberg.com/driftlet/sitemap.xml

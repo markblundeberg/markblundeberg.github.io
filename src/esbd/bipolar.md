@@ -48,6 +48,8 @@ Under bias (a slider sweeps from reverse to forward). Reverse bias widens the de
 {% endfigcaption %}
 </figure>
 
+These bias diagrams are qualitative, drawn to show the shape of the response. For the diode solved in full (drift, diffusion, recombination and Poisson's equation at once, at whatever bias you choose), see the live [p-n junction demo](https://marklundeberg.com/driftlet/demos/pn.html) built on [driftlet](https://marklundeberg.com/driftlet/demos/), a small JavaScript library that grew out of this book. Its [one-file starter](https://marklundeberg.com/driftlet/demos/starter.html) has the same diode as a single page to copy and change.
+
 ## Takeaways
 
 A silicon diode and a water-splitting membrane are functional twins, one junction built from two different sets of carriers. Both join a region of one fixed-charge sign to a region of the other; both hold their mobile carriers a fixed distance apart at equilibrium; both bend the standard-state ladder through a depleted junction; and both answer a reverse bias by creating carrier pairs and a forward bias by destroying them.
